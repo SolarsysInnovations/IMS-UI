@@ -15,9 +15,9 @@ export const sidebarData = [
     },
     {
         id: 3,
-        path: "/as",
-        title: "logout",
-        icon: LogoutOutlined
+        path: "/components",
+        title: "components",
+        icon: "",
 
     },
     {

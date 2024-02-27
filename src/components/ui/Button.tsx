@@ -12,7 +12,7 @@ interface ButtonProps {
   disabled?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: any) => void | undefined;
   size?: "small" | "medium" | "large";
   sx?: React.CSSProperties;
   type?: "submit" | "button";
@@ -21,18 +21,17 @@ interface ButtonProps {
   hasBackground?: boolean;
 }
 
-const ButtonUi: React.FC<ButtonProps> = ({ hasBackground, variant, ...props }) => {
+const ButtonUi: React.FC<ButtonProps> = ({ label, onClick, size, hasBackground, variant, }) => {
   return (
     <>
       <Button
-        {...props}
+        onClick={onClick}
         fullWidth
-        size='large'
+        size={size}
         variant={variant}
-
         type='submit'
       >
-        {props.label || "Continue"}
+        {label || "Continue"}
       </Button >
     </>
   );

@@ -138,6 +138,18 @@ const OPTIONS = Array.from(new Array(10000))
 export default function AutoCompleteSelectUi() {
     return (
         <Autocomplete
+            sx={{
+                borderRadius: "8px !important",
+                '& .MuiOutlinedInput-root': {
+                    borderRadius: "8px !important",
+                    overflow: "hidden",
+                    borderColor: `action.active`,
+                    transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
+                    '&:hover': {
+                        backgroundColor: `action.hover`,
+                    },
+                },
+            }}
             id="virtualize-demo"
             size='small'
             disableListWrap

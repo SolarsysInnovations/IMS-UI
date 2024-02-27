@@ -110,7 +110,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           src="https://img.freepik.com/free-psd/gradient-abstract-logo_23-2150689648.jpg?size=626&ext=jpg&ga=GA1.1.373236869.1707911526&semt=ais"
         />
         <DrawerHeader style={{ backgroundColor: "#1C2536", display: "flex", alignItems: "center" }}>
-          {open && <Typography variant="h6" sx={{ color: 'white', textAlign: 'left', marginLeft: 2 }}>Solar sis</Typography>}
+          {open && <Typography variant="h6" sx={{ color: 'white', textAlign: 'left', marginLeft: 2 }}>Invoice</Typography>}
           <IconButton onClick={handleDrawerClose}>
             {!open ? <MenuIcon style={{ color: "#fff" }} /> : <ChevronLeftIcon style={{ color: "#fff" }} />}
           </IconButton>
@@ -120,7 +120,6 @@ export default function MainLayout({ children }: MainLayoutProps) {
           {sidebarData.map((item, index) => (
             <ListItem key={item.id} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
-
                 onClick={() => handleItemClick(item.path)}
 
                 sx={{
@@ -147,7 +146,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
                     justifyContent: 'center',
                   }}
                 >
-                  <item.icon sx={{ color: activeItem === item.path ? `primary.main` : `primary.light` }} color={activeItem === item.path ? "primary" : "secondary"} style={{ width: "20px" }} />
+                  {item.icon && (
+                    <item.icon sx={{ color: activeItem === item.path ? `primary.main` : `primary.light` }} color={activeItem === item.path ? "primary" : "secondary"} style={{ width: "20px" }} />
+                  )}
                 </ListItemIcon>
                 <ListItemText primary={<Typography color="inherit"
                   variant="subtitle1" sx={{ color: activeItem === item.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>{capitalize(item.title)}</Typography>} sx={{ opacity: open ? 1 : 0 }} />
