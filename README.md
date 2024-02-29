@@ -1,46 +1,185 @@
-# Getting Started with Create React App
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import { DataGrid, GridColDef, GridDeleteIcon, GridToolbar, GridValueGetterParams, useGridApiRef } from '@mui/x-data-grid';
+import { Stack, IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import axios from 'axios';
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+const columns: GridColDef[] = [
+    {
+        field: 'Action',
+        headerName: 'Action',
+        width: 140,
+        editable: false,
+        renderCell: (params: any) => {
+            const onClick = (e: any) => {
+                const currentRow = params.row;
+                return alert(JSON.stringify(currentRow, null, 4));
+            };
 
-## Available Scripts
+            return (
+                <Stack direction="row" spacing={1}>
+                    <IconButton aria-label="" onClick={onClick}>
+                        <EditIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
+                    </IconButton>
+                    <IconButton aria-label="" onClick={onClick}>
+                        <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
+                    </IconButton>
+                </Stack>
+            );
+        },
 
-In the project directory, you can run:
+    },
+    { field: 'id', headerName: 'ID', width: 90 },
+    {
+        field: 'name',
+        headerName: 'name',
+        width: 250,
+        editable: true,
+    },
+    {
+        field: 'username',
+        headerName: 'username',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'email',
+        headerName: 'email',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'phone',
+        headerName: 'phone',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'website',
+        headerName: 'website',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'website',
+        headerName: 'website',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'website',
+        headerName: 'website',
+        width: 150,
+        editable: true,
+    },
+    // {
+    //     field: 'fullName',
+    //     headerName: 'Full name',
+    //     description: 'This column has a value getter and is not sortable.',
+    //     sortable: false,
+    //     width: 160,
+    //     valueGetter: (params: GridValueGetterParams) =>
+    //         `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+    // },
+];
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+export default function GridDataUi() {
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+    const [tableData, setTableData] = React.useState([]);
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    React.useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+                console.log(response.data);
 
-### `npm run build`
+                setTableData(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+        // Call the fetchData function when the component mounts
+        fetchData();
+    }, [])
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+    return (
+        <Box sx={{ height: "fit-content", width: '100%', }}>
+            <DataGrid
+                // {...data}
+                sx={{
+                    overflow: "hidden",
+                    borderRadius: "10px",
+                    "& .MuiDataGrid-root": {
+                        color: `#fff`
+                    },
+                    "& .MuiIconButton-label": {
+                        color: `#fff`
+                    },
+                    "& .MuiDataGrid-toolbarContainer": {
+                        padding: " 2px 4px 0px 0px",
+                        backgroundColor: "#fafaff",
+                        borderTopLeftRadius: "10px",
+                        borderTopRightRadius: "10px",
+                    },
+                    "& .MuiButton-root": {
+                        color: "grey.600",
+                        backgroundColor: "transparent",
+                    },
+                    "& ::-webkit-scrollbar": {
+                        height: "8px!important",
+                        width: "80px!important",
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+                    },
+                    "& ::-webkit-scrollbar-track": {
+                        backgroundColor: "#f5f5f5"
+                    },
+                    "& ::-webkit-scrollbar-thumb": {
+                        width: "80px!important",
+                        borderRadius: "10px",
+                        backgroundColor: "grey.200"
+                    }
+                }}
+                rows={tableData}
+                columns={columns}
+                initialState={{
+                    // * below pagination for grid table
+                    pagination: {
+                        paginationModel: {
+                            pageSize: 8,
+                        },
+                    },
+                }}
+                localeText={{
+                    toolbarDensity: 'Size',
+                    toolbarDensityLabel: 'Size',
+                    toolbarDensityCompact: 'Small',
+                    toolbarDensityStandard: 'Medium',
+                    toolbarDensityComfortable: 'Large',
+                }}
+                slots={{
+                    toolbar: GridToolbar,
+                }}
+                slotProps={{
+                    toolbar: {
+                        // * below global search field
+                        showQuickFilter: true,
+                    },
+                }}
+                rowHeight={40}
+                columnBuffer={2} columnThreshold={2}
+                pageSizeOptions={[15]}
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+                // * below checkbox selection multi and single
+                // checkboxSelection
+                disableRowSelectionOnClick
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+            />
+        </Box>
+    );
+}

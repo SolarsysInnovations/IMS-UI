@@ -10,6 +10,10 @@ import PrivateRoutes from "./services/utils/PrivateRoute";
 import Demo from "./pages/Demo-screen";
 import useAuthentication from "./hooks/useAuthentication";
 import ComponentsScreen from "./pages/Components-screen";
+import ClientList from "./pages/client/Clients-List";
+import CreateClient from "./pages/client/Create-client";
+import { Edit } from "@mui/icons-material";
+import EditClient from "./pages/client/Edit-client";
 
 
 function App() {
@@ -23,6 +27,9 @@ function App() {
             <Route element={<PrivateRoutes />}>
               <Route path="/" element={<Navigate to="/dashboard" replace={true} />} />
               <Route element={<Dashboard />} path="/" />
+              <Route element={<ClientList />} path="/client-list" />
+              <Route element={<EditClient />} path="/client-list/edit/:id" />
+              <Route element={<CreateClient />} path="/client/create" />
               <Route element={<Dashboard />} path="/dashboard" />
               <Route element={<Demo />} path="/demo" />
               <Route element={<ComponentsScreen />} path="/components" />

@@ -1,25 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import loginSlice from "./login-slice";
-import storage from "redux-persist/lib/storage";
-import { persistReducer } from "redux-persist";
-import { combineReducers } from "@reduxjs/toolkit";
-
-const persistConfig = {
-  key: "root",
-  version: 1,
-  storage,
-}
-
-const rootReducer = combineReducers({
-  login: loginSlice.reducer,
-})
-
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+import counterSlice from "./demoSlice";
+import clientDataSlice from "./client/fetchClientList";
 
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: {
+    counter: counterSlice.reducer,
+    clientList: clientDataSlice.reducer,
+  },
 });
 
-
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

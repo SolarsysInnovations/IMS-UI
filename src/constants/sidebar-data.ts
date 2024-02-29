@@ -17,19 +17,26 @@ export const sidebarData = [
         id: 3,
         path: "/components",
         title: "components",
-        icon: "",
+        icon: ReceiptRounded,
 
     },
     {
         id: 4,
-        path: "/asdsa",
-        title: "profile",
-        icon: AccountCircleRounded
+        path: "/client-list",
+        title: "Clients",
+        icon: "",
+
     },
-    {
-        id: 5,
-        path: "/asdasds",
-        title: "settings",
-        icon: SettingsSuggestRounded
-    },
+    // {
+    //     id: 4,
+    //     path: "/asdsa",
+    //     title: "profile",
+    //     icon: AccountCircleRounded
+    // },
+    // {
+    //     id: 5,
+    //     path: "/asdasds",
+    //     title: "settings",
+    //     icon: SettingsSuggestRounded
+    // },
 ]

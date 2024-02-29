@@ -158,9 +158,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
         </List>
         <Divider />
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, }}>
+      <Box component="main" sx={{ width: "500px", flexGrow: 1, }}>
         <Header />
-        <Box sx={{ px: 2 }}>
+        <Box sx={{ px: 2, }}>
           {children}
         </Box>
       </Box>

@@ -19,6 +19,7 @@ import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useState } from 'react'
 import { AccountCircle, Login, Logout, PersonAdd, Search, SearchOffRounded, Settings } from '@mui/icons-material'
+import SearchBarUi from '../ui/SearchBar'
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -42,13 +43,16 @@ export default function Header() {
           paddingLeft: "15px !important",
           paddingRight: "15px !important",
         },
-
         justifyContent: 'space-between',
         backgroundColor: "#ffffff",
       }}>
-        <Box>
+        {/* <Box >
           <Typography variant="h6" color="initial">Hello</Typography>
+        </Box> */}
+        <Box >
+          <SearchBarUi />
         </Box>
+
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
             <Tooltip title="Account settings">
@@ -73,7 +77,7 @@ export default function Header() {
             PaperProps={{
               elevation: 0,
               sx: {
-                overflow: 'visible',
+
                 borderRadius: '13px',
                 filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.32))',
                 mt: 1.5,

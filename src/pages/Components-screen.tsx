@@ -12,9 +12,11 @@ import TimePickerUi from '../components/ui/Time Picker';
 import DateTimePickerUi from '../components/ui/DateTimePicker';
 import GridDataUi from '../components/Grid/GridData';
 import ButtonSmallUi from '../components/ui/ButtonSmall';
+import SearchBarUi from '../components/ui/SearchBar';
+import { columns } from '../constants/table-columns-data';
+import { clientListData } from '../constants/clientData';
 
 const ComponentsScreen = () => {
-
     const [checked, setChecked] = React.useState(true);
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         console.log(event.target.checked);
@@ -23,6 +25,7 @@ const ComponentsScreen = () => {
 
     return (
         <Stack spacing={3} sx={{ mb: 4, mt: 4 }}>
+            <SearchBarUi />
             <ButtonUi variant='contained' />
             <ButtonSmallUi size="small" variant='contained' />
             <ButtonSmallUi size="small" variant='outlined' />
@@ -39,7 +42,7 @@ const ComponentsScreen = () => {
             <DatePickerUi />
             <TimePickerUi />
             <DateTimePickerUi />
-            <GridDataUi />
+            <GridDataUi tableData={clientListData} columns={columns} />
         </Stack>
     )
 }

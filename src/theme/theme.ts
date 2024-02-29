@@ -203,6 +203,7 @@ const theme = createTheme({
       lineHeight: 1.2,
     },
   },
+
   components: {
     MuiAvatar: {
       styleOverrides: {
@@ -213,6 +214,7 @@ const theme = createTheme({
         },
       },
     },
+
     MuiButton: {
       styleOverrides: {
         root: {

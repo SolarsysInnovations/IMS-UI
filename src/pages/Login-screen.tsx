@@ -1,5 +1,5 @@
 import { Alert, Avatar, Box, Button, FormHelperText, Icon, IconButton, Stack, Tab, Tabs, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ButtonUi from "../components/ui/Button";
 import { Link, useNavigate } from "react-router-dom";
 import palette from "../theme/create-pallet";
@@ -9,15 +9,16 @@ import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from "react-redux";
 import { setPassword, setUsername } from "../redux-store/login-slice";
-import { AppDispatch } from "../redux-store/store";
 import TextFieldLarge from "../components/ui/TextFieldLarge";
 import { RemoveRedEyeRounded, VisibilityOff, VisibilityOffRounded, VisibilityOutlined } from "@mui/icons-material";
-import { userLogin } from "../services/api/usersApi";
+import { userLogin } from "../redux-store/login-slice";
 import { serializeFormValues } from "../services/utils/serialize";
+import { fetchClientList } from "../redux-store/client/fetchClientList";
+import { AppDispatch } from "../redux-store/store";
+
 interface Values {
   email: string;
   password: string;
-
 }
 
 const Login = () => {
@@ -34,8 +35,11 @@ const Login = () => {
     password: Yup.string()
       .max(255)
       .required('Password is required'),
-
   });
+
+  useEffect(() => {
+    dispatch(fetchClientList());
+  }, [dispatch]);
 
   return (
     <Formik
@@ -47,14 +51,10 @@ const Login = () => {
 
       onSubmit={async (values: Values, { setSubmitting, resetForm }) => {
         try {
-          const serializedValues = serializeFormValues(values)
-          console.log(serializedValues);
-
-          dispatch(setUsername(serializedValues.email));
-
-          dispatch(setPassword(serializedValues.password));
-
-          const loginResult: any = await dispatch(userLogin(serializedValues));
+          console.log(values);
+          dispatch(setUsername(values.email));
+          dispatch(setPassword(values.password));
+          const loginResult: any = await dispatch(userLogin(values));
           resetForm();
 
           if (loginResult) {

@@ -28,8 +28,8 @@ const TextFieldUi = ({ label, value, onChange, disabled, endAdornment, startAdor
             error={error}
             helperText={helperText}
             name={name}
-            type={type}
-            fullWidth={fullWidth}
+            type={type || "text"}
+            fullWidth={fullWidth || true}
             InputProps={{
                 startAdornment: startAdornment ? (
                     <InputAdornment position='start'>{startAdornment}</InputAdornment>
@@ -49,6 +49,12 @@ const TextFieldUi = ({ label, value, onChange, disabled, endAdornment, startAdor
                         backgroundColor: `action.hover`,
                     },
                 },
+                " & .MuiFormLabel-root": {
+                    fontSize: "14px"
+                },
+                " & .MuiOutlinedInput-root": {
+                    fontSize: "14px"
+                }
             }}
 
 
