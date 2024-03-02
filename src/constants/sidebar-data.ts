@@ -40,3 +40,35 @@ export const sidebarData = [
     //     icon: SettingsSuggestRounded
     // },
 ]
+
+export const sidebarTwo = [
+    {
+        id: 1,
+        title: "Dashboard",
+        path: "/dashboard",
+        icon: Home,
+        isParent: false
+    },
+    {
+        id: 2,
+        title: "Client",
+        path: "/client",
+        icon: Home,
+        isParent: true,
+        subItems: [
+            { title: "Create", path: "/client/create" },
+            { title: "Update", path: "/client/update" }
+        ]
+    },
+    {
+        id: 3,
+        title: "Invoice",
+        path: "/invoice",
+        icon: Home,
+        isParent: true,
+        subItems: [
+            { title: "Create", path: "/invoice/create" },
+            { title: "Update", path: "/invoice/update" }
+        ]
+    }
+];

@@ -87,13 +87,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   const [open, setOpen] = React.useState(true);
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
-
   const handleCollapse = (index: number) => {
     setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
   };
   const handleDrawerClose = () => {
     setOpen(prev => !prev)
-    setOpenIndex(null)
   };
 
   const handleItemClick = (path: any) => {
@@ -145,60 +143,58 @@ export default function MainLayout({ children }: MainLayoutProps) {
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
                   }}
-                  onClick={() => navigate(item.path)}
                 >
                   <ListItemIcon>
-                    {React.createElement(item.icon, {
-                      sx: {
-                        width: "22px",
-                        color: activeItem === item.path ? 'primary.main' : 'primary.light'
-                      }
-                    })}
+                    <item.icon />
                   </ListItemIcon>
                   <ListItemText
-                    primary={
-                      <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === item.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>
-                        {capitalize(item.title)}
-                      </Typography>
-                    }
+                    sx={{
+                      color: 'inherit',
+                      fontSize: 14,
+                      fontWeight: 600,
+                      '& .MuiTypography-root': { fontSize: 14, fontWeight: 600 }
+                    }}
+                    primary={<Typography color="inherit"
+                      variant="subtitle1" sx={{ color: activeItem === item.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>{capitalize(item.title)}</Typography>}
                   />
-                  {item.subItems && (openIndex === index ? <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} /> : <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} />)}
-
+                  {item.sub && (openIndex === index ? <KeyboardArrowDownIcon onClick={() => handleCollapse(index)} sx={{
+                    width: "15px", color: `primary.light`
+                  }} /> : <KeyboardArrowDownIcon onClick={() => handleCollapse(index)} sx={{
+                    width: "15px", color: `primary.light`
+                  }} />)}
                 </ListItemButton>
-                {item.subItems && (
+                {item.sub && (
                   <Collapse in={openIndex === index} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                      {item.subItems.map((subItem: any, subIndex: number) => (
+                      {item.sub.map((subItem: string, subIndex: number) => (
                         <ListItemButton
-                          key={subIndex}
                           sx={{
                             width: "200px",
                             "&:hover": {
                               backgroundColor: 'rgba(255, 255, 255, 0.067)'
                             },
-                            backgroundColor: activeItem === subItem.path ? "rgba(255, 255, 255, 0.067) " : "",
+                            backgroundColor: activeItem === item.path ? "rgba(255, 255, 255, 0.067) " : "",
                             paddingTop: "2px",
                             paddingBottom: "2px",
                             marginTop: "10px",
                             transition: "0.2s",
-                            marginLeft: open ? 2 : 2,
+                            marginLeft: open ? 2 : 0,
                             borderRadius: "5px",
                             minHeight: 10,
                             justifyContent: open ? 'initial' : 'center',
                             px: 2.5,
                           }}
-                          onClick={() => navigate(subItem.path)}
-                        >
-                          <ListItemIcon sx={{ width: 'fit-content', minWidth: '20px !important' }}>
-                            <FiberManualRecordIcon sx={{ width: '10px', color: activeItem === subItem.path ? `primary.main` : `primary.light` }} />
+                          onClick={() => navigate(subItem)} key={subIndex} >
+                          <ListItemIcon
+                            sx={{
+                              width: 'fit-content',
+                              minWidth: '20px !important'
+                            }}
+                          >
+                            <FiberManualRecordIcon sx={{ width: '10px' }} />
                           </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === subItem.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>
-                                {capitalize(subItem.title)}
-                              </Typography>
-                            }
-                          />
+                          <ListItemText primary={<Typography color="inherit"
+                            variant="subtitle1" sx={{ color: activeItem === item.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>{capitalize(subItem)}</Typography>} />
                         </ListItemButton>
                       ))}
                     </List>
@@ -209,6 +205,45 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </>
         </List>
         {/*  <Divider /> */}
+        <List disablePadding={true} sx={{ mt: 1, }}>
+          {sidebarData.map((item, index) => (
+            <ListItem key={item.id} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                onClick={() => handleItemClick(item.path)}
+                sx={{
+                  width: "200px",
+                  "&:hover": {
+                    backgroundColor: 'rgba(255, 255, 255, 0.067)'
+                  },
+                  backgroundColor: activeItem === item.path ? "rgba(255, 255, 255, 0.067) " : "",
+                  paddingTop: "2px",
+                  paddingBottom: "2px",
+                  marginTop: "10px",
+                  transition: "0.2s",
+                  marginLeft: open ? 2 : 0,
+                  borderRadius: "5px",
+                  minHeight: 10,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {item.icon && (
+                    <item.icon sx={{ color: activeItem === item.path ? `primary.main` : `primary.light` }} color={activeItem === item.path ? "primary" : "secondary"} style={{ width: "20px" }} />
+                  )}
+                </ListItemIcon>
+                <ListItemText primary={<Typography color="inherit"
+                  variant="subtitle1" sx={{ color: activeItem === item.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>{capitalize(item.title)}</Typography>} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
         <Divider />
       </Drawer>
       <Box component="main" sx={{ width: "500px", flexGrow: 1, }}>
