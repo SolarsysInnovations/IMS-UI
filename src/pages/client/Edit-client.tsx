@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 interface Values {
     companyName: string;
     email: string;
-    phoneNumber: string;
+    phoneNumber: number | undefined;
     primaryContact: string;
     type: string;
 }
@@ -29,6 +29,8 @@ const EditClient = () => {
         const initialClientDataStr = localStorage.getItem('client');
         if (initialClientDataStr) {
             const parsedClientData = JSON.parse(initialClientDataStr);
+            console.log(parsedClientData);
+
             setInitialClientData(parsedClientData);
         }
     }, []);
@@ -53,7 +55,7 @@ const EditClient = () => {
             initialValues={initialClientData || {
                 companyName: 'asdas',
                 email: '',
-                phoneNumber: '',
+                phoneNumber: 0,
                 primaryContact: '',
                 type: '',
             }}

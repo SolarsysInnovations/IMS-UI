@@ -4,58 +4,159 @@ import { Add } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
 import GridDataEntry from '../../components/GridDataEntry/GridDataEntry';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchClientList } from '../../redux-store/client/fetchClientList';
 import { Box, Button, Grid } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
 import { updateEmail, updateName } from '../../redux-store/client/clientSlice';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch, RootState } from '../../redux-store/store';
+import RadioUi from '../../components/ui/RadioGroup';
+import { updateCustomerType } from '../../redux-store/client/createClientSlice';
+import { Formik ,Form} from 'formik';
+import * as Yup from 'yup';
+import ButtonUi from '../../components/ui/Button';
+import ButtonSmallUi from '../../components/ui/ButtonSmall';
 
 const CreateClient = () => {
     const dispatch = useDispatch<AppDispatch>();
+    const pathname = usePathname();
     // dispatch(fetchClientList());
     const buttons = [
         { label: 'Back', icon: Add, onClick: () => navigate(-1) },
         { label: 'Save', icon: Add, onClick: () => navigate("/client/create") },
     ];
     const navigate = useNavigate();
-    const pathname = usePathname();
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
 
-    const handleNameChange = (event: any) => {
-        setName(event.target.value);
-    }
 
-    const handleEmailChange = (event: any) => {
-        setEmail(event.target.value);
-    }
+    interface createClientProps {
+        primaryContact: string;
+        type: string;
+        companyName: string;
+        email: string;
+        phoneNumber: number;
+    };
 
-    const handleSubmit = () => {
-        console.log(email);
-        console.log(name);
-        dispatch(updateEmail(email));
-        dispatch(updateName(name));
-    }
+    const genderOptions = [
+        { value: "Individual", label: "Individual" },
+        { value: "Business", label: "Business" },
+    ]
+
+    const validationSchema = Yup.object({
+        primaryContact: Yup.string()
+            .max(255)
+            .required('primaryContact is required'),
+        type: Yup.string()
+            .max(255)
+            .required('type is required'),
+        companyName: Yup.string()
+            .max(255)
+            .required('companyName is required'),
+        email: Yup.string()
+            .max(255)
+            .required('email is required'),
+        phoneNumber: Yup.number()
+            .required('phoneNumber is required'),
+    });
 
     return (
-        <>
-            <TableHeader headerName={pathname} buttons={buttons} />
-            <Grid container spacing={2}>
-                <Grid item xs={4}>
-                    <Box>
-                        <TextFieldUi fullWidth label='Name' value={name} onChange={handleNameChange} />
-                    </Box>
-                </Grid>
+        <div>
+            <Formik
+                initialValues={{
+                    primaryContact: "",
+                    type: "",
+                    companyName: "",
+                    email: "",
+                    phoneNumber: 0,
+                }}
+                validationSchema={validationSchema}
+                onSubmit={async (values: createClientProps, { setSubmitting, resetForm }) => {
+                    try {
+                        console.log(values);
+                        resetForm();
+                    } catch (error) {
+                        console.error("An error occurred during login:", error);
+                    }
+                    finally {
+                        setSubmitting(false);
+                    }
+                }}
+            >
+                {({ errors, touched, values, handleChange }) => (
+                    <div>
+                        <TableHeader headerName={pathname} buttons={buttons} />
+                        <Form noValidate >
+                        <Grid container spacing={2}>
+                            <Grid item xs={4}>
+                                <Box>
+                                        <RadioUi value={values.type} onChange={handleChange} groupName='type' options={genderOptions} label='customer type'  />
+                                </Box>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Box>
+                                    <TextFieldUi
+                                        // fullWidth label='Primary Contact' value={values.primaryContact} onChange={handleChange}
+                                        fullWidth={false}
+                                        label='Primary Contact'
+                                        name='primaryContact'
+                                        type="text"
+                                        value={values.primaryContact}
+                                        onChange={handleChange}
+                                        error={touched.primaryContact && Boolean(errors.primaryContact)}
+                                        helperText={touched.primaryContact && errors.primaryContact}
+                                    />
+                                </Box>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Box>
+                                    <TextFieldUi
+                                        fullWidth={false}
+                                        label='Company Name'
+                                        name='companyName'
+                                        type="text"
+                                        value={values.companyName}
+                                        onChange={handleChange}
+                                        error={touched.companyName && Boolean(errors.companyName)}
+                                        helperText={touched.companyName && errors.companyName}
+                                    />
+                                </Box>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Box>
+                                    <TextFieldUi
+                                        // fullWidth label='Email' value={values.email} onChange={handleChange}
+                                        fullWidth={false}
+                                        label='Email'
+                                        name='email'
+                                        type="text"
+                                        value={values.email}
+                                        onChange={handleChange}
+                                        error={touched.email && Boolean(errors.email)}
+                                        helperText={touched.email && errors.email}
+                                    />
+                                </Box>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Box>
+                                    <TextFieldUi
+                                        fullWidth={false}
+                                        label='Phone Number'
+                                        name='phoneNumber'
+                                        type="text"
+                                        value={values.phoneNumber}
+                                        onChange={handleChange}
+                                        error={touched.phoneNumber && Boolean(errors.phoneNumber)}
+                                        helperText={touched.phoneNumber && errors.phoneNumber}
+                                    />
+                                </Box>
+                            </Grid>
+                            </Grid>
+                            <ButtonUi color="primary" label='Login' variant='contained' type='submit' />
 
-                <Grid item xs={4}>
-                    <Box>
-                        <TextFieldUi fullWidth label='Email' value={email} onChange={handleEmailChange} />
-                    </Box>
-                </Grid>
-            </Grid>
-            <Button onClick={handleSubmit}>Submit</Button>
-        </>
+                       </Form>
+                    </div>
+                )}
+            </Formik>
+        </div>
     )
 }
 

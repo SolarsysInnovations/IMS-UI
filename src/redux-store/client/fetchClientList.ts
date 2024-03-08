@@ -29,6 +29,8 @@ export const fetchClientList = createAsyncThunk<any>('clientSlice/fetchData', as
             throw new Error('Failed to fetch data');
         }
         const data = await response.json();
+        console.log(data);
+
         return data;
     } catch (error) {
         throw error;

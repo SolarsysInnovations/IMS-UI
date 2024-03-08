@@ -65,7 +65,7 @@ export const columns: GridColDef[] = [
         field: 'phoneNumber',
         headerName: 'phoneNumber',
         width: 150,
-        editable: true,
+        editable: false,
     },
 
     // {

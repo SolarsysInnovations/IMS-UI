@@ -52,11 +52,11 @@ export const sidebarTwo = [
     {
         id: 2,
         title: "Client",
-        path: "/client",
+        path: "/client-list",
         icon: Home,
         isParent: true,
         subItems: [
-            { title: "Create", path: "/client/create" },
+            { title: "Create Client", path: "/client/create" },
             { title: "Update", path: "/client/update" }
         ]
     },

@@ -3,7 +3,7 @@ import React, { } from "react";
 
 interface TextFieldProps {
     label?: string;
-    value?: string;
+    value?: string | number;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     disabled?: boolean;
     startAdornment?: React.ReactNode;
@@ -11,7 +11,7 @@ interface TextFieldProps {
     error?: boolean | undefined;
     helperText?: string | undefined | boolean;
     name?: string;
-    type?: string;
+    type?: "text" | "password" | "number" | "email" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "color";
     fullWidth?: boolean;
 }
 
