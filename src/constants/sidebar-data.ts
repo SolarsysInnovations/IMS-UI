@@ -1,4 +1,5 @@
 import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded, SettingsSuggestRounded } from "@mui/icons-material"
+import DemoScreen from "../pages/Demo-screen";
 
 export const sidebarData = [
     {
@@ -51,7 +52,7 @@ export const sidebarTwo = [
     },
     {
         id: 2,
-        title: "Client",
+        title: "Clients",
         path: "/client-list",
         icon: Home,
         isParent: true,
@@ -62,13 +63,39 @@ export const sidebarTwo = [
     },
     {
         id: 3,
-        title: "Invoice",
-        path: "/invoice",
+        title: "Invoices",
+        path: "/invoice/list",
         icon: Home,
         isParent: true,
         subItems: [
             { title: "Create", path: "/invoice/create" },
             { title: "Update", path: "/invoice/update" }
         ]
-    }
+    },
+    {
+        id: 4,
+        title: "Services",
+        path: "/services/list",
+        icon: Home,
+        isParent: true,
+        subItems: [
+            { title: "Create Services", path: "/service/create" },
+            { title: "Edit Services", path: "/service/edit" },
+        ]
+    },
+    {
+        id: 5,
+        title: "Demo",
+        path: "/demo",
+        icon: Home,
+        isParent: false
+    },
+    {
+        id: 6,
+        title: "DemoTwo",
+        path: "/demo-two",
+        icon: Home,
+        isParent: false
+    },
+
 ];

@@ -5,6 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { string } from 'yup';
+import { Typography } from '@mui/material';
 
 interface RadioOptions {
     value: string;
@@ -14,40 +15,49 @@ interface RadioOptions {
 interface RadioFormProps {
     options?: RadioOptions[];
     groupName?: string;
+    errorMsg?: string | false | undefined;
     label?: string;
     size?: string;
     value?: string | number;
-    onChange? : (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
-export default function RadioUi({onChange,value, options, groupName, label }: RadioFormProps) {
+export default function RadioUi({ errorMsg, onChange, value, options, groupName, label }: RadioFormProps) {
     return (
-        <FormControl>
-            <FormLabel sx={{
+        <>
+            <FormControl sx={{ flexDirection: "row", justifyContent: "space-between" }} >
+                <FormLabel sx={{
                     fontSize: "14px",
-            }} id="demo-row-radio-buttons-group-label">{label}</FormLabel>
-            <RadioGroup
-                value={value}
-                onChange={onChange}
-                sx={{
-                    padding : "0px 2px"
-                }}
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name={groupName}
-            >
-                {options?.map((option, index) => (
-                    <FormControlLabel  sx={{
-                        '& .MuiSvgIcon-root': {
-                          fontSize: 15,
-                        },
-                        
-                        '& .MuiTypography-root': {
-                            fontSize: 13,                            
-                        },
-                        padding : "1px 6px;"
-                      }}  key={index} value={option.value} control={<Radio />} label={option.label} />
-                ))}
-            </RadioGroup>
-        </FormControl>
+                    marginTop: "6px",
+                }} id="demo-row-radio-buttons-group-label">{label}</FormLabel>
+                <RadioGroup
+
+                    row
+                    value={value}
+                    onChange={onChange}
+                    sx={{
+                        padding: "0px 2px",
+                        marginLeft: "14px",
+                    }}
+
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name={groupName}
+                >
+                    {options?.map((option, index) => (
+                        <FormControlLabel sx={{
+                            '& .MuiSvgIcon-root': {
+                                fontSize: 15,
+                            },
+
+                            '& .MuiTypography-root': {
+                                fontSize: 13,
+                            },
+                            padding: "0"
+                        }} key={index} value={option.value} control={<Radio />} label={option.label} />
+                    ))}
+                </RadioGroup>
+
+            </FormControl>
+            <Typography sx={{ fontSize: "12px", color: "#F04438" }} variant="subtitle2" color="initial">{errorMsg}</Typography>
+        </>
     );
 }

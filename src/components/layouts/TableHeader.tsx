@@ -8,7 +8,7 @@ interface TableHeaderProps {
     buttons?: {
         label: string;
         icon: any;
-        onClick: () => void;
+        onClick:any;
     }[];
 }
 

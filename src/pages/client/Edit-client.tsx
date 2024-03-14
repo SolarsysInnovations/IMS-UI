@@ -9,6 +9,10 @@ import TableHeader from '../../components/layouts/TableHeader';
 import { Add } from '@mui/icons-material';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { useEffect, useState } from 'react';
+import { editUpdate } from '../../redux-store/client/editUpdate';
+import { AppDispatch } from '../../redux-store/store';
+import { toast } from 'react-toastify';
+import ToastUi from '../../components/ui/ToastifyUi';
 
 interface Values {
     companyName: string;
@@ -20,15 +24,15 @@ interface Values {
 
 const EditClient = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
     const [initialClientData, setInitialClientData] = useState<Values | null>(null);
 
     useEffect(() => {
-        const initialClientDataStr = localStorage.getItem('client');
-        if (initialClientDataStr) {
-            const parsedClientData = JSON.parse(initialClientDataStr);
+        const initialClientData = localStorage.getItem('client');
+        if (initialClientData) {
+            const parsedClientData = JSON.parse(initialClientData);
             console.log(parsedClientData);
 
             setInitialClientData(parsedClientData);
@@ -45,28 +49,47 @@ const EditClient = () => {
         phoneNumber: Yup.string()
             .required('Phone number is required'),
         primaryContact: Yup.string()
+            .max(255)
             .required('Primary contact is required'),
         type: Yup.string()
+            .max(255)
             .required('Type is required')
     });
 
     return (
         <Formik
+            enableReinitialize
             initialValues={initialClientData || {
-                companyName: 'asdas',
+                companyName: '',
                 email: '',
                 phoneNumber: 0,
                 primaryContact: '',
                 type: '',
             }}
+
             validationSchema={validationSchema}
-            onSubmit={(values: Values, { setSubmitting }) => {
-                alert("Form submitted with values:" + JSON.stringify(values));
-                // Dispatch action or perform other tasks here
+            onSubmit={(values: Values, { setSubmitting, resetForm }) => {
+                const payload = { row: values };
+                dispatch(editUpdate(payload));
+                toast.info("client updated successfully", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                })
+                resetForm();
+
+                setInitialClientData(null);
             }}
+
         >
             {({ errors, touched, values, handleChange, handleSubmit }) => (
                 <Box sx={{ mt: 2 }}>
+                    <ToastUi autoClose={1000} />
                     <TableHeader headerName='Edit the client details' buttons={[
                         { label: 'Update', icon: Add, onClick: handleSubmit }
                     ]} />
@@ -77,7 +100,7 @@ const EditClient = () => {
                                     label='Company Name'
                                     name='companyName'
                                     type='text'
-                                    value={initialClientData?.companyName}
+                                    value={values?.companyName}
                                     onChange={handleChange}
                                     error={touched.companyName && Boolean(errors.companyName)}
                                     helperText={touched.companyName && errors.companyName}
@@ -88,7 +111,7 @@ const EditClient = () => {
                                     label='Email'
                                     name='email'
                                     type='email'
-                                    value={initialClientData?.email}
+                                    value={values?.email}
                                     onChange={handleChange}
                                     error={touched.email && Boolean(errors.email)}
                                     helperText={touched.email && errors.email}
@@ -99,7 +122,7 @@ const EditClient = () => {
                                     label='Phone Number'
                                     name='phoneNumber'
                                     type='number'
-                                    value={initialClientData?.phoneNumber}
+                                    value={values?.phoneNumber}
                                     onChange={handleChange}
                                     error={touched.phoneNumber && Boolean(errors.phoneNumber)}
                                     helperText={touched.phoneNumber && errors.phoneNumber}
@@ -110,7 +133,7 @@ const EditClient = () => {
                                     label='Primary Contact'
                                     name='primaryContact'
                                     type='text'
-                                    value={initialClientData?.primaryContact}
+                                    value={values?.primaryContact}
                                     onChange={handleChange}
                                     error={touched.primaryContact && Boolean(errors.primaryContact)}
                                     helperText={touched.primaryContact && errors.primaryContact}
@@ -121,7 +144,7 @@ const EditClient = () => {
                                     label='Type'
                                     name='type'
                                     type='text'
-                                    value={initialClientData?.type}
+                                    value={values?.type}
                                     onChange={handleChange}
                                     error={touched.type && Boolean(errors.type)}
                                     helperText={touched.type && errors.type}

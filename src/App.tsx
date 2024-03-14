@@ -14,6 +14,12 @@ import ClientList from "./pages/client/Clients-List";
 import CreateClient from "./pages/client/Create-client";
 import { Edit } from "@mui/icons-material";
 import EditClient from "./pages/client/Edit-client";
+import DemoTwo from "./pages/DemoTwo";
+import InvoiceList from "./pages/Invoice/Invoice-list";
+import CreateInvoice from "./pages/Invoice/create-invoice";
+import ServicesList from "./pages/service/service-list-screen";
+import CreateServices from "./pages/service/create-service-screen";
+import EditService from "./pages/service/edit-service-screen";
 
 
 function App() {
@@ -32,7 +38,13 @@ function App() {
               <Route element={<CreateClient />} path="/client/create" />
               <Route element={<Dashboard />} path="/dashboard" />
               <Route element={<Demo />} path="/demo" />
+              <Route element={<DemoTwo />} path="/demo-two" />
               <Route element={<ComponentsScreen />} path="/components" />
+              <Route element={<InvoiceList />} path="/invoice/list" />
+              <Route element={<CreateInvoice />} path="/invoice/create" />
+              <Route element={<ServicesList />} path="/services/list" />
+              <Route element={<CreateServices />} path="/service/create" />
+              <Route element={<EditService />} path="/service/edit" />
             </Route>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
           </Routes>

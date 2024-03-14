@@ -68,7 +68,7 @@ const Login = () => {
         }
       }}
     >
-      {({ errors, touched, values, handleChange }) => (
+      {({ errors, touched, values, handleChange, isSubmitting }) => (
         <Box
           sx={{
             mt: 3, backgroundColor: "background.paper", flex: "1 1 auto", alignItems: "center", display: "flex", justifyContent: "center",
@@ -103,7 +103,7 @@ const Login = () => {
               <Box sx={{ mb: 2 }}>
 
               </Box>
-              <Form  noValidate>
+              <Form noValidate>
                 <Stack spacing={3}>
                   <TextFieldLarge
                     fullWidth={false}
@@ -137,7 +137,7 @@ const Login = () => {
                 </Stack>
                 <FormHelperText sx={{ mt: 1 }}><Link style={{ color: palette.primary.main, textDecoration: 'none' }} to="/forgetPassword" >Forget Password ?</Link></FormHelperText>
                 <Box sx={{ mt: 2 }}>
-                  <ButtonUi color="primary" label='Login' variant='contained' type='submit' />
+                  <ButtonUi loading={isSubmitting} color="primary" label='Login' variant='contained' type='submit' />
                 </Box>
                 <Box sx={{ mt: 1 }}>
                   <ButtonUi label='skip login' />

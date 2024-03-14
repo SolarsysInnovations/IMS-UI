@@ -3,37 +3,82 @@ import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
 import { Link, useNavigate } from "react-router-dom";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux-store/store";
+import { useEffect } from "react";
+import { fetchClientList } from "../redux-store/client/fetchClientList";
+import { deleteClient } from "../redux-store/client/deleteClient";
+import { toast } from "react-toastify";
+import ToastUi from "../components/ui/ToastifyUi";
 
 const id = 1
+
+
+const MyCellRenderer = ({ row }: { row: any }) => {
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        dispatch(fetchClientList());
+    }, [dispatch]);
+
+
+    const handleEditClick = () => {
+        localStorage.setItem("client", JSON.stringify(row));
+        console.log(row);
+    };
+
+    const handleDeleteClick = () => {
+        dispatch(deleteClient({ row }))
+            .then(() => {
+                dispatch(fetchClientList());
+                toast.info("client deleted successfully", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                })
+            })
+            .catch((error) => {
+                console.error("Error deleting client:", error);
+                toast.error("Failed to delete client", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
+            });
+    };
+
+
+    return (
+        <Stack direction="row" spacing={1}>
+            <Link to={`/client-list/edit/${id}`}>
+                <IconButton aria-label="" onClick={handleEditClick}>
+                    <EditIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
+                </IconButton>
+            </Link>
+            <IconButton aria-label="" onClick={handleDeleteClick}>
+                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
+            </IconButton>
+        </Stack>
+    );
+};
+
 export const columns: GridColDef[] = [
     {
         field: 'Action',
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => {
-
-            const onClick = (e: any) => {
-                const currentRow = params.row;
-                return alert(JSON.stringify(currentRow, null, 4));
-            };
-
-            return (
-                <Stack direction="row" spacing={1}>
-                    <Link to={`/client-list/edit/${id}`} ><IconButton aria-label="" onClick={() => {
-                        const currentRow = params.row;
-                        localStorage.setItem("client", JSON.stringify(currentRow))
-                        return console.log(currentRow);
-                    }}>
-                        <EditIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
-                    </IconButton>
-                    </Link>
-                    <IconButton aria-label="" onClick={onClick}>
-                        <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
-                    </IconButton>
-                </Stack >
-            );
-        },
+        renderCell: (params: any) => <MyCellRenderer row={params.row} />,
 
     },
     { field: 'id', headerName: 'ID', width: 90 },

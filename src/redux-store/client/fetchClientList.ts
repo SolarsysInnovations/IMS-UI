@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { API_URLS } from "../../constants/api-urls";
+import { API_URLS, BASE_LOCAL_URL } from "../../constants/api-urls";
 
 interface ClientListState {
     data: any;
@@ -24,13 +24,12 @@ export const fetchClientList = createAsyncThunk<any>('clientSlice/fetchData', as
                 'Content-Type': 'application/json'
             }
         };
-        const response = await fetch("http://localhost:4000/client/clientList", config);
+        const response = await fetch(`${BASE_LOCAL_URL}/client/clientList`, config);
         if (!response.ok) {
             throw new Error('Failed to fetch data');
         }
         const data = await response.json();
         console.log(data);
-
         return data;
     } catch (error) {
         throw error;

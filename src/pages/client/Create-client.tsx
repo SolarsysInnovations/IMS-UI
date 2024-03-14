@@ -11,12 +11,11 @@ import TextFieldUi from '../../components/ui/TextField';
 import { updateEmail, updateName } from '../../redux-store/client/clientSlice';
 import { AppDispatch, RootState } from '../../redux-store/store';
 import RadioUi from '../../components/ui/RadioGroup';
-import { updateCustomerType } from '../../redux-store/client/createClientSlice';
-import { Formik ,Form} from 'formik';
+import { createClient, updateCustomerType } from '../../redux-store/client/createClientSlice';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import ButtonUi from '../../components/ui/Button';
-import ButtonSmallUi from '../../components/ui/ButtonSmall';
-
+import ToastUi from '../../components/ui/ToastifyUi';
+import { toast } from 'react-toastify';
 const CreateClient = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
@@ -26,8 +25,6 @@ const CreateClient = () => {
         { label: 'Save', icon: Add, onClick: () => navigate("/client/create") },
     ];
     const navigate = useNavigate();
-
-
     interface createClientProps {
         primaryContact: string;
         type: string;
@@ -55,6 +52,7 @@ const CreateClient = () => {
             .max(255)
             .required('email is required'),
         phoneNumber: Yup.number()
+            .min(8, "too short")
             .required('phoneNumber is required'),
     });
 
@@ -72,7 +70,19 @@ const CreateClient = () => {
                 onSubmit={async (values: createClientProps, { setSubmitting, resetForm }) => {
                     try {
                         console.log(values);
+                        dispatch(createClient(values))
                         resetForm();
+                        toast.success("created client successfully", {
+                            position: "top-right",
+                            autoClose: 2000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "dark",
+                        })
+
                     } catch (error) {
                         console.error("An error occurred during login:", error);
                     }
@@ -81,78 +91,78 @@ const CreateClient = () => {
                     }
                 }}
             >
-                {({ errors, touched, values, handleChange }) => (
+                {({ errors, touched, values, handleChange, handleSubmit }) => (
                     <div>
-                        <TableHeader headerName={pathname} buttons={buttons} />
-                        <Form noValidate >
-                        <Grid container spacing={2}>
-                            <Grid item xs={4}>
-                                <Box>
-                                        <RadioUi value={values.type} onChange={handleChange} groupName='type' options={genderOptions} label='customer type'  />
-                                </Box>
+                        <ToastUi autoClose={2000} />
+                        <TableHeader headerName={pathname} buttons={[
+                            { label: 'Back', icon: Add, onClick: () => navigate(-1) },
+                            { label: 'Save', icon: Add, onClick: handleSubmit },
+                        ]} />
+                        <Form id="createClientForm" noValidate >
+                            <Grid container spacing={2}>
+                                <Grid item xs={4}>
+                                    <Box>
+                                        <RadioUi value={values.type} errorMsg={touched.type && errors.type} onChange={handleChange} groupName='type' options={genderOptions} label='customer type' />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Box>
+                                        <TextFieldUi
+                                            fullWidth={false}
+                                            label='Primary Contact'
+                                            name='primaryContact'
+                                            type="text"
+                                            value={values.primaryContact}
+                                            onChange={handleChange}
+                                            error={touched.primaryContact && Boolean(errors.primaryContact)}
+                                            helperText={touched.primaryContact && errors.primaryContact}
+                                        />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Box>
+                                        <TextFieldUi
+                                            fullWidth={false}
+                                            label='Company Name'
+                                            name='companyName'
+                                            type="text"
+                                            value={values.companyName}
+                                            onChange={handleChange}
+                                            error={touched.companyName && Boolean(errors.companyName)}
+                                            helperText={touched.companyName && errors.companyName}
+                                        />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Box>
+                                        <TextFieldUi
+                                            fullWidth={false}
+                                            label='Email'
+                                            name='email'
+                                            type="text"
+                                            value={values.email}
+                                            onChange={handleChange}
+                                            error={touched.email && Boolean(errors.email)}
+                                            helperText={touched.email && errors.email}
+                                        />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Box>
+                                        <TextFieldUi
+                                            fullWidth={false}
+                                            label='Phone Number'
+                                            name='phoneNumber'
+                                            type="text"
+                                            value={values.phoneNumber}
+                                            onChange={handleChange}
+                                            error={touched.phoneNumber && Boolean(errors.phoneNumber)}
+                                            helperText={touched.phoneNumber && errors.phoneNumber}
+                                        />
+                                    </Box>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={4}>
-                                <Box>
-                                    <TextFieldUi
-                                        // fullWidth label='Primary Contact' value={values.primaryContact} onChange={handleChange}
-                                        fullWidth={false}
-                                        label='Primary Contact'
-                                        name='primaryContact'
-                                        type="text"
-                                        value={values.primaryContact}
-                                        onChange={handleChange}
-                                        error={touched.primaryContact && Boolean(errors.primaryContact)}
-                                        helperText={touched.primaryContact && errors.primaryContact}
-                                    />
-                                </Box>
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Box>
-                                    <TextFieldUi
-                                        fullWidth={false}
-                                        label='Company Name'
-                                        name='companyName'
-                                        type="text"
-                                        value={values.companyName}
-                                        onChange={handleChange}
-                                        error={touched.companyName && Boolean(errors.companyName)}
-                                        helperText={touched.companyName && errors.companyName}
-                                    />
-                                </Box>
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Box>
-                                    <TextFieldUi
-                                        // fullWidth label='Email' value={values.email} onChange={handleChange}
-                                        fullWidth={false}
-                                        label='Email'
-                                        name='email'
-                                        type="text"
-                                        value={values.email}
-                                        onChange={handleChange}
-                                        error={touched.email && Boolean(errors.email)}
-                                        helperText={touched.email && errors.email}
-                                    />
-                                </Box>
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Box>
-                                    <TextFieldUi
-                                        fullWidth={false}
-                                        label='Phone Number'
-                                        name='phoneNumber'
-                                        type="text"
-                                        value={values.phoneNumber}
-                                        onChange={handleChange}
-                                        error={touched.phoneNumber && Boolean(errors.phoneNumber)}
-                                        helperText={touched.phoneNumber && errors.phoneNumber}
-                                    />
-                                </Box>
-                            </Grid>
-                            </Grid>
-                            <ButtonUi color="primary" label='Login' variant='contained' type='submit' />
-
-                       </Form>
+                        </Form>
                     </div>
                 )}
             </Formik>
