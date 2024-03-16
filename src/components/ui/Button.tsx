@@ -27,7 +27,7 @@ const ButtonUi: React.FC<ButtonProps> = ({ loading, label, onClick, size, hasBac
   return (
     <>
       <Button
-        sx={{ padding: "15px 16px" }}
+        sx={{ padding: "10px 16px" }}
         onClick={onClick}
         fullWidth
         size={size}

@@ -3,27 +3,23 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import palette from '../../theme/create-pallet';
-
-// Define the interface for tab data
 interface TabData {
     value: string;
     label: string;
 }
-
-// Define props interface for TabsUI component
 interface ColorTabsProps {
-    tabs?: TabData[]; // Array of tab data
-    defaultValue?: string; // Default selected tab value
-    onChange?: (value: string) => void; // Event handler for tab change
-    textColor?: any // Text color for tabs
-    ariaLabel?: string; // Aria label for accessibility
+    tabs?: TabData[];
+    defaultValue?: string;
+    onChange?: (value: string) => void;
+    textColor?: any
+    ariaLabel?: string;
     indicatorColor?: any
 }
 
 const TabUi: React.FC<ColorTabsProps> = ({
     tabs = [],
     defaultValue = tabs[0]?.value || '',
-    onChange = () => { }, // Default empty function for onChange
+    onChange = () => { },
     textColor,
     indicatorColor,
     ariaLabel = 'tabs',
@@ -35,8 +31,11 @@ const TabUi: React.FC<ColorTabsProps> = ({
         onChange(newValue);
     };
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%', }}>
             <Tabs
+                sx={{
+                    minHeight: "39px"
+                }}
                 value={value}
                 onChange={handleChange}
                 textColor={textColor}
@@ -44,7 +43,9 @@ const TabUi: React.FC<ColorTabsProps> = ({
                 aria-label={ariaLabel}
             >
                 {tabs.map(tab => (
-                    <Tab key={tab.value} value={tab.value} label={tab.label} />
+                    <Tab sx={{
+                        padding: "3px  10px"
+                    }} key={tab.value} value={tab.value} label={tab.label} />
                 ))}
             </Tabs>
         </Box>

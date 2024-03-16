@@ -3,27 +3,23 @@ import TableHeader from '../../components/layouts/TableHeader';
 import { Add } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
-import GridDataEntry from '../../components/GridDataEntry/GridDataEntry';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchClientList } from '../../redux-store/client/fetchClientList';
-import { Box, Button, Grid } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { Box, Grid } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
-import { updateEmail, updateName } from '../../redux-store/client/clientSlice';
-import { AppDispatch, RootState } from '../../redux-store/store';
+import { AppDispatch } from '../../redux-store/store'
 import RadioUi from '../../components/ui/RadioGroup';
-import { createClient, updateCustomerType } from '../../redux-store/client/createClientSlice';
+import { createClient } from '../../redux-store/client/createClientSlice';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import ToastUi from '../../components/ui/ToastifyUi';
 import { toast } from 'react-toastify';
+import TabUi from '../../components/ui/Tabs';
+import SelectDropdown from '../../components/ui/SelectDropdown';
 const CreateClient = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     // dispatch(fetchClientList());
-    const buttons = [
-        { label: 'Back', icon: Add, onClick: () => navigate(-1) },
-        { label: 'Save', icon: Add, onClick: () => navigate("/client/create") },
-    ];
+
     const navigate = useNavigate();
     interface createClientProps {
         primaryContact: string;
@@ -56,6 +52,7 @@ const CreateClient = () => {
             .required('phoneNumber is required'),
     });
 
+
     return (
         <div>
             <Formik
@@ -72,6 +69,7 @@ const CreateClient = () => {
                         console.log(values);
                         dispatch(createClient(values))
                         resetForm();
+
                         toast.success("created client successfully", {
                             position: "top-right",
                             autoClose: 2000,
@@ -163,6 +161,7 @@ const CreateClient = () => {
                                 </Grid>
                             </Grid>
                         </Form>
+
                     </div>
                 )}
             </Formik>

@@ -84,6 +84,7 @@ const EditClient = () => {
                 resetForm();
 
                 setInitialClientData(null);
+                localStorage.removeItem('client');
             }}
 
         >

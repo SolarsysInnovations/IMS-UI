@@ -97,5 +97,12 @@ export const sidebarTwo = [
         icon: Home,
         isParent: false
     },
+    {
+        id: 7,
+        title: "Component",
+        path: "/components",
+        icon: Home,
+        isParent: false
+    },
 
 ];

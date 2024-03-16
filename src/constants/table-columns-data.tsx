@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { fetchClientList } from "../redux-store/client/fetchClientList";
 import { deleteClient } from "../redux-store/client/deleteClient";
 import { toast } from "react-toastify";
-import ToastUi from "../components/ui/ToastifyUi";
+import { RemoveRedEyeOutlined } from "@mui/icons-material";
 
 const id = 1
 
@@ -57,16 +57,18 @@ const MyCellRenderer = ({ row }: { row: any }) => {
             });
     };
 
-
     return (
         <Stack direction="row" spacing={1}>
             <Link to={`/client-list/edit/${id}`}>
-                <IconButton aria-label="" onClick={handleEditClick}>
-                    <EditIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
+                <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
+                    <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
                 </IconButton>
             </Link>
-            <IconButton aria-label="" onClick={handleDeleteClick}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
+            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
+                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
+            </IconButton>
+            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
+                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
         </Stack>
     );
