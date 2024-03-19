@@ -58,7 +58,6 @@ export const sidebarTwo = [
         isParent: true,
         subItems: [
             { title: "Create Client", path: "/client/create" },
-            { title: "Update", path: "/client/update" }
         ]
     },
     {
@@ -69,7 +68,6 @@ export const sidebarTwo = [
         isParent: true,
         subItems: [
             { title: "Create", path: "/invoice/create" },
-            { title: "Update", path: "/invoice/update" }
         ]
     },
     {
@@ -80,7 +78,6 @@ export const sidebarTwo = [
         isParent: true,
         subItems: [
             { title: "Create Services", path: "/service/create" },
-            { title: "Edit Services", path: "/service/edit" },
         ]
     },
     {

@@ -103,8 +103,8 @@ export const columns: GridColDef[] = [
         editable: true,
     },
     {
-        field: 'email',
-        headerName: 'email',
+        field: 'customerEmail',
+        headerName: 'customerEmail',
         width: 150,
         editable: true,
     },

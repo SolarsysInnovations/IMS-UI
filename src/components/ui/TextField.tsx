@@ -13,12 +13,14 @@ interface TextFieldProps {
     name?: string;
     type?: "text" | "password" | "number" | "email" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "color";
     fullWidth?: boolean;
+    required?: boolean;
 }
 
-const TextFieldUi = ({ label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth }: TextFieldProps) => {
+const TextFieldUi = ({ required, label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth }: TextFieldProps) => {
 
     return (
         <TextField
+            required={required}
             variant="outlined"
             size="small"
             label={label}
@@ -50,10 +52,10 @@ const TextFieldUi = ({ label, value, onChange, disabled, endAdornment, startAdor
                     },
                 },
                 " & .MuiFormLabel-root": {
-                    fontSize: "14px"
+                    fontSize: "13px"
                 },
                 " & .MuiOutlinedInput-root": {
-                    fontSize: "14px"
+                    fontSize: "13px"
                 }
             }}
 

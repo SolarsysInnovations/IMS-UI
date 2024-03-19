@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_LOCAL_URL } from "../../constants/api-urls";
+import { toastConfig } from "../../constants/forms/config/toastConfig";
+import { toast } from "react-toastify";
 
 interface EditUpdatePayload {
     row: any;
@@ -25,7 +27,7 @@ export const editUpdate = createAsyncThunk<any, EditUpdatePayload>(
             }
             const data = await response.json();
             console.log(data);
-            // Optionally, you can dispatch an action here to update the Redux store
+            toast.success("updated successfully", toastConfig)
             return data;
         } catch (error) {
             throw error;

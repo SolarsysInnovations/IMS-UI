@@ -1,29 +1,41 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { BASE_LOCAL_URL } from "../../constants/api-urls";
+import { toast } from "react-toastify";
+import { toastConfig } from "../../constants/forms/config/toastConfig";
 
 
-interface createClientProps {
+interface CreateClientProps {
     primaryContact: string;
     type: string;
     companyName: string;
-    email: string;
-    phoneNumber: number;
+    customerEmail: string;
+    phoneNumber: number | undefined;
+    paymentTerms: string;
+    country: string;
+    address: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    contactName: string;
+    contactEmail: string;
+    contactPhone: number | undefined;
 };
 
-const initialState: createClientProps = {
+const initialState: CreateClientProps = {
     primaryContact: "",
     type: "",
     companyName: "",
-    email: "",
-    phoneNumber: 0,
-}
-interface CreateClientProps {
-    // Define the properties needed for creating a client
-    primaryContact: string;
-    type: string;
-    companyName: string;
-    email: string;
-    phoneNumber: number;
+    customerEmail: "",
+    phoneNumber: undefined,
+    paymentTerms: "",
+    country: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    contactName: "",
+    contactEmail: "",
+    contactPhone: undefined,
 }
 
 export const createClient = createAsyncThunk<any, CreateClientProps>(
@@ -45,6 +57,7 @@ export const createClient = createAsyncThunk<any, CreateClientProps>(
             }
             const responseData = await response.json();
             console.log(responseData);
+            toast.success("created client successfully", toastConfig)
             // Optionally, you can dispatch an action here to update the Redux store
             return responseData;
         } catch (error) {
@@ -68,8 +81,8 @@ const createClientSlice = createSlice({
         companyName: (state, action: PayloadAction<string>) => {
             state.type = action.payload
         },
-        email: (state, action: PayloadAction<string>) => {
-            state.email = action.payload
+        customerEmail: (state, action: PayloadAction<string>) => {
+            state.customerEmail = action.payload
         },
         phoneNumber: (state, action: PayloadAction<number>) => {
             state.phoneNumber = action.payload
@@ -77,6 +90,6 @@ const createClientSlice = createSlice({
     }
 });
 
-export const { updateCustomerType, updateType, companyName, email, phoneNumber } = createClientSlice.actions;
+export const { updateCustomerType, updateType, companyName, customerEmail, phoneNumber } = createClientSlice.actions;
 
 export default createClientSlice;
