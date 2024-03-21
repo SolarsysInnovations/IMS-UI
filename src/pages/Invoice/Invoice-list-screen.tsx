@@ -7,25 +7,23 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux-store/store'
 import ToastUi from '../../components/ui/ToastifyUi'
-import { fetchServiceList } from '../../redux-store/service/serviceSlice'
-import { invoiceData } from '../../constants/invoiceData'
 import { columns } from '../../constants/invoice-table-data'
+import { fetchInvoiceList } from '../../redux-store/invoice/invoiceSlice'
 
 const InvoiceList = () => {
-    const componentRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
-        dispatch(fetchServiceList())
+        dispatch(fetchInvoiceList())
     }, [dispatch])
     // const { data: clientListData } = useSelector((state: RootState) => state.clientDataList);
-    const { data: serviceList } = useSelector((state: RootState) => state.serviceList);
+    const { data: invoiceList } = useSelector((state: RootState) => state.invoiceList);
 
     const buttons = [
         { label: 'Create User', icon: Add, onClick: () => navigate("/invoice/create") },
     ];
     const navigate = useNavigate();
     const pathname = usePathname();
-    const newData = serviceList.map((item: any) => {
+    const newData = invoiceList.map((item: any) => {
         return {
             ...item,
             id: item._id // Rename _id to id
@@ -37,7 +35,7 @@ const InvoiceList = () => {
         <>
             <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi columns={columns} tableData={invoiceData} checkboxSelection={false} />
+            <GridDataUi columns={columns} tableData={newData} checkboxSelection={false} />
 
         </>
     )

@@ -15,7 +15,7 @@ export interface createCustomerProps {
     contactPhone: number;
 };
 
-const customerInitialValue: createCustomerProps = {
+export const customerInitialValue: createCustomerProps = {
     primaryContact: "",
     type: "",
     companyName: "",
@@ -34,37 +34,44 @@ const customerInitialValue: createCustomerProps = {
 
 export default customerInitialValue;
 //
+interface ServiceListProps {
+    serviceAccountingCode: string;
+    qty: Number;
+    price: Number;
+    serviceAmount: Number;
+}
 export interface InvoiceInitialValueProps {
-    primaryContact: string;
-    type: string;
+    invoiceType: string;
+    invoiceNumber: string;
     companyName: string;
-    customerEmail: string;
-    phoneNumber: number;
+    gstType: string;
+    gstPercentage: string;
+    invoiceDate: string;
+    gstInNumber: string;
     paymentTerms: string;
-    country: string;
-    address: string;
-    city: string;
-    state: string;
-    pinCode: string;
-    contactName: string;
-    contactEmail: string;
-    contactPhone: number;
+    dueDate: string;
+    invoiceStatus: string;
+    servicesList: ServiceListProps[];
 }
 
 export const invoiceInitialValue: InvoiceInitialValueProps = {
-    primaryContact: "",
-    type: "",
+    invoiceType: "",
+    invoiceNumber: "",
     companyName: "",
-    customerEmail: "",
-    phoneNumber: 0,
+    gstType: "",
+    gstPercentage: "",
+    invoiceDate: "",
+    gstInNumber: "",
     paymentTerms: "",
-    country: "",
-    address: "",
-    city: "",
-    state: "",
-    pinCode: "",
-    contactName: "",
-    contactEmail: "",
-    contactPhone: 0,
+    dueDate: "",
+    invoiceStatus: "",
+    servicesList: [
+        {
+            serviceAccountingCode: "",
+            qty: 0,
+            price: 0,
+            serviceAmount: 0
+        },
+    ]
 };
 

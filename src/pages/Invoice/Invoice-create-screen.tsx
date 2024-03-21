@@ -1,25 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TableHeader from '../../components/layouts/TableHeader';
 import { Add } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box, Grid, Typography } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
-import { AppDispatch } from '../../redux-store/store'
+import { AppDispatch, RootState } from '../../redux-store/store'
 import RadioUi from '../../components/ui/RadioGroup';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import ToastUi from '../../components/ui/ToastifyUi';
-import { toast } from 'react-toastify';
-import TabUi from '../../components/ui/Tabs';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { validationSchema } from '../../constants/forms/validations/validationSchema';
-import { toastConfig } from '../../constants/forms/config/toastConfig';
-import formInitialValues, { createCustomerProps } from '../../constants/forms/formikInitialValues';
-import { customerCreate } from '../../redux-store/customer/customerCreateSlice';
+import { InvoiceInitialValueProps, invoiceInitialValue } from '../../constants/forms/formikInitialValues';
+import { fetchCustomerList } from '../../redux-store/customer/fetchClientList';
 
 const CreateInvoice = () => {
+
+    const { data: customerList } = useSelector((state: RootState) => state.customerList);
+
+    const companyOptions = customerList.map((customer: any) => ({
+        value: customer?.companyName,
+        label: customer?.companyName,
+    }))
 
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
@@ -30,22 +34,34 @@ const CreateInvoice = () => {
         { value: "Regular", label: "Regular" },
         { value: "Onetime", label: "Onetime" },
     ]
-
+    const paymentTerms = [
+        { value: "Net 30", label: "Net 30" },
+        { value: "Net 45", label: "Net 45" },
+        { value: "Due On Receipt", label: "Due On Receipt" },
+        { value: "Custom", label: "Custom" },
+    ]
+    useEffect(() => {
+        dispatch(fetchCustomerList())
+    }, [dispatch])
     const options = [{ value: "arun", label: "arun" }]
     const countries = [{ value: "uk", label: "uk" },
     { value: "australia", label: "australia" }];
+    const gstType = [
+        { value: "Local", label: "Local" },
+        { value: "Interstate", label: "Interstate" },
+        { value: "SEZ", label: "SEZ" },
+    ];
 
     return (
         <div>
             <Formik
-                initialValues={formInitialValues}
+                initialValues={invoiceInitialValue}
                 validationSchema={validationSchema}
-                onSubmit={async (values: createCustomerProps, { setSubmitting, resetForm }) => {
+                onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
                     try {
                         console.log(values);
-                        dispatch(customerCreate(values))
-                        resetForm();
-
+                        // dispatch(customerCreate(values))
+                        // resetForm();
                     } catch (error) {
                         console.error("An error occurred during login:", error);
                     }
@@ -65,7 +81,7 @@ const CreateInvoice = () => {
                             <Grid container spacing={2}>
                                 <Grid item xs={4}>
                                     <Box>
-                                        <RadioUi value={values.type} errorMsg={touched.type && errors.type} onChange={handleChange} groupName='type' options={genderOptions} label='Invoice type' />
+                                        <RadioUi value={values.invoiceType} onChange={handleChange} groupName='type' options={genderOptions} label='Invoice type' />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={4}>
@@ -73,25 +89,31 @@ const CreateInvoice = () => {
                                         <TextFieldUi
                                             required={true}
                                             fullWidth={false}
-                                            label='Primary Contact'
-                                            name='primaryContact'
-                                            type="text"
-                                            value={values.primaryContact}
+                                            label='Invoice Number'
+                                            name='invoiceNumber'
+                                            type="number"
+                                            value={values.invoiceNumber}
                                             onChange={handleChange}
-                                            error={touched.primaryContact && Boolean(errors.primaryContact)}
-                                            helperText={touched.primaryContact && errors.primaryContact}
+                                            error={touched.invoiceNumber && Boolean(errors.invoiceNumber)}
+                                            helperText={touched.invoiceNumber && errors.invoiceNumber}
                                         />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Box>
-                                        <TextFieldUi
-                                            fullWidth={false}
-                                            label='Company Name'
-                                            name='companyName'
-                                            type="text"
-                                            value={values.companyName}
-                                            onChange={handleChange}
+                                        <SelectDropdown
+                                            onChange={(newValue: any) => {
+                                                if (newValue) {
+                                                    console.log(newValue)
+                                                    setFieldValue("companyName", newValue.value)
+                                                } else {
+                                                    console.log("clearing the value")
+                                                    setFieldValue("companyName", "")
+                                                }
+                                            }}
+                                            options={companyOptions}
+                                            value={values.companyName ? { value: values.companyName, label: values.companyName } : null}
+                                            labelText='Customer Name'
                                             error={touched.companyName && Boolean(errors.companyName)}
                                             helperText={touched.companyName && errors.companyName}
                                         />
@@ -99,15 +121,21 @@ const CreateInvoice = () => {
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Box>
-                                        <TextFieldUi
-                                            fullWidth={false}
-                                            label='customer Email'
-                                            name='customerEmail'
-                                            type="text"
-                                            value={values.customerEmail}
-                                            onChange={handleChange}
-                                            error={touched.customerEmail && Boolean(errors.customerEmail)}
-                                            helperText={touched.customerEmail && errors.customerEmail}
+                                        <SelectDropdown
+                                            onChange={(newValue: any) => {
+                                                if (newValue) {
+                                                    console.log(newValue)
+                                                    setFieldValue("gstType", newValue.value)
+                                                } else {
+                                                    console.log("clearing the value")
+                                                    setFieldValue("gstType", "")
+                                                }
+                                            }}
+                                            options={gstType}
+                                            value={values.gstType ? { value: values.gstType, label: values.gstType } : null}
+                                            labelText='Gst Type'
+                                            error={touched.gstType && Boolean(errors.gstType)}
+                                            helperText={touched.gstType && errors.gstType}
                                         />
                                     </Box>
                                 </Grid>
@@ -115,19 +143,14 @@ const CreateInvoice = () => {
                                     <Box>
                                         <TextFieldUi
                                             fullWidth={false}
-                                            label='Phone Number'
-                                            name='phoneNumber'
+                                            label='Gst Percentage'
+                                            name='gstPercentage'
                                             type="text"
-                                            value={values.phoneNumber}
+                                            value={values.gstPercentage}
                                             onChange={handleChange}
-                                            error={touched.phoneNumber && Boolean(errors.phoneNumber)}
-                                            helperText={touched.phoneNumber && errors.phoneNumber}
+                                            error={touched.gstPercentage && Boolean(errors.gstPercentage)}
+                                            helperText={touched.gstPercentage && errors.gstPercentage}
                                         />
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Box>
-                                        <Typography variant="body2" color="initial">Other Details</Typography>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={4}>
@@ -142,7 +165,7 @@ const CreateInvoice = () => {
                                                     setFieldValue("paymentTerms", "")
                                                 }
                                             }}
-                                            options={options}
+                                            options={paymentTerms}
                                             value={values.paymentTerms ? { value: values.paymentTerms, label: values.paymentTerms } : null}
                                             labelText='Payment Terms'
                                             error={touched.paymentTerms && Boolean(errors.paymentTerms)}
@@ -150,14 +173,9 @@ const CreateInvoice = () => {
                                         />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Box>
-                                        <Typography variant="body2" color="initial">Address</Typography>
-                                    </Box>
-                                </Grid>
                                 <Grid item xs={4}>
                                     <Box>
-                                        <SelectDropdown
+                                        {/* <SelectDropdown
                                             labelText='country / region'
                                             value={values.country ? { value: values.country, label: values.country } : null}
                                             onChange={(newValue: any) => {
@@ -172,6 +190,20 @@ const CreateInvoice = () => {
                                             options={countries}
                                             error={touched.country && Boolean(errors.country)}
                                             helperText={touched.country && errors.country}
+                                        /> */}
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Box>
+                                        <TextFieldUi
+                                            fullWidth={false}
+                                            label='Invoice Date'
+                                            name='invoiceDate'
+                                            type="text"
+                                            value={values.invoiceDate}
+                                            onChange={handleChange}
+                                            error={touched.invoiceDate && Boolean(errors.invoiceDate)}
+                                            helperText={touched.invoiceDate && errors.invoiceDate}
                                         />
                                     </Box>
                                 </Grid>
@@ -179,27 +211,13 @@ const CreateInvoice = () => {
                                     <Box>
                                         <TextFieldUi
                                             fullWidth={false}
-                                            label='Address'
-                                            name='address'
+                                            label='GstIn Number'
+                                            name='gstInNumber'
                                             type="text"
-                                            value={values.address}
+                                            value={values.gstInNumber}
                                             onChange={handleChange}
-                                            error={touched.address && Boolean(errors.address)}
-                                            helperText={touched.address && errors.address}
-                                        />
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Box>
-                                        <TextFieldUi
-                                            fullWidth={false}
-                                            label='city'
-                                            name='city'
-                                            type="text"
-                                            value={values.city}
-                                            onChange={handleChange}
-                                            error={touched.city && Boolean(errors.city)}
-                                            helperText={touched.city && errors.city}
+                                            error={touched.gstInNumber && Boolean(errors.gstInNumber)}
+                                            helperText={touched.gstInNumber && errors.gstInNumber}
                                         />
                                     </Box>
                                 </Grid>
@@ -207,7 +225,7 @@ const CreateInvoice = () => {
                                     <Box>
                                         <SelectDropdown
                                             labelText='state'
-                                            value={values.state ? { value: values.state, label: values.state } : null}
+                                            value={values.paymentTerms ? { value: values.paymentTerms, label: values.paymentTerms } : null}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
                                                     console.log(newValue)
@@ -218,8 +236,8 @@ const CreateInvoice = () => {
                                                 }
                                             }}
                                             options={countries}
-                                            error={touched.state && Boolean(errors.state)}
-                                            helperText={touched.state && errors.state}
+                                            error={touched.paymentTerms && Boolean(errors.paymentTerms)}
+                                            helperText={touched.paymentTerms && errors.paymentTerms}
                                         />
                                     </Box>
                                 </Grid>
@@ -227,13 +245,13 @@ const CreateInvoice = () => {
                                     <Box>
                                         <TextFieldUi
                                             fullWidth={false}
-                                            label='pin code'
-                                            name='pinCode'
+                                            label='Due Date'
+                                            name='dueDate'
                                             type="text"
-                                            value={values.pinCode}
+                                            value={values.dueDate}
                                             onChange={handleChange}
-                                            error={touched.pinCode && Boolean(errors.pinCode)}
-                                            helperText={touched.pinCode && errors.pinCode}
+                                            error={touched.dueDate && Boolean(errors.dueDate)}
+                                            helperText={touched.dueDate && errors.dueDate}
                                         />
                                     </Box>
                                 </Grid>
@@ -246,41 +264,13 @@ const CreateInvoice = () => {
                                     <Box>
                                         <TextFieldUi
                                             fullWidth={false}
-                                            label='Contact Name'
-                                            name='contactName'
+                                            label='Invoice Status'
+                                            name='invoiceStatus'
                                             type="text"
-                                            value={values.contactName}
+                                            value={values.invoiceStatus}
                                             onChange={handleChange}
-                                            error={touched.contactName && Boolean(errors.contactName)}
-                                            helperText={touched.contactName && errors.contactName}
-                                        />
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Box>
-                                        <TextFieldUi
-                                            fullWidth={false}
-                                            label='Contact Email'
-                                            name='contactEmail'
-                                            type="text"
-                                            value={values.contactEmail}
-                                            onChange={handleChange}
-                                            error={touched.contactEmail && Boolean(errors.contactEmail)}
-                                            helperText={touched.contactEmail && errors.contactEmail}
-                                        />
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Box>
-                                        <TextFieldUi
-                                            fullWidth={false}
-                                            label='Contact Phone'
-                                            name='contactPhone'
-                                            type="text"
-                                            value={values.contactPhone}
-                                            onChange={handleChange}
-                                            error={touched.contactPhone && Boolean(errors.contactPhone)}
-                                            helperText={touched.contactPhone && errors.contactPhone}
+                                            error={touched.invoiceStatus && Boolean(errors.invoiceStatus)}
+                                            helperText={touched.invoiceStatus && errors.invoiceStatus}
                                         />
                                     </Box>
                                 </Grid>

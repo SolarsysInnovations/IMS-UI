@@ -20,11 +20,7 @@ interface InvoiceProps {
     dueDate: string;
     invoiceStatus: string;
     servicesList: ServiceProps[];
-    taxAmount: number;
-    discountAmount: number;
-    totalAmount: number;
 }
-
 
 export const invoiceData: InvoiceProps[] = [
     {
@@ -54,9 +50,5 @@ export const invoiceData: InvoiceProps[] = [
                 serviceAmount: 8000,
             }
         ],
-
-        taxAmount: 0,
-        discountAmount: 0,
-        totalAmount: 10000,
     }
 ]

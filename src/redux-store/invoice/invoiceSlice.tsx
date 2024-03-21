@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { BASE_URL_NODE } from "../../constants/api-urls";
+import { API_URLS, BASE_URL_NODE } from "../../constants/api-urls";
 
 
 interface InvoiceListState {
@@ -24,9 +24,9 @@ export const fetchInvoiceList = createAsyncThunk<any>('invoice/fetchData', async
                 'Content-Type': 'application/json'
             }
         };
-        const response = await fetch(`${BASE_URL_NODE}/service/list`, config);
+        const response = await fetch(API_URLS.invoiceList, config);
         if (!response.ok) {
-            throw new Error('Failed to fetch service data');
+            throw new Error('Failed to fetch invoice data');
         }
         const data = await response.json();
         console.log(data);

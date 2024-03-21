@@ -1,46 +1,35 @@
 import * as Yup from 'yup';
 
 export const validationSchema = Yup.object({
-    primaryContact: Yup.string()
+    invoiceType: Yup.string()
         .max(255)
         .required('primaryContact is required'),
-    type: Yup.string()
+    invoiceNumber: Yup.string()
         .max(255)
         .required('type is required'),
-    companyName: Yup.string()
+    customerName: Yup.string()
         .max(255)
         .required('companyName is required'),
-    customerEmail: Yup.string()
+    gstType: Yup.string()
         .max(255)
         .required('customerEmail is required'),
-    phoneNumber: Yup.number()
-        .min(8, "too short")
+    gstPercentage: Yup.string()
+        .max(255)
         .required('phoneNumber is required'),
-    paymentTerms: Yup.string()
+    invoiceDate: Yup.string()
         .max(255)
         .required('paymentTerms is required'),
-    country: Yup.string()
+    gstInNumber: Yup.string()
         .max(255)
         .required('country is required'),
-    address: Yup.string()
+    paymentTerms: Yup.string()
         .max(255)
         .required('address is required'),
-    city: Yup.string()
+    dueDate: Yup.string()
         .max(255)
         .required('city is required'),
-    state: Yup.string()
+    invoiceStatus: Yup.string()
         .max(255)
         .required('state is required'),
-    pinCode: Yup.string()
-        .max(255)
-        .required('pinCode is required'),
-    contactName: Yup.string()
-        .max(255)
-        .required('contactName is required'),
-    contactEmail: Yup.string()
-        .max(255)
-        .required('contactEmail is required'),
-    contactPhone: Yup.number()
-        .min(8, "too short")
-        .required('phoneNumber is required'),
+
 });
