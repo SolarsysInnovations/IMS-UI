@@ -2,42 +2,37 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import DemoTwo from '../../pages/DemoTwo';
 
 const style = {
     position: 'absolute' as 'absolute',
-    top: '90%',
-    left: '60%',
+    top: '45%',
+    left: '50%',
     transform: 'translate(-50%, -50%)',
     width: "60%",
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    borderRadius: "10px",
     boxShadow: 24,
     p: 4,
 };
 
-export default function ModalUi() {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+interface ModalUiProps {
+    children?: React.ReactNode;
+    open: boolean;
+    onClose?: () => void;
+}
 
+export default function ModalUi({ children, open, onClose }: ModalUiProps) {
     return (
         <div>
-            <Button onClick={handleOpen}>Open modal</Button>
             <Modal
                 keepMounted
-                sx={{
-                    msOverflowX: "scroll",
-                    overflowY: "scroll",
-                }}
                 open={open}
-                onClose={handleClose}
+                onClose={onClose} // Use onClose prop for handling modal close
                 aria-labelledby="keep-mounted-modal-title"
                 aria-describedby="keep-mounted-modal-description"
             >
                 <Box sx={style}>
-                    <DemoTwo />
+                    {children}
                 </Box>
             </Modal>
         </div>

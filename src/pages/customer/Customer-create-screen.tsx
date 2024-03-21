@@ -8,7 +8,6 @@ import { Box, Grid, Typography } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
 import { AppDispatch } from '../../redux-store/store'
 import RadioUi from '../../components/ui/RadioGroup';
-import { createClient } from '../../redux-store/client/createClientSlice';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import ToastUi from '../../components/ui/ToastifyUi';
@@ -17,9 +16,11 @@ import TabUi from '../../components/ui/Tabs';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { validationSchema } from '../../constants/forms/validations/validationSchema';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
-import formInitialValues, { createClientProps } from '../../constants/forms/formikInitialValues';
+import formInitialValues, { createCustomerProps } from '../../constants/forms/formikInitialValues';
+import { customerCreate } from '../../redux-store/customer/customerCreateSlice';
+import customerInitialValue from '../../constants/forms/formikInitialValues';
 
-const CreateClient = () => {
+const CustomerCreate = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
@@ -38,13 +39,13 @@ const CreateClient = () => {
     return (
         <div>
             <Formik
-                initialValues={formInitialValues}
+                initialValues={customerInitialValue}
                 validationSchema={validationSchema}
-                onSubmit={async (values: createClientProps, { setSubmitting, resetForm }) => {
+                onSubmit={async (values: createCustomerProps, { setSubmitting, resetForm }) => {
                     try {
                         console.log(values);
-                        dispatch(createClient(values))
-                        // resetForm();
+                        dispatch(customerCreate(values))
+                        resetForm();
 
                     } catch (error) {
                         console.error("An error occurred during login:", error);
@@ -227,13 +228,13 @@ const CreateClient = () => {
                                     <Box>
                                         <TextFieldUi
                                             fullWidth={false}
-                                            label='Zip code'
-                                            name='zipCode'
+                                            label='pin code'
+                                            name='pinCode'
                                             type="text"
-                                            value={values.zipCode}
+                                            value={values.pinCode}
                                             onChange={handleChange}
-                                            error={touched.zipCode && Boolean(errors.zipCode)}
-                                            helperText={touched.zipCode && errors.zipCode}
+                                            error={touched.pinCode && Boolean(errors.pinCode)}
+                                            helperText={touched.pinCode && errors.pinCode}
                                         />
                                     </Box>
                                 </Grid>
@@ -294,4 +295,4 @@ const CreateClient = () => {
     )
 }
 
-export default CreateClient
+export default CustomerCreate

@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterSlice from "./demoSlice";
-import clientDataSlice from "./client/fetchClientList";
-import createClientSlice from "./client/createClientSlice";
+import createClientSlice from "./customer/customerCreateSlice";
 import serviceListDataSlice from "./service/serviceSlice";
+import customerDataSlice from "./customer/fetchClientList";
 
 export const store = configureStore({
   reducer: {
     counter: counterSlice.reducer,
-    clientList: clientDataSlice.reducer,
+    customerList: customerDataSlice.reducer,
     createClient: createClientSlice.reducer,
     serviceList: serviceListDataSlice.reducer,
   },

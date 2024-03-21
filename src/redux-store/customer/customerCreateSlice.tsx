@@ -1,10 +1,10 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { BASE_LOCAL_URL } from "../../constants/api-urls";
+import { API_URLS, BASE_LOCAL_URL } from "../../constants/api-urls";
 import { toast } from "react-toastify";
 import { toastConfig } from "../../constants/forms/config/toastConfig";
 
 
-interface CreateClientProps {
+interface CreateCustomerProps {
     primaryContact: string;
     type: string;
     companyName: string;
@@ -15,32 +15,32 @@ interface CreateClientProps {
     address: string;
     city: string;
     state: string;
-    zipCode: string;
+    pinCode: string;
     contactName: string;
     contactEmail: string;
     contactPhone: number | undefined;
 };
 
-const initialState: CreateClientProps = {
+const initialState: CreateCustomerProps = {
     primaryContact: "",
     type: "",
     companyName: "",
     customerEmail: "",
-    phoneNumber: undefined,
+    phoneNumber: 0,
     paymentTerms: "",
     country: "",
     address: "",
     city: "",
     state: "",
-    zipCode: "",
+    pinCode: "",
     contactName: "",
     contactEmail: "",
-    contactPhone: undefined,
+    contactPhone: 0,
 }
 
-export const createClient = createAsyncThunk<any, CreateClientProps>(
-    'client/create',
-    async (createClientProps: CreateClientProps, { rejectWithValue }) => {
+export const customerCreate = createAsyncThunk<any, CreateCustomerProps>(
+    'customer/create',
+    async (createCustomerProps: CreateCustomerProps, { rejectWithValue }) => {
         try {
             const token = localStorage.getItem('token');
             const config = {
@@ -49,15 +49,15 @@ export const createClient = createAsyncThunk<any, CreateClientProps>(
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(createClientProps) // Pass the entire object
+                body: JSON.stringify(createCustomerProps) // Pass the entire object
             };
-            const response = await fetch(`${BASE_LOCAL_URL}/client/createClient`, config);
+            const response = await fetch(API_URLS.customerCreate, config);
             if (!response.ok) {
-                throw new Error('Failed to create client');
+                throw new Error('Failed to create customer');
             }
             const responseData = await response.json();
             console.log(responseData);
-            toast.success("created client successfully", toastConfig)
+            toast.success("created customer successfully", toastConfig)
             // Optionally, you can dispatch an action here to update the Redux store
             return responseData;
         } catch (error) {
@@ -69,7 +69,7 @@ export const createClient = createAsyncThunk<any, CreateClientProps>(
 
 
 const createClientSlice = createSlice({
-    name: "clientSlice",
+    name: "customerSlice",
     initialState,
     reducers: {
         updateCustomerType: (state, action: PayloadAction<string>) => {

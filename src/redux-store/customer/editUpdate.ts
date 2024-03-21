@@ -1,16 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { BASE_LOCAL_URL } from "../../constants/api-urls";
+import { API_URLS, BASE_LOCAL_URL } from "../../constants/api-urls";
 import { toastConfig } from "../../constants/forms/config/toastConfig";
 import { toast } from "react-toastify";
 
-interface EditUpdatePayload {
+interface CustomerEditUpdatePayload {
     row: any;
 }
 
-export const editUpdate = createAsyncThunk<any, EditUpdatePayload>(
-    'client/update',
-    async ({ row }: EditUpdatePayload) => {
-        console.log(row);
+export const customerEditUpdate = createAsyncThunk<any, CustomerEditUpdatePayload>(
+    'customer/update',
+    async ({ row }: CustomerEditUpdatePayload) => {
         try {
             const token = localStorage.getItem('token');
             const config = {
@@ -21,13 +20,14 @@ export const editUpdate = createAsyncThunk<any, EditUpdatePayload>(
                 },
                 body: JSON.stringify(row)
             };
-            const response = await fetch(`${BASE_LOCAL_URL}/client/update/${row.id}`, config);
+            const id = row.id;
+            const response = await fetch(`${API_URLS.customerUpdate}/${id}`, config);
             if (!response.ok) {
                 throw new Error('Failed to update client');
             }
             const data = await response.json();
             console.log(data);
-            toast.success("updated successfully", toastConfig)
+            toast.success("customer updated successfully", toastConfig)
             return data;
         } catch (error) {
             throw error;

@@ -1,4 +1,4 @@
-export interface createClientProps {
+export interface createCustomerProps {
     primaryContact: string;
     type: string;
     companyName: string;
@@ -9,13 +9,13 @@ export interface createClientProps {
     address: string;
     city: string;
     state: string;
-    zipCode: string;
+    pinCode: string;
     contactName: string;
     contactEmail: string;
     contactPhone: number;
 };
 
-const formInitialValues: createClientProps = {
+const customerInitialValue: createCustomerProps = {
     primaryContact: "",
     type: "",
     companyName: "",
@@ -26,10 +26,45 @@ const formInitialValues: createClientProps = {
     address: "",
     city: "",
     state: "",
-    zipCode: "",
+    pinCode: "",
     contactName: "",
     contactEmail: "",
     contactPhone: 0,
 };
 
-export default formInitialValues;
+export default customerInitialValue;
+//
+export interface InvoiceInitialValueProps {
+    primaryContact: string;
+    type: string;
+    companyName: string;
+    customerEmail: string;
+    phoneNumber: number;
+    paymentTerms: string;
+    country: string;
+    address: string;
+    city: string;
+    state: string;
+    pinCode: string;
+    contactName: string;
+    contactEmail: string;
+    contactPhone: number;
+}
+
+export const invoiceInitialValue: InvoiceInitialValueProps = {
+    primaryContact: "",
+    type: "",
+    companyName: "",
+    customerEmail: "",
+    phoneNumber: 0,
+    paymentTerms: "",
+    country: "",
+    address: "",
+    city: "",
+    state: "",
+    pinCode: "",
+    contactName: "",
+    contactEmail: "",
+    contactPhone: 0,
+};
+

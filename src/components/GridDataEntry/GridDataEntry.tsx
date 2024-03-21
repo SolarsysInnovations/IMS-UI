@@ -2,7 +2,7 @@ import { Box, Grid, Button } from '@mui/material'
 import React, { useState } from 'react'
 import TextFieldUi from '../ui/TextField'
 import { useDispatch } from 'react-redux';
-import { updateEmail, updateName } from '../../redux-store/client/clientSlice';
+import { updateEmail, updateName } from '../../redux-store/customer/customerSlice';
 
 
 const GridDataEntry = () => {

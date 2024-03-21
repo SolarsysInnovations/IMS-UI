@@ -31,9 +31,9 @@ export const validationSchema = Yup.object({
     state: Yup.string()
         .max(255)
         .required('state is required'),
-    zipCode: Yup.string()
+    pinCode: Yup.string()
         .max(255)
-        .required('zipCode is required'),
+        .required('pinCode is required'),
     contactName: Yup.string()
         .max(255)
         .required('contactName is required'),

@@ -13,8 +13,8 @@ import TextFieldLarge from "../components/ui/TextFieldLarge";
 import { RemoveRedEyeRounded, VisibilityOff, VisibilityOffRounded, VisibilityOutlined } from "@mui/icons-material";
 import { userLogin } from "../redux-store/login-slice";
 import { serializeFormValues } from "../services/utils/serialize";
-import { fetchClientList } from "../redux-store/client/fetchClientList";
 import { AppDispatch } from "../redux-store/store";
+import { fetchCustomerList } from "../redux-store/customer/fetchClientList";
 
 interface Values {
   email: string;
@@ -38,7 +38,7 @@ const Login = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchClientList());
+    dispatch(fetchCustomerList());
   }, [dispatch]);
 
   return (

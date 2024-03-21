@@ -12,7 +12,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { sidebarData } from '../../constants/sidebar-data';
 import { capitalize } from '../../services/utils/capitalization';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Collapse, ListSubheader } from '@mui/material';

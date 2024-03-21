@@ -9,28 +9,28 @@ import TableHeader from '../../components/layouts/TableHeader';
 import { Add } from '@mui/icons-material';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { useEffect, useState } from 'react';
-import { editUpdate } from '../../redux-store/client/editUpdate';
 import { AppDispatch } from '../../redux-store/store';
 import { toast } from 'react-toastify';
 import ToastUi from '../../components/ui/ToastifyUi';
 import { validationSchema } from '../../constants/forms/validations/validationSchema';
 import RadioUi from '../../components/ui/RadioGroup';
-import formInitialValues, { createClientProps } from '../../constants/forms/formikInitialValues';
+import formInitialValues, { createCustomerProps } from '../../constants/forms/formikInitialValues';
 import SelectDropdown from '../../components/ui/SelectDropdown';
+import { customerEditUpdate } from '../../redux-store/customer/editUpdate';
 
 
 
-const EditClient = () => {
+const CustomerEdit = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    const [initialClientData, setInitialClientData] = useState<createClientProps | null>(null);
+    const [initialCustomerData, setInitialClientData] = useState<createCustomerProps | null>(null);
 
     useEffect(() => {
-        const initialClientData = localStorage.getItem('client');
-        if (initialClientData) {
-            const parsedClientData = JSON.parse(initialClientData);
+        const initialCustomerData = localStorage.getItem('client');
+        if (initialCustomerData) {
+            const parsedClientData = JSON.parse(initialCustomerData);
             console.log(parsedClientData);
 
             setInitialClientData(parsedClientData);
@@ -50,13 +50,12 @@ const EditClient = () => {
     return (
         <Formik
             enableReinitialize
-            initialValues={initialClientData || formInitialValues}
+            initialValues={initialCustomerData || formInitialValues}
             validationSchema={validationSchema}
-            onSubmit={async (values: createClientProps, { setSubmitting, resetForm }) => {
+            onSubmit={async (values: createCustomerProps, { setSubmitting, resetForm }) => {
                 try {
                     const payload = { row: values };
-                    dispatch(editUpdate(payload));
-
+                    dispatch(customerEditUpdate(payload));
                     resetForm();
 
                     setInitialClientData(null);
@@ -243,13 +242,13 @@ const EditClient = () => {
                                 <Box>
                                     <TextFieldUi
                                         fullWidth={false}
-                                        label='Zip code'
-                                        name='zipCode'
+                                        label='pin code'
+                                        name='pinCode'
                                         type="text"
-                                        value={values.zipCode}
+                                        value={values.pinCode}
                                         onChange={handleChange}
-                                        error={touched.zipCode && Boolean(errors.zipCode)}
-                                        helperText={touched.zipCode && errors.zipCode}
+                                        error={touched.pinCode && Boolean(errors.pinCode)}
+                                        helperText={touched.pinCode && errors.pinCode}
                                     />
                                 </Box>
                             </Grid>
@@ -308,4 +307,4 @@ const EditClient = () => {
     );
 };
 
-export default EditClient;
+export default CustomerEdit;

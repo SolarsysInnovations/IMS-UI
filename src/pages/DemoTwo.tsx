@@ -39,7 +39,6 @@ function DemoTwo() {
 
     return (
         <div className="App" id="invoiceCapture" style={{ padding: "10px" }}>
-            <h1>Generate PDF from Table Content</h1>
             <Box sx={{
                 textAlign: "right",
             }}>

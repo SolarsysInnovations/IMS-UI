@@ -14,7 +14,7 @@ import GridDataUi from '../components/Grid/GridData';
 import ButtonSmallUi from '../components/ui/ButtonSmall';
 import SearchBarUi from '../components/ui/SearchBar';
 import { columns } from '../constants/table-columns-data';
-import { clientListData } from '../constants/clientData';
+import { clientListData } from '../constants/customerData';
 
 const ComponentsScreen = () => {
     const [checked, setChecked] = React.useState(true);

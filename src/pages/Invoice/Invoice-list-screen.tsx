@@ -8,9 +8,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux-store/store'
 import ToastUi from '../../components/ui/ToastifyUi'
 import { fetchServiceList } from '../../redux-store/service/serviceSlice'
-import { columns } from '../../constants/service-table-data'
+import { invoiceData } from '../../constants/invoiceData'
+import { columns } from '../../constants/invoice-table-data'
 
-const ServicesList = () => {
+const InvoiceList = () => {
     const componentRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
@@ -20,7 +21,7 @@ const ServicesList = () => {
     const { data: serviceList } = useSelector((state: RootState) => state.serviceList);
 
     const buttons = [
-        { label: 'Create User', icon: Add, onClick: () => navigate("/client/create") },
+        { label: 'Create User', icon: Add, onClick: () => navigate("/invoice/create") },
     ];
     const navigate = useNavigate();
     const pathname = usePathname();
@@ -36,10 +37,10 @@ const ServicesList = () => {
         <>
             <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi columns={columns} tableData={newData} checkboxSelection={false} />
+            <GridDataUi columns={columns} tableData={invoiceData} checkboxSelection={false} />
 
         </>
     )
 }
 
-export default ServicesList
+export default InvoiceList
