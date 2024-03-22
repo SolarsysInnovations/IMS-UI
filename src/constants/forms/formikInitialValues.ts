@@ -1,6 +1,6 @@
 export interface createCustomerProps {
-    primaryContact: string;
-    type: string;
+    customerName: string;
+    customerType: string;
     companyName: string;
     customerEmail: string;
     phoneNumber: number;
@@ -16,8 +16,8 @@ export interface createCustomerProps {
 };
 
 export const customerInitialValue: createCustomerProps = {
-    primaryContact: "",
-    type: "",
+    customerName: "",
+    customerType: "",
     companyName: "",
     customerEmail: "",
     phoneNumber: 0,

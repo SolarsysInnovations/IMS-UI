@@ -85,9 +85,9 @@ export const columns: GridColDef[] = [
     },
     { field: 'id', headerName: 'ID', width: 90 },
     {
-        field: 'primaryContact',
-        headerName: 'primaryContact',
-        width: 250,
+        field: 'customerName',
+        headerName: 'Customer Name',
+        width: 150,
         editable: true,
     },
     {

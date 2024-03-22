@@ -5,8 +5,8 @@ import { toastConfig } from "../../constants/forms/config/toastConfig";
 
 
 interface CreateCustomerProps {
-    primaryContact: string;
-    type: string;
+    customerName: string;
+    customerType: string;
     companyName: string;
     customerEmail: string;
     phoneNumber: number | undefined;
@@ -22,8 +22,8 @@ interface CreateCustomerProps {
 };
 
 const initialState: CreateCustomerProps = {
-    primaryContact: "",
-    type: "",
+    customerName: "",
+    customerType: "",
     companyName: "",
     customerEmail: "",
     phoneNumber: 0,
@@ -41,6 +41,7 @@ const initialState: CreateCustomerProps = {
 export const customerCreate = createAsyncThunk<any, CreateCustomerProps>(
     'customer/create',
     async (createCustomerProps: CreateCustomerProps, { rejectWithValue }) => {
+        console.log("Values:", createCustomerProps);
         try {
             const token = localStorage.getItem('token');
             const config = {
@@ -73,13 +74,13 @@ const createClientSlice = createSlice({
     initialState,
     reducers: {
         updateCustomerType: (state, action: PayloadAction<string>) => {
-            state.primaryContact = action.payload;
+            state.customerName = action.payload;
         },
         updateType: (state, action: PayloadAction<string>) => {
-            state.type = action.payload;
+            state.customerType = action.payload;
         },
         companyName: (state, action: PayloadAction<string>) => {
-            state.type = action.payload
+            state.customerType = action.payload
         },
         customerEmail: (state, action: PayloadAction<string>) => {
             state.customerEmail = action.payload

@@ -10,6 +10,8 @@ interface CustomerEditUpdatePayload {
 export const customerEditUpdate = createAsyncThunk<any, CustomerEditUpdatePayload>(
     'customer/update',
     async ({ row }: CustomerEditUpdatePayload) => {
+
+
         try {
             const token = localStorage.getItem('token');
             const config = {

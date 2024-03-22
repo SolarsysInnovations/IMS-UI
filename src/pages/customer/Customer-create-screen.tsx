@@ -31,8 +31,15 @@ const CustomerCreate = () => {
         { value: "Individual", label: "Individual" },
         { value: "Business", label: "Business" },
     ]
-
-    const options = [{ value: "arun", label: "arun" }]
+    // Monthly, Annual, Quarterly, Due on receipt,
+    // Net 30, Net 45,
+    const paymentTerms = [{ value: "Monthly", label: "Monthly" },
+    { value: "Annual", label: "Annual" },
+    { value: "Quarterly", label: "Quarterly" },
+    { value: "Due on receipt", label: "Due on receipt" },
+    { value: "Net 30", label: "Net 30" },
+    { value: "Net 45", label: "Net 45" },
+    ]
     const countries = [{ value: "uk", label: "uk" },
     { value: "australia", label: "australia" }];
 
@@ -40,13 +47,13 @@ const CustomerCreate = () => {
         <div>
             <Formik
                 initialValues={customerInitialValue}
-                validationSchema={validationSchema}
+                validate={() => ({})}
+                // validationSchema={validationSchema}
                 onSubmit={async (values: createCustomerProps, { setSubmitting, resetForm }) => {
                     try {
                         console.log(values);
                         dispatch(customerCreate(values))
-                        resetForm();
-
+                        // resetForm();
                     } catch (error) {
                         console.error("An error occurred during login:", error);
                     }
@@ -66,7 +73,14 @@ const CustomerCreate = () => {
                             <Grid container spacing={2}>
                                 <Grid item xs={4}>
                                     <Box>
-                                        <RadioUi value={values.type} errorMsg={touched.type && errors.type} onChange={handleChange} groupName='type' options={genderOptions} label='customer type' />
+                                        <RadioUi value={values.customerType} errorMsg={touched.customerType && errors.customerType} onChange={(newValue: any) => {
+                                            if (newValue) {
+                                                console.log(newValue.target.value);
+                                                setFieldValue('customerType', newValue.target.value);
+                                            } else {
+                                                setFieldValue('customerType', "")
+                                            }
+                                        }} groupName='type' options={genderOptions} label='customer type' />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={4}>
@@ -74,13 +88,13 @@ const CustomerCreate = () => {
                                         <TextFieldUi
                                             required={true}
                                             fullWidth={false}
-                                            label='Primary Contact'
-                                            name='primaryContact'
+                                            label='Customer Name'
+                                            name='customerName'
                                             type="text"
-                                            value={values.primaryContact}
+                                            value={values.customerName}
                                             onChange={handleChange}
-                                            error={touched.primaryContact && Boolean(errors.primaryContact)}
-                                            helperText={touched.primaryContact && errors.primaryContact}
+                                            error={touched.customerName && Boolean(errors.customerName)}
+                                            helperText={touched.customerName && errors.customerName}
                                         />
                                     </Box>
                                 </Grid>
@@ -143,7 +157,7 @@ const CustomerCreate = () => {
                                                     setFieldValue("paymentTerms", "")
                                                 }
                                             }}
-                                            options={options}
+                                            options={paymentTerms}
                                             value={values.paymentTerms ? { value: values.paymentTerms, label: values.paymentTerms } : null}
                                             labelText='Payment Terms'
                                             error={touched.paymentTerms && Boolean(errors.paymentTerms)}

@@ -31,7 +31,6 @@ const CustomerList = () => {
         };
     });
     console.log(newData);
-
     return (
         <>
             <ToastUi autoClose={1000} />

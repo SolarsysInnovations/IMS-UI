@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { AppDispatch } from '../../redux-store/store';
 import { toast } from 'react-toastify';
 import ToastUi from '../../components/ui/ToastifyUi';
-import { validationSchema } from '../../constants/forms/validations/validationSchema';
+import { customerValidationSchema, validationSchema } from '../../constants/forms/validations/validationSchema';
 import RadioUi from '../../components/ui/RadioGroup';
 import formInitialValues, { createCustomerProps } from '../../constants/forms/formikInitialValues';
 import SelectDropdown from '../../components/ui/SelectDropdown';
@@ -51,13 +51,13 @@ const CustomerEdit = () => {
         <Formik
             enableReinitialize
             initialValues={initialCustomerData || formInitialValues}
-            validationSchema={validationSchema}
+            // validate={() => ({})}
+            validationSchema={customerValidationSchema}
             onSubmit={async (values: createCustomerProps, { setSubmitting, resetForm }) => {
                 try {
                     const payload = { row: values };
                     dispatch(customerEditUpdate(payload));
                     resetForm();
-
                     setInitialClientData(null);
                     localStorage.removeItem('client');
 
@@ -68,19 +68,19 @@ const CustomerEdit = () => {
                     setSubmitting(false);
                 }
             }}
-
         >
             {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => (
                 <Box sx={{ mt: 2 }}>
                     <ToastUi autoClose={1000} />
-                    <TableHeader headerName='Edit the client details' buttons={[
+                    <TableHeader headerName='Edit the Customer details' buttons={[
+                        { label: 'Back', icon: Add, onClick: () => { navigate(-1) } },
                         { label: 'Update', icon: Add, onClick: handleSubmit }
                     ]} />
                     <Form id="createClientForm" noValidate>
                         <Grid container spacing={2}>
                             <Grid item xs={4}>
                                 <Box>
-                                    <RadioUi value={values.type} errorMsg={touched.type && errors.type} onChange={handleChange} groupName='type' options={genderOptions} label='customer type' />
+                                    <RadioUi value={values.customerType} errorMsg={touched.customerType && errors.customerType} onChange={handleChange} groupName='type' options={genderOptions} label='customer type' />
                                 </Box>
                             </Grid>
                             <Grid item xs={4}>
@@ -88,13 +88,13 @@ const CustomerEdit = () => {
                                     <TextFieldUi
                                         required={true}
                                         fullWidth={false}
-                                        label='Primary Contact'
-                                        name='primaryContact'
+                                        label='Customer Name'
+                                        name='customerName'
                                         type="text"
-                                        value={values.primaryContact}
+                                        value={values.customerName}
                                         onChange={handleChange}
-                                        error={touched.primaryContact && Boolean(errors.primaryContact)}
-                                        helperText={touched.primaryContact && errors.primaryContact}
+                                        error={touched.customerName && Boolean(errors.customerName)}
+                                        helperText={touched.customerName && errors.customerName}
                                     />
                                 </Box>
                             </Grid>
