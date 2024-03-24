@@ -14,7 +14,7 @@ import { RemoveRedEyeRounded, VisibilityOff, VisibilityOffRounded, VisibilityOut
 import { userLogin } from "../redux-store/login-slice";
 import { serializeFormValues } from "../services/utils/serialize";
 import { AppDispatch } from "../redux-store/store";
-import { fetchCustomerList } from "../redux-store/customer/fetchClientList";
+import { useGetCustomersQuery } from "../redux-store/customer/customerApi";
 
 interface Values {
   email: string;
@@ -22,6 +22,7 @@ interface Values {
 }
 
 const Login = () => {
+  const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -38,8 +39,8 @@ const Login = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchCustomerList());
-  }, [dispatch]);
+    refetch();
+  }, [dispatch, refetch]);
 
   return (
     <Formik

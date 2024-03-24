@@ -12,6 +12,7 @@ export default function GridDataUi({ checkboxSelection, columns, tableData }: Gr
     return (
         <Box sx={{ height: "fit-content", width: '100%', }}>
             <DataGrid
+
                 // {...data}
                 sx={{
                     overflow: "hidden",
@@ -66,11 +67,13 @@ export default function GridDataUi({ checkboxSelection, columns, tableData }: Gr
                 slots={{
                     toolbar: GridToolbar,
                 }}
+
                 slotProps={{
                     toolbar: {
-                        // * below global search field
+                        printOptions: { disableToolbarButton: true },
+                        csvOptions: { disableToolbarButton: false },
                         showQuickFilter: true,
-                    },
+                    }
                 }}
                 rowHeight={40}
                 columnBuffer={2} columnThreshold={2}

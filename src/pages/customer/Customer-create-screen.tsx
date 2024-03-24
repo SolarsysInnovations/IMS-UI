@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TableHeader from '../../components/layouts/TableHeader';
 import { Add } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
@@ -14,11 +14,11 @@ import ToastUi from '../../components/ui/ToastifyUi';
 import { toast } from 'react-toastify';
 import TabUi from '../../components/ui/Tabs';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { validationSchema } from '../../constants/forms/validations/validationSchema';
+import { customerValidationSchema, validationSchema } from '../../constants/forms/validations/validationSchema';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
-import formInitialValues, { createCustomerProps } from '../../constants/forms/formikInitialValues';
-import { customerCreate } from '../../redux-store/customer/customerCreateSlice';
 import customerInitialValue from '../../constants/forms/formikInitialValues';
+import { useAddCustomerMutation } from '../../redux-store/customer/customerApi';
+import { CreateCustomerProps } from '../../types/types';
 
 const CustomerCreate = () => {
 
@@ -26,7 +26,7 @@ const CustomerCreate = () => {
     const pathname = usePathname();
     // dispatch(fetchClientList());
     const navigate = useNavigate();
-
+    const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
     const genderOptions = [
         { value: "Individual", label: "Individual" },
         { value: "Business", label: "Business" },
@@ -43,21 +43,28 @@ const CustomerCreate = () => {
     const countries = [{ value: "uk", label: "uk" },
     { value: "australia", label: "australia" }];
 
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success("successfully created the new customer", toastConfig)
+        }
+    }, [isSuccess])
     return (
         <div>
             <Formik
                 initialValues={customerInitialValue}
-                validate={() => ({})}
-                // validationSchema={validationSchema}
-                onSubmit={async (values: createCustomerProps, { setSubmitting, resetForm }) => {
+                // validate={() => ({})}
+                validationSchema={customerValidationSchema}
+                onSubmit={async (values: CreateCustomerProps, { setSubmitting, resetForm }) => {
                     try {
-                        console.log(values);
-                        dispatch(customerCreate(values))
-                        // resetForm();
+                        const result = await addCustomer(values);
+                        if ('data' in result) {
+                            resetForm();
+                        } else {
+                            console.error("An error occurred during customer creation:", result.error);
+                        }
                     } catch (error) {
-                        console.error("An error occurred during login:", error);
-                    }
-                    finally {
+                        console.error("An error occurred during customer creation:", error);
+                    } finally {
                         setSubmitting(false);
                     }
                 }}

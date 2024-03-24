@@ -2,18 +2,17 @@ import { Box, IconButton, Stack } from "@mui/material";
 import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
 import { Link, useNavigate } from "react-router-dom";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux-store/store";
 import React, { useEffect } from "react";
-import { customerDelete } from "../redux-store/customer/customerDelete";
 import { toast } from "react-toastify";
 import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
-import { fetchCustomerList } from "../redux-store/customer/fetchClientList";
 import ModalUi from "../components/ui/ModalUi";
 import CustomerDetails from "../pages/customer/customerDetails";
 import TableHeader from "../components/layouts/TableHeader";
 import usePathname from "../hooks/usePathname";
+import { useDeleteCustomerMutation, useGetCustomersQuery } from "../redux-store/customer/customerApi";
+import { toastConfig } from "./forms/config/toastConfig";
 
 const id = 1
 
@@ -21,34 +20,30 @@ const id = 1
 const MyCellRenderer = ({ row }: { row: any }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false); // State to manage modal open/close
-
+    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
+    const [deleteCustomer, { isLoading: deleteLoading, error: deleteError, isSuccess }] = useDeleteCustomerMutation();
     const handleModalOpen = () => setOpenModal(true); // Function to open modal
     const handleModalClose = () => setOpenModal(false); // Function to close modal
     const pathname = usePathname();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        dispatch(fetchCustomerList());
-    }, [dispatch]);
-
-
     const handleEditClick = () => {
-        localStorage.setItem("client", JSON.stringify(row));
+        localStorage.setItem("customer", JSON.stringify(row));
         console.log(row);
     };
 
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success("successfully deleted the new customer", toastConfig)
+        }
+        refetch();
+    }, [isSuccess, refetch])
+
     const handleDeleteClick = () => {
-        dispatch(customerDelete({ row }))
-            .then(() => {
-                dispatch(fetchCustomerList());
-            })
-            .catch((error) => {
-                console.error("Error deleting client:", error);
-            });
+        const id = row.id;
+        console.log(id);
+        deleteCustomer(id)
     };
-
-
-
     return (
         <Stack direction="row" spacing={1}>
             <Link to={`/customer-list/edit/${id}`}>

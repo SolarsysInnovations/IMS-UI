@@ -48,7 +48,11 @@ export const customerValidationSchema = Yup.object({
         .max(255)
         .required('customerEmail is required'),
     phoneNumber: Yup.number()
-        .required('phoneNumber is required'),
+        .typeError("That doesn't look like phoneNumber number")
+        .positive("phoneNumber number can't start with a minus")
+        .integer("phoneNumber number can't include a decimal point")
+        .min(8)
+        .required('phoneNumber number is required'),
     paymentTerms: Yup.string()
         .max(255)
         .required('paymentTerms is required'),
@@ -74,5 +78,9 @@ export const customerValidationSchema = Yup.object({
         .max(255)
         .required('contactEmail is required'),
     contactPhone: Yup.number()
-        .required('contactPhone is required'),
+        .typeError("That doesn't look like contactPhone number")
+        .positive("contactPhone number can't start with a minus")
+        .integer("contactPhone number can't include a decimal point")
+        .min(8)
+        .required('contactPhone number is required'),
 });

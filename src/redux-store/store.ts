@@ -1,18 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterSlice from "./demoSlice";
-import createClientSlice from "./customer/customerCreateSlice";
 import serviceListDataSlice from "./service/serviceSlice";
-import customerDataSlice from "./customer/fetchClientList";
 import invoiceListDataSlice from "./invoice/invoiceSlice";
+import { customerApi } from "./customer/customerApi";
 
 export const store = configureStore({
   reducer: {
+    [customerApi.reducerPath]: customerApi.reducer,
     counter: counterSlice.reducer,
-    customerList: customerDataSlice.reducer,
-    createClient: createClientSlice.reducer,
     serviceList: serviceListDataSlice.reducer,
     invoiceList: invoiceListDataSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(customerApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -16,7 +16,7 @@ export const toastConfig: ToastConfigProps = {
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    // progress: undefined, // You can remove this line because it's already optional in the interface
-    theme: "dark",
+    progress: undefined,
+    theme: "colored",
 };
 

@@ -1,22 +1,21 @@
 import { Box, Grid, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import ButtonUi from '../../components/ui/Button';
 import TextFieldUi from '../../components/ui/TextField';
 import TableHeader from '../../components/layouts/TableHeader';
 import { Add } from '@mui/icons-material';
-import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { useEffect, useState } from 'react';
 import { AppDispatch } from '../../redux-store/store';
 import { toast } from 'react-toastify';
 import ToastUi from '../../components/ui/ToastifyUi';
-import { customerValidationSchema, validationSchema } from '../../constants/forms/validations/validationSchema';
+import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
 import RadioUi from '../../components/ui/RadioGroup';
-import formInitialValues, { createCustomerProps } from '../../constants/forms/formikInitialValues';
+import formInitialValues from '../../constants/forms/formikInitialValues';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { customerEditUpdate } from '../../redux-store/customer/editUpdate';
+import { useUpdateCustomerMutation } from '../../redux-store/customer/customerApi';
+import { toastConfig } from '../../constants/forms/config/toastConfig';
+import { CreateCustomerProps } from '../../types/types';
 
 
 
@@ -25,10 +24,10 @@ const CustomerEdit = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    const [initialCustomerData, setInitialClientData] = useState<createCustomerProps | null>(null);
-
+    const [initialCustomerData, setInitialClientData] = useState<CreateCustomerProps | null>(null);
+    const [updateCustomer, { isLoading, error, isSuccess }] = useUpdateCustomerMutation();
     useEffect(() => {
-        const initialCustomerData = localStorage.getItem('client');
+        const initialCustomerData = localStorage.getItem('customer');
         if (initialCustomerData) {
             const parsedClientData = JSON.parse(initialCustomerData);
             console.log(parsedClientData);
@@ -46,6 +45,9 @@ const CustomerEdit = () => {
     const countries = [{ value: "uk", label: "uk" },
     { value: "australia", label: "australia" }];
 
+    useEffect(() => {
+        if (isSuccess) { toast.success("Successfully updated the customer", toastConfig); }
+    }, [isSuccess]);
 
     return (
         <Formik
@@ -53,14 +55,18 @@ const CustomerEdit = () => {
             initialValues={initialCustomerData || formInitialValues}
             // validate={() => ({})}
             validationSchema={customerValidationSchema}
-            onSubmit={async (values: createCustomerProps, { setSubmitting, resetForm }) => {
+            onSubmit={async (values: CreateCustomerProps, { setSubmitting, resetForm }) => {
                 try {
-                    const payload = { row: values };
-                    dispatch(customerEditUpdate(payload));
-                    resetForm();
-                    setInitialClientData(null);
-                    localStorage.removeItem('client');
-
+                    const id: number | undefined = values.id;
+                    console.log(id);
+                    if (id === undefined) {
+                        console.error('ID is undefined');
+                    } else {
+                        await updateCustomer({ id, customer: values });
+                        resetForm();
+                        setInitialClientData(null);
+                        localStorage.removeItem('client');
+                    }
                 } catch (error) {
                     console.error("An error occurred during login:", error);
                 }

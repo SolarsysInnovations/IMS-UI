@@ -13,7 +13,7 @@ import DateTimePickerUi from '../components/ui/DateTimePicker';
 import GridDataUi from '../components/Grid/GridData';
 import ButtonSmallUi from '../components/ui/ButtonSmall';
 import SearchBarUi from '../components/ui/SearchBar';
-import { columns } from '../constants/table-columns-data';
+import { columns } from '../constants/customer-table-data';
 import { clientListData } from '../constants/customerData';
 
 const ComponentsScreen = () => {

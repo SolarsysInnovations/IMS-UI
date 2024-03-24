@@ -13,17 +13,19 @@ import * as Yup from 'yup';
 import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { validationSchema } from '../../constants/forms/validations/validationSchema';
-import { InvoiceInitialValueProps, invoiceInitialValue } from '../../constants/forms/formikInitialValues';
-import { fetchCustomerList } from '../../redux-store/customer/fetchClientList';
+import { invoiceInitialValue } from '../../constants/forms/formikInitialValues';
+import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
+import { InvoiceInitialValueProps } from '../../types/types';
 
 const CreateInvoice = () => {
 
-    const { data: customerList } = useSelector((state: RootState) => state.customerList);
+    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
+    console.log(customers);
 
-    const companyOptions = customerList.map((customer: any) => ({
+    const companyOptions = customers?.map((customer: any) => ({
         value: customer?.companyName,
         label: customer?.companyName,
-    }))
+    })) || []
 
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
@@ -41,8 +43,8 @@ const CreateInvoice = () => {
         { value: "Custom", label: "Custom" },
     ]
     useEffect(() => {
-        dispatch(fetchCustomerList())
-    }, [dispatch])
+        refetch()
+    }, [dispatch, refetch])
     const options = [{ value: "arun", label: "arun" }]
     const countries = [{ value: "uk", label: "uk" },
     { value: "australia", label: "australia" }];
