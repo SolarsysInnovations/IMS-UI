@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { CreateCustomerProps } from '../../types/types';
+import { InvoiceInitialValueProps } from '../../types/types';
 import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 
-export const customerApi = createApi({
-    reducerPath: 'customerApi',
+export const invoiceApi = createApi({
+    reducerPath: 'invoiceApi',
     baseQuery: fetchBaseQuery({
         baseUrl: BASE_LOCAL_URL,
         prepareHeaders: (headers, { getState }) => {
@@ -17,33 +17,33 @@ export const customerApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        getCustomers: builder.query<CreateCustomerProps[], void>({
+        getInvoice: builder.query<InvoiceInitialValueProps[], void>({
             query: () => ({
-                url: API_URLS.customerList,
+                url: API_URLS.invoiceList,
                 method: 'POST',
             }),
         }),
-        addCustomer: builder.mutation<any, Partial<CreateCustomerProps>>({
-            query: (customer) => ({
-                url: API_URLS.customerCreate,
+        addInvoice: builder.mutation<any, Partial<InvoiceInitialValueProps>>({
+            query: (invoiceData) => ({
+                url: '/invoice/create',
                 method: 'POST',
-                body: customer,
+                body: invoiceData,
             }),
         }),
-        updateCustomer: builder.mutation<any, { id: number; customer: Partial<CreateCustomerProps> }>({
-            query: ({ id, customer }) => ({
-                url: `/customer/update/${id}`,
+        updateInvoice: builder.mutation<any, { id: number; invoiceData: Partial<InvoiceInitialValueProps> }>({
+            query: ({ id, invoiceData }) => ({
+                url: `/invoice/update/${id}`,
                 method: 'POST',
-                body: customer,
+                body: invoiceData,
             }),
         }),
-        deleteCustomer: builder.mutation<void, number>({
+        deleteInvoice: builder.mutation<void, number>({
             query: (id) => ({
-                url: `/customer/delete/${id}`,
+                url: `/invoice/delete/${id}`,
                 method: 'POST',
             }),
         }),
     }),
 });
 
-export const { useGetCustomersQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation } = customerApi;
+export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation } = invoiceApi;

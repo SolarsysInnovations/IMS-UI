@@ -14,7 +14,7 @@ import ToastUi from '../../components/ui/ToastifyUi';
 import { toast } from 'react-toastify';
 import TabUi from '../../components/ui/Tabs';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { customerValidationSchema, validationSchema } from '../../constants/forms/validations/validationSchema';
+import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import customerInitialValue from '../../constants/forms/formikInitialValues';
 import { useAddCustomerMutation } from '../../redux-store/customer/customerApi';

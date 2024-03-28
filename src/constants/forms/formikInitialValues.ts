@@ -23,21 +23,15 @@ export default customerInitialValue;
 export const invoiceInitialValue: InvoiceInitialValueProps = {
     invoiceType: "",
     invoiceNumber: "",
-    companyName: "",
+    customerName: "",
     gstType: "",
-    gstPercentage: "",
-    invoiceDate: "",
-    gstInNumber: "",
+    gstPercentage: 0,
     paymentTerms: "",
-    dueDate: "",
-    invoiceStatus: "",
-    servicesList: [
-        {
-            serviceAccountingCode: "",
-            qty: 0,
-            price: 0,
-            serviceAmount: 0
-        },
-    ]
+    invoiceDate: '17-03-2024',
+    gstInNumber: "",
+    dueDate: '15-03-2024',
+    // invoiceStatus: "",
+    service: [],
+    servicesList: [],
 };
 

@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-export const validationSchema = Yup.object({
+export const invoiceValidationSchema = Yup.object({
     invoiceType: Yup.string()
         .max(255)
         .required('invoiceType is required'),
@@ -13,9 +13,10 @@ export const validationSchema = Yup.object({
     gstType: Yup.string()
         .max(255)
         .required('customerEmail is required'),
-    gstPercentage: Yup.string()
-        .max(255)
-        .required('phoneNumber is required'),
+    gstPercentage: Yup.number()
+        .min(0, 'gstPercentage must be a positive number')
+        .max(999, 'gstPercentage must be a three-digit number')
+        .required('gstPercentage is required'),
     invoiceDate: Yup.string()
         .max(255)
         .required('paymentTerms is required'),
@@ -28,10 +29,13 @@ export const validationSchema = Yup.object({
     dueDate: Yup.string()
         .max(255)
         .required('city is required'),
-    invoiceStatus: Yup.string()
-        .max(255)
-        .required('state is required'),
-
+    // invoiceStatus: Yup.string()
+    //     .max(255)
+    //     .required('state is required'),
+    service: Yup.array()
+        .min(1, "At least one service must be selected")
+        .of(Yup.string())
+        .required("services is required"),
 });
 
 export const customerValidationSchema = Yup.object({

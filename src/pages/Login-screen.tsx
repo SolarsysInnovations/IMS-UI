@@ -3,28 +3,23 @@ import React, { useEffect, useState } from "react";
 import ButtonUi from "../components/ui/Button";
 import { Link, useNavigate } from "react-router-dom";
 import palette from "../theme/create-pallet";
-import TabUi from "../components/ui/Tabs";
-import tabs from "../constants/data";
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from "react-redux";
-import { setPassword, setUsername } from "../redux-store/login-slice";
 import TextFieldLarge from "../components/ui/TextFieldLarge";
 import { RemoveRedEyeRounded, VisibilityOff, VisibilityOffRounded, VisibilityOutlined } from "@mui/icons-material";
-import { userLogin } from "../redux-store/login-slice";
-import { serializeFormValues } from "../services/utils/serialize";
 import { AppDispatch } from "../redux-store/store";
-import { useGetCustomersQuery } from "../redux-store/customer/customerApi";
-
+import { useLoginMutation } from "../redux-store/auth/loginApi";
+import { LocalStorageKeys, useLocalStorage } from "../hooks/useLocalStorage";
 interface Values {
   email: string;
   password: string;
 }
 
 const Login = () => {
-  const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
-
+  const [login, { data, error, isLoading }] = useLoginMutation();
   const dispatch = useDispatch<AppDispatch>();
+  const [userToken, setUserToken] = useLocalStorage(LocalStorageKeys.TOKEN, "");
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -38,10 +33,6 @@ const Login = () => {
       .required('Password is required'),
   });
 
-  useEffect(() => {
-    refetch();
-  }, [dispatch, refetch]);
-
   return (
     <Formik
       initialValues={{
@@ -53,13 +44,13 @@ const Login = () => {
       onSubmit={async (values: Values, { setSubmitting, resetForm }) => {
         try {
           console.log(values);
-          dispatch(setUsername(values.email));
-          dispatch(setPassword(values.password));
-          const loginResult: any = await dispatch(userLogin(values));
+          const loginResult: any = await login(values);
           resetForm();
-
-          if (loginResult) {
+          if (loginResult && loginResult.data && loginResult.data.token) {
+            setUserToken(loginResult.data.token);
             navigate("/dashboard");
+          } else {
+            console.error("Login failed: Invalid credentials");
           }
         } catch (error) {
           console.error("An error occurred during login:", error);

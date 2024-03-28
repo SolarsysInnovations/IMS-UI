@@ -1,19 +1,37 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridCellEditStopParams, GridCellEditStopReasons, GridToolbar, MuiEvent } from '@mui/x-data-grid';
 
 interface GridDataProps {
     columns?: any;
     tableData?: any;
     checkboxSelection?: any;
+    showToolbar?: boolean;
+    pagination?: boolean;
+    hideFooter?: boolean;
+    onCellEditor?: any;
+    onCellEditStop?: any;
 }
-export default function GridDataUi({ checkboxSelection, columns, tableData }: GridDataProps) {
+export default function GridDataUi({ onCellEditStop, onCellEditor, hideFooter, pagination, showToolbar, checkboxSelection, columns, tableData }: GridDataProps) {
 
     return (
         <Box sx={{ height: "fit-content", width: '100%', }}>
             <DataGrid
+                onCellEditStart={onCellEditor}
+                onRowEditStart={(params: any, event: any) => {
+                    const newValue = event.target.value;
+                    console.log(newValue);
+                }}
+                onCellEditStop={onCellEditStop}
+                // onCellEditStop={(params: any, event: any) => {
+                //     const newValue = event.target.value;
+                //     const rowId = params.id;
+                //     console.log('New value:', newValue);
+                //     console.log('Row ID:', rowId);
+                // }}
 
-                // {...data}
+
+
                 sx={{
                     overflow: "hidden",
                     borderRadius: "10px",
@@ -65,7 +83,7 @@ export default function GridDataUi({ checkboxSelection, columns, tableData }: Gr
                     toolbarDensityComfortable: 'Large',
                 }}
                 slots={{
-                    toolbar: GridToolbar,
+                    toolbar: showToolbar ? GridToolbar : undefined,
                 }}
 
                 slotProps={{
@@ -81,6 +99,8 @@ export default function GridDataUi({ checkboxSelection, columns, tableData }: Gr
                 // * below checkbox selection multi and single
                 checkboxSelection={checkboxSelection}
                 disableRowSelectionOnClick
+                hideFooterPagination={pagination}
+                hideFooter={hideFooter}
 
             />
         </Box>

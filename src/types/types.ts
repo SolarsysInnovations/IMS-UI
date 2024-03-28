@@ -22,21 +22,34 @@ export interface CreateCustomerProps {
 
 // -------- invoice service ------------------------
 interface ServiceListProps {
+    id: string | Number;
     serviceAccountingCode: string;
-    qty: Number;
-    price: Number;
     serviceAmount: Number;
+    qty: Number;
+    totalAmount: Number;
 }
+
 export interface InvoiceInitialValueProps {
     invoiceType: string;
     invoiceNumber: string;
-    companyName: string;
+    customerName: string;
     gstType: string;
-    gstPercentage: string;
+    gstPercentage: number;
     invoiceDate: string;
     gstInNumber: string;
     paymentTerms: string;
     dueDate: string;
-    invoiceStatus: string;
+    // invoiceStatus: string;
+    service: string[];
     servicesList: ServiceListProps[];
+}
+
+
+// ---------- service  --------------------
+
+// ---------user login --------------------
+
+export interface LoginData {
+    email: string;
+    password: string;
 }

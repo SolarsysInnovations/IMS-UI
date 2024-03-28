@@ -1,24 +1,20 @@
 import { IconButton, Stack } from "@mui/material";
-import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
+import { GridColDef, GridDeleteIcon, GridValueSetterParams } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
 import { Link, useNavigate } from "react-router-dom";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux-store/store";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
-import ToastUi from "../components/ui/ToastifyUi";
-import { fetchServiceList } from "../redux-store/service/serviceSlice";
+import { useGetServiceQuery } from "../redux-store/service/serviceApi";
 
 const id = 1
-
-
 const MyCellRenderer = ({ row }: { row: any }) => {
+    const { data: serviceList, error, isLoading, refetch } = useGetServiceQuery()
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
-        dispatch(fetchServiceList());
-    }, [dispatch]);
+        refetch()
+    }, [dispatch, refetch]);
 
 
     const handleEditClick = () => {
@@ -27,33 +23,7 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     };
 
     const handleDeleteClick = () => {
-        // dispatch(deleteClient({ row }))
-        //     .then(() => {
-        //         dispatch(fetchClientList());
-        //         toast.info("client deleted successfully", {
-        //             position: "top-right",
-        //             autoClose: 1000,
-        //             hideProgressBar: false,
-        //             closeOnClick: true,
-        //             pauseOnHover: true,
-        //             draggable: true,
-        //             progress: undefined,
-        //             theme: "dark",
-        //         })
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error deleting client:", error);
-        //         toast.error("Failed to delete client", {
-        //             position: "top-right",
-        //             autoClose: 1000,
-        //             hideProgressBar: false,
-        //             closeOnClick: true,
-        //             pauseOnHover: true,
-        //             draggable: true,
-        //             progress: undefined,
-        //             theme: "dark",
-        //         });
-        //     });
+
     };
 
 
@@ -72,33 +42,56 @@ const MyCellRenderer = ({ row }: { row: any }) => {
 };
 
 export const columns: GridColDef[] = [
-    {
-        field: 'Action',
-        headerName: 'Action',
-        width: 140,
-        editable: false,
-        renderCell: (params: any) => <MyCellRenderer row={params.row} />,
-    },
-    { field: 'id', headerName: 'ID', width: 90 },
+    // {
+    //     field: 'Action',
+    //     headerName: 'Action',
+    //     width: 140,
+    //     editable: false,
+    //     renderCell: (params: any) => <MyCellRenderer row={params.row} />,
+    // },
+    // { field: 'id', headerName: 'ID', width: 90, },
     {
         field: 'serviceAccountingCode',
         headerName: 'Service Code',
-        width: 150,
+        width: 200,
         editable: true,
     },
-    {
-        field: 'serviceDescription',
-        headerName: 'Description',
-        width: 450,
-        editable: true,
-    },
+    // {
+    //     field: 'serviceDescription',
+    //     headerName: 'Description',
+    //     width: 450,
+    //     editable: true,
+    // },
     {
         field: 'serviceAmount',
-        headerName: 'Amount',
-        width: 150,
+        headerName: 'Service Amount',
+        width: 200,
         editable: false,
     },
+    {
+        field: 'qty',
+        headerName: 'Qty',
+        width: 150,
+        editable: true,
+        valueGetter: (params: any) => params.value || 0,
+        valueSetter: (params: GridValueSetterParams) => {
+            let newValue = params.value; // New value entered by the user
+            let row = { ...params.row }; // Copy the row object
 
+            // Update the qty field in the row object
+            row.qty = newValue;
+            console.log(row.qty);
+            // Return the updated row object
+            return row;
+        }
+    },
+    {
+        field: 'totalAmount',
+        headerName: 'Total Amount',
+        width: 150,
+        editable: false,
+        valueGetter: (params: any) => params.value || 0,
+    },
     // {
     //     field: 'fullName',
     //     headerName: 'Full name',

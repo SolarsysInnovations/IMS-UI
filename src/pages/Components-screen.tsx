@@ -39,7 +39,7 @@ const ComponentsScreen = () => {
             />
             <BadgeIconUi />
             <TextAreaUi />
-            <DatePickerUi />
+            {/* <DatePickerUi /> */}
             <TimePickerUi />
             <DateTimePickerUi />
             <GridDataUi tableData={clientListData} columns={columns} />

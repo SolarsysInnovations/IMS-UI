@@ -2,23 +2,22 @@ import { IconButton, Stack } from "@mui/material";
 import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
 import { Link, useNavigate } from "react-router-dom";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux-store/store";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
-import ToastUi from "../components/ui/ToastifyUi";
-import { fetchServiceList } from "../redux-store/service/serviceSlice";
+import { useGetInvoiceQuery } from "../redux-store/invoice/invcoiceApi";
 
 const id = 1
 
-
 const MyCellRenderer = ({ row }: { row: any }) => {
     const dispatch = useDispatch<AppDispatch>();
+    const { data: invoice, error, isLoading, refetch } = useGetInvoiceQuery();
+
+    console.log(invoice);
 
     useEffect(() => {
-        dispatch(fetchServiceList());
-    }, [dispatch]);
+        refetch()
+    }, [dispatch, refetch]);
 
 
     const handleEditClick = () => {
@@ -27,33 +26,7 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     };
 
     const handleDeleteClick = () => {
-        // dispatch(deleteClient({ row }))
-        //     .then(() => {
-        //         dispatch(fetchClientList());
-        //         toast.info("client deleted successfully", {
-        //             position: "top-right",
-        //             autoClose: 1000,
-        //             hideProgressBar: false,
-        //             closeOnClick: true,
-        //             pauseOnHover: true,
-        //             draggable: true,
-        //             progress: undefined,
-        //             theme: "dark",
-        //         })
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error deleting client:", error);
-        //         toast.error("Failed to delete client", {
-        //             position: "top-right",
-        //             autoClose: 1000,
-        //             hideProgressBar: false,
-        //             closeOnClick: true,
-        //             pauseOnHover: true,
-        //             draggable: true,
-        //             progress: undefined,
-        //             theme: "dark",
-        //         });
-        //     });
+
     };
 
 
