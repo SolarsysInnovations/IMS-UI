@@ -25,18 +25,20 @@ export default function RadioUi({ errorMsg, onChange, value, options, groupName,
     return (
         <>
             <FormControl sx={{ flexDirection: "row", justifyContent: "space-between" }} >
-                <FormLabel sx={{
-                    fontSize: "14px",
-                    marginTop: "6px",
-                }} id="demo-row-radio-buttons-group-label">{label}</FormLabel>
+                {label ? (
+                    <FormLabel sx={{
+                        fontSize: "14px",
+                        marginTop: "4px",
+                        marginRight: "10px",
+                    }} id="demo-row-radio-buttons-group-label">{label}</FormLabel>
+                ) : ""}
                 <RadioGroup
 
                     row
                     value={value}
                     onChange={onChange}
                     sx={{
-                        padding: "0px 2px",
-                        marginLeft: "14px",
+
                     }}
 
                     aria-labelledby="demo-row-radio-buttons-group-label"
@@ -45,11 +47,11 @@ export default function RadioUi({ errorMsg, onChange, value, options, groupName,
                     {options?.map((option, index) => (
                         <FormControlLabel sx={{
                             '& .MuiSvgIcon-root': {
-                                fontSize: 15,
+                                fontSize: "12px",
                             },
 
                             '& .MuiTypography-root': {
-                                fontSize: 13,
+                                fontSize: "12px",
                             },
                             padding: "0"
                         }} key={index} value={option.value} control={<Radio />} label={option.label} />

@@ -17,22 +17,21 @@ const MultiSelectUi: React.FC<MultiSelectUiProps> = ({
     options,
     getOptionLabel,
     defaultValue = [],
-    label = "Favorites",
+    label = "Select",
     value = [], // Default value to an empty array
     onChange,
     error,
     helperText,
 }) => {
-    // Ensure that the value prop is always an array
     const selectedValues = Array.isArray(value)
         ? value.map(item => ({ value: item.value, label: item.value }))
         : [];
-    console.log("Selected values:", selectedValues);
 
     return (
         <Autocomplete
             sx={{
                 borderRadius: "8px !important",
+                fontSize: "12px",
                 '& .MuiOutlinedInput-root': {
                     borderRadius: "8px !important",
                     overflow: "hidden",
@@ -43,10 +42,13 @@ const MultiSelectUi: React.FC<MultiSelectUiProps> = ({
                     },
                 },
                 '& .MuiAutocomplete-input': {
-                    fontSize: "13px"
+                    fontSize: "12px"
                 },
                 '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
-                    fontSize: "13px"
+                    fontSize: "12px"
+                },
+                '& .css-1pnrxdh-MuiButtonBase-root-MuiChip-root': {
+                    fontSize: "12px"
                 },
             }}
             multiple
@@ -66,7 +68,7 @@ const MultiSelectUi: React.FC<MultiSelectUiProps> = ({
                     variant='outlined'
                     {...params}
                     label={label}
-                    placeholder="Favorites"
+                    placeholder="search"
                 />
             )}
         />

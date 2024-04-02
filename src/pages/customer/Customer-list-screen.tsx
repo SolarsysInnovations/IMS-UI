@@ -13,7 +13,7 @@ import { useGetCustomersQuery } from '../../redux-store/customer/customerApi'
 const CustomerList = () => {
     const { data: customers, error, isLoading } = useGetCustomersQuery();
     const buttons = [
-        { label: 'Create User', icon: Add, onClick: () => navigate("/customer/create") },
+        { label: 'Create Customer', icon: Add, onClick: () => navigate("/customer/create") },
     ];
     const navigate = useNavigate();
     const pathname = usePathname();
@@ -27,7 +27,7 @@ const CustomerList = () => {
         <>
             <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi columns={columns} tableData={newData || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} columns={columns} tableData={newData || []} checkboxSelection={false} />
         </>
     )
 }

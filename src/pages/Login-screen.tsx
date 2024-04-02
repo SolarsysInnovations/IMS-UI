@@ -11,10 +11,10 @@ import { RemoveRedEyeRounded, VisibilityOff, VisibilityOffRounded, VisibilityOut
 import { AppDispatch } from "../redux-store/store";
 import { useLoginMutation } from "../redux-store/auth/loginApi";
 import { LocalStorageKeys, useLocalStorage } from "../hooks/useLocalStorage";
-interface Values {
-  email: string;
-  password: string;
-}
+import { loginValidationSchema } from "../constants/forms/validations/validationSchema";
+import { loginInitialValue } from "../constants/forms/formikInitialValues";
+import { LoginProps } from "../types/types";
+
 
 const Login = () => {
   const [login, { data, error, isLoading }] = useLoginMutation();
@@ -23,25 +23,13 @@ const Login = () => {
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .email('Must be a valid email')
-      .max(255)
-      .required('Email is required'),
-    password: Yup.string()
-      .max(255)
-      .required('Password is required'),
-  });
+
 
   return (
     <Formik
-      initialValues={{
-        email: "",
-        password: "",
-      }}
-      validationSchema={validationSchema}
-
-      onSubmit={async (values: Values, { setSubmitting, resetForm }) => {
+      initialValues={loginInitialValue}
+      validationSchema={loginValidationSchema}
+      onSubmit={async (values: LoginProps, { setSubmitting, resetForm }) => {
         try {
           console.log(values);
           const loginResult: any = await login(values);
@@ -92,20 +80,17 @@ const Login = () => {
                   </Link>
                 </Typography>
               </Stack>
-              <Box sx={{ mb: 2 }}>
-
-              </Box>
               <Form noValidate>
                 <Stack spacing={3}>
                   <TextFieldLarge
                     fullWidth={false}
-                    label='Email Address'
-                    name='email'
-                    type='email'
-                    value={values.email}
+                    label='User Name '
+                    name='username'
+                    type='username'
+                    value={values.username}
                     onChange={handleChange}
-                    error={touched.email && Boolean(errors.email)}
-                    helperText={touched.email && errors.email}
+                    error={touched.username && Boolean(errors.username)}
+                    helperText={touched.username && errors.username}
                   />
                   <TextFieldLarge
                     endAdornment={passwordVisible ? <IconButton onClick={() => {
@@ -131,17 +116,6 @@ const Login = () => {
                 <Box sx={{ mt: 2 }}>
                   <ButtonUi loading={isSubmitting} color="primary" label='Login' variant='contained' type='submit' />
                 </Box>
-                <Box sx={{ mt: 1 }}>
-                  <ButtonUi label='skip login' />
-                </Box>
-                <Alert
-                  severity='info'
-                  sx={{ mt: 2, mb: 2 }}
-                >
-                  <div>
-                    You can use <b>demo@Arun.io</b> and password <b>Password123!</b>
-                  </div>
-                </Alert>
               </Form>
             </div>
           </Box>

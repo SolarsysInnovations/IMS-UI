@@ -1,6 +1,10 @@
 
 // -------- customer ------------------------
-
+export interface LoginProps {
+    email: string;
+    username: string;
+    password: string;
+}
 export interface CreateCustomerProps {
     id?: any;
     customerName: string;
@@ -34,12 +38,12 @@ export interface InvoiceInitialValueProps {
     invoiceNumber: string;
     customerName: string;
     gstType: string;
-    gstPercentage: number;
+    gstPercentage: number | null;
     invoiceDate: string;
     gstInNumber: string;
     paymentTerms: string;
     dueDate: string;
-    // invoiceStatus: string;
+    invoiceStatus: string;
     service: string[];
     servicesList: ServiceListProps[];
 }
@@ -48,8 +52,3 @@ export interface InvoiceInitialValueProps {
 // ---------- service  --------------------
 
 // ---------user login --------------------
-
-export interface LoginData {
-    email: string;
-    password: string;
-}

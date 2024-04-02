@@ -1,5 +1,10 @@
-import { InvoiceInitialValueProps, CreateCustomerProps } from "../../types/types";
+import { InvoiceInitialValueProps, CreateCustomerProps, LoginProps } from "../../types/types";
 
+export const loginInitialValue: LoginProps = {
+    email: "",
+    username: "",
+    password: "",
+}
 
 export const customerInitialValue: CreateCustomerProps = {
     customerName: "",
@@ -25,12 +30,12 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
     invoiceNumber: "",
     customerName: "",
     gstType: "",
-    gstPercentage: 0,
-    paymentTerms: "",
-    invoiceDate: '17-03-2024',
+    gstPercentage: null,
     gstInNumber: "",
-    dueDate: '15-03-2024',
-    // invoiceStatus: "",
+    paymentTerms: "",
+    invoiceDate: '',
+    dueDate: '',
+    invoiceStatus: "Pending",
     service: [],
     servicesList: [],
 };

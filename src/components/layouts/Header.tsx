@@ -50,7 +50,7 @@ export default function Header() {
           <Typography variant="h6" color="initial">Hello</Typography>
         </Box> */}
         <Box >
-          <SearchBarUi />
+          {/* <SearchBarUi /> */}
         </Box>
 
         <Box>

@@ -52,3 +52,24 @@ export const invoiceData: InvoiceProps[] = [
         ],
     }
 ]
+
+export const invoiceType = [
+    { value: "Retainer", label: "Retainer" },
+    { value: "Onetime", label: "Onetime" },
+]
+export const governmentGstType = [
+    { value: "TDS", label: "TDS" },
+    { value: "TCS", label: "TCS" },
+]
+
+export const paymentTerms = [
+    { value: "Net 30", label: "Net 30" },
+    { value: "Net 45", label: "Net 45" },
+    { value: "Due On Receipt", label: "Due On Receipt" },
+    { value: "Custom", label: "Custom" },
+]
+export const gstType = [
+    { value: "Local", label: "Local" },
+    { value: "Interstate", label: "Interstate" },
+    { value: "SEZ", label: "SEZ" },
+];

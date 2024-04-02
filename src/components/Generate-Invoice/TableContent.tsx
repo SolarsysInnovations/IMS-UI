@@ -16,40 +16,35 @@ function createData(
 ) {
     return { code, description, qty, rate, amount };
 }
+interface TableContentUiProps {
+    tableData?: any;
+}
 
-const rows = [
-    createData('234324', "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, inventore?", 6.0, 24, 4.0),
-    createData('43667', "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, inventore?", 9.0, 37, 4.3),
-    createData('12343', "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, inventore?", 16.0, 24, 6.0),
 
-];
-
-export default function TableContent() {
+export default function TableContent({ tableData }: TableContentUiProps) {
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>#</TableCell>
-                        <TableCell align="right">Item & Description </TableCell>
+                        <TableCell>serviceAccountingCode</TableCell>
+                        <TableCell align="right">serviceAmount </TableCell>
                         <TableCell align="right">Qty</TableCell>
-                        <TableCell align="right">Rate</TableCell>
-                        <TableCell align="right">Amount</TableCell>
+                        <TableCell align="right">totalAmount</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {tableData?.servicesList?.map((data: any) => (
                         <TableRow
-                            key={row.code}
+                            key={data.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
-                                {row.code}
+                                {data.serviceAccountingCode}
                             </TableCell>
-                            <TableCell align="right">{row.description}</TableCell>
-                            <TableCell align="right">{row.qty}</TableCell>
-                            <TableCell align="right">{row.rate}</TableCell>
-                            <TableCell align="right">{row.amount}</TableCell>
+                            <TableCell align="right">{data.serviceAmount}</TableCell>
+                            <TableCell align="right">{data.qty}</TableCell>
+                            <TableCell align="right">{data.totalAmount}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

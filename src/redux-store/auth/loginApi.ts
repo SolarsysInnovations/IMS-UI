@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { LoginData } from '../../types/types';
 import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
+import { LoginProps } from '../../types/types';
 
 
 export const loginApi = createApi({
@@ -18,7 +18,7 @@ export const loginApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        login: builder.mutation<LoginData, Partial<LoginData>>({
+        login: builder.mutation<any, Partial<LoginProps>>({
             query: (userData) => ({
                 url: API_URLS.login,
                 method: 'POST',

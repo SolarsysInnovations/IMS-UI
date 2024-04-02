@@ -15,7 +15,7 @@ const InvoiceList = () => {
     const { data: invoiceList, error, isLoading } = useGetInvoiceQuery();
     console.log(invoiceList);
     const buttons = [
-        { label: 'Create User', icon: Add, onClick: () => navigate("/invoice/create") },
+        { label: 'Create Invoice', icon: Add, onClick: () => navigate("/invoice/create") },
     ];
     const navigate = useNavigate();
     const pathname = usePathname();
@@ -25,13 +25,12 @@ const InvoiceList = () => {
             id: item._id
         };
     }) || [];
-    console.log(newData);
 
     return (
         <>
             <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi columns={columns} tableData={newData} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} columns={columns} tableData={newData} checkboxSelection={false} />
 
         </>
     )

@@ -29,6 +29,11 @@ export const createTypography = () => {
       fontWeight: 500,
       lineHeight: 1.57,
     },
+    subtitle3: {
+      fontSize: "0.775rem",
+      fontWeight: 500,
+      lineHeight: 1.57,
+    },
     overline: {
       fontSize: "0.75rem",
       fontWeight: 600,

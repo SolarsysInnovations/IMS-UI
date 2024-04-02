@@ -6,11 +6,14 @@ import { MyDocument } from "./Demo-screen";
 import TableContent from "../components/Generate-Invoice/TableContent";
 import ModalUi from "../components/ui/ModalUi";
 
+interface InvoiceUiProps {
+    invoiceData?: any;
+}
 
+function DemoTwo({ invoiceData }: InvoiceUiProps) {
+    console.log(invoiceData);
 
-function DemoTwo() {
     const tableRef = useRef(null);
-
     const printPDF = () => {
         const element = document.querySelector("#invoiceCapture");
         if (!element) {
@@ -38,60 +41,64 @@ function DemoTwo() {
     };
 
     return (
-        <div className="App" id="invoiceCapture" style={{ padding: "10px" }}>
-            <Box sx={{
-                textAlign: "right",
-            }}>
-                <Typography variant="h1" color="initial">INVOICE</Typography>
-            </Box>
-            <Stack sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mt: 6,
-            }}>
-                <Box gap={3}>
-                    <Typography variant="subtitle2" color="initial">Billed To : <span>Really Great Company</span></Typography>
-                    <Typography variant="subtitle2" color="initial">Address 4545 Lorem ipsum dolor <br /> sit Lorem, ipsum dolor.</Typography>
+        <>
+            <div className="App" id="invoiceCapture" style={{ padding: "10px" }}>
+                <Box sx={{
+                    textAlign: "right",
+                }}>
+                    <Typography variant="h1" color="initial">INVOICE</Typography>
                 </Box>
-                <Box gap={3}>
-                    <Typography variant="subtitle2" color="initial">Invoice : <span>INV - 00090</span></Typography>
-                    <Typography variant="subtitle2" color="initial">Invoice Date : <span>09-4-2024</span></Typography>
-                    <Typography variant="subtitle2" color="initial">Terms : <span>Due On Receipt</span></Typography>
-                    <Typography variant="subtitle2" color="initial">Due Date : <span>19-may 2023</span></Typography>
-                </Box>
-            </Stack>
-            <Box sx={{ mt: 6 }}>
-                <TableContent />
-            </Box>
+                <>
+                    <Stack sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mt: 6,
+                    }}>
+                        <Box gap={3}>
+                            <Typography variant="subtitle2" color="initial">Billed To : <span>{invoiceData?.customerName}</span></Typography>
+                            <Typography variant="subtitle2" color="initial">Address 4545 Lorem ipsum dolor <br /> sit Lorem, ipsum dolor.</Typography>
+                        </Box>
+                        <Box gap={3}>
+                            <Typography variant="subtitle2" color="initial">Invoice No : <span>{invoiceData?.invoiceNumber}</span></Typography>
+                            <Typography variant="subtitle2" color="initial">Payment Terms: <span>{invoiceData?.paymentTerms}</span></Typography>
+                            <Typography variant="subtitle2" color="initial">Invoice Date : <span>{invoiceData?.invoiceDate}</span></Typography>
+                            <Typography variant="subtitle2" color="initial">Due Date : <span>{invoiceData?.dueDate}</span></Typography>
+                        </Box>
+                    </Stack>
+                    <Box sx={{ mt: 6 }}>
+                        <TableContent tableData={invoiceData || []} />
+                    </Box>
 
-            <Stack sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mt: 10,
-            }}>
-                <Box gap={3} >
-                    <Typography variant="subtitle2" color="initial">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</Typography>
+                    <Stack sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mt: 10,
+                    }}>
+                        <Box gap={3} >
+                            <Typography variant="subtitle2" color="initial">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</Typography>
 
+                        </Box>
+                        <Box gap={3} >
+                            <Typography variant="subtitle2" color="initial">Sub Total : <span>443</span></Typography>
+                            <Typography variant="subtitle2" color="initial">Tax Rate : <span>5.00%</span></Typography>
+                            <Typography variant="subtitle2" color="initial">Total : <span>$1324.00</span></Typography>
+                            <Typography variant="h6" color="initial">Total : <span>$1324.00</span></Typography>
+                        </Box>
+                    </Stack>
+                </>
+                <Box gap={3} sx={{ mt: 10, mb: 7 }}>
+                    <Typography variant="subtitle2" color="initial">Terms & Conditions</Typography>
+                    <Typography variant="subtitle2" color="initial">All payments must be made in full before any design work</Typography>
                 </Box>
-                <Box gap={3} >
-                    <Typography variant="subtitle2" color="initial">Sub Total : <span>443</span></Typography>
-                    <Typography variant="subtitle2" color="initial">Tax Rate : <span>5.00%</span></Typography>
-                    <Typography variant="subtitle2" color="initial">Total : <span>$1324.00</span></Typography>
-                    <Typography variant="h6" color="initial">Total : <span>$1324.00</span></Typography>
-                </Box>
-            </Stack>
-            <Box gap={3} sx={{ mt: 10, mb: 7 }}>
-                <Typography variant="subtitle2" color="initial">Terms & Conditions</Typography>
-                <Typography variant="subtitle2" color="initial">All payments must be made in full before any design work</Typography>
-            </Box>
+
+
+            </div>
             <button onClick={printPDF}>Generate PDF</button>
-
-
-        </div>
+        </>
     );
 }
 

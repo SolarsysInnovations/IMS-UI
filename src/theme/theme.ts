@@ -137,7 +137,8 @@ const theme = createTheme({
       lineHeight: 1.5,
     },
     body2: {
-      fontSize: "0.875rem",
+      // fontSize: "0.875rem",
+      fontSize: "0.800rem",
       fontWeight: 400,
       lineHeight: 1.57,
     },
@@ -159,6 +160,9 @@ const theme = createTheme({
       fontWeight: 500,
       lineHeight: 1.57,
     },
+
+
+
     overline: {
       fontSize: "0.75rem",
       fontWeight: 600,

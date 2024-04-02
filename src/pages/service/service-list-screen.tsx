@@ -16,7 +16,7 @@ const ServicesList = () => {
     const { data: serviceList, error, isLoading } = useGetServiceQuery();
 
     const buttons = [
-        { label: 'Create User', icon: Add, onClick: () => navigate("/client/create") },
+        { label: 'Create Service List', icon: Add, onClick: () => navigate("/client/create") },
     ];
     const navigate = useNavigate();
     const pathname = usePathname();
@@ -32,7 +32,7 @@ const ServicesList = () => {
         <>
             <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi columns={columns} tableData={newData} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} columns={columns} tableData={newData} checkboxSelection={false} />
         </>
     )
 }

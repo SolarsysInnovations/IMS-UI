@@ -14,12 +14,14 @@ interface SelectDropdownProps {
   onChange: (value: ValueProps | null) => void; // Add onChange event handler
   error?: boolean | undefined;
   helperText?: string | undefined | boolean;
+  width?: string;
 }
 
-export default function SelectDropdown({ error, helperText, options, value, labelText, onChange }: SelectDropdownProps) {
+export default function SelectDropdown({ width, error, helperText, options, value, labelText, onChange }: SelectDropdownProps) {
   return (
     <Autocomplete
       sx={{
+        width: `${width}`,
         borderRadius: "8px !important",
         '& .MuiOutlinedInput-root': {
           borderRadius: "8px !important",
@@ -31,11 +33,12 @@ export default function SelectDropdown({ error, helperText, options, value, labe
           },
         },
         '& .MuiAutocomplete-input': {
-          fontSize: "13px"
+          fontSize: "12px"
         },
         '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
-          fontSize: "13px"
-        }
+          fontSize: "12px"
+        },
+
       }}
       size='small'
       disablePortal

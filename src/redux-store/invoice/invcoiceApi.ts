@@ -25,7 +25,7 @@ export const invoiceApi = createApi({
         }),
         addInvoice: builder.mutation<any, Partial<InvoiceInitialValueProps>>({
             query: (invoiceData) => ({
-                url: '/invoice/create',
+                url: API_URLS.invoiceCreate,
                 method: 'POST',
                 body: invoiceData,
             }),
@@ -45,5 +45,7 @@ export const invoiceApi = createApi({
         }),
     }),
 });
+
+
 
 export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation } = invoiceApi;

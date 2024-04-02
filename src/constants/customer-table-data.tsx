@@ -42,8 +42,12 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     const handleDeleteClick = () => {
         const id = row.id;
         console.log(id);
-        deleteCustomer(id)
+        const confirmed = window.confirm("Are you sure you want to delete this customer?");
+        if (confirmed) {
+            deleteCustomer(id);
+        }
     };
+
     return (
         <Stack direction="row" spacing={1}>
             <Link to={`/customer-list/edit/${id}`}>

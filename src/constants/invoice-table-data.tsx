@@ -4,16 +4,20 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux-store/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGetInvoiceQuery } from "../redux-store/invoice/invcoiceApi";
+import { RemoveRedEyeOutlined } from "@mui/icons-material";
+import ModalUi from "../components/ui/ModalUi";
+import DemoTwo from "../pages/DemoTwo";
 
 const id = 1
 
 const MyCellRenderer = ({ row }: { row: any }) => {
     const dispatch = useDispatch<AppDispatch>();
     const { data: invoice, error, isLoading, refetch } = useGetInvoiceQuery();
-
-    console.log(invoice);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [invoiceData, setInvoiceData] = useState<any>();
+    console.log(invoiceData);
 
     useEffect(() => {
         refetch()
@@ -29,7 +33,13 @@ const MyCellRenderer = ({ row }: { row: any }) => {
 
     };
 
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCloseModal = () => {
 
+        setIsModalOpen(false);
+    };
     return (
         <Stack direction="row" spacing={1}>
             <Link to={`/service-list/edit/${id}`}>
@@ -40,6 +50,15 @@ const MyCellRenderer = ({ row }: { row: any }) => {
             <IconButton aria-label="" onClick={handleDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
             </IconButton>
+            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={() => {
+                handleOpenModal()
+                setInvoiceData(row)
+            }}>
+                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
+            </IconButton>
+            <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
+                <DemoTwo invoiceData={invoiceData} />
+            </ModalUi>
         </Stack>
     );
 };

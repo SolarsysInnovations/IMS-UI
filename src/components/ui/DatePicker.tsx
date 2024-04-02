@@ -31,7 +31,7 @@ export default function DatePickerUi({ label, value, onChange }: DatePickerProps
                 sx={{
                     width: "100%",
                     '& .MuiOutlinedInput-root': {
-                        fontSize: "14px",
+                        fontSize: "12px",
                         borderRadius: "8px !important",
                         overflow: "hidden",
                         borderColor: `action.active`,
@@ -41,10 +41,10 @@ export default function DatePickerUi({ label, value, onChange }: DatePickerProps
                         },
                     },
                     " & .MuiFormLabel-root": {
-                        fontSize: "14px"
+                        fontSize: "12px"
                     },
                     " & .MuiOutlinedInput-root": {
-                        fontSize: "14px"
+                        fontSize: "12px"
                     }
                 }}
                 slotProps={{ textField: { variant: "outlined", size: "small" } }}

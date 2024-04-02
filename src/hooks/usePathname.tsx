@@ -2,8 +2,10 @@ import { useLocation } from 'react-router-dom';
 
 function usePathname() {
     const location = useLocation();
-    const pathnameWithSpaces = location.pathname.replace('/', '').replace(/-/g, ' ');
-    return pathnameWithSpaces.charAt(0).toUpperCase() + pathnameWithSpaces.slice(1);
+    const pathnameParts = location.pathname.split(/[\/-]/).filter(part => part !== '');
+    const capitalizedPathnameParts = pathnameParts.map(part => part.charAt(0).toUpperCase() + part.slice(1));
+    const capitalizedPathname = capitalizedPathnameParts.join(' ');
+    return capitalizedPathname;
 }
 
 export default usePathname;

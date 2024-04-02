@@ -146,7 +146,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
                   }}
                   onClick={() => navigate(item.path)}
                 >
-                  <ListItemIcon>
+                  <ListItemIcon sx={{
+                    minWidth: "43px",
+                  }}>
                     {React.createElement(item.icon, {
                       sx: {
                         width: "22px",
@@ -156,7 +158,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                   </ListItemIcon>
                   <ListItemText
                     primary={
-                      <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === item.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>
+                      <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === item.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600, marginLeft: "5px" }}>
                         {capitalize(item.title)}
                       </Typography>
                     }

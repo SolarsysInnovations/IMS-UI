@@ -14,12 +14,14 @@ interface TextFieldProps {
     type?: "text" | "password" | "number" | "email" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "color";
     fullWidth?: boolean;
     required?: boolean;
+    width?: string;
 }
 
-const TextFieldUi = ({ required, label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth }: TextFieldProps) => {
+const TextFieldUi = ({ width, required, label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth }: TextFieldProps) => {
 
     return (
         <TextField
+
             required={required}
             variant="outlined"
             size="small"
@@ -41,6 +43,7 @@ const TextFieldUi = ({ required, label, value, onChange, disabled, endAdornment,
                 ) : undefined,
             }}
             sx={{
+                width: `${width}`,
                 borderRadius: "8px !important",
                 '& .MuiOutlinedInput-root': {
                     borderRadius: "8px !important",
@@ -52,11 +55,15 @@ const TextFieldUi = ({ required, label, value, onChange, disabled, endAdornment,
                     },
                 },
                 " & .MuiFormLabel-root": {
-                    fontSize: "13px"
+                    fontSize: "12px"
                 },
                 " & .MuiOutlinedInput-root": {
-                    fontSize: "13px"
+                    fontSize: "12px"
+                },
+                "& .css-1o5h54k-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
+                    fontSize: "13px",
                 }
+
             }}
 
 
