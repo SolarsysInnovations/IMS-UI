@@ -125,7 +125,7 @@ const CreateInvoice = () => {
         if (selectedTds) {
             if (selectedTds === "Professional Service 10%") {
                 let discountPercentage = 10;
-                let discountedAmount = subTotalInvoiceAmount * (discountPercentage) / 100;
+                let discountedAmount = (subTotalInvoiceAmount - disAmount) * (discountPercentage) / 100;
                 console.log("Discounted Amount:", discountedAmount);
                 setTdsAmount(discountedAmount);
                 tdsTax = discountedAmount
