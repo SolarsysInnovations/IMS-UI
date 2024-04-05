@@ -56,6 +56,7 @@ const CustomerCreate = () => {
                 validationSchema={customerValidationSchema}
                 onSubmit={async (values: CreateCustomerProps, { setSubmitting, resetForm }) => {
                     try {
+                        // console.log(values);
                         const result = await addCustomer(values);
                         if ('data' in result) {
                             resetForm();
@@ -137,13 +138,13 @@ const CustomerCreate = () => {
                                     <Box>
                                         <TextFieldUi
                                             fullWidth={false}
-                                            label='Phone Number'
-                                            name='phoneNumber'
+                                            label='Customer Phone Number'
+                                            name='customerPhone'
                                             type="text"
-                                            value={values.phoneNumber}
+                                            value={values.customerPhone}
                                             onChange={handleChange}
-                                            error={touched.phoneNumber && Boolean(errors.phoneNumber)}
-                                            helperText={touched.phoneNumber && errors.phoneNumber}
+                                            error={touched.customerPhone && Boolean(errors.customerPhone)}
+                                            helperText={touched.customerPhone && errors.customerPhone}
                                         />
                                     </Box>
                                 </Grid>

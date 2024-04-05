@@ -1,7 +1,8 @@
+import { number } from "yup";
 import { InvoiceInitialValueProps, CreateCustomerProps, LoginProps } from "../../types/types";
 
 export const loginInitialValue: LoginProps = {
-    email: "",
+    // email: "",
     username: "",
     password: "",
 }
@@ -11,7 +12,7 @@ export const customerInitialValue: CreateCustomerProps = {
     customerType: "",
     companyName: "",
     customerEmail: "",
-    phoneNumber: 0,
+    customerPhone: 0,
     paymentTerms: "",
     country: "",
     address: "",
@@ -21,6 +22,7 @@ export const customerInitialValue: CreateCustomerProps = {
     contactName: "",
     contactEmail: "",
     contactPhone: 0,
+
 };
 
 export default customerInitialValue;
@@ -36,6 +38,11 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
     invoiceDate: '',
     dueDate: '',
     invoiceStatus: "Pending",
+    discountAmount: null,
+    invoiceTotalAmount: null,
+    taxAmount: {
+        tds: ""
+    },
     service: [],
     servicesList: [],
 };

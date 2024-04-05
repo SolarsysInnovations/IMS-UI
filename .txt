@@ -12,6 +12,27 @@
     invoiceDate: '',
     dueDate: '',
     invoiceStatus: 'Pending',
-    service: [],
-    servicesList: []
+    service: ["sdfdsf" , "ddfd", "sddsfsd"],
+    discountAmount : 0,
+    tds : string,
+    totalAmount : 2000,
+    servicesList: [
+      {
+         id: string | Number;
+        serviceAccountingCode: string;
+        serviceAmount: Number;
+        qty: Number;
+        totalAmount: Number;
+    },
+     {
+       id: string | Number;
+      serviceAccountingCode: string;
+      serviceAmount: Number;
+      qty: Number;
+      totalAmount: Number;
+    },
+    ]
   }
+
+
+  
