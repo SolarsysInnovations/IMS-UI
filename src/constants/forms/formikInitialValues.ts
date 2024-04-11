@@ -24,6 +24,26 @@ export const customerInitialValue: CreateCustomerProps = {
     contactPhone: 0,
 
 };
+
+export const customerInitialValues = {
+    customerType: "",
+    customerName: "",
+    companyName: "",
+    customerEmail: "",
+    customerPhone: "",
+    paymentTerms: "",
+    country: "",
+    address: "",
+    city: "",
+    state: "",
+    pinCode: "",
+    contactPersons: [{
+        contactName: '',
+        contactEmail: '',
+        contactPhone: '',
+    },],
+};
+
 export const dyCustomerInitialValue: DyCreateCustomerProps = {
     customerName: "asasa",
     customerType: "",

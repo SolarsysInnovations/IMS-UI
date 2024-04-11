@@ -64,3 +64,15 @@
                     />
                 </Grid>
             );
+
+
+renderCell: (params: any) => {
+            const contactNames = params.row.contactPersons.map((person: any) => person.contactName).join(', ');
+            console.log(contactNames);
+            return null;
+        },
+
+         renderCell: (params: any) => {
+            console.log(params.row);
+            return null;
+        },

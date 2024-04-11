@@ -1,404 +1,91 @@
 import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import * as Yup from 'yup';
+import { FieldProps } from "../../types/types";
 
 
-export const invoiceScreenForm = [
+
+export const fields: FieldProps[] = [
     {
-        type: 'tableHeader',
-        headerName: 'Invoice Creation',
-        gridSize: 12,
-        buttons: [
-            { label: 'Back', icon: Add, onClick: 'handleBack' },
-            { label: 'Save', icon: Add, onClick: 'handleSave' },
-            { label: 'Preview Invoice', icon: Add, onClick: 'handlePreviewInvoice' },
-        ],
+        type: 'section',
+        titleGridSize: 12,
+        name: "info",
+        subFields: [
+            {
+                name: 'customerType', label: 'customerType', type: 'radio', gridSize: 3, options: [{ value: "Business", label: "Business" },
+                { value: "Individual", label: "Individual" }], validation: Yup.string().required('customerName is required',)
+            },
+        ]
     },
     {
-        name: "invoiceType",
-        type: 'radio',
-        options: [
-            { value: "Retainer", label: "Retainer" },
-            { value: "Onetime", label: "Onetime" },
-        ],
-        gridSize: 12,
+        type: 'section',
+        titleGridSize: 12,
+        name: "info",
+        label: 'Address Information',
+        subFields: [
+            { name: 'customerName', label: 'customerName', type: 'text', gridSize: 3, validation: Yup.string().required('customerName is required',) },
+            { name: 'companyName', label: 'companyName', type: 'text', gridSize: 3, validation: Yup.string().required('companyName is required') },
+            { name: 'customerEmail', label: 'customerEmail', type: 'email', gridSize: 3, validation: Yup.string().required('customerEmail is required') },
+            { name: 'customerPhone', label: 'customerPhone', type: 'number', gridSize: 3, validation: Yup.string().required('customerPhone is required') },
+        ]
     },
     {
-        name: "invoiceNumber",
-        label: "Invoice Number",
-        type: 'text',
-        gridSize: 3,
+        name: 'otherDetails',
+        label: 'Other Details',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            {
+                name: 'paymentTerms', label: 'paymentTerms', type: 'select', gridSize: 3, options: [{ value: "Monthly", label: "Monthly" },
+                { value: "Annual", label: "Annual" },
+                { value: "Quarterly", label: "Quarterly" },
+                { value: "Due on receipt", label: "Due on receipt" },
+                { value: "Net 30", label: "Net 30" },
+                { value: "Net 45", label: "Net 45" },
+                ], validation: Yup.string().required('paymentTerms is required')
+            },
+
+        ]
     },
     {
-        name: "customerName",
-        type: 'selectDropdown',
-        options: [],
-        gridSize: 3,
+        name: 'country',
+        label: 'Country / region',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            {
+                name: 'country', label: 'country/region', type: 'select', gridSize: 3, options: [{ value: "uk", label: "uk" },
+                { value: "australia", label: "australia" }], validation: Yup.string().required('paymentTerms is required')
+            },
+            { name: 'address', label: 'Address', type: 'text', gridSize: 3, validation: Yup.string().required('address is required') },
+            {
+                name: 'city', label: 'City', type: 'select', gridSize: 3, options: [
+                    { value: "India", label: "India" },
+                    { value: "India", label: "India" }
+                ], validation: Yup.string().required('companyName is required')
+            },
+            {
+                name: 'state', label: 'State', type: 'select', gridSize: 3, options: [
+                    { value: "Chennai", label: "Chennai" },
+                    { value: "Trichy", label: "Trichy" }
+                ], validation: Yup.string().required('companyName is required')
+            },
+            { name: 'pinCode', label: 'PinCode', type: 'number', gridSize: 3, validation: Yup.string().required('pinCode is required') },
+
+        ]
     },
     {
-        name: "gstType",
-        type: 'selectDropdown',
-        options: [{ value: "Local", label: "Local" },
-        { value: "Interstate", label: "Interstate" },
-        { value: "SEZ", label: "SEZ" },],
-        gridSize: 3,
-    },
-    {
-        type: "gridBreak"
-    },
-    {
-        name: "gstPercentage",
-        label: "gstPercentage",
-        type: 'number',
-        gridSize: 1.5,
-    },
-    {
-        name: "gstInNumber",
-        label: "gstInNumber",
-        type: 'text',
-        gridSize: 2,
-    },
-    {
-        type: "gridBreak"
-    },
-    {
-        name: "paymentTerms",
-        type: 'selectDropdown',
-        options: [
-            { value: "Net 30", label: "Net 30" },
-            { value: "Net 45", label: "Net 45" },
-            { value: "Due On Receipt", label: "Due On Receipt" },
-            { value: "Custom", label: "Custom" },
-        ],
-        gridSize: 3,
-    },
-    {
-        name: "invoiceDate",
-        label: "invoiceDate",
-        type: 'date',
-        gridSize: 2,
-    },
-    {
-        name: "dueDate",
-        label: "dueDate",
-        type: 'date',
-        gridSize: 2,
-    },
-    {
-        type: "gridBreak"
+        name: 'contactPersons',
+        label: 'Contact Persons',
+        type: 'array',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'contactName', label: 'contactName', type: 'text', gridSize: 3, validation: Yup.string().required('contactName is required') },
+            { name: 'contactEmail', label: 'contactEmail', type: 'email', gridSize: 3, validation: Yup.string().required('contactEmail is required') },
+            { name: 'contactPhone', label: 'contactPhone', type: 'number', gridSize: 3, validation: Yup.string().required('contactPhone is required') },
+        ]
     },
 ];
 
-
-export const customerScreenForm: Array<any> = [
-    {
-        type: 'tableHeader',
-        headerName: 'Invoice Creation',
-        gridSize: 12,
-        buttons: [
-            { label: 'Back', icon: Add, onClick: 'handleBack' },
-            { label: 'Save', icon: Add, onClick: 'handleSave' },
-        ],
-    },
-    {
-        name: "customerType",
-        type: 'radio',
-        options: [
-            { value: "Individual", label: "Individual" },
-            { value: "Business", label: "Business" },
-        ],
-        gridSize: 3,
-        value: '',
-    },
-    {
-        name: "customerName",
-        label: "customerName",
-        type: 'text',
-        gridSize: 3,
-        value: '',
-    },
-    {
-        name: "companyName",
-        label: "companyName",
-        type: 'text',
-        gridSize: 3,
-        value: '',
-    },
-    {
-        type: "gridBreak"
-    },
-    {
-        name: "customerEmail",
-        label: "customerEmail",
-        type: 'text',
-        gridSize: 3,
-        value: '',
-    },
-    {
-        name: "customerPhone",
-        label: "customerPhone",
-        type: 'text',
-        gridSize: 3,
-        value: '',
-    },
-    {
-        type: "gridBreak"
-    },
-    {
-        type: "heading",
-        name: "Other Details",
-        gridSize: 12,
-        value: '',
-    },
-    {
-        name: "paymentTerms",
-        type: 'selectDropdown',
-        options: [
-            { value: "Net 30", label: "Net 30" },
-            { value: "Net 45", label: "Net 45" },
-            { value: "Due On Receipt", label: "Due On Receipt" },
-            { value: "Custom", label: "Custom" },
-        ],
-        gridSize: 3,
-        value: '',
-    },
-    {
-        type: "gridBreak"
-    },
-    {
-        type: "heading",
-        name: "Address",
-        gridSize: 12,
-        value: '',
-    },
-    {
-        name: "country",
-        type: 'selectDropdown',
-        options: [
-            { value: "India", label: "India" },
-            { value: "USA", label: "USA" },
-            { value: "Colombia", label: "Colombia" },
-            { value: "NewZealand", label: "NewZealand" },
-        ],
-        gridSize: 3,
-        value: '',
-    },
-    {
-        name: "address",
-        label: "address",
-        type: 'text',
-        gridSize: 3,
-        value: '',
-    },
-    {
-        name: "city",
-        label: "city",
-        type: 'text',
-        gridSize: 3,
-        value: '',
-    },
-    {
-        type: "gridBreak"
-    },
-    {
-        name: "state",
-        type: 'selectDropdown',
-        options: [
-            { value: "India", label: "India" },
-            { value: "USA", label: "USA" },
-            { value: "Colombia", label: "Colombia" },
-            { value: "NewZealand", label: "NewZealand" },
-        ],
-        gridSize: 3,
-        value: '',
-    },
-    {
-        name: "pinCode",
-        label: "pinCode",
-        type: 'number',
-        gridSize: 3,
-        value: '',
-    },
-    {
-        type: "gridBreak"
-    },
-    [
-        {
-            type: 'tableHeader',
-            headerName: 'Contact person',
-            gridSize: 12,
-            buttons: [
-                { label: 'Add', icon: Add, onClick: "handleAdd" },
-            ],
-        },
-    ],
-    [
-        {
-            contactPerson: {
-                name: "contactPerson",
-                type: "text",
-                label: "contactPerson",
-                gridSize: 3,
-                value: '',
-            },
-            contactEmail: {
-                name: "contactEmail",
-                type: "text",
-                label: "contactEmail",
-                gridSize: 3,
-                value: '',
-            }
-        },
-        {
-            contactPerson: {
-                name: "contactPerson",
-                type: "text",
-                label: "contactPerson",
-                gridSize: 3,
-                value: '',
-            },
-            contactEmail: {
-                name: "contactEmail",
-                type: "text",
-                label: "contactEmail",
-                gridSize: 3,
-                value: '',
-            }
-        }
-    ]
-]
-
-export const customerScreenFormTwo: Array<any> = [
-    {
-        isTableHeader: true,
-        type: 'tableHeader',
-        headerName: 'Invoice Creation',
-        gridSize: 12,
-        buttons: [
-            { label: 'Back', icon: Add, onClick: 'handleBack' },
-            { label: 'Save', icon: Add, onClick: 'handleSave' },
-        ],
-    },
-    {
-        sectionName: ' Creation',
-        fields: [
-            {
-                name: 'customerType', label: 'Customer Type', type: 'radio', options: [
-                    { value: "Retainer", label: "Retainer" },
-                    { value: "Onetime", label: "Onetime" },
-                ], gridSize: 3, value: ''
-            },
-            { name: 'customerName', label: 'Customer Name', type: 'text', gridSize: 3, value: 'wewe' },
-            { name: 'companyName', label: 'Company Name', type: 'text', gridSize: 3, value: 'wewe' },
-            { name: 'customerEmail', label: 'Customer Email', type: 'text', gridSize: 3, value: '' },
-            { name: 'customerPhone', label: 'Customer Phone', type: 'number', gridSize: 3, value: '' },
-        ]
-    },
-    {
-        sectionName: 'Other Details',
-        fields: [
-            {
-                name: 'paymentTerms', label: 'Payment Terms', type: 'selectDropdown', options: [
-                    { value: "Net 30", label: "Net 30" },
-                    { value: "Net 45", label: "Net 45" },
-                    { value: "Due On Receipt", label: "Due On Receipt" },
-                    { value: "Custom", label: "Custom" },
-                ], gridSize: 3, value: ''
-            },
-
-        ]
-    },
-    {
-        sectionName: 'Address',
-        fields: [
-            {
-                name: 'country', label: 'Country', type: 'selectDropdown', options: [
-                    { value: "India", label: "India" },
-                    { value: "USA", label: "USA" },
-                    { value: "Colombia", label: "Colombia" },
-                    { value: "NewZealand", label: "NewZealand" },
-                ], gridSize: 3, value: ''
-            },
-            { name: 'address', label: 'Address', type: 'text', gridSize: 3, value: '' },
-            { name: 'city', label: 'City', type: 'text', gridSize: 3, value: '' },
-            {
-                name: 'state', label: 'state', type: 'selectDropdown', options: [
-                    { value: "India", label: "India" },
-                    { value: "USA", label: "USA" },
-                    { value: "Colombia", label: "Colombia" },
-                    { value: "NewZealand", label: "NewZealand" },
-                ], gridSize: 3, value: ''
-            },
-            { name: 'pinCode', label: 'Pin Code', type: 'number', gridSize: 3, value: '' },
-        ]
-    },
-    {
-        sectionName: 'Contact Persons',
-        fields: [
-            { name: 'contactName', label: 'Contact Name', type: 'text', gridSize: 3, value: 'wwe' },
-
-
-        ]
-    },
-]
-
-export const customerScreenFormThree = {
-    fields: [
-        {
-            type: "text",
-            label: "Full Name",
-            required: true,
-            validation: {
-                required: "Full name is required"
-            },
-            values: "asdsadas"
-        },
-        {
-            type: "email",
-            label: "Email Address",
-            required: true,
-            validation: {
-                required: "Email address is required",
-                pattern: {
-                    value: "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$/i",
-                    message: "Invalid email address"
-                }
-            },
-            values: "asasas@gmail.com"
-        },
-
-    ]
-}
-
-
-export const customerContact = [
-    {
-        contactPerson: {
-            name: "contactPerson",
-            type: "text",
-            label: "contactPerson",
-            gridSize: 3,
-        },
-        contactEmail: {
-            name: "contactEmail",
-            type: "text",
-            label: "contactEmail",
-            gridSize: 3,
-        }
-    },
-    {
-        contactPerson: {
-            name: "contactPerson",
-            type: "text",
-            label: "contactPerson",
-            gridSize: 3,
-        },
-        contactEmail: {
-            name: "contactEmail",
-            type: "text",
-            label: "contactEmail",
-            gridSize: 3,
-        }
-    }
-];
 
 

@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 
 // -------- customer ------------------------
 export interface LoginProps {
@@ -44,6 +45,28 @@ export interface DyCreateCustomerProps {
     contactPerson: ContactPersonProps[];
 };
 
+export interface FormProps {
+    fields: FieldProps[];
+    initialValues: any;
+    validationSchema: any;
+    onSubmit: (values: any, actions: any) => void;
+}
+export interface SubField {
+    name: string;
+    label: string;
+    type: string;
+    gridSize?: number;
+    validation?: Yup.StringSchema<string>;
+    options?: { value: string; label: string }[];
+}
+
+export interface FieldProps {
+    name: string;
+    label?: string;
+    type: string;
+    titleGridSize?: number;
+    subFields?: SubField[];
+}
 
 // -------- invoice service ------------------------
 interface ServiceListProps {

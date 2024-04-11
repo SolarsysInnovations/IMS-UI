@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Field, ErrorMessage, FieldArray, Formik } from 'formik';
 import { TextField, Button, Typography, Grid, IconButton, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,30 +12,13 @@ import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import RadioUi from '../../components/ui/RadioGroup';
 import { useAddCustomerMutation } from '../../redux-store/customer/customerApi';
+import { toastConfig } from '../../constants/forms/config/toastConfig';
+import { toast } from 'react-toastify';
+import { fields } from '../../constants/form-data/form-data-json';
+import { FieldProps, FormProps, SubField } from '../../types/types';
+import { customerInitialValues } from '../../constants/forms/formikInitialValues';
 
-interface SubField {
-    name: string;
-    label: string;
-    type: string;
-    gridSize?: number;
-    validation?: Yup.StringSchema<string>;
-    options?: { value: string; label: string }[];
-}
 
-interface Field {
-    name: string;
-    label?: string;
-    type: string;
-    titleGridSize?: number;
-    subFields?: SubField[];
-}
-
-interface FormProps {
-    fields: Field[];
-    initialValues: any;
-    validationSchema: any;
-    onSubmit: (values: any, actions: any) => void;
-}
 
 const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
     const options: any = subField.options?.map(option => ({
@@ -70,6 +53,7 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 
     );
 };
+
 const renderTextField = (field: any, meta: any, subField: SubField) => (
     <TextFieldUi
         {...field}
@@ -83,6 +67,7 @@ const renderTextField = (field: any, meta: any, subField: SubField) => (
         helperText={meta.touched && meta.error}
     />
 );
+
 const renderRadioField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
     const options: any = subField.options?.map(option => ({
         value: option.value,
@@ -104,7 +89,7 @@ const renderRadioField = (field: any, meta: any, subField: SubField, setFieldVal
 };
 
 
-const FieldRenderer: React.FC<{ field: Field; setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void }> = ({ field, setFieldValue }) => {
+const FieldRenderer: React.FC<{ field: FieldProps; setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void }> = ({ field, setFieldValue }) => {
     switch (field.type) {
         case 'section':
             return (
@@ -198,7 +183,7 @@ const DynamicCustomerCreate: React.FC<FormProps> = ({ fields, initialValues, val
                             { label: 'Save', icon: Add, onClick: handleSubmit },
                         ]} />
                         <Form>
-                            {fields?.map((field: Field) => (
+                            {fields?.map((field: FieldProps) => (
                                 <Grid key={field.name} container spacing={2}>
                                     <FieldRenderer field={field} setFieldValue={setFieldValue} />
                                 </Grid>
@@ -209,109 +194,6 @@ const DynamicCustomerCreate: React.FC<FormProps> = ({ fields, initialValues, val
             </Formik>
         </div>
     );
-};
-
-// Define your form fields
-const fields: Field[] = [
-    {
-        type: 'section',
-        titleGridSize: 12,
-        name: "info",
-        subFields: [
-            {
-                name: 'customerType', label: 'customerType', type: 'radio', gridSize: 3, options: [{ value: "Business", label: "Business" },
-                { value: "Individual", label: "Individual" }], validation: Yup.string().required('customerName is required',)
-            },
-        ]
-    },
-    {
-        type: 'section',
-        titleGridSize: 12,
-        name: "info",
-        label: 'Address Information',
-        subFields: [
-            { name: 'customerName', label: 'customerName', type: 'text', gridSize: 3, validation: Yup.string().required('customerName is required',) },
-            { name: 'companyName', label: 'companyName', type: 'text', gridSize: 3, validation: Yup.string().required('companyName is required') },
-            { name: 'customerEmail', label: 'customerEmail', type: 'email', gridSize: 3, validation: Yup.string().required('customerEmail is required') },
-            { name: 'customerPhone', label: 'customerPhone', type: 'number', gridSize: 3, validation: Yup.string().required('customerPhone is required') },
-        ]
-    },
-    {
-        name: 'otherDetails',
-        label: 'Other Details',
-        type: 'section',
-        titleGridSize: 12,
-        subFields: [
-            {
-                name: 'paymentTerms', label: 'paymentTerms', type: 'select', gridSize: 3, options: [{ value: "Monthly", label: "Monthly" },
-                { value: "Annual", label: "Annual" },
-                { value: "Quarterly", label: "Quarterly" },
-                { value: "Due on receipt", label: "Due on receipt" },
-                { value: "Net 30", label: "Net 30" },
-                { value: "Net 45", label: "Net 45" },
-                ], validation: Yup.string().required('paymentTerms is required')
-            },
-
-        ]
-    },
-    {
-        name: 'country',
-        label: 'Country / region',
-        type: 'section',
-        titleGridSize: 12,
-        subFields: [
-            {
-                name: 'country', label: 'country/region', type: 'select', gridSize: 3, options: [{ value: "uk", label: "uk" },
-                { value: "australia", label: "australia" }], validation: Yup.string().required('paymentTerms is required')
-            },
-            { name: 'address', label: 'Address', type: 'text', gridSize: 3, validation: Yup.string().required('address is required') },
-            {
-                name: 'city', label: 'City', type: 'select', gridSize: 3, options: [
-                    { value: "India", label: "India" },
-                    { value: "India", label: "India" }
-                ], validation: Yup.string().required('companyName is required')
-            },
-            {
-                name: 'state', label: 'State', type: 'select', gridSize: 3, options: [
-                    { value: "Chennai", label: "Chennai" },
-                    { value: "Trichy", label: "Trichy" }
-                ], validation: Yup.string().required('companyName is required')
-            },
-            { name: 'pinCode', label: 'PinCode', type: 'number', gridSize: 3, validation: Yup.string().required('pinCode is required') },
-
-        ]
-    },
-    {
-        name: 'contactPersons',
-        label: 'Contact Persons',
-        type: 'array',
-        titleGridSize: 12,
-        subFields: [
-            { name: 'contactName', label: 'contactName', type: 'text', gridSize: 3, validation: Yup.string().required('contactName is required') },
-            { name: 'contactEmail', label: 'contactEmail', type: 'email', gridSize: 3, validation: Yup.string().required('contactEmail is required') },
-            { name: 'contactPhone', label: 'contactPhone', type: 'number', gridSize: 3, validation: Yup.string().required('contactPhone is required') },
-        ]
-    },
-];
-
-// Define initial values for your form
-const initialValues = {
-    customerType: "",
-    customerName: "",
-    companyName: "",
-    customerEmail: "",
-    customerPhone: "",
-    paymentTerms: "",
-    country: "",
-    address: "",
-    city: "",
-    state: "",
-    pinCode: "",
-    contactPersons: [{
-        contactName: '',
-        contactEmail: '',
-        contactPhone: '',
-    }],
 };
 
 const validationSchema = Yup.object().shape({
@@ -334,7 +216,6 @@ const validationSchema = Yup.object().shape({
     ).min(1, 'At least one contact person is required'),
 });
 
-
 const MyComponent: React.FC = () => {
     const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
 
@@ -343,18 +224,24 @@ const MyComponent: React.FC = () => {
             console.log(values);
             actions.resetForm();
             await addCustomer(values);
+            toast.success("successfully created the new customer", toastConfig)
+            alert("created the new customer")
         } catch (error) {
             console.log(error);
         }
 
     };
-
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success("successfully created the new customer", toastConfig)
+        }
+    }, [isSuccess])
     return (
         <div>
             {/* Use DynamicCustomerCreate with the required props */}
             <DynamicCustomerCreate
                 fields={fields}
-                initialValues={initialValues}
+                initialValues={customerInitialValues}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
             />

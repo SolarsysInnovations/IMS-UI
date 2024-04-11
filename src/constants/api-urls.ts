@@ -4,7 +4,7 @@
 const JAVA_URL = "https://ims-backend-9ghn.onrender.com";
 const LOCAL_URL = "http://localhost:4000";
 const LIVE_URL = "https://node-js-invoice.onrender.com";
-export const BASE_LOCAL_URL = LIVE_URL;
+export const BASE_LOCAL_URL = LOCAL_URL;
 
 export enum ApiEndpoint {
     LOGIN = "login",
