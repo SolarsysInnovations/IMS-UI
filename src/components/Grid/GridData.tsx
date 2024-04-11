@@ -63,7 +63,14 @@ export default function GridDataUi({ onCellEditStop, onCellEditor, hideFooter, p
                         width: "80px!important",
                         borderRadius: "10px",
                         backgroundColor: "grey.200"
+                    },
+                    "& .css-ha70k2-MuiInputBase-root-MuiInput-root" : {
+                        fontSize : "12px"
+                    },
+                    ".css-1qgbav7-MuiButtonBase-root-MuiButton-root":{
+                        fontSize: "12px"
                     }
+
                 }}
                 rows={tableData}
                 columns={columns}

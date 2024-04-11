@@ -3,6 +3,7 @@ import DemoScreen from "../pages/Demo-screen";
 import GroupIcon from '@mui/icons-material/Group';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 export const sidebarTwo = [
     {
         id: 1,
@@ -35,7 +36,7 @@ export const sidebarTwo = [
         id: 4,
         title: "Services",
         path: "/services/list",
-        icon: VolunteerActivismIcon,
+        icon: MiscellaneousServicesIcon,
         isParent: true,
         subItems: [
             { title: "Create Services", path: "/service/create" },
