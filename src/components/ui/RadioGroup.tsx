@@ -33,14 +33,12 @@ export default function RadioUi({ errorMsg, onChange, value, options, groupName,
                     }} id="demo-row-radio-buttons-group-label">{label}</FormLabel>
                 ) : ""}
                 <RadioGroup
-
                     row
                     value={value}
                     onChange={onChange}
                     sx={{
 
                     }}
-
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name={groupName}
                 >
@@ -59,6 +57,7 @@ export default function RadioUi({ errorMsg, onChange, value, options, groupName,
                 </RadioGroup>
 
             </FormControl>
+
             <Typography sx={{ fontSize: "12px", color: "#F04438" }} variant="subtitle2" color="initial">{errorMsg}</Typography>
         </>
     );

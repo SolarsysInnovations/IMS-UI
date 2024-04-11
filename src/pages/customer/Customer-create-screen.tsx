@@ -24,15 +24,12 @@ const CustomerCreate = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
-    // dispatch(fetchClientList());
     const navigate = useNavigate();
     const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
     const genderOptions = [
         { value: "Individual", label: "Individual" },
         { value: "Business", label: "Business" },
     ]
-    // Monthly, Annual, Quarterly, Due on receipt,
-    // Net 30, Net 45,
     const paymentTerms = [{ value: "Monthly", label: "Monthly" },
     { value: "Annual", label: "Annual" },
     { value: "Quarterly", label: "Quarterly" },
@@ -56,6 +53,7 @@ const CustomerCreate = () => {
                 validationSchema={customerValidationSchema}
                 onSubmit={async (values: CreateCustomerProps, { setSubmitting, resetForm }) => {
                     try {
+                        // console.log(values);
                         const result = await addCustomer(values);
                         if ('data' in result) {
                             resetForm();
@@ -137,13 +135,13 @@ const CustomerCreate = () => {
                                     <Box>
                                         <TextFieldUi
                                             fullWidth={false}
-                                            label='Phone Number'
-                                            name='phoneNumber'
+                                            label='Customer Phone Number'
+                                            name='customerPhone'
                                             type="text"
-                                            value={values.phoneNumber}
+                                            value={values.customerPhone}
                                             onChange={handleChange}
-                                            error={touched.phoneNumber && Boolean(errors.phoneNumber)}
-                                            helperText={touched.phoneNumber && errors.phoneNumber}
+                                            error={touched.customerPhone && Boolean(errors.customerPhone)}
+                                            helperText={touched.customerPhone && errors.customerPhone}
                                         />
                                     </Box>
                                 </Grid>

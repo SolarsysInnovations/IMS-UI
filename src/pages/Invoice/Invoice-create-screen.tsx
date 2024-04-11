@@ -16,18 +16,20 @@ import { invoiceInitialValue } from '../../constants/forms/formikInitialValues';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 import { InvoiceInitialValueProps } from '../../types/types';
 import MultiSelectUi from '../../components/ui/MultiSelect';
-import GridDataUi from '../../components/Grid/GridData';
+import GridDataUi from '../../components/GridTable/GridData';
 import { useGetServiceQuery, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
-import DemoTwo from '../DemoTwo';
 import { generateOptions } from '../../services/utils/dropdownOptions';
 import { useAddInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
-import { columns } from '../../constants/service-table-data';
 import { governmentGstType, gstType, invoiceType, paymentTerms } from '../../constants/invoiceData';
+import { pdfjs } from 'react-pdf';
+import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
+import InvoiceGrid from './Invoice-grid';
+import { columns } from '../../constants/grid-table-data/invoice/invoice-service-table-data';
 
 export const handleRowUpdate = (updatedRow: any) => {
     console.log(updatedRow); // Log the modified row object
@@ -38,16 +40,22 @@ const CreateInvoice = () => {
     const navigate = useNavigate();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [addInvoice, { isSuccess, isError, }] = useAddInvoiceMutation();
-    const [updateService, { isSuccess: serviceUpdate, isError: serviceError }] = useUpdateServiceMutation();
+
     const { data: serviceList } = useGetServiceQuery();
     const [selectedServiceCode, setSelectedServiceCode] = useState<any[]>([]);
     const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [filteredServiceData, setFilteredServiceData] = useState<any[]>([]);
-
+    const [updateQty, setUpdateQty] = useState<any>();
+    const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
+    const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
+    const [discountAmount, setDiscountAmount] = useState<null | number>(null);
+    const [selectedTds, setSelectedTdsAmount] = useState<string>("");
+    const [tdsAmount, setTdsAmount] = useState<number | null>(null);
+    const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>()
+    const [tdsOrTcsDiscount, setTdsOrTcsDiscount] = useState(0);
+    console.log(updateQty);
     console.log(selectedServiceCode);
 
-    console.log(serviceList);
     const newData = useMemo(() => {
         return serviceList?.map((item: any) => ({
             ...item,
@@ -56,27 +64,84 @@ const CreateInvoice = () => {
     }, [serviceList]);
 
     useEffect(() => {
-        const filteredData = newData
-            ?.filter((service: any) =>
-                selectedServiceCode.some((selectedCode: string) => selectedCode === service.serviceAccountingCode)
-            )
-            ?.map((service: any) => {
+        if (newData) {
+            const processedServiceList = newData.map((service: any) => {
                 const qty = service.qty || 1;
-                const amount = service.serviceAmount || 0;
-                const totalAmount = amount * qty;
+                const totalAmount = qty * service.serviceAmount;
                 return {
-                    id: service._id,
-                    serviceAccountingCode: service.serviceAccountingCode,
-                    serviceAmount: amount,
+                    ...service,
                     qty: qty,
-                    totalAmount: totalAmount,
+                    totalAmount: totalAmount
                 };
             });
+            localStorage.setItem('servicesList', JSON.stringify(processedServiceList));
+        }
+    }, [newData]);
 
-        setFilteredServiceData(filteredData || []);
-    }, [newData, selectedServiceCode]);
+    useEffect(() => {
+        if (updateQty) {
+            const serviceListFromLocalStorage = JSON.parse(localStorage.getItem('servicesList') || '[]');
+            const index = serviceListFromLocalStorage.findIndex((service: any) => service.serviceAccountingCode === updateQty.serviceAccountingCode);
+            if (index !== -1) {
+                const updatedData = [...serviceListFromLocalStorage];
+                updatedData[index] = {
+                    ...updatedData[index],
+                    qty: updateQty.qty,
+                    totalAmount: updateQty.qty * updatedData[index].serviceAmount
+                };
+                localStorage.setItem('servicesList', JSON.stringify(updatedData));
+            }
+        }
+    }, [updateQty]);
 
-    console.log(filteredServiceData);
+    useEffect(() => {
+        const serviceListFromLocalStorage = JSON.parse(localStorage.getItem('servicesList') || '[]');
+        const filterDataByAccountingCode = serviceListFromLocalStorage.filter((service: any) => selectedServiceCode.includes(service.serviceAccountingCode));
+        setSelectedServiceData(filterDataByAccountingCode);
+    }, [selectedServiceCode, updateQty]);
+
+    console.log(selectedServiceData);
+
+    const calculateServiceTotalAmount = (serviceData: any[]) => {
+        let totalAmount = 0;
+        serviceData.forEach((service: any) => {
+            totalAmount += service.totalAmount
+        });
+        return totalAmount;
+    }
+
+    useEffect(() => {
+        const totalAmount = calculateServiceTotalAmount(selectedServiceData);
+        setSubTotalInvoiceAmount(totalAmount);
+        console.log("Total Amount:", totalAmount);
+    }, [selectedServiceData, updateQty])
+
+    useEffect(() => {
+        console.log(subTotalInvoiceAmount);
+        console.log(discountPercentage);
+        const disAmount = (subTotalInvoiceAmount * (discountPercentage ?? 0)) / 100;
+        console.log("Discount Amount:", disAmount);
+        setDiscountAmount(disAmount)
+
+        let tdsTax = null;
+        if (selectedTds) {
+            if (selectedTds === "Professional Service 10%") {
+                let discountPercentage = 10;
+                let discountedAmount = (subTotalInvoiceAmount - disAmount) * (discountPercentage) / 100;
+                console.log("Discounted Amount:", discountedAmount);
+                setTdsAmount(discountedAmount);
+                tdsTax = discountedAmount
+            }
+        }
+        console.log(tdsTax);
+
+        const invoiceAmount = tdsTax ? subTotalInvoiceAmount - (tdsTax + disAmount) : null;
+        console.log(invoiceAmount);
+        setInvoiceTotalAmount(invoiceAmount);
+        console.log(subTotalInvoiceAmount);
+        console.log("Discount Percentage:", discountPercentage);
+    }, [discountPercentage, subTotalInvoiceAmount, tdsAmount, selectedTds]);
+
 
     useEffect(() => {
         refetch()
@@ -88,6 +153,7 @@ const CreateInvoice = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+
     const customerName = generateOptions(customers, 'customerName', 'customerName');
     const serviceAccountCode = generateOptions(serviceList, "serviceAccountingCode", "serviceAccountingCode")
 
@@ -97,14 +163,22 @@ const CreateInvoice = () => {
         }
     }, [isSuccess])
 
+    const tdsOptions = [
+        {
+            value: "Professional Service 10%",
+            label: "Professional Service 10%"
+        },
+    ]
     return (
         <div>
             <Formik
                 initialValues={invoiceInitialValue}
-                validationSchema={invoiceValidationSchema}
+                // validationSchema={invoiceValidationSchema}
+                validate={() => ({})}
                 onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
                     try {
-                        values.servicesList = filteredServiceData;
+                        values.servicesList = selectedServiceData;
+                        values.invoiceTotalAmount = invoiceTotalAmount ?? null;
                         console.log(values);
                         // addInvoice(values);
                         alert(JSON.stringify(values));
@@ -123,14 +197,10 @@ const CreateInvoice = () => {
                         <TableHeader headerName={pathname} buttons={[
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) },
                             { label: 'Save', icon: Add, onClick: handleSubmit },
-                            {
-                                label: 'Preview Invoice', icon: Add, onClick: () => {
-                                    handleOpenModal();
-                                }
-                            },
+                            { label: 'Preview Invoice', icon: Add, onClick: () => { handleOpenModal(); } },
                         ]} />
                         <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
-                            <DemoTwo invoiceData={values} />
+                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={values} />
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
@@ -297,7 +367,6 @@ const CreateInvoice = () => {
                                         />
                                     </Box>
                                 </Grid>
-
                                 <Grid item xs={6}>
                                     <MultiSelectUi
                                     
@@ -317,7 +386,7 @@ const CreateInvoice = () => {
                                                 // Store the selected service codes
                                                 setSelectedServiceCode(selectedServiceCodes);
                                                 // setSelectedServiceCode(newValue);
-                                                values.servicesList = filteredServiceData;
+                                                values.servicesList = selectedServiceData;
                                             } else if (newValue !== null) { // Check if newValue is not null
                                                 console.log(newValue);
                                                 const newServiceValues = [{ value: newValue.value }];
@@ -338,30 +407,9 @@ const CreateInvoice = () => {
                                     // </Box>
         />
                                 </Grid>
-                                {filteredServiceData.length === 0 ? "" : (
-                                    <Grid item xs={12}>
-                                        <GridDataUi
-                                            onCellEditStop={(params: any, event: any) => {
-                                                const newValue = event.target.value;
-                                                const rowId = params.id;
-                                                const updatedRowData = {
-                                                    ...params.row,
-                                                    qty: newValue
-                                                };
-                                                //  updateService(updateService)
-                                                console.log({ id: updatedRowData.id, serviceData: updatedRowData });
-                                                console.log('qty:', newValue);
-                                                console.log('Row ID:', rowId);
-                                            }}
-
-                                            // onCellEditor={(params: any) => console.log(params)}
-                                            hideFooter={true}
-                                            pagination={true}
-                                            showToolbar={false}
-                                            columns={columns}
-                                            tableData={values.service.length === 0 ? [] : filteredServiceData || []}
-                                        />
-                                    </Grid>
+                                {selectedServiceData.length === 0 ? "" : (
+                                    <InvoiceGrid setUpdateQty={setUpdateQty} values={values} columns={columns} hideFooter={true}
+                                        pagination={true} showToolbar={false} tableData={values.service.length === 0 ? [] : selectedServiceData || []} />
                                 )}
                                 <Grid container mt={3} mb={3} spacing={4} justifyContent="flex-end">
                                     <Box sx={{
@@ -375,7 +423,7 @@ const CreateInvoice = () => {
                                             justifyContent: "space-between",
                                         }}>
                                             <Typography variant="body2" color="initial">Sub Total: </Typography>
-                                            <Typography variant="body2" color="initial">1000 </Typography>
+                                            <Typography variant="body2" color="initial">{subTotalInvoiceAmount}</Typography>
                                         </Box>
                                         <Box sx={{
                                             marginTop: "10px",
@@ -387,19 +435,23 @@ const CreateInvoice = () => {
                                                 gap: "30px",
                                                 justifyContent: "space-between",
                                             }}>
-                                                <Typography variant="body2" color="initial">Discount Amount</Typography>
+                                                {/* <Typography variant="body2" color="initial">Discount Amount</Typography> */}
                                                 <TextFieldUi
                                                     width='100px'
-                                                    label='Discount'
-                                                    name='gstInNumber'
-                                                    type="text"
-                                                    value={values.gstInNumber}
-                                                    onChange={handleChange}
-                                                    error={touched.gstInNumber && Boolean(errors.gstInNumber)}
-                                                    helperText={touched.gstInNumber && errors.gstInNumber}
+                                                    label='Discount %'
+                                                    name='discount'
+                                                    type="number"
+                                                    value={values.discountAmount !== null ? values.discountAmount.toString() : ""}
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        const parsedValue = value !== "" ? parseFloat(value) : null;
+                                                        setDiscountPercentage(parsedValue); // Set discountAmount as a number or null
+                                                        console.log(parsedValue);
+                                                        setFieldValue("discountAmount", value);
+                                                    }}
                                                 />
                                             </Box>
-                                            <Typography variant="body2" color="initial">1200$</Typography>
+                                            <Typography variant="body2" color="initial">-{discountAmount}</Typography>
                                         </Box>
                                         <Box sx={{
                                             marginTop: "10px",
@@ -407,43 +459,28 @@ const CreateInvoice = () => {
                                             justifyContent: "space-between",
                                         }}>
                                             <Box sx={{ display: "flex" }} >
-                                                <RadioUi value={values.invoiceType} onChange={(newValue: any) => {
-                                                    if (newValue) {
-                                                        console.log(newValue.target.value);
-                                                        setFieldValue('invoiceType', newValue.target.value);
-                                                    } else {
-                                                        setFieldValue('invoiceType', "")
-                                                    }
-                                                }} groupName='type' options={governmentGstType}
-                                                    errorMsg={touched.invoiceType && errors.invoiceType}
-                                                />
                                                 <SelectDropdown
                                                     width='150px'
                                                     onChange={(newValue: any) => {
                                                         if (newValue) {
                                                             console.log(newValue)
-                                                            if (newValue.value === "Local") {
-                                                                setFieldValue("gstPercentage", "0.18")
-                                                            } else if (newValue.value === "Interstate") {
-                                                                setFieldValue("gstPercentage", "0.18")
-                                                            } else if (newValue.value === "SEZ") {
-                                                                setFieldValue("gstPercentage", "0")
+                                                            if (newValue.value === "Professional Service 10%") {
+                                                                setFieldValue("taxAmount.tds", newValue.value)
+                                                                setSelectedTdsAmount(newValue.value)
                                                             }
-                                                            setFieldValue("gstType", newValue.value)
-                                                        } else {
+                                                            setFieldValue("taxAmount.tds", newValue.value)
+                                                        }
+                                                        else {
                                                             console.log("clearing the value")
-                                                            setFieldValue("gstType", "")
-                                                            setFieldValue("gstPercentage", "")
+                                                            setFieldValue("taxAmount.tds", "")
                                                         }
                                                     }}
-                                                    options={gstType}
-                                                    value={values.gstType ? { value: values.gstType, label: values.gstType } : null}
-                                                    labelText='Gst Type'
-                                                    error={touched.gstType && Boolean(errors.gstType)}
-                                                    helperText={touched.gstType && errors.gstType}
+                                                    options={tdsOptions}
+                                                    value={values.taxAmount.tds ? { value: values.taxAmount.tds, label: values.taxAmount.tds } : null}
+                                                    labelText='TDS %'
                                                 />
                                             </Box>
-                                            <Typography variant="body2" color="initial">1200$</Typography>
+                                            <Typography variant="body2" color="initial">-{tdsAmount}</Typography>
                                         </Box>
                                         <Divider sx={{ marginTop: "20px" }} />
                                         <Box sx={{
@@ -453,10 +490,9 @@ const CreateInvoice = () => {
                                         }}>
 
                                             <Typography variant="subtitle1" color="initial">Total Amount: </Typography>
-                                            <Typography variant="subtitle2" color="initial">1000 </Typography>
+                                            <Typography variant="subtitle2" color="initial">{invoiceTotalAmount}</Typography>
                                         </Box>
                                     </Box>
-
                                 </Grid>
                             </Grid>
                         </Form>

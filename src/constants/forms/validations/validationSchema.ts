@@ -35,6 +35,9 @@ export const invoiceValidationSchema = Yup.object({
     gstInNumber: Yup.string()
         .max(255)
         .required('country is required'),
+    discountAmount: Yup.string()
+        .max(255)
+        .required('country is required'),
     paymentTerms: Yup.string()
         .max(255)
         .required('address is required'),
@@ -63,12 +66,12 @@ export const customerValidationSchema = Yup.object({
     customerEmail: Yup.string()
         .max(255)
         .required('customerEmail is required'),
-    phoneNumber: Yup.number()
-        .typeError("That doesn't look like phoneNumber number")
-        .positive("phoneNumber number can't start with a minus")
-        .integer("phoneNumber number can't include a decimal point")
+    customerPhone: Yup.number()
+        .typeError("That doesn't look like customerPhone number")
+        .positive("customerPhone number can't start with a minus")
+        .integer("customerPhone number can't include a decimal point")
         .min(8)
-        .required('phoneNumber number is required'),
+        .required('customerPhone number is required'),
     paymentTerms: Yup.string()
         .max(255)
         .required('paymentTerms is required'),

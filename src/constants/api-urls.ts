@@ -14,7 +14,6 @@ export enum ApiEndpoint {
     CUSTOMER_DELETE = "customerDelete",
     INVOICE_LIST = "invoiceList",
     INVOICE_CREATE = "invoiceCreate",
-
 }
 
 export type ApiUrls = {

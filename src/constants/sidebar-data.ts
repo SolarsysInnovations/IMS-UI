@@ -20,6 +20,7 @@ export const sidebarTwo = [
         isParent: true,
         subItems: [
             { title: "Create Customer", path: "/customer/create" },
+            { title: "Customer Demo", path: "/customer/demo" },
         ]
     },
     {
@@ -60,6 +61,13 @@ export const sidebarTwo = [
         id: 7,
         title: "Component",
         path: "/components",
+        icon: Home,
+        isParent: false
+    },
+    {
+        id: 7,
+        title: "DynamicForm",
+        path: "/dynamicForm",
         icon: Home,
         isParent: false
     },

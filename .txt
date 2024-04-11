@@ -12,6 +12,55 @@
     invoiceDate: '',
     dueDate: '',
     invoiceStatus: 'Pending',
-    service: [],
-    servicesList: []
+    service: ["sdfdsf" , "ddfd", "sddsfsd"],
+    discountAmount : 0,
+    tds : string,
+    totalAmount : 2000,
+    servicesList: [
+      {
+         id: string | Number;
+        serviceAccountingCode: string;
+        serviceAmount: Number;
+        qty: Number;
+        totalAmount: Number;
+    },
+     {
+       id: string | Number;
+      serviceAccountingCode: string;
+      serviceAmount: Number;
+      qty: Number;
+      totalAmount: Number;
+    },
+    ]
   }
+
+
+  
+
+  case FieldType.MultiSelect:
+            return (
+                <Grid item xs={field.gridSize}>
+                    <MultiSelectUi
+                        options={field.options}
+                        label={field.label}
+                        value={formData[field.name] || []}
+                        onChange={(event: React.ChangeEvent<{}>, newValue: any | any[]) => {
+                            if (setFormData) { // Ensure setFormData is defined
+                                if (Array.isArray(newValue)) {
+                                    console.log(newValue);
+                                    const newServiceValues = newValue.map(item => (item.value));
+                                    console.log(newServiceValues);
+                                    setFormData(field.name, newServiceValues);
+                                } else if (newValue !== null) {
+                                    console.log(newValue);
+                                    const newServiceValues = [{ value: newValue.value }];
+                                    setFormData(field.name, newServiceValues);
+                                } else {
+                                    console.log("clearing the value");
+                                    setFormData(field.name, []);
+                                }
+                            }
+                        }}
+                    />
+                </Grid>
+            );

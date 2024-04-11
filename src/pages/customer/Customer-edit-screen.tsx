@@ -81,6 +81,7 @@ const CustomerEdit = () => {
                     <TableHeader headerName='Edit the Customer details' buttons={[
                         { label: 'Back', icon: Add, onClick: () => { navigate(-1) } },
                         { label: 'Update', icon: Add, onClick: handleSubmit }
+
                     ]} />
                     <Form id="createClientForm" noValidate>
                         <Grid container spacing={2}>
@@ -136,13 +137,13 @@ const CustomerEdit = () => {
                                 <Box>
                                     <TextFieldUi
                                         fullWidth={false}
-                                        label='Phone Number'
-                                        name='phoneNumber'
+                                        label='Customer Phone Number'
+                                        name='customerPhone'
                                         type="number"
-                                        value={values.phoneNumber}
+                                        value={values.customerPhone}
                                         onChange={handleChange}
-                                        error={touched.phoneNumber && Boolean(errors.phoneNumber)}
-                                        helperText={touched.phoneNumber && errors.phoneNumber}
+                                        error={touched.customerPhone && Boolean(errors.customerPhone)}
+                                        helperText={touched.customerPhone && errors.customerPhone}
                                     />
                                 </Box>
                             </Grid>

@@ -11,6 +11,25 @@ interface InvoiceUiProps {
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 function DemoTwo({ invoiceData }: InvoiceUiProps) {
+    const [pdfFile, setPdfFile] = useState<File | null>(null);
+    const [numPages, setNumPages] = useState<number | null>(null);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [showPdf, setShowPdf] = useState(false);
+
+    const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+        setNumPages(numPages);
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            const file = files[0];
+            setPdfFile(file);
+            setShowPdf(true);
+            setPageNumber(1); // Set page number to 1 when file is changed
+        }
+    };
+
     const printPDF = () => {
         const element = document.querySelector("#invoiceCapture");
         if (!element) {
@@ -32,14 +51,18 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
                 doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
                 heightLeft -= pageHeight;
             }
-            const pdfData = doc.output('datauristring');
-            localStorage.setItem('invoicePDF', pdfData);
+            const pdfData = doc.output('datauristring'); // Convert PDF to data URL
+            localStorage.setItem('invoicePDF', pdfData); // Store PDF data in localStorage
             doc.save('Downld.pdf');
         });
     };
 
     return (
         <>
+            <div>
+                <label htmlFor="file">Upload file</label>
+                <input type="file" onChange={handleFileChange} />
+            </div>
             <div className="App" id="invoiceCapture" style={{ padding: "10px" }}>
                 <Box sx={{
                     textAlign: "right",
@@ -93,6 +116,22 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
                 </Box>
             </div>
             <button onClick={printPDF}>Generate PDF</button>
+
+            {showPdf && (
+                <div >
+                    <Document
+                        file={pdfFile}
+                        onLoadSuccess={({ numPages }) => {
+                            console.log("Number of pages:", numPages);
+                            setNumPages(numPages);
+                        }}
+                    >
+                        <Page
+                            pageNumber={pageNumber}
+                        />
+                    </Document>
+                </div>
+            )}
         </>
     );
 }

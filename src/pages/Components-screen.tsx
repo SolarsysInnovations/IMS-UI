@@ -10,11 +10,10 @@ import TextAreaUi from '../components/ui/TextArea';
 import DatePickerUi from '../components/ui/DatePicker';
 import TimePickerUi from '../components/ui/Time Picker';
 import DateTimePickerUi from '../components/ui/DateTimePicker';
-import GridDataUi from '../components/Grid/GridData';
+import GridDataUi from '../components/GridTable/GridData';
 import ButtonSmallUi from '../components/ui/ButtonSmall';
 import SearchBarUi from '../components/ui/SearchBar';
-import { columns } from '../constants/customer-table-data';
-import { clientListData } from '../constants/customerData';
+import { columns } from '../constants/grid-table-data/customer-table-data';
 
 const ComponentsScreen = () => {
     const [checked, setChecked] = React.useState(true);
@@ -42,7 +41,7 @@ const ComponentsScreen = () => {
             {/* <DatePickerUi /> */}
             <TimePickerUi />
             <DateTimePickerUi />
-            <GridDataUi tableData={clientListData} columns={columns} />
+            {/* <GridDataUi tableData={clientListData} columns={columns} /> */}
         </Stack>
     )
 }
