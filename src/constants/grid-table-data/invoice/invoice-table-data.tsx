@@ -3,12 +3,12 @@ import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../redux-store/store";
+import { AppDispatch } from "../../../redux-store/store";
 import { useEffect, useState } from "react";
-import { useGetInvoiceQuery } from "../redux-store/invoice/invcoiceApi";
+import { useGetInvoiceQuery } from "../../../redux-store/invoice/invcoiceApi";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
-import ModalUi from "../components/ui/ModalUi";
-import DemoTwo from "../pages/DemoTwo";
+import ModalUi from "../../../components/ui/ModalUi";
+import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
 
 const id = 1
 
@@ -57,7 +57,7 @@ const MyCellRenderer = ({ row }: { row: any }) => {
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
             <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
-                <DemoTwo invoiceData={invoiceData} />
+                <InvoiceUi invoiceData={invoiceData} />
             </ModalUi>
         </Stack>
     );

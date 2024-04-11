@@ -24,15 +24,12 @@ const CustomerCreate = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
-    // dispatch(fetchClientList());
     const navigate = useNavigate();
     const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
     const genderOptions = [
         { value: "Individual", label: "Individual" },
         { value: "Business", label: "Business" },
     ]
-    // Monthly, Annual, Quarterly, Due on receipt,
-    // Net 30, Net 45,
     const paymentTerms = [{ value: "Monthly", label: "Monthly" },
     { value: "Annual", label: "Annual" },
     { value: "Quarterly", label: "Quarterly" },

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import GridDataUi from '../../components/Grid/GridData'
+import GridDataUi from '../../components/GridTable/GridData'
 import TableHeader from '../../components/layouts/TableHeader'
 import usePathname from '../../hooks/usePathname'
 import { Add } from '@mui/icons-material'
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux-store/store'
 import ToastUi from '../../components/ui/ToastifyUi'
-import { columns } from '../../constants/service-table-data'
+import { columns } from '../../constants/grid-table-data/service-table-data'
 import { useGetServiceQuery } from '../../redux-store/service/serviceApi'
 
 const ServicesList = () => {

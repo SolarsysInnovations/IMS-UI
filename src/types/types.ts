@@ -24,6 +24,27 @@ export interface CreateCustomerProps {
     contactPhone: number;
 };
 
+interface ContactPersonProps {
+    contactName: string;
+    contactEmail: string;
+}
+export interface DyCreateCustomerProps {
+    id?: any;
+    customerName: string;
+    customerType: string;
+    companyName: string;
+    customerEmail: string;
+    customerPhone: number;
+    paymentTerms: string;
+    country: string;
+    address: string;
+    city: string;
+    state: string;
+    pinCode: string;
+    contactPerson: ContactPersonProps[];
+};
+
+
 // -------- invoice service ------------------------
 interface ServiceListProps {
     id: string | Number;

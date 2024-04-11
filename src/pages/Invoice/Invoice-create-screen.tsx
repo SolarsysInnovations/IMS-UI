@@ -16,18 +16,20 @@ import { invoiceInitialValue } from '../../constants/forms/formikInitialValues';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 import { InvoiceInitialValueProps } from '../../types/types';
 import MultiSelectUi from '../../components/ui/MultiSelect';
-import GridDataUi from '../../components/Grid/GridData';
+import GridDataUi from '../../components/GridTable/GridData';
 import { useGetServiceQuery, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
-import DemoTwo from '../DemoTwo';
 import { generateOptions } from '../../services/utils/dropdownOptions';
 import { useAddInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
-import { columns } from '../../constants/service-table-data';
 import { governmentGstType, gstType, invoiceType, paymentTerms } from '../../constants/invoiceData';
+import { pdfjs } from 'react-pdf';
+import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
+import InvoiceGrid from './Invoice-grid';
+import { columns } from '../../constants/grid-table-data/invoice/invoice-service-table-data';
 
 export const handleRowUpdate = (updatedRow: any) => {
     console.log(updatedRow); // Log the modified row object
@@ -167,14 +169,12 @@ const CreateInvoice = () => {
             label: "Professional Service 10%"
         },
     ]
-
     return (
         <div>
             <Formik
                 initialValues={invoiceInitialValue}
                 // validationSchema={invoiceValidationSchema}
                 validate={() => ({})}
-
                 onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
                     try {
                         values.servicesList = selectedServiceData;
@@ -197,14 +197,10 @@ const CreateInvoice = () => {
                         <TableHeader headerName={pathname} buttons={[
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) },
                             { label: 'Save', icon: Add, onClick: handleSubmit },
-                            {
-                                label: 'Preview Invoice', icon: Add, onClick: () => {
-                                    handleOpenModal();
-                                }
-                            },
+                            { label: 'Preview Invoice', icon: Add, onClick: () => { handleOpenModal(); } },
                         ]} />
                         <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
-                            <DemoTwo invoiceData={values} />
+                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={values} />
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
@@ -406,30 +402,8 @@ const CreateInvoice = () => {
                                     />
                                 </Grid>
                                 {selectedServiceData.length === 0 ? "" : (
-                                    <Grid item xs={12}>
-                                        <GridDataUi
-                                            onCellEditStop={(params: any, event: any) => {
-                                                const newValue = event.target.value;
-                                                const rowId = params.id;
-                                                const updatedRowData = {
-                                                    ...params.row,
-                                                    qty: newValue
-                                                };
-                                                //  updateService(updateService)
-                                                console.log({ id: updatedRowData.id, serviceData: updatedRowData });
-                                                setUpdateQty(updatedRowData)
-                                                console.log('qty:', newValue);
-                                                console.log('Row ID:', rowId);
-                                            }}
-
-                                            // onCellEditor={(params: any) => console.log(params)}
-                                            hideFooter={true}
-                                            pagination={true}
-                                            showToolbar={false}
-                                            columns={columns}
-                                            tableData={values.service.length === 0 ? [] : selectedServiceData || []}
-                                        />
-                                    </Grid>
+                                    <InvoiceGrid setUpdateQty={setUpdateQty} values={values} columns={columns} hideFooter={true}
+                                        pagination={true} showToolbar={false} tableData={values.service.length === 0 ? [] : selectedServiceData || []} />
                                 )}
                                 <Grid container mt={3} mb={3} spacing={4} justifyContent="flex-end">
                                     <Box sx={{
@@ -479,16 +453,6 @@ const CreateInvoice = () => {
                                             justifyContent: "space-between",
                                         }}>
                                             <Box sx={{ display: "flex" }} >
-                                                {/* <RadioUi value={values.invoiceType} onChange={(newValue: any) => {
-                                                    if (newValue) {
-                                                        console.log(newValue.target.value);
-                                                        setFieldValue('invoiceType', newValue.target.value);
-                                                    } else {
-                                                        setFieldValue('invoiceType', "")
-                                                    }
-                                                }} groupName='type' options={governmentGstType}
-                                                    errorMsg={touched.invoiceType && errors.invoiceType}
-                                                /> */}
                                                 <SelectDropdown
                                                     width='150px'
                                                     onChange={(newValue: any) => {
@@ -523,7 +487,6 @@ const CreateInvoice = () => {
                                             <Typography variant="subtitle2" color="initial">{invoiceTotalAmount}</Typography>
                                         </Box>
                                     </Box>
-
                                 </Grid>
                             </Grid>
                         </Form>

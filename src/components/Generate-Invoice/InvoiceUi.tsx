@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import jsPdf from "jspdf";
 import html2canvas from "html2canvas";
 import { Box, Stack, Typography } from "@mui/material";
-import TableContent from "../components/Generate-Invoice/TableContent";
 import { Document, Page, pdfjs } from "react-pdf";
+import TableContent from "./TableContent";
 interface InvoiceUiProps {
     invoiceData?: any;
+    subtotal?: number | null;
+    discount?: number | null;
+    tds?: number | null;
 }
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function DemoTwo({ invoiceData }: InvoiceUiProps) {
+function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
+
+
     const printPDF = () => {
         const element = document.querySelector("#invoiceCapture");
         if (!element) {
@@ -37,7 +42,7 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
             doc.save('Downld.pdf');
         });
     };
-
+    console.log("invoice", invoiceData);
     return (
         <>
             <div className="App" id="invoiceCapture" style={{ padding: "10px" }}>
@@ -80,10 +85,10 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
                             <Typography variant="subtitle2" color="initial">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</Typography>
                         </Box>
                         <Box gap={3} >
-                            <Typography variant="subtitle2" color="initial">Sub Total : <span>443</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Tax Rate : <span>5.00%</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Total : <span>$1324.00</span></Typography>
-                            <Typography variant="h6" color="initial">Total : <span>$1324.00</span></Typography>
+                            <Typography variant="subtitle2" color="initial">Sub Total : <span>{subtotal}</span></Typography>
+                            <Typography variant="subtitle2" color="initial">Discount % : <span>{discount}</span></Typography>
+                            <Typography variant="subtitle2" color="initial">TDS Tax : <span>{tds}</span></Typography>
+                            <Typography variant="h6" color="initial">Total : <span>{invoiceData?.invoiceTotalAmount}</span></Typography>
                         </Box>
                     </Stack>
                 </>
@@ -97,4 +102,4 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
     );
 }
 
-export default DemoTwo;
+export default InvoiceUi;

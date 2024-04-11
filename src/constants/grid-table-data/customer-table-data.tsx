@@ -3,16 +3,16 @@ import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../redux-store/store";
+import { AppDispatch } from "../../redux-store/store";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
-import ModalUi from "../components/ui/ModalUi";
-import CustomerDetails from "../pages/customer/customerDetails";
-import TableHeader from "../components/layouts/TableHeader";
-import usePathname from "../hooks/usePathname";
-import { useDeleteCustomerMutation, useGetCustomersQuery } from "../redux-store/customer/customerApi";
-import { toastConfig } from "./forms/config/toastConfig";
+import ModalUi from "../../components/ui/ModalUi";
+import CustomerDetails from "../../pages/customer/customerDetails";
+import TableHeader from "../../components/layouts/TableHeader";
+import usePathname from "../../hooks/usePathname";
+import { useDeleteCustomerMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
+import { toastConfig } from "../forms/config/toastConfig";
 
 const id = 1
 
@@ -113,6 +113,26 @@ export const columns: GridColDef[] = [
         width: 150,
         editable: false,
     },
+    {
+        field: 'contactPersons',
+        headerName: 'contactPersons',
+        width: 250,
+        editable: false,
+        renderCell: (params: any) => {
+            console.log('params.value:', params.row);
+            return (
+                <ul className="flex">
+                    {params.value?.map((person: any) => {
+                        console.log('person:', person);
+                        return (
+                            <li key={person.id}>{person.contactName}</li>
+                        );
+                    })}
+                </ul>
+            );
+        },
+    },
+
 
     // {
     //     field: 'fullName',

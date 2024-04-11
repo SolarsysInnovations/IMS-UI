@@ -22,6 +22,8 @@ import EditService from "./pages/service/edit-service-screen";
 import CustomerList from "./pages/customer/Customer-list-screen";
 import CustomerEdit from "./pages/customer/Customer-edit-screen";
 import CustomerCreate from "./pages/customer/Customer-create-screen";
+import DynamicFormDemo from "./pages/DynamicFormDemo";
+import DynamicCustomerCreate from "./pages/customer/DynamicCustomerCreate";
 
 
 function App() {
@@ -39,6 +41,7 @@ function App() {
               <Route element={<CustomerList />} path="/customer-list" />
               <Route element={<CustomerEdit />} path="/customer-list/edit/:id" />
               <Route element={<CustomerCreate />} path="/customer/create" />
+              <Route element={<DynamicCustomerCreate />} path="/customer/demo" />
               <Route element={<Dashboard />} path="/dashboard" />
               <Route element={<Demo />} path="/demo" />
               <Route element={<DemoTwo />} path="/demo-two" />
@@ -48,6 +51,7 @@ function App() {
               <Route element={<ServicesList />} path="/services/list" />
               <Route element={<CreateServices />} path="/service/create" />
               <Route element={<EditService />} path="/service/edit" />
+              <Route element={<DynamicFormDemo />} path="/dynamicForm" />
             </Route>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
           </Routes>
