@@ -50,6 +50,10 @@ const MultiSelectUi: React.FC<MultiSelectUiProps> = ({
                 '& .css-1pnrxdh-MuiButtonBase-root-MuiChip-root': {
                     fontSize: "12px"
                 },
+                "& .css-ih149s-MuiFormControl-root-MuiTextField-root" : {
+                    height : "34px !important",
+                }
+                    
             }}
             multiple
             id="tags-outlined"
@@ -64,7 +68,7 @@ const MultiSelectUi: React.FC<MultiSelectUiProps> = ({
             renderInput={(params) => (
                 <TextField
                     error={error} helperText={helperText}
-                    sx={{ fontSize: "13px !important" }}
+                    sx={{ fontSize: "12px !important" }}
                     variant='outlined'
                     {...params}
                     label={label}

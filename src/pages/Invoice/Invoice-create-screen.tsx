@@ -369,6 +369,7 @@ const CreateInvoice = () => {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <MultiSelectUi
+                                    
                                         options={serviceAccountCode?.filter((option: { value: string }) => !values.service.some((item: string) => item === option.value))}
                                         label='Select Services'
                                         value={values.service.map(item => ({ value: item, label: item }))}
@@ -399,7 +400,12 @@ const CreateInvoice = () => {
                                         }}
                                         error={touched.service && Boolean(errors.service)}
                                         helperText={touched.service && errors.service}
-                                    />
+                                    //    <Box sx={{
+                                    //         ".css-1kp88ho-MuiAutocomplete-root .MuiAutocomplete-tag"{
+                                    //             margin: "0px",
+                                    //     }}>
+                                    // </Box>
+        />
                                 </Grid>
                                 {selectedServiceData.length === 0 ? "" : (
                                     <InvoiceGrid setUpdateQty={setUpdateQty} values={values} columns={columns} hideFooter={true}
