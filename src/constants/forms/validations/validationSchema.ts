@@ -103,3 +103,9 @@ export const customerValidationSchema = Yup.object({
         .min(8)
         .required('contactPhone number is required'),
 });
+
+export const serviceValidationSchema = Yup.object({
+    customerName: Yup.string()
+        .max(255)
+        .required('customerName is required'),
+});

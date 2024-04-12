@@ -77,5 +77,9 @@ export interface InvoiceInitialValueProps {
 
 
 // ---------- service  --------------------
-
+export interface serviceCreationProps{
+   serviceAccountingcode: string;
+   description: string;
+   amount: number | null;
+};
 // ---------user login --------------------
