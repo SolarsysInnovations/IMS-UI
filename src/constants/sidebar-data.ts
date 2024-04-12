@@ -20,7 +20,6 @@ export const sidebarTwo = [
         isParent: true,
         subItems: [
             { title: "Create Customer", path: "/customer/create" },
-            { title: "Customer Demo", path: "/customer/demo" },
         ]
     },
     {

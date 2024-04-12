@@ -53,59 +53,24 @@ export const invoiceValidationSchema = Yup.object({
         .required("services is required"),
 });
 
-export const customerValidationSchema = Yup.object({
-    customerName: Yup.string()
-        .max(255)
-        .required('customerName is required'),
-    customerType: Yup.string()
-        .max(255)
-        .required('customerType is required'),
-    companyName: Yup.string()
-        .max(255)
-        .required('companyName is required'),
-    customerEmail: Yup.string()
-        .max(255)
-        .required('customerEmail is required'),
-    customerPhone: Yup.number()
-        .typeError("That doesn't look like customerPhone number")
-        .positive("customerPhone number can't start with a minus")
-        .integer("customerPhone number can't include a decimal point")
-        .min(8)
-        .required('customerPhone number is required'),
-    paymentTerms: Yup.string()
-        .max(255)
-        .required('paymentTerms is required'),
-    country: Yup.string()
-        .max(255)
-        .required('country is required'),
-    address: Yup.string()
-        .max(255)
-        .required('address is required'),
-    city: Yup.string()
-        .max(255)
-        .required('city is required'),
-    state: Yup.string()
-        .max(255)
-        .required('state is required'),
-    pinCode: Yup.string()
-        .max(255)
-        .required('pinCode is required'),
-    contactName: Yup.string()
-        .max(255)
-        .required('contactName is required'),
-    contactEmail: Yup.string()
-        .max(255)
-        .required('contactEmail is required'),
-    contactPhone: Yup.number()
-        .typeError("That doesn't look like contactPhone number")
-        .positive("contactPhone number can't start with a minus")
-        .integer("contactPhone number can't include a decimal point")
-        .min(8)
-        .required('contactPhone number is required'),
+export const customerValidationSchema = Yup.object().shape({
+    customerName: Yup.string().required('Customer Name is required'),
+    companyName: Yup.string().required('Company Name is required'),
+    customerEmail: Yup.string().email('Invalid email').required('Customer Email is required'),
+    customerPhone: Yup.string().required('Customer Number is required'),
+    paymentTerms: Yup.string().required('Payment Terms is required'),
+    country: Yup.string().required('Country is required'),
+    address: Yup.string().required('Address is required'),
+    city: Yup.string().required('City is required'),
+    state: Yup.string().required('State is required'),
+    pinCode: Yup.string().required('Pin Code is required'),
+    contactPersons: Yup.array().of(
+        Yup.object().shape({
+            contactName: Yup.string().required('Contact Person Name is required'),
+            contactEmail: Yup.string().email('Invalid email').required('Contact Person Email is required'),
+            contactPhone: Yup.string().required('Contact Person Phone is required'),
+        })
+    ).min(1, 'At least one contact person is required'),
 });
 
-export const serviceValidationSchema = Yup.object({
-    customerName: Yup.string()
-        .max(255)
-        .required('customerName is required'),
-});
+

@@ -4,7 +4,7 @@
 const JAVA_URL = "https://ims-backend-9ghn.onrender.com";
 const LOCAL_URL = "http://localhost:4000";
 const LIVE_URL = "https://node-js-invoice.onrender.com";
-export const BASE_LOCAL_URL = LIVE_URL;
+export const BASE_LOCAL_URL = LOCAL_URL;
 
 export enum ApiEndpoint {
     LOGIN = "login",
@@ -12,6 +12,7 @@ export enum ApiEndpoint {
     CUSTOMER_CREATE = "customerCreate",
     CUSTOMER_UPDATE = "customerUpdate",
     CUSTOMER_DELETE = "customerDelete",
+    CUSTOMER_GET = "customerGet",
     INVOICE_LIST = "invoiceList",
     INVOICE_CREATE = "invoiceCreate",
 }
@@ -26,6 +27,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.CUSTOMER_CREATE]: `/customer/create`,
     [ApiEndpoint.CUSTOMER_UPDATE]: `/customer/update`,
     [ApiEndpoint.CUSTOMER_DELETE]: `/customer/delete`,
+    [ApiEndpoint.CUSTOMER_GET]: `/customer/get`,
     [ApiEndpoint.INVOICE_LIST]: `/invoice/list`,
     [ApiEndpoint.INVOICE_CREATE]: `/invoice/create`,
 };

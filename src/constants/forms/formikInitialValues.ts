@@ -1,29 +1,11 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, CreateCustomerProps, LoginProps, DyCreateCustomerProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps } from "../../types/types";
 
 export const loginInitialValue: LoginProps = {
     // email: "",
     username: "",
     password: "",
 }
-
-export const customerInitialValue: CreateCustomerProps = {
-    customerName: "",
-    customerType: "",
-    companyName: "",
-    customerEmail: "",
-    customerPhone: 0,
-    paymentTerms: "",
-    country: "",
-    address: "",
-    city: "",
-    state: "",
-    pinCode: "",
-    contactName: "",
-    contactEmail: "",
-    contactPhone: 0,
-
-};
 
 export const customerInitialValues = {
     customerType: "",
@@ -64,7 +46,6 @@ export const dyCustomerInitialValue: DyCreateCustomerProps = {
     ],
 };
 
-export default customerInitialValue;
 //
 export const invoiceInitialValue: InvoiceInitialValueProps = {
     invoiceType: "",
