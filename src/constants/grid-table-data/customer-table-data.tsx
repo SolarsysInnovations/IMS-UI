@@ -17,7 +17,7 @@ import { toastConfig } from "../forms/config/toastConfig";
 const id = 1
 
 
-const MyCellRenderer = ({ row }: { row: any }) => {
+const MyCellRenderer = ({ row, contactPersons }: any) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false); // State to manage modal open/close
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
@@ -28,8 +28,8 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     const navigate = useNavigate();
 
     const handleEditClick = () => {
-        localStorage.setItem("customer", JSON.stringify(row));
-        console.log(row);
+        console.log(row, contactPersons);
+        // localStorage.setItem("customer", JSON.stringify(row));
     };
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const MyCellRenderer = ({ row }: { row: any }) => {
 
     return (
         <Stack direction="row" spacing={1}>
-            <Link to={`/customer-list/edit/${id}`}>
+            <Link to={`/customer-list/edit/${row}`}>
                 <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
                     <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
                 </IconButton>
@@ -79,8 +79,7 @@ export const columns: GridColDef[] = [
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer row={params.row} />,
-
+        renderCell: (params: any) => <MyCellRenderer row={params.row?.id} />,
     },
     { field: 'id', headerName: 'ID', width: 90 },
     {
@@ -113,25 +112,26 @@ export const columns: GridColDef[] = [
         width: 150,
         editable: false,
     },
-    {
-        field: 'contactPersons',
-        headerName: 'contactPersons',
-        width: 250,
-        editable: false,
-        renderCell: (params: any) => {
-            console.log('params.value:', params.row);
-            return (
-                <ul className="flex">
-                    {params.value?.map((person: any) => {
-                        console.log('person:', person);
-                        return (
-                            <li key={person.id}>{person.contactName}</li>
-                        );
-                    })}
-                </ul>
-            );
-        },
-    },
+
+    // {
+    //     field: 'contactPersons',
+    //     headerName: 'contactPersons',
+    //     width: 250,
+    //     editable: false,
+    //     renderCell: (params: any) => {
+    //         console.log('params.value:', params.row);
+    //         return (
+    //             <ul className="flex">
+    //                 {params.value?.map((person: any) => {
+    //                     console.log('person:', person);
+    //                     return (
+    //                         <li key={person.id}>{person.contactName}</li>
+    //                     );
+    //                 })}
+    //             </ul>
+    //         );
+    //     },
+    // },
 
 
     // {
