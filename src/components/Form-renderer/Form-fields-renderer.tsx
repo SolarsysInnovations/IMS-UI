@@ -1,24 +1,11 @@
-import React, { useEffect } from 'react';
-import { Form, Field, ErrorMessage, FieldArray, Formik } from 'formik';
-import { TextField, Button, Typography, Grid, IconButton, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import * as Yup from 'yup';
-import TextFieldUi from '../../components/ui/TextField';
-import SelectDropdown from '../../components/ui/SelectDropdown';
-import ButtonSmallUi from '../../components/ui/ButtonSmall';
-import TableHeader from '../../components/layouts/TableHeader';
-import usePathname from '../../hooks/usePathname';
-import { Add } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import RadioUi from '../../components/ui/RadioGroup';
-import { useAddCustomerMutation } from '../../redux-store/customer/customerApi';
-import { toastConfig } from '../../constants/forms/config/toastConfig';
-import { toast } from 'react-toastify';
-import { fields } from '../../constants/form-data/form-data-json';
-import { FieldProps, FormProps, SubField } from '../../types/types';
-import { customerInitialValues } from '../../constants/forms/formikInitialValues';
-
-
+import { Field, FieldArray } from "formik";
+import SelectDropdown from "../ui/SelectDropdown";
+import TextFieldUi from "../ui/TextField";
+import RadioUi from "../ui/RadioGroup";
+import { Grid, Typography } from "@mui/material";
+import React from "react";
+import ButtonSmallUi from "../ui/ButtonSmall";
+import { FieldProps, SubField } from "../../types/types";
 
 const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
     const options: any = subField.options?.map(option => ({
@@ -89,7 +76,7 @@ const renderRadioField = (field: any, meta: any, subField: SubField, setFieldVal
 };
 
 
-const FieldRenderer: React.FC<{ field: FieldProps; setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void }> = ({ field, setFieldValue }) => {
+export const FieldRenderer: React.FC<{ field: FieldProps; setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void }> = ({ field, setFieldValue }) => {
     switch (field.type) {
         case 'section':
             return (
@@ -164,89 +151,3 @@ const FieldRenderer: React.FC<{ field: FieldProps; setFieldValue: (field: string
             return null;
     }
 };
-
-const DynamicCustomerCreate: React.FC<FormProps> = ({ fields, initialValues, validationSchema, onSubmit }) => {
-    const pathname = usePathname();
-    const navigate = useNavigate();
-    return (
-        <div>
-            <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                // validate={() => ({})}
-                onSubmit={onSubmit}
-            >
-                {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => (
-                    <>
-                        <TableHeader headerName={pathname} buttons={[
-                            { label: 'Back', icon: Add, onClick: () => navigate(-1) },
-                            { label: 'Save', icon: Add, onClick: handleSubmit },
-                        ]} />
-                        <Form>
-                            {fields?.map((field: FieldProps) => (
-                                <Grid key={field.name} container spacing={2}>
-                                    <FieldRenderer field={field} setFieldValue={setFieldValue} />
-                                </Grid>
-                            ))}
-                        </Form>
-                    </>
-                )}
-            </Formik>
-        </div>
-    );
-};
-
-const validationSchema = Yup.object().shape({
-    customerName: Yup.string().required('Customer Name is required'),
-    companyName: Yup.string().required('Company Name is required'),
-    customerEmail: Yup.string().email('Invalid email').required('Customer Email is required'),
-    customerPhone: Yup.string().required('Customer Number is required'),
-    paymentTerms: Yup.string().required('Payment Terms is required'),
-    country: Yup.string().required('Country is required'),
-    address: Yup.string().required('Address is required'),
-    city: Yup.string().required('City is required'),
-    state: Yup.string().required('State is required'),
-    pinCode: Yup.string().required('Pin Code is required'),
-    contactPersons: Yup.array().of(
-        Yup.object().shape({
-            contactName: Yup.string().required('Contact Person Name is required'),
-            contactEmail: Yup.string().email('Invalid email').required('Contact Person Email is required'),
-            contactPhone: Yup.string().required('Contact Person Phone is required'),
-        })
-    ).min(1, 'At least one contact person is required'),
-});
-
-const MyComponent: React.FC = () => {
-    const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
-
-    const onSubmit = async (values: any, actions: any) => {
-        try {
-            console.log(values);
-            actions.resetForm();
-            await addCustomer(values);
-            toast.success("successfully created the new customer", toastConfig)
-            alert("created the new customer")
-        } catch (error) {
-            console.log(error);
-        }
-
-    };
-    useEffect(() => {
-        if (isSuccess) {
-            toast.success("successfully created the new customer", toastConfig)
-        }
-    }, [isSuccess])
-    return (
-        <div>
-            {/* Use DynamicCustomerCreate with the required props */}
-            <DynamicCustomerCreate
-                fields={fields}
-                initialValues={customerInitialValues}
-                validationSchema={validationSchema}
-                onSubmit={onSubmit}
-            />
-        </div>
-    );
-};
-
-export default MyComponent;

@@ -11,26 +11,46 @@ import ModalUi from "../../components/ui/ModalUi";
 import CustomerDetails from "../../pages/customer/customerDetails";
 import TableHeader from "../../components/layouts/TableHeader";
 import usePathname from "../../hooks/usePathname";
-import { useDeleteCustomerMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
+import { useDeleteCustomerMutation, useGetCustomerByIdMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { toastConfig } from "../forms/config/toastConfig";
+import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
 
 const id = 1
 
-
-const MyCellRenderer = ({ row, contactPersons }: any) => {
+const MyCellRenderer = ({ id, contactPersons }: any) => {
+    const [customerDetails, setCustomerDetails] = useLocalStorage(LocalStorageKeys.CUSTOMER_EDIT, null);
     const dispatch = useDispatch<AppDispatch>();
-    const [openModal, setOpenModal] = React.useState(false); // State to manage modal open/close
+    const [openModal, setOpenModal] = React.useState(false);
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
-    const [deleteCustomer, { isLoading: deleteLoading, error: deleteError, isSuccess }] = useDeleteCustomerMutation();
-    const handleModalOpen = () => setOpenModal(true); // Function to open modal
-    const handleModalClose = () => setOpenModal(false); // Function to close modal
+    const [deleteCustomer, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteCustomerMutation<{ deletedCustomer: any, error: any, isLoading: any, isSuccess: any, data: any }>();
+    const [getCustomer, { data: customerData, }] = useGetCustomerByIdMutation<{ data: any }>();
+
+    useEffect(() => {
+        if (deletedData) {
+            console.log('Deleted data:', deletedData?.deletedCustomer);
+        }
+    }, [deletedData]);
+
+    useEffect(() => {
+        if (customerData) {
+            console.log('customer:', customerData);
+            setCustomerDetails(customerData);
+        }
+    }, [customerData]);
+
+    const handleModalOpen = () => setOpenModal(true);
+    const handleModalClose = () => setOpenModal(false);
     const pathname = usePathname();
     const navigate = useNavigate();
 
-    const handleEditClick = () => {
-        console.log(row, contactPersons);
-        // localStorage.setItem("customer", JSON.stringify(row));
-    };
+    const handleEditClick = async () => {
+        try {
+            getCustomer(id)
+            console.log('Customer data:', customerData);
+        } catch (error) {
+            console.error('Error handling edit click:', error);
+        }
+    }
 
     useEffect(() => {
         if (isSuccess) {
@@ -40,17 +60,15 @@ const MyCellRenderer = ({ row, contactPersons }: any) => {
     }, [isSuccess, refetch])
 
     const handleDeleteClick = () => {
-        const id = row.id;
         console.log(id);
         const confirmed = window.confirm("Are you sure you want to delete this customer?");
         if (confirmed) {
             deleteCustomer(id);
         }
     };
-
     return (
         <Stack direction="row" spacing={1}>
-            <Link to={`/customer-list/edit/${row}`}>
+            <Link to={`/customer/edit/${id}`}>
                 <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
                     <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
                 </IconButton>
@@ -63,10 +81,10 @@ const MyCellRenderer = ({ row, contactPersons }: any) => {
             </IconButton>
             <ModalUi open={openModal} onClose={handleModalClose}>
                 <TableHeader headerName="Client Details" buttons={[
-                    { label: 'Edit', icon: Add, onClick: () => navigate(`/customer-list/edit/${id}`) },
+                    { label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) },
                 ]} />
                 <Box sx={{ marginTop: "15px" }}>
-                    <CustomerDetails details={row} />
+                    <CustomerDetails details={id} />
                 </Box>
             </ModalUi>
         </Stack>
@@ -79,7 +97,7 @@ export const columns: GridColDef[] = [
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer row={params.row?.id} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} />,
     },
     { field: 'id', headerName: 'ID', width: 90 },
     {

@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { CreateCustomerProps } from '../../types/types';
 import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 
@@ -17,20 +16,21 @@ export const customerApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        getCustomers: builder.query<CreateCustomerProps[], void>({
+        getCustomers: builder.query<any[], void>({
             query: () => ({
                 url: API_URLS.customerList,
                 method: 'POST',
             }),
         }),
-        addCustomer: builder.mutation<any, Partial<CreateCustomerProps>>({
+
+        addCustomer: builder.mutation<any, Partial<any>>({
             query: (customer) => ({
                 url: API_URLS.customerCreate,
                 method: 'POST',
                 body: customer,
             }),
         }),
-        updateCustomer: builder.mutation<any, { id: number; customer: Partial<CreateCustomerProps> }>({
+        updateCustomer: builder.mutation<any, { id: number; customer: Partial<any> }>({
             query: ({ id, customer }) => ({
                 url: `/customer/update/${id}`,
                 method: 'POST',
@@ -43,7 +43,14 @@ export const customerApi = createApi({
                 method: 'POST',
             }),
         }),
+
+        getCustomerById: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `http://localhost:4000/customer/get/${id}`,
+                method: 'POST',
+            }),
+        }),
     }),
 });
 
-export const { useGetCustomersQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation } = customerApi;
+export const { useGetCustomersQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useGetCustomerByIdMutation } = customerApi;

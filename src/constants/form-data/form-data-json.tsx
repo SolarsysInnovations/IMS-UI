@@ -5,7 +5,7 @@ import { FieldProps } from "../../types/types";
 
 
 
-export const fields: FieldProps[] = [
+export const customerFields: FieldProps[] = [
     {
         type: 'section',
         titleGridSize: 12,
