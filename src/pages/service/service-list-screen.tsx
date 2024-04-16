@@ -10,6 +10,8 @@ import ToastUi from '../../components/ui/ToastifyUi'
 import { columns } from '../../constants/grid-table-data/service-table-data'
 import { useGetServiceQuery } from '../../redux-store/service/serviceApi'
 
+
+
 const ServicesList = () => {
     const dispatch = useDispatch<AppDispatch>();
 

@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps } from "../../types/types";
 
 export const loginInitialValue: LoginProps = {
     // email: "",
@@ -25,6 +25,12 @@ export const customerInitialValues = {
         contactPhone: '',
     },],
 };
+export const serviceInitialValues = {
+    serviceAccountingcode: "232",
+    description: "new",
+    amount: "250",
+};
+
 
 export const dyCustomerInitialValue: DyCreateCustomerProps = {
     customerName: "asasa",
@@ -44,6 +50,11 @@ export const dyCustomerInitialValue: DyCreateCustomerProps = {
             contactEmail: "",
         }
     ],
+};
+export const dyserviceInitialValues: serviceCreationProps= {
+    serviceAccountingcode: "",
+    description: "",
+    amount :0,
 };
 
 //

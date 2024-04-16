@@ -6,4 +6,4 @@ const EditService = () => {
     )
 }
 
-export default EditService
+export default EditService;

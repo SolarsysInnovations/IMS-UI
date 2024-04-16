@@ -88,4 +88,31 @@ export const customerFields: FieldProps[] = [
 ];
 
 
+ export const serviceFields: FieldProps[] = [
+    {
+        name: 'Service Accounting Code',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'serviceAccountingcode', label: 'Service Accounting Code', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
+        ]
+    },
+    {
+        name: 'Description',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'description', label: 'Description', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
+        ]
+    },
+    {
+        name: 'Amount',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'amount', label: 'Amount', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
+        ]
+    },
 
+
+ ];

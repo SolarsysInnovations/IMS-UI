@@ -73,4 +73,9 @@ export const customerValidationSchema = Yup.object().shape({
     ).min(1, 'At least one contact person is required'),
 });
 
+export const serviceValidationSchema = Yup.object().shape({
+    serviceAccountingcode: Yup.string().required('Service Accounting Code is required'),
+    description: Yup.string().required('Description is required'),
+    amount: Yup.string().required('Amount is required'),
+});
 
