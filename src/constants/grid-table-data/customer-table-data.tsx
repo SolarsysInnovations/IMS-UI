@@ -18,12 +18,12 @@ import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
 const id = 1
 
 const MyCellRenderer = ({ id, contactPersons }: any) => {
-    const [customerDetails, setCustomerDetails] = useLocalStorage(LocalStorageKeys.CUSTOMER_EDIT, null);
-    const dispatch = useDispatch<AppDispatch>();
+    const [customerDetails, setCustomerDetails] = useLocalStorage<any>("customerDetails", "")
     const [openModal, setOpenModal] = React.useState(false);
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [deleteCustomer, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteCustomerMutation<{ deletedCustomer: any, error: any, isLoading: any, isSuccess: any, data: any }>();
-    const [getCustomer, { data: customerData, }] = useGetCustomerByIdMutation<{ data: any }>();
+    const [getCustomer, { data: customerData }] = useGetCustomerByIdMutation<{ data: any }>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (deletedData) {
@@ -38,15 +38,21 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
         }
     }, [customerData]);
 
-    const handleModalOpen = () => setOpenModal(true);
+    const handleModalOpen = async () => {
+        setOpenModal(true);
+        try {
+            await getCustomer(id);
+        } catch (error) {
+            console.error('Error fetching customer data:', error);
+        }
+    }
     const handleModalClose = () => setOpenModal(false);
-    const pathname = usePathname();
-    const navigate = useNavigate();
 
     const handleEditClick = async () => {
         try {
             getCustomer(id)
             console.log('Customer data:', customerData);
+            navigate(`/customer/edit/${id}`)
         } catch (error) {
             console.error('Error handling edit click:', error);
         }
@@ -68,11 +74,9 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     };
     return (
         <Stack direction="row" spacing={1}>
-            <Link to={`/customer/edit/${id}`}>
-                <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
-                    <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
-                </IconButton>
-            </Link>
+            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
+                <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
+            </IconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
@@ -84,7 +88,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
                     { label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) },
                 ]} />
                 <Box sx={{ marginTop: "15px" }}>
-                    <CustomerDetails details={id} />
+                    <CustomerDetails details={customerData || []} />
                 </Box>
             </ModalUi>
         </Stack>
@@ -130,7 +134,12 @@ export const columns: GridColDef[] = [
         width: 150,
         editable: false,
     },
-
+    // {
+    //     field: "country",
+    //     editable: true,
+    //     type: "singleSelect",
+    //     valueOptions: ["United Kingdom", "Spain", "Brazil"]
+    // }
     // {
     //     field: 'contactPersons',
     //     headerName: 'contactPersons',

@@ -137,3 +137,43 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
 }
 
 export default DemoTwo;
+
+
+
+
+
+
+
+
+
+
+
+const invoiceInitialValue = {
+        invoiceType: "Retainer",
+        invoiceNumber: "IM98432",
+        customerName: "sandy",
+        gstType: "Local",
+        gstPercentage: 0.18,
+        gstInNumber: "IN92342",
+        paymentTerms: "Net 30",
+        invoiceDate: '13-04-2024',
+        dueDate: '13-05-2024',
+        invoiceStatus: "Pending",
+        discountAmount: '2',
+        invoiceTotalAmount: 13230,
+        taxAmount: { tds: 'Professional Service 10%' },
+        service: ['ECF7589'],
+        servicesList: [
+            {
+                _id: '65f2c628a7125d2fd42f982c',
+                __v: 0,
+                serviceAccountingCode: 'ECF7589',
+                serviceAmount: 15000,
+                serviceDescription:
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                id: '65f2c628a7125d2fd42f982c',
+                qty: 1,
+                totalAmount: 15000
+            }
+        ]
+    }; 

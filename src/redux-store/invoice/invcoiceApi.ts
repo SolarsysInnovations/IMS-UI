@@ -39,7 +39,7 @@ export const invoiceApi = createApi({
         }),
         deleteInvoice: builder.mutation<void, number>({
             query: (id) => ({
-                url: `/invoice/delete/${id}`,
+                url: `${API_URLS.invoiceDelete}/${id}`,
                 method: 'POST',
             }),
         }),

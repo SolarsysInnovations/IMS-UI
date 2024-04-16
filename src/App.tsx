@@ -22,6 +22,7 @@ import EditService from "./pages/service/service-edit-screen";
 import CustomerList from "./pages/customer/Customer-list-screen";
 import CustomerEdit from "./pages/customer/Customer-edit-screen";
 import CustomerCreate from "./pages/customer/Customer-create-screen";
+import InvoiceEditScreen from "./pages/Invoice/Invoice-edit-screen";
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
               <Route element={<DemoTwo />} path="/demo-two" />
               <Route element={<ComponentsScreen />} path="/components" />
               <Route element={<InvoiceList />} path="/invoice/list" />
+              <Route element={<InvoiceEditScreen />} path="/invoice/edit/:id" />
               <Route element={<CreateInvoice />} path="/invoice/create" />
               <Route element={<ServicesList />} path="/services/list" />
               <Route element={<CreateServices />} path="/service/create" />
