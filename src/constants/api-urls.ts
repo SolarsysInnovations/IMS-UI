@@ -15,6 +15,7 @@ export enum ApiEndpoint {
     CUSTOMER_GET = "customerGet",
     INVOICE_LIST = "invoiceList",
     INVOICE_CREATE = "invoiceCreate",
+    INVOICE_DELETE = "invoiceDelete",
 }
 
 export type ApiUrls = {
@@ -30,4 +31,5 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.CUSTOMER_GET]: `/customer/get`,
     [ApiEndpoint.INVOICE_LIST]: `/invoice/list`,
     [ApiEndpoint.INVOICE_CREATE]: `/invoice/create`,
+    [ApiEndpoint.INVOICE_DELETE]: `/invoice/delete`,
 };

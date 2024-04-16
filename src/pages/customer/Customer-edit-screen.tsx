@@ -38,6 +38,7 @@ const CustomerEdit: React.FC = () => {
             toast.success("successfully created the new customer", toastConfig)
         }
     }, [isSuccess])
+    console.log(customerDetails);
 
 
     return (

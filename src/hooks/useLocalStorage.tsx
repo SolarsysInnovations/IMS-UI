@@ -8,26 +8,31 @@ export enum LocalStorageKeys {
     CUSTOMER_EDIT = "customerDetails",
 }
 
-export const useLocalStorage = (key: string, initialValue: any) => {
-    const storedValue = localStorage.getItem(key);
-    let initial;
-    try {
-        initial = storedValue ? JSON.parse(storedValue) : initialValue;
-    } catch (error) {
-        console.error(`Error parsing JSON for key ${key}:`, error);
-        initial = initialValue;
-    }
-    const [value, setValue] = useState(initial);
 
-    const updateValue = (newValue: any) => {
-        if (typeof newValue === 'object') {
-            localStorage.setItem(key, JSON.stringify({ ...newValue }));
-        } else {
-            localStorage.setItem(key, JSON.stringify(newValue));
+
+
+type SetValue<T> = (value: T) => void;
+
+export function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
+    const [storedValue, setStoredValue] = useState<T>(() => {
+        try {
+            const item = window.localStorage.getItem(key);
+            return item ? JSON.parse(item) : initialValue;
+        } catch (error) {
+            console.error(`Error parsing JSON for key ${key}:`, error);
+            return initialValue;
         }
-        setValue(newValue);
+    });
+
+    const setValue: SetValue<T> = (value: T) => {
+        try {
+            const valueToStore = value instanceof Function ? value(storedValue) : value;
+            setStoredValue(valueToStore);
+            window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        } catch (error) {
+            console.error(`Error setting value for key ${key}:`, error);
+        }
     };
 
-    return [value, updateValue];
-};
-
+    return [storedValue, setValue];
+}

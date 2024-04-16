@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
 import Typography from '@mui/material/Typography'
 import { Grid } from '@mui/material';
 
@@ -7,16 +7,36 @@ interface CustomerDetailsProps {
 }
 
 const CustomerDetails = ({ details }: CustomerDetailsProps) => {
+    console.log("dasdsa", details ? details : "");
     return (
         <Grid container spacing={2}>
             {Object.entries(details).map(([key, value]) => (
-                <Grid item xs={6}>
-                    <Typography variant="subtitle2" color="initial">
-                        {key} : <Typography variant="body2" component="span" >{value as ReactNode}</Typography>
+                <Grid item sm={6} key={key}>
+                    <Typography variant="body2" color="initial">
+                        <strong>{key}:</strong>
+                        {Array.isArray(value) ? (
+                            <>
+                                {value?.map((item, index) => {
+                                    return (
+                                        <div key={index}>
+                                            {Object.entries(item).map(([subKey, subValue]) => (
+                                                <div key={subKey}>
+                                                    <strong>{subKey}:</strong> {subValue as string}{' '}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )
+                                })}
+                            </>
+                        ) : (
+                            <span> {value as string}</span>
+                        )}
                     </Typography>
                 </Grid>
             ))}
         </Grid>
+
+
     )
 }
 

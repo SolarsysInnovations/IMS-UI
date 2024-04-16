@@ -5,10 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import { useEffect, useState } from "react";
-import { useGetInvoiceQuery } from "../../../redux-store/invoice/invcoiceApi";
+import { useDeleteInvoiceMutation, useGetInvoiceQuery } from "../../../redux-store/invoice/invcoiceApi";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../../components/ui/ModalUi";
 import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
+import { toastConfig } from "../../forms/config/toastConfig";
+import { toast } from "react-toastify";
 
 const id = 1
 
@@ -18,35 +20,41 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [invoiceData, setInvoiceData] = useState<any>();
     console.log(invoiceData);
+    const [deleteInvoice, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteInvoiceMutation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         refetch()
     }, [dispatch, refetch]);
 
-
     const handleEditClick = () => {
         localStorage.setItem("service", JSON.stringify(row));
         console.log(row);
+        navigate(`/invoice/edit/${row.id}`)
     };
-
     const handleDeleteClick = () => {
-
+        const confirmed = window.confirm("Are you sure you want to delete this invoice?");
+        if (confirmed) {
+            deleteInvoice(row.id)
+        }
     };
-
     const handleOpenModal = () => {
         setIsModalOpen(true);
     };
     const handleCloseModal = () => {
-
         setIsModalOpen(false);
     };
+    useEffect(() => {
+        if (D_Success) {
+            toast.success("successfully deleted the invoice", toastConfig)
+        }
+        refetch();
+    }, [D_Success]);
     return (
         <Stack direction="row" spacing={1}>
-            <Link to={`/service-list/edit/${id}`}>
-                <IconButton aria-label="" onClick={handleEditClick}>
-                    <EditIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
-                </IconButton>
-            </Link>
+            <IconButton aria-label="" onClick={handleEditClick}>
+                <EditIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
+            </IconButton>
             <IconButton aria-label="" onClick={handleDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
             </IconButton>
@@ -71,7 +79,6 @@ export const columns: GridColDef[] = [
         editable: false,
         renderCell: (params: any) => <MyCellRenderer row={params.row} />,
     },
-
     {
         field: 'invoiceType',
         headerName: 'Invoice Type',
@@ -108,7 +115,6 @@ export const columns: GridColDef[] = [
         width: 150,
         editable: false,
     },
-
     // {
     //     field: 'fullName',
     //     headerName: 'Full name',

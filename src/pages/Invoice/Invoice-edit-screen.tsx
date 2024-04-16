@@ -34,7 +34,7 @@ import { columns } from '../../constants/grid-table-data/invoice/invoice-service
 export const handleRowUpdate = (updatedRow: any) => {
     console.log(updatedRow); // Log the modified row object
 };
-const CreateInvoice = () => {
+const InvoiceEditScreen = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
@@ -53,6 +53,7 @@ const CreateInvoice = () => {
     const [tdsAmount, setTdsAmount] = useState<number | null>(null);
     const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>()
     const [tdsOrTcsDiscount, setTdsOrTcsDiscount] = useState(0);
+    const [serviceData, setServiceData] = useState<any>();
     console.log(updateQty);
     console.log(selectedServiceCode);
 
@@ -63,6 +64,10 @@ const CreateInvoice = () => {
         })) || [];
     }, [serviceList]);
 
+    useEffect(() => {
+        const data = window.localStorage.getItem("service");
+        setServiceData(data);
+    }, [])
     useEffect(() => {
         if (newData) {
             const processedServiceList = newData.map((service: any) => {
@@ -142,9 +147,11 @@ const CreateInvoice = () => {
         console.log("Discount Percentage:", discountPercentage);
     }, [discountPercentage, subTotalInvoiceAmount, tdsAmount, selectedTds]);
 
+
     useEffect(() => {
         refetch()
     }, [dispatch, refetch])
+
     const handleOpenModal = () => {
         setIsModalOpen(true);
     };
@@ -167,10 +174,39 @@ const CreateInvoice = () => {
             label: "Professional Service 10%"
         },
     ]
+    const ini = {
+        invoiceType: "Retainer",
+        invoiceNumber: "IM98432",
+        customerName: "sandy",
+        gstType: "Local",
+        gstPercentage: 0.18,
+        gstInNumber: "IN92342",
+        paymentTerms: "Net 30",
+        invoiceDate: '13-04-2024',
+        dueDate: '13-05-2024',
+        invoiceStatus: "Pending",
+        discountAmount: 2,
+        invoiceTotalAmount: 13230,
+        taxAmount: { tds: 'Professional Service 10%' },
+        service: ['ECF7589'],
+        servicesList: [
+            {
+                _id: '65f2c628a7125d2fd42f982c',
+                __v: 0,
+                serviceAccountingCode: 'ECF7589',
+                serviceAmount: 15000,
+                serviceDescription:
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                id: '65f2c628a7125d2fd42f982c',
+                qty: 1,
+                totalAmount: 15000
+            }
+        ]
+    }
     return (
         <div>
             <Formik
-                initialValues={invoiceInitialValue}
+                initialValues={serviceData || ini}
                 // validationSchema={invoiceValidationSchema}
                 validate={() => ({})}
                 onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
@@ -178,9 +214,9 @@ const CreateInvoice = () => {
                         values.servicesList = selectedServiceData;
                         values.invoiceTotalAmount = invoiceTotalAmount ?? null;
                         console.log(values);
-                        addInvoice(values);
+                        // addInvoice(values);
                         // alert(JSON.stringify(values));
-                        resetForm();
+                        // resetForm();
                     } catch (error) {
                         console.error("An error occurred during login:", error);
                     }
@@ -193,9 +229,9 @@ const CreateInvoice = () => {
                     <div>
                         <ToastUi autoClose={2000} />
                         <TableHeader headerName={pathname} buttons={[
-                            { label: 'Preview', icon: Add, onClick: () => { handleOpenModal(); } },
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) },
                             { label: 'Save', icon: Add, onClick: handleSubmit },
+                            { label: 'Preview Invoice', icon: Add, onClick: () => { handleOpenModal(); } },
                         ]} />
                         <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
                             <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={values} />
@@ -212,8 +248,8 @@ const CreateInvoice = () => {
                                                 setFieldValue('invoiceType', "")
                                             }
                                         }} groupName='type' options={invoiceType}
-                                            // label='Invoice type'
-                                            errorMsg={touched.invoiceType && errors.invoiceType}
+                                        // label='Invoice type'
+                                        // errorMsg={touched.invoiceType && errors.invoiceType}
                                         />
                                     </Box>
                                 </Grid>
@@ -230,7 +266,7 @@ const CreateInvoice = () => {
                                             })()}
                                             onChange={handleChange}
                                             error={touched.invoiceNumber && Boolean(errors.invoiceNumber)}
-                                            helperText={touched.invoiceNumber && errors.invoiceNumber}
+                                        // helperText={touched.invoiceNumber && errors.invoiceNumber}
                                         />
                                     </Box>
                                 </Grid>
@@ -250,7 +286,7 @@ const CreateInvoice = () => {
                                             value={values.customerName ? { value: values.customerName, label: values.customerName } : null}
                                             labelText='Customer Name'
                                             error={touched.customerName && Boolean(errors.customerName)}
-                                            helperText={touched.customerName && errors.customerName}
+                                        // helperText={touched.customerName && errors.customerName}
                                         />
                                     </Box>
                                 </Grid>
@@ -278,7 +314,7 @@ const CreateInvoice = () => {
                                             value={values.gstType ? { value: values.gstType, label: values.gstType } : null}
                                             labelText='Gst Type'
                                             error={touched.gstType && Boolean(errors.gstType)}
-                                            helperText={touched.gstType && errors.gstType}
+                                        // helperText={touched.gstType && errors.gstType}
                                         />
                                     </Box>
                                 </Grid>
@@ -292,7 +328,7 @@ const CreateInvoice = () => {
                                             value={values.gstPercentage || ""}
                                             onChange={handleChange}
                                             error={touched.gstPercentage && Boolean(errors.gstPercentage)}
-                                            helperText={touched.gstPercentage && errors.gstPercentage}
+                                        // helperText={touched.gstPercentage && errors.gstPercentage}
                                         />
                                     </Box>
                                 </Grid>
@@ -306,7 +342,7 @@ const CreateInvoice = () => {
                                             value={values.gstInNumber}
                                             onChange={handleChange}
                                             error={touched.gstInNumber && Boolean(errors.gstInNumber)}
-                                            helperText={touched.gstInNumber && errors.gstInNumber}
+                                        // helperText={touched.gstInNumber && errors.gstInNumber}
                                         />
                                     </Box>
                                 </Grid>
@@ -342,7 +378,7 @@ const CreateInvoice = () => {
                                             value={values.paymentTerms ? { value: values.paymentTerms, label: values.paymentTerms } : null}
                                             labelText='Payment Terms'
                                             error={touched.paymentTerms && Boolean(errors.paymentTerms)}
-                                            helperText={touched.paymentTerms && errors.paymentTerms}
+                                        // helperText={touched.paymentTerms && errors.paymentTerms}
                                         />
                                     </Box>
                                 </Grid>
@@ -370,7 +406,7 @@ const CreateInvoice = () => {
 
                                         options={serviceAccountCode?.filter((option: { value: string }) => !values.service.some((item: string) => item === option.value))}
                                         label='Select Services'
-                                        value={values.service.map(item => ({ value: item, label: item }))}
+                                        value={values.service.map((item: any) => ({ value: item, label: item }))}
                                         onChange={(event: React.ChangeEvent<{}>, newValue: any | any[]) => {
                                             if (Array.isArray(newValue)) {
                                                 console.log(newValue);
@@ -502,4 +538,4 @@ const CreateInvoice = () => {
     )
 }
 
-export default CreateInvoice
+export default InvoiceEditScreen
