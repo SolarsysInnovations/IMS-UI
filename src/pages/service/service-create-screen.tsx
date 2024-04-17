@@ -15,7 +15,6 @@ const ServiceCreate: React.FC = () => {
             await addService(values);
             toast.success("successfully created the new service", toastConfig)
             actions.resetForm();
-            alert(JSON.stringify(values))
             alert("created the new service");
         } catch (error) {
             console.log(error);

@@ -6,6 +6,7 @@ export enum LocalStorageKeys {
     THEME_PREFERENCE = "theme_preference",
     USER_PREFERENCES = "user_preferences",
     CUSTOMER_EDIT = "customerDetails",
+    SERVICE_EDIT = "serviceDetails",
 }
 
 

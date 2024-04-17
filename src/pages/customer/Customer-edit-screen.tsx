@@ -40,7 +40,6 @@ const CustomerEdit: React.FC = () => {
     }, [isSuccess])
     console.log(customerDetails);
 
-
     return (
         <div>
             {/* Use DynamicCustomerCreate with the required props */}
