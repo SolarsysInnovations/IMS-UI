@@ -46,7 +46,7 @@ export const customerApi = createApi({
 
         getCustomerById: builder.mutation<void, number>({
             query: (id) => ({
-                url: `http://localhost:4000/customer/get/${id}`,
+                url: `/customer/get/${id}`,
                 method: 'POST',
             }),
         }),
