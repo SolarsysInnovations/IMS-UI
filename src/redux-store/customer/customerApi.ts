@@ -1,6 +1,27 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
+import { createSlice } from '@reduxjs/toolkit';
+
+const customerSlice = createSlice({
+    name: 'customer',
+    initialState: {
+        data: null,
+        loading: false,
+        error: null,
+    },
+    reducers: {
+        setCustomerData(state, action) {
+            state.data = action.payload;
+        },
+        setCustomerLoading(state, action) {
+            state.loading = action.payload;
+        },
+        setCustomerError(state, action) {
+            state.error = action.payload;
+        },
+    },
+});
 
 export const customerApi = createApi({
     reducerPath: 'customerApi',
@@ -53,4 +74,6 @@ export const customerApi = createApi({
     }),
 });
 
+export const { setCustomerData, setCustomerLoading, setCustomerError } = customerSlice.actions;
+export { customerSlice };
 export const { useGetCustomersQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useGetCustomerByIdMutation } = customerApi;

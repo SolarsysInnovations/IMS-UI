@@ -1,8 +1,8 @@
 import { Box, IconButton, Stack } from "@mui/material";
 import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -10,33 +10,31 @@ import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
 import CustomerDetails from "../../pages/customer/customerDetails";
 import TableHeader from "../../components/layouts/TableHeader";
-import usePathname from "../../hooks/usePathname";
-import { useDeleteCustomerMutation, useGetCustomerByIdMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
+import { setCustomerData, setCustomerError, setCustomerLoading, useDeleteCustomerMutation, useGetCustomerByIdMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { toastConfig } from "../forms/config/toastConfig";
-import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
-
-const id = 1
+import useSuccessToast from "../../hooks/useToast";
 
 const MyCellRenderer = ({ id, contactPersons }: any) => {
-    const [customerDetails, setCustomerDetails] = useLocalStorage<any>("customerDetails", "")
+    const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [deleteCustomer, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteCustomerMutation<{ deletedCustomer: any, error: any, isLoading: any, isSuccess: any, data: any }>();
-    const [getCustomer, { data: customerData }] = useGetCustomerByIdMutation<{ data: any }>();
+    const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCustomerByIdMutation<{ data: any, isSuccess: any, isError: any }>();
+
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (deletedData) {
-            console.log('Deleted data:', deletedData?.deletedCustomer);
+    const handleEditClick = async () => {
+        try {
+            await getCustomer(id)
+            navigate(`/customer/edit/${id}`)
+        } catch (error) {
+            console.error('Error handling edit click:', error);
         }
-    }, [deletedData]);
+    }
 
     useEffect(() => {
-        if (customerData) {
-            console.log('customer:', customerData);
-            setCustomerDetails(customerData);
-        }
-    }, [customerData]);
+        dispatch(setCustomerData(customerData));
+    }, [customerData, dispatch, C_success])
 
     const handleModalOpen = async () => {
         setOpenModal(true);
@@ -48,30 +46,18 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     }
     const handleModalClose = () => setOpenModal(false);
 
-    const handleEditClick = async () => {
-        try {
-            getCustomer(id)
-            console.log('Customer data:', customerData);
-            navigate(`/customer/edit/${id}`)
-        } catch (error) {
-            console.error('Error handling edit click:', error);
-        }
-    }
-
     useEffect(() => {
-        if (isSuccess) {
-            toast.success("successfully deleted the new customer", toastConfig)
-        }
         refetch();
     }, [isSuccess, refetch])
 
     const handleDeleteClick = () => {
-        console.log(id);
         const confirmed = window.confirm("Are you sure you want to delete this customer?");
         if (confirmed) {
             deleteCustomer(id);
         }
     };
+    useSuccessToast({ isSuccess, message: "successfully deleted the new customer", })
+
     return (
         <Stack direction="row" spacing={1}>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
