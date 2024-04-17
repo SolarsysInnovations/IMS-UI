@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CustomerEdit: React.FC = () => {
     const [updateCustomer, { isLoading, isSuccess, isError, error }] = useUpdateCustomerMutation();
-    const [customerDetails, setCustomerDetails] = useLocalStorage(LocalStorageKeys.CUSTOMER_EDIT, null);
+    const [customerDetails] = useLocalStorage(LocalStorageKeys.CUSTOMER_EDIT, null);
     const navigate = useNavigate();
     const onSubmit = async (values: any, actions: any) => {
         try {
@@ -25,7 +25,6 @@ const CustomerEdit: React.FC = () => {
             toast.success("successfully created the new customer", toastConfig)
             alert("created the new customer")
             actions.resetForm();
-            // setCustomerDetails("")
             navigate(-1);
         } catch (error) {
             console.log(error);

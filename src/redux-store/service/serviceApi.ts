@@ -45,7 +45,13 @@ export const serviceApi = createApi({
                 method: 'POST',
             }),
         }),
+        getServiceById: builder.mutation<void, number>({
+                query: (id) => ({
+                    url: `/service/get/${id}`,
+                    method: 'POST',
+                }),
+        }),
     }),
 });
 
-export const { useGetServiceQuery, useAddServiceMutation, useUpdateServiceMutation, useDeleteServiceMutation } = serviceApi;
+export const { useGetServiceQuery, useAddServiceMutation,useGetServiceByIdMutation, useUpdateServiceMutation, useDeleteServiceMutation } = serviceApi;

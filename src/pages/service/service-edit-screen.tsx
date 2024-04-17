@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAddServiceMutation, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import { toast } from 'react-toastify';
-import { serviceFields } from '../../constants/form-data/form-data-json';
+import { serviceFields} from '../../constants/form-data/form-data-json';
 import { serviceInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
@@ -25,7 +25,7 @@ const CustomerEdit: React.FC = () => {
             toast.success("successfully created the new customer", toastConfig)
             alert("created the new customer")
             actions.resetForm();
-            // setCustomerDetails("")
+            // setserviceDetails();
             navigate(-1);
         } catch (error) {
             console.log(error);

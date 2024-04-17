@@ -5,14 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import { useEffect } from "react";
-import { useGetServiceQuery } from "../../redux-store/service/serviceApi";
 import { toast } from "react-toastify";
 import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
-import CustomerDetails from "../../pages/customer/customerDetails";
+import ServiceDetails from "../../pages/service/serviceDetails";
 import TableHeader from "../../components/layouts/TableHeader";
 import usePathname from "../../hooks/usePathname";
-import { useDeleteCustomerMutation, useGetCustomerByIdMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
+import { useDeleteServiceMutation, useGetServiceQuery, useGetServiceByIdMutation,useUpdateServiceMutation } from "../../redux-store/service/serviceApi";
 import { toastConfig } from "../forms/config/toastConfig";
 import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
 import React from "react";
@@ -20,13 +19,13 @@ import React from "react";
 const id = 1
 
 const MyCellRenderer = ({ id, contactPersons }: any) => {
-    const [customerDetails, setCustomerDetails] = useLocalStorage(LocalStorageKeys.CUSTOMER_EDIT, null);
+    const [serviceDetails, setServiceDetails] = useLocalStorage(LocalStorageKeys.SERVICE_EDIT, null);
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
-    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
-    const [deleteCustomer, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteCustomerMutation<{ deletedCustomer: any, error: any, isLoading: any, isSuccess: any, data: any }>();
-    const [getCustomer, { data: customerData, }] = useGetCustomerByIdMutation<{ data: any }>();
-
+    const { data: services, error, isLoading, refetch } = useGetServiceQuery();
+    const [deletedService, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteServiceMutation<{ deletedService: any, error: any, isLoading: any, isSuccess: any, data: any }>();
+    const [getService, { data: serviceData, }] = useGetServiceByIdMutation<{ data: any }>();
+    const [deleteService, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteServiceMutation();
     useEffect(() => {
         if (deletedData) {
             console.log('Deleted data:', deletedData?.deletedCustomer);
@@ -34,11 +33,11 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     }, [deletedData]);
 
     useEffect(() => {
-        if (customerData) {
-            console.log('customer:', customerData);
-            setCustomerDetails(customerData);
+        if (serviceData) {
+            console.log('customer:', serviceData);
+            setServiceDetails(serviceData);
         }
-    }, [customerData]);
+    }, [serviceData]);
 
     const handleModalOpen = () => setOpenModal(true);
     const handleModalClose = () => setOpenModal(false);
@@ -47,8 +46,8 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
     const handleEditClick = async () => {
         try {
-            getCustomer(id)
-            console.log('Customer data:', customerData);
+            getService(id)
+            console.log('Service data:', serviceData);
         } catch (error) {
             console.error('Error handling edit click:', error);
         }
@@ -65,7 +64,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
         console.log(id);
         const confirmed = window.confirm("Are you sure you want to delete this service?");
         if (confirmed) {
-            deleteCustomer(id);
+            deleteService(id);
         }
     };
     return (
@@ -86,7 +85,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
                     { label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) },
                 ]} />
                 <Box sx={{ marginTop: "15px" }}>
-                    <CustomerDetails details={id} />
+                    <ServiceDetails details={id} />
                 </Box>
             </ModalUi>
         </Stack>
