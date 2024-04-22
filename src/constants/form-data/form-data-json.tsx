@@ -94,7 +94,7 @@ export const customerFields: FieldProps[] = [
         type: 'section',
         titleGridSize: 12,
         subFields: [
-            { name: 'serviceAccountingcode', label: 'Service Accounting Code', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
+            { name: 'serviceAccountingCode', label: 'serviceAccountingCode', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
         ]
     },
     {
@@ -102,7 +102,7 @@ export const customerFields: FieldProps[] = [
         type: 'section',
         titleGridSize: 12,
         subFields: [
-            { name: 'description', label: 'Description', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
+            { name: 'serviceDescription', label: 'serviceDescription', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
         ]
     },
     {
@@ -110,7 +110,7 @@ export const customerFields: FieldProps[] = [
         type: 'section',
         titleGridSize: 12,
         subFields: [
-            { name: 'amount', label: 'Amount', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
+            { name: 'serviceAmount', label: 'serviceAmount', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
         ]
     },
 

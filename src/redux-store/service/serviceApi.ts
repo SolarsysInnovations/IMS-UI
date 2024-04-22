@@ -2,9 +2,28 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { InvoiceInitialValueProps } from '../../types/types';
 import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { BASE_LOCAL_URL } from '../../constants/api-urls';
+import { createSlice } from '@reduxjs/toolkit';
 
 
-
+const serviceSlice = createSlice({
+    name: 'service',
+    initialState: {
+        data: null,
+        loading: false,
+        error: null,
+    },
+    reducers: {
+        setServiceData(state, action) {
+            state.data = action.payload;
+        },
+        setServiceLoading(state, action) {
+            state.loading = action.payload;
+        },
+        setServiceError(state, action) {
+            state.error = action.payload;
+        },
+    },
+});
 export const serviceApi = createApi({
     reducerPath: 'serviceApi',
     baseQuery: fetchBaseQuery({
@@ -54,4 +73,6 @@ export const serviceApi = createApi({
     }),
 });
 
+export const { setServiceData, setServiceLoading, setServiceError } = serviceSlice.actions;
+export { serviceSlice };
 export const { useGetServiceQuery, useAddServiceMutation,useGetServiceByIdMutation, useUpdateServiceMutation, useDeleteServiceMutation } = serviceApi;

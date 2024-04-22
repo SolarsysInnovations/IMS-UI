@@ -19,4 +19,3 @@ export const toastConfig: ToastConfigProps = {
     progress: undefined,
     theme: "colored",
 };
-

@@ -11,7 +11,7 @@ import ModalUi from "../../components/ui/ModalUi";
 import ServiceDetails from "../../pages/service/serviceDetails";
 import TableHeader from "../../components/layouts/TableHeader";
 import usePathname from "../../hooks/usePathname";
-import { useDeleteServiceMutation, useGetServiceQuery, useGetServiceByIdMutation,useUpdateServiceMutation } from "../../redux-store/service/serviceApi";
+import { useDeleteServiceMutation, useGetServiceQuery, useGetServiceByIdMutation,useUpdateServiceMutation, setServiceData } from "../../redux-store/service/serviceApi";
 import { toastConfig } from "../forms/config/toastConfig";
 import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
 import React from "react";
@@ -19,35 +19,48 @@ import React from "react";
 const id = 1
 
 const MyCellRenderer = ({ id, contactPersons }: any) => {
-    const [serviceDetails, setServiceDetails] = useLocalStorage(LocalStorageKeys.SERVICE_EDIT, null);
+    // const [serviceDetails, setServiceDetails] = useLocalStorage(LocalStorageKeys.SERVICE_EDIT, null);
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
     const { data: services, error, isLoading, refetch } = useGetServiceQuery();
     const [deletedService, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteServiceMutation<{ deletedService: any, error: any, isLoading: any, isSuccess: any, data: any }>();
-    const [getService, { data: serviceData, }] = useGetServiceByIdMutation<{ data: any }>();
-    const [deleteService, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteServiceMutation();
-    useEffect(() => {
-        if (deletedData) {
-            console.log('Deleted data:', deletedData?.deletedCustomer);
-        }
-    }, [deletedData]);
+    const [getService, { data: serviceData, isSuccess: C_success, isError: C_error }] = useGetServiceByIdMutation<{ data: any, isSuccess: any, isError: any }>();
+    // const [deleteService, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteServiceMutation();
+
+    // useEffect(() => {
+    //     if (serviceData) {
+    //         console.log('service:', serviceData);
+    //         setServiceDetails(serviceData);
+    //     }
+    // }, [serviceData]);
 
     useEffect(() => {
-        if (serviceData) {
-            console.log('customer:', serviceData);
-            setServiceDetails(serviceData);
-        }
-    }, [serviceData]);
+        dispatch(setServiceData(serviceData));
+    }, [serviceData, dispatch, C_success])
 
-    const handleModalOpen = () => setOpenModal(true);
-    const handleModalClose = () => setOpenModal(false);
+    // const handleModalOpen = () => setOpenModal(true);
+    // const handleModalClose = () => setOpenModal(false);
     const pathname = usePathname();
     const navigate = useNavigate();
 
+    const handleModalOpen = async () => {
+        setOpenModal(true);
+        try {
+            await getService(id);
+        } catch (error) {
+            console.error('Error fetching service data:', error);
+        }
+    }
+    const handleModalClose = () => setOpenModal(false);
+
+    useEffect(() => {
+        refetch();
+    }, [isSuccess, refetch])
+
     const handleEditClick = async () => {
         try {
-            getService(id)
-            console.log('Service data:', serviceData);
+            await getService(id)
+            navigate(`/service/edit/${id}`)
         } catch (error) {
             console.error('Error handling edit click:', error);
         }
@@ -64,16 +77,14 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
         console.log(id);
         const confirmed = window.confirm("Are you sure you want to delete this service?");
         if (confirmed) {
-            deleteService(id);
+            deletedService(id);
         }
     };
     return (
         <Stack direction="row" spacing={1}>
-            <Link to={`/customer/edit/${id}`}>
                 <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
                     <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
                 </IconButton>
-            </Link>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>

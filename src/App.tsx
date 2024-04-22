@@ -18,11 +18,11 @@ import InvoiceList from "./pages/Invoice/Invoice-list-screen";
 import CreateInvoice from "./pages/Invoice/Invoice-create-screen";
 import ServicesList from "./pages/service/service-list-screen";
 import CreateServices from "./pages/service/service-create-screen";
-import EditService from "./pages/service/service-edit-screen";
 import CustomerList from "./pages/customer/Customer-list-screen";
 import CustomerEdit from "./pages/customer/Customer-edit-screen";
 import CustomerCreate from "./pages/customer/Customer-create-screen";
 import InvoiceEditScreen from "./pages/Invoice/Invoice-edit-screen";
+import ServiceEditScreen from "./pages/service/service-edit-screen";
 
 
 function App() {
@@ -49,7 +49,7 @@ function App() {
               <Route element={<CreateInvoice />} path="/invoice/create" />
               <Route element={<ServicesList />} path="/services/list" />
               <Route element={<CreateServices />} path="/service/create" />
-              <Route element={<EditService />} path="/service/edit" />
+              <Route element={<ServiceEditScreen/>} path="/service/edit/:id" />
             </Route>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
           </Routes>

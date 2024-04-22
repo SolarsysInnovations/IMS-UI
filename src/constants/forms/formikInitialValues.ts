@@ -26,9 +26,9 @@ export const customerInitialValues = {
     },],
 };
 export const serviceInitialValues = {
-    serviceAccountingcode: "007",
-    description: "Project Nova",
-    amount: "25890",
+    serviceAccountingCode: "007",
+    serviceDescription: "Project Nova",
+    serviceAmount: "25890",
 };
 
 

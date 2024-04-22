@@ -6,15 +6,17 @@ import { Add } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { columns } from '../../constants/grid-table-data/customer-table-data'
 import ToastUi from '../../components/ui/ToastifyUi'
-import { useGetCustomersQuery } from '../../redux-store/customer/customerApi'
+import { useGetCustomersQuery, useUpdateCustomerMutation } from '../../redux-store/customer/customerApi'
 
 const CustomerList = () => {
+    const [updateCustomer, { isSuccess, isError }] = useUpdateCustomerMutation();
     const { data: customers, error, isLoading } = useGetCustomersQuery();
     const buttons = [
         { label: 'Create Customer', icon: Add, onClick: () => navigate("/customer/create") },
     ];
     const navigate = useNavigate();
     const pathname = usePathname();
+
     return (
         <>
             <ToastUi autoClose={1000} />
