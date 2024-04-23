@@ -18,7 +18,7 @@ const ServicesList = () => {
     const { data: serviceList, error, isLoading } = useGetServiceQuery();
 
     const buttons = [
-        { label: 'Create Service List', icon: Add, onClick: () => navigate("/client/create") },
+        { label: 'Create Service List', icon: Add, onClick: () => navigate("/service/create") },
     ];
     const navigate = useNavigate();
     const pathname = usePathname();

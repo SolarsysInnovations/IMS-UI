@@ -39,9 +39,9 @@ export const sidebarTwo = [
         path: "/services/list",
         icon: MiscellaneousServicesIcon,
         isParent: true,
-        subItems: [
-            { title: "Create Services", path: "/service/create" },
-        ]
+        // subItems: [
+        //     { title: "Create Services", path: "/service/create" },
+        // ]
     },
     {
         id: 7,
