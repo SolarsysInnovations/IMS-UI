@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { createTheme, colors } from "@mui/material";
+import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme/theme";
 import Login from "./pages/Login-screen";
@@ -24,15 +24,20 @@ import CustomerCreate from "./pages/customer/Customer-create-screen";
 import InvoiceEditScreen from "./pages/Invoice/Invoice-edit-screen";
 import ServiceEditScreen from "./pages/service/service-edit-screen";
 import Reportscreen from "./pages/reports/Reportscreen";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "./redux-store/auth/authSlice";
 
 function App() {
-  const isAuthenticated = useAuthentication();
+  const token = useSelector(selectCurrentToken);
+
+  console.log(token);
 
   return (
     <div>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
+
             <Route element={<PrivateRoutes />}>
               <Route path="/" element={<Navigate to="/dashboard" replace={true} />} />
               <Route element={<Dashboard />} path="/" />
@@ -52,7 +57,9 @@ function App() {
               <Route element={<ServiceEditScreen/>} path="/service/edit/:id" />
               <Route element={<Reportscreen />} path="/reports" />
             </Route>
-            <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
+
+            <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
+
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

@@ -17,6 +17,10 @@ export enum ApiEndpoint {
     INVOICE_CREATE = "invoiceCreate",
     INVOICE_DELETE = "invoiceDelete",
     SERVICE_CREATE = "serviceCreate",
+    SERVICE_LIST = "serviceList",
+    SERVICE_DELETE = "serviceDelete",
+    SERVICE_GET = "serviceGet",
+    SERVICE_UPDATE = "serviceUpdate"
 }
 
 export type ApiUrls = {
@@ -25,13 +29,20 @@ export type ApiUrls = {
 
 export const API_URLS: ApiUrls = {
     [ApiEndpoint.LOGIN]: `/user/login`,
+    // customer endpoints
     [ApiEndpoint.CUSTOMER_LIST]: `/customer/list`,
     [ApiEndpoint.CUSTOMER_CREATE]: `/customer/create`,
     [ApiEndpoint.CUSTOMER_UPDATE]: `/customer/update`,
     [ApiEndpoint.CUSTOMER_DELETE]: `/customer/delete`,
     [ApiEndpoint.CUSTOMER_GET]: `/customer/get`,
+    // invoice endpoints
     [ApiEndpoint.INVOICE_LIST]: `/invoice/list`,
     [ApiEndpoint.INVOICE_CREATE]: `/invoice/create`,
     [ApiEndpoint.INVOICE_DELETE]: `/invoice/delete`,
+    // service endpoints
+    [ApiEndpoint.SERVICE_LIST]: `/service/list`,
     [ApiEndpoint.SERVICE_CREATE]: `/service/create`,
+    [ApiEndpoint.SERVICE_DELETE]: `/service/delete`,
+    [ApiEndpoint.SERVICE_GET]: `/service/get`,
+    [ApiEndpoint.SERVICE_UPDATE]: `/service/update`
 };

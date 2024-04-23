@@ -25,16 +25,18 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
     const handleEditClick = async () => {
         try {
-            await getCustomer(id)
-            navigate(`/customer/edit/${id}`)
+            const response = await getCustomer(id);
+            if ('data' in response) {
+                const customerData = response.data;
+                await dispatch(setCustomerData(customerData));
+                navigate(`/customer/edit/${id}`);
+            } else {
+                console.error('Error response:', response.error);
+            }
         } catch (error) {
             console.error('Error handling edit click:', error);
         }
     }
-
-    useEffect(() => {
-        dispatch(setCustomerData(customerData));
-    }, [customerData, dispatch, C_success])
 
     const handleModalOpen = async () => {
         setOpenModal(true);
@@ -44,6 +46,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
             console.error('Error fetching customer data:', error);
         }
     }
+
     const handleModalClose = () => setOpenModal(false);
 
     useEffect(() => {

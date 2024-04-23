@@ -59,13 +59,19 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
     const handleEditClick = async () => {
         try {
-            await getService(id)
-            navigate(`/service/edit/${id}`)
+            const response = await getService(id);
+            if ('data' in response) {
+                const serviceData = response.data;
+                await dispatch(setServiceData(serviceData));
+                console.log("service data", serviceData);
+                navigate(`/service/edit/${id}`);
+            } else {
+                console.error('Error response:', response.error);
+            }
         } catch (error) {
             console.error('Error handling edit click:', error);
         }
     }
-
     useEffect(() => {
         if (isSuccess) {
             toast.success("successfully deleted the new service", toastConfig)

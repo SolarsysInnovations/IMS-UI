@@ -23,7 +23,7 @@ const ServiceEditScreen: React.FC = () => {
             console.log(values);
             await updateService({
                 id: id,
-                serviceData: values,
+                service: values,
             });
             actions.resetForm();
             // setserviceDetails();
@@ -38,18 +38,20 @@ const ServiceEditScreen: React.FC = () => {
             navigate(-1);
         }
     });
+    console.log("Hello ",serviceStateDetails);
+    
 
     return (
         <div>
             <ToastContainer />
-            {serviceStateDetails && (
+            {/* {serviceStateDetails && ( */}
                 <DynamicFormCreate
                     fields={serviceFields}
                     initialValues={serviceStateDetails}
                     validationSchema={serviceValidationSchema}
                     onSubmit={onSubmit}
                 />
-            )}
+            {/* )} */}
         </div>
          
          );
