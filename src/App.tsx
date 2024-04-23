@@ -23,7 +23,7 @@ import CustomerEdit from "./pages/customer/Customer-edit-screen";
 import CustomerCreate from "./pages/customer/Customer-create-screen";
 import InvoiceEditScreen from "./pages/Invoice/Invoice-edit-screen";
 import ServiceEditScreen from "./pages/service/service-edit-screen";
-
+import Reportscreen from "./pages/reports/Reportscreen";
 
 function App() {
   const isAuthenticated = useAuthentication();
@@ -50,6 +50,7 @@ function App() {
               <Route element={<ServicesList />} path="/services/list" />
               <Route element={<CreateServices />} path="/service/create" />
               <Route element={<ServiceEditScreen/>} path="/service/edit/:id" />
+              <Route element={<Reportscreen />} path="/reports" />
             </Route>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
           </Routes>

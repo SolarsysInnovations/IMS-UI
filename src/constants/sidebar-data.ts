@@ -4,6 +4,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
+import TaskIcon from '@mui/icons-material/Task';
 export const sidebarTwo = [
     {
         id: 1,
@@ -42,6 +43,14 @@ export const sidebarTwo = [
             { title: "Create Services", path: "/service/create" },
         ]
     },
+    {
+        id: 7,
+        title: "Reports",
+        path: "/reports",
+        icon: TaskIcon,
+        isParent: false
+    },
+
     {
         id: 5,
         title: "Demo",
