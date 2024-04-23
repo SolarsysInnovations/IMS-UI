@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
+import { apiSlice } from '../api/apiSlice';
 
 const customerSlice = createSlice({
     name: 'customer',
@@ -23,25 +24,18 @@ const customerSlice = createSlice({
     },
 });
 
-export const customerApi = createApi({
-    reducerPath: 'customerApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASE_LOCAL_URL,
-        prepareHeaders: (headers, { getState }) => {
-            const token = localStorage.getItem(LocalStorageKeys.TOKEN);
-            if (token) {
-                const cleanedToken = token.replace(/^"(.*)"$/, '$1');
-                headers.set('Authorization', `Bearer ${cleanedToken}`);
-            }
-            return headers;
-        },
-    }),
+
+
+export const customerApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getCustomers: builder.query<any[], void>({
             query: () => ({
                 url: API_URLS.customerList,
                 method: 'POST',
+
             }),
+            // Set caching for 5 minutes (adjust the duration as needed)
+            keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
         }),
 
         addCustomer: builder.mutation<any, Partial<any>>({

@@ -1,19 +1,23 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { invoiceApi } from "./invoice/invcoiceApi";
 import { serviceApi } from "./service/serviceApi";
-import { loginApi } from "./auth/loginApi";
 import { customerApi, customerSlice } from "./customer/customerApi";
+import authReducer from './auth/authSlice';
+import { apiSlice } from "./api/apiSlice";
+import { loginApi } from "./auth/loginApi";
 
 export const store = configureStore({
   reducer: {
-    [loginApi.reducerPath]: loginApi.reducer,
-    [customerApi.reducerPath]: customerApi.reducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
+    [loginApi.reducerPath]: loginApi.reducer, // Add loginApi reducer
     [invoiceApi.reducerPath]: invoiceApi.reducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
     customerState: customerSlice.reducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
-    loginApi.middleware,
+    apiSlice.middleware,
+    loginApi.middleware, // Add loginApi middleware
     customerApi.middleware,
     invoiceApi.middleware,
     serviceApi.middleware,

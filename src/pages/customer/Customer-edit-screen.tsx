@@ -27,7 +27,6 @@ const CustomerEdit: React.FC = () => {
             });
             actions.resetForm();
             // setCustomerDetails("")
-
         } catch (error) {
             console.log(error);
         }
@@ -39,6 +38,7 @@ const CustomerEdit: React.FC = () => {
             navigate(-1);
         }
     });
+    console.log(customerStateDetails);
 
     return (
         <div>

@@ -14,10 +14,18 @@ import { LocalStorageKeys, useLocalStorage } from "../hooks/useLocalStorage";
 import { loginValidationSchema } from "../constants/forms/validations/validationSchema";
 import { loginInitialValue } from "../constants/forms/formikInitialValues";
 import { LoginProps } from "../types/types";
+import { setCredentials } from "../redux-store/auth/authSlice";
 
-
+interface LoginResponse {
+  data?: {
+    user: any;
+    accessToken: any;
+    refreshToken: any;
+  };
+  error?: any;
+}
 const Login = () => {
-  const [login, { data, error, isLoading }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation()
   const dispatch = useDispatch<AppDispatch>();
   const [userToken, setUserToken] = useLocalStorage(LocalStorageKeys.TOKEN, "");
   const navigate = useNavigate();
@@ -29,22 +37,33 @@ const Login = () => {
     <Formik
       initialValues={loginInitialValue}
       validationSchema={loginValidationSchema}
+      // validate={() => ({})}
       onSubmit={async (values: LoginProps, { setSubmitting, resetForm }) => {
         try {
-          console.log(values);
-          const loginResult: any = await login(values);
-          resetForm();
-          if (loginResult && loginResult.data && loginResult.data.token) {
-            setUserToken(loginResult.data.token);
+          const loginResult: LoginResponse = await login(values);
+
+          // Check if the login was successful and accessToken is available
+          if (loginResult.data && "accessToken" in loginResult.data) {
+            // Check if the response contains a refresh token
+            if (loginResult.data.accessToken) {
+              const { user, accessToken, refreshToken } = loginResult.data;
+              dispatch(setCredentials({ user, accessToken, refreshToken }));
+            } else {
+              const { user, accessToken } = loginResult.data;
+              dispatch(setCredentials({ user, accessToken }));
+            }
+            // Move the navigation inside the if-else block after dispatching actions
             navigate("/dashboard");
+
           } else {
-            console.error("Login failed: Invalid credentials");
+            // Handle the case where accessToken is not available
+            console.error("Access token not found in login response:", loginResult);
           }
+          resetForm();
+
         } catch (error) {
           console.error("An error occurred during login:", error);
-        }
-        finally {
-          setSubmitting(false);
+          console.log("Error details:", error); // Add this line to log the error object
         }
       }}
     >
