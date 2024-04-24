@@ -94,9 +94,9 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
+            {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
-            </IconButton>
+            </IconButton> */}
             <ModalUi open={openModal} onClose={handleModalClose}>
                 <TableHeader headerName="Client Details" buttons={[
                     { label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) },

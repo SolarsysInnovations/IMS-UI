@@ -22,7 +22,7 @@ const ServiceCreate: React.FC = () => {
     useSuccessToast({ isSuccess, message: "successfully created the service" })
     return (
         <div>
-            {/* Use DynamicCustomerCreate with the required props */}
+              {/* Use DynamicServiceCreate with the required props */}
             <DynamicFormCreate
                 fields={serviceFields}
                 initialValues={serviceInitialValues}
