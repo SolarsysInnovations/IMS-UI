@@ -31,9 +31,7 @@ import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
 import InvoiceGrid from './Invoice-grid';
 import { columns } from '../../constants/grid-table-data/invoice/invoice-service-table-data';
 
-export const handleRowUpdate = (updatedRow: any) => {
-    console.log(updatedRow); // Log the modified row object
-};
+
 const InvoiceEditScreen = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
@@ -54,8 +52,6 @@ const InvoiceEditScreen = () => {
     const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>()
     const [tdsOrTcsDiscount, setTdsOrTcsDiscount] = useState(0);
     const [serviceData, setServiceData] = useState<any>();
-    console.log(updateQty);
-    console.log(selectedServiceCode);
 
     const newData = useMemo(() => {
         return serviceList?.map((item: any) => ({
@@ -105,7 +101,6 @@ const InvoiceEditScreen = () => {
         setSelectedServiceData(filterDataByAccountingCode);
     }, [selectedServiceCode, updateQty]);
 
-    console.log(selectedServiceData);
 
     const calculateServiceTotalAmount = (serviceData: any[]) => {
         let totalAmount = 0;
@@ -118,14 +113,10 @@ const InvoiceEditScreen = () => {
     useEffect(() => {
         const totalAmount = calculateServiceTotalAmount(selectedServiceData);
         setSubTotalInvoiceAmount(totalAmount);
-        console.log("Total Amount:", totalAmount);
     }, [selectedServiceData, updateQty])
 
     useEffect(() => {
-        console.log(subTotalInvoiceAmount);
-        console.log(discountPercentage);
         const disAmount = (subTotalInvoiceAmount * (discountPercentage ?? 0)) / 100;
-        console.log("Discount Amount:", disAmount);
         setDiscountAmount(disAmount)
 
         let tdsTax = null;
@@ -133,18 +124,13 @@ const InvoiceEditScreen = () => {
             if (selectedTds === "Professional Service 10%") {
                 let discountPercentage = 10;
                 let discountedAmount = (subTotalInvoiceAmount - disAmount) * (discountPercentage) / 100;
-                console.log("Discounted Amount:", discountedAmount);
                 setTdsAmount(discountedAmount);
                 tdsTax = discountedAmount
             }
         }
-        console.log(tdsTax);
 
         const invoiceAmount = tdsTax ? subTotalInvoiceAmount - (tdsTax + disAmount) : null;
-        console.log(invoiceAmount);
         setInvoiceTotalAmount(invoiceAmount);
-        console.log(subTotalInvoiceAmount);
-        console.log("Discount Percentage:", discountPercentage);
     }, [discountPercentage, subTotalInvoiceAmount, tdsAmount, selectedTds]);
 
 
@@ -213,7 +199,6 @@ const InvoiceEditScreen = () => {
                     try {
                         values.servicesList = selectedServiceData;
                         values.invoiceTotalAmount = invoiceTotalAmount ?? null;
-                        console.log(values);
                         // addInvoice(values);
                         // alert(JSON.stringify(values));
                         // resetForm();
@@ -242,7 +227,6 @@ const InvoiceEditScreen = () => {
                                     <Box>
                                         <RadioUi value={values.invoiceType} onChange={(newValue: any) => {
                                             if (newValue) {
-                                                console.log(newValue.target.value);
                                                 setFieldValue('invoiceType', newValue.target.value);
                                             } else {
                                                 setFieldValue('invoiceType', "")
@@ -275,10 +259,8 @@ const InvoiceEditScreen = () => {
                                         <SelectDropdown
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    console.log(newValue)
                                                     setFieldValue("customerName", newValue.value)
                                                 } else {
-                                                    console.log("clearing the value")
                                                     setFieldValue("customerName", "")
                                                 }
                                             }}
@@ -295,7 +277,6 @@ const InvoiceEditScreen = () => {
                                         <SelectDropdown
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    console.log(newValue)
                                                     if (newValue.value === "Local") {
                                                         setFieldValue("gstPercentage", "0.18")
                                                     } else if (newValue.value === "Interstate") {
@@ -305,7 +286,6 @@ const InvoiceEditScreen = () => {
                                                     }
                                                     setFieldValue("gstType", newValue.value)
                                                 } else {
-                                                    console.log("clearing the value")
                                                     setFieldValue("gstType", "")
                                                     setFieldValue("gstPercentage", "")
                                                 }
@@ -351,7 +331,6 @@ const InvoiceEditScreen = () => {
                                         <SelectDropdown
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    console.log(newValue)
                                                     if (newValue.value === "Net 30") {
                                                         const currentDateNet30 = dayjs().format('DD-MM-YYYY');
                                                         const dueDateNet30 = dayjs().add(30, 'days').format('DD-MM-YYYY');
@@ -370,7 +349,6 @@ const InvoiceEditScreen = () => {
                                                     }
                                                     setFieldValue("paymentTerms", newValue.value)
                                                 } else {
-                                                    console.log("clearing the value")
                                                     setFieldValue("paymentTerms", "")
                                                 }
                                             }}
@@ -409,26 +387,20 @@ const InvoiceEditScreen = () => {
                                         value={values.service.map((item: any) => ({ value: item, label: item }))}
                                         onChange={(event: React.ChangeEvent<{}>, newValue: any | any[]) => {
                                             if (Array.isArray(newValue)) {
-                                                console.log(newValue);
                                                 const newServiceValues = newValue.map(item => (item.value));
-                                                console.log(newServiceValues);
                                                 setFieldValue("service", newServiceValues);
-                                                console.log(newValue);
                                                 const selectedServiceCodes = newValue.map(item => item.value);
-                                                console.log(selectedServiceCodes); // Array containing only the values ['ECF7589']
 
                                                 // Store the selected service codes
                                                 setSelectedServiceCode(selectedServiceCodes);
                                                 // setSelectedServiceCode(newValue);
                                                 values.servicesList = selectedServiceData;
                                             } else if (newValue !== null) { // Check if newValue is not null
-                                                console.log(newValue);
                                                 const newServiceValues = [{ value: newValue.value }];
                                                 setFieldValue("service", newServiceValues);
 
 
                                             } else {
-                                                console.log("clearing the value");
                                                 setFieldValue("service", []);
                                             }
                                         }}
@@ -480,7 +452,6 @@ const InvoiceEditScreen = () => {
                                                         const value = e.target.value;
                                                         const parsedValue = value !== "" ? parseFloat(value) : null;
                                                         setDiscountPercentage(parsedValue); // Set discountAmount as a number or null
-                                                        console.log(parsedValue);
                                                         setFieldValue("discountAmount", value);
                                                     }}
                                                 />
@@ -497,7 +468,6 @@ const InvoiceEditScreen = () => {
                                                     width='150px'
                                                     onChange={(newValue: any) => {
                                                         if (newValue) {
-                                                            console.log(newValue)
                                                             if (newValue.value === "Professional Service 10%") {
                                                                 setFieldValue("taxAmount.tds", newValue.value)
                                                                 setSelectedTdsAmount(newValue.value)
@@ -505,7 +475,6 @@ const InvoiceEditScreen = () => {
                                                             setFieldValue("taxAmount.tds", newValue.value)
                                                         }
                                                         else {
-                                                            console.log("clearing the value")
                                                             setFieldValue("taxAmount.tds", "")
                                                         }
                                                     }}

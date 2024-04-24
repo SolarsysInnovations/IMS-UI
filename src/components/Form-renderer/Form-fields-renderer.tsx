@@ -20,13 +20,11 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
                     labelText={subField.label}
                     value={options.find((opt: any) => opt.value === value)}
                     onChange={(newValue: any) => {
-                        console.log(newValue);
                         if (newValue) {
                             onChange(newValue.value);
                             setFieldValue(subField.name, newValue.value);
                         } else {
                             setFieldValue(subField.name, '');
-                            console.log("clearing value");
                             onChange("");
                         }
 
@@ -63,12 +61,10 @@ const renderRadioField = (field: any, meta: any, subField: SubField, setFieldVal
 
     return (
         <RadioUi options={options} value={field.value} onChange={(newValue: any) => {
-            console.log(newValue);
             if (newValue) {
                 setFieldValue(subField.name, newValue.target.value);
             } else {
                 setFieldValue(subField.name, '');
-                console.log("clearing value");
             }
         }}
         />

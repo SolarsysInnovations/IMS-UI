@@ -2,20 +2,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { InvoiceInitialValueProps } from '../../types/types';
 import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
+import { apiSlice } from '../api/apiSlice';
 
-export const invoiceApi = createApi({
-    reducerPath: 'invoiceApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASE_LOCAL_URL,
-        prepareHeaders: (headers, { getState }) => {
-            const token = localStorage.getItem(LocalStorageKeys.TOKEN);
-            if (token) {
-                const cleanedToken = token.replace(/^"(.*)"$/, '$1');
-                headers.set('Authorization', `Bearer ${cleanedToken}`);
-            }
-            return headers;
-        },
-    }),
+export const invoiceApi = apiSlice.injectEndpoints({
+
     endpoints: (builder) => ({
         getInvoice: builder.query<InvoiceInitialValueProps[], void>({
             query: () => ({

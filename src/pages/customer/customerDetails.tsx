@@ -7,7 +7,6 @@ interface CustomerDetailsProps {
 }
 
 const CustomerDetails = ({ details }: CustomerDetailsProps) => {
-    console.log("dasdsa", details ? details : "");
     return (
         <Grid container spacing={2}>
             {Object.entries(details).map(([key, value]) => (

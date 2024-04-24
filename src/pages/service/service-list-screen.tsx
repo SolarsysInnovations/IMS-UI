@@ -22,19 +22,12 @@ const ServicesList = () => {
     ];
     const navigate = useNavigate();
     const pathname = usePathname();
-    const newData = serviceList?.map((item: any) => {
-        return {
-            ...item,
-            id: item._id
-        };
-    }) || [];
-    console.log(newData);
 
     return (
         <>
             <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} columns={columns} tableData={newData} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} columns={columns} tableData={serviceList || []} checkboxSelection={false} />
         </>
     )
 }

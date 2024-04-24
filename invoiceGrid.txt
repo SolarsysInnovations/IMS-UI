@@ -70,49 +70,42 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     );
 };
 
-export const columns: GridColDef[] = [
+const roles = ['Market', 'Finance', 'Development'];
+
+export const invoiceDemoColumns: GridColDef[] = [
+
+    {
+        field: 'itemDetails',
+        headerName: 'itemDetails',
+        width: 350,
+        editable: true,
+        type: "singleSelect",
+        valueOptions: roles,
+    },
+    {
+        field: 'quantity',
+        headerName: 'quantity',
+        width: 100,
+        editable: true,
+    },
+    {
+        field: 'rate',
+        headerName: 'rate',
+        width: 100,
+        editable: false,
+    },
+    {
+        field: 'amount',
+        headerName: 'amount',
+        width: 100,
+        editable: false,
+    },
     {
         field: 'Action',
         headerName: 'Action',
         width: 140,
         editable: false,
         renderCell: (params: any) => <MyCellRenderer row={params.row} />,
-    },
-    {
-        field: 'invoiceType',
-        headerName: 'Invoice Type',
-        width: 150,
-        editable: true,
-    },
-    {
-        field: 'invoiceNumber',
-        headerName: 'Invoice Number',
-        width: 150,
-        editable: true,
-    },
-    {
-        field: 'customerName',
-        headerName: 'Customer Name',
-        width: 150,
-        editable: false,
-    },
-    {
-        field: 'dueDate',
-        headerName: 'Due Date',
-        width: 150,
-        editable: false,
-    },
-    {
-        field: 'invoiceStatus',
-        headerName: 'Invoice Status',
-        width: 150,
-        editable: false,
-    },
-    {
-        field: 'gstPercentage',
-        headerName: 'Gst Percentage',
-        width: 150,
-        editable: false,
     },
     // {
     //     field: 'fullName',
@@ -123,4 +116,29 @@ export const columns: GridColDef[] = [
     //     valueGetter: (params: GridValueGetterParams) =>
     //         `${params.row.firstName || ''} ${params.row.lastName || ''}`,
     // },
+];
+
+// Function to get a random item from an array
+const randomArrayItem = (array: any) => {
+    return array[Math.floor(Math.random() * array.length)];
+};
+
+
+// Generate invoice data with random roles
+export const invoiceDataDemo = [
+    {
+        id: 1,
+        itemDetails: randomArrayItem(roles), // Assign a random role
+        quantity: 0,
+        rate: 0,
+        amount: 0,
+    },
+    {
+        id: 2,
+        itemDetails: randomArrayItem(roles), // Assign a random role
+        quantity: 0,
+        rate: 0,
+        amount: 0,
+    },
+    // Add more objects as needed
 ];

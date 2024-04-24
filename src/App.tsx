@@ -26,12 +26,10 @@ import ServiceEditScreen from "./pages/service/service-edit-screen";
 import Reportscreen from "./pages/reports/Reportscreen";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "./redux-store/auth/authSlice";
+import DemoInvoice from "./pages/Invoice/Demo-Invocie";
 
 function App() {
   const token = useSelector(selectCurrentToken);
-
-  console.log(token);
-
   return (
     <div>
       <ThemeProvider theme={theme}>
@@ -39,27 +37,26 @@ function App() {
           <Routes>
 
             <Route element={<PrivateRoutes />}>
-              <Route path="/" element={<Navigate to="/dashboard" replace={true} />} />
-              <Route element={<Dashboard />} path="/" />
-              // ! customer routes
-              <Route element={<CustomerList />} path="/customer-list" />
-              <Route element={<CustomerEdit />} path="/customer/edit/:id" />
-              <Route element={<CustomerCreate />} path="/customer/create" />
-              <Route element={<Dashboard />} path="/dashboard" />
-              <Route element={<Demo />} path="/demo" />
-              <Route element={<DemoTwo />} path="/demo-two" />
-              <Route element={<ComponentsScreen />} path="/components" />
-              <Route element={<InvoiceList />} path="/invoice/list" />
-              <Route element={<InvoiceEditScreen />} path="/invoice/edit/:id" />
-              <Route element={<CreateInvoice />} path="/invoice/create" />
-              <Route element={<ServicesList />} path="/services/list" />
-              <Route element={<CreateServices />} path="/service/create" />
+              <Route index element={<Navigate to="/dashboard" />} />
+              <Route path="/" element={<Dashboard />} />
+              {/* Customer routes */}
+              <Route path="/customer-list" element={<CustomerList />} />
+              <Route path="/customer/edit/:id" element={<CustomerEdit />} />
+              <Route path="/customer/create" element={<CustomerCreate />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/demo" element={<Demo />} />
+              <Route path="/demo-two" element={<DemoTwo />} />
+              <Route path="/demo-invoice" element={<DemoInvoice />} />
+              <Route path="/components" element={<ComponentsScreen />} />
+              <Route path="/invoice/list" element={<InvoiceList />} />
+              <Route path="/invoice/edit/:id" element={<InvoiceEditScreen />} />
+              <Route path="/invoice/create" element={<CreateInvoice />} />
+              <Route path="/services/list" element={<ServicesList />} />
+              <Route path="/service/create" element={<CreateServices />} />
               <Route element={<ServiceEditScreen/>} path="/service/edit/:id" />
               <Route element={<Reportscreen />} path="/reports" />
             </Route>
-
             <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
-
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

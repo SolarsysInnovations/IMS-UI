@@ -26,10 +26,6 @@ interface FormFieldRendererProps {
 }
 
 const FormFieldRenderer = ({ handleAdd, touched, errors, onChange, field, formData, setFormData, handleBack, handleSave, handlePreviewInvoice }: FormFieldRendererProps) => {
-    console.log(formData);
-
-
-
     const pathName = usePathname();
     const handleButtonClick = (onClick: any, preventDefault: boolean = false) => {
         const handleClick = () => {
@@ -204,10 +200,8 @@ const FormFieldRenderer = ({ handleAdd, touched, errors, onChange, field, formDa
                         onChange={(newValue: any) => {
                             if (setFormData) { // Ensure setFormData is defined
                                 if (newValue) {
-                                    console.log(newValue);
                                     setFormData(field.name, newValue.value);
                                 } else {
-                                    console.log("clearing the value");
                                     setFormData(field.name, null); // Set to null when clearing the value
                                 }
                             }

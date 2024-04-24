@@ -13,7 +13,6 @@ import { useGetInvoiceQuery } from '../../redux-store/invoice/invcoiceApi'
 const InvoiceList = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { data: invoiceList, error, isLoading } = useGetInvoiceQuery();
-    console.log(invoiceList);
     const buttons = [
         { label: 'Create Invoice', icon: Add, onClick: () => navigate("/invoice/create") },
     ];
@@ -30,7 +29,7 @@ const InvoiceList = () => {
         <>
             <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} columns={columns} tableData={newData} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} columns={columns} tableData={newData || []} checkboxSelection={false} />
 
         </>
     )

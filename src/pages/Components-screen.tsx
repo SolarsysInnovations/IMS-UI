@@ -18,7 +18,6 @@ import { columns } from '../constants/grid-table-data/customer-table-data';
 const ComponentsScreen = () => {
     const [checked, setChecked] = React.useState(true);
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.checked);
         setChecked(event.target.checked);
     };
 

@@ -57,7 +57,6 @@ const InvoiceCalculation = ({ tdsAmount, setSelectedTdsAmount, subTotalInvoiceAm
                                     const value = e.target.value;
                                     const parsedValue = value !== "" ? parseFloat(value) : null;
                                     setDiscountPercentage(parsedValue); // Set discountAmount as a number or null
-                                    console.log(parsedValue);
                                     setFieldValue("discountAmount", value);
                                 }}
                             />
@@ -74,7 +73,6 @@ const InvoiceCalculation = ({ tdsAmount, setSelectedTdsAmount, subTotalInvoiceAm
                                 width='150px'
                                 onChange={(newValue: any) => {
                                     if (newValue) {
-                                        console.log(newValue)
                                         if (newValue.value === "Professional Service 10%") {
                                             setFieldValue("taxAmount.tds", newValue.value)
                                             setSelectedTdsAmount(newValue.value)
@@ -82,7 +80,6 @@ const InvoiceCalculation = ({ tdsAmount, setSelectedTdsAmount, subTotalInvoiceAm
                                         setFieldValue("taxAmount.tds", newValue.value)
                                     }
                                     else {
-                                        console.log("clearing the value")
                                         setFieldValue("taxAmount.tds", "")
                                     }
                                 }}
