@@ -43,10 +43,7 @@ const baseQueryWithReauth = async (
 
     // If the result is an error and its status is 403, attempt to refresh the token
     if (result?.error?.status === 403) {
-        console.log('sending refresh token')
-        console.log('Received 403 error, attempting to refresh token...');
         const refreshResult = await baseQuery('/refresh', api, extraOptions);
-        console.log(refreshResult);
 
         // If refresh is successful, update the token and retry the original query
         if (refreshResult?.data) {

@@ -13,7 +13,6 @@ interface InvoiceGridProps {
     setUpdateQty: any;
 }
 const InvoiceGrid = ({ setUpdateQty, values, columns, onCellEditStop, hideFooter, pagination, showToolbar, tableData }: InvoiceGridProps) => {
-    console.log(values);
     return (
         <Grid item xs={12}>
             <GridDataUi
@@ -24,10 +23,7 @@ const InvoiceGrid = ({ setUpdateQty, values, columns, onCellEditStop, hideFooter
                         ...params.row,
                         qty: newValue
                     };
-                    console.log({ id: updatedRowData.id, serviceData: updatedRowData });
                     setUpdateQty(updatedRowData)
-                    console.log('qty:', newValue);
-                    console.log('Row ID:', rowId);
                 }}
                 hideFooter={hideFooter}
                 pagination={pagination}

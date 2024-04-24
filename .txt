@@ -76,3 +76,40 @@ renderCell: (params: any) => {
             console.log(params.row);
             return null;
         },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        renderCell: (params) => (
+                <>
+                    <Select
+                        sx={{ width: 220 }}
+                        labelId="item-details-label"
+                        id="item-details-select"
+                        value={params.value || ''}
+                        // onChange={(event) => handleOptionSelect(event.target.value)}
+                        label="Item Details"
+                    >
+                        {roles.map((option, index) => (
+                            <MenuItem key={index} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                        <MenuItem>
+                            <Button variant="contained" >
+                                create new service
+                            </Button>
+                        </MenuItem>
+                    </Select>
+                </>

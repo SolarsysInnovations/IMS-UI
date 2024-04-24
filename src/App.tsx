@@ -25,12 +25,10 @@ import CustomerCreate from "./pages/customer/Customer-create-screen";
 import InvoiceEditScreen from "./pages/Invoice/Invoice-edit-screen";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "./redux-store/auth/authSlice";
+import DemoInvoice from "./pages/Invoice/Demo-Invocie";
 
 function App() {
   const token = useSelector(selectCurrentToken);
-
-  console.log(token);
-
   return (
     <div>
       <ThemeProvider theme={theme}>
@@ -47,6 +45,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/demo" element={<Demo />} />
               <Route path="/demo-two" element={<DemoTwo />} />
+              <Route path="/demo-invoice" element={<DemoInvoice />} />
               <Route path="/components" element={<ComponentsScreen />} />
               <Route path="/invoice/list" element={<InvoiceList />} />
               <Route path="/invoice/edit/:id" element={<InvoiceEditScreen />} />
@@ -55,9 +54,7 @@ function App() {
               <Route path="/service/create" element={<CreateServices />} />
               <Route path="/service/edit" element={<EditService />} />
             </Route>
-
             <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
-
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

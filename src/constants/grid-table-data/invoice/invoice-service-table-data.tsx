@@ -1,15 +1,9 @@
 import { GridColDef, GridDeleteIcon, GridValueSetterParams } from "@mui/x-data-grid";
-import { handleRowUpdate } from "../../../pages/Invoice/Invoice-create-screen";
 
 const id = 1
 
 export const columns: GridColDef[] = [
-    {
-        field: 'id',
-        headerName: 'id',
-        width: 200,
-        editable: true,
-    },
+
     {
         field: 'serviceAccountingCode',
         headerName: 'Service Code',
@@ -33,8 +27,6 @@ export const columns: GridColDef[] = [
             let row = { ...params.row }; // Copy the row object
             // Update the qty field in the row object
             row.qty = newValue;
-            console.log(row.qty);
-            handleRowUpdate(row);
             // Return the updated row object
             return row;
         }

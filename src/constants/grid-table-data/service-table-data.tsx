@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import { useEffect } from "react";
 import { useGetServiceQuery } from "../../redux-store/service/serviceApi";
-import { handleRowUpdate } from "../../pages/Invoice/Invoice-create-screen";
 
 const id = 1
 

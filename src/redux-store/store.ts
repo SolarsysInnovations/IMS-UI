@@ -10,7 +10,6 @@ export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     [loginApi.reducerPath]: loginApi.reducer, // Add loginApi reducer
-    [invoiceApi.reducerPath]: invoiceApi.reducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
     customerState: customerSlice.reducer,
     auth: authReducer,
@@ -19,7 +18,6 @@ export const store = configureStore({
     apiSlice.middleware,
     loginApi.middleware, // Add loginApi middleware
     customerApi.middleware,
-    invoiceApi.middleware,
     serviceApi.middleware,
   ),
 });

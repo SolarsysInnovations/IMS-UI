@@ -20,7 +20,6 @@ export default function GridDataUi({ onCellEditStop, onCellEditor, hideFooter, p
                 onCellEditStart={onCellEditor}
                 onRowEditStart={(params: any, event: any) => {
                     const newValue = event.target.value;
-                    console.log(newValue);
                 }}
                 onCellEditStop={onCellEditStop}
                 // onCellEditStop={(params: any, event: any) => {
@@ -64,10 +63,10 @@ export default function GridDataUi({ onCellEditStop, onCellEditor, hideFooter, p
                         borderRadius: "10px",
                         backgroundColor: "grey.200"
                     },
-                    "& .css-ha70k2-MuiInputBase-root-MuiInput-root" : {
-                        fontSize : "12px"
+                    "& .css-ha70k2-MuiInputBase-root-MuiInput-root": {
+                        fontSize: "12px"
                     },
-                    ".css-1qgbav7-MuiButtonBase-root-MuiButton-root":{
+                    ".css-1qgbav7-MuiButtonBase-root-MuiButton-root": {
                         fontSize: "12px"
                     }
 

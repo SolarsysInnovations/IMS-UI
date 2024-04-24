@@ -74,7 +74,6 @@ export const CreateServices: React.FC = () => {
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    console.log(values);
                     setSubmitting(false);
                 }}
             >

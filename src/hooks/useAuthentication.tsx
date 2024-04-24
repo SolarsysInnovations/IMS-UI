@@ -26,8 +26,6 @@ const useAuthentication = () => {
             } else {
                 // Token is still valid
                 setAuthenticated(true);
-                // console.log("hello");
-
             }
         };
 

@@ -19,8 +19,6 @@ const CustomerEdit: React.FC = () => {
     const onSubmit = async (values: any, actions: any) => {
         try {
             const id: number = values?._id
-            console.log(id);
-            console.log(values);
             await updateCustomer({
                 id: id,
                 customer: values,
@@ -38,7 +36,6 @@ const CustomerEdit: React.FC = () => {
             navigate(-1);
         }
     });
-    console.log(customerStateDetails);
 
     return (
         <div>
