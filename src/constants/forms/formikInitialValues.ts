@@ -78,3 +78,7 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
     servicesList: [],
 };
 
+export const AragingInitialValue: ArAgingInitialValueProps = {
+    AragingDate: "",
+};
+

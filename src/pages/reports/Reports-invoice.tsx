@@ -11,7 +11,7 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import { Typography, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 
-const Reportscreen: React.FC = () => {
+const Reportsinvoice: React.FC = () => {
     const pathname = usePathname();
     const navigate = useNavigate();
     const handleClick = async () => {
@@ -66,4 +66,4 @@ const Reportscreen: React.FC = () => {
     );
 };
 
-export default Reportscreen;
+export default Reportsinvoice;

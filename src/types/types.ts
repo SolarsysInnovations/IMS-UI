@@ -82,6 +82,11 @@ export interface InvoiceInitialValueProps {
     servicesList: ServiceListProps[];
 }
 
+export interface ArAgingInitialValueProps {
+    
+    AragingDate: string;
+    
+}
 
 // ---------- service  --------------------
 export interface serviceCreationProps{
