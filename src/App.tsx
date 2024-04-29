@@ -53,7 +53,7 @@ function App() {
               <Route path="/invoice/create" element={<CreateInvoice />} />
               <Route path="/services/list" element={<ServicesList />} />
               <Route path="/service/create" element={<CreateServices />} />
-              <Route element={<ServiceEditScreen/>} path="/service/edit/:id" />
+              <Route element={<ServiceEditScreen />} path="/service/edit/:id" />
               <Route element={<Reportscreen />} path="/reports" />
             </Route>
             <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />

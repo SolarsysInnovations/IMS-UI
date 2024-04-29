@@ -78,15 +78,14 @@ export interface InvoiceInitialValueProps {
     invoiceTotalAmount: number | null;
     discountAmount: number | null;
     taxAmount: TaxAmountProps;
-    service: string[];
     servicesList: ServiceListProps[];
 }
 
 
 // ---------- service  --------------------
-export interface serviceCreationProps{
-   serviceAccountingcode: string;
-   description: string;
-   amount: number;
+export interface serviceCreationProps {
+    serviceAccountingcode: string;
+    description: string;
+    amount: number;
 };
 // ---------user login --------------------

@@ -12,8 +12,8 @@ const CustomerCreate: React.FC = () => {
     const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
     const onSubmit = async (values: any, actions: any) => {
         try {
-            actions.resetForm();
             await addCustomer(values);
+            actions.resetForm();
         } catch (error) {
             console.log(error);
         }

@@ -16,7 +16,6 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
         <Field name={subField.name}>
             {({ field: { value, onChange } }: any) => (
                 <SelectDropdown
-
                     labelText={subField.label}
                     value={options.find((opt: any) => opt.value === value)}
                     onChange={(newValue: any) => {
@@ -27,7 +26,6 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
                             setFieldValue(subField.name, '');
                             onChange("");
                         }
-
                     }}
                     options={options}
                     error={meta.touched && Boolean(meta.error)}
@@ -60,7 +58,7 @@ const renderRadioField = (field: any, meta: any, subField: SubField, setFieldVal
     })) || [];
 
     return (
-        <RadioUi options={options} value={field.value} onChange={(newValue: any) => {
+        <RadioUi errorMsg={meta.touched && meta.error} options={options} value={field.value} onChange={(newValue: any) => {
             if (newValue) {
                 setFieldValue(subField.name, newValue.target.value);
             } else {

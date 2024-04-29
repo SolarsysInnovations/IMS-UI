@@ -2,6 +2,8 @@ import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 import { FieldProps } from "../../types/types";
+import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
+import { generateOptions } from "../../services/utils/dropdownOptions";
 
 
 
@@ -88,7 +90,7 @@ export const customerFields: FieldProps[] = [
 ];
 
 
- export const serviceFields: FieldProps[] = [
+export const serviceFields: FieldProps[] = [
     {
         name: 'Service Accounting Code',
         type: 'section',
@@ -115,4 +117,37 @@ export const customerFields: FieldProps[] = [
     },
 
 
- ];
+];
+
+
+export const invoiceFields: FieldProps[] = [
+    {
+        type: 'section',
+        titleGridSize: 12,
+        name: "info",
+        subFields: [
+            {
+                name: 'invoiceType', label: 'invoiceType', type: 'radio', gridSize: 3, options: [{ value: "Onetime", label: "Onetime" },
+                { value: "Retainer", label: "Retainer" }], validation: Yup.string().required('invoiceType is required',)
+            },
+            { name: 'invoiceNumber', label: 'invoiceNumber', type: 'number', gridSize: 3, validation: Yup.string().required('invoiceNumber is required') },
+            {
+                name: 'customerName', label: 'Customer Name', type: 'select', gridSize: 3, options: [], validation: Yup.string().required('companyName is required')
+            },
+            {
+                name: 'gstType', label: 'Gst Type', type: 'select', gridSize: 3, options: [
+                    { value: "Local", label: "Local" },
+                    { value: "Interstate", label: "Interstate" }
+                ], validation: Yup.string().required('gstType is required')
+            },
+            { name: 'gstPercentage', label: 'gstPercentage', type: 'number', gridSize: 3, validation: Yup.string().required('gstPercentage is required') },
+            { name: 'Gst In Number', label: 'gstInNumber', type: 'number', gridSize: 3, validation: Yup.string().required('gstInNumber is required') },
+            {
+                name: 'paymentTerms', label: 'paymentTerms', type: 'select', gridSize: 3, options: [
+                    { value: "Net30", label: "Net30" },
+                    { value: "Net45", label: "Net45" }
+                ]
+            },
+        ]
+    },
+]

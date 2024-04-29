@@ -1,260 +1,165 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-import {
-    GridRowsProp,
-    GridRowModesModel,
-    GridRowModes,
-    DataGrid,
-    GridColDef,
-    GridToolbarContainer,
-    GridActionsCellItem,
-    GridEventListener,
-    GridRowId,
-    GridRowModel,
-    GridRowEditStopReasons,
-} from '@mui/x-data-grid';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import TextFieldUi from '../../components/ui/TextField';
+import SelectDropdown from '../../components/ui/SelectDropdown';
+import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { useGetServiceQuery } from '../../redux-store/service/serviceApi';
+import { useAddCustomerMutation, useGetCustomersQuery } from '../../redux-store/customer/customerApi';
+import { toastConfig } from '../../constants/forms/config/toastConfig';
+import { ToastContainer, toast } from 'react-toastify';
+import { customerFields, invoiceFields } from '../../constants/form-data/form-data-json';
+import { customerInitialValues, invoiceInitialValue } from '../../constants/forms/formikInitialValues';
+import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
+import { customerValidationSchema, invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
+import useSuccessToast from '../../hooks/useToast';
+import { generateOptions } from '../../services/utils/dropdownOptions';
+import { updateFieldOptions } from '../../services/utils/formFieldoptions';
 
-const roles = ['Market', 'Finance', 'Development'];
-const randomRole = () => {
-    return randomArrayItem(roles);
-};
-
-// Function to get a random item from an array
-const randomArrayItem = (array: any) => {
-    return array[Math.floor(Math.random() * array.length)];
-};
-
-// Generate invoice data with random roles
-export const invoiceDataDemo = [
-    {
-        id: 1,
-        serviceAccountingCode: randomArrayItem(roles), // Assign a random role
-        quantity: 0,
-        rate: 0,
-        amount: 0,
-        isNew: false,
-    },
-    {
-        id: 2,
-        serviceAccountingCode: randomArrayItem(roles), // Assign a random role
-        quantity: 0,
-        rate: 0,
-        amount: 0,
-        isNew: false,
-    },
-    // Add more objects as needed
-];
-
-interface EditToolbarProps {
-    rows: GridRowsProp;
-    setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-    setRowModesModel: (
-        newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-    ) => void;
+interface Service {
+    id: string; // Ensure id is mandatory
+    serviceAccountingCode: string;
+    serviceDescription: string;
+    serviceAmount: number;
 }
 
-function EditToolbar(props: EditToolbarProps) {
-    const { rows, setRows, setRowModesModel } = props;
 
-    const generateUniqueId = () => {
-        const maxId = Math.max(...rows.map((row: any) => row.id), 0);
-        return maxId + 1;
-    };
 
-    const handleClick = () => {
-        const id = generateUniqueId(); // Generate a unique id
-        setRows((oldRows) => [
-            ...oldRows,
-            { id, serviceAccountingCode: '', quantity: '', rate: '', amount: '', isNew: true },
-        ]);
-        setRowModesModel((oldModel) => ({
-            ...oldModel,
-            [id]: { mode: GridRowModes.Edit, fieldToFocus: 'id' },
-        }));
-    };
-    return (
-        <GridToolbarContainer>
-            <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-                Add record
-            </Button>
-        </GridToolbarContainer>
-    );
-}
-
-export default function FullFeaturedCrudGrid() {
+export default function DemoInvoice() {
+    const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
     const { data: serviceList } = useGetServiceQuery();
-    const [rows, setRows] = React.useState(invoiceDataDemo);
-    const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
-    const [serviceAccountingCode, setServiceAccountingCode] = React.useState();
+    const [modifiedServiceList, setModifiedServiceList] = React.useState<Service[]>([]);
+    const [selectedAccountingCode, setSelectedAccountingCode] = React.useState<string | null>(null);
+    const [rows, setRows] = React.useState<any[]>([]); // Initialize rows as an empty array
 
-    const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
-        if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-            event.defaultMuiPrevented = true;
+    console.log(rows);
+    console.log(selectedAccountingCode);
+    console.log(modifiedServiceList);
+    const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
+
+
+    React.useEffect(() => {
+        if (serviceList) {
+            const mappedServiceList = serviceList.map((s: any) => ({
+                id: `${rowIdCounter.current++}`, // Manually assign unique ID
+                serviceAccountingCode: s.serviceAccountingCode,
+                serviceDescription: s.serviceDescription,
+                quantity: 0,
+                serviceAmount: s.serviceAmount,
+                amount: 0,
+            }));
+            setModifiedServiceList(mappedServiceList);
         }
+    }, [serviceList]);
+
+    const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+        const { value } = event.target;
+        const updatedRows = [...rows];
+        const quantity = parseInt(value); // Parse the value to an integer
+        const serviceAmount = updatedRows[index].serviceAmount; // Get the service amount from the row
+        const amount = quantity * serviceAmount; // Calculate the amount
+        updatedRows[index] = {
+            ...updatedRows[index],
+            quantity,
+            amount // Update the amount in the row
+        };
+        setRows(updatedRows);
     };
 
-    const handleEditClick = (id: GridRowId) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    const handleAddRow = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        const newRow = {
+            id: `row_${Date.now()}`,
+            serviceAccountingCode: "",
+            quantity: 0,
+            serviceAmount: 0,
+            amount: 0
+        };
+        setRows([...rows, newRow]);
     };
 
-    const handleSaveClick = (id: GridRowId) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    const handleRemoveRow = (id: string) => {
+        const updatedRows = rows.filter(row => row.id !== id);
+        setRows(updatedRows);
     };
-
-    const handleDeleteClick = (id: GridRowId) => () => {
-        setRows(rows.filter((row) => row.id !== id));
-    };
-
-    const handleCancelClick = (id: GridRowId) => () => {
-        setRowModesModel({
-            ...rowModesModel,
-            [id]: { mode: GridRowModes.View, ignoreModifications: true },
-        });
-
-        const editedRow = rows.find((row) => row.id === id);
-        if (editedRow!.isNew) {
-            setRows(rows.filter((row) => row.id !== id));
-        }
-    };
-
-    const processRowUpdate = (newRow: GridRowModel) => {
-        const updatedRow = { ...newRow, isNew: false };
-        setRows(rows.map((row: any) => (row.id === newRow.id ? updatedRow : row)));
-        return updatedRow;
-    };
-
-    const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
-        setRowModesModel(newRowModesModel);
-    };
-
-    console.log(serviceList);
-
-    const columns: GridColDef[] = [
-        {
-            field: 'serviceAccountingCode',
-            headerName: 'serviceAccountingCode',
-            width: 220,
-            editable: true,
-            type: 'singleSelect',
-            valueOptions: ['Market', 'Finance', 'Development'],
-        },
-        {
-            field: 'quantity',
-            headerName: 'quantity',
-            type: 'number',
-            width: 80,
-            align: 'left',
-            headerAlign: 'left',
-            editable: true,
-        },
-        {
-            field: 'rate',
-            headerName: 'rate',
-            type: 'number',
-            width: 80,
-            align: 'left',
-            headerAlign: 'left',
-            editable: true,
-        },
-        {
-            field: 'amount',
-            headerName: 'amount',
-            type: 'number',
-            width: 200,
-            align: 'left',
-            headerAlign: 'left',
-            editable: true,
-        },
-        // {
-        //     field: 'quantity',
-        //     headerName: 'Join date',
-        //     type: 'date',
-        //     width: 180,
-        //     editable: true,
-        // },
-        {
-            field: 'actions',
-            type: 'actions',
-            headerName: 'Actions',
-            width: 100,
-            cellClassName: 'actions',
-            getActions: ({ id }) => {
-                const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-                if (isInEditMode) {
-                    return [
-                        <GridActionsCellItem
-                            icon={<SaveIcon />}
-                            label="Save"
-                            sx={{
-                                color: 'primary.main',
-                            }}
-                            onClick={handleSaveClick(id)}
-                        />,
-                        <GridActionsCellItem
-                            icon={<CancelIcon />}
-                            label="Cancel"
-                            className="textPrimary"
-                            onClick={handleCancelClick(id)}
-                            color="inherit"
-                        />,
-                    ];
-                }
-
-                return [
-                    <GridActionsCellItem
-                        icon={<EditIcon />}
-                        label="Edit"
-                        className="textPrimary"
-                        onClick={handleEditClick(id)}
-                        color="inherit"
-                    />,
-                    <GridActionsCellItem
-                        icon={<DeleteIcon />}
-                        label="Delete"
-                        onClick={handleDeleteClick(id)}
-                        color="inherit"
-                    />,
-                ];
-            },
-        },
-    ];
-
     return (
-        <Box
-            sx={{
-                height: 500,
-                width: '100%',
-                '& .actions': {
-                    color: 'text.secondary',
-                },
-                '& .textPrimary': {
-                    color: 'text.primary',
-                },
-            }}
-        >
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                editMode="row"
-                rowModesModel={rowModesModel}
-                onRowModesModelChange={handleRowModesModelChange}
-                onRowEditStop={handleRowEditStop}
-                processRowUpdate={processRowUpdate}
-                slots={{
-                    toolbar: EditToolbar,
-                }}
-                slotProps={{
-                    toolbar: { rows, setRows, setRowModesModel },
-                }}
-            />
-        </Box>
+        <div>
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Service Accounting Code</TableCell>
+                            <TableCell align="left">Quantity</TableCell>
+                            <TableCell align="left">Service Amount</TableCell>
+                            <TableCell align="left">Amount</TableCell>
+                            <TableCell align="left"></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((item, index) => (
+                            <TableRow key={item.id}>
+                                <TableCell component="th" scope="row">
+                                    <SelectDropdown
+                                        onMouseDown={() => {
+                                            // navigate("/customer/create")
+                                            console.log("Add new");
+                                        }}
+                                        button={true}
+                                        options={modifiedServiceList.map((service) => ({
+                                            label: service.serviceAccountingCode,
+                                            value: service.serviceAccountingCode
+                                        }))}
+                                        value={item.serviceAccountingCode ? { label: item.serviceAccountingCode, value: item.serviceAccountingCode } : null}
+                                        onChange={(e: any) => {
+                                            if (e) {
+                                                setSelectedAccountingCode(e.value);
+                                                const selectedService = modifiedServiceList.find(service => service.serviceAccountingCode === e.value);
+                                                if (selectedService) {
+                                                    const updatedRows = [...rows];
+                                                    updatedRows[index] = { ...selectedService, id: item.id }; // Update the existing row with the selected service
+                                                    setRows(updatedRows);
+                                                }
+                                            } else {
+                                                const updatedRows = [...rows];
+                                                updatedRows[index] = {
+                                                    ...updatedRows[index],
+                                                    serviceAccountingCode: "",
+                                                    quantity: 0,
+                                                    amount: 0
+                                                };
+                                                setRows(updatedRows);
+                                            }
+                                        }}
+                                    />
+                                </TableCell>
+                                <TableCell align="right">
+                                    <TextFieldUi
+                                        type='number'
+                                        value={item?.quantity}
+                                        label='INout sample'
+                                        onChange={(e) => handleQuantityChange(e, index)}
+                                    />
+                                </TableCell>
+                                <TableCell align="right">
+                                    <TextFieldUi type='number' value={item?.serviceAmount} label='INout sample' />
+                                </TableCell>
+                                <TableCell align="right">{item?.amount}</TableCell>
+                                <TableCell align="right">
+                                    <ButtonSmallUi type='button' onClick={() => handleRemoveRow(item.id)} label='Remove' />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                        <ButtonSmallUi type='button' onClick={handleAddRow} label='Add' />
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
     );
-}
+};
+
+

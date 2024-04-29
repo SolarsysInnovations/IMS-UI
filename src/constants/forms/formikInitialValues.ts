@@ -51,10 +51,10 @@ export const dyCustomerInitialValue: DyCreateCustomerProps = {
         }
     ],
 };
-export const dyserviceInitialValues: serviceCreationProps= {
+export const dyserviceInitialValues: serviceCreationProps = {
     serviceAccountingcode: "",
     description: "",
-    amount :0,
+    amount: 0,
 };
 
 //
@@ -74,7 +74,6 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
     taxAmount: {
         tds: ""
     },
-    service: [],
     servicesList: [],
 };
 

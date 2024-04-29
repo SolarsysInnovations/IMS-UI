@@ -1,6 +1,8 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { Button, Paper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface ValueProps {
   value: string;
@@ -15,9 +17,11 @@ interface SelectDropdownProps {
   error?: boolean | undefined;
   helperText?: string | undefined | boolean;
   width?: string;
+  button?: boolean;
+  onMouseDown?: () => void;
 }
 
-export default function SelectDropdown({ width, error, helperText, options, value, labelText, onChange }: SelectDropdownProps) {
+export default function SelectDropdown({ onMouseDown, button, width, error, helperText, options, value, labelText, onChange }: SelectDropdownProps) {
   return (
     <Autocomplete
       sx={{
@@ -38,18 +42,36 @@ export default function SelectDropdown({ width, error, helperText, options, valu
         '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
           fontSize: "12px"
         },
-
       }}
       size='small'
       disablePortal
       id="combo-box-demo"
       options={options}
-
       value={value || null} // Update the type of value prop
       onChange={(event, newValue) => {
         onChange(newValue); // Pass the selected value to the parent component
       }}
       renderInput={(params) => <TextField error={error} helperText={helperText} sx={{ fontSize: "13px !important" }} variant='outlined' {...params} label={labelText} />}
+
+      PaperComponent={({ children }) => {
+        return (
+          <Paper>
+            {children}
+            {button && (
+              <Button
+                color="primary"
+                fullWidth
+                sx={{ justifyContent: "flex-start", pl: 2 }}
+                onMouseDown={onMouseDown}
+              >
+                + Add New
+              </Button>
+            )}
+          </Paper>
+        );
+      }}
     />
   );
 }
+
+
