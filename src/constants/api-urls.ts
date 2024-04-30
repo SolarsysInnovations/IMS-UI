@@ -20,7 +20,9 @@ export enum ApiEndpoint {
     SERVICE_LIST = "serviceList",
     SERVICE_DELETE = "serviceDelete",
     SERVICE_GET = "serviceGet",
-    SERVICE_UPDATE = "serviceUpdate"
+    SERVICE_UPDATE = "serviceUpdate",
+    REPORT_LIST = "reportList",
+    REPORT_GET = "reportGet"
 }
 
 export type ApiUrls = {
@@ -44,5 +46,9 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.SERVICE_CREATE]: `/service/create`,
     [ApiEndpoint.SERVICE_DELETE]: `/service/delete`,
     [ApiEndpoint.SERVICE_GET]: `/service/get`,
-    [ApiEndpoint.SERVICE_UPDATE]: `/service/update`
+    [ApiEndpoint.SERVICE_UPDATE]: `/service/update`,
+    //reports endpoints
+    [ApiEndpoint.REPORT_LIST]: `/report/list`,
+    [ApiEndpoint.REPORT_GET]: `/report/get`,
+
 };

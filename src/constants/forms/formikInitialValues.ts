@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, ArAgingInitialValueProps } from "../../types/types";
 
 export const loginInitialValue: LoginProps = {
     // email: "",
@@ -79,6 +79,10 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
 };
 
 export const AragingInitialValue: ArAgingInitialValueProps = {
-    AragingDate: "",
+    customerName: "",
+    startDate: "",
+    endDate: "",
+    customTerms:"",
+    reportList:[]
 };
 

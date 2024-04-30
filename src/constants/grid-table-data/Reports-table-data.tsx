@@ -40,10 +40,6 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
              <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>  */}
-          
-                <TableHeader headerName="Client Details" buttons={[
-                    { label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) },
-                ]} />
                 <Box sx={{ marginTop: "15px" }}>
                     <ServiceDetails details={id} />
                 </Box>
@@ -62,7 +58,7 @@ export const columns: GridColDef[] = [
         
     },
     {
-        field: 'Customer Name',
+        field: 'customerName',
         headerName: 'Customer Name',
         width: 180,
         editable: false,

@@ -7,12 +7,11 @@ export interface LoginProps {
     password: string;
 }
 
-
-
 interface ContactPersonProps {
     contactName: string;
     contactEmail: string;
 }
+
 export interface DyCreateCustomerProps {
     id?: any;
     customerName: string;
@@ -52,6 +51,7 @@ export interface FieldProps {
     subFields?: SubField[];
 }
 
+
 // -------- invoice service ------------------------
 interface ServiceListProps {
     id: string | Number;
@@ -59,6 +59,13 @@ interface ServiceListProps {
     serviceAmount: Number;
     qty: Number;
     totalAmount: Number;
+}
+
+interface ReportListProps {
+    id: string | Number;
+    customerName: string;
+    startDate: string;
+    endDate: string;
 }
 
 interface TaxAmountProps {
@@ -83,9 +90,12 @@ export interface InvoiceInitialValueProps {
 }
 
 export interface ArAgingInitialValueProps {
-    
-    AragingDate: string;
-    
+    customTerms: any;
+    customerName: string;  
+    startDate: string;
+    endDate: string;
+    reportList: ReportListProps[];
+
 }
 
 // ---------- service  --------------------
