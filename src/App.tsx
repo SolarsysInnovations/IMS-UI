@@ -55,8 +55,8 @@ function App() {
               <Route path="/invoice/create" element={<CreateInvoice />} />
               <Route path="/services/list" element={<ServicesList />} />
               <Route path="/service/create" element={<CreateServices />} />
-              <Route element={<ServiceEditScreen/>} path="/service/edit/:id" />
-              <Route element={<Reportscreen/>} path="/reports" />
+              <Route element={<ServiceEditScreen />} path="/service/edit/:id" />
+              <Route element={<Reportscreen />} path="/reports" />
               <Route element={<ArAgingscreen />} path="/reports/araging" />
               <Route element={<Reportsinvoice />} path="/reports/invoice" />
             </Route>

@@ -73,3 +73,9 @@ export const gstType = [
     { value: "Interstate", label: "Interstate" },
     { value: "SEZ", label: "SEZ" },
 ];
+export const tdsOptions = [
+    {
+        value: "Professional Service 10%",
+        label: "Professional Service 10%"
+    },
+]
