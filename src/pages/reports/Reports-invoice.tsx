@@ -1,69 +1,153 @@
-import React from 'react';
-import { useNavigate } from "react-router-dom";
-import usePathname from "../../hooks/usePathname";
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import InfoIcon from '@mui/icons-material/Info';
-import TableHeader from "../../../src/components/layouts/TableHeader";
-import { Add } from "@mui/icons-material";
-import DescriptionIcon from '@mui/icons-material/Description';
-import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
-import { Typography, IconButton } from '@mui/material';
-import Box from '@mui/material/Box';
+import React, { useState } from 'react'
+import TableHeader from '../../components/layouts/TableHeader';
+import { Add, Height } from '@mui/icons-material';
+import usePathname from '../../hooks/usePathname';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box, Grid,  } from '@mui/material';
+import { AppDispatch, RootState } from '../../redux-store/store'
+import { Formik, Form } from 'formik';
+import ToastUi from '../../components/ui/ToastifyUi';
+import SelectDropdown from '../../components/ui/SelectDropdown';
+import { ArAgingInitialValueProps } from '../../types/types';
+import GridDataUi from '../../components/GridTable/GridData';
+import { useGetReportQuery } from '../../redux-store/reports/reportApi';
+import DatePickerUi from '../../components/ui/DatePicker';
+import dayjs from 'dayjs';
+import ModalUi from '../../components/ui/ModalUi';
+import { customTerms } from '../../constants/reportData';
+import { pdfjs } from 'react-pdf';
+import { columns } from '../../constants/grid-table-data/Reports-table-data';
+import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
+import { Button } from '@mui/material'; 
 
-const Reportsinvoice: React.FC = () => {
+const Reportsinvoice = () => {
+    
+    const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
-    const handleClick = async () => {
-    
-                navigate(`/reports/araging`);
-    }
-    const handleClick1 = async () => {
-    
-        navigate(`/reports/invoice`);
-}
+    const { data: customers, error, isLoading, refetch } = useGetReportQuery();
+    const { data: reportList } = useGetReportQuery();
+    const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+    const buttonStyle = {
+        borderRadius: "10px",
+        marginTop:"15px",
+        padding: "2px 8px",
+        marginLeft:"10px",
+        height:"34px",
+        fontWeight:"2px"
+      };
+   
     return (
         <div>
-              <TableHeader headerName={pathname} buttons={[
-                            { label: 'Back', icon: Add, onClick: () => navigate(-1) },
+            <Formik
+                initialValues={AragingInitialValue}
+                validate={() => ({})}
+                onSubmit={async (values: ArAgingInitialValueProps, { setSubmitting, resetForm }) => {
+                    try {
+                        values.reportList = selectedServiceData;
+                        // values.startDate = invoiceTotalAmount ;
+                        // addReport(values);
+                        // // alert(JSON.stringify(values));
+                        resetForm();
+                    } catch (error) {
+                        console.error("An error occurred during login:", error);
+                    }
+                    finally {
+                        setSubmitting(false);
+                    }
+                }}
+            >
+                {({ errors, touched, values, setFieldValue }) => (
+                    <div>
+                        <ToastUi autoClose={2000} />
+                        <TableHeader headerName={pathname} buttons={[
+                            { label: 'Back', icon: Add, onClick: () => navigate(-1) }
                         ]} />
-                        {/* <Grid container marginTop={3}>
-                        <RequestQuoteIcon /> Receivables
-                     </Grid> */}
+                        <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >        
+                        </ModalUi>
+                        <Form id="createClientForm" noValidate >
+                            <Grid container spacing={2}>
+                                <Grid item xs={3}>
+                                    <Box>
+                                    <SelectDropdown
+                                            onChange={(newValue: any) => {
+                                                if (newValue) {
+                                                    if (newValue.value === "This Week") {
+                                                        const currentDateNet1 = dayjs().format('DD-MM-YYYY');
+                                                        const dueDateNet1 = dayjs().add(7, 'days').format('DD-MM-YYYY');
+                                                        setFieldValue("startDate", currentDateNet1);
+                                                        setFieldValue("endDate", dueDateNet1);
+                                                    } else if (newValue.value === "Last 7 Days") {
+                                                        const currentDateNet2 = dayjs().format('DD-MM-YYYY');
+                                                        const dueDateNet2 = dayjs().add(-7, 'days').format('DD-MM-YYYY');
+                                                        setFieldValue("startDate", currentDateNet2);
+                                                        setFieldValue("endDate", dueDateNet2);
+                                                    }
+                                                    else if (newValue.value === "This Month") {
+                                                        const currentDateNet3 = dayjs().format('DD-MM-YYYY');
+                                                        const dueDateNet3 = dayjs().add(30, 'days').format('DD-MM-YYYY');
+                                                        setFieldValue('startDate', currentDateNet3)
+                                                        setFieldValue("endDate", dueDateNet3)
+                                                    }else if (newValue.value === "Last 30 Days") {
+                                                        const currentDateNet4 = dayjs().format('DD-MM-YYYY');
+                                                        const dueDateNet4 = dayjs().add(-30, 'days').format('DD-MM-YYYY');
+                                                        setFieldValue('startDate', currentDateNet4)
+                                                        setFieldValue("endDate", dueDateNet4)
+                                                    }else if (newValue.value === "Custom") {
+                                                        const currentDate = dayjs().format('DD-MM-YYYY');
+                                                        setFieldValue('startDate', "")
+                                                        setFieldValue("endDate", "")
+                                                    }
+                                                    setFieldValue("customTerms", newValue.value)
+                                                } else {
+                                                    setFieldValue("customTerms", "")
+                                                }
+                                            }}
+                                            options={customTerms}
+                                            value={values.customTerms ? { value: values.customTerms, label: values.customTerms } : null}
+                                            labelText='Select'
+                                            error={touched.customTerms && Boolean(errors.customTerms)}
+                                            // helperText={touched.customTerms && errors.customTerms}
+                                        />
+                                    </Box>
+                                </Grid>
 
-        <div style={{display:"flex", marginTop:10}}>
-            <div style={{fontWeight:'lighter', marginLeft:10}}>
-        <RequestQuoteIcon />
-        </div>
-      <Typography variant="body1" marginLeft={1} style={{ fontWeight: 'bold' }}>Receivables</Typography>
-    </div>
-
-                        
-         <Grid container spacing={2} marginTop={-1} marginLeft={-2}>
-            <Grid item xs="auto">
-                 <Button
-                    variant="text"
-                    color="primary"
-                    startIcon={<InfoIcon/>}
-                    onClick={handleClick}
-                >
-                    AR Aging Summary
-                </Button>
-                </Grid>
-        </Grid> 
-        <Grid item xs="auto">
-                <Button
-                    variant="text"
-                    color="primary"
-                    startIcon={<DescriptionIcon/>}
-                    onClick={handleClick1}
-                >
-                   Invoice Detail Summary
-                </Button>
-            </Grid>
-    
-        </div>
-    );
-};
+                                <Grid item xs={2}>
+                                    <Box>
+                                        <DatePickerUi
+                                            label="Start Date"
+                                            onChange={(date: any) => setFieldValue("startDate", date)}
+                                            value={values.startDate}
+                                        />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Box>
+                                        <DatePickerUi
+                                            label="End Date"
+                                            onChange={(date: any) => console.log(date)}
+                                            value={values.endDate}
+                                        />
+                                    </Box>
+                                    
+                                </Grid>
+                                <Button variant="contained" color="primary" style={buttonStyle}>Customize</Button>
+                                <Grid container marginTop={5} marginLeft={2}>
+                                <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
+                          </Grid>
+                            </Grid>
+                        </Form>
+                    </div>
+                )
+                }
+            </Formik >
+        </div >
+    )
+}
 
 export default Reportsinvoice;
