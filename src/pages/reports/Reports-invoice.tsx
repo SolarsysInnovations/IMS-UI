@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import TableHeader from '../../components/layouts/TableHeader';
-import { Add, Height } from '@mui/icons-material';
+import { Add} from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +17,7 @@ import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { customTerms } from '../../constants/reportData';
 import { pdfjs } from 'react-pdf';
-import { columns } from '../../constants/grid-table-data/Reports-table-data';
+import { columns } from '../../constants/grid-table-data/invoice-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
 import { Button } from '@mui/material'; 
 
@@ -136,8 +136,8 @@ const Reportsinvoice = () => {
                                     </Box>
                                     
                                 </Grid>
-                                <Button variant="contained" color="primary" style={buttonStyle}>Customize</Button>
-                                <Grid container marginTop={5} marginLeft={2}>
+                                <Button variant="contained" color="success" style={buttonStyle}>Run Reports</Button>
+                                <Grid container marginTop={5} marginLeft={1}>
                                 <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
                           </Grid>
                             </Grid>
