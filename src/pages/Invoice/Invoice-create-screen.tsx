@@ -27,56 +27,81 @@ import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
 import DemoInvoice from './Demo-Invocie';
 import { gstType, invoiceType, paymentTerms, tdsOptions } from '../../constants/invoiceData';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
+import { useGetGstTypeQuery } from '../../redux-store/invoice/gstTypeApi';
+import { useGetTdsTaxQuery } from '../../redux-store/invoice/tdsTaxApi';
+import TextAreaUi from '../../components/ui/TextArea';
+import GstTypeScreen from './GstType/GstTypeScreen';
+import TdsTaxScreen from './TdsTax/TdsTaxScreen';
+import { useGetPaymentTermsQuery } from '../../redux-store/invoice/paymentTerms';
+import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
 
 interface Service {
     id: string; // Ensure id is mandatory
     serviceAccountingCode: string;
     serviceDescription: string;
     serviceAmount: number;
+    quantity: number;
+    price: number;
 }
 
 const CreateInvoice = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
+    // popUps
+    const [invoicePopUp, setInvoicePopup] = useState(false);
+    const [gstTypePopUp, setGstTypePopup] = useState(false);
+    const [tdsTaxPopUp, setTdsTaxPopup] = useState(false);
+    const [paymentTermsPopUp, setPaymentTermsPopUp] = useState(false);
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [addInvoice, { isSuccess, isError, }] = useAddInvoiceMutation();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
     const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
     const [discountAmount, setDiscountAmount] = useState<null | number>(null);
-    const [selectedTds, setSelectedTdsAmount] = useState<string>("");
+    const [selectedTds, setSelectedTdsAmount] = useState<number | null>(null);
     const [tdsAmount, setTdsAmount] = useState<number | null>(null);
     const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>()
-    const customerName = generateOptions(customers, 'customerName', 'customerName');
     // * * * * * * * grid table states * * * * * * * * *
     // const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
     const { data: serviceList } = useGetServiceQuery();
+    const { data: paymentTerms } = useGetPaymentTermsQuery();
     const [modifiedServiceList, setModifiedServiceList] = React.useState<Service[]>([]);
     const [rows, setRows] = React.useState<any[]>([]); // Initialize rows as an empty array
     const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
+    const [invoiceValues, setInvoiceValues] = useState(invoiceInitialValue);
+    const { data: gstTypesData = [] } = useGetGstTypeQuery();
+    const { data: tdsTaxData = [] } = useGetTdsTaxQuery();
 
+    console.log(gstTypesData);
+    console.log(tdsTaxData);
+    console.log("payment", paymentTerms);
+
+    // * ----------- to generate the dropdown options -------------
+    const customerName = generateOptions(customers, 'customerName', 'customerName');
+    const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName")
+    const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName")
+    const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName")
+    console.log(tdsTaxOptions);
     React.useEffect(() => {
-        if (rows) {
-            const sumSubTotal = rows.reduce((acc, row) => acc + row.price, 0)
+        if (invoiceValues) {
+            const sumSubTotal = invoiceValues.servicesList.reduce((acc: any, row: any) => acc + row.price, 0)
             console.log(sumSubTotal);
             setSubTotalInvoiceAmount(sumSubTotal)
         }
-    }, [rows]);
+    }, [invoiceValues]);
     React.useEffect(() => {
         const disAmount = (subTotalInvoiceAmount * (discountPercentage ?? 0)) / 100;
         console.log(disAmount);
         setDiscountAmount(disAmount)
         let tdsTax = null;
         if (selectedTds) {
-            if (selectedTds === "Professional Service 10%") {
-                let discountPercentage = 10;
-                let discountedAmount = (subTotalInvoiceAmount - disAmount) * (discountPercentage) / 100;
-                setTdsAmount(discountedAmount);
-                tdsTax = discountedAmount
-            }
+            let discountedAmount = (subTotalInvoiceAmount - disAmount) * (selectedTds) / 100;
+            setTdsAmount(discountedAmount);
+            tdsTax = discountedAmount
+        } else {
+            setTdsAmount(null);
         }
-
         const invoiceAmount = tdsTax ? subTotalInvoiceAmount - (tdsTax + disAmount) : null;
         setInvoiceTotalAmount(invoiceAmount);
     }, [discountPercentage, subTotalInvoiceAmount, selectedTds])
@@ -97,16 +122,25 @@ const CreateInvoice = () => {
 
     const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const { value } = event.target;
-        const updatedRows = [...rows];
-        const quantity = parseInt(value); // Parse the value to an integer
-        const serviceAmount = updatedRows[index].serviceAmount; // Get the service amount from the row
-        const price = quantity * serviceAmount; // Calculate the amount
-        updatedRows[index] = {
-            ...updatedRows[index],
-            quantity,
-            price // Update the amount in the row
-        };
-        setRows(updatedRows);
+        const parsedValue = parseInt(value); // Parse the value to an integer
+        setInvoiceValues(prevInvoiceValues => {
+            const updatedServicesList = prevInvoiceValues.servicesList.map((service, serviceIndex) => {
+                if (serviceIndex === index) {
+                    const quantity = isNaN(parsedValue) ? 0 : parsedValue; // If parsedValue is NaN, set quantity to 0
+                    const price = quantity * service.serviceAmount; // Calculate the amount
+                    return {
+                        ...service,
+                        quantity,
+                        price // Update the amount in the service
+                    };
+                }
+                return service;
+            });
+            return {
+                ...prevInvoiceValues,
+                servicesList: updatedServicesList
+            };
+        });
     };
 
     const handleAddRow = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -118,12 +152,25 @@ const CreateInvoice = () => {
             serviceAmount: 0,
             price: 0
         };
-        setRows([...rows, newRow]);
+        const updatedServicesList = [...invoiceValues.servicesList, newRow];
+        setInvoiceValues(prevState => ({
+            ...prevState,
+            servicesList: updatedServicesList
+        }));
     };
 
     const handleRemoveRow = (id: string) => {
-        const updatedRows = rows.filter(row => row.id !== id);
-        setRows(updatedRows);
+        // Find the index of the row with the provided id in invoiceValues.servicesList
+        const index = invoiceValues.servicesList.findIndex(row => row.id === id);
+        if (index !== -1) {
+            // Create a new array without the removed row
+            const updatedServicesList = invoiceValues.servicesList.filter((_, idx) => idx !== index);
+            // Update the state with the new array
+            setInvoiceValues(prevState => ({
+                ...prevState,
+                servicesList: updatedServicesList
+            }));
+        }
     };
 
     useEffect(() => {
@@ -135,21 +182,20 @@ const CreateInvoice = () => {
             toast.success("successfully created the new  Invoice", toastConfig)
         }
     }, [isSuccess])
+    console.log(invoiceValues.servicesList);
 
-    console.log(invoiceInitialValue.servicesList);
-    // Inside your component
     return (
         <Formik
-            initialValues={invoiceInitialValue}
+            initialValues={invoiceValues}
             // validationSchema={invoiceValidationSchema}
             validate={() => ({})}
             onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
                 try {
-                    values.servicesList = rows
+                    values.servicesList = invoiceValues.servicesList
                     values.invoiceTotalAmount = invoiceTotalAmount ?? null;
-                    await addInvoice(values);
+                    // await addInvoice(values);
                     // alert(JSON.stringify(values));
-                    console.log(values);
+                    console.log("values", values);
                     // resetForm();
                 } catch (error) {
                     console.error("An error occurred during login:", error);
@@ -169,8 +215,25 @@ const CreateInvoice = () => {
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) },
                             { label: 'Save', icon: Add, onClick: handleSubmit },
                         ]} />
-                        <ModalUi topHeight='70%' open={isModalOpen} onClose={() => setIsModalOpen(false)} >
-                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={values} />
+                        <ModalUi topHeight='40%' open={isModalOpen} onClose={() => {
+                            setIsModalOpen(false)
+                            setInvoicePopup(false)
+                            setGstTypePopup(false)
+                            setTdsTaxPopup(false)
+                            setPaymentTermsPopUp(false)
+                        }} >
+                            <>
+                                {invoicePopUp && (
+                                    <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={values} />
+                                )}
+                                {gstTypePopUp && (
+                                    <GstTypeScreen />
+                                )}
+                                {tdsTaxPopUp && (
+                                    <TdsTaxScreen />
+                                )}
+                                {paymentTermsPopUp && (<PaymentTermsScreen />)}
+                            </>
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
@@ -226,22 +289,29 @@ const CreateInvoice = () => {
                                 <Grid item xs={3}>
                                     <Box>
                                         <SelectDropdown
+                                            onMouseDown={() => {
+                                                setIsModalOpen(true)
+                                                setGstTypePopup(true)
+                                                // navigate("/customer/create")
+                                                console.log("Add new");
+                                            }}
+                                            button={true}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    if (newValue.value === "Local") {
-                                                        setFieldValue("gstPercentage", 0.18)
-                                                    } else if (newValue.value === "Interstate") {
-                                                        setFieldValue("gstPercentage", 0.18)
-                                                    } else if (newValue.value === "SEZ") {
-                                                        setFieldValue("gstPercentage", 0)
+                                                    const selectedGstType = gstTypesData.find((item) => item.gstName === newValue.value)
+                                                    if (selectedGstType) {
+                                                        setFieldValue("gstPercentage", selectedGstType.gstPercentage)
+                                                        setFieldValue("gstType", newValue.value)
+                                                    } else {
+                                                        setFieldValue("gstType", "")
+                                                        setFieldValue("gstPercentage", null)
                                                     }
-                                                    setFieldValue("gstType", newValue.value)
                                                 } else {
                                                     setFieldValue("gstType", "")
                                                     setFieldValue("gstPercentage", null)
                                                 }
                                             }}
-                                            options={gstType}
+                                            options={gstTypeOptions}
                                             value={values.gstType ? { value: values.gstType, label: values.gstType } : null}
                                             labelText='Gst Type'
                                             error={touched.gstType && Boolean(errors.gstType)}
@@ -280,30 +350,29 @@ const CreateInvoice = () => {
                                 <Grid item xs={3}>
                                     <Box>
                                         <SelectDropdown
+                                            button={true}
+                                            onMouseDown={() => {
+                                                setIsModalOpen(true)
+                                                setPaymentTermsPopUp(true);
+                                            }}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    if (newValue.value === "Net 30") {
-                                                        const currentDateNet30 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet30 = dayjs().add(30, 'days').format('DD-MM-YYYY');
-                                                        setFieldValue("invoiceDate", currentDateNet30);
-                                                        setFieldValue("dueDate", dueDateNet30);
-                                                    } else if (newValue.value === "Net 45") {
-                                                        const currentDateNet45 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet45 = dayjs().add(45, 'days').format('DD-MM-YYYY');
-                                                        setFieldValue("invoiceDate", currentDateNet45);
-                                                        setFieldValue("dueDate", dueDateNet45);
+                                                    const selectedPaymentTerms = paymentTerms?.find((item) => item.termName === newValue.value)
+                                                    if (selectedPaymentTerms) {
+                                                        setFieldValue("startDate", selectedPaymentTerms.startDate)
+                                                        setFieldValue("dueDate", selectedPaymentTerms.dueDate)
+                                                        setFieldValue("paymentTerms", newValue.value)
+                                                    } else {
+                                                        setFieldValue("startDate", "")
+                                                        setFieldValue("dueDate", "")
                                                     }
-                                                    else if (newValue.value === "Due On Receipt") {
-                                                        const currentDate = dayjs().format('DD-MM-YYYY');
-                                                        setFieldValue('invoiceDate', currentDate)
-                                                        setFieldValue("dueDate", currentDate)
-                                                    }
-                                                    setFieldValue("paymentTerms", newValue.value)
                                                 } else {
                                                     setFieldValue("paymentTerms", "")
+                                                    setFieldValue("startDate", "")
+                                                    setFieldValue("dueDate", "")
                                                 }
                                             }}
-                                            options={paymentTerms}
+                                            options={paymentTermsOptions}
                                             value={values.paymentTerms ? { value: values.paymentTerms, label: values.paymentTerms } : null}
                                             labelText='Payment Terms'
                                             error={touched.paymentTerms && Boolean(errors.paymentTerms)}
@@ -315,9 +384,9 @@ const CreateInvoice = () => {
                                 <Grid item xs={2}>
                                     <Box>
                                         <DatePickerUi
-                                            label="Invoice Date"
-                                            onChange={(date: any) => setFieldValue("invoiceDate", date)}
-                                            value={values.invoiceDate}
+                                            label="Start Date"
+                                            onChange={(date: any) => setFieldValue("startDate", date)}
+                                            value={values.startDate}
                                         />
                                     </Box>
                                 </Grid>
@@ -343,7 +412,7 @@ const CreateInvoice = () => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {rows.map((item, index) => (
+                                                {invoiceValues?.servicesList?.map((item, index) => (
                                                     <TableRow key={item.id}>
                                                         <TableCell component="th" scope="row">
                                                             <SelectDropdown
@@ -361,19 +430,25 @@ const CreateInvoice = () => {
                                                                     if (e) {
                                                                         const selectedService = modifiedServiceList.find(service => service.serviceAccountingCode === e.value);
                                                                         if (selectedService) {
-                                                                            const updatedRows = [...rows];
-                                                                            updatedRows[index] = { ...selectedService, id: item.id }; // Update the existing row with the selected service
-                                                                            setRows(updatedRows);
+                                                                            const updatedServiceList = [...invoiceValues.servicesList];
+                                                                            updatedServiceList[index] = { ...selectedService, id: item.id }; // Update the existing service in the list
+                                                                            setInvoiceValues(prevState => ({
+                                                                                ...prevState,
+                                                                                servicesList: updatedServiceList
+                                                                            }));
                                                                         }
                                                                     } else {
-                                                                        const updatedRows = [...rows];
-                                                                        updatedRows[index] = {
-                                                                            ...updatedRows[index],
+                                                                        const updatedServiceList = [...invoiceValues.servicesList];
+                                                                        updatedServiceList[index] = {
+                                                                            ...updatedServiceList[index],
                                                                             serviceAccountingCode: "",
                                                                             quantity: 0,
                                                                             price: 0
                                                                         };
-                                                                        setRows(updatedRows);
+                                                                        setInvoiceValues(prevState => ({
+                                                                            ...prevState,
+                                                                            servicesList: updatedServiceList
+                                                                        }));
                                                                     }
                                                                 }}
                                                             />
@@ -382,16 +457,18 @@ const CreateInvoice = () => {
                                                             <TextFieldUi
                                                                 type='number'
                                                                 value={item?.quantity}
-                                                                label='INout sample'
+                                                                // label='INout sample'
                                                                 onChange={(e) => handleQuantityChange(e, index)}
                                                             />
                                                         </TableCell>
                                                         <TableCell align="right">
-                                                            <TextFieldUi type='number' value={item?.serviceAmount} label='INout sample' />
+                                                            <TextFieldUi type='number' value={item?.serviceAmount}
+                                                            // label='INout sample'
+                                                            />
                                                         </TableCell>
                                                         <TableCell align="right">{item?.price}</TableCell>
                                                         <TableCell align="right">
-                                                            <ButtonSmallUi type='button' onClick={() => handleRemoveRow(item.id)} label='Remove' />
+                                                            <ButtonSmallUi type='button' onClick={() => handleRemoveRow(item?.id)} label='Remove' />
                                                         </TableCell>
                                                     </TableRow>
                                                 ))}
@@ -400,83 +477,109 @@ const CreateInvoice = () => {
                                         </Table>
                                     </TableContainer>
                                 </Grid>
-                                <Grid container mt={3} mb={3} spacing={4} justifyContent="flex-end">
+                                <Grid item xs={6}>
+                                    <Grid item xs={12}>
+                                        <TextAreaUi variant='standard' onChange={(e) => {
+                                            if (e) {
+                                                setFieldValue("notes", e.target.value);
+                                            } else {
+                                                setFieldValue("notes", "");
+                                            }
+                                        }} value={values?.notes} rows={1} label='Notes' />
+                                    </Grid>
+                                    <Grid mt={2} item xs={12}>
+                                        <TextAreaUi variant='standard' onChange={(e) => {
+                                            if (e) {
+                                                setFieldValue("termsAndConditions", e.target.value);
+                                            } else {
+                                                setFieldValue("termsAndConditions", "");
+                                            }
+                                        }} value={values?.termsAndConditions} rows={1} label='Terms And Conditions' />
+                                    </Grid>
+                                </Grid>
+
+                                <Grid item xs={6}>
                                     <Box sx={{
-                                        width: '40%',
-                                        padding: "20px",
-                                        backgroundColor: "#fafafa",
-                                        borderRadius: "10px",
+                                        display: 'flex',
+                                        justifyContent: "space-between",
+                                    }}>
+                                        <Typography variant="body2" color="initial">Sub Total: </Typography>
+                                        <Typography variant="body2" color="initial">{subTotalInvoiceAmount}</Typography>
+                                    </Box>
+                                    <Box sx={{
+                                        marginTop: "10px",
+                                        display: 'flex',
+                                        justifyContent: "space-between",
                                     }}>
                                         <Box sx={{
                                             display: 'flex',
+                                            gap: "30px",
                                             justifyContent: "space-between",
                                         }}>
-                                            <Typography variant="body2" color="initial">Sub Total: </Typography>
-                                            <Typography variant="body2" color="initial">{subTotalInvoiceAmount}</Typography>
+                                            {/* <Typography variant="body2" color="initial">Discount Amount Typography> */}
+                                            <TextFieldUi
+                                                width='100px'
+                                                label='Discount %'
+                                                name='discount'
+                                                type="number"
+                                                value={values.discountAmount ?? ""}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    console.log(value);
+                                                    const parsedValue = value !== "" ? parseFloat(value) : null;
+                                                    setDiscountPercentage(parsedValue);
+                                                    setFieldValue("discountAmount", parsedValue);
+                                                }}
+                                            />
                                         </Box>
-                                        <Box sx={{
-                                            marginTop: "10px",
-                                            display: 'flex',
-                                            justifyContent: "space-between",
-                                        }}>
-                                            <Box sx={{
-                                                display: 'flex',
-                                                gap: "30px",
-                                                justifyContent: "space-between",
-                                            }}>
-                                                {/* <Typography variant="body2" color="initial">Discount Amount Typography> */}
-                                                <TextFieldUi
-                                                    width='100px'
-                                                    label='Discount %'
-                                                    name='discount'
-                                                    type="number"
-                                                    value={values.discountAmount !== null ? values.discountAmount : ""}
-                                                    onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        const parsedValue = value !== "" ? parseFloat(value) : null;
-                                                        setDiscountPercentage(parsedValue);
-                                                        setFieldValue("discountAmount", value);
-                                                    }}
-                                                />
-                                            </Box>
-                                            <Typography variant="body2" color="initial">-{discountAmount}</Typography>
-                                        </Box>
-                                        <Box sx={{
-                                            marginTop: "10px",
-                                            display: 'flex',
-                                            justifyContent: "space-between",
-                                        }}>
-                                            <Box sx={{ display: "flex" }} >
-                                                <SelectDropdown
-                                                    width='150px'
-                                                    onChange={(newValue: any) => {
-                                                        if (newValue) {
-                                                            if (newValue.value === "Professional Service 10%") {
-                                                                setFieldValue("taxAmount.tds", newValue.value)
-                                                                setSelectedTdsAmount(newValue.value)
-                                                            }
+                                        <Typography variant="body2" color="initial">-{discountAmount}</Typography>
+                                    </Box>
+                                    <Box sx={{
+                                        marginTop: "10px",
+                                        display: 'flex',
+                                        justifyContent: "space-between",
+                                    }}>
+                                        <Box sx={{ display: "flex" }} >
+                                            <SelectDropdown
+                                                onMouseDown={() => {
+                                                    setIsModalOpen(true)
+                                                    setTdsTaxPopup(true)
+                                                    // navigate("/customer/create")
+                                                    console.log("Add new");
+                                                }}
+                                                button={true}
+                                                width='150px'
+                                                onChange={(newValue: any) => {
+                                                    if (newValue) {
+                                                        const selectedTdsTax = tdsTaxData.find((item) => item.taxName === newValue.value);
+                                                        if (selectedTdsTax) {
                                                             setFieldValue("taxAmount.tds", newValue.value)
-                                                        }
-                                                        else {
+                                                            setSelectedTdsAmount(selectedTdsTax.taxPercentage)
+                                                        } else {
                                                             setFieldValue("taxAmount.tds", "")
+                                                            setSelectedTdsAmount(null)
                                                         }
-                                                    }}
-                                                    options={tdsOptions}
-                                                    value={values.taxAmount.tds ? { value: values.taxAmount.tds, label: values.taxAmount.tds } : null}
-                                                    labelText='TDS %'
-                                                />
-                                            </Box>
-                                            <Typography variant="body2" color="initial">-{tdsAmount}</Typography>
+                                                    }
+                                                    else {
+                                                        setFieldValue("taxAmount.tds", "")
+                                                        setSelectedTdsAmount(null)
+                                                    }
+                                                }}
+                                                options={tdsTaxOptions}
+                                                value={values.taxAmount.tds ? { value: values.taxAmount.tds, label: values.taxAmount.tds } : null}
+                                                labelText='TDS %'
+                                            />
                                         </Box>
-                                        <Divider sx={{ marginTop: "20px" }} />
-                                        <Box sx={{
-                                            marginTop: "10px",
-                                            display: 'flex',
-                                            justifyContent: "space-between",
-                                        }}>
-                                            <Typography variant="subtitle1" color="initial">Total Amount: </Typography>
-                                            <Typography variant="subtitle2" color="initial">{invoiceTotalAmount}</Typography>
-                                        </Box>
+                                        <Typography variant="body2" color="initial">-{tdsAmount}</Typography>
+                                    </Box>
+                                    <Divider sx={{ marginTop: "20px" }} />
+                                    <Box sx={{
+                                        marginTop: "10px",
+                                        display: 'flex',
+                                        justifyContent: "space-between",
+                                    }}>
+                                        <Typography variant="subtitle1" color="initial">Total Amount: </Typography>
+                                        <Typography variant="subtitle2" color="initial">{invoiceTotalAmount}</Typography>
                                     </Box>
                                 </Grid>
                             </Grid>

@@ -6,6 +6,7 @@ import { Grid, Typography } from "@mui/material";
 import React from "react";
 import ButtonSmallUi from "../ui/ButtonSmall";
 import { FieldProps, SubField } from "../../types/types";
+import DatePickerUi from "../ui/DatePicker";
 
 const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
     const options: any = subField.options?.map(option => ({
@@ -51,6 +52,23 @@ const renderTextField = (field: any, meta: any, subField: SubField) => (
     />
 );
 
+const renderDatePickerField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => (
+    <DatePickerUi
+        {...field}
+        label={subField.label}
+        value={field.value}
+        onChange={(date: any) => {
+            if (date) {
+                setFieldValue(subField.name, date);
+            } else {
+                setFieldValue(subField.name, '');
+            }
+        }}
+        error={meta.touched && !!meta.error}
+        helperText={meta.touched && meta.error}
+    />
+);
+
 const renderRadioField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
     const options: any = subField.options?.map(option => ({
         value: option.value,
@@ -69,7 +87,6 @@ const renderRadioField = (field: any, meta: any, subField: SubField, setFieldVal
     );
 };
 
-
 export const FieldRenderer: React.FC<{ field: FieldProps; setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void }> = ({ field, setFieldValue }) => {
     switch (field.type) {
         case 'section':
@@ -81,13 +98,17 @@ export const FieldRenderer: React.FC<{ field: FieldProps; setFieldValue: (field:
                     {field.subFields?.map((subField: SubField) => (
                         <Grid pb={2} pl={2} xs={subField.gridSize} key={subField.name}>
                             <Field name={subField.name}>
-                                {({ field, meta }: any) => (
-                                    subField.type === "select"
-                                        ? renderSelectField(field, meta, subField, setFieldValue)
-                                        : subField.type === "radio"
-                                            ? renderRadioField(field, meta, subField, setFieldValue)
-                                            : renderTextField(field, meta, subField)
-                                )}
+                                {({ field, meta }: any) => {
+                                    if (subField.type === "date") {
+                                        return renderDatePickerField(field, meta, subField, setFieldValue);
+                                    } else if (subField.type === "select") {
+                                        return renderSelectField(field, meta, subField, setFieldValue);
+                                    } else if (subField.type === "radio") {
+                                        return renderRadioField(field, meta, subField, setFieldValue);
+                                    } else {
+                                        return renderTextField(field, meta, subField);
+                                    }
+                                }}
                             </Field>
                         </Grid>
                     ))}

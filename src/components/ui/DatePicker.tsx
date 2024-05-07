@@ -19,8 +19,6 @@ export default function DatePickerUi({ label, value, onChange }: DatePickerProps
     const parseDate = (value: any) => {
         return dayjs(value, 'DD-MM-YYYY');
     };
-    const today = dayjs();
-    const tomorrow = dayjs().add(1, 'day');
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
@@ -35,7 +33,7 @@ export default function DatePickerUi({ label, value, onChange }: DatePickerProps
                     return null;
                 }}
                 format='DD-MM-YYYY'
-                views={['year', 'month', 'day',]}
+                views={['year', 'month', 'day']}
                 sx={{
                     width: "100%",
                     '& .MuiOutlinedInput-root': {
@@ -55,7 +53,6 @@ export default function DatePickerUi({ label, value, onChange }: DatePickerProps
                         fontSize: "12px"
                     }
                 }}
-                minDate={tomorrow}
                 slotProps={{
                     textField: {
                         variant: "outlined", size: "small",
@@ -63,6 +60,7 @@ export default function DatePickerUi({ label, value, onChange }: DatePickerProps
                 }}
                 label={label}
             />
+
         </LocalizationProvider>
     );
 }
