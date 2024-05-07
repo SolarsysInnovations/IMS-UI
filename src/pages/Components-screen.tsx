@@ -28,7 +28,7 @@ const ComponentsScreen = () => {
             <ButtonSmallUi size="small" variant='contained' />
             <ButtonSmallUi size="small" variant='outlined' />
             <TextFieldLarge label='Text Field' />
-            <TextFieldUi label='small text field' />
+            <TextFieldUi type='text' label='small text field' />
             <AutoCompleteSelectUi />
             <CheckboxesUi
                 label='label here'

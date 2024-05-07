@@ -5,7 +5,6 @@ import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { apiSlice } from '../api/apiSlice';
 
 export const invoiceApi = apiSlice.injectEndpoints({
-
     endpoints: (builder) => ({
         getInvoice: builder.query<InvoiceInitialValueProps[], void>({
             query: () => ({
@@ -35,7 +34,5 @@ export const invoiceApi = apiSlice.injectEndpoints({
         }),
     }),
 });
-
-
 
 export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation } = invoiceApi;

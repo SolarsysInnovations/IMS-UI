@@ -11,7 +11,7 @@ interface TextFieldProps {
     error?: boolean | undefined;
     helperText?: string | undefined | boolean;
     name?: string;
-    type?: "text" | "password" | "number" | "email" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "color";
+    type: "text" | "password" | "number" | "email" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "color";
     fullWidth?: boolean;
     required?: boolean;
     width?: string;
@@ -21,7 +21,6 @@ const TextFieldUi = ({ width, required, label, value, onChange, disabled, endAdo
 
     return (
         <TextField
-
             required={required}
             variant="outlined"
             size="small"
@@ -32,7 +31,7 @@ const TextFieldUi = ({ width, required, label, value, onChange, disabled, endAdo
             error={error}
             helperText={helperText}
             name={name}
-            type={type || "text"}
+            type={type}
             fullWidth={fullWidth || true}
             InputProps={{
                 startAdornment: startAdornment ? (

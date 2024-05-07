@@ -44,6 +44,9 @@ export const invoiceValidationSchema = Yup.object({
     dueDate: Yup.string()
         .max(255)
         .required('city is required'),
+    notes: Yup.string()
+        .max(255)
+        .required('notes is required'),
     // invoiceStatus: Yup.string()
     //     .max(255)
     //     .required('state is required'),
@@ -79,3 +82,26 @@ export const serviceValidationSchema = Yup.object().shape({
     serviceAmount: Yup.string().required('Amount is required'),
 });
 
+export const gstTypeValidationSchema = Yup.object().shape({
+    gstName: Yup.string().required('gstName is required'),
+    // gstPercentage: Yup.number()
+    //     .min(0, 'gstPercentage must be a positive number')
+    //     // .max(999, 'gstPercentage must be a three-digit number')
+    //     .required('gstPercentage is required'),
+});
+
+export const tdsTaxValidationSchema = Yup.object().shape({
+    taxName: Yup.string().required('taxName is required'),
+    // gstPercentage: Yup.number()
+    //     .min(0, 'gstPercentage must be a positive number')
+    //     // .max(999, 'gstPercentage must be a three-digit number')
+    //     .required('gstPercentage is required'),
+});
+
+export const paymentTermsValidationSchema = Yup.object().shape({
+    termName: Yup.string().required('taxName is required'),
+    // gstPercentage: Yup.number()
+    //     .min(0, 'gstPercentage must be a positive number')
+    //     // .max(999, 'gstPercentage must be a three-digit number')
+    //     .required('gstPercentage is required'),
+});

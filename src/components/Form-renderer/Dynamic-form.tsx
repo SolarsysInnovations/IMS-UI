@@ -6,8 +6,10 @@ import TableHeader from "../layouts/TableHeader";
 import { Grid } from "@mui/material";
 import { FieldRenderer } from "./Form-fields-renderer";
 import { Add } from "@mui/icons-material";
+import { useState } from "react";
 
-export const DynamicFormCreate: React.FC<FormProps> = ({ fields, initialValues, validationSchema, onSubmit }) => {
+export const DynamicFormCreate: React.FC<FormProps> = ({ showTable, fields, initialValues, validationSchema, onSubmit }) => {
+
     const pathname = usePathname();
     const navigate = useNavigate();
     return (
@@ -20,10 +22,12 @@ export const DynamicFormCreate: React.FC<FormProps> = ({ fields, initialValues, 
             >
                 {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => (
                     <>
-                        <TableHeader headerName={pathname} buttons={[
-                            { label: 'Back', icon: Add, onClick: () => navigate(-1) },
-                            { label: 'Save', icon: Add, onClick: handleSubmit },
-                        ]} />
+                        {showTable && (
+                            <TableHeader headerName={pathname} buttons={[
+                                { label: 'Back', icon: Add, onClick: () => navigate(-1) },
+                                { label: 'Save', icon: Add, onClick: handleSubmit },
+                            ]} />
+                        )}
                         <Form>
                             {fields?.map((field: FieldProps) => (
                                 <Grid key={field.name} container spacing={2}>
