@@ -119,6 +119,45 @@ export const serviceFields: FieldProps[] = [
 
 ];
 
+export const GstTypeFields: FieldProps[] = [
+    {
+        name: 'GstType',
+        label: 'Gst Type',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'gstName', label: 'gstName', type: 'text', gridSize: 3, validation: Yup.string().required('gstName is required') },
+            { name: 'gstPercentage', label: 'gstPercentage', type: 'number', gridSize: 3, validation: Yup.string().required('gstPercentage is required') },
+        ]
+    },
+];
+
+export const TdsTaxFields: FieldProps[] = [
+    {
+        name: 'tdsTax',
+        label: 'Tds Tax Create',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'taxName', label: 'taxName', type: 'text', gridSize: 3, validation: Yup.string().required('taxName is required') },
+            { name: 'taxPercentage', label: 'taxPercentage', type: 'number', gridSize: 3, validation: Yup.string().required('taxPercentage is required') },
+        ]
+    },
+];
+
+export const paymentTermsFields: FieldProps[] = [
+    {
+        name: 'paymentTerms',
+        label: 'Payment Terms Create',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'termName', label: 'termName', type: 'text', gridSize: 3, validation: Yup.string().required('termName is required') },
+            { name: 'startDate', label: 'Start Date', type: 'date', gridSize: 3, validation: Yup.string().required('startDate is required') },
+            { name: 'dueDate', label: 'Due Date', type: 'date', gridSize: 3, validation: Yup.string().required('dueDate is required') },
+        ]
+    },
+];
 
 export const invoiceFields: FieldProps[] = [
     {

@@ -5,14 +5,30 @@ export interface LoginProps {
     // email: string;
     username: string;
     password: string;
-}
+};
 
 
 
 interface ContactPersonProps {
     contactName: string;
     contactEmail: string;
-}
+};
+export interface GstTypeProps {
+    gstName: string,
+    gstPercentage: number | null,
+};
+
+export interface TdsTaxProps {
+    taxName: string,
+    taxPercentage: number | null,
+};
+
+export interface PaymentTermsProps {
+    termName: string,
+    startDate: string,
+    dueDate: string,
+};
+
 export interface DyCreateCustomerProps {
     id?: any;
     customerName: string;
@@ -33,8 +49,9 @@ export interface FormProps {
     fields: FieldProps[];
     initialValues: any;
     validationSchema: any;
+    showTable?: boolean;
     onSubmit: (values: any, actions: any) => void;
-}
+};
 export interface SubField {
     name: string;
     label: string;
@@ -42,7 +59,7 @@ export interface SubField {
     gridSize?: number;
     validation?: Yup.StringSchema<string>;
     options?: { value: string; label: string }[];
-}
+};
 
 export interface FieldProps {
     name: string;
@@ -50,36 +67,38 @@ export interface FieldProps {
     type: string;
     titleGridSize?: number;
     subFields?: SubField[];
-}
+};
 
 // -------- invoice service ------------------------
 interface ServiceListProps {
-    id: string | Number;
+    id: string;
     serviceAccountingCode: string;
-    serviceAmount: Number;
-    qty: Number;
-    totalAmount: Number;
-}
+    serviceAmount: number;
+    quantity: number;
+    price: number;
+};
 
 interface TaxAmountProps {
     tds: string;
-}
+};
 export interface InvoiceInitialValueProps {
     invoiceType: string;
     invoiceNumber: string;
     customerName: string;
     gstType: string;
     gstPercentage: number | null;
-    invoiceDate: string;
+    startDate: string;
+    dueDate: string;
     gstInNumber: string;
     paymentTerms: string;
-    dueDate: string;
     invoiceStatus: string;
     invoiceTotalAmount: number | null;
     discountAmount: number | null;
+    notes: string;
+    termsAndConditions: string;
     taxAmount: TaxAmountProps;
     servicesList: ServiceListProps[];
-}
+};
 
 
 // ---------- service  --------------------
