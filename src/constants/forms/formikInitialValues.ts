@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, PaymentTermsProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, PaymentTermsProps, ArAgingInitialValueProps } from "../../types/types";
 
 export const loginInitialValue: LoginProps = {
     // email: "",
@@ -92,15 +92,16 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
     },
     servicesList: [],
 };
-<<<<<<< HEAD
 
 export const AragingInitialValue: ArAgingInitialValueProps = {
     customerName: "",
     startDate: "",
     endDate: "",
+    days0to30: "",
+    days30to45:"",
+    above45: "",
+    total: "",
     customTerms:"",
     reportList:[]
 };
 
-=======
->>>>>>> d72efc01f59af051a3689146d03df64f7207f930

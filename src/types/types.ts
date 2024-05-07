@@ -82,6 +82,10 @@ interface ReportListProps {
     customerName: string;
     startDate: string;
     endDate: string;
+    days0to30: string;
+    days30to45: string;
+    above45: string;
+    total: string;
 }
 
 interface TaxAmountProps {
@@ -111,6 +115,10 @@ export interface ArAgingInitialValueProps {
     customerName: string;  
     startDate: string;
     endDate: string;
+    days0to30: string;
+    days30to45: string;
+    above45: string;
+    total: string;
     reportList: ReportListProps[];
 
 }

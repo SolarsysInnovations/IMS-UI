@@ -64,19 +64,19 @@ export const columns: GridColDef[] = [
         editable: false,
     },
     {
-        field: 'serviceAccountingCode',
+        field: 'days0to30',
         headerName: '0-30 Days',
         width: 180,
         editable: true,
     },
     {
-        field: 'serviceDescription',
+        field: 'days30to45',
         headerName: '30-45 Days',
         width: 240,
         editable: false,
     },
     {
-        field: 'serviceAmount',
+        field: 'above45',
         headerName: 'Above 45 Days',
         width: 180,
         editable: false,
@@ -98,12 +98,12 @@ export const columns: GridColDef[] = [
     //         return row;
     //     }
     // },
-    // {
-    //     field: 'totalAmount',
-    //     headerName: 'Total Amount',
-    //     width: 150,
-    //     editable: false,
-    //     valueGetter: (params: any) => params.value || 0,
-    // },
+     {
+        field: 'total',
+     headerName: 'Total Amount',
+         width: 150,
+         editable: false,
+         valueGetter: (params: any) => params.value || 0,
+     },
 
 ];

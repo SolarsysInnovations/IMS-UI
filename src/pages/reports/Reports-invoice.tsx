@@ -19,20 +19,33 @@ import { customTerms } from '../../constants/reportData';
 import { pdfjs } from 'react-pdf';
 import { columns } from '../../constants/grid-table-data/invoice-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
-import { Button } from '@mui/material'; 
+import { Button ,TextField } from '@mui/material'; 
 
 const Reportsinvoice = () => {
     
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const { data: customers, error, isLoading, refetch } = useGetReportQuery();
     const { data: reportList } = useGetReportQuery();
     const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [data, setData] = useState([ ]);
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+    const handleClick =()=>{
+        if (startDate && endDate) {
+            // Filter data based on start and end dates
+            const filteredData = data.filter((item: any) => {
+              return item.date >= startDate && item.date <= endDate;
+            });
+            console.log('Filtered Data:', filteredData);
+          } else {
+            console.log('Please select both start and end dates.');
+          }    }
     const buttonStyle = {
         borderRadius: "10px",
         marginTop:"15px",
@@ -132,11 +145,12 @@ const Reportsinvoice = () => {
                                             label="End Date"
                                             onChange={(date: any) => console.log(date)}
                                             value={values.endDate}
+                                            // renderInput={(params:any) => <TextField {...params} />}
                                         />
                                     </Box>
                                     
                                 </Grid>
-                                <Button variant="contained" color="success" style={buttonStyle}>Run Reports</Button>
+                                <Button variant="contained" color="success" style={buttonStyle} onClick={handleClick}>Run Reports</Button>
                                 <Grid container marginTop={5} marginLeft={1}>
                                 <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
                           </Grid>

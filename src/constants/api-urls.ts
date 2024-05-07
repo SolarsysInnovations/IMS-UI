@@ -42,6 +42,8 @@ export enum ApiEndpoint {
     PAYMENT_TERMS_DELETE = "paymentTermsDelete",
     PAYMENT_TERMS_GET = "paymentTermsGet",
     PAYMENT_TERMS_UPDATE = "paymentTermsUpdate",
+    REPORT_LIST = "REPORT_LIST",
+    REPORT_GET = "REPORT_GET",
 }
 
 export type ApiUrls = {
@@ -66,12 +68,11 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.SERVICE_DELETE]: `/service/delete`,
     [ApiEndpoint.SERVICE_GET]: `/service/get`,
     [ApiEndpoint.SERVICE_UPDATE]: `/service/update`,
-<<<<<<< HEAD
+
     //reports endpoints
     [ApiEndpoint.REPORT_LIST]: `/report/list`,
     [ApiEndpoint.REPORT_GET]: `/report/get`,
 
-=======
     // gstType endpoints 
     [ApiEndpoint.GST_TYPE_LIST]: '/gstType/list',
     [ApiEndpoint.GST_TYPE_CREATE]: '/gstType/create',
@@ -90,5 +91,4 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.PAYMENT_TERMS_DELETE]: '/paymentTerms/delete',
     [ApiEndpoint.PAYMENT_TERMS_GET]: '/paymentTerms/get',
     [ApiEndpoint.PAYMENT_TERMS_UPDATE]: '/paymentTerms/update',
->>>>>>> d72efc01f59af051a3689146d03df64f7207f930
 };

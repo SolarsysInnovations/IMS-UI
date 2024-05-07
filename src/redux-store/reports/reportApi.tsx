@@ -28,7 +28,7 @@ export const reportApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getReport: builder.query<any[], void>({
             query: () => ({
-                url: API_URLS.reportList,
+                url: API_URLS.REPORT_LIST,
                 method: 'POST',
 
             }),
