@@ -5,14 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import { useEffect, useState } from "react";
-import { useDeleteInvoiceMutation, useGetInvoiceQuery } from "../../../redux-store/invoice/invcoiceApi";
+import { useDeleteInvoiceMutation, useGetInvoiceQuery, useInvoiceGetByIdMutation } from "../../../redux-store/invoice/invcoiceApi";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../../components/ui/ModalUi";
 import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
 import { toastConfig } from "../../forms/config/toastConfig";
 import { toast } from "react-toastify";
+import { setCustomerData } from "../../../redux-store/customer/customerApi";
 
-const id = 1
 
 const MyCellRenderer = ({ row }: { row: any }) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -22,15 +22,29 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     console.log(invoiceData);
     const [deleteInvoice, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteInvoiceMutation();
     const navigate = useNavigate();
+    const [getInvoice, { data: customerData, isSuccess: C_success, isError: C_error }] = useInvoiceGetByIdMutation<{ data: any, isSuccess: any, isError: any }>();
 
     useEffect(() => {
         refetch()
     }, [dispatch, refetch]);
 
-    const handleEditClick = () => {
-        localStorage.setItem("service", JSON.stringify(row));
-        navigate(`/invoice/edit/${row.id}`)
-    };
+    const handleEditClick = async () => {
+        try {
+            const response = await getInvoice(row.id);
+            if ('data' in response) {
+                const customerData = response.data;
+                console.log(customerData);
+
+                await dispatch(setCustomerData(customerData));
+                navigate(`/invoice/edit/${1}`);
+            } else {
+                console.error('Error response:', response.error);
+            }
+        } catch (error) {
+            console.error('Error handling edit click:', error);
+        }
+    }
+
     const handleDeleteClick = () => {
         const confirmed = window.confirm("Are you sure you want to delete this invoice?");
         if (confirmed) {

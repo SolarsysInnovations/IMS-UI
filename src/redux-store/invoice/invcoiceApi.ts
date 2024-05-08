@@ -3,6 +3,29 @@ import { InvoiceInitialValueProps } from '../../types/types';
 import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { apiSlice } from '../api/apiSlice';
+import { createSlice } from '@reduxjs/toolkit';
+
+
+const invoiceSlice = createSlice({
+    name: 'invoice',
+    initialState: {
+        data: null,
+        loading: false,
+        error: null,
+    },
+    reducers: {
+        setInvoiceData(state, action) {
+            state.data = action.payload;
+        },
+        setInvoiceLoading(state, action) {
+            state.loading = action.payload;
+        },
+        setInvoiceError(state, action) {
+            state.error = action.payload;
+        },
+    },
+});
+
 
 export const invoiceApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -21,7 +44,7 @@ export const invoiceApi = apiSlice.injectEndpoints({
         }),
         updateInvoice: builder.mutation<any, { id: number; invoiceData: Partial<InvoiceInitialValueProps> }>({
             query: ({ id, invoiceData }) => ({
-                url: `/invoice/update/${id}`,
+                url: `${API_URLS.invoiceUpdate}/${id}`,
                 method: 'POST',
                 body: invoiceData,
             }),
@@ -32,7 +55,13 @@ export const invoiceApi = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
+        invoiceGetById: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `${API_URLS.invoiceGet}/${id}`,
+                method: 'POST',
+            }),
+        }),
     }),
 });
 
-export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation } = invoiceApi;
+export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation, useInvoiceGetByIdMutation } = invoiceApi;
