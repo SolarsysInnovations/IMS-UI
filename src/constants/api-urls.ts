@@ -70,8 +70,8 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.SERVICE_UPDATE]: `/service/update`,
 
     //reports endpoints
-    [ApiEndpoint.REPORT_LIST]: `/report/list`,
-    [ApiEndpoint.REPORT_GET]: `/report/get`,
+    [ApiEndpoint.REPORT_LIST]: `/invoice/arReport`,
+    [ApiEndpoint.REPORT_GET]: `/invoice/invoiceReport`,
 
     // gstType endpoints 
     [ApiEndpoint.GST_TYPE_LIST]: '/gstType/list',

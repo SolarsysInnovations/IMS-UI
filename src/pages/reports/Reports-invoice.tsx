@@ -20,6 +20,8 @@ import { pdfjs } from 'react-pdf';
 import { columns } from '../../constants/grid-table-data/invoice-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
 import { Button ,TextField } from '@mui/material'; 
+import ButtonUi from '../../components/ui/Button';
+import ButtonSmallUi from '../../components/ui/ButtonSmall';
 
 const Reportsinvoice = () => {
     
@@ -147,11 +149,14 @@ const Reportsinvoice = () => {
                                             value={values.endDate}
                                             // renderInput={(params:any) => <TextField {...params} />}
                                         />
+
                                     </Box>
                                     
                                 </Grid>
-                                <Button variant="contained" color="success" style={buttonStyle} onClick={handleClick}>Run Reports</Button>
-                                <Grid container marginTop={5} marginLeft={1}>
+                                <Grid item xs={2}>
+                                        <ButtonSmallUi size='large' label='Run Reports' variant='contained' onClick={handleClick} />       
+                                </Grid>
+                         <Grid container marginTop={5} marginLeft={1}>
                                 <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
                           </Grid>
                             </Grid>

@@ -51,46 +51,51 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
 export const columns: GridColDef[] = [
     {
-        field: 'id',
-        headerName: 'id',
-        width: 180,
+        field: 'invoiceType',
+        headerName: 'Invoice Type',
+        width: 150,
         editable: true,
-        
+    },
+    {
+        field: 'invoiceNumber',
+        headerName: 'Invoice Number',
+        width: 150,
+        editable: true,
     },
     {
         field: 'customerName',
         headerName: 'Customer Name',
-        width: 180,
+        width: 150,
         editable: false,
     },
     {
-        field: 'serviceAccountingCode',
-        headerName: 'Order Number',
-        width: 180,
-        editable: true,
-    },
-    {
-        field: 'serviceDescription',
+        field: 'invoiceDate',
         headerName: 'Invoice Date',
-        width: 180,
+        width: 150,
         editable: false,
     },
     {
-        field: 'Due Date',
+        field: 'dueDate',
         headerName: 'Due Date',
-        width: 180,
+        width: 150,
         editable: false,
     },
     {
-        field: 'Total',
-        headerName: 'Total',
-        width: 180,
+        field: 'invoiceStatus',
+        headerName: 'Invoice Status',
+        width: 150,
         editable: false,
     },
+     {
+         field: 'gstPercentage',
+         headerName: 'Amount',
+         width: 150,
+         editable: false,
+     },    
     {
-        field: 'serviceAmount',
-        headerName: 'Balance',
-        width: 180,
-        editable: false,
-    }
+         field: 'total',
+         headerName: 'Total',
+         width: 150,
+         editable: false,
+     }
 ];

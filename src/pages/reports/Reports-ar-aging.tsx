@@ -19,11 +19,15 @@ import { customTerms } from '../../constants/reportData';
 import { pdfjs } from 'react-pdf';
 import { columns } from '../../constants/grid-table-data/Reports-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
+import ButtonUi from '../../components/ui/Button';
+import data from '../../constants/data';
 
 const ArAgingscreen= () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const { data: customers, error, isLoading, refetch } = useGetReportQuery();
     const { data: reportList } = useGetReportQuery();
     const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
@@ -31,7 +35,16 @@ const ArAgingscreen= () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-   
+    const handleClick =()=>{
+        if (startDate && endDate) {
+            // Filter data based on start and end dates
+            const filteredData = data.filter((item: any) => {
+              return item.date >= startDate && item.date <= endDate;
+            });
+            console.log('Filtered Data:', filteredData);
+          } else {
+            console.log('Please select both start and end dates.');
+          }    }
     return (
         <div>
             <Formik
@@ -124,6 +137,9 @@ const ArAgingscreen= () => {
                                             value={values.endDate}
                                         />
                                     </Box>
+                                </Grid>
+                                <Grid item xs={2}>
+                                        <ButtonUi size='small' label='Run Reports' variant='contained' onClick={handleClick} />       
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2}>
                                 <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />

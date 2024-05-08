@@ -37,7 +37,7 @@ export const reportApi = apiSlice.injectEndpoints({
         }),
         getReportById: builder.mutation<void, number>({
             query: (id) => ({
-                url: `report/get/${id}`,
+                url: `invoice/arReport`,
                 method: 'POST',
             }),
         }),
