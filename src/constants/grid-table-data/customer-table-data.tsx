@@ -28,6 +28,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
             const response = await getCustomer(id);
             if ('data' in response) {
                 const customerData = response.data;
+                // console.log(customerData);
                 await dispatch(setCustomerData(customerData));
                 navigate(`/customer/edit/${id}`);
             } else {
