@@ -92,6 +92,7 @@ interface TaxAmountProps {
     tds: string;
 };
 export interface InvoiceInitialValueProps {
+    id: number;
     invoiceType: string;
     invoiceNumber: string;
     customerName: string;
@@ -103,7 +104,7 @@ export interface InvoiceInitialValueProps {
     paymentTerms: string;
     invoiceStatus: string;
     invoiceTotalAmount: number | null;
-    discountAmount: number | null;
+    discountPercentage: number | null;
     notes: string;
     termsAndConditions: string;
     taxAmount: TaxAmountProps;

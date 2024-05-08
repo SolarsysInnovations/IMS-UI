@@ -193,10 +193,12 @@ const CreateInvoice = () => {
                 try {
                     values.servicesList = invoiceValues.servicesList
                     values.invoiceTotalAmount = invoiceTotalAmount ?? null;
-                    // await addInvoice(values);
+                    await addInvoice(values);
                     // alert(JSON.stringify(values));
+
                     console.log("values", values);
-                    // resetForm();
+                    resetForm();
+                    setInvoiceValues({ ...invoiceInitialValue })
                 } catch (error) {
                     console.error("An error occurred during login:", error);
                 }
@@ -522,13 +524,13 @@ const CreateInvoice = () => {
                                                 label='Discount %'
                                                 name='discount'
                                                 type="number"
-                                                value={values.discountAmount ?? ""}
+                                                value={values.discountPercentage ?? ""}
                                                 onChange={(e) => {
                                                     const value = e.target.value;
                                                     console.log(value);
                                                     const parsedValue = value !== "" ? parseFloat(value) : null;
                                                     setDiscountPercentage(parsedValue);
-                                                    setFieldValue("discountAmount", parsedValue);
+                                                    setFieldValue("discountPercentage", parsedValue);
                                                 }}
                                             />
                                         </Box>

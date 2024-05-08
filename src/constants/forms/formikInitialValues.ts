@@ -73,6 +73,7 @@ export const dyserviceInitialValues: serviceCreationProps = {
 
 //
 export const invoiceInitialValue: InvoiceInitialValueProps = {
+    id: 0,
     invoiceType: "",
     invoiceNumber: "",
     customerName: "",
@@ -83,7 +84,7 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
     startDate: '',
     dueDate: '',
     invoiceStatus: "Pending",
-    discountAmount: null,
+    discountPercentage: null,
     invoiceTotalAmount: null,
     notes: "Thanks for your business transaction",
     termsAndConditions: "",
