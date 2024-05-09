@@ -21,6 +21,7 @@ import { columns } from '../../constants/grid-table-data/Reports-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
 import ButtonUi from '../../components/ui/Button';
 import data from '../../constants/data';
+import ButtonSmallUi from '../../components/ui/ButtonSmall';
 
 const ArAgingscreen= () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -139,7 +140,7 @@ const ArAgingscreen= () => {
                                     </Box>
                                 </Grid>
                                 <Grid item xs={2}>
-                                        <ButtonUi size='small' label='Run Reports' variant='contained' onClick={handleClick} />       
+                                        <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleClick} />       
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2}>
                                 <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
