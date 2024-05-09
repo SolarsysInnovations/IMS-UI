@@ -74,6 +74,7 @@ export const dyserviceInitialValues: serviceCreationProps = {
 //
 export const invoiceInitialValue: InvoiceInitialValueProps = {
     id: 0,
+    invoiceDate: new Date(),
     invoiceType: "",
     invoiceNumber: "",
     customerName: "",
@@ -99,10 +100,10 @@ export const AragingInitialValue: ArAgingInitialValueProps = {
     startDate: "",
     endDate: "",
     days0to30: "",
-    days30to45:"",
+    days30to45: "",
     above45: "",
     total: "",
-    customTerms:"",
-    reportList:[]
+    customTerms: "",
+    reportList: []
 };
 

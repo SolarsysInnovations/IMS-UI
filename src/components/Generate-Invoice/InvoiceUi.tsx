@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import jsPdf from "jspdf";
 import html2canvas from "html2canvas";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
 import { Document, Page, pdfjs } from "react-pdf";
 import TableContent from "./TableContent";
+import { formatDate } from "../../services/utils/dataFormatter";
+import ButtonSmallUi from "../ui/ButtonSmall";
+import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 interface InvoiceUiProps {
     invoiceData?: any;
     subtotal?: number | null;
@@ -14,7 +17,18 @@ interface InvoiceUiProps {
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
+    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
+    const [customerDetails, setCustomerDetails] = useState<any>()
 
+    useEffect(() => {
+        if (invoiceData) {
+            const details = invoiceData.customerName
+            const customerDetails = customers?.find((customer: any) => details === customer.customerName)
+            setCustomerDetails(customerDetails)
+        }
+    }, [customers, invoiceData])
+
+    console.log(customerDetails);
 
     const printPDF = () => {
         const element = document.querySelector("#invoiceCapture");
@@ -43,43 +57,81 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
         });
     };
     console.log("invoice", invoiceData);
+
+    if (!invoiceData) {
+        return <div>No data available</div>;
+    }
     return (
         <>
             <div className="App" id="invoiceCapture" style={{ padding: "10px" }}>
-                <Box sx={{
-                    textAlign: "right",
-                }}>
-                    <Typography variant="h1" color="initial">INVOICE</Typography>
-                </Box>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Box>
+                            <Typography variant="h5" color="initial">INVOICE</Typography>
+                        </Box>
+                    </Grid>
+                    <Grid sx={{ marginTop: "30px", borderBottom: "1px solid #dadada", paddingBottom: "10px", display: 'flex', alignItems: 'right', justifyContent: 'left' }} item xs={12}>
+                        <Box>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>SOLARSYS</span></p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}> <span style={{ fontWeight: "500" }}>Address :</span> <span>1/305, Thillai Nagar , Trichy 905 606 </span></p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>Phone :</span> <span>983894833</span></p>
+                            </div>
+                        </Box>
+                    </Grid>
+                    <Grid sx={{ borderBottom: "1px solid #dadada", paddingBottom: "20px", }} item xs={6}>
+                        <Box gap={3}>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>Billed To :</span> <span>{customerDetails?.customerName}</span></p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>Email :</span> <span>{customerDetails?.customerEmail}</span></p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>Phone :</span> <span>{customerDetails?.customerPhone}</span></p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>Address :</span> <span>{customerDetails?.address}</span></p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>Address :</span> <span>{customerDetails?.address} , {customerDetails?.pinCode}</span></p>
+                            </div>
+
+                        </Box>
+                    </Grid>
+                    <Grid sx={{ borderBottom: "1px solid #dadada", paddingBottom: "20px", }} item xs={6}>
+                        <Box gap={3}>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>Invoice Date :</span> <span>{formatDate(invoiceData?.invoiceDate)}</span></p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>Invoice No :</span> <span>{invoiceData?.invoiceNumber}</span></p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>Payment Terms :</span> <span>{invoiceData?.paymentTerms}</span></p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>Due Date :</span> <span>{invoiceData?.dueDate}</span></p>
+                            </div>
+                        </Box>
+                    </Grid>
+                </Grid>
+
                 <>
-                    <Stack sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mt: 6,
-                    }}>
-                        <Box gap={3}>
-                            <Typography variant="subtitle2" color="initial">Billed To : <span>{invoiceData?.customerName}</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Address 4545 Lorem ipsum dolor <br /> sit Lorem, ipsum dolor.</Typography>
-                        </Box>
-                        <Box gap={3}>
-                            <Typography variant="subtitle2" color="initial">Invoice No : <span>{invoiceData?.invoiceNumber}</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Payment Terms: <span>{invoiceData?.paymentTerms}</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Invoice Date : <span>{invoiceData?.invoiceDate}</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Due Date : <span>{invoiceData?.dueDate}</span></Typography>
-                        </Box>
-                    </Stack>
-                    <Box sx={{ mt: 6 }}>
+
+                    <Box sx={{ mt: 3 }}>
                         <TableContent tableData={invoiceData || []} />
                     </Box>
-
                     <Stack sx={{
                         display: "flex",
                         flexDirection: "row",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        mt: 10,
+                        mt: 2,
                     }}>
                         <Box gap={3} >
                             <Typography variant="subtitle2" color="initial">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</Typography>
@@ -96,8 +148,9 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
                     <Typography variant="subtitle2" color="initial">Terms & Conditions</Typography>
                     <Typography variant="subtitle2" color="initial">All payments must be made in full before any design work</Typography>
                 </Box>
-            </div>
-            <button onClick={printPDF}>Generate PDF</button>
+            </div >
+            <ButtonSmallUi label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
+            <ButtonSmallUi label="Email To" variant="contained" size="small" />
         </>
     );
 }

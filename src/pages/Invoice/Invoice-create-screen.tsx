@@ -34,6 +34,8 @@ import GstTypeScreen from './GstType/GstTypeScreen';
 import TdsTaxScreen from './TdsTax/TdsTaxScreen';
 import { useGetPaymentTermsQuery } from '../../redux-store/invoice/paymentTerms';
 import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
+import { float } from 'html2canvas/dist/types/css/property-descriptors/float';
+import { formatDate } from '../../services/utils/dataFormatter';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -53,6 +55,7 @@ const CreateInvoice = () => {
     const [gstTypePopUp, setGstTypePopup] = useState(false);
     const [tdsTaxPopUp, setTdsTaxPopup] = useState(false);
     const [paymentTermsPopUp, setPaymentTermsPopUp] = useState(false);
+    const [invoiceFinalData, setInvoiceFinalData] = useState();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [addInvoice, { isSuccess, isError, }] = useAddInvoiceMutation();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,26 +76,23 @@ const CreateInvoice = () => {
     const { data: gstTypesData = [] } = useGetGstTypeQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxQuery();
 
-    console.log(gstTypesData);
-    console.log(tdsTaxData);
-    console.log("payment", paymentTerms);
-
+    console.log(customers);
+    console.log(invoiceFinalData);
     // * ----------- to generate the dropdown options -------------
     const customerName = generateOptions(customers, 'customerName', 'customerName');
-    const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName")
-    const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName")
-    const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName")
-    console.log(tdsTaxOptions);
+    const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
+    const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
+    const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
+
     React.useEffect(() => {
         if (invoiceValues) {
             const sumSubTotal = invoiceValues.servicesList.reduce((acc: any, row: any) => acc + row.price, 0)
-            console.log(sumSubTotal);
             setSubTotalInvoiceAmount(sumSubTotal)
         }
     }, [invoiceValues]);
+
     React.useEffect(() => {
         const disAmount = (subTotalInvoiceAmount * (discountPercentage ?? 0)) / 100;
-        console.log(disAmount);
         setDiscountAmount(disAmount)
         let tdsTax = null;
         if (selectedTds) {
@@ -182,7 +182,6 @@ const CreateInvoice = () => {
             toast.success("successfully created the new  Invoice", toastConfig)
         }
     }, [isSuccess])
-    console.log(invoiceValues.servicesList);
 
     return (
         <Formik
@@ -191,12 +190,11 @@ const CreateInvoice = () => {
             validate={() => ({})}
             onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
                 try {
+                    values.invoiceTotalAmount = invoiceTotalAmount
                     values.servicesList = invoiceValues.servicesList
                     values.invoiceTotalAmount = invoiceTotalAmount ?? null;
                     await addInvoice(values);
                     // alert(JSON.stringify(values));
-
-                    console.log("values", values);
                     resetForm();
                     setInvoiceValues({ ...invoiceInitialValue })
                 } catch (error) {
@@ -213,11 +211,20 @@ const CreateInvoice = () => {
                     <div>
                         <ToastUi autoClose={2000} />
                         <TableHeader headerName={pathname} buttons={[
-                            { label: 'Preview', icon: Add, onClick: () => setIsModalOpen(true) },
+                            {
+                                label: 'Preview', icon: Add, onClick: () => {
+                                    setIsModalOpen(true)
+                                    setInvoicePopup(true)
+                                    values.invoiceTotalAmount = invoiceTotalAmount
+                                    values.servicesList = invoiceValues.servicesList
+                                    values.invoiceTotalAmount = invoiceTotalAmount ?? null;
+                                    setInvoiceFinalData(values as any)
+                                }
+                            },
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) },
                             { label: 'Save', icon: Add, onClick: handleSubmit },
                         ]} />
-                        <ModalUi topHeight='40%' open={isModalOpen} onClose={() => {
+                        <ModalUi topHeight='80%' open={isModalOpen} onClose={() => {
                             setIsModalOpen(false)
                             setInvoicePopup(false)
                             setGstTypePopup(false)
@@ -226,7 +233,7 @@ const CreateInvoice = () => {
                         }} >
                             <>
                                 {invoicePopUp && (
-                                    <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={values} />
+                                    <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} />
                                 )}
                                 {gstTypePopUp && (
                                     <GstTypeScreen />
@@ -239,7 +246,7 @@ const CreateInvoice = () => {
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
-                                <Grid item xs={12}>
+                                <Grid item xs={6}>
                                     <Box>
                                         <RadioUi value={values.invoiceType} onChange={(newValue: any) => {
                                             if (newValue) {
@@ -251,6 +258,15 @@ const CreateInvoice = () => {
                                             // label='Invoice type'
                                             errorMsg={touched.invoiceType && errors.invoiceType}
                                         />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'flex-end',
+                                    }}>
+                                        <Typography variant="subtitle2" color="initial">Created at : {formatDate(values.invoiceDate)}</Typography>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={3}>
@@ -275,6 +291,10 @@ const CreateInvoice = () => {
                                         <SelectDropdown
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
+                                                    if (newValue) {
+                                                        const selectedCustomerDetails = customers?.find((customer: any) => newValue.value === customer?.customerName);
+                                                        console.log(selectedCustomerDetails);
+                                                    }
                                                     setFieldValue("customerName", newValue.value)
                                                 } else {
                                                     setFieldValue("customerName", "")
@@ -295,7 +315,6 @@ const CreateInvoice = () => {
                                                 setIsModalOpen(true)
                                                 setGstTypePopup(true)
                                                 // navigate("/customer/create")
-                                                console.log("Add new");
                                             }}
                                             button={true}
                                             onChange={(newValue: any) => {
@@ -387,7 +406,10 @@ const CreateInvoice = () => {
                                     <Box>
                                         <DatePickerUi
                                             label="Start Date"
-                                            onChange={(date: any) => setFieldValue("startDate", date)}
+                                            onChange={(date: Date) => {
+                                                console.log(date);
+                                                setFieldValue("startDate", date);
+                                            }}
                                             value={values.startDate}
                                         />
                                     </Box>
@@ -396,7 +418,10 @@ const CreateInvoice = () => {
                                     <Box>
                                         <DatePickerUi
                                             label="Due Date"
-                                            onChange={(date: any) => console.log(date)}
+                                            onChange={(date: Date) => {
+                                                console.log(date)
+                                                setFieldValue("dueDate", date);
+                                            }}
                                             value={values.dueDate}
                                         />
                                     </Box>
@@ -527,7 +552,6 @@ const CreateInvoice = () => {
                                                 value={values.discountPercentage ?? ""}
                                                 onChange={(e) => {
                                                     const value = e.target.value;
-                                                    console.log(value);
                                                     const parsedValue = value !== "" ? parseFloat(value) : null;
                                                     setDiscountPercentage(parsedValue);
                                                     setFieldValue("discountPercentage", parsedValue);
@@ -547,7 +571,6 @@ const CreateInvoice = () => {
                                                     setIsModalOpen(true)
                                                     setTdsTaxPopup(true)
                                                     // navigate("/customer/create")
-                                                    console.log("Add new");
                                                 }}
                                                 button={true}
                                                 width='150px'

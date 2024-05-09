@@ -1,10 +1,10 @@
 // "http://localhost:4000";
 // export const BASE_URL_NODE = "https://node-js-invoice.onrender.com";
 // https://ims-backend-9ghn.onrender.com/login
-const JAVA_URL = "https://ims-backend-9ghn.onrender.com";
+const JAVA_URL = "https://ims-backend-9ghn.onrender.com"; // ! java backend
 const LOCAL_URL = "http://localhost:4000";
-const LIVE_URL = "https://node-js-invoice.onrender.com";
-export const BASE_LOCAL_URL = JAVA_URL;
+const LIVE_URL = "https://node-js-invoice.onrender.com";  // ! nodejs backend
+export const BASE_LOCAL_URL = LOCAL_URL;
 
 export enum ApiEndpoint {
     LOGIN = "login",

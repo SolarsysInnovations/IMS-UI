@@ -4,7 +4,7 @@ import { Add } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Grid,  } from '@mui/material';
+import { Box, Grid, } from '@mui/material';
 import { AppDispatch, RootState } from '../../redux-store/store'
 import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
@@ -22,7 +22,7 @@ import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
 import ButtonUi from '../../components/ui/Button';
 import data from '../../constants/data';
 
-const ArAgingscreen= () => {
+const ArAgingscreen = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
@@ -35,16 +35,17 @@ const ArAgingscreen= () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-    const handleClick =()=>{
+    const handleClick = () => {
         if (startDate && endDate) {
             // Filter data based on start and end dates
             const filteredData = data.filter((item: any) => {
-              return item.date >= startDate && item.date <= endDate;
+                return item.date >= startDate && item.date <= endDate;
             });
             console.log('Filtered Data:', filteredData);
-          } else {
+        } else {
             console.log('Please select both start and end dates.');
-          }    }
+        }
+    }
     return (
         <div>
             <Formik
@@ -71,13 +72,13 @@ const ArAgingscreen= () => {
                         <TableHeader headerName={pathname} buttons={[
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) }
                         ]} />
-                        <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >        
+                        <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
                                 <Grid item xs={3}>
                                     <Box>
-                                    <SelectDropdown
+                                        <SelectDropdown
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
                                                     if (newValue.value === "This Week") {
@@ -96,12 +97,12 @@ const ArAgingscreen= () => {
                                                         const dueDateNet3 = dayjs().add(30, 'days').format('DD-MM-YYYY');
                                                         setFieldValue('startDate', currentDateNet3)
                                                         setFieldValue("endDate", dueDateNet3)
-                                                    }else if (newValue.value === "Last 30 Days") {
+                                                    } else if (newValue.value === "Last 30 Days") {
                                                         const currentDateNet4 = dayjs().format('DD-MM-YYYY');
                                                         const dueDateNet4 = dayjs().add(-30, 'days').format('DD-MM-YYYY');
                                                         setFieldValue('startDate', currentDateNet4)
                                                         setFieldValue("endDate", dueDateNet4)
-                                                    }else if (newValue.value === "Custom") {
+                                                    } else if (newValue.value === "Custom") {
                                                         const currentDate = dayjs().format('DD-MM-YYYY');
                                                         setFieldValue('startDate', "")
                                                         setFieldValue("endDate", "")
@@ -115,7 +116,7 @@ const ArAgingscreen= () => {
                                             value={values.customTerms ? { value: values.customTerms, label: values.customTerms } : null}
                                             labelText='Select'
                                             error={touched.customTerms && Boolean(errors.customTerms)}
-                                            // helperText={touched.customTerms && errors.customTerms}
+                                        // helperText={touched.customTerms && errors.customTerms}
                                         />
                                     </Box>
                                 </Grid>
@@ -139,11 +140,11 @@ const ArAgingscreen= () => {
                                     </Box>
                                 </Grid>
                                 <Grid item xs={2}>
-                                        <ButtonUi size='small' label='Run Reports' variant='contained' onClick={handleClick} />       
+                                    <ButtonUi size='small' label='Run Reports' variant='contained' onClick={handleClick} />
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2}>
-                                <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
-                          </Grid>
+                                    <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
+                                </Grid>
                             </Grid>
                         </Form>
                     </div>

@@ -93,6 +93,7 @@ interface TaxAmountProps {
 };
 export interface InvoiceInitialValueProps {
     id: number;
+    invoiceDate: Date;
     invoiceType: string;
     invoiceNumber: string;
     customerName: string;
@@ -103,7 +104,7 @@ export interface InvoiceInitialValueProps {
     gstInNumber: string;
     paymentTerms: string;
     invoiceStatus: string;
-    invoiceTotalAmount: number | null;
+    invoiceTotalAmount: number | null | undefined;
     discountPercentage: number | null;
     notes: string;
     termsAndConditions: string;
@@ -113,7 +114,7 @@ export interface InvoiceInitialValueProps {
 
 export interface ArAgingInitialValueProps {
     customTerms: any;
-    customerName: string;  
+    customerName: string;
     startDate: string;
     endDate: string;
     days0to30: string;
