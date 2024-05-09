@@ -41,8 +41,14 @@ export const reportApi = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
+        getReportInvoiceById: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `invoice/invoiceReport`,
+                method: 'POST',
+            }),
+        }),
     }),
 });
 export const { setReportData, setReportLoading, setReportError } = reportSlice.actions;
 export { reportSlice };
-export const { useGetReportByIdMutation, useGetReportQuery } = reportApi;
+export const { useGetReportByIdMutation,useGetReportInvoiceByIdMutation, useGetReportQuery } = reportApi;

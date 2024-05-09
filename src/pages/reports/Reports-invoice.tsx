@@ -11,7 +11,7 @@ import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { ArAgingInitialValueProps } from '../../types/types';
 import GridDataUi from '../../components/GridTable/GridData';
-import { useGetReportQuery } from '../../redux-store/reports/reportApi';
+import { useGetReportInvoiceByIdMutation, useGetReportQuery } from '../../redux-store/reports/reportApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
@@ -30,7 +30,6 @@ const Reportsinvoice = () => {
     const navigate = useNavigate();
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const { data: customers, error, isLoading, refetch } = useGetReportQuery();
     const { data: reportList } = useGetReportQuery();
     const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);

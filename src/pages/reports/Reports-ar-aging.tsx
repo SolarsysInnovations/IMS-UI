@@ -31,7 +31,7 @@ const ArAgingscreen= () => {
     const [endDate, setEndDate] = useState(null);
     const { data: customers, error, isLoading, refetch } = useGetReportQuery();
     const { data: reportList } = useGetReportQuery();
-    const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
+    const [selectedReportData, setSelectedReportData] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleCloseModal = () => {
         setIsModalOpen(false);
@@ -53,20 +53,20 @@ const ArAgingscreen= () => {
                 validate={() => ({})}
                 onSubmit={async (values: ArAgingInitialValueProps, { setSubmitting, resetForm }) => {
                     try {
-                        values.reportList = selectedServiceData;
+                        values.reportList = selectedReportData;
                         // values.startDate = invoiceTotalAmount ;
                         // addReport(values);
                         // // alert(JSON.stringify(values));
                         resetForm();
                     } catch (error) {
-                        console.error("An error occurred during login:", error);
+                        console.error("An error occurred", error);
                     }
                     finally {
                         setSubmitting(false);
                     }
                 }}
             >
-                {({ errors, touched, values, setFieldValue }) => (
+                {({ errors, touched, values, setFieldValue, handleSubmit }) => (
                     <div>
                         <ToastUi autoClose={2000} />
                         <TableHeader headerName={pathname} buttons={[
@@ -140,7 +140,7 @@ const ArAgingscreen= () => {
                                     </Box>
                                 </Grid>
                                 <Grid item xs={2}>
-                                        <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleClick} />       
+                                        <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />       
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2}>
                                 <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
