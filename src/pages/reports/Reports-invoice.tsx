@@ -34,6 +34,7 @@ const Reportsinvoice = () => {
     const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState([ ]);
+    const [Invoice, { isSuccess, isError}] = useGetReportInvoiceByIdMutation();
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
@@ -61,15 +62,13 @@ const Reportsinvoice = () => {
             <Formik
                 initialValues={AragingInitialValue}
                 validate={() => ({})}
-                onSubmit={async (values: ArAgingInitialValueProps, { setSubmitting, resetForm }) => {
+                onSubmit={async (values: any, { setSubmitting, resetForm }) => {
+                    console.log("values",values);
                     try {
-                        values.reportList = selectedServiceData;
-                        // values.startDate = invoiceTotalAmount ;
-                        // addReport(values);
-                        // // alert(JSON.stringify(values));
+                        await Invoice(values);
                         resetForm();
                     } catch (error) {
-                        console.error("An error occurred during login:", error);
+                        console.error("An error occurred", error);
                     }
                     finally {
                         setSubmitting(false);

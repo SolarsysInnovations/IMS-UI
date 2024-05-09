@@ -9,9 +9,9 @@ import { AppDispatch, RootState } from '../../redux-store/store'
 import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { ArAgingInitialValueProps } from '../../types/types';
+import { ArAgingInitialValueProps , ReportListProps} from '../../types/types';
 import GridDataUi from '../../components/GridTable/GridData';
-import { useGetReportQuery } from '../../redux-store/reports/reportApi';
+import { useGetReportByIdMutation, useGetReportQuery } from '../../redux-store/reports/reportApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
@@ -23,16 +23,17 @@ import ButtonUi from '../../components/ui/Button';
 import data from '../../constants/data';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 
-const ArAgingscreen= () => {
+const ArAgingscreen: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const { data: customers, error, isLoading, refetch } = useGetReportQuery();
+    const { data: customers,  refetch } = useGetReportQuery();
     const { data: reportList } = useGetReportQuery();
-    const [selectedReportData, setSelectedReportData] = useState<any[]>([]);
+    const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [ArAging, { isSuccess, isError}] = useGetReportByIdMutation();
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
@@ -51,12 +52,10 @@ const ArAgingscreen= () => {
             <Formik
                 initialValues={AragingInitialValue}
                 validate={() => ({})}
-                onSubmit={async (values: ArAgingInitialValueProps, { setSubmitting, resetForm }) => {
+                onSubmit={async (values: any, { setSubmitting, resetForm }) => {
+                    console.log("values",values);
                     try {
-                        values.reportList = selectedReportData;
-                        // values.startDate = invoiceTotalAmount ;
-                        // addReport(values);
-                        // // alert(JSON.stringify(values));
+                        await ArAging(values);
                         resetForm();
                     } catch (error) {
                         console.error("An error occurred", error);
