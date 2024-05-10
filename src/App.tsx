@@ -29,6 +29,7 @@ import { selectCurrentToken } from "./redux-store/auth/authSlice";
 import DemoInvoice from "./pages/Invoice/Demo-Invocie";
 import ArAgingscreen from "./pages/reports/Reports-ar-aging";
 import Reportsinvoice from "./pages/reports/Reports-invoice";
+import SendEmail from "./pages/Invoice/Send-email";
 
 function App() {
   const token = useSelector(selectCurrentToken);
@@ -37,7 +38,6 @@ function App() {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
-
             <Route element={<PrivateRoutes />}>
               <Route index element={<Navigate to="/dashboard" />} />
               <Route path="/" element={<Dashboard />} />
@@ -55,12 +55,16 @@ function App() {
               <Route path="/invoice/create" element={<CreateInvoice />} />
               <Route path="/services/list" element={<ServicesList />} />
               <Route path="/service/create" element={<CreateServices />} />
+              <Route path="/invoice/sendemail" element={<SendEmail />} />
               <Route element={<ServiceEditScreen />} path="/service/edit/:id" />
               <Route element={<Reportscreen />} path="/reports" />
               <Route element={<ArAgingscreen />} path="/reports/araging" />
               <Route element={<Reportsinvoice />} path="/reports/invoice" />
             </Route>
-            <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
+            <Route
+              path="/login"
+              element={token ? <Navigate to="/dashboard" /> : <Login />}
+            />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

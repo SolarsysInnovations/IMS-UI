@@ -1,134 +1,138 @@
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
 // -------- customer ------------------------
 export interface LoginProps {
-    // email: string;
-    username: string;
-    password: string;
-};
+  // email: string;
+  username: string;
+  password: string;
+}
 
 interface ContactPersonProps {
-    contactName: string;
-    contactEmail: string;
-};
+  contactName: string;
+  contactEmail: string;
+}
 export interface GstTypeProps {
-    gstName: string,
-    gstPercentage: number | null,
-};
+  gstName: string;
+  gstPercentage: number | null;
+}
 
 export interface TdsTaxProps {
-    taxName: string,
-    taxPercentage: number | null,
-};
+  taxName: string;
+  taxPercentage: number | null;
+}
 
 export interface PaymentTermsProps {
-    termName: string,
-    startDate: string,
-    dueDate: string,
-};
+  termName: string;
+  startDate: string;
+  dueDate: string;
+}
 
 export interface DyCreateCustomerProps {
-    id?: any;
-    customerName: string;
-    customerType: string;
-    companyName: string;
-    customerEmail: string;
-    customerPhone: number;
-    paymentTerms: string;
-    country: string;
-    address: string;
-    city: string;
-    state: string;
-    pinCode: string;
-    contactPerson: ContactPersonProps[];
-};
+  id?: any;
+  customerName: string;
+  customerType: string;
+  companyName: string;
+  customerEmail: string;
+  customerPhone: number;
+  paymentTerms: string;
+  country: string;
+  address: string;
+  city: string;
+  state: string;
+  pinCode: string;
+  contactPerson: ContactPersonProps[];
+}
 
 export interface FormProps {
-    fields: FieldProps[];
-    initialValues: any;
-    validationSchema: any;
-    showTable?: boolean;
-    onSubmit: (values: any, actions: any) => void;
-};
+  fields: FieldProps[];
+  initialValues: any;
+  validationSchema: any;
+  showTable?: boolean;
+  onSubmit: (values: any, actions: any) => void;
+}
 export interface SubField {
-    name: string;
-    label: string;
-    type: string;
-    gridSize?: number;
-    validation?: Yup.StringSchema<string>;
-    options?: { value: string; label: string }[];
-};
+  name: string;
+  label: string;
+  type: string;
+  gridSize?: number;
+  validation?: Yup.StringSchema<string>;
+  options?: { value: string; label: string }[];
+}
 
 export interface FieldProps {
-    name: string;
-    label?: string;
-    type: string;
-    titleGridSize?: number;
-    subFields?: SubField[];
-};
-
+  name: string;
+  label?: string;
+  type: string;
+  titleGridSize?: number;
+  subFields?: SubField[];
+}
 
 // -------- invoice service ------------------------
 interface ServiceListProps {
-    id: string;
-    serviceAccountingCode: string;
-    serviceAmount: number;
-    quantity: number;
-    price: number;
-};
+  id: string;
+  serviceAccountingCode: string;
+  serviceAmount: number;
+  quantity: number;
+  price: number;
+}
 
 interface ReportListProps {
-    id: string | Number;
-    customerName: string;
-    startDate: string;
-    endDate: string;
-    days0to30: string;
-    days30to45: string;
-    above45: string;
-    total: string;
+  id: string | Number;
+  customerName: string;
+  startDate: string;
+  endDate: string;
+  days0to30: string;
+  days30to45: string;
+  above45: string;
+  total: string;
 }
 
 interface TaxAmountProps {
-    tds: string;
-};
+  tds: string;
+}
 export interface InvoiceInitialValueProps {
-    id: number;
-    invoiceDate: Date;
-    invoiceType: string;
-    invoiceNumber: string;
-    customerName: string;
-    gstType: string;
-    gstPercentage: number | null;
-    startDate: string;
-    dueDate: string;
-    gstInNumber: string;
-    paymentTerms: string;
-    invoiceStatus: string;
-    invoiceTotalAmount: number | null | undefined;
-    discountPercentage: number | null;
-    notes: string;
-    termsAndConditions: string;
-    taxAmount: TaxAmountProps;
-    servicesList: ServiceListProps[];
-};
+  id: number;
+  invoiceDate: Date;
+  invoiceType: string;
+  invoiceNumber: string;
+  customerName: string;
+  gstType: string;
+  gstPercentage: number | null;
+  startDate: string;
+  dueDate: string;
+  gstInNumber: string;
+  paymentTerms: string;
+  invoiceStatus: string;
+  invoiceTotalAmount: number | null | undefined;
+  discountPercentage: number | null;
+  notes: string;
+  termsAndConditions: string;
+  taxAmount: TaxAmountProps;
+  servicesList: ServiceListProps[];
+}
 
 export interface ArAgingInitialValueProps {
-    customTerms: any;
-    customerName: string;
-    startDate: string;
-    endDate: string;
-    days0to30: string;
-    days30to45: string;
-    above45: string;
-    total: string;
-    reportList: ReportListProps[];
-
+  customTerms: any;
+  customerName: string;
+  startDate: string;
+  endDate: string;
+  days0to30: string;
+  days30to45: string;
+  above45: string;
+  total: string;
+  reportList: ReportListProps[];
 }
 
 // ---------- service  --------------------
 export interface serviceCreationProps {
-    serviceAccountingcode: string;
-    description: string;
-    amount: number;
-};
+  serviceAccountingcode: string;
+  description: string;
+  amount: number;
+}
 // ---------user login --------------------
+
+export interface SendEmailInitialValueProps {
+  fromemail: string;
+  toemail: string;
+  description: string;
+}
