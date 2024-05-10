@@ -4,7 +4,7 @@ import { Add } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Grid,  } from '@mui/material';
+import { Box, Grid, } from '@mui/material';
 import { AppDispatch, RootState } from '../../redux-store/store'
 import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
@@ -64,13 +64,13 @@ const ArAgingscreen: React.FC = () => {
                         <TableHeader headerName={pathname} buttons={[
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) }
                         ]} />
-                        <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >        
+                        <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
                                 <Grid item xs={3}>
                                     <Box>
-                                    <SelectDropdown
+                                        <SelectDropdown
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
                                                     if (newValue.value === "Today") {
@@ -95,12 +95,12 @@ const ArAgingscreen: React.FC = () => {
                                                         const dueDateNet3 = dayjs().add(30, 'days').format('DD-MM-YYYY');
                                                         setFieldValue('startDate', currentDateNet3)
                                                         setFieldValue("endDate", dueDateNet3)
-                                                    }else if (newValue.value === "Last 30 Days") {
+                                                    } else if (newValue.value === "Last 30 Days") {
                                                         const currentDateNet4 = dayjs().format('DD-MM-YYYY');
                                                         const dueDateNet4 = dayjs().add(-30, 'days').format('DD-MM-YYYY');
                                                         setFieldValue('startDate', currentDateNet4)
                                                         setFieldValue("endDate", dueDateNet4)
-                                                    }else if (newValue.value === "Custom") {
+                                                    } else if (newValue.value === "Custom") {
                                                         const currentDate = dayjs().format('DD-MM-YYYY');
                                                         setFieldValue('startDate', "")
                                                         setFieldValue("endDate", "")
@@ -141,8 +141,8 @@ const ArAgingscreen: React.FC = () => {
                                         <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />       
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2}>
-                                <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
-                          </Grid>
+                                    <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
+                                </Grid>
                             </Grid>
                         </Form>
                     </div>

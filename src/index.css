@@ -29,3 +29,8 @@ code {
 .css-q5skqe-MuiAutocomplete-listbox .MuiAutocomplete-option.Mui-focused {
   background-color: #f7f7f7 !important;
 }
+
+.css-y8a4g5-MuiPaper-root-MuiTableContainer-root {
+  box-shadow: none !important;
+  border-radius: 0px !important;
+}

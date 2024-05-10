@@ -24,6 +24,7 @@ const CustomerCreate: React.FC = () => {
             {/* Use DynamicCustomerCreate with the required props */}
             <ToastContainer />
             <DynamicFormCreate
+                showTable={true}
                 fields={customerFields}
                 initialValues={customerInitialValues}
                 validationSchema={customerValidationSchema}

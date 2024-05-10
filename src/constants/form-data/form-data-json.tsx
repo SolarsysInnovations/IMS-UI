@@ -14,7 +14,7 @@ export const customerFields: FieldProps[] = [
         name: "info",
         subFields: [
             {
-                name: 'customerType', label: 'customerType', type: 'radio', gridSize: 3, options: [{ value: "Business", label: "Business" },
+                name: 'customerType', label: 'Customer Type', type: 'radio', gridSize: 3, options: [{ value: "Business", label: "Business" },
                 { value: "Individual", label: "Individual" }], validation: Yup.string().required('customerName is required',)
             },
         ]
@@ -25,7 +25,7 @@ export const customerFields: FieldProps[] = [
         name: "info",
         label: 'Address Information',
         subFields: [
-            { name: 'customerName', label: 'customerName', type: 'text', gridSize: 3, validation: Yup.string().required('customerName is required',) },
+            { name: 'customerName', label: 'Customer Name', type: 'text', gridSize: 3, validation: Yup.string().required('customerName is required',) },
             { name: 'companyName', label: 'companyName', type: 'text', gridSize: 3, validation: Yup.string().required('companyName is required') },
             { name: 'customerEmail', label: 'customerEmail', type: 'email', gridSize: 3, validation: Yup.string().required('customerEmail is required') },
             { name: 'customerPhone', label: 'customerPhone', type: 'number', gridSize: 3, validation: Yup.string().required('customerPhone is required') },

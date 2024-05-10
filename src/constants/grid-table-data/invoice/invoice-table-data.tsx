@@ -93,6 +93,12 @@ export const columns: GridColDef[] = [
         renderCell: (params: any) => <MyCellRenderer row={params.row} />,
     },
     {
+        field: 'id',
+        headerName: 'id',
+        width: 150,
+        editable: true,
+    },
+    {
         field: 'invoiceType',
         headerName: 'Invoice Type',
         width: 150,

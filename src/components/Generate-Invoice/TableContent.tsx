@@ -1,54 +1,68 @@
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 
-function createData(
-    code: string,
-    description: string,
-    qty: number,
-    rate: number,
-    amount: number,
-) {
-    return { code, description, qty, rate, amount };
+interface TableRow {
+    headName: string;
+    align: "left" | "right" | "center" | "justify" | undefined;
 }
+
 interface TableContentUiProps {
     tableData?: any;
 }
 
+const tableRow: TableRow[] = [
+    {
+        headName: "Accounting Code",
+        align: "left",
+    },
+    {
+        headName: "Service Amount",
+        align: "left",
+    },
+    {
+        headName: "Quantity",
+        align: "left",
+    },
+    {
+        headName: "Total Price",
+        align: "right",
+    },
+];
 
 export default function TableContent({ tableData }: TableContentUiProps) {
+    console.log(tableData);
+
     return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>serviceAccountingCode</TableCell>
-                        <TableCell align="right">serviceAmount </TableCell>
-                        <TableCell align="right">Qty</TableCell>
-                        <TableCell align="right">totalAmount</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {tableData?.servicesList?.map((data: any) => (
-                        <TableRow
-                            key={data.id}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell component="th" scope="row">
-                                {data.serviceAccountingCode}
-                            </TableCell>
-                            <TableCell align="right">{data.serviceAmount}</TableCell>
-                            <TableCell align="right">{data.qty}</TableCell>
-                            <TableCell align="right">{data.totalAmount}</TableCell>
-                        </TableRow>
+        <div style={{ boxShadow: "none", backgroundColor: "transparent" }}>
+            <table style={{ boxShadow: "none", width: "100%" }}>
+                <thead>
+                    <tr>
+                        {tableRow.map((data, index) => (
+                            <th
+                                key={index}
+                                style={{
+                                    fontSize: "10px",
+                                    backgroundColor: "#343232",
+                                    padding: "7px 16px",
+                                    color: "#ededed",
+                                }}
+                                align={data.align}
+                            >
+                                {data.headName}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {tableData?.servicesList?.map((data: any, index: number) => (
+                        <tr key={index}>
+                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data.serviceAccountingCode}</td>
+                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data.serviceAmount}</td>
+                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data.quantity}</td>
+                            <td style={{ fontSize: "10px", padding: "10px 16px", textAlign: "right" }}>{data.price}</td>
+                        </tr>
                     ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                </tbody>
+            </table>
+        </div>
     );
 }

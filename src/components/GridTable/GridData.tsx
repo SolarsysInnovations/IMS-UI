@@ -107,7 +107,6 @@ export default function GridDataUi({ onCellEditStop, onCellEditor, hideFooter, p
                 disableRowSelectionOnClick
                 hideFooterPagination={pagination}
                 hideFooter={hideFooter}
-
             />
         </Box>
     );
