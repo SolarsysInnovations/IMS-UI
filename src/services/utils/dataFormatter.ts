@@ -1,5 +1,5 @@
-export function formatDate(date: Date | null): string {
-    if (!date) {
+export function formatDate(date: Date | null | undefined): string {
+    if (!date || isNaN(date.getTime())) {
         return ''; // Return an empty string for null values
     }
     const day = date.getDate().toString().padStart(2, '0');

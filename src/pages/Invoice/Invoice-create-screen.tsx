@@ -224,7 +224,7 @@ const CreateInvoice = () => {
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) },
                             { label: 'Save', icon: Add, onClick: handleSubmit },
                         ]} />
-                        <ModalUi topHeight='80%' open={isModalOpen} onClose={() => {
+                        <ModalUi topHeight='90%' open={isModalOpen} onClose={() => {
                             setIsModalOpen(false)
                             setInvoicePopup(false)
                             setGstTypePopup(false)

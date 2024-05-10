@@ -1,26 +1,15 @@
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 
-function createData(
-    code: string,
-    description: string,
-    qty: number,
-    rate: number,
-    amount: number,
-) {
-    return { code, description, qty, rate, amount };
+interface TableRow {
+    headName: string;
+    align: "left" | "right" | "center" | "justify" | undefined;
 }
+
 interface TableContentUiProps {
     tableData?: any;
 }
 
-const tableRow = [
+const tableRow: TableRow[] = [
     {
         headName: "Accounting Code",
         align: "left",
@@ -30,52 +19,50 @@ const tableRow = [
         align: "left",
     },
     {
-        headName: "quantity",
+        headName: "Quantity",
         align: "left",
     },
     {
-        headName: "total price",
+        headName: "Total Price",
         align: "right",
     },
+];
 
-]
 export default function TableContent({ tableData }: TableContentUiProps) {
     console.log(tableData);
 
     return (
-        <TableContainer sx={{
-            "& .css-7u7gjs-MuiPaper-root-MuiTableContainer-root": {
-                boxShadow: "none !important",
-                backgroundColor: "red",
-            }
-        }} component={Paper}>
-            <Table sx={{
-                "& .css-7u7gjs-MuiPaper-root-MuiTableContainer-root": {
-                    boxShadow: "none"
-                }
-            }}>
-                <TableHead>
-                    <TableRow>
-                        {tableRow.map((data) => (
-                            <TableCell align={data.align as "left" | "right" | "center" | "justify" | "inherit" | undefined} key={data.headName}>
+        <div style={{ boxShadow: "none", backgroundColor: "transparent" }}>
+            <table style={{ boxShadow: "none", width: "100%" }}>
+                <thead>
+                    <tr>
+                        {tableRow.map((data, index) => (
+                            <th
+                                key={index}
+                                style={{
+                                    fontSize: "10px",
+                                    backgroundColor: "#343232",
+                                    padding: "7px 16px",
+                                    color: "#ededed",
+                                }}
+                                align={data.align}
+                            >
                                 {data.headName}
-                            </TableCell>
+                            </th>
                         ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {tableData?.servicesList?.map((data: any) => (
-                        <TableRow
-                            key={data.id}
-                        >
-                            <TableCell >{data.serviceAccountingCode}</TableCell>
-                            <TableCell align="left">{data.serviceAmount}</TableCell>
-                            <TableCell align="left">{data.quantity}</TableCell>
-                            <TableCell align="right">{data.price}</TableCell>
-                        </TableRow>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tableData?.servicesList?.map((data: any, index: number) => (
+                        <tr key={index}>
+                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data.serviceAccountingCode}</td>
+                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data.serviceAmount}</td>
+                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data.quantity}</td>
+                            <td style={{ fontSize: "10px", padding: "10px 16px", textAlign: "right" }}>{data.price}</td>
+                        </tr>
                     ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                </tbody>
+            </table>
+        </div>
     );
 }

@@ -20,16 +20,20 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useState } from 'react'
 import { AccountCircle, Login, Logout, PersonAdd, Search, SearchOffRounded, Settings } from '@mui/icons-material'
 import SearchBarUi from '../ui/SearchBar'
-
+import { logOut } from '../../redux-store/auth/authSlice'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../../redux-store/store'
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
 
   const handleClose = () => {
+    dispatch(logOut())
     setAnchorEl(null)
   }
   return (
