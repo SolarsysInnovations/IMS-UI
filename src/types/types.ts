@@ -113,6 +113,7 @@ export interface ArAgingInitialValueProps {
     invoiceDate: string;
     startDate: string;
     endDate: string;
+    // reportList: ReportListProps[];
 }
 
 // ---------- service  --------------------

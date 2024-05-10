@@ -99,5 +99,6 @@ export const AragingInitialValue: ArAgingInitialValueProps = {
     invoiceDate: "",
     startDate: "",
     endDate: "",
+    
 };
 

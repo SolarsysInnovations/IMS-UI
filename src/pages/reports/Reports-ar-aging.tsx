@@ -9,49 +9,57 @@ import { AppDispatch, RootState } from '../../redux-store/store'
 import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { ArAgingInitialValueProps , ReportListProps} from '../../types/types';
 import GridDataUi from '../../components/GridTable/GridData';
 import { useGetReportByIdMutation, useGetReportQuery } from '../../redux-store/reports/reportApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { invoiceDate } from '../../constants/reportData';
-import { pdfjs } from 'react-pdf';
 import { columns } from '../../constants/grid-table-data/Reports-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
-import ButtonUi from '../../components/ui/Button';
-import data from '../../constants/data';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
+import { ArAgingInitialValueProps } from '../../types/types';
 
 const ArAgingscreen: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const { data: customers,  refetch } = useGetReportQuery();
-    const { data: reportList } = useGetReportQuery();
-    const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
+    const { data: reportList } = useGetReportQuery(); 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [ArAging, { isSuccess, isError}] = useGetReportByIdMutation();
-    
+    const [ArAging] = useGetReportByIdMutation();
+    const [tableData, setTableData] = useState<any>()
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
     
     console.log("list of values",reportList);
+    console.log("tabledata",tableData);
+    
     return (
         <div>
             <Formik
                 initialValues={AragingInitialValue}
                 validate={() => ({})}
-                onSubmit={async (values: any, { setSubmitting, resetForm }) => {
+                onSubmit={async (values: ArAgingInitialValueProps, { setSubmitting, resetForm }) => {
                     console.log("values",values);
                     try {
-                        await ArAging(values);
-                        resetForm();
+                        const response = await ArAging(values);
+                        // Check if the response contains data or error
+                        if ('data' in response) {
+                            // If data exists, log it
+                            const data = response.data
+                            console.log("Response data:", response.data);
+                            setTableData(data)
+                            // Reset form or update state with the data
+                            resetForm();
+                        } else if ('error' in response) {
+                            // If error exists, handle the error
+                            console.error("An error occurred", response.error);
+                            // Handle error state or display error message
+                        }
                     } catch (error) {
-                        console.error("An error occurred", error);
+                        // Catch any unexpected errors during mutation call
+                        console.error("An unexpected error occurred", error);
                     }
                     finally {
                         setSubmitting(false);
@@ -141,7 +149,8 @@ const ArAgingscreen: React.FC = () => {
                                         <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />       
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2}>
-                                    <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
+                
+                                    <GridDataUi showToolbar={true} columns={columns} tableData={values || []} checkboxSelection={false} />
                                 </Grid>
                             </Grid>
                         </Form>
