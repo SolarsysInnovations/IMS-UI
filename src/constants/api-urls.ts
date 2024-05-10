@@ -44,8 +44,8 @@ export enum ApiEndpoint {
     PAYMENT_TERMS_DELETE = "paymentTermsDelete",
     PAYMENT_TERMS_GET = "paymentTermsGet",
     PAYMENT_TERMS_UPDATE = "paymentTermsUpdate",
-    REPORT_LIST = "REPORT_LIST",
-    REPORT_GET = "REPORT_GET",
+    REPORT_LIST = "reportList",
+    REPORT_GET = "reportGet",
 }
 
 export type ApiUrls = {

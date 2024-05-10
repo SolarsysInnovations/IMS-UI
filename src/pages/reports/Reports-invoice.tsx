@@ -15,7 +15,7 @@ import { useGetReportInvoiceByIdMutation, useGetReportQuery } from '../../redux-
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
-import { customTerms } from '../../constants/reportData';
+import { invoiceDate } from '../../constants/reportData';
 import { pdfjs } from 'react-pdf';
 import { columns } from '../../constants/grid-table-data/invoice-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
@@ -90,6 +90,12 @@ const Reportsinvoice = () => {
                                     <SelectDropdown
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
+                                                    if (newValue.value === "Today") {
+                                                        const currentDateNet = dayjs().format('DD-MM-YYYY');
+                                                        const dueDateNet = dayjs().add(0, 'days').format('DD-MM-YYYY');
+                                                        setFieldValue("startDate", currentDateNet);
+                                                        setFieldValue("endDate", dueDateNet);
+                                                    }
                                                     if (newValue.value === "This Week") {
                                                         const currentDateNet1 = dayjs().format('DD-MM-YYYY');
                                                         const dueDateNet1 = dayjs().add(7, 'days').format('DD-MM-YYYY');
@@ -116,16 +122,16 @@ const Reportsinvoice = () => {
                                                         setFieldValue('startDate', "")
                                                         setFieldValue("endDate", "")
                                                     }
-                                                    setFieldValue("customTerms", newValue.value)
+                                                    setFieldValue("invoiceDate", newValue.value)
                                                 } else {
-                                                    setFieldValue("customTerms", "")
+                                                    setFieldValue("invoiceDate", "")
                                                 }
                                             }}
-                                            options={customTerms}
-                                            value={values.customTerms ? { value: values.customTerms, label: values.customTerms } : null}
+                                            options={invoiceDate}
+                                            value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                                             labelText='Select'
-                                            error={touched.customTerms && Boolean(errors.customTerms)}
-                                            // helperText={touched.customTerms && errors.customTerms}
+                                            error={touched.invoiceDate && Boolean(errors.invoiceDate)}
+                                            // helperText={touched.invoiceDate && errors.invoiceDate}
                                         />
                                     </Box>
                                 </Grid>

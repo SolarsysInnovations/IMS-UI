@@ -78,9 +78,11 @@ interface ServiceListProps {
 };
 
 export interface ReportListProps {
-    customTerms: string;
-    startDate: string;
-    endDate: string;
+    customerName: string;
+    days0to30: string;
+    days30to45:string;
+    above45: string;
+    total: string;
 }
 
 interface TaxAmountProps {
@@ -107,7 +109,7 @@ export interface InvoiceInitialValueProps {
 };
 
 export interface ArAgingInitialValueProps {
-    customTerms: string;
+    invoiceDate: string;
     startDate: string;
     endDate: string;
 }

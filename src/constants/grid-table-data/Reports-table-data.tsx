@@ -81,23 +81,6 @@ export const columns: GridColDef[] = [
         width: 180,
         editable: false,
     },
-    // {
-    //     field: 'qty',
-    //     headerName: 'Qty',
-    //     width: 150,
-    //     editable: true,
-    //     valueGetter: (params: any) => params.value || 0,
-    //     valueSetter: (params: GridValueSetterParams) => {
-    //         let newValue = params.value; // New value entered by the user
-    //         let row = { ...params.row }; // Copy the row object
-    //         // Update the qty field in the row object
-    //         row.qty = newValue;
-    //         console.log(row.qty);
-    //         handleRowUpdate(row);
-    //         // Return the updated row object
-    //         return row;
-    //     }
-    // },
      {
         field: 'total',
      headerName: 'Total Amount',

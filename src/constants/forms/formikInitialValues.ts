@@ -95,7 +95,7 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
 };
 
 export const AragingInitialValue: ArAgingInitialValueProps = {
-    customTerms: "",
+    invoiceDate: "",
     startDate: "",
     endDate: "",
 
