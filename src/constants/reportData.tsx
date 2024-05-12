@@ -1,21 +1,24 @@
 
 interface ArAgingProps {
-    id: number;
     customerName: string;
-    startDate: string;
-    endDate: string;
+    days0to30: string;
+    days30to45:string;
+    above45: string;
+    total: string; 
 }
 
 export const reportData: ArAgingProps[] = [
     {
-        id: 1,
-        customerName: "Siva",
-        startDate: "08-11-2023",
-        endDate: "25-11-2020"
+    customerName: "Raj",
+    days0to30: "234.4",
+    days30to45: "444.5",
+    above45: "567.56",
+    total: "344634" ,
     }
 ]
 
-export const customTerms = [
+export const invoiceDate = [
+    { value: "Today", label: "Today" },
     { value: "This Week", label: "This Week" },
     { value: "Last 7 Days", label: "Last 7 Days" },
     { value: "This Month", label: "This Month" },

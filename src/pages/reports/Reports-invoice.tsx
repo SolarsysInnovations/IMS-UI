@@ -11,11 +11,11 @@ import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { ArAgingInitialValueProps } from '../../types/types';
 import GridDataUi from '../../components/GridTable/GridData';
-import { useGetReportQuery } from '../../redux-store/reports/reportApi';
+import { useGetReportInvoiceByIdMutation, useGetReportQuery } from '../../redux-store/reports/reportApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
-import { customTerms } from '../../constants/reportData';
+import { invoiceDate } from '../../constants/reportData';
 import { pdfjs } from 'react-pdf';
 import { columns } from '../../constants/grid-table-data/invoice-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
@@ -30,11 +30,11 @@ const Reportsinvoice = () => {
     const navigate = useNavigate();
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const { data: customers, error, isLoading, refetch } = useGetReportQuery();
     const { data: reportList } = useGetReportQuery();
     const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([ ]);
+    const [Invoice, { isSuccess, isError}] = useGetReportInvoiceByIdMutation();
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
@@ -63,15 +63,13 @@ const Reportsinvoice = () => {
             <Formik
                 initialValues={AragingInitialValue}
                 validate={() => ({})}
-                onSubmit={async (values: ArAgingInitialValueProps, { setSubmitting, resetForm }) => {
+                onSubmit={async (values: any, { setSubmitting, resetForm }) => {
+                    console.log("values",values);
                     try {
-                        values.reportList = selectedServiceData;
-                        // values.startDate = invoiceTotalAmount ;
-                        // addReport(values);
-                        // // alert(JSON.stringify(values));
+                        await Invoice(values);
                         resetForm();
                     } catch (error) {
-                        console.error("An error occurred during login:", error);
+                        console.error("An error occurred", error);
                     }
                     finally {
                         setSubmitting(false);
@@ -93,6 +91,12 @@ const Reportsinvoice = () => {
                                         <SelectDropdown
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
+                                                    if (newValue.value === "Today") {
+                                                        const currentDateNet = dayjs().format('DD-MM-YYYY');
+                                                        const dueDateNet = dayjs().add(0, 'days').format('DD-MM-YYYY');
+                                                        setFieldValue("startDate", currentDateNet);
+                                                        setFieldValue("endDate", dueDateNet);
+                                                    }
                                                     if (newValue.value === "This Week") {
                                                         const currentDateNet1 = dayjs().format('DD-MM-YYYY');
                                                         const dueDateNet1 = dayjs().add(7, 'days').format('DD-MM-YYYY');
@@ -119,16 +123,16 @@ const Reportsinvoice = () => {
                                                         setFieldValue('startDate', "")
                                                         setFieldValue("endDate", "")
                                                     }
-                                                    setFieldValue("customTerms", newValue.value)
+                                                    setFieldValue("invoiceDate", newValue.value)
                                                 } else {
-                                                    setFieldValue("customTerms", "")
+                                                    setFieldValue("invoiceDate", "")
                                                 }
                                             }}
-                                            options={customTerms}
-                                            value={values.customTerms ? { value: values.customTerms, label: values.customTerms } : null}
+                                            options={invoiceDate}
+                                            value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                                             labelText='Select'
-                                            error={touched.customTerms && Boolean(errors.customTerms)}
-                                        // helperText={touched.customTerms && errors.customTerms}
+                                            error={touched.invoiceDate && Boolean(errors.invoiceDate)}
+                                            // helperText={touched.invoiceDate && errors.invoiceDate}
                                         />
                                     </Box>
                                 </Grid>

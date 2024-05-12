@@ -28,21 +28,28 @@ export const reportApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getReport: builder.query<any[], void>({
             query: () => ({
-                url: API_URLS.REPORT_LIST,
+                url: API_URLS.reportList,
                 method: 'POST',
+                
 
-            }),
-            // Set caching for 5 minutes (adjust the duration as needed)
-            keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
+            }), keepUnusedDataFor: 5 * 60 * 1000, 
         }),
-        getReportById: builder.mutation<void, number>({
-            query: (id) => ({
+        getReportById: builder.mutation<any, Partial<any>>({
+            query: (reports) => ({
                 url: `invoice/arReport`,
                 method: 'POST',
+                body: reports,
+            }),
+        }),
+        getReportInvoiceById: builder.mutation<any, Partial<any>>({
+            query: (reports) => ({
+                url: `invoice/invoiceReport`,
+                method: 'POST',
+                body: reports,
             }),
         }),
     }),
 });
 export const { setReportData, setReportLoading, setReportError } = reportSlice.actions;
 export { reportSlice };
-export const { useGetReportByIdMutation, useGetReportQuery } = reportApi;
+export const { useGetReportByIdMutation,useGetReportInvoiceByIdMutation, useGetReportQuery } = reportApi;

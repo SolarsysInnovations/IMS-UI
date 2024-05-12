@@ -18,18 +18,12 @@ const InvoiceList = () => {
     ];
     const navigate = useNavigate();
     const pathname = usePathname();
-    const newData = invoiceList?.map((item: any) => {
-        return {
-            ...item,
-            id: item._id
-        };
-    }) || [];
 
     return (
         <>
             <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} columns={columns} tableData={newData || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} columns={columns} tableData={invoiceList || []} checkboxSelection={false} />
 
         </>
     )

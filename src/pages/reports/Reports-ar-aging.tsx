@@ -9,64 +9,56 @@ import { AppDispatch, RootState } from '../../redux-store/store'
 import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { ArAgingInitialValueProps } from '../../types/types';
+import { ArAgingInitialValueProps , ReportListProps} from '../../types/types';
 import GridDataUi from '../../components/GridTable/GridData';
-import { useGetReportQuery } from '../../redux-store/reports/reportApi';
+import { useGetReportByIdMutation, useGetReportQuery } from '../../redux-store/reports/reportApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
-import { customTerms } from '../../constants/reportData';
+import { invoiceDate } from '../../constants/reportData';
 import { pdfjs } from 'react-pdf';
 import { columns } from '../../constants/grid-table-data/Reports-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
 import ButtonUi from '../../components/ui/Button';
 import data from '../../constants/data';
+import ButtonSmallUi from '../../components/ui/ButtonSmall';
 
-const ArAgingscreen = () => {
+const ArAgingscreen: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const { data: customers, error, isLoading, refetch } = useGetReportQuery();
+    const { data: customers,  refetch } = useGetReportQuery();
     const { data: reportList } = useGetReportQuery();
     const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [ArAging, { isSuccess, isError}] = useGetReportByIdMutation();
+    
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-    const handleClick = () => {
-        if (startDate && endDate) {
-            // Filter data based on start and end dates
-            const filteredData = data.filter((item: any) => {
-                return item.date >= startDate && item.date <= endDate;
-            });
-            console.log('Filtered Data:', filteredData);
-        } else {
-            console.log('Please select both start and end dates.');
-        }
-    }
+    
+    console.log("list of values",reportList);
     return (
         <div>
             <Formik
                 initialValues={AragingInitialValue}
                 validate={() => ({})}
-                onSubmit={async (values: ArAgingInitialValueProps, { setSubmitting, resetForm }) => {
+                onSubmit={async (values: any, { setSubmitting, resetForm }) => {
+                    console.log("values",values);
                     try {
-                        values.reportList = selectedServiceData;
-                        // values.startDate = invoiceTotalAmount ;
-                        // addReport(values);
-                        // // alert(JSON.stringify(values));
+                        await ArAging(values);
                         resetForm();
                     } catch (error) {
-                        console.error("An error occurred during login:", error);
+                        console.error("An error occurred", error);
                     }
                     finally {
                         setSubmitting(false);
                     }
                 }}
             >
-                {({ errors, touched, values, setFieldValue }) => (
+                {({ errors, touched, values, setFieldValue, handleSubmit }) => (
                     <div>
                         <ToastUi autoClose={2000} />
                         <TableHeader headerName={pathname} buttons={[
@@ -81,7 +73,13 @@ const ArAgingscreen = () => {
                                         <SelectDropdown
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    if (newValue.value === "This Week") {
+                                                    if (newValue.value === "Today") {
+                                                        const currentDateNet1 = dayjs().format('DD-MM-YYYY');
+                                                        const dueDateNet1 = dayjs().add(0, 'days').format('DD-MM-YYYY');
+                                                        setFieldValue("startDate", currentDateNet1);
+                                                        setFieldValue("endDate", dueDateNet1);
+                                                    }
+                                                    else if (newValue.value === "This Week") {
                                                         const currentDateNet1 = dayjs().format('DD-MM-YYYY');
                                                         const dueDateNet1 = dayjs().add(7, 'days').format('DD-MM-YYYY');
                                                         setFieldValue("startDate", currentDateNet1);
@@ -107,16 +105,16 @@ const ArAgingscreen = () => {
                                                         setFieldValue('startDate', "")
                                                         setFieldValue("endDate", "")
                                                     }
-                                                    setFieldValue("customTerms", newValue.value)
+                                                    setFieldValue("invoiceDate", newValue.value)
                                                 } else {
-                                                    setFieldValue("customTerms", "")
+                                                    setFieldValue("invoiceDate", "")
                                                 }
                                             }}
-                                            options={customTerms}
-                                            value={values.customTerms ? { value: values.customTerms, label: values.customTerms } : null}
+                                            options={invoiceDate}
+                                            value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                                             labelText='Select'
-                                            error={touched.customTerms && Boolean(errors.customTerms)}
-                                        // helperText={touched.customTerms && errors.customTerms}
+                                            error={touched.invoiceDate && Boolean(errors.invoiceDate)}
+                                            // helperText={touched.invoiceDate && errors.invoiceDate}
                                         />
                                     </Box>
                                 </Grid>
@@ -140,7 +138,7 @@ const ArAgingscreen = () => {
                                     </Box>
                                 </Grid>
                                 <Grid item xs={2}>
-                                    <ButtonUi size='small' label='Run Reports' variant='contained' onClick={handleClick} />
+                                        <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />       
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2}>
                                     <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />

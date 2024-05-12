@@ -8,47 +8,47 @@ const LIVE_URL = "https://node-js-invoice.onrender.com"; // ! nodejs backend
 export const BASE_LOCAL_URL = JAVA_URL;
 
 export enum ApiEndpoint {
-  LOGIN = "login",
-  // customer
-  CUSTOMER_LIST = "customerList",
-  CUSTOMER_CREATE = "customerCreate",
-  CUSTOMER_UPDATE = "customerUpdate",
-  CUSTOMER_DELETE = "customerDelete",
-  CUSTOMER_GET = "customerGet",
-  // invoice
-  INVOICE_LIST = "invoiceList",
-  INVOICE_CREATE = "invoiceCreate",
-  INVOICE_UPDATE = "invoiceUpdate",
-  INVOICE_DELETE = "invoiceDelete",
-  INVOICE_GET = "invoiceGet",
-  // service
-  SERVICE_LIST = "serviceList",
-  SERVICE_CREATE = "serviceCreate",
-  SERVICE_DELETE = "serviceDelete",
-  SERVICE_GET = "serviceGet",
-  SERVICE_UPDATE = "serviceUpdate",
-  // gst type
-  GST_TYPE_LIST = "gstTypeList",
-  GST_TYPE_CREATE = "gstTypeCreate",
-  GST_TYPE_DELETE = "gstTypeDelete",
-  GST_TYPE_GET = "gstTypeGet",
-  GST_TYPE_UPDATE = "gstTypeUpdate",
-  // tds tax
-  TDS_TAX_LIST = "tdsTaxList",
-  TDS_TAX_CREATE = "tdsTaxCreate",
-  TDS_TAX_DELETE = "tdsTaxDelete",
-  TDS_TAX_GET = "tdsTaxGet",
-  TDS_TAX_UPDATE = "tdsTaxUpdate",
-  // payment Terms
-  PAYMENT_TERMS_LIST = "paymentTermsList",
-  PAYMENT_TERMS_CREATE = "paymentTermsCreate",
-  PAYMENT_TERMS_DELETE = "paymentTermsDelete",
-  PAYMENT_TERMS_GET = "paymentTermsGet",
-  PAYMENT_TERMS_UPDATE = "paymentTermsUpdate",
-  REPORT_LIST = "REPORT_LIST",
-  REPORT_GET = "REPORT_GET",
-  //send Email
-  SEND_EMAIL = "sendEmail",
+    LOGIN = "login",
+    // customer
+    CUSTOMER_LIST = "customerList",
+    CUSTOMER_CREATE = "customerCreate",
+    CUSTOMER_UPDATE = "customerUpdate",
+    CUSTOMER_DELETE = "customerDelete",
+    CUSTOMER_GET = "customerGet",
+    // invoice
+    INVOICE_LIST = "invoiceList",
+    INVOICE_CREATE = "invoiceCreate",
+    INVOICE_UPDATE = "invoiceUpdate",
+    INVOICE_DELETE = "invoiceDelete",
+    INVOICE_GET = "invoiceGet",
+    // service
+    SERVICE_LIST = "serviceList",
+    SERVICE_CREATE = "serviceCreate",
+    SERVICE_DELETE = "serviceDelete",
+    SERVICE_GET = "serviceGet",
+    SERVICE_UPDATE = "serviceUpdate",
+    // gst type
+    GST_TYPE_LIST = "gstTypeList",
+    GST_TYPE_CREATE = "gstTypeCreate",
+    GST_TYPE_DELETE = "gstTypeDelete",
+    GST_TYPE_GET = "gstTypeGet",
+    GST_TYPE_UPDATE = "gstTypeUpdate",
+    // tds tax
+    TDS_TAX_LIST = "tdsTaxList",
+    TDS_TAX_CREATE = "tdsTaxCreate",
+    TDS_TAX_DELETE = "tdsTaxDelete",
+    TDS_TAX_GET = "tdsTaxGet",
+    TDS_TAX_UPDATE = "tdsTaxUpdate",
+    // payment Terms
+    PAYMENT_TERMS_LIST = "paymentTermsList",
+    PAYMENT_TERMS_CREATE = "paymentTermsCreate",
+    PAYMENT_TERMS_DELETE = "paymentTermsDelete",
+    PAYMENT_TERMS_GET = "paymentTermsGet",
+    PAYMENT_TERMS_UPDATE = "paymentTermsUpdate",
+    REPORT_LIST = "reportList",
+    REPORT_GET = "reportGet",
+    //send Email
+    SEND_EMAIL = "sendEmail",
 }
 
 export type ApiUrls = {
