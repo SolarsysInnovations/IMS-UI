@@ -1,24 +1,27 @@
 import React, { useState } from "react";
-import { Formik } from "formik";
-import * as Yup from "yup";
+import { Form, Formik } from "formik";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
-import { Box, Grid, Button } from "@mui/material";
+import { Box, Grid, Button ,Typography} from "@mui/material";
 import TextFieldUi from "../../components/ui/TextField";
 import ButtonSmallUi from "../../components/ui/ButtonSmall";
 import { useSendEmailNotifictionMutation } from "../../redux-store/invoice/invcoiceApi";
 import { SendEmailInitialValueProps } from "../../types/types";
 import { sendEmailValidationSchema } from "../../constants/forms/validations/validationSchema";
 import { useNavigate } from "react-router-dom";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+import usePathname from "../../hooks/usePathname";
+import TableHeader from "../../components/layouts/TableHeader";
 
 const SendEmail = () => {
   const [sendEmailNotifiction, { isSuccess, isError }] =
     useSendEmailNotifictionMutation();
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
-  const navigate = useNavigate();
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const [editor, setEditor] = useState<any>(null); // To keep reference of the editor
+  const pathname = 'Send Email'
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       const file = files[0];
@@ -28,8 +31,28 @@ const SendEmail = () => {
     }
   };
 
-  const handleSubmit = async (
-    values: SendEmailInitialValueProps,
+  const handleRemoveFile = (index: number) => {
+    const updatedFiles = uploadedFiles.filter((_, i) => i !== index);
+    setUploadedFiles(updatedFiles);
+  };
+
+  const toolbarItems = [
+    ['heading', 'bold', 'italic', 'strike', 'hr', 'quote', 'ul', 'ol','table','indent','outdent','image', 'link']
+  ];
+
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+
+  const handleSubmit = async (values: SendEmailInitialValueProps,
     {
       setSubmitting,
       resetForm,
@@ -37,8 +60,6 @@ const SendEmail = () => {
   ) => {
     try {
       const formData = new FormData();
-
-      // Append form data
       formData.append("recipientEmail", values.toemail);
       uploadedFiles.forEach((file, index) => {
         formData.append(`file`, file);
@@ -57,125 +78,115 @@ const SendEmail = () => {
 
   return (
     <>
-      <ButtonSmallUi
-        label="Back"
-        variant="contained"
-        size="small"
-        onClick={() => navigate(-1)}
-      />
-      <Formik
-        initialValues={{ fromemail: "", toemail: "", description: "" }}
-        validationSchema={sendEmailValidationSchema}
-        onSubmit={handleSubmit}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          /* and other goodies */
-        }) => (
-          <form
-            onSubmit={handleSubmit}
-            style={{ display: "flex", flexDirection: "column" }}
-          >
+      <Formik initialValues={{ fromemail: "", toemail: "", description: "" }} validationSchema={sendEmailValidationSchema} onSubmit={handleSubmit}>
+        {({ values, errors, touched, handleChange, handleSubmit }) => (
             <div>
-              <Grid
-                item
-                xs={6}
-                style={{ marginBottom: "10px", marginTop: "10px" }}
-              >
-                <TextFieldUi
-                  required={true}
-                  fullWidth={false}
-                  label="FromEmail"
-                  name="fromemail"
-                  width="600px"
-                  type="email"
-                  value={(() => {
-                    return values.fromemail;
-                  })()}
-                  onChange={handleChange}
-                  error={touched.fromemail && Boolean(errors.fromemail)}
-                  helperText={touched.fromemail && errors.fromemail}
-                />
-              </Grid>
-              {errors.fromemail && touched.fromemail && (
-                <div style={{ color: "red" }}>{errors.fromemail}</div>
-              )}
+              <Form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column" }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Box>
+                      <Typography variant="h5" color="initial">
+                        {pathname}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={10}>
+                      <Box>
+                        <TextFieldUi
+                            required={true}
+                            fullWidth={false}
+                            label="From Email"
+                            name="fromemail"
+                            type="email"
+                            value={(() => {
+                              return values.fromemail;
+                            })()}
+                            onChange={handleChange}
+                            error={touched.fromemail && Boolean(errors.fromemail)}
+                            helperText={touched.fromemail && errors.fromemail}
+                          />
+                      </Box>
+                  </Grid>
+                  {errors.fromemail && touched.fromemail && (
+                    <div style={{ color: "red" }}>{errors.fromemail}</div>
+                  )}
+                  <Grid item xs={10}>
+                    <Box>
+                      <TextFieldUi
+                        required={true}
+                        fullWidth={false}
+                        label="To Email"
+                        name="toemail"
+                        type="email"
+                        value={(() => {
+                          return values.toemail;
+                        })()}
+                        onChange={handleChange}
+                        error={touched.toemail && Boolean(errors.toemail)}
+                        helperText={touched.toemail && errors.toemail}
+                      />
+                    </Box>
+                  </Grid>
+                  {errors.toemail && touched.toemail && (
+                    <div style={{ color: "red" }}>{errors.toemail}</div>
+                  )}
+                  <Grid item xs={12}>
+                    <Box>
+                      <Editor
+                        initialValue=""
+                        previewStyle="vertical"
+                        height="280px"
+                        initialEditType="wysiwyg"
+                        hideModeSwitch={true}
+                        toolbarItems={toolbarItems}
+                        ref={(editor: any) => setEditor(editor)}
+                      />
+                    </Box>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2}>
+                  <Grid item xs={10}>
+                    <Box sx={{ mt: 3, display: "flex" }}>
+                      <Button
+                        component="label"
+                        role={undefined}
+                        variant="contained"
+                        tabIndex={-1}
+                        startIcon={<CloudUploadIcon />}
+                      >
+                        Upload file
+                        <VisuallyHiddenInput
+                          id="fileInput"
+                          type="file"
+                          onChange={handleFileUpload}
+                        />
+                      </Button> 
+                    </Box>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Box sx={{ mt: 3, display: "flex" }}>
+                      <ButtonSmallUi color="primary" label="Send" size="small" variant="contained" type="submit"/>
+                    </Box>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={1}>
+                  {uploadedFiles && uploadedFiles.map((fileName, index) => (
+                    <>
+                      <Grid item xs={5}>
+                        <Box sx={{ mt: 1, display: "flex" }}>
+                          <Typography>{fileName}</Typography>
+                        </Box>
+                      </Grid>
+                      <Grid item xs={7}>
+                        <Box sx={{ mt: 1, display: "flex" }}>
+                          <ButtonSmallUi color="secondary" onClick={() => handleRemoveFile(index)} label="Remove"/>
+                        </Box>
+                      </Grid>
+                    </>
+                  ))}
+                </Grid>
+              </Form>
             </div>
-
-            <div>
-              <Grid item xs={6} style={{ marginBottom: "10px" }}>
-                <TextFieldUi
-                  required={true}
-                  fullWidth={false}
-                  label="ToEmail"
-                  name="toemail"
-                  width="600px"
-                  type="email"
-                  value={(() => {
-                    return values.toemail;
-                  })()}
-                  onChange={handleChange}
-                  error={touched.toemail && Boolean(errors.toemail)}
-                  helperText={touched.toemail && errors.toemail}
-                />
-              </Grid>
-              {errors.toemail && touched.toemail && (
-                <div style={{ color: "red" }}>{errors.toemail}</div>
-              )}
-            </div>
-            <div className="custom-editor">
-              <Editor
-                initialValue=""
-                previewStyle="vertical"
-                height="300px"
-                initialEditType="wysiwyg"
-                useCommandShortcut={true}
-              />
-            </div>
-            <div style={{ display: "flex" }}>
-              <Box sx={{ mt: 3 }}>
-                <Button
-                  variant="outlined"
-                  component="label"
-                  htmlFor="file-upload"
-                  className="hidden-file-upload-button"
-                >
-                  Choose File
-                  <input
-                    id="file-upload"
-                    type="file"
-                    onChange={handleFileUpload}
-                    style={{ display: "none" }}
-                  />
-                </Button>
-                <ButtonSmallUi
-                  color="primary"
-                  label="Send"
-                  size="small"
-                  variant="contained"
-                  type="submit"
-                />
-              </Box>
-            </div>
-            <Box sx={{ mt: 3 }}>
-              {uploadedFiles.map((fileName, index) => (
-                <div key={index}>{fileName}</div>
-              ))}
-            </Box>
-
-            {/* <ButtonSmallUi
-                color="primary"
-                label="Send"
-                size="small"
-                variant="contained"
-                type="submit"
-              /> */}
-          </form>
         )}
       </Formik>
     </>

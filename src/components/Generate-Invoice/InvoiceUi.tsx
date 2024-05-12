@@ -14,11 +14,18 @@ interface InvoiceUiProps {
   subtotal?: number | null;
   discount?: number | null;
   tds?: number | null;
+  emailModalOpen?: any;
+  emailPopup?: any;
+  isModalOpen?: any
+  invoicePopup?: any
+  gstTypePopup?: any
+  tdsTaxPopup?: any
+  paymentTermsPopUp ?: any
 }
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
+function InvoiceUi({ invoiceData, subtotal, discount, tds,emailModalOpen,emailPopup,isModalOpen,invoicePopup,gstTypePopup,tdsTaxPopup,paymentTermsPopUp }: InvoiceUiProps) {
   const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
   const [customerDetails, setCustomerDetails] = useState<any>();
   const navigate = useNavigate();
@@ -247,7 +254,7 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
         label="Email To"
         variant="contained"
         size="small"
-        onClick={() => navigate("/invoice/sendemail")}
+        onClick={() => { emailModalOpen(true); emailPopup(true); isModalOpen(false);invoicePopup(false);gstTypePopup(false);tdsTaxPopup(false);paymentTermsPopUp(false); } }
       />
     </>
   );

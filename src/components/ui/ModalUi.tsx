@@ -34,6 +34,7 @@ export default function ModalUi({ topHeight, children, open, onClose }: ModalUiP
                 onClose={onClose} // Use onClose prop for handling modal close
                 aria-labelledby="keep-mounted-modal-title"
                 aria-describedby="keep-mounted-modal-description"
+                BackdropProps={{ onClick: (e) => e.stopPropagation() }} // Prevent backdrop click close
             >
                 <Box sx={{
 
@@ -47,6 +48,7 @@ export default function ModalUi({ topHeight, children, open, onClose }: ModalUiP
                     boxShadow: 24,
                     p: 4,
                 }}>
+                    <Button onClick={onClose} sx={{ position: 'absolute', top: '10px', right: '10px' }}>Close</Button>
                     {children}
                 </Box>
             </Modal>
