@@ -43,6 +43,7 @@ const CustomerEdit: React.FC = () => {
             <ToastContainer />
             {customerStateDetails && (
                 <DynamicFormCreate
+                    showTable={true}
                     fields={customerFields}
                     initialValues={customerStateDetails}
                     validationSchema={customerValidationSchema}

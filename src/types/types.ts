@@ -80,7 +80,7 @@ interface ServiceListProps {
 export interface ReportListProps {
     customerName: string;
     days0to30: string;
-    days30to45:string;
+    days30to45: string;
     above45: string;
     total: string;
 }

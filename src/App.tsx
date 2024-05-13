@@ -29,7 +29,21 @@ import { selectCurrentToken } from "./redux-store/auth/authSlice";
 import DemoInvoice from "./pages/Invoice/Demo-Invocie";
 import ArAgingscreen from "./pages/reports/Reports-ar-aging";
 import Reportsinvoice from "./pages/reports/Reports-invoice";
+import DynamicForm from "./components/Demo-dynamic-form/DynamicFrom";
 
+const initialValues = {
+  "text-input": "",
+  "email": "",
+  "password-input": "",
+  "number-input": "",
+  "checkbox-input": "",
+  "radio-input": "",
+  "textarea-input": "",
+  "select-input": "",
+  "nested-text-input": "",
+  "sub-text-input": "",
+  "sub-number-input": ""
+};
 function App() {
   const token = useSelector(selectCurrentToken);
   return (
@@ -55,6 +69,7 @@ function App() {
               <Route path="/invoice/create" element={<CreateInvoice />} />
               <Route path="/services/list" element={<ServicesList />} />
               <Route path="/service/create" element={<CreateServices />} />
+              <Route path="/dynamicForm" element={<DynamicForm />} />
               <Route element={<ServiceEditScreen />} path="/service/edit/:id" />
               <Route element={<Reportscreen />} path="/reports" />
               <Route element={<ArAgingscreen />} path="/reports/araging" />

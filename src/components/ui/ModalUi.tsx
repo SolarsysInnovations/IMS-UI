@@ -40,7 +40,7 @@ export default function ModalUi({ topHeight, children, open, onClose }: ModalUiP
                     position: 'absolute' as 'absolute',
                     top: `${topHeight || "50%"}`,
                     left: '50%',
-                    transform: 'translate(-50%, -45%)',
+                    transform: 'translate(-50%, -75%)',
                     width: "50%",
                     bgcolor: 'background.paper',
                     borderRadius: "10px",

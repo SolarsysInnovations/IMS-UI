@@ -103,7 +103,8 @@ const CreateInvoice = () => {
             setTdsAmount(null);
         }
         const invoiceAmount = tdsTax ? subTotalInvoiceAmount - (tdsTax + disAmount) : null;
-        setInvoiceTotalAmount(invoiceAmount);
+        const roundedInvoiceAmount = invoiceAmount ? Number(invoiceAmount.toFixed(2)) : null;
+        setInvoiceTotalAmount(roundedInvoiceAmount);
     }, [discountPercentage, subTotalInvoiceAmount, selectedTds])
 
     React.useEffect(() => {

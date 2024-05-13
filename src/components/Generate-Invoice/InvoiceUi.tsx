@@ -19,7 +19,26 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
+    const [subTotalAmount, setSubTotalAmount] = useState<number>(0)
     const [customerDetails, setCustomerDetails] = useState<any>()
+    const [discountAmount, setDiscountAmount] = useState<number>(0)
+    useEffect(() => {
+        if (invoiceData) {
+            const calculateTotal = invoiceData.servicesList.reduce((total: any, service: any) => {
+                return total + service.price;
+            }, 0)
+            setSubTotalAmount(calculateTotal);
+
+            const disAmount = (subTotalAmount * (invoiceData.discountPercentage ?? 0)) / 100;
+            setDiscountAmount(disAmount);
+
+
+        }
+
+
+    }, [invoiceData, subTotalAmount])
+    console.log(subTotalAmount);
+
 
     useEffect(() => {
         if (invoiceData) {
@@ -129,21 +148,29 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
                         <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }} >
                             <div style={{ display: "flex", width: "250px", justifyContent: "space-between" }}>
                                 <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600" }}>Sub total</p>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>$46654</p>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>{subTotalAmount}</p>
                             </div>
                         </Box>
                     </Grid>
                     <Grid sx={{ marginTop: "0px" }} item xs={12}>
-                        <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }} >
+                        <Box sx={{ display: "flex", justifyContent: "right", }} >
                             <div style={{ display: "flex", width: "250px", justifyContent: "space-between" }}>
-                                <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600" }}>Sub total</p>
+                                <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600" }}>Discount Amount</p>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>-{discountAmount}</p>
+                            </div>
+                        </Box>
+                    </Grid>
+                    <Grid sx={{ marginTop: "0px" }} item xs={12}>
+                        <Box sx={{ display: "flex", justifyContent: "right", }} >
+                            <div style={{ display: "flex", width: "250px", justifyContent: "space-between" }}>
+                                <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600" }}>Tax Amount</p>
                                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>$46654</p>
                             </div>
                         </Box>
                     </Grid>
                 </Grid>
                 <Grid container>
-                    <Grid sx={{ marginTop: "20px" }} item xs={8}>
+                    <Grid sx={{ marginTop: "20px" }} item xs={12}>
                         <Box >
                             <div>
                                 <p style={{ fontSize: "12px", }}><span style={{ fontWeight: "500", width: "130px", display: "inline-block" }}>Notes </span> : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</p>
@@ -156,31 +183,15 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
                         </Box>
                     </Grid>
                 </Grid>
-                <>
 
-                    <Stack sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mt: 2,
-                    }}>
 
-                        <Box gap={3} >
-                            <Typography variant="subtitle2" color="initial">Sub Total : <span>{subtotal}</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Discount % : <span>{discount}</span></Typography>
-                            <Typography variant="subtitle2" color="initial">TDS Tax : <span>{tds}</span></Typography>
-                            <Typography variant="h6" color="initial">Total : <span>{invoiceData?.invoiceTotalAmount}</span></Typography>
-                        </Box>
-                    </Stack>
-                </>
-                <Box gap={3} sx={{ mt: 10, mb: 7 }}>
-                    <Typography variant="subtitle2" color="initial">Terms & Conditions</Typography>
-                    <Typography variant="subtitle2" color="initial">All payments must be made in full before any design work</Typography>
-                </Box>
             </div >
-            <ButtonSmallUi label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
-            <ButtonSmallUi label="Email To" variant="contained" size="small" />
+            <Grid container spacing={5}>
+                <Grid item xs={5} sx={{ display: " flex", justifyContent: "space-between" }}>
+                    <ButtonSmallUi label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
+                    <ButtonSmallUi label="Email To" variant="contained" size="small" />
+                </Grid>
+            </Grid>
         </>
     );
 }

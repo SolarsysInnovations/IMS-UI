@@ -43,6 +43,7 @@ export default function SelectDropdown({ onMouseDown, button, width, error, help
           fontSize: "12px"
         },
       }}
+      
       size='small'
       disablePortal
       id="combo-box-demo"

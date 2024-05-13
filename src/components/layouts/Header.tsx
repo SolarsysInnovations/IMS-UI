@@ -33,7 +33,7 @@ export default function Header() {
   }
 
   const handleClose = () => {
-    dispatch(logOut())
+
     setAnchorEl(null)
   }
   return (
@@ -127,7 +127,7 @@ export default function Header() {
               </ListItemIcon>
               Settings
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={() => dispatch(logOut())}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>

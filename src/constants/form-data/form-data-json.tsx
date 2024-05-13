@@ -73,7 +73,6 @@ export const customerFields: FieldProps[] = [
                 ], validation: Yup.string().required('companyName is required')
             },
             { name: 'pinCode', label: 'PinCode', type: 'number', gridSize: 3, validation: Yup.string().required('pinCode is required') },
-
         ]
     },
     {
@@ -190,3 +189,7 @@ export const invoiceFields: FieldProps[] = [
         ]
     },
 ]
+
+
+
+// !  --------------------------

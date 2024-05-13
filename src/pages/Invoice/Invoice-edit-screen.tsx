@@ -34,6 +34,7 @@ import GstTypeScreen from './GstType/GstTypeScreen';
 import TdsTaxScreen from './TdsTax/TdsTaxScreen';
 import { useGetPaymentTermsQuery } from '../../redux-store/invoice/paymentTerms';
 import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
+import { formatDate } from '../../services/utils/dataFormatter';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -88,6 +89,7 @@ const InvoiceEdit = () => {
             setSubTotalInvoiceAmount(sumSubTotal)
         }
     }, [invoiceValues]);
+
     React.useEffect(() => {
         const disAmount = (subTotalInvoiceAmount * (discountPercentage ?? 0)) / 100;
         setDiscountAmount(disAmount)
@@ -100,8 +102,11 @@ const InvoiceEdit = () => {
             setTdsAmount(null);
         }
         const invoiceAmount = tdsTax ? subTotalInvoiceAmount - (tdsTax + disAmount) : null;
-        setInvoiceTotalAmount(invoiceAmount);
-    }, [discountPercentage, subTotalInvoiceAmount, selectedTds])
+        const roundedInvoiceAmount = invoiceAmount ? Number(invoiceAmount.toFixed(2)) : null;
+        setInvoiceTotalAmount(roundedInvoiceAmount);
+    }, [discountPercentage, subTotalInvoiceAmount, selectedTds, invoiceStateDetails])
+
+
 
     React.useEffect(() => {
         if (serviceList) {
@@ -209,6 +214,14 @@ const InvoiceEdit = () => {
             }}
         >
             {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => {
+                if (values.discountPercentage) {
+                    setDiscountPercentage(values.discountPercentage)
+                }
+                if (values.taxAmount.tds) {
+                    const selectedTdsTax = tdsTaxData?.find((item) => item.taxName === values.taxAmount.tds);
+                    const percentage = selectedTdsTax?.taxPercentage;
+                    setSelectedTdsAmount(percentage)
+                }
                 console.log(values);
                 return (
                     <div>
@@ -240,7 +253,7 @@ const InvoiceEdit = () => {
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
-                                <Grid item xs={12}>
+                                <Grid item xs={6}>
                                     <Box>
                                         <RadioUi value={values.invoiceType} onChange={(newValue: any) => {
                                             if (newValue) {
@@ -252,6 +265,15 @@ const InvoiceEdit = () => {
                                         // label='Invoice type'
                                         // errorMsg={touched.invoiceType && errors.invoiceType}
                                         />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'flex-end',
+                                    }}>
+                                        <Typography variant="subtitle2" color="initial">Created at : {formatDate(new Date(values.invoiceDate))}</Typography>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={3}>
@@ -389,7 +411,7 @@ const InvoiceEdit = () => {
                                         <DatePickerUi
                                             label="Start Date"
                                             onChange={(date: any) => setFieldValue("startDate", date)}
-                                            value={values.startDate}
+                                            value={values.startDate ? formatDate(new Date(values.startDate)) : null}
                                         />
                                     </Box>
                                 </Grid>
@@ -398,7 +420,7 @@ const InvoiceEdit = () => {
                                         <DatePickerUi
                                             label="Due Date"
                                             onChange={(date: any) => console.log(date)}
-                                            value={values.dueDate}
+                                            value={values.dueDate ? formatDate(new Date(values.dueDate)) : null}
                                         />
                                     </Box>
                                 </Grid>
