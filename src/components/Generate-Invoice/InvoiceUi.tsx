@@ -203,58 +203,6 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,emailModalOpen,emailPo
 
         <>
             <div className="App" id="invoiceCapture" style={{ padding: "50px 30px" }}>
-                <Grid container sx={{ borderBottom: "1px solid #dadada", paddingBottom: "15px" }}>
-                    <Grid sx={{ marginTop: "0px", display: 'flex', alignContent: "flex-start", alignItems: 'flex-start', }} item xs={6.5}>
-                        <Box>
-                            <h1 style={{ marginTop: "0px", textAlign: "left" }}>INVOICE</h1>
-                        </Box>
-                    </Grid>
-                    <Grid sx={{ marginTop: "0px", paddingBottom: "10px", display: 'flex', alignItems: 'right', justifyContent: 'left' }} item xs={5.5}>
-                        <Box>
-                            <div>
-                                <p style={{ fontSize: "14px", fontWeight: "600", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>SOLARSYS</span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}> <span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Address :</span> <span>1/305, Thillai Nagar, Trichy 905 606 </span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Phone :</span> <span>983894833</span></p>
-                            </div>
-                        </Box>
-                    </Grid>
-
-                </Grid>
-                <Grid container sx={{ backgroundColor: "#f8f9f9", marginTop: "30px", padding: "20px 20px" }}>
-                    <Grid sx={{ marginTop: "0px" }} item xs={4}>
-                        <Box gap={3}>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Billed To </span> <span>: {customerDetails?.customerName}</span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Email </span> <span>: {customerDetails?.customerEmail}</span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Phone </span> <span>: {customerDetails?.customerPhone}</span></p>
-                            </div>
-
-
-                        </Box>
-                    </Grid>
-                    <Grid sx={{ marginTop: "0px", }} item xs={4}>
-                        <Box gap={3}>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Invoice No </span> <span>: {invoiceData?.invoiceNumber}</span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Payment Terms </span> <span>: {invoiceData?.paymentTerms}</span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Due Date </span> <span>: {formatDate(new Date(invoiceData?.dueDate))}</span></p>
-                            </div>
-                        </Box>
-                    </Grid>
-
-                </Grid>
                 <Grid container>
                     <Grid sx={{ marginTop: "0px" }} item xs={12}>
                         <Box sx={{ mt: 5 }}>
@@ -263,14 +211,6 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,emailModalOpen,emailPo
                     </Grid>
                 </Grid>
                 <Grid container>
-                    <Grid sx={{ marginTop: "0px" }} item xs={12}>
-                        <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }} >
-                            <div style={{ display: "flex", width: "250px", justifyContent: "space-between" }}>
-                                <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600" }}>Sub total</p>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>$46654</p>
-                            </div>
-                        </Box>
-                    </Grid>
                     <Grid sx={{ marginTop: "0px" }} item xs={12}>
                         <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }} >
                             <div style={{ display: "flex", width: "250px", justifyContent: "space-between" }}>
@@ -317,17 +257,7 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,emailModalOpen,emailPo
                     <Typography variant="subtitle2" color="initial">All payments must be made in full before any design work</Typography>
                 </Box>
             </div >
-            <ButtonSmallUi label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
-            <ButtonSmallUi label="Email To" variant="contained" size="small" />
         </>
-        <Box gap={3} sx={{ mt: 10, mb: 7 }}>
-          <Typography variant="subtitle2" color="initial">
-            Terms & Conditions
-          </Typography>
-          <Typography variant="subtitle2" color="initial">
-            All payments must be made in full before any design work
-          </Typography>
-        </Box>
       </div>
       <ButtonSmallUi label="Generate PDF" variant="contained" size="small" onClick={printPDF}/>
       <ButtonSmallUi label="Email To" variant="contained" size="small" onClick={() => { emailModalOpen(true); emailPopup(true); isModalOpen(false);invoicePopup(false);gstTypePopup(false);tdsTaxPopup(false);paymentTermsPopUp(false); } }/>
