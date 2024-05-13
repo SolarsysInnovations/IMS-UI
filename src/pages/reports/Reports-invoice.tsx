@@ -16,9 +16,9 @@ import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { invoiceDate } from '../../constants/reportData';
 import { columns } from '../../constants/grid-table-data/invoice-table-data';
-import { invoiceInitialValue } from '../../constants/forms/formikInitialValues';
+import { invoicesInitialValue } from '../../constants/forms/formikInitialValues';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
-import { InvoiceInitialValueProps } from '../../types/types';
+import { InvoicesInitialValueProps } from '../../types/types';
 
 const Reportsinvoice: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -34,14 +34,16 @@ const Reportsinvoice: React.FC = () => {
     
     // console.log("list of values",reportList);
     console.log("tabledata",tableData);
+   
     
     return (
         <div>
             <Formik
-                initialValues={invoiceInitialValue}
+                initialValues={invoicesInitialValue}
                 validate={() => ({})}
-                onSubmit={async (values:InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
+                onSubmit={async (values:InvoicesInitialValueProps, { setSubmitting, resetForm }) => {
                     console.log("values",values);
+                    console.log("invociedate", values.invoiceDate);
                     try {
                         const response = await ArAging(values);
                         // Check if the response contains data or error
@@ -82,10 +84,10 @@ const Reportsinvoice: React.FC = () => {
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
                                                     if (newValue.value === "Today") {
-                                                        const currentDateNet1 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet1 = dayjs().add(0, 'days').format('DD-MM-YYYY');
-                                                        setFieldValue("startDate", currentDateNet1);
-                                                        setFieldValue("endDate", dueDateNet1);
+                                                        const currentDateNet = dayjs().format('DD-MM-YYYY');
+                                                        const dueDateNet = dayjs().add(0, 'days').format('DD-MM-YYYY');
+                                                        setFieldValue("startDate", currentDateNet);
+                                                        setFieldValue("endDate", dueDateNet);
                                                     }
                                                     else if (newValue.value === "This Week") {
                                                         const currentDateNet1 = dayjs().format('DD-MM-YYYY');
@@ -141,7 +143,7 @@ const Reportsinvoice: React.FC = () => {
                                         <DatePickerUi
                                             label="End Date"
                                             onChange={(date: any) => console.log(date)}
-                                            value={values.dueDate}
+                                            value={values.endDate}
                                         />
                                     </Box>
                                 </Grid>

@@ -99,6 +99,29 @@ export interface InvoiceInitialValueProps {
     gstPercentage: number | null;
     startDate: string;
     dueDate: string;
+    endDate: string;
+    gstInNumber: string;
+    paymentTerms: string;
+    invoiceStatus: string;
+    totalAmount:string;
+    invoiceTotalAmount: number | null | undefined;
+    discountPercentage: number | null;
+    notes: string;
+    termsAndConditions: string;
+    taxAmount: TaxAmountProps;
+    servicesList: ServiceListProps[];
+    
+};export interface InvoicesInitialValueProps {
+    id: number;
+    invoiceDate: string;
+    invoiceType: string;
+    invoiceNumber: string;
+    customerName: string;
+    gstType: string;
+    gstPercentage: number | null;
+    startDate: string;
+    dueDate: string;
+    endDate: string;
     gstInNumber: string;
     paymentTerms: string;
     invoiceStatus: string;
@@ -110,6 +133,7 @@ export interface InvoiceInitialValueProps {
     taxAmount: TaxAmountProps;
     servicesList: ServiceListProps[];
 };
+
 
 export interface ArAgingInitialValueProps {
     invoiceDate: string;

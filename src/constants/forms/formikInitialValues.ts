@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, PaymentTermsProps, ArAgingInitialValueProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, PaymentTermsProps, ArAgingInitialValueProps,InvoicesInitialValueProps } from "../../types/types";
 
 export const loginInitialValue: LoginProps = {
     // email: "",
@@ -84,6 +84,31 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
     paymentTerms: "",
     startDate: '',
     dueDate: '',
+    endDate: '',
+    invoiceStatus: "Pending",
+    discountPercentage: null,
+    invoiceTotalAmount: null,
+    notes: "Thanks for your business transaction",
+    totalAmount: "",
+    termsAndConditions: "",
+    taxAmount: {
+        tds: ""
+    },
+    servicesList: [],
+};
+export const invoicesInitialValue: InvoicesInitialValueProps = {
+    id: 0,
+    invoiceDate: "",
+    invoiceType: "",
+    invoiceNumber: "",
+    customerName: "",
+    gstType: "",
+    gstPercentage: null,
+    gstInNumber: "",
+    paymentTerms: "",
+    startDate: '',
+    dueDate: '',
+    endDate: '',
     invoiceStatus: "Pending",
     discountPercentage: null,
     invoiceTotalAmount: null,
