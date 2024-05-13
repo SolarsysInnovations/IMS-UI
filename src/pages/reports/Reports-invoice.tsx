@@ -9,74 +9,66 @@ import { AppDispatch, RootState } from '../../redux-store/store'
 import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { ArAgingInitialValueProps } from '../../types/types';
 import GridDataUi from '../../components/GridTable/GridData';
 import { useGetReportInvoiceByIdMutation, useGetReportQuery } from '../../redux-store/reports/reportApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { invoiceDate } from '../../constants/reportData';
-import { pdfjs } from 'react-pdf';
 import { columns } from '../../constants/grid-table-data/invoice-table-data';
-import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
-import { Button, TextField } from '@mui/material';
-import ButtonUi from '../../components/ui/Button';
+import { invoicesInitialValue } from '../../constants/forms/formikInitialValues';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
+import { InvoicesInitialValueProps } from '../../types/types';
 
-const Reportsinvoice = () => {
-
+const Reportsinvoice: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const { data: reportList } = useGetReportQuery();
-    const [selectedServiceData, setSelectedServiceData] = useState<any[]>([]);
+    // const { data: reportList } = useGetReportQuery(); 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [data, setData] = useState([ ]);
-    const [Invoice, { isSuccess, isError}] = useGetReportInvoiceByIdMutation();
+    const [ArAging] = useGetReportInvoiceByIdMutation();
+    const [tableData, setTableData] = useState<any>()
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-    const handleClick = () => {
-        if (startDate && endDate) {
-            // Filter data based on start and end dates
-            const filteredData = data.filter((item: any) => {
-                return item.date >= startDate && item.date <= endDate;
-            });
-            console.log('Filtered Data:', filteredData);
-        } else {
-            console.log('Please select both start and end dates.');
-        }
-    }
-    const buttonStyle = {
-        borderRadius: "10px",
-        marginTop: "15px",
-        padding: "2px 8px",
-        marginLeft: "10px",
-        height: "34px",
-        fontWeight: "2px"
-    };
-
+    
+    // console.log("list of values",reportList);
+    console.log("tabledata",tableData);
+   
+    
     return (
         <div>
             <Formik
-                initialValues={AragingInitialValue}
+                initialValues={invoicesInitialValue}
                 validate={() => ({})}
-                onSubmit={async (values: any, { setSubmitting, resetForm }) => {
+                onSubmit={async (values:InvoicesInitialValueProps, { setSubmitting, resetForm }) => {
                     console.log("values",values);
+                    console.log("invociedate", values.invoiceDate);
                     try {
-                        await Invoice(values);
-                        resetForm();
+                        const response = await ArAging(values);
+                        // Check if the response contains data or error
+                        if ('data' in response) {
+                            // If data exists, log it
+                            const data = response.data
+                            console.log("Response data:", response.data);
+                            setTableData(data)
+                            // Reset form or update state with the data
+                            resetForm();
+                        } else if ('error' in response) {
+                            // If error exists, handle the error
+                            console.error("An error occurred", response.error);
+                            // Handle error state or display error message
+                        }
                     } catch (error) {
-                        console.error("An error occurred", error);
+                        // Catch any unexpected errors during mutation call
+                        console.error("An unexpected error occurred", error);
                     }
                     finally {
                         setSubmitting(false);
                     }
                 }}
             >
-                {({ errors, touched, values, setFieldValue }) => (
+                {({ errors, touched, values, setFieldValue, handleSubmit }) => (
                     <div>
                         <ToastUi autoClose={2000} />
                         <TableHeader headerName={pathname} buttons={[
@@ -97,7 +89,7 @@ const Reportsinvoice = () => {
                                                         setFieldValue("startDate", currentDateNet);
                                                         setFieldValue("endDate", dueDateNet);
                                                     }
-                                                    if (newValue.value === "This Week") {
+                                                    else if (newValue.value === "This Week") {
                                                         const currentDateNet1 = dayjs().format('DD-MM-YYYY');
                                                         const dueDateNet1 = dayjs().add(7, 'days').format('DD-MM-YYYY');
                                                         setFieldValue("startDate", currentDateNet1);
@@ -152,17 +144,15 @@ const Reportsinvoice = () => {
                                             label="End Date"
                                             onChange={(date: any) => console.log(date)}
                                             value={values.endDate}
-                                        // renderInput={(params:any) => <TextField {...params} />}
                                         />
-
                                     </Box>
-
                                 </Grid>
                                 <Grid item xs={2}>
-                                    <ButtonSmallUi size='large' label='Run Reports' variant='contained' onClick={handleClick} />
+                                        <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />       
                                 </Grid>
-                                <Grid container marginTop={5} marginLeft={1}>
-                                    <GridDataUi showToolbar={true} columns={columns} tableData={reportList || []} checkboxSelection={false} />
+                                <Grid container marginTop={5} marginLeft={2}>
+                
+                                    <GridDataUi showToolbar={true} columns={columns} tableData={tableData || []} checkboxSelection={false} />
                                 </Grid>
                             </Grid>
                         </Form>
@@ -174,4 +164,4 @@ const Reportsinvoice = () => {
     )
 }
 
-export default Reportsinvoice;
+export default Reportsinvoice
