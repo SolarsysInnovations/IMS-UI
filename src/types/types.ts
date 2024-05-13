@@ -78,6 +78,7 @@ interface ServiceListProps {
 };
 
 export interface ReportListProps {
+    id:string;
     customerName: string;
     days0to30: string;
     days30to45:string;
@@ -101,6 +102,7 @@ export interface InvoiceInitialValueProps {
     gstInNumber: string;
     paymentTerms: string;
     invoiceStatus: string;
+    totalAmount:string;
     invoiceTotalAmount: number | null | undefined;
     discountPercentage: number | null;
     notes: string;
@@ -113,8 +115,9 @@ export interface ArAgingInitialValueProps {
     invoiceDate: string;
     startDate: string;
     endDate: string;
-    // reportList: ReportListProps[];
+  
 }
+
 
 // ---------- service  --------------------
 export interface serviceCreationProps {

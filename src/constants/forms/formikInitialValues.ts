@@ -88,6 +88,7 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
     discountPercentage: null,
     invoiceTotalAmount: null,
     notes: "Thanks for your business transaction",
+    totalAmount: "",
     termsAndConditions: "",
     taxAmount: {
         tds: ""
@@ -98,7 +99,6 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
 export const AragingInitialValue: ArAgingInitialValueProps = {
     invoiceDate: "",
     startDate: "",
-    endDate: "",
-    
+    endDate: "",    
 };
 

@@ -24,7 +24,7 @@ const ArAgingscreen: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
-    const { data: reportList } = useGetReportQuery(); 
+    // const { data: reportList } = useGetReportQuery(); 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [ArAging] = useGetReportByIdMutation();
     const [tableData, setTableData] = useState<any>()
@@ -32,7 +32,7 @@ const ArAgingscreen: React.FC = () => {
         setIsModalOpen(false);
     };
     
-    console.log("list of values",reportList);
+    // console.log("list of values",reportList);
     console.log("tabledata",tableData);
     
     return (
@@ -150,7 +150,7 @@ const ArAgingscreen: React.FC = () => {
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2}>
                 
-                                    <GridDataUi showToolbar={true} columns={columns} tableData={values || []} checkboxSelection={false} />
+                                    <GridDataUi showToolbar={true} columns={columns} tableData={tableData || []} checkboxSelection={false} />
                                 </Grid>
                             </Grid>
                         </Form>

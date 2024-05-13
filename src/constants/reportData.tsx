@@ -1,5 +1,6 @@
 
 interface ArAgingProps {
+    id: string;
     customerName: string;
     days0to30: string;
     days30to45:string;
@@ -9,11 +10,12 @@ interface ArAgingProps {
 
 export const reportData: ArAgingProps[] = [
     {
-    customerName: "Raj",
-    days0to30: "234.4",
-    days30to45: "444.5",
-    above45: "567.56",
-    total: "344634" ,
+    id: "",
+    customerName: " ",
+    days0to30: " ",
+    days30to45: " ",
+    above45: " ",
+    total: " " ,
     }
 ]
 

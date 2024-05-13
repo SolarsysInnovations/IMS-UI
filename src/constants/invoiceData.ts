@@ -19,6 +19,7 @@ interface InvoiceProps {
     paymentTerms: string;
     dueDate: string;
     invoiceStatus: string;
+    totalAmount:string;
     servicesList: ServiceProps[];
 }
 
@@ -36,6 +37,7 @@ export const invoiceData: InvoiceProps[] = [
         paymentTerms: "",
         dueDate: "20-12-2024",
         invoiceStatus: "pending",
+        totalAmount:"2000",
         servicesList: [
             {
                 serviceAccountingCode: "234923",
