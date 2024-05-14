@@ -19,7 +19,6 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     const { data: invoice, error, isLoading, refetch } = useGetInvoiceQuery();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [invoiceData, setInvoiceData] = useState<any>();
-    console.log(invoiceData);
     const [deleteInvoice, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteInvoiceMutation();
     const navigate = useNavigate();
 

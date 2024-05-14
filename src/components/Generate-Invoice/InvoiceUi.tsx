@@ -7,7 +7,7 @@ import TableContent from "./TableContent";
 import { formatDate } from "../../services/utils/dataFormatter";
 import ButtonSmallUi from "../ui/ButtonSmall";
 import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
-import { format } from "util";
+import { addDays, format } from "date-fns";
 interface InvoiceUiProps {
     invoiceData?: any;
     subtotal?: number | null;
@@ -37,7 +37,6 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
 
 
     }, [invoiceData, subTotalAmount])
-    console.log(subTotalAmount);
 
 
     useEffect(() => {
@@ -48,7 +47,6 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
         }
     }, [customers, invoiceData])
 
-    console.log(customerDetails);
 
     const printPDF = () => {
         const element = document.querySelector("#invoiceCapture");
@@ -130,7 +128,7 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
                                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Payment Terms </span> <span>: {invoiceData?.paymentTerms}</span></p>
                             </div>
                             <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Due Date </span> <span>: {formatDate(new Date(invoiceData?.dueDate))}</span></p>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Due Date </span> <span>: {invoiceData?.dueDate ? format(addDays(new Date(invoiceData?.dueDate), 0), 'dd-MM-yyyy') : "N/A"}</span></p>
                             </div>
                         </Box>
                     </Grid>

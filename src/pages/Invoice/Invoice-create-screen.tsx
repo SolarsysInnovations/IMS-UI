@@ -36,6 +36,8 @@ import { useGetPaymentTermsQuery } from '../../redux-store/invoice/paymentTerms'
 import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
 import { float } from 'html2canvas/dist/types/css/property-descriptors/float';
 import { formatDate } from '../../services/utils/dataFormatter';
+import { addDays, format } from 'date-fns';
+import ServiceCreate from '../service/service-create-screen';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -54,6 +56,7 @@ const CreateInvoice = () => {
     const [invoicePopUp, setInvoicePopup] = useState(false);
     const [gstTypePopUp, setGstTypePopup] = useState(false);
     const [tdsTaxPopUp, setTdsTaxPopup] = useState(false);
+    const [servicePopUp, setServicePopUp] = useState(false);
     const [paymentTermsPopUp, setPaymentTermsPopUp] = useState(false);
     const [invoiceFinalData, setInvoiceFinalData] = useState();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
@@ -76,8 +79,6 @@ const CreateInvoice = () => {
     const { data: gstTypesData = [] } = useGetGstTypeQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxQuery();
 
-    console.log(customers);
-    console.log(invoiceFinalData);
     // * ----------- to generate the dropdown options -------------
     const customerName = generateOptions(customers, 'customerName', 'customerName');
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
@@ -207,7 +208,6 @@ const CreateInvoice = () => {
             }}
         >
             {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => {
-                console.log(values);
                 return (
                     <div>
                         <ToastUi autoClose={2000} />
@@ -231,6 +231,7 @@ const CreateInvoice = () => {
                             setGstTypePopup(false)
                             setTdsTaxPopup(false)
                             setPaymentTermsPopUp(false)
+                            setServicePopUp(false)
                         }} >
                             <>
                                 {invoicePopUp && (
@@ -243,6 +244,7 @@ const CreateInvoice = () => {
                                     <TdsTaxScreen />
                                 )}
                                 {paymentTermsPopUp && (<PaymentTermsScreen />)}
+                                {servicePopUp && (<ServiceCreate />)}
                             </>
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
@@ -294,7 +296,6 @@ const CreateInvoice = () => {
                                                 if (newValue) {
                                                     if (newValue) {
                                                         const selectedCustomerDetails = customers?.find((customer: any) => newValue.value === customer?.customerName);
-                                                        console.log(selectedCustomerDetails);
                                                     }
                                                     setFieldValue("customerName", newValue.value)
                                                 } else {
@@ -381,8 +382,11 @@ const CreateInvoice = () => {
                                                 if (newValue) {
                                                     const selectedPaymentTerms = paymentTerms?.find((item) => item.termName === newValue.value)
                                                     if (selectedPaymentTerms) {
-                                                        setFieldValue("startDate", selectedPaymentTerms.startDate)
-                                                        setFieldValue("dueDate", selectedPaymentTerms.dueDate)
+                                                        const today = new Date();
+                                                        const startDate = format(today, 'dd-MM-yyyy');
+                                                        const dueDate = format(addDays(today, selectedPaymentTerms.totalDays), 'dd-MM-yyyy')
+                                                        setFieldValue("startDate", startDate)
+                                                        setFieldValue("dueDate", dueDate)
                                                         setFieldValue("paymentTerms", newValue.value)
                                                     } else {
                                                         setFieldValue("startDate", "")
@@ -408,7 +412,6 @@ const CreateInvoice = () => {
                                         <DatePickerUi
                                             label="Start Date"
                                             onChange={(date: Date) => {
-                                                console.log(date);
                                                 setFieldValue("startDate", date);
                                             }}
                                             value={values.startDate}
@@ -420,7 +423,6 @@ const CreateInvoice = () => {
                                         <DatePickerUi
                                             label="Due Date"
                                             onChange={(date: Date) => {
-                                                console.log(date)
                                                 setFieldValue("dueDate", date);
                                             }}
                                             value={values.dueDate}
@@ -445,8 +447,8 @@ const CreateInvoice = () => {
                                                         <TableCell component="th" scope="row">
                                                             <SelectDropdown
                                                                 onMouseDown={() => {
-                                                                    // navigate("/customer/create")
-                                                                    console.log("Add new");
+                                                                    setIsModalOpen(true)
+                                                                    setServicePopUp(true)
                                                                 }}
                                                                 button={true}
                                                                 options={modifiedServiceList.map((service) => ({

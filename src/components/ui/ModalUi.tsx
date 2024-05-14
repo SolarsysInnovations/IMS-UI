@@ -3,18 +3,6 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '30%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: "60%",
-    bgcolor: 'background.paper',
-    borderRadius: "10px",
-    boxShadow: 24,
-    p: 4,
-};
-
 interface ModalUiProps {
     children?: React.ReactNode;
     open: boolean;
@@ -38,9 +26,9 @@ export default function ModalUi({ topHeight, children, open, onClose }: ModalUiP
                 <Box sx={{
 
                     position: 'absolute' as 'absolute',
-                    top: `${topHeight || "50%"}`,
-                    left: '50%',
-                    transform: 'translate(-50%, -75%)',
+                    top: `${"10%"}`,
+                    left: '25%',
+
                     width: "50%",
                     bgcolor: 'background.paper',
                     borderRadius: "10px",

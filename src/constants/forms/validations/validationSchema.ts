@@ -100,8 +100,8 @@ export const tdsTaxValidationSchema = Yup.object().shape({
 
 export const paymentTermsValidationSchema = Yup.object().shape({
     termName: Yup.string().required('taxName is required'),
-    // gstPercentage: Yup.number()
-    //     .min(0, 'gstPercentage must be a positive number')
-    //     // .max(999, 'gstPercentage must be a three-digit number')
-    //     .required('gstPercentage is required'),
+    totalDays: Yup.number()
+        .min(0, 'totalDays must be a positive number')
+        .max(365, 'totalDays must be a three-digit number')
+        .required('totalDays is required'),
 });

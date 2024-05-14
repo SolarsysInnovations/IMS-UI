@@ -17,7 +17,6 @@ const TdsTaxList = () => {
 
     const { data: getTdsTax, error, isLoading } = useGetTdsTaxQuery();
 
-    console.log(getTdsTax);
 
     return (
         <>

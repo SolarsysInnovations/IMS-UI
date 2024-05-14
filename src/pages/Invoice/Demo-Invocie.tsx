@@ -37,9 +37,6 @@ export default function DemoInvoice() {
     const [selectedAccountingCode, setSelectedAccountingCode] = React.useState<string | null>(null);
     const [rows, setRows] = React.useState<any[]>([]); // Initialize rows as an empty array
 
-    console.log(rows);
-    console.log(selectedAccountingCode);
-    console.log(modifiedServiceList);
     const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
 
 

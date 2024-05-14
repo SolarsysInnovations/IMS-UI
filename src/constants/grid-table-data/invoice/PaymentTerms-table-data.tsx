@@ -52,19 +52,13 @@ export const paymentTermsColumns: GridColDef[] = [
 
     {
         field: 'termName',
-        headerName: 'tax Name',
-        width: 150,
-        editable: true,
-    },
-    {
-        field: 'startDate',
-        headerName: 'startDate',
+        headerName: 'Tax Name',
         width: 150,
         editable: false,
     },
     {
-        field: 'dueDate',
-        headerName: 'dueDate',
+        field: 'totalDays',
+        headerName: 'Total Days',
         width: 150,
         editable: false,
     },

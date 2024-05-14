@@ -11,7 +11,6 @@ const PaymentTermsList = () => {
 
     const { data: paymentTermsList, error, isLoading } = useGetPaymentTermsQuery();
 
-    console.log("pt", paymentTermsList);
 
     return (
         <>

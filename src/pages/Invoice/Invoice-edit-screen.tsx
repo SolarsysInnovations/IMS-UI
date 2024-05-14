@@ -76,7 +76,6 @@ const InvoiceEdit = () => {
     const { data: gstTypesData = [] } = useGetGstTypeQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxQuery();
 
-    console.log("invoice values", invoiceValues);
 
     // * ----------- to generate the dropdown options -------------
     const customerName = generateOptions(customers, 'customerName', 'customerName');
@@ -194,7 +193,6 @@ const InvoiceEdit = () => {
                 try {
                     values.servicesList = invoiceValues.servicesList
                     values.invoiceTotalAmount = invoiceTotalAmount ?? null;
-                    console.log(values);
 
                     await updateInvoice({
                         id: values.id ?? undefined,
@@ -202,7 +200,6 @@ const InvoiceEdit = () => {
                     });
                     // // alert(JSON.stringify(values));
 
-                    console.log("values", values);
                     resetForm();
                     navigate("/invoice/list");
                 } catch (error) {
@@ -222,7 +219,6 @@ const InvoiceEdit = () => {
                     const percentage = selectedTdsTax?.taxPercentage;
                     setSelectedTdsAmount(percentage)
                 }
-                console.log(values);
                 return (
                     <div>
                         <ToastUi autoClose={2000} />
@@ -318,7 +314,6 @@ const InvoiceEdit = () => {
                                                 setIsModalOpen(true)
                                                 setGstTypePopup(true)
                                                 // navigate("/customer/create")
-                                                console.log("Add new");
                                             }}
                                             button={true}
                                             onChange={(newValue: any) => {
@@ -550,7 +545,6 @@ const InvoiceEdit = () => {
                                                 value={values.discountPercentage ?? ""}
                                                 onChange={(e) => {
                                                     const value = e.target.value;
-                                                    console.log(value);
                                                     const parsedValue = value !== "" ? parseFloat(value) : null;
                                                     setDiscountPercentage(parsedValue);
                                                     setFieldValue("discountPercentage", parsedValue);
@@ -570,7 +564,6 @@ const InvoiceEdit = () => {
                                                     setIsModalOpen(true)
                                                     setTdsTaxPopup(true)
                                                     // navigate("/customer/create")
-                                                    console.log("Add new");
                                                 }}
                                                 button={true}
                                                 width='150px'

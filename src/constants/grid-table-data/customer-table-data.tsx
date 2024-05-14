@@ -73,7 +73,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
-            <ModalUi open={openModal} onClose={handleModalClose}>
+            <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
                 <TableHeader headerName="Client Details" buttons={[
                     { label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) },
                 ]} />
