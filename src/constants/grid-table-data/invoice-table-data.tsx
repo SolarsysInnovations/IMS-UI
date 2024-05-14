@@ -93,13 +93,7 @@ export const columns: GridColDef[] = [
         headerName: 'Invoice Status',
         width: 150,
         editable: false,
-    },
-     {
-         field: 'totalAmount',
-         headerName: 'Amount',
-         width: 150,
-         editable: false,
-     },    
+    },   
     {
          field: 'totalAmount',
          headerName: 'Total',
