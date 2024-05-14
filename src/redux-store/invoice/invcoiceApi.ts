@@ -69,10 +69,22 @@ export const invoiceApi = apiSlice.injectEndpoints({
       }),
     }),
     sendEmailNotifiction: builder.mutation<any, FormData>({
+      
       query: (emailData) => ({
-        url: API_URLS.sendEmail,
+        // console.log("emailData", emailData)
+        url:"https://ims-backend-9ghn.onrender.com/sendPDFByEmail", //API_URLS.sendEmail,
         method: "POST",
+        headers: {
+          'Content-Type': 'multipart/form-data;'
+        },
         body: emailData,
+        formData: true
+        // serializeBody: (body: any) => {
+        //   if (body instanceof FormData) {
+        //     console.log(body)
+        //     return body;
+        //   }
+        // }
       }),
     }),
   }),

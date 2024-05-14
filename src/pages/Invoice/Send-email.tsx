@@ -64,10 +64,11 @@ const SendEmail = () => {
       uploadedFiles.forEach((file, index) => {
         formData.append(`file`, file);
       });
+      formData.forEach((value, key) => {   console.log(key, value); });
 
       await sendEmailNotifiction(formData);
-      resetForm();
-      setUploadedFiles([]);
+      // resetForm();
+      // setUploadedFiles([]);
       console.log("Email sent successfully!");
     } catch (error) {
       console.error("An error occurred during sendemail:", error);
@@ -106,10 +107,7 @@ const SendEmail = () => {
                             helperText={touched.fromemail && errors.fromemail}
                           />
                       </Box>
-                  </Grid>
-                  {errors.fromemail && touched.fromemail && (
-                    <div style={{ color: "red" }}>{errors.fromemail}</div>
-                  )}
+                </Grid>                  
                   <Grid item xs={10}>
                     <Box>
                       <TextFieldUi
@@ -127,9 +125,6 @@ const SendEmail = () => {
                       />
                     </Box>
                   </Grid>
-                  {errors.toemail && touched.toemail && (
-                    <div style={{ color: "red" }}>{errors.toemail}</div>
-                  )}
                   <Grid item xs={12}>
                     <Box>
                       <Editor
