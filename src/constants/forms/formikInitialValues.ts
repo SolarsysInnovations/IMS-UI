@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, SendEmailInitialValueProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps } from "../../types/types";
 
 export const loginInitialValue: LoginProps = {
     // email: "",
@@ -127,8 +127,3 @@ export const AragingInitialValue: ArAgingInitialValueProps = {
     endDate: "",
 };
 
-export const SendEmailInitialValue: SendEmailInitialValueProps = {
-    recipientEmail: "",
-    fromemail:"",
-    file: null
-}

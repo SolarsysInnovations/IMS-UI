@@ -2,13 +2,11 @@ import { Field, FieldArray, useFormikContext } from "formik";
 import SelectDropdown from "../ui/SelectDropdown";
 import TextFieldUi from "../ui/TextField";
 import RadioUi from "../ui/RadioGroup";
-import { Grid, IconButton, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
 import ButtonSmallUi from "../ui/ButtonSmall";
 import { FieldProps, SubField } from "../../types/types";
 import DatePickerUi from "../ui/DatePicker";
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import AddIcon from '@mui/icons-material/Add';
 
 const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
     const options: any = subField.options?.map(option => ({
@@ -165,16 +163,13 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                                                 </Field>
                                             </Grid>
                                         ))}
-                                        {/* <ButtonSmallUi type="button" variant='contained' onClick={() => remove(index)} label="Delete" /> */}
-                                        <IconButton size='small' sx={{mb:4}} color="error" onClick={() => remove(index)}>
+                                        <ButtonSmallUi type="button" variant='contained' onClick={() => remove(index)} label="Delete" />
+                                        {/* <IconButton size='small' onClick={() => remove(index)}>
                                             <DeleteIcon />
-                                        </IconButton>
+                                        </IconButton> */}
                                     </React.Fragment>
                                 ))}
-                                {/* <ButtonSmallUi type="button" variant='contained' onClick={() => push({})} label={`Add `} /> */}
-                                <IconButton size='small' sx={{mb:4}} color="primary" onClick={() => push({})}>
-                                    <AddIcon />
-                                </IconButton>
+                                <ButtonSmallUi type="button" variant='contained' onClick={() => push({})} label={`Add `} />
                                 {/* ${field.label.slice(0, -1)} to add label */}
                             </>
                         )}

@@ -13,18 +13,11 @@ interface InvoiceUiProps {
     subtotal?: number | null;
     discount?: number | null;
     tds?: number | null;
-    emailModalOpen?: any;
-    emailPopup?: any;
-    isModalOpen?: any
-    invoicePopup?: any
-    gstTypePopup?: any
-    tdsTaxPopup?: any
-    paymentTermsPopUp ?: any
 }
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function InvoiceUi({ invoiceData, subtotal, discount, tds, emailModalOpen,emailPopup,isModalOpen,invoicePopup,gstTypePopup,tdsTaxPopup,paymentTermsPopUp }: InvoiceUiProps) {
+function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [subTotalAmount, setSubTotalAmount] = useState<number>(0)
     const [customerDetails, setCustomerDetails] = useState<any>()
@@ -194,7 +187,7 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds, emailModalOpen,emailP
             <Grid container spacing={5}>
                 <Grid item xs={5} sx={{ display: " flex", justifyContent: "space-between" }}>
                     <ButtonSmallUi label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
-                    <ButtonSmallUi label="Email To" variant="contained" size="small" onClick={() => { emailModalOpen(true); emailPopup(true); isModalOpen(false);invoicePopup(false);gstTypePopup(false);tdsTaxPopup(false);paymentTermsPopUp(false); } } />
+                    <ButtonSmallUi label="Email To" variant="contained" size="small" />
                 </Grid>
             </Grid>
         </>

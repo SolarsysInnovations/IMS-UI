@@ -155,10 +155,3 @@ export interface serviceCreationProps {
     amount: number;
 };
 // ---------user login --------------------
-
-export interface SendEmailInitialValueProps {
-    fromemail: string;
-    recipientEmail: string;
-    //description: string;
-    file: File | null;
-}

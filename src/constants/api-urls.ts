@@ -46,8 +46,6 @@ export enum ApiEndpoint {
     PAYMENT_TERMS_UPDATE = "paymentTermsUpdate",
     REPORT_LIST = "reportList",
     REPORT_GET = "reportGet",
-    //send Email
-    SEND_EMAIL = "sendEmail",
 }
 
 export type ApiUrls = {
@@ -95,5 +93,4 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.PAYMENT_TERMS_DELETE]: '/paymentTerms/delete',
     [ApiEndpoint.PAYMENT_TERMS_GET]: '/paymentTerms/get',
     [ApiEndpoint.PAYMENT_TERMS_UPDATE]: '/paymentTerms/update',
-    [ApiEndpoint.SEND_EMAIL]: "/sendPDFByEmail",
 };
