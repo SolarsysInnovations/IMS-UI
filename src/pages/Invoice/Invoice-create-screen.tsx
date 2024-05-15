@@ -38,6 +38,7 @@ import { float } from 'html2canvas/dist/types/css/property-descriptors/float';
 import { formatDate } from '../../services/utils/dataFormatter';
 import { addDays, format } from 'date-fns';
 import ServiceCreate from '../service/service-create-screen';
+import SendEmail from './Send-email';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -62,6 +63,8 @@ const CreateInvoice = () => {
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [addInvoice, { isSuccess, isError, }] = useAddInvoiceMutation();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEmailModalOpen, setisEmailModalOpen] = useState(false);
+    const [emailPopUp, setEmailPopUp] = useState(false);
     const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
     const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
     const [discountAmount, setDiscountAmount] = useState<null | number>(null);
@@ -235,7 +238,7 @@ const CreateInvoice = () => {
                         }} >
                             <>
                                 {invoicePopUp && (
-                                    <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} />
+                                    <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData}  emailModalOpen={setisEmailModalOpen} emailPopup={setEmailPopUp} isModalOpen={setIsModalOpen} invoicePopup={setInvoicePopup} gstTypePopup={setGstTypePopup} tdsTaxPopup={setTdsTaxPopup} paymentTermsPopUp={setPaymentTermsPopUp}/>
                                 )}
                                 {gstTypePopUp && (
                                     <GstTypeScreen />
@@ -246,6 +249,14 @@ const CreateInvoice = () => {
                                 {paymentTermsPopUp && (<PaymentTermsScreen />)}
                                 {servicePopUp && (<ServiceCreate />)}
                             </>
+                        </ModalUi>
+                        <ModalUi topHeight='60%' open={isEmailModalOpen} onClose={() => {
+                            setisEmailModalOpen(false)
+                            setEmailPopUp(false)
+                        }} >
+                            {emailPopUp && (
+                                <SendEmail></SendEmail>
+                            )}
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>

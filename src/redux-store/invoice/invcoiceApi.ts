@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { InvoiceInitialValueProps } from '../../types/types';
+import { InvoiceInitialValueProps,SendEmailInitialValueProps } from '../../types/types';
 import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { apiSlice } from '../api/apiSlice';
@@ -61,7 +61,14 @@ export const invoiceApi = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
+        sendEmailNotifiction: builder.mutation<any, Partial<FormData>>({
+            query: (emailData) => ({
+                url:"https://ims-backend-9ghn.onrender.com/sendPDFByEmail", //API_URLS.sendEmail,
+                method: "POST",
+                body: emailData
+            }),
+        }),
     }),
 });
 
-export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation, useInvoiceGetByIdMutation } = invoiceApi;
+export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation, useInvoiceGetByIdMutation,useSendEmailNotifictionMutation } = invoiceApi;
