@@ -28,6 +28,7 @@ const GstTypeCreate: React.FC = () => {
         <div>
             {/* Use DynamicServiceCreate with the required props */}
             <DynamicFormCreate
+                headerName='Create Gst Type'
                 showTable={true}
                 fields={GstTypeFields}
                 initialValues={gstTypeInitialValue}

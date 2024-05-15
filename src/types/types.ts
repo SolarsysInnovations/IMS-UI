@@ -51,6 +51,9 @@ export interface FormProps {
     setData?: any;
     updateFormValue?: (setFieldValue: Function) => void;
     headerName?: string;
+    isSuccessToast?: boolean;
+    error?: any;
+    toastMessage?: string;
 };
 export interface SubField {
     name: string;

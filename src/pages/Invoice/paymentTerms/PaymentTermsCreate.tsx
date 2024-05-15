@@ -33,6 +33,7 @@ const PaymentTermsCreate: React.FC = () => {
         <div>
             {/* Use DynamicServiceCreate with the required props */}
             <DynamicFormCreate
+                headerName='Create Payment Terms'
                 showTable={true}
                 fields={paymentTermsFields}
                 initialValues={paymentTermsInitialValue}

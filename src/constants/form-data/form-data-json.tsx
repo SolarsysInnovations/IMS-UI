@@ -105,12 +105,12 @@ export const serviceFields: FieldProps[] = [
 export const GstTypeFields: FieldProps[] = [
     {
         name: 'GstType',
-        label: 'Gst Type',
+        label: '',
         type: 'section',
         titleGridSize: 12,
         subFields: [
             { name: 'gstName', label: 'Gst Name', type: 'text', gridSize: 3, validation: Yup.string().required('gstName is required') },
-            { name: 'gstPercentage', label: 'Gst Percentage', type: 'number', gridSize: 3, validation: Yup.string().required('gstPercentage is required') },
+            { name: 'gstPercentage', label: 'Gst Percentage', type: 'number', gridSize: 3, validation: Yup.string().required('gstPercentage is required'), endAdornment: "%" },
         ]
     },
 ];
@@ -118,12 +118,12 @@ export const GstTypeFields: FieldProps[] = [
 export const TdsTaxFields: FieldProps[] = [
     {
         name: 'tdsTax',
-        label: 'Tds Tax Create',
+        label: '',
         type: 'section',
         titleGridSize: 12,
         subFields: [
             { name: 'taxName', label: 'Tax Name', type: 'text', gridSize: 3, validation: Yup.string().required('taxName is required') },
-            { name: 'taxPercentage', label: 'Tax Percentage', type: 'number', gridSize: 3, validation: Yup.string().required('taxPercentage is required') },
+            { name: 'taxPercentage', label: 'Tax Percentage', type: 'number', gridSize: 3, validation: Yup.string().required('taxPercentage is required'), endAdornment: "%" },
         ]
     },
 ];
@@ -131,7 +131,7 @@ export const TdsTaxFields: FieldProps[] = [
 export const paymentTermsFields: FieldProps[] = [
     {
         name: 'paymentTerms',
-        label: 'Payment Terms Create',
+        label: '',
         type: 'section',
         titleGridSize: 12,
         subFields: [

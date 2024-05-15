@@ -8,6 +8,7 @@ import { formatDate } from "../../services/utils/dataFormatter";
 import ButtonSmallUi from "../ui/ButtonSmall";
 import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { addDays, format } from "date-fns";
+
 interface InvoiceUiProps {
     invoiceData?: any;
     subtotal?: number | null;
@@ -22,6 +23,7 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
     const [subTotalAmount, setSubTotalAmount] = useState<number>(0)
     const [customerDetails, setCustomerDetails] = useState<any>()
     const [discountAmount, setDiscountAmount] = useState<number>(0)
+
     useEffect(() => {
         if (invoiceData) {
             const calculateTotal = invoiceData.servicesList.reduce((total: any, service: any) => {
@@ -31,11 +33,7 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
 
             const disAmount = (subTotalAmount * (invoiceData.discountPercentage ?? 0)) / 100;
             setDiscountAmount(disAmount);
-
-
         }
-
-
     }, [invoiceData, subTotalAmount])
 
 
@@ -192,6 +190,7 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds }: InvoiceUiProps) {
             </Grid>
         </>
     );
+
 }
 
 export default InvoiceUi;
