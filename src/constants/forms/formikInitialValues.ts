@@ -1,5 +1,6 @@
 import { number } from "yup";
 import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps } from "../../types/types";
+import ServicesList from "../../pages/service/service-list-screen";
 
 export const loginInitialValue: LoginProps = {
     // email: "",
@@ -17,6 +18,7 @@ export const companyInitialValues ={
     companyWebsite: "",
     companyTaxNumber: "",
     companyRegNumber: "",
+    companyList:[],
 
 };
 

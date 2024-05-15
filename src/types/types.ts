@@ -166,5 +166,7 @@ export interface companyInitialValueProps {
     companyWebsite:string;
     companyTaxNumber:string;
     companyRegNumber:string;
+    companyList: ServiceListProps[];
+
   
 }
