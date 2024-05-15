@@ -5,6 +5,7 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import TaskIcon from '@mui/icons-material/Task';
+import SettingsIcon from '@mui/icons-material/Settings';
 export const sidebarTwo = [
     {
         id: 1,
@@ -44,36 +45,42 @@ export const sidebarTwo = [
         // ]
     },
     {
-        id: 7,
+        id: 5,
         title: "Reports",
         path: "/reports",
         icon: TaskIcon,
         isParent: false
     },
-
     {
-        id: 5,
+        id: 6,
+        title: "Settings",
+        path: "/settings",
+        icon: SettingsIcon,
+        isParent: false
+    },
+    {
+        id: 7,
         title: "Demo",
         path: "/demo",
         icon: Home,
         isParent: false
     },
     {
-        id: 6,
+        id: 8,
         title: "DemoTwo",
         path: "/demo-two",
         icon: Home,
         isParent: false
     },
     {
-        id: 7,
+        id: 9,
         title: "Component",
         path: "/components",
         icon: Home,
         isParent: false
     },
     {
-        id: 7,
+        id: 10,
         title: "DynamicForm",
         path: "/dynamicForm",
         icon: Home,

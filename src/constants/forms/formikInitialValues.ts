@@ -6,6 +6,19 @@ export const loginInitialValue: LoginProps = {
     username: "",
     password: "",
 }
+export const companyInitialValues ={
+    companyName: "",
+    companyAddress: "",
+    companyState: "",
+    companyCountry:"",
+    companyEmail: "",
+    companyPhone: "",
+    companyCell: "",
+    companyWebsite: "",
+    companyTaxNumber: "",
+    companyRegNumber: "",
+
+};
 
 export const customerInitialValues = {
     customerType: "",

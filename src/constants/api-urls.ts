@@ -4,7 +4,7 @@
 const JAVA_URL = "https://ims-backend-9ghn.onrender.com"; // ! java backend
 const LOCAL_URL = "http://localhost:4000";
 const NODE_URL = "https://node-js-invoice.onrender.com";  // ! nodejs backend
-export const BASE_LOCAL_URL = LOCAL_URL;
+export const BASE_LOCAL_URL = JAVA_URL;
 
 export enum ApiEndpoint {
     LOGIN = "login",
@@ -46,6 +46,12 @@ export enum ApiEndpoint {
     PAYMENT_TERMS_UPDATE = "paymentTermsUpdate",
     REPORT_LIST = "reportList",
     REPORT_GET = "reportGet",
+    //send Email
+    SEND_EMAIL = "sendEmail",
+    //settings
+    SETTINGS_UPDATE = "settingsUpdate",
+    SETTINGS_CREATE = "settingsCreate",
+    SETTINGS_LIST = "settingsList",
 }
 
 export type ApiUrls = {
@@ -72,11 +78,9 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.SERVICE_DELETE]: `/service/delete`,
     [ApiEndpoint.SERVICE_GET]: `/service/get`,
     [ApiEndpoint.SERVICE_UPDATE]: `/service/update`,
-
     //reports endpoints
     [ApiEndpoint.REPORT_LIST]: `/invoice/arReport`,
     [ApiEndpoint.REPORT_GET]: `/invoice/invoiceReport`,
-
     // gstType endpoints 
     [ApiEndpoint.GST_TYPE_LIST]: '/gstType/list',
     [ApiEndpoint.GST_TYPE_CREATE]: '/gstType/create',
@@ -95,4 +99,11 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.PAYMENT_TERMS_DELETE]: '/paymentTerms/delete',
     [ApiEndpoint.PAYMENT_TERMS_GET]: '/paymentTerms/get',
     [ApiEndpoint.PAYMENT_TERMS_UPDATE]: '/paymentTerms/update',
+    [ApiEndpoint.SEND_EMAIL]: "/sendPDFByEmail",
+    //settings endpoints
+    [ApiEndpoint.SETTINGS_CREATE]: `/setting/create`,
+    [ApiEndpoint.SETTINGS_UPDATE]: `/setting/update`,
+    [ApiEndpoint.SETTINGS_LIST]: `/setting/list`,
+
+
 };

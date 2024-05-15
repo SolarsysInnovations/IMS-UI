@@ -118,6 +118,91 @@ export const serviceFields: FieldProps[] = [
 
 ];
 
+
+export const companyFields: FieldProps[] = [
+    {
+        name: 'Company Name',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyName', label: 'Company Name', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
+        ]
+    },
+    {
+        name: 'Company Address',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyAddress', label: 'Company Address', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
+        ]
+    },
+    {
+        name: 'Company State',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyState', label: 'Company State', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+        ]
+    },
+    {
+        name: 'Company Country',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyCountry', label: 'Company Country', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+        ]
+    },
+    {
+        name: 'Company Email',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyEmail', label: 'Company Email', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+        ]
+    },
+    {
+        name: 'Company Phone',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyPhone', label: 'Company Phone', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+        ]
+    },
+    {
+        name: 'Company Cell',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyCell', label: 'Company Cell', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+        ]
+    },
+    {
+        name: 'Company Website',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyWebsite', label: 'Company Website', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+        ]
+    },
+    {
+        name: 'Company Tax number',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyTaxNumber', label: 'Company TaxNumber', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+        ]
+    },
+    {
+        name: 'Company Reg number',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyRegNumber', label: 'Company RegNumber', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+        ]
+    },
+
+];
+
 export const GstTypeFields: FieldProps[] = [
     {
         name: 'GstType',

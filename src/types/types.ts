@@ -149,4 +149,17 @@ export interface serviceCreationProps {
     description: string;
     amount: number;
 };
-// ---------user login --------------------
+//----------settings--------
+export interface companyInitialValueProps {
+    companyName: string;
+    companyAddress: string;
+    companyState: string;
+    companyCountry:string;
+    companyEmail:string;
+    companyPhone:string;
+    companyCell:string;
+    companyWebsite:string;
+    companyTaxNumber:string;
+    companyRegNumber:string;
+  
+}
