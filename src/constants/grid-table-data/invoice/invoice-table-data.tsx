@@ -19,7 +19,6 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     const { data: invoice, error, isLoading, refetch } = useGetInvoiceQuery();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [invoiceData, setInvoiceData] = useState<any>();
-    console.log(invoiceData);
     const [deleteInvoice, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteInvoiceMutation();
     const navigate = useNavigate();
     const [getInvoice, { data: customerData, isSuccess: C_success, isError: C_error }] = useInvoiceGetByIdMutation<{ data: any, isSuccess: any, isError: any }>();
@@ -33,7 +32,6 @@ const MyCellRenderer = ({ row }: { row: any }) => {
             const response = await getInvoice(row.id);
             if ('data' in response) {
                 const customerData = response.data;
-                console.log(customerData);
 
                 await dispatch(setCustomerData(customerData));
                 navigate(`/invoice/edit/${1}`);
@@ -77,7 +75,7 @@ const MyCellRenderer = ({ row }: { row: any }) => {
             }}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
-            <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
+            <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
                 <InvoiceUi invoiceData={invoiceData} />
             </ModalUi>
         </Stack>

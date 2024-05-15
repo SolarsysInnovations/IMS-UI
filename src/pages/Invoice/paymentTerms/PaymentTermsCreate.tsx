@@ -10,21 +10,24 @@ import { useAddGstTypeMutation, useGetGstTypeQuery } from '../../../redux-store/
 import { TdsTaxFields, paymentTermsFields } from '../../../constants/form-data/form-data-json';
 import { useAddTdsTaxMutation, useGetTdsTaxQuery } from '../../../redux-store/invoice/tdsTaxApi';
 import { useAddPaymentTermsMutation, useGetPaymentTermsQuery } from '../../../redux-store/invoice/paymentTerms';
+import { PaymentTermsProps } from '../../../types/types';
 
 
 const PaymentTermsCreate: React.FC = () => {
     const [addPaymentTerms, { isLoading, isSuccess, isError, error, }] = useAddPaymentTermsMutation();
     const { data: getPaymentTerms, isSuccess: getSuccess, refetch } = useGetPaymentTermsQuery();
 
-    const onSubmit = async (values: any, actions: any) => {
+    const onSubmit = async (values: PaymentTermsProps, { setSubmitting, resetForm }: any) => {
         try {
-            await addPaymentTerms(values);
-            actions.resetForm();
-            refetch()
+            await addPaymentTerms(values).unwrap(); // Call unwrap to handle the result properly
+            refetch();
+            resetForm();
         } catch (error) {
-            console.log(error);
+            console.error("An error occurred during form submission:", error);
+        } finally {
+            setSubmitting(false);
         }
-    };
+    }
     // useSuccessToast({ isSuccess, message: "successfully created the gst type", })
     return (
         <div>

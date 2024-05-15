@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useAddServiceMutation,useGetServiceByIdMutation, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
+import { useAddServiceMutation, useGetServiceByIdMutation, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
-import { serviceFields} from '../../constants/form-data/form-data-json';
+import { serviceFields } from '../../constants/form-data/form-data-json';
 import { serviceInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
@@ -19,8 +19,6 @@ const ServiceEditScreen: React.FC = () => {
     const onSubmit = async (values: any, actions: any) => {
         try {
             const id: number = values?._id
-            console.log(id);
-            console.log(values);
             await updateService({
                 id: id,
                 service: values,
@@ -34,27 +32,24 @@ const ServiceEditScreen: React.FC = () => {
 
     useSuccessToast({
         isSuccess, message: "successfully edited the service",
-        navigate: () => {
-            navigate(-1);
-        }
     });
-    console.log("Hello ",serviceStateDetails);
-    
 
     return (
         <div>
             <ToastContainer />
-            {/* {serviceStateDetails && ( */}
+            {serviceStateDetails && (
                 <DynamicFormCreate
+                    headerName='Edit Service'
+                    showTable={true}
                     fields={serviceFields}
-                    initialValues={serviceStateDetails}
+                    initialValues={serviceStateDetails || []}
                     validationSchema={serviceValidationSchema}
                     onSubmit={onSubmit}
                 />
-            {/* )} */}
+            )}
         </div>
-         
-         );
-         
+
+    );
+
 };
 export default ServiceEditScreen;

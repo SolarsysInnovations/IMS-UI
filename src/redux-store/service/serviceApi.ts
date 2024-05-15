@@ -1,4 +1,4 @@
-import {API_URLS } from '../../constants/api-urls';
+import { API_URLS } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
 
@@ -19,6 +19,11 @@ const serviceSlice = createSlice({
         },
         setServiceError(state, action) {
             state.error = action.payload;
+        },
+        clearServiceData: (state) => {
+            state.data = null;
+            state.loading = false;
+            state.error = null;
         },
     },
 });
@@ -65,6 +70,6 @@ export const serviceApi = apiSlice.injectEndpoints({
         }),
     }),
 });
-export const { setServiceData, setServiceLoading, setServiceError } = serviceSlice.actions;
+export const { setServiceData, setServiceLoading, setServiceError, clearServiceData } = serviceSlice.actions;
 export { serviceSlice };
-export const { useGetServiceQuery, useAddServiceMutation,useGetServiceByIdMutation, useUpdateServiceMutation, useDeleteServiceMutation } = serviceApi;
+export const { useGetServiceQuery, useAddServiceMutation, useGetServiceByIdMutation, useUpdateServiceMutation, useDeleteServiceMutation } = serviceApi;

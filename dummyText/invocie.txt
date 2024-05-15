@@ -1,179 +1,221 @@
-import React, { useState } from "react";
-import jsPdf from "jspdf";
-import html2canvas from "html2canvas";
-import { Box, Stack, Typography } from "@mui/material";
-import TableContent from "../components/Generate-Invoice/TableContent";
-import { Document, Page, pdfjs } from "react-pdf";
-interface InvoiceUiProps {
-    invoiceData?: any;
+import { Grid } from "@mui/material";
+import { Field, Form, Formik, useFormikContext } from "formik";
+import { useEffect, useState } from "react";
+import TextFieldUi from "../ui/TextField";
+import ButtonSmallUi from "../ui/ButtonSmall";
+import SelectDropdown from "../ui/SelectDropdown";
+import DatePickerUi from "../ui/DatePicker";
+import RadioUi from "../ui/RadioGroup";
+import { log } from "console";
+
+type FormFieldProps = {
+  [key: string]: string;
+};
+
+interface FieldConfig {
+  name: string;
+  placeholder: string;
+  type: any;
+  options?: { value: string; label: string }[];
+  subFields?: any;
+
 }
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-function DemoTwo({ invoiceData }: InvoiceUiProps) {
-    const [pdfFile, setPdfFile] = useState<File | null>(null);
-    const [numPages, setNumPages] = useState<number | null>(null);
-    const [pageNumber, setPageNumber] = useState(1);
-    const [showPdf, setShowPdf] = useState(false);
-
-    const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
-        setNumPages(numPages);
-    };
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-        if (files && files.length > 0) {
-            const file = files[0];
-            setPdfFile(file);
-            setShowPdf(true);
-            setPageNumber(1); // Set page number to 1 when file is changed
-        }
-    };
-
-    const printPDF = () => {
-        const element = document.querySelector("#invoiceCapture");
-        if (!element) {
-            console.error("Element with id 'invoiceCapture' not found");
-            return;
-        }
-        html2canvas(element as HTMLElement).then((canvas) => {
-            const imgWidth = 208;
-            const pageHeight = 295;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
-            let position = 0;
-            heightLeft -= pageHeight;
-            const doc = new jsPdf('p', 'mm');
-            doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                doc.addPage();
-                doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                heightLeft -= pageHeight;
-            }
-            const pdfData = doc.output('datauristring'); // Convert PDF to data URL
-            localStorage.setItem('invoicePDF', pdfData); // Store PDF data in localStorage
-            doc.save('Downld.pdf');
-        });
-    };
-
-    return (
-        <>
-            <div>
-                <label htmlFor="file">Upload file</label>
-                <input type="file" onChange={handleFileChange} />
-            </div>
-            <div className="App" id="invoiceCapture" style={{ padding: "10px" }}>
-                <Box sx={{
-                    textAlign: "right",
-                }}>
-                    <Typography variant="h1" color="initial">INVOICE</Typography>
-                </Box>
-                <>
-                    <Stack sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mt: 6,
-                    }}>
-                        <Box gap={3}>
-                            <Typography variant="subtitle2" color="initial">Billed To : <span>{invoiceData?.customerName}</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Address 4545 Lorem ipsum dolor <br /> sit Lorem, ipsum dolor.</Typography>
-                        </Box>
-                        <Box gap={3}>
-                            <Typography variant="subtitle2" color="initial">Invoice No : <span>{invoiceData?.invoiceNumber}</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Payment Terms: <span>{invoiceData?.paymentTerms}</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Invoice Date : <span>{invoiceData?.invoiceDate}</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Due Date : <span>{invoiceData?.dueDate}</span></Typography>
-                        </Box>
-                    </Stack>
-                    <Box sx={{ mt: 6 }}>
-                        <TableContent tableData={invoiceData || []} />
-                    </Box>
-
-                    <Stack sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mt: 10,
-                    }}>
-                        <Box gap={3} >
-                            <Typography variant="subtitle2" color="initial">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</Typography>
-                        </Box>
-                        <Box gap={3} >
-                            <Typography variant="subtitle2" color="initial">Sub Total : <span>443</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Tax Rate : <span>5.00%</span></Typography>
-                            <Typography variant="subtitle2" color="initial">Total : <span>$1324.00</span></Typography>
-                            <Typography variant="h6" color="initial">Total : <span>$1324.00</span></Typography>
-                        </Box>
-                    </Stack>
-                </>
-                <Box gap={3} sx={{ mt: 10, mb: 7 }}>
-                    <Typography variant="subtitle2" color="initial">Terms & Conditions</Typography>
-                    <Typography variant="subtitle2" color="initial">All payments must be made in full before any design work</Typography>
-                </Box>
-            </div>
-            <button onClick={printPDF}>Generate PDF</button>
-
-            {showPdf && (
-                <div >
-                    <Document
-                        file={pdfFile}
-                        onLoadSuccess={({ numPages }) => {
-                            console.log("Number of pages:", numPages);
-                            setNumPages(numPages);
-                        }}
-                    >
-                        <Page
-                            pageNumber={pageNumber}
-                        />
-                    </Document>
-                </div>
-            )}
-        </>
-    );
+interface FormConfig {
+  fields: FieldConfig[];
 }
 
-export default DemoTwo;
 
 
 
+const FormField = ({ updateFormValue, setFormData }: any) => {
+  const { setFieldValue, values } = useFormikContext<FormFieldProps>();
+  console.log(values);
 
+  useEffect(() => {
+    if (values) {
+      setFormData(values);
+    }
+  }, [values, setFormData]);
 
+  useEffect(() => {
+    updateFormValue(setFieldValue);
+  }, [updateFormValue, setFieldValue]);
 
+  return (
+    <div>
+      <Grid container>
+        <FormFields />
+        <ButtonSmallUi label="Submit" type="submit" />
+      </Grid>
+    </div>
+  );
+};
 
+const FormFields = () => {
+  const formConfig: FormConfig = {
+    fields: [
+      { name: "firstName", placeholder: "First Name", type: "text" },
+      {
+        name: "gender",
+        placeholder: "Gender",
+        type: "select",
+        options: [
+          { value: "male", label: "Male" },
+          { value: "female", label: "Female" },
+          { value: "other", label: "Other" },
+        ],
+      },
+      {
+        name: "color",
+        placeholder: "Color",
+        type: "radio",
+        options: [
+          { value: "red", label: "Red" },
+          { value: "blue", label: "Blue" },
+        ],
+      },
+    ],
 
+  };
 
+  return (
+    <>
+      {formConfig.fields.map((field, index) => {
+        if (field.type === "text") {
+          return <TextFieldRenderer key={index} field={field} />;
+        } else if (field.type === "select") {
+          return <DropdownFieldRenderer key={index} field={field} />;
+        } else if (field.type === "date") {
+          return <DateFieldRenderer key={index} field={field} />;
+        } else if (field.type === "radio") {
+          return <RadioFieldRenderer key={index} field={field} />;
+        } else {
+          return null;
+        }
+      })}
 
+    </>
+  );
+};
 
-const invoiceInitialValue = {
-        invoiceType: "Retainer",
-        invoiceNumber: "IM98432",
-        customerName: "sandy",
-        gstType: "Local",
-        gstPercentage: 0.18,
-        gstInNumber: "IN92342",
-        paymentTerms: "Net 30",
-        invoiceDate: '13-04-2024',
-        dueDate: '13-05-2024',
-        invoiceStatus: "Pending",
-        discountAmount: '2',
-        invoiceTotalAmount: 13230,
-        taxAmount: { tds: 'Professional Service 10%' },
-        service: ['ECF7589'],
-        servicesList: [
-            {
-                _id: '65f2c628a7125d2fd42f982c',
-                __v: 0,
-                serviceAccountingCode: 'ECF7589',
-                serviceAmount: 15000,
-                serviceDescription:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                id: '65f2c628a7125d2fd42f982c',
-                qty: 1,
-                totalAmount: 15000
-            }
-        ]
-    }; 
+interface FieldRendererProps {
+  field: FieldConfig;
+}
+
+const DropdownFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
+  const { values, setFieldValue } = useFormikContext<FormFieldProps>();
+  console.log(values);
+
+  const handleChange = (selectedValue: any | null) => {
+    if (selectedValue) {
+      setFieldValue(`${field.name}`, selectedValue.value);
+    } else {
+      setFieldValue(field.name, null);
+    }
+  };
+
+  return (
+    <Grid item xs={6}>
+      <SelectDropdown
+        onChange={handleChange}
+        options={field.options || []}
+        value={values[field.name] ? { value: values[field.name], label: values[field.name] } : null}
+        labelText={field.placeholder} // Use placeholder as labelText
+      />
+    </Grid>
+  );
+};
+
+const TextFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
+  const { values, setFieldValue } = useFormikContext<FormFieldProps>();
+  console.log(field);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e) {
+      setFieldValue(field.name, e.target.value);
+    } else {
+      setFieldValue(field.name, null);
+    }
+
+  };
+
+  return (
+    <Grid item xs={6}>
+      <TextFieldUi
+        type={field.type}
+        label={field.placeholder}
+        name={field.name}
+        value={values[field.name] || ""}
+        onChange={handleChange}
+      />
+    </Grid>
+  );
+};
+
+const DateFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
+  const { values, setFieldValue } = useFormikContext<FormFieldProps>();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFieldValue(field.name, e);
+  };
+
+  return (
+    <Grid item xs={6}>
+      <DatePickerUi
+        label={field.placeholder}
+        value={values[field.name]}
+        onChange={handleChange}
+      />
+    </Grid>
+  );
+};
+
+const RadioFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
+  const { values, setFieldValue } = useFormikContext<FormFieldProps>();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFieldValue(field.name, e.target.value);
+  };
+
+  return (
+    <Grid item xs={6}>
+      <RadioUi
+        options={field.options || []} value={values[field.name]} onChange={handleChange}
+      />
+    </Grid>
+  );
+};
+
+const DynamicForm = () => {
+  const [formValues, setFormValues] = useState<any>({
+    firstName: "",
+    gender: "",
+    color: "",
+  });
+  const [formData, setFormData] = useState<FormFieldProps | undefined>();
+
+  const updateFormValue = (setFieldValue: Function) => {
+    if (formValues.firstName === "arun") {
+      setFieldValue("address.addressOne", "newAddress");
+    }
+  };
+
+  return (
+    <div>
+      <h1>{"Formik Context"}</h1>
+      <Formik
+        onSubmit={async (values) => {
+          console.log(values);
+        }}
+        initialValues={formValues}
+      >
+        <Form>
+          <FormField setFormData={setFormData} updateFormValue={updateFormValue} />
+        </Form>
+      </Formik>
+    </div>
+  );
+};
+
+export default DynamicForm;

@@ -1,9 +1,9 @@
-import { Field, FieldArray } from "formik";
+import { Field, FieldArray, useFormikContext } from "formik";
 import SelectDropdown from "../ui/SelectDropdown";
 import TextFieldUi from "../ui/TextField";
 import RadioUi from "../ui/RadioGroup";
 import { Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import ButtonSmallUi from "../ui/ButtonSmall";
 import { FieldProps, SubField } from "../../types/types";
 import DatePickerUi from "../ui/DatePicker";
@@ -43,12 +43,15 @@ const renderTextField = (field: any, meta: any, subField: SubField) => (
         {...field}
         // variant="outlined"
         // margin="normal"
+        value={field.value || ""}
+        startAdornment={subField.startAdornment ? <span>{subField.startAdornment}</span> : undefined}
+        endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
         type={subField.type}
         fullWidth
         id={subField.name}
         label={subField.label}
         error={meta.touched && !!meta.error}
-        helperText={meta.touched && meta.error}
+        helperText={subField?.helperText}
     />
 );
 
@@ -86,8 +89,34 @@ const renderRadioField = (field: any, meta: any, subField: SubField, setFieldVal
         />
     );
 };
+type FormFieldProps = {
+    [key: string]: string;
+};
+interface FieldRendererProps {
+    updateFormValue: any;
+    setData: any;
+    field: FieldProps;
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+}
+export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, field, setFieldValue, setData }) => {
+    const { values } = useFormikContext<FormFieldProps>();
 
-export const FieldRenderer: React.FC<{ field: FieldProps; setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void }> = ({ field, setFieldValue }) => {
+    // Memoize the updateFormValue function to prevent unnecessary re-renders
+    const memoizedUpdateFormValue = useMemo(() => updateFormValue, [updateFormValue]);
+
+    useEffect(() => {
+        if (setData) {
+            setData(values);
+        }
+    }, [values, setData])
+
+    useEffect(() => {
+        if (memoizedUpdateFormValue) {
+            memoizedUpdateFormValue(setFieldValue);
+        }
+    }, [memoizedUpdateFormValue, setFieldValue]);
+
+
     switch (field.type) {
         case 'section':
             return (

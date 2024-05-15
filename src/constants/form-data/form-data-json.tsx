@@ -26,9 +26,9 @@ export const customerFields: FieldProps[] = [
         label: 'Address Information',
         subFields: [
             { name: 'customerName', label: 'Customer Name', type: 'text', gridSize: 3, validation: Yup.string().required('customerName is required',) },
-            { name: 'companyName', label: 'companyName', type: 'text', gridSize: 3, validation: Yup.string().required('companyName is required') },
-            { name: 'customerEmail', label: 'customerEmail', type: 'email', gridSize: 3, validation: Yup.string().required('customerEmail is required') },
-            { name: 'customerPhone', label: 'customerPhone', type: 'number', gridSize: 3, validation: Yup.string().required('customerPhone is required') },
+            { name: 'companyName', label: 'Company Name', type: 'text', gridSize: 3, validation: Yup.string().required('companyName is required') },
+            { name: 'customerEmail', label: 'Customer Email', type: 'email', gridSize: 3, validation: Yup.string().required('customerEmail is required') },
+            { name: 'customerPhone', label: 'Customer Phone', type: 'number', gridSize: 3, validation: Yup.string().required('customerPhone is required') },
         ]
     },
     {
@@ -38,7 +38,7 @@ export const customerFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             {
-                name: 'paymentTerms', label: 'paymentTerms', type: 'select', gridSize: 3, options: [{ value: "Monthly", label: "Monthly" },
+                name: 'paymentTerms', label: 'Payment Terms', type: 'select', gridSize: 3, options: [{ value: "Monthly", label: "Monthly" },
                 { value: "Annual", label: "Annual" },
                 { value: "Quarterly", label: "Quarterly" },
                 { value: "Due on receipt", label: "Due on receipt" },
@@ -81,9 +81,9 @@ export const customerFields: FieldProps[] = [
         type: 'array',
         titleGridSize: 12,
         subFields: [
-            { name: 'contactName', label: 'contactName', type: 'text', gridSize: 3, validation: Yup.string().required('contactName is required') },
-            { name: 'contactEmail', label: 'contactEmail', type: 'email', gridSize: 3, validation: Yup.string().required('contactEmail is required') },
-            { name: 'contactPhone', label: 'contactPhone', type: 'number', gridSize: 3, validation: Yup.string().required('contactPhone is required') },
+            { name: 'contactName', label: 'Contact Name', type: 'text', gridSize: 3, validation: Yup.string().required('contactName is required') },
+            { name: 'contactEmail', label: 'Contact Email', type: 'email', gridSize: 3, validation: Yup.string().required('contactEmail is required') },
+            { name: 'contactPhone', label: 'Contact Phone', type: 'number', gridSize: 3, validation: Yup.string().required('contactPhone is required') },
         ]
     },
 ];
@@ -95,27 +95,11 @@ export const serviceFields: FieldProps[] = [
         type: 'section',
         titleGridSize: 12,
         subFields: [
-            { name: 'serviceAccountingCode', label: 'serviceAccountingCode', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
+            { name: 'serviceAccountingCode', label: 'Service AccountingCode', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
+            { name: 'serviceDescription', label: 'Service Description', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
+            { name: 'serviceAmount', label: 'Service Amount', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
         ]
     },
-    {
-        name: 'Description',
-        type: 'section',
-        titleGridSize: 12,
-        subFields: [
-            { name: 'serviceDescription', label: 'serviceDescription', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
-        ]
-    },
-    {
-        name: 'Amount',
-        type: 'section',
-        titleGridSize: 12,
-        subFields: [
-            { name: 'serviceAmount', label: 'serviceAmount', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
-        ]
-    },
-
-
 ];
 
 
@@ -210,8 +194,8 @@ export const GstTypeFields: FieldProps[] = [
         type: 'section',
         titleGridSize: 12,
         subFields: [
-            { name: 'gstName', label: 'gstName', type: 'text', gridSize: 3, validation: Yup.string().required('gstName is required') },
-            { name: 'gstPercentage', label: 'gstPercentage', type: 'number', gridSize: 3, validation: Yup.string().required('gstPercentage is required') },
+            { name: 'gstName', label: 'Gst Name', type: 'text', gridSize: 3, validation: Yup.string().required('gstName is required') },
+            { name: 'gstPercentage', label: 'Gst Percentage', type: 'number', gridSize: 3, validation: Yup.string().required('gstPercentage is required') },
         ]
     },
 ];
@@ -223,8 +207,8 @@ export const TdsTaxFields: FieldProps[] = [
         type: 'section',
         titleGridSize: 12,
         subFields: [
-            { name: 'taxName', label: 'taxName', type: 'text', gridSize: 3, validation: Yup.string().required('taxName is required') },
-            { name: 'taxPercentage', label: 'taxPercentage', type: 'number', gridSize: 3, validation: Yup.string().required('taxPercentage is required') },
+            { name: 'taxName', label: 'Tax Name', type: 'text', gridSize: 3, validation: Yup.string().required('taxName is required') },
+            { name: 'taxPercentage', label: 'Tax Percentage', type: 'number', gridSize: 3, validation: Yup.string().required('taxPercentage is required') },
         ]
     },
 ];
@@ -236,9 +220,8 @@ export const paymentTermsFields: FieldProps[] = [
         type: 'section',
         titleGridSize: 12,
         subFields: [
-            { name: 'termName', label: 'termName', type: 'text', gridSize: 3, validation: Yup.string().required('termName is required') },
-            { name: 'startDate', label: 'Start Date', type: 'date', gridSize: 3, validation: Yup.string().required('startDate is required') },
-            { name: 'dueDate', label: 'Due Date', type: 'date', gridSize: 3, validation: Yup.string().required('dueDate is required') },
+            { name: 'termName', label: 'Term Name', type: 'text', gridSize: 4, validation: Yup.string().required('termName is required'), helperText: " Eg : Net 30 as 30 days" },
+            { name: 'totalDays', label: 'Total Days', type: 'number', gridSize: 3, validation: Yup.string().required('termName is required'), endAdornment: "Days", helperText: " Eg : No of days" },
         ]
     },
 ];

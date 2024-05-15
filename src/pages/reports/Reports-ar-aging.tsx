@@ -31,24 +31,20 @@ const ArAgingscreen: React.FC = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-    
-    // console.log("list of values",reportList);
-    console.log("tabledata",tableData);
-    
+
+
     return (
         <div>
             <Formik
                 initialValues={AragingInitialValue}
                 validate={() => ({})}
                 onSubmit={async (values: ArAgingInitialValueProps, { setSubmitting, resetForm }) => {
-                    console.log("values",values);
                     try {
                         const response = await ArAging(values);
                         // Check if the response contains data or error
                         if ('data' in response) {
                             // If data exists, log it
                             const data = response.data
-                            console.log("Response data:", response.data);
                             setTableData(data)
                             // Reset form or update state with the data
                             resetForm();
@@ -122,7 +118,7 @@ const ArAgingscreen: React.FC = () => {
                                             value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                                             labelText='Select'
                                             error={touched.invoiceDate && Boolean(errors.invoiceDate)}
-                                            // helperText={touched.invoiceDate && errors.invoiceDate}
+                                        // helperText={touched.invoiceDate && errors.invoiceDate}
                                         />
                                     </Box>
                                 </Grid>
@@ -146,10 +142,10 @@ const ArAgingscreen: React.FC = () => {
                                     </Box>
                                 </Grid>
                                 <Grid item xs={2}>
-                                        <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />       
+                                    <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2}>
-                
+
                                     <GridDataUi showToolbar={true} columns={columns} tableData={tableData || []} checkboxSelection={false} />
                                 </Grid>
                             </Grid>

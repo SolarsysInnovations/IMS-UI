@@ -16,7 +16,6 @@ const GstTypeList = () => {
 
     const { data: gstTypeList, error, isLoading } = useGetGstTypeQuery();
 
-    console.log(gstTypeList);
 
     return (
         <>

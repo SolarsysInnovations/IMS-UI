@@ -13,7 +13,6 @@ interface GridDataProps {
     onCellEditStop?: any;
 }
 export default function GridDataUi({ onCellEditStop, onCellEditor, hideFooter, pagination, showToolbar, checkboxSelection, columns, tableData }: GridDataProps) {
-console.log("tabledata",tableData);
     return (
         <Box sx={{ height: "fit-content", width: '100%', }}>
             <DataGrid

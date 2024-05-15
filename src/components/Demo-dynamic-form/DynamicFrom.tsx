@@ -18,37 +18,12 @@ interface FieldConfig {
   type: any;
   options?: { value: string; label: string }[];
   subFields?: any;
+
 }
 
 interface FormConfig {
   fields: FieldConfig[];
 }
-
-
-const SubFieldRenderer: React.FC<{ subFields: FieldConfig[] }> = ({ subFields }) => {
-  console.log(subFields);
-  return (
-    <>
-      {subFields.map((field, index) => {
-        if (field.type === "text") {
-          return <TextFieldRenderer key={index} field={field} />;
-        } else if (field.type === "select") {
-          return <DropdownFieldRenderer key={index} field={field} />;
-        } else if (field.type === "date") {
-          return <DateFieldRenderer key={index} field={field} />;
-        } else if (field.type === "radio") {
-          return <RadioFieldRenderer key={index} field={field} />;
-        } else if (field.type === "object") {
-          return <SubFieldRenderer key={index} subFields={field.subFields} />;
-        } else {
-          return null;
-        }
-      })}
-
-    </>
-  );
-};
-
 
 const FormField = ({ updateFormValue, setFormData }: any) => {
   const { setFieldValue, values } = useFormikContext<FormFieldProps>();
@@ -78,12 +53,6 @@ const FormFields = () => {
   const formConfig: FormConfig = {
     fields: [
       { name: "firstName", placeholder: "First Name", type: "text" },
-      { name: "lastName", placeholder: "Last Name", type: "text" },
-      { name: "email", placeholder: "Email", type: "text" },
-      { name: "age", placeholder: "Age", type: "number" },
-      { name: "address", placeholder: "Address", type: "text" },
-      { name: "subscribe", placeholder: "Subscribe", type: "checkbox" },
-      { name: "customDate", placeholder: "Custom Date", type: "date" },
       {
         name: "gender",
         placeholder: "Gender",
@@ -103,16 +72,6 @@ const FormFields = () => {
           { value: "blue", label: "Blue" },
         ],
       },
-      {
-        name: "nestedObject",
-        placeholder: "Nested Object",
-        type: "object",
-        subFields: [
-          { name: "addressOne", placeholder: "addressOne", type: "text" },
-          { name: "addressTwo", placeholder: "addressTwo", type: "text" },
-          { name: "addressThree", placeholder: "addressThree", type: "text" },
-        ],
-      },
     ],
 
   };
@@ -128,8 +87,6 @@ const FormFields = () => {
           return <DateFieldRenderer key={index} field={field} />;
         } else if (field.type === "radio") {
           return <RadioFieldRenderer key={index} field={field} />;
-        } else if (field.type === "object") {
-          return <SubFieldRenderer key={index} subFields={field.subFields} />;
         } else {
           return null;
         }
@@ -149,7 +106,7 @@ const DropdownFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
 
   const handleChange = (selectedValue: any | null) => {
     if (selectedValue) {
-      setFieldValue(field.name, selectedValue.value);
+      setFieldValue(`${field.name}`, selectedValue.value);
     } else {
       setFieldValue(field.name, null);
     }
@@ -169,18 +126,15 @@ const DropdownFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
 
 const TextFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
   const { values, setFieldValue } = useFormikContext<FormFieldProps>();
-  console.log(values);
+  console.log(field);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isNested = field.name.includes(".");
-
-    if (isNested) {
+    if (e) {
       setFieldValue(field.name, e.target.value);
     } else {
-      const nestedFieldName = `address.${field.name}`;
-      setFieldValue(field.name, e.target.value);
-      setFieldValue(nestedFieldName, e.target.value);
+      setFieldValue(field.name, null);
     }
+
   };
 
   return (
@@ -233,20 +187,15 @@ const RadioFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
 const DynamicForm = () => {
   const [formValues, setFormValues] = useState<any>({
     firstName: "",
-    lastName: "",
-    email: "",
     gender: "",
     color: "",
-    address: {
-      addressOne: '',
-      addressTwo: '',
-      addressThree: '',
-    }
   });
   const [formData, setFormData] = useState<FormFieldProps | undefined>();
 
   const updateFormValue = (setFieldValue: Function) => {
-
+    if (formValues.firstName === "arun") {
+      setFieldValue("address.addressOne", "newAddress");
+    }
   };
 
   return (

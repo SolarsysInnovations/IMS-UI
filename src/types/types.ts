@@ -23,8 +23,7 @@ export interface TdsTaxProps {
 
 export interface PaymentTermsProps {
     termName: string,
-    startDate: string,
-    dueDate: string,
+    totalDays: number | null,
 };
 
 export interface DyCreateCustomerProps {
@@ -49,6 +48,9 @@ export interface FormProps {
     validationSchema: any;
     showTable?: boolean;
     onSubmit: (values: any, actions: any) => void;
+    setData?: any;
+    updateFormValue?: (setFieldValue: Function) => void;
+    headerName?: string;
 };
 export interface SubField {
     name: string;
@@ -57,6 +59,9 @@ export interface SubField {
     gridSize?: number;
     validation?: Yup.StringSchema<string>;
     options?: { value: string; label: string }[];
+    startAdornment?: any;
+    endAdornment?: any;
+    helperText?: string;
 };
 
 export interface FieldProps {
@@ -78,7 +83,7 @@ interface ServiceListProps {
 };
 
 export interface ReportListProps {
-    id:string;
+    id: string;
     customerName: string;
     days0to30: string;
     days30to45: string;
@@ -103,15 +108,15 @@ export interface InvoiceInitialValueProps {
     gstInNumber: string;
     paymentTerms: string;
     invoiceStatus: string;
-    totalAmount:string;
+    totalAmount: string;
     invoiceTotalAmount: number | null | undefined;
     discountPercentage: number | null;
     notes: string;
     termsAndConditions: string;
     taxAmount: TaxAmountProps;
     servicesList: ServiceListProps[];
-    
-};export interface InvoicesInitialValueProps {
+
+}; export interface InvoicesInitialValueProps {
     id: number;
     invoiceDate: string;
     invoiceType: string;
@@ -125,7 +130,7 @@ export interface InvoiceInitialValueProps {
     gstInNumber: string;
     paymentTerms: string;
     invoiceStatus: string;
-    totalAmount:string;
+    totalAmount: string;
     invoiceTotalAmount: number | null | undefined;
     discountPercentage: number | null;
     notes: string;
@@ -139,7 +144,7 @@ export interface ArAgingInitialValueProps {
     invoiceDate: string;
     startDate: string;
     endDate: string;
-  
+
 }
 
 

@@ -8,7 +8,7 @@ import { FieldRenderer } from "./Form-fields-renderer";
 import { Add } from "@mui/icons-material";
 import { useState } from "react";
 
-export const DynamicFormCreate: React.FC<FormProps> = ({ showTable, fields, initialValues, validationSchema, onSubmit }) => {
+export const DynamicFormCreate: React.FC<FormProps> = ({ headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit }) => {
 
     const pathname = usePathname();
     const navigate = useNavigate();
@@ -20,23 +20,25 @@ export const DynamicFormCreate: React.FC<FormProps> = ({ showTable, fields, init
                 // validate={() => ({})}
                 onSubmit={onSubmit}
             >
-                {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => (
-                    <>
-                        {showTable && (
-                            <TableHeader headerName={pathname} buttons={[
-                                { label: 'Back', icon: Add, onClick: () => navigate(-1) },
-                                { label: 'Save', icon: Add, onClick: handleSubmit },
-                            ]} />
-                        )}
-                        <Form>
-                            {fields?.map((field: FieldProps) => (
-                                <Grid key={field.name} container spacing={2}>
-                                    <FieldRenderer field={field} setFieldValue={setFieldValue} />
-                                </Grid>
-                            ))}
-                        </Form>
-                    </>
-                )}
+                {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => {
+                    return (
+                        <>
+                            {showTable && (
+                                <TableHeader headerName={headerName || pathname} buttons={[
+                                    { label: 'Back', icon: Add, onClick: () => navigate(-1) },
+                                    { label: 'Save', icon: Add, onClick: handleSubmit },
+                                ]} />
+                            )}
+                            <Form>
+                                {fields?.map((field: FieldProps) => (
+                                    <Grid key={field.name} container spacing={2}>
+                                        <FieldRenderer updateFormValue={updateFormValue} setData={setData} field={field} setFieldValue={setFieldValue} />
+                                    </Grid>
+                                ))}
+                            </Form>
+                        </>
+                    )
+                }}
             </Formik>
         </div>
     );

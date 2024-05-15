@@ -31,19 +31,15 @@ const Reportsinvoice: React.FC = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-    
-    // console.log("list of values",reportList);
-    console.log("tabledata",tableData);
-   
-    
+
+
+
     return (
         <div>
             <Formik
                 initialValues={invoicesInitialValue}
                 validate={() => ({})}
-                onSubmit={async (values:InvoicesInitialValueProps, { setSubmitting, resetForm }) => {
-                    console.log("values",values);
-                    console.log("invociedate", values.invoiceDate);
+                onSubmit={async (values: InvoicesInitialValueProps, { setSubmitting, resetForm }) => {
                     try {
                         const response = await ArAging(values);
                         // Check if the response contains data or error
@@ -124,7 +120,7 @@ const Reportsinvoice: React.FC = () => {
                                             value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                                             labelText='Select'
                                             error={touched.invoiceDate && Boolean(errors.invoiceDate)}
-                                            // helperText={touched.invoiceDate && errors.invoiceDate}
+                                        // helperText={touched.invoiceDate && errors.invoiceDate}
                                         />
                                     </Box>
                                 </Grid>
@@ -148,10 +144,10 @@ const Reportsinvoice: React.FC = () => {
                                     </Box>
                                 </Grid>
                                 <Grid item xs={2}>
-                                        <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />       
+                                    <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2}>
-                
+
                                     <GridDataUi showToolbar={true} columns={columns} tableData={tableData || []} checkboxSelection={false} />
                                 </Grid>
                             </Grid>
