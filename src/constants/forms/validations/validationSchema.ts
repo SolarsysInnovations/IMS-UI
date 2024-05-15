@@ -105,3 +105,12 @@ export const paymentTermsValidationSchema = Yup.object().shape({
         .max(365, 'totalDays must be a three-digit number')
         .required('totalDays is required'),
 });
+
+export const sendEmailValidationSchema = Yup.object().shape({
+//   fromemail: Yup.string()
+//     .email("Invalid email address")
+//     .required("From Email is required"),
+  recipientEmail: Yup.string()
+    .email("Invalid email address")
+    .required("To Email is required"),
+});
