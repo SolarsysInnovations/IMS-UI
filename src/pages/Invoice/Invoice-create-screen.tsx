@@ -38,6 +38,8 @@ import { float } from 'html2canvas/dist/types/css/property-descriptors/float';
 import { formatDate } from '../../services/utils/dataFormatter';
 import { addDays, format } from 'date-fns';
 import ServiceCreate from '../service/service-create-screen';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import { clearData } from '../../redux-store/global/globalState';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -53,11 +55,7 @@ const CreateInvoice = () => {
     const pathname = usePathname();
     const navigate = useNavigate();
     // popUps
-    const [invoicePopUp, setInvoicePopup] = useState(false);
-    const [gstTypePopUp, setGstTypePopup] = useState(false);
-    const [tdsTaxPopUp, setTdsTaxPopup] = useState(false);
-    const [servicePopUp, setServicePopUp] = useState(false);
-    const [paymentTermsPopUp, setPaymentTermsPopUp] = useState(false);
+    const [popUpComponent, setPopUpComponent] = useState("");
     const [invoiceFinalData, setInvoiceFinalData] = useState();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [addInvoice, { isSuccess, isError, }] = useAddInvoiceMutation();
@@ -84,7 +82,13 @@ const CreateInvoice = () => {
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
-
+    const PopupComponents = {
+        GST_TYPE: 'gstType',
+        PAYMENT_TERMS: 'paymentTerms',
+        TDS_TAX: 'tdsTax',
+        SERVICES: 'services',
+        INVOICE: 'invoice'
+    }
     React.useEffect(() => {
         if (invoiceValues) {
             const sumSubTotal = invoiceValues.servicesList.reduce((acc: any, row: any) => acc + row.price, 0)
@@ -215,7 +219,7 @@ const CreateInvoice = () => {
                             {
                                 label: 'Preview', icon: Add, onClick: () => {
                                     setIsModalOpen(true)
-                                    setInvoicePopup(true)
+                                    // setInvoicePopup(true)
                                     values.invoiceTotalAmount = invoiceTotalAmount
                                     values.servicesList = invoiceValues.servicesList
                                     values.invoiceTotalAmount = invoiceTotalAmount ?? null;
@@ -225,28 +229,43 @@ const CreateInvoice = () => {
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) },
                             { label: 'Save', icon: Add, onClick: handleSubmit },
                         ]} />
-                        <ModalUi topHeight='90%' open={isModalOpen} onClose={() => {
+                        {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
+                        <DialogBoxUi
+                            open={isModalOpen} // Set open to true to display the dialog initially
+                            // title="Custom Dialog Title"
+                            content={
+                                <>
+                                    {
+                                        popUpComponent === PopupComponents.GST_TYPE ? <GstTypeScreen /> :
+                                            popUpComponent === PopupComponents.PAYMENT_TERMS ? <PaymentTermsScreen /> :
+                                                popUpComponent === PopupComponents.TDS_TAX ? <TdsTaxScreen /> :
+                                                    popUpComponent === PopupComponents.SERVICES ? <ServiceCreate /> :
+                                                        popUpComponent === PopupComponents.INVOICE ? <InvoiceUi /> : null
+                                    }
+
+                                </>
+                            }
+                            // actions={
+                            //     <Button autoFocus onClick={handleClose}>
+                            //         Save changes
+                            //     </Button>
+                            // }
+                            handleClose={() => {
+                                setIsModalOpen(false)
+                                setPopUpComponent("")
+
+                            }}
+                        />
+                        {/* <ModalUi topHeight='90%' open={isModalOpen} onClose={() => {
                             setIsModalOpen(false)
                             setInvoicePopup(false)
-                            setGstTypePopup(false)
-                            setTdsTaxPopup(false)
-                            setPaymentTermsPopUp(false)
-                            setServicePopUp(false)
                         }} >
                             <>
                                 {invoicePopUp && (
                                     <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} />
                                 )}
-                                {gstTypePopUp && (
-                                    <GstTypeScreen />
-                                )}
-                                {tdsTaxPopUp && (
-                                    <TdsTaxScreen />
-                                )}
-                                {paymentTermsPopUp && (<PaymentTermsScreen />)}
-                                {servicePopUp && (<ServiceCreate />)}
                             </>
-                        </ModalUi>
+                        </ModalUi> */}
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
                                 <Grid item xs={6}>
@@ -315,7 +334,7 @@ const CreateInvoice = () => {
                                         <SelectDropdown
                                             onMouseDown={() => {
                                                 setIsModalOpen(true)
-                                                setGstTypePopup(true)
+                                                setPopUpComponent(PopupComponents.GST_TYPE)
                                                 // navigate("/customer/create")
                                             }}
                                             button={true}
@@ -349,6 +368,7 @@ const CreateInvoice = () => {
                                             label='Gst Percentage'
                                             name='gstPercentage'
                                             type="number"
+                                            endAdornment="%"
                                             value={values.gstPercentage || ""}
                                             onChange={handleChange}
                                             error={touched.gstPercentage && Boolean(errors.gstPercentage)}
@@ -375,8 +395,8 @@ const CreateInvoice = () => {
                                         <SelectDropdown
                                             button={true}
                                             onMouseDown={() => {
+                                                setPopUpComponent(PopupComponents.PAYMENT_TERMS);
                                                 setIsModalOpen(true)
-                                                setPaymentTermsPopUp(true);
                                             }}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
@@ -448,7 +468,7 @@ const CreateInvoice = () => {
                                                             <SelectDropdown
                                                                 onMouseDown={() => {
                                                                     setIsModalOpen(true)
-                                                                    setServicePopUp(true)
+                                                                    setPopUpComponent(PopupComponents.SERVICES)
                                                                 }}
                                                                 button={true}
                                                                 options={modifiedServiceList.map((service) => ({
@@ -549,9 +569,10 @@ const CreateInvoice = () => {
                                             {/* <Typography variant="body2" color="initial">Discount Amount Typography> */}
                                             <TextFieldUi
                                                 width='100px'
-                                                label='Discount %'
+                                                label='Discount'
                                                 name='discount'
                                                 type="number"
+                                                endAdornment="%"
                                                 value={values.discountPercentage ?? ""}
                                                 onChange={(e) => {
                                                     const value = e.target.value;
@@ -572,7 +593,7 @@ const CreateInvoice = () => {
                                             <SelectDropdown
                                                 onMouseDown={() => {
                                                     setIsModalOpen(true)
-                                                    setTdsTaxPopup(true)
+                                                    setPopUpComponent(PopupComponents.TDS_TAX)
                                                     // navigate("/customer/create")
                                                 }}
                                                 button={true}

@@ -1,37 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import { useAddServiceMutation } from '../../../redux-store/service/serviceApi';
-import { toastConfig } from '../../../constants/forms/config/toastConfig';
-import { toast } from 'react-toastify';
-import { GstTypeFields, serviceFields } from '../../../constants/form-data/form-data-json';
-import { gstTypeInitialValue, serviceInitialValues } from '../../../constants/forms/formikInitialValues';
+import React, { useEffect, useMemo } from 'react';
+import { useAddGstTypeMutation, useGetGstTypeQuery, useUpdateGstTypeMutation } from '../../../redux-store/invoice/gstTypeApi';
+import { GstTypeFields } from '../../../constants/form-data/form-data-json';
+import { gstTypeInitialValue } from '../../../constants/forms/formikInitialValues';
+import { gstTypeValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
-import { gstTypeValidationSchema, serviceValidationSchema } from '../../../constants/forms/validations/validationSchema';
-import useSuccessToast from '../../../hooks/useToast';
-import { useAddGstTypeMutation, useGetGstTypeQuery } from '../../../redux-store/invoice/gstTypeApi';
+import { GstTypeFormProps, GstTypeProps } from '../../../types/types';
+import { clearData } from '../../../redux-store/global/globalState';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux-store/store';
 
 
-const GstTypeCreate: React.FC = () => {
-    const [addGstType, { isLoading, isSuccess, isError, error, }] = useAddGstTypeMutation();
-    const { data: getGstType, isSuccess: getSuccess, refetch } = useGetGstTypeQuery();
+// create and edit screen
 
-    const onSubmit = async (values: any, actions: any) => {
+const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
+
+    const [addGstType, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddGstTypeMutation();
+
+    const [updateGstType, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateGstTypeMutation();
+
+    const { data: getGstType, refetch } = useGetGstTypeQuery();
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    const initialValues = gstTypeValue || gstTypeInitialValue;
+
+    const onSubmit = useMemo(() => async (values: GstTypeProps, actions: any) => {
         try {
-            await addGstType(values);
+            if (gstTypeValue) {
+                console.log(values);
+                await updateGstType({ id: gstTypeValue.id, gstTypeData: values });
+                dispatch(clearData());
+            } else {
+                await addGstType(values);
+            }
             actions.resetForm();
-            refetch()
         } catch (error) {
-            console.log(error);
+            console.error("An error occurred during form submission:", error);
+        } finally {
+            actions.setSubmitting(false);
         }
-    };
-    // useSuccessToast({ isSuccess, message: "successfully created the gst type", })
+    }, [addGstType, updateGstType, gstTypeValue]);
+
+    useEffect(() => {
+        if (isAddSuccess || isUpdateSuccess) {
+            refetch();
+            console.log("Operation successful!");
+        }
+    }, [isAddSuccess, isUpdateSuccess]);
+
     return (
         <div>
-            {/* Use DynamicServiceCreate with the required props */}
             <DynamicFormCreate
-                headerName='Create Gst Type'
+                toastMessage={gstTypeValue ? 'Successfully Updated GST Type' : 'Successfully Created GST Type'}
+                isSuccessToast={isAddSuccess || isUpdateSuccess}
+                headerName={gstTypeValue ? 'Edit GST Type' : 'Create GST Type'}
                 showTable={true}
                 fields={GstTypeFields}
-                initialValues={gstTypeInitialValue}
+                initialValues={initialValues}
                 validationSchema={gstTypeValidationSchema}
                 onSubmit={onSubmit}
             />
@@ -39,4 +64,4 @@ const GstTypeCreate: React.FC = () => {
     );
 };
 
-export default GstTypeCreate;
+export default GstTypeForm;

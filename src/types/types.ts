@@ -12,19 +12,29 @@ interface ContactPersonProps {
     contactEmail: string;
 };
 export interface GstTypeProps {
+    id?: string | undefined;
     gstName: string,
     gstPercentage: number | null,
 };
-
+export interface GstTypeFormProps {
+    gstTypeValue?: GstTypeProps;
+}
 export interface TdsTaxProps {
+    id?: string | undefined;
     taxName: string,
     taxPercentage: number | null,
 };
-
+export interface TdsTaxFormProps {
+    tdsTaxValue: TdsTaxProps;
+}
 export interface PaymentTermsProps {
+    id?: string,
     termName: string,
     totalDays: number | null,
 };
+export interface PaymentTermsFormProps {
+    paymentTermsValue: PaymentTermsProps
+}
 
 export interface DyCreateCustomerProps {
     id?: any;

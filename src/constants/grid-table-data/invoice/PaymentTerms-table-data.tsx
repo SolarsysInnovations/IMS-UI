@@ -11,22 +11,35 @@ import { useDeleteInvoiceMutation, useGetInvoiceQuery } from "../../../redux-sto
 import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch } from "react-redux";
 import EditIcon from '@mui/icons-material/Edit';
-import { useDeleteTdsTaxMutation, useGetTdsTaxQuery } from "../../../redux-store/invoice/tdsTaxApi";
-import { useDeletePaymentTermsMutation, useGetPaymentTermsQuery } from "../../../redux-store/invoice/paymentTerms";
+import { useDeletePaymentTermsMutation, useGetPaymentTermsQuery, usePaymentTermsGetByIdMutation } from "../../../redux-store/invoice/paymentTerms";
+import { setData, clearData } from "../../../redux-store/global/globalState";
 
-const MyCellRenderer = ({ row }: { row: any }) => {
+
+const MyCellRenderer = ({ id }: { id: any }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const { data: getPaymentTerms, error, isLoading, isSuccess: getSuccess, refetch } = useGetPaymentTermsQuery();
+    const [getPaymentTerm, { }] = usePaymentTermsGetByIdMutation();
     const [deletePaymentTerms, { isLoading: D_Loading, isSuccess: deleteSuccess }] = useDeletePaymentTermsMutation();
+    const { data: getPaymentTermsList, refetch } = useGetPaymentTermsQuery();
 
-    const handleEditClick = () => {
-        localStorage.setItem("service", JSON.stringify(row));
-        // navigate(`/invoice/edit/${row.id}`)
+    const handleEditClick = async () => {
+        try {
+            const response = await getPaymentTerm(id);
+            if (response && 'data' in response) {
+                const gstTypeData = response.data;
+                console.log(gstTypeData);
+                dispatch(setData(gstTypeData));
+            } else {
+                console.error('Invalid response format:', response);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     };
+
     const handleDeleteClick = () => {
         const confirmed = window.confirm("Are you sure you want to delete this gst type?");
         if (confirmed) {
-            deletePaymentTerms(row.id)
+            deletePaymentTerms(id)
         }
     };
 
@@ -70,6 +83,6 @@ export const paymentTermsColumns: GridColDef[] = [
         // width: 100,
         headerAlign: 'center',
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer row={params.row} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row.id} />,
     },
 ];

@@ -5,41 +5,60 @@ import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-for
 import { gstTypeValidationSchema, serviceValidationSchema, tdsTaxValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { useAddGstTypeMutation, useGetGstTypeQuery } from '../../../redux-store/invoice/gstTypeApi';
 import { TdsTaxFields } from '../../../constants/form-data/form-data-json';
-import { useAddTdsTaxMutation, useGetTdsTaxQuery } from '../../../redux-store/invoice/tdsTaxApi';
+import { useAddTdsTaxMutation, useGetTdsTaxQuery, useUpdateTdsTaxMutation } from '../../../redux-store/invoice/tdsTaxApi';
 import SnackBarUi from '../../../components/ui/Snackbar';
 import { Alert } from '@mui/material';
 import useSuccessToast from '../../../hooks/useToast';
+import { TdsTaxFormProps, TdsTaxProps } from '../../../types/types';
+import { clearData } from '../../../redux-store/global/globalState';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux-store/store';
 
 
-const TdsTaxCreate: React.FC = () => {
-    const [addTdsTax, { isLoading, isSuccess, isError, error, }] = useAddTdsTaxMutation();
-    const { data: tdsTax, refetch } = useGetTdsTaxQuery();
+const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
+    const dispatch = useDispatch<AppDispatch>();
 
-    const onSubmit = useMemo(() => async (values: any, actions: any) => {
+    const [addTdsTax, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddTdsTaxMutation();
+
+    const [updateTdsTax, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateTdsTaxMutation();
+
+    const { data: tdsTaxList, refetch } = useGetTdsTaxQuery();
+
+    const initialValue = tdsTaxValue || tdsTaxInitialValue;
+
+
+    const onSubmit = useMemo(() => async (values: TdsTaxProps, actions: any) => {
         try {
-            await addTdsTax(values).unwrap();
+            if (tdsTaxValue) {
+                await updateTdsTax({ id: tdsTaxValue.id, tdsTaxData: values });
+                dispatch(clearData());
+            } else {
+                await addTdsTax(values);
+            }
             actions.resetForm();
         } catch (error) {
             console.error("An error occurred during form submission:", error);
         } finally {
             actions.setSubmitting(false);
         }
-    }, [addTdsTax]);
+    }, [addTdsTax, updateTdsTax, tdsTaxValue]);
 
     useEffect(() => {
-        refetch()
-    }, [isSuccess, refetch])
-    // useSuccessToast({ isSuccess, message: "successfully created the gst type", })
+        if (isAddSuccess || isUpdateSuccess) {
+            refetch();
+        }
+    }, [isAddSuccess, isUpdateSuccess]);
     return (
         <div>
             {/* Use DynamicServiceCreate with the required props */}
             <DynamicFormCreate
-                toastMessage='SuccessFully Created Tds Tax'
-                isSuccessToast={isSuccess}
-                headerName='Create Tds Tax'
+
+                toastMessage={tdsTaxValue ? 'Successfully Updated Tds Tax' : 'Successfully Created Tds Tax'}
+                isSuccessToast={isAddSuccess || isUpdateSuccess}
+                headerName={tdsTaxValue ? 'Edit Tds Tax ' : 'Create Tds Tax'}
                 showTable={true}
                 fields={TdsTaxFields}
-                initialValues={tdsTaxInitialValue}
+                initialValues={initialValue}
                 validationSchema={tdsTaxValidationSchema}
                 onSubmit={onSubmit}
             />

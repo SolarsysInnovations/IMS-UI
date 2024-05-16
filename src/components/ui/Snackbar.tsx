@@ -2,7 +2,7 @@ import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-interface SnackBarUiProps {
+export interface SnackBarUiProps {
     message: string;
     severity: 'error' | 'warning' | 'info' | 'success';
     autoHideDuration?: number;
@@ -35,7 +35,6 @@ const SnackBarUi: React.FC<SnackBarUiProps> = ({
     return (
         <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={autoHideDuration} onClose={handleClose}>
             <Alert
-
                 onClose={handleClose}
                 severity={severity}
                 variant="filled"

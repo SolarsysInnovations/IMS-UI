@@ -16,7 +16,7 @@ export const gstTypeApi = apiSlice.injectEndpoints({
                 body: gstTypeData,
             }),
         }),
-        updateGstType: builder.mutation<any, { id: number; gstTypeData: Partial<any> }>({
+        updateGstType: builder.mutation<any, { id: string | undefined; gstTypeData: Partial<any> }>({
             query: ({ id, gstTypeData }) => ({
                 url: `${API_URLS.gstTypeUpdate}/${id}`,
                 method: 'POST',

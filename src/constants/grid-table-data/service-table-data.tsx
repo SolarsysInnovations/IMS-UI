@@ -59,7 +59,6 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
             if ('data' in response) {
                 const serviceData = response.data;
                 await dispatch(setServiceData(serviceData));
-                console.log("service data", serviceData);
                 setOpenModal(true);
             } else {
                 console.error('Error response:', response.error);
