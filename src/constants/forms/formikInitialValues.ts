@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps } from "../../types/types";
 import ServicesList from "../../pages/service/service-list-screen";
 
 export const loginInitialValue: LoginProps = {
@@ -7,11 +7,11 @@ export const loginInitialValue: LoginProps = {
     username: "",
     password: "",
 }
-export const companyInitialValues ={
+export const companyInitialValues = {
     companyName: "",
     companyAddress: "",
     companyState: "",
-    companyCountry:"",
+    companyCountry: "",
     companyEmail: "",
     companyPhone: "",
     companyCell: "",
@@ -145,3 +145,8 @@ export const AragingInitialValue: ArAgingInitialValueProps = {
     endDate: "",
 };
 
+export const SendEmailInitialValue: SendEmailInitialValueProps = {
+    recipientEmail: "",
+    fromemail: "",
+    file: null
+}

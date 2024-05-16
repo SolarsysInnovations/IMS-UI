@@ -22,6 +22,19 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCustomerByIdMutation<{ data: any, isSuccess: any, isError: any }>();
 
     const navigate = useNavigate();
+    const role = localStorage.getItem("userRole");
+    const buttons = [];
+    if (role != "APPROVER"  && role != "STANDARD USER") {
+        buttons.push({ label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) })
+    }
+
+
+    function showButton(){
+        if (role === "APPROVER" || role === "STANDARD USER") {
+            return true;
+        }
+        return false;
+    }
 
     const handleEditClick = async () => {
         try {
@@ -64,19 +77,17 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
     return (
         <Stack direction="row" spacing={1}>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
+            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick} disabled={showButton()}>
                 <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
+            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick} disabled={showButton()}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
             <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
-                <TableHeader headerName="Client Details" buttons={[
-                    { label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) },
-                ]} />
+                <TableHeader headerName="Client Details"  buttons={buttons} />
                 <Box sx={{ marginTop: "15px" }}>
                     <CustomerDetails details={customerData || []} />
                 </Box>
@@ -108,19 +119,19 @@ export const columns: GridColDef[] = [
     },
     {
         field: 'companyName',
-        headerName: 'companyName',
+        headerName: 'Company Name',
         width: 150,
         editable: true,
     },
     {
         field: 'customerEmail',
-        headerName: 'customerEmail',
+        headerName: 'Customer Email',
         width: 150,
         editable: true,
     },
     {
         field: 'customerPhone',
-        headerName: 'customerPhone',
+        headerName: 'Customer Phone',
         width: 150,
         editable: false,
     },
