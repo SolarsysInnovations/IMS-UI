@@ -11,12 +11,11 @@ import { useGetServiceQuery } from '../../../redux-store/service/serviceApi'
 import { useGetGstTypeQuery } from '../../../redux-store/invoice/gstTypeApi'
 import { gstTypeColumns } from '../../../constants/grid-table-data/invoice/GstType-table-data'
 
+
+
 const GstTypeList = () => {
     const dispatch = useDispatch<AppDispatch>();
-
     const { data: gstTypeList, error, isLoading } = useGetGstTypeQuery();
-
-
     return (
         <>
             <ToastUi autoClose={1000} />
@@ -25,4 +24,4 @@ const GstTypeList = () => {
     )
 }
 
-export default GstTypeList
+export default GstTypeList;

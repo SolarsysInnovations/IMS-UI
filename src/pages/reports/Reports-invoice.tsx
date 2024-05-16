@@ -46,7 +46,6 @@ const Reportsinvoice: React.FC = () => {
                         if ('data' in response) {
                             // If data exists, log it
                             const data = response.data
-                            console.log("Response data:", response.data);
                             setTableData(data)
                             // Reset form or update state with the data
                             resetForm();

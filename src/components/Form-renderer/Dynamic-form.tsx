@@ -7,8 +7,9 @@ import { Grid } from "@mui/material";
 import { FieldRenderer } from "./Form-fields-renderer";
 import { Add } from "@mui/icons-material";
 import { useState } from "react";
+import SnackBarUi from "../ui/Snackbar";
 
-export const DynamicFormCreate: React.FC<FormProps> = ({ headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit }) => {
+export const DynamicFormCreate: React.FC<FormProps> = ({ toastMessage, isSuccessToast, error, headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit }) => {
 
     const pathname = usePathname();
     const navigate = useNavigate();
@@ -36,6 +37,11 @@ export const DynamicFormCreate: React.FC<FormProps> = ({ headerName, setData, up
                                     </Grid>
                                 ))}
                             </Form>
+                            <SnackBarUi
+                                message={isSuccessToast ? `${toastMessage}` : `Error: ${error?.message || 'Unknown error occurred'}`}
+                                severity={isSuccessToast ? "success" : "error"}
+                                isSubmitting={isSuccessToast}
+                            />
                         </>
                     )
                 }}

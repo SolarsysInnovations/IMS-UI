@@ -11,21 +11,34 @@ import { useDeleteInvoiceMutation, useGetInvoiceQuery } from "../../../redux-sto
 import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch } from "react-redux";
 import EditIcon from '@mui/icons-material/Edit';
-import { useDeleteTdsTaxMutation, useGetTdsTaxQuery } from "../../../redux-store/invoice/tdsTaxApi";
+import { useDeleteTdsTaxMutation, useGetTdsTaxQuery, useTdsTaxGetByIdMutation } from "../../../redux-store/invoice/tdsTaxApi";
+import { setData, clearData } from "../../../redux-store/global/globalState";
 
-const MyCellRenderer = ({ row }: { row: any }) => {
+
+const MyCellRenderer = ({ id }: { id: any }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const { data: getTdsTax, error, isLoading, isSuccess: getSuccess, refetch } = useGetTdsTaxQuery();
+    const { data: getTdsTax, refetch } = useGetTdsTaxQuery();
+    const [getPaymentTerm, { }] = useTdsTaxGetByIdMutation();
     const [deleteTdsTax, { isLoading: D_Loading, isSuccess: deleteSuccess }] = useDeleteTdsTaxMutation();
 
-    const handleEditClick = () => {
-        localStorage.setItem("service", JSON.stringify(row));
-        // navigate(`/invoice/edit/${row.id}`)
+    const handleEditClick = async () => {
+        try {
+            const response = await getPaymentTerm(id);
+            if (response && 'data' in response) {
+                const gstTypeData = response.data;
+                dispatch(setData(gstTypeData));
+            } else {
+                console.error('Invalid response format:', response);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     };
+
     const handleDeleteClick = () => {
         const confirmed = window.confirm("Are you sure you want to delete this gst type?");
         if (confirmed) {
-            deleteTdsTax(row.id)
+            deleteTdsTax(id)
         }
     };
 
@@ -66,6 +79,6 @@ export const tdsTaxColumns: GridColDef[] = [
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer row={params.row} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row.id} />,
     },
 ];

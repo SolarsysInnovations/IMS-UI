@@ -6,7 +6,6 @@ import ButtonSmallUi from "../ui/ButtonSmall";
 import SelectDropdown from "../ui/SelectDropdown";
 import DatePickerUi from "../ui/DatePicker";
 import RadioUi from "../ui/RadioGroup";
-import { log } from "console";
 
 type FormFieldProps = {
   [key: string]: string;
@@ -27,7 +26,6 @@ interface FormConfig {
 
 const FormField = ({ updateFormValue, setFormData }: any) => {
   const { setFieldValue, values } = useFormikContext<FormFieldProps>();
-  console.log(values);
 
   useEffect(() => {
     if (values) {
@@ -102,7 +100,6 @@ interface FieldRendererProps {
 
 const DropdownFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
   const { values, setFieldValue } = useFormikContext<FormFieldProps>();
-  console.log(values);
 
   const handleChange = (selectedValue: any | null) => {
     if (selectedValue) {
@@ -126,7 +123,6 @@ const DropdownFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
 
 const TextFieldRenderer: React.FC<FieldRendererProps> = ({ field }) => {
   const { values, setFieldValue } = useFormikContext<FormFieldProps>();
-  console.log(field);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e) {
@@ -203,7 +199,6 @@ const DynamicForm = () => {
       <h1>{"Formik Context"}</h1>
       <Formik
         onSubmit={async (values) => {
-          console.log(values);
         }}
         initialValues={formValues}
       >

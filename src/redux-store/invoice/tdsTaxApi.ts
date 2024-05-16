@@ -16,7 +16,7 @@ export const tdsTaxApi = apiSlice.injectEndpoints({
                 body: tdsTaxData,
             }),
         }),
-        updateTdsTax: builder.mutation<any, { id: number; tdsTaxData: Partial<any> }>({
+        updateTdsTax: builder.mutation<any, { id: string | undefined; tdsTaxData: Partial<any> }>({
             query: ({ id, tdsTaxData }) => ({
                 url: `${API_URLS.tdsTaxUpdate}/${id}`,
                 method: 'POST',

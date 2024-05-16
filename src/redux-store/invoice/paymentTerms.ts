@@ -16,7 +16,7 @@ export const paymentTermsApi = apiSlice.injectEndpoints({
                 body: paymentTermsData,
             }),
         }),
-        updatePaymentTerms: builder.mutation<any, { id: number; paymentTermsData: Partial<any> }>({
+        updatePaymentTerms: builder.mutation<any, { id: string | undefined; paymentTermsData: Partial<any> }>({
             query: ({ id, paymentTermsData }) => ({
                 url: `${API_URLS.paymentTermsUpdate}/${id}`,
                 method: 'POST',

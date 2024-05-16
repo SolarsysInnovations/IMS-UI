@@ -5,6 +5,7 @@ import { customerApi, customerSlice } from "./customer/customerApi";
 import authReducer from './auth/authSlice';
 import { apiSlice } from "./api/apiSlice";
 import { loginApi } from "./auth/loginApi";
+import { globalSlice } from "./global/globalState";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     [loginApi.reducerPath]: loginApi.reducer, // Add loginApi reducer
     customerState: customerSlice.reducer,
     serviceState: serviceSlice.reducer,
+    globalState: globalSlice.reducer,
     auth: authReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
