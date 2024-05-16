@@ -57,6 +57,9 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
                 initialValues={initialValues}
                 validationSchema={paymentTermsValidationSchema}
                 onSubmit={onSubmit}
+                buttons={[
+                    { label: 'Save', onClick: onSubmit }
+                ]}
             />
         </div>
     );

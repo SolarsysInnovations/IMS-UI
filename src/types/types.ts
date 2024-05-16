@@ -64,6 +64,7 @@ export interface FormProps {
     isSuccessToast?: boolean;
     error?: any;
     toastMessage?: string;
+    buttons?: any;
 };
 export interface SubField {
     name: string;

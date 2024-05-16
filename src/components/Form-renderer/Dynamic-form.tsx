@@ -9,10 +9,12 @@ import { Add } from "@mui/icons-material";
 import { useState } from "react";
 import SnackBarUi from "../ui/Snackbar";
 
-export const DynamicFormCreate: React.FC<FormProps> = ({ toastMessage, isSuccessToast, error, headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit }) => {
+export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error, headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit }: FormProps) => {
 
     const pathname = usePathname();
     const navigate = useNavigate();
+
+
     return (
         <div>
             <Formik
@@ -22,13 +24,22 @@ export const DynamicFormCreate: React.FC<FormProps> = ({ toastMessage, isSuccess
                 onSubmit={onSubmit}
             >
                 {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => {
+                    const defaultButtons = [
+                        { label: 'Back', icon: Add, onClick: () => navigate(-1) },
+                        { label: 'Save', icon: Add, onClick: handleSubmit } // Use handleSubmit here
+                    ];
+
+                    const resolvedButtons = buttons ? buttons.map((button: any) => ({
+                        ...button,
+                        onClick: button.label === 'Save' ? handleSubmit : button.onClick
+                    })) : defaultButtons;
                     return (
                         <>
                             {showTable && (
-                                <TableHeader headerName={headerName || pathname} buttons={[
-                                    { label: 'Back', icon: Add, onClick: () => navigate(-1) },
-                                    { label: 'Save', icon: Add, onClick: handleSubmit },
-                                ]} />
+                                <TableHeader
+                                    headerName={headerName || pathname}
+                                    buttons={resolvedButtons}
+                                />
                             )}
                             <Form>
                                 {fields?.map((field: FieldProps) => (
