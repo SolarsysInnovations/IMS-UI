@@ -52,6 +52,9 @@ export enum ApiEndpoint {
     SETTINGS_UPDATE = "settingsUpdate",
     SETTINGS_CREATE = "settingsCreate",
     SETTINGS_LIST = "settingsList",
+    //Link
+    LINK_CREATE = "linkCreate",
+    LINK_LIST = "linkList"
 }
 
 export type ApiUrls = {
@@ -104,6 +107,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.SETTINGS_CREATE]: `/setting/create`,
     [ApiEndpoint.SETTINGS_UPDATE]: `/setting/update`,
     [ApiEndpoint.SETTINGS_LIST]: `/setting/list`,
-
-
+    //link endpoints
+    [ApiEndpoint.LINK_CREATE]: `/link/create`,
+    [ApiEndpoint.LINK_LIST]: `/link/list`,
 };

@@ -18,7 +18,6 @@ export const companyInitialValues ={
     companyWebsite: "",
     companyTaxNumber: "",
     companyRegNumber: "",
-    companyList:[],
 
 };
 
@@ -45,7 +44,11 @@ export const serviceInitialValues = {
     serviceDescription: "",
     serviceAmount: "",
 };
-
+export const linkInitialValues = {
+    label: "",
+    url: "",
+    description: "",
+};
 export const gstTypeInitialValue: GstTypeProps = {
     gstName: "",
     gstPercentage: 0,

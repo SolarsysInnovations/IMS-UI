@@ -102,6 +102,19 @@ export const serviceFields: FieldProps[] = [
     },
 ];
 
+export const linkFields: FieldProps[] = [
+    {
+        name: 'New Link',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'label', label: 'Label', type: 'text', gridSize: 5, validation: Yup.string().required('Label is required',) },
+            { name: 'url', label: 'URL', type: 'text', gridSize: 5, validation: Yup.string().required('URL is required') },
+            { name: 'description', label: 'Description', type: 'description', gridSize: 10, validation: Yup.string().required('Description is required') },
+        ]
+    },
+];
+
 
 export const companyFields: FieldProps[] = [
     {
@@ -109,9 +122,9 @@ export const companyFields: FieldProps[] = [
         type: 'section',
         titleGridSize: 12,
         subFields: [
-            { name: 'companyName', label: 'Company Name', type: 'text', gridSize: 4, validation: Yup.string().required('Service Accounting Code is required',) },
-            { name: 'companyAddress', label: 'Company Address', type: 'text', gridSize: 4, validation: Yup.string().required('Description is required') },
-            { name: 'companyState', label: 'Company State', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
+            { name: 'companyName', label: 'Company Name', type: 'text', gridSize: 4, validation: Yup.string().required('Company Name is required',) },
+            { name: 'companyAddress', label: 'Company Address', type: 'text', gridSize: 4, validation: Yup.string().required('Company Address is required') },
+            { name: 'companyState', label: 'Company State', type: 'text', gridSize: 4, validation: Yup.string().required('Company State is required') },
             { name: 'companyCountry', label: 'Company Country', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
             { name: 'companyEmail', label: 'Company Email', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
             { name: 'companyPhone', label: 'Company Phone', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
