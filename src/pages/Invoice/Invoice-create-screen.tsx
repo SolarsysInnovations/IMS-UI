@@ -40,6 +40,7 @@ import { addDays, format } from 'date-fns';
 import ServiceCreate from '../service/service-create-screen';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { clearData } from '../../redux-store/global/globalState';
+import SendEmail from './Send-email';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -59,7 +60,10 @@ const CreateInvoice = () => {
     const [invoiceFinalData, setInvoiceFinalData] = useState();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [addInvoice, { isSuccess, isError, }] = useAddInvoiceMutation();
+    const [opendialogBox, setIsOpenDialogBox] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEmailModalOpen, setisEmailModalOpen] = useState(false);
+    const [emailPopUp, setEmailPopUp] = useState(false);
     const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
     const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
     const [discountAmount, setDiscountAmount] = useState<null | number>(null);
@@ -231,7 +235,7 @@ const CreateInvoice = () => {
                         ]} />
                         {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
                         <DialogBoxUi
-                            open={isModalOpen} // Set open to true to display the dialog initially
+                            open={opendialogBox} // Set open to true to display the dialog initially
                             // title="Custom Dialog Title"
                             content={
                                 <>
@@ -242,7 +246,6 @@ const CreateInvoice = () => {
                                                     popUpComponent === PopupComponents.SERVICES ? <ServiceCreate /> :
                                                         popUpComponent === PopupComponents.INVOICE ? <InvoiceUi /> : null
                                     }
-
                                 </>
                             }
                             // actions={
@@ -251,7 +254,7 @@ const CreateInvoice = () => {
                             //     </Button>
                             // }
                             handleClose={() => {
-                                setIsModalOpen(false)
+                                setIsOpenDialogBox(false)
                                 setPopUpComponent("")
 
                             }}
@@ -262,10 +265,20 @@ const CreateInvoice = () => {
                         }} >
                             <>
                                 {invoicePopUp && (
-                                    <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} />
+                                    <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData}  emailModalOpen={setisEmailModalOpen} emailPopup={setEmailPopUp} isModalOpen={setIsModalOpen} invoicePopup={setInvoicePopup} gstTypePopup={setGstTypePopup} tdsTaxPopup={setTdsTaxPopup} paymentTermsPopUp={setPaymentTermsPopUp}/>
                                 )}
                             </>
                         </ModalUi> */}
+
+                        <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
+                            setIsModalOpen(false)
+                            setEmailPopUp(false)
+                        }} >
+                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} emailModalOpen={setisEmailModalOpen} emailPopup={setEmailPopUp} isModalOpen={setIsModalOpen} />
+                            {emailPopUp && (
+                                <SendEmail />
+                            )}
+                        </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
                                 <Grid item xs={6}>
@@ -333,7 +346,7 @@ const CreateInvoice = () => {
                                     <Box>
                                         <SelectDropdown
                                             onMouseDown={() => {
-                                                setIsModalOpen(true)
+                                                setIsOpenDialogBox(true)
                                                 setPopUpComponent(PopupComponents.GST_TYPE)
                                                 // navigate("/customer/create")
                                             }}
@@ -396,7 +409,7 @@ const CreateInvoice = () => {
                                             button={true}
                                             onMouseDown={() => {
                                                 setPopUpComponent(PopupComponents.PAYMENT_TERMS);
-                                                setIsModalOpen(true)
+                                                setIsOpenDialogBox(true)
                                             }}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
@@ -467,7 +480,7 @@ const CreateInvoice = () => {
                                                         <TableCell component="th" scope="row">
                                                             <SelectDropdown
                                                                 onMouseDown={() => {
-                                                                    setIsModalOpen(true)
+                                                                    setIsOpenDialogBox(true)
                                                                     setPopUpComponent(PopupComponents.SERVICES)
                                                                 }}
                                                                 button={true}
@@ -592,7 +605,7 @@ const CreateInvoice = () => {
                                         <Box sx={{ display: "flex" }} >
                                             <SelectDropdown
                                                 onMouseDown={() => {
-                                                    setIsModalOpen(true)
+                                                    setIsOpenDialogBox(true)
                                                     setPopUpComponent(PopupComponents.TDS_TAX)
                                                     // navigate("/customer/create")
                                                 }}

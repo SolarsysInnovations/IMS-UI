@@ -11,9 +11,15 @@ import { useGetCustomersQuery, useUpdateCustomerMutation } from '../../redux-sto
 const CustomerList = () => {
     const [updateCustomer, { isSuccess, isError }] = useUpdateCustomerMutation();
     const { data: customers, error, isLoading } = useGetCustomersQuery();
-    const buttons = [
-        { label: 'Create Customer', icon: Add, onClick: () => navigate("/customer/create") },
-    ];
+
+    const role = localStorage.getItem("userRole");
+    const buttons = [];
+    
+    if (role != "APPROVER" && role != "STANDARD USER") {
+        buttons.push({ label: 'Create Customer', icon: Add, onClick: () => navigate("/customer/create") })
+    }
+        
+    
     const navigate = useNavigate();
     const pathname = usePathname();
 

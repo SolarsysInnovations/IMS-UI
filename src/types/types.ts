@@ -172,18 +172,26 @@ export interface companyInitialValueProps {
     companyName: string;
     companyAddress: string;
     companyState: string;
-    companyCountry:string;
-    companyEmail:string;
-    companyPhone:string;
-    companyCell:string;
-    companyWebsite:string;
-    companyTaxNumber:string;
-    companyRegNumber:string;
+    companyCountry: string;
+    companyEmail: string;
+    companyPhone: string;
+    companyCell: string;
+    companyWebsite: string;
+    companyTaxNumber: string;
+    companyRegNumber: string;
 
-  
+
 }
 export interface linkCreationProps {
     link: string;
     url: string;
     description: string;
 };
+// ---------user login --------------------
+
+export interface SendEmailInitialValueProps {
+    fromemail: string;
+    recipientEmail: string;
+    //description: string;
+    file: File | null;
+}
