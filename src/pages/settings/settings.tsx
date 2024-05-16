@@ -33,24 +33,23 @@ const Settingscreen = () => {
   const pathname = usePathname();
   const [updateSetting,] = useUpdateSettingMutation();
   const [addSetting, { isLoading, isSuccess, isError, error }] = useAddSettingMutation();
-  const invoiceStateDetails = useSelector(
-    (state: any) => state.customerState.data
-  );
-  const [settingValues, setSettingValues] = useState(invoiceStateDetails);
-  const [updateData] = useUpdateSettingMutation();
-  //   const companyStateDetails = useSelector((state: any) => state.companyState.data);
+  // const companyStateDetails = useSelector((state: any) => state.companyState.data);
   const [openModal, setOpenModal] = React.useState(false);
   const [data, setData] = useState<any>();
-  const { data: getGstType, isSuccess: getSuccess, refetch } = useGetSettingQuery();
+  const { refetch } = useGetSettingQuery();
 
-  const onSubmit = async (values: any, actions: any) => {
-    try {
-        await addSetting(values);
-        actions.resetForm();
-        refetch()
-    } catch (error) {
-        console.log(error);
-    }
+const onSubmit = async (values: any, actions: any) => {
+  // try {
+  //     const id: number = values?._id
+  //     await updateSetting({
+  //         id: id,
+  //         setting: values,
+  //     });
+  //     actions.resetForm();
+  //     // setserviceDetails();
+  // } catch (error) {
+  //     console.log(error);
+  // }
 };
 const handleModalClose = () => {
   refetch()
@@ -64,9 +63,7 @@ const buttons1 = [
   { label: 'Save', icon: Add, onClick: () => setOpenModal(true) },
 ];
   const updateFormValue = (setFieldValue: Function) => {
-    // if (data?.customerName === "arun") {
-    //     setFieldValue("companyName", "arun");
-    // }
+    
 };
   const handleTabChange = (e: any, tabIndex: any) => {
     console.log(tabIndex);
@@ -184,7 +181,6 @@ const buttons1 = [
             </Box>
           )}
         </React.Fragment>
-      
     // </Formik>
   );
 };

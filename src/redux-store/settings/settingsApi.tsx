@@ -43,7 +43,7 @@ export const settingsApi = apiSlice.injectEndpoints({
 
         addSetting: builder.mutation<any, Partial<any>>({
             query: (settings) => ({
-                url: API_URLS.settingsCreate,
+                url: `/setting/createCompany`,
                 method: 'POST',
                 body: settings,
             }),
