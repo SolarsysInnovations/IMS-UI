@@ -40,7 +40,6 @@ import { addDays, format } from 'date-fns';
 import ServiceCreate from '../service/service-create-screen';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { clearData } from '../../redux-store/global/globalState';
-import SendEmail from './Send-email';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -62,8 +61,6 @@ const CreateInvoice = () => {
     const [addInvoice, { isSuccess, isError, }] = useAddInvoiceMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isEmailModalOpen, setisEmailModalOpen] = useState(false);
-    const [emailPopUp, setEmailPopUp] = useState(false);
     const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
     const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
     const [discountAmount, setDiscountAmount] = useState<null | number>(null);
@@ -272,12 +269,8 @@ const CreateInvoice = () => {
 
                         <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
                             setIsModalOpen(false)
-                            setEmailPopUp(false)
                         }} >
-                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} emailModalOpen={setisEmailModalOpen} emailPopup={setEmailPopUp} isModalOpen={setIsModalOpen} />
-                            {emailPopUp && (
-                                <SendEmail />
-                            )}
+                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData}  isModalOpen={setIsModalOpen} />
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>

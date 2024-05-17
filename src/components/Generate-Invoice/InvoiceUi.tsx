@@ -8,28 +8,25 @@ import { formatDate } from "../../services/utils/dataFormatter";
 import ButtonSmallUi from "../ui/ButtonSmall";
 import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { addDays, format } from "date-fns";
+import DialogBoxUi from "../ui/DialogBox";
+import SendEmail from "../../pages/Invoice/Send-email";
 
 interface InvoiceUiProps {
     invoiceData?: any;
     subtotal?: number | null;
     discount?: number | null;
     tds?: number | null;
-    emailModalOpen?: any;
-    emailPopup?: any;
     isModalOpen?: any
-    invoicePopup?: any
-    gstTypePopup?: any
-    tdsTaxPopup?: any
-    paymentTermsPopUp?: any
 }
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function InvoiceUi({ invoiceData, subtotal, discount, tds, emailModalOpen, emailPopup, isModalOpen, invoicePopup, gstTypePopup, tdsTaxPopup, paymentTermsPopUp }: InvoiceUiProps) {
+function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: InvoiceUiProps) {
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [subTotalAmount, setSubTotalAmount] = useState<number>(0)
     const [customerDetails, setCustomerDetails] = useState<any>()
     const [discountAmount, setDiscountAmount] = useState<number>(0)
+    const [openemaildialogBox, setIsOpenEmailDialogBox] = useState(false);
 
     useEffect(() => {
         if (invoiceData) {
@@ -192,13 +189,22 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds, emailModalOpen, email
             <Grid container spacing={5}>
                 <Grid item xs={5} sx={{ display: " flex", justifyContent: "space-between" }}>
                     <ButtonSmallUi label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
-                    <ButtonSmallUi label="Email To" variant="contained" size="small" onClick={() => { emailModalOpen(true); emailPopup(true); isModalOpen(false); invoicePopup(false); gstTypePopup(false); tdsTaxPopup(false); paymentTermsPopUp(false); }} />
+                    <ButtonSmallUi label="Email To" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); } } />
                 </Grid>
             </Grid>
 
+            <DialogBoxUi
+                open={openemaildialogBox} // Set open to true to display the dialog initially
+                // title="Custom Dialog Title"
+                content={
+                   <SendEmail />
+                }
+                handleClose={() => {
+                    setIsOpenEmailDialogBox(false)
+                }}
+            />
         </>
     );
-
 }
 
 export default InvoiceUi;
