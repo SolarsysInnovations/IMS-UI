@@ -92,8 +92,8 @@ interface ServiceListProps {
     id: string;
     serviceAccountingCode: string;
     serviceAmount: number;
-    quantity: number;
-    price: number;
+    serviceQty: number;
+    serviceTotalAmount: number;
 };
 
 export interface ReportListProps {
