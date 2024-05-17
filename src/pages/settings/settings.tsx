@@ -23,6 +23,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { Link } from '@mui/material';
 import ModalUi from '../../components/ui/ModalUi'
 import AddLink from './link'
+import { Card, CardContent, Button } from '@mui/material';
 
 
 
@@ -39,17 +40,17 @@ const Settingscreen = () => {
   const { refetch } = useGetSettingQuery();
 
 const onSubmit = async (values: any, actions: any) => {
-  // try {
-  //     const id: number = values?._id
-  //     await updateSetting({
-  //         id: id,
-  //         setting: values,
-  //     });
-  //     actions.resetForm();
-  //     // setserviceDetails();
-  // } catch (error) {
-  //     console.log(error);
-  // }
+   try {
+       const id: number = values?._id
+       await updateSetting({
+           id: id,
+           settings: values,
+       });
+       actions.resetForm();
+       // setserviceDetails();
+ } catch (error) {
+       console.log(error);
+   }
 };
 const handleModalClose = () => {
   refetch()
@@ -58,10 +59,7 @@ const handleModalClose = () => {
 const buttons = [
   { label: 'Add Link', icon: Add, onClick: () => setOpenModal(true) },
 ];
-const buttons1 = [
-  { label: 'Edit', icon: Add, onClick: () => setOpenModal(true) },
-  { label: 'Save', icon: Add, onClick: () => setOpenModal(true) },
-];
+
   const updateFormValue = (setFieldValue: Function) => {
     
 };
@@ -128,21 +126,25 @@ const buttons1 = [
           {currentTabIndex === 0 && (
             <Container fixed>
               <Box sx={{ml:"-40px"}}>
-              <TableHeader headerName={"Update Your Company Information"} buttons={buttons1} />
-                <Typography mt={2} variant="body1">
-                <Stack direction="row" spacing={1} alignItems="center">
-        <Typography variant="body2">Multi Branch</Typography>
-        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-      </Stack>
+                {/* <Typography mt={2} variant="body1">
+                <Stack direction="row" spacing={1} alignItems="center"> */}
+        {/* <Typography variant="body2">Multi Branch</Typography> */}
+        {/* <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} /> */}
+      {/* </Stack> */}
                   <DynamicFormCreate
+                  showTable={true}
+                  headerName="Update your Company Information"
                     setData={setData}
                     updateFormValue={updateFormValue}
                     fields={companyFields}
                     initialValues={companyInitialValues || []}
                     validationSchema={companyValidationSchema}
                     onSubmit={onSubmit}
+                    buttons={[
+                      { label: 'Save', onClick: onSubmit }
+                   ]}
                   />
-                </Typography>
+                {/* </Typography> */}
               </Box>
             </Container>
           )}
@@ -157,9 +159,21 @@ const buttons1 = [
                     <AddLink />
                 </Box>
             </ModalUi>
-               <Typography mt={2} variant="body1" sx={{display:"flex",width:"300px",justifyContent:"space-between"}}>
-            <Box sx={{alignItems:"center",display:"flex"}}>    <LanguageIcon /><Link href="https://contents.tdscpc.gov.in/">TRACES</Link></Box>
-              <Box sx={{alignItems:"center",display:"flex"}}> <LanguageIcon/><Link href="https://tin.tin.nsdl.com/oltas/index">OLTAS Challan</Link></Box>
+               <Typography mt={2} sx={{display:"flex",width:"380px", justifyContent:"space-between"}} variant="body1" >
+               <Card elevation={7} sx={{display:"flex",width:"180px"}}>
+      <CardContent>
+        <Typography variant="caption" sx={{display:"flex",width:"300px"}}>
+        <Box sx={{alignItems:"center",display:"flex"}}>    <LanguageIcon /><Link href="https://contents.tdscpc.gov.in/">TRACES</Link></Box>
+        </Typography>
+      </CardContent>
+      </Card>
+      <Card elevation={7} sx={{display:"flex",width:"180px"}}>
+        <CardContent>
+        <Typography variant="caption" sx={{display:"flex",width:"300px"}}>
+      <Box sx={{alignItems:"center",display:"flex", }}> <LanguageIcon/><Link href="https://tin.tin.nsdl.com/oltas/index">OLTAS Challan</Link></Box>
+</Typography>
+</CardContent>
+      </Card> 
              </Typography>
              </Box> 
            </Container>

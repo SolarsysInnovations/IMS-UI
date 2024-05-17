@@ -61,7 +61,7 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
                 validationSchema={tdsTaxValidationSchema}
                 onSubmit={onSubmit}
                 buttons={[
-                    { label: 'Save', onClick: onSubmit }
+                   { label: 'Save', onClick: onSubmit }
                 ]}
             />
         </div>
