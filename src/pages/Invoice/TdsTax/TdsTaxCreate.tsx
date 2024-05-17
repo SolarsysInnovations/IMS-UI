@@ -52,7 +52,6 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
         <div>
             {/* Use DynamicServiceCreate with the required props */}
             <DynamicFormCreate
-
                 toastMessage={tdsTaxValue ? 'Successfully Updated Tds Tax' : 'Successfully Created Tds Tax'}
                 isSuccessToast={isAddSuccess || isUpdateSuccess}
                 headerName={tdsTaxValue ? 'Edit Tds Tax ' : 'Create Tds Tax'}
@@ -61,6 +60,9 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
                 initialValues={initialValue}
                 validationSchema={tdsTaxValidationSchema}
                 onSubmit={onSubmit}
+                buttons={[
+                    { label: 'Save', onClick: onSubmit }
+                ]}
             />
         </div>
     );

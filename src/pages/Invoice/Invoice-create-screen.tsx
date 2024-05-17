@@ -133,8 +133,8 @@ const CreateInvoice = () => {
     const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const { value } = event.target;
         const parsedValue = parseInt(value); // Parse the value to an integer
-        setInvoiceValues(prevInvoiceValues => {
-            const updatedServicesList = prevInvoiceValues.servicesList.map((service, serviceIndex) => {
+        setInvoiceValues((prevInvoiceValues: any) => {
+            const updatedServicesList = prevInvoiceValues.servicesList.map((service: any, serviceIndex: any) => {
                 if (serviceIndex === index) {
                     const quantity = isNaN(parsedValue) ? 0 : parsedValue; // If parsedValue is NaN, set quantity to 0
                     const price = quantity * service.serviceAmount; // Calculate the amount
@@ -163,7 +163,7 @@ const CreateInvoice = () => {
             price: 0
         };
         const updatedServicesList = [...invoiceValues.servicesList, newRow];
-        setInvoiceValues(prevState => ({
+        setInvoiceValues((prevState: any) => ({
             ...prevState,
             servicesList: updatedServicesList
         }));
@@ -171,12 +171,12 @@ const CreateInvoice = () => {
 
     const handleRemoveRow = (id: string) => {
         // Find the index of the row with the provided id in invoiceValues.servicesList
-        const index = invoiceValues.servicesList.findIndex(row => row.id === id);
+        const index = invoiceValues.servicesList.findIndex((row: any) => row.id === id);
         if (index !== -1) {
             // Create a new array without the removed row
-            const updatedServicesList = invoiceValues.servicesList.filter((_, idx) => idx !== index);
+            const updatedServicesList = invoiceValues.servicesList.filter((_: any, idx: any) => idx !== index);
             // Update the state with the new array
-            setInvoiceValues(prevState => ({
+            setInvoiceValues((prevState: any) => ({
                 ...prevState,
                 servicesList: updatedServicesList
             }));
@@ -200,12 +200,14 @@ const CreateInvoice = () => {
             validate={() => ({})}
             onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
                 try {
-                    values.invoiceTotalAmount = invoiceTotalAmount
+                    // values.invoiceTotalAmount = invoiceTotalAmount
                     values.servicesList = invoiceValues.servicesList
-                    values.invoiceTotalAmount = invoiceTotalAmount ?? null;
-                    await addInvoice(values);
+                    values.totalAmount = invoiceTotalAmount ?? null;
+                    // await addInvoice(values);
                     // alert(JSON.stringify(values));
-                    resetForm();
+                    console.log(values);
+
+                    // resetForm();
                     setInvoiceValues({ ...invoiceInitialValue })
                 } catch (error) {
                     console.error("An error occurred during login:", error);
@@ -224,9 +226,9 @@ const CreateInvoice = () => {
                                 label: 'Preview', icon: Add, onClick: () => {
                                     setIsModalOpen(true)
                                     // setInvoicePopup(true)
-                                    values.invoiceTotalAmount = invoiceTotalAmount
+                                    // values.invoiceTotalAmount = invoiceTotalAmount
                                     values.servicesList = invoiceValues.servicesList
-                                    values.invoiceTotalAmount = invoiceTotalAmount ?? null;
+                                    values.totalAmount = invoiceTotalAmount ?? null;
                                     setInvoiceFinalData(values as any)
                                 }
                             },
@@ -475,7 +477,7 @@ const CreateInvoice = () => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {invoiceValues?.servicesList?.map((item, index) => (
+                                                {invoiceValues?.servicesList?.map((item: any, index: any) => (
                                                     <TableRow key={item.id}>
                                                         <TableCell component="th" scope="row">
                                                             <SelectDropdown
@@ -495,7 +497,7 @@ const CreateInvoice = () => {
                                                                         if (selectedService) {
                                                                             const updatedServiceList = [...invoiceValues.servicesList];
                                                                             updatedServiceList[index] = { ...selectedService, id: item.id }; // Update the existing service in the list
-                                                                            setInvoiceValues(prevState => ({
+                                                                            setInvoiceValues((prevState: any) => ({
                                                                                 ...prevState,
                                                                                 servicesList: updatedServiceList
                                                                             }));
@@ -508,7 +510,7 @@ const CreateInvoice = () => {
                                                                             quantity: 0,
                                                                             price: 0
                                                                         };
-                                                                        setInvoiceValues(prevState => ({
+                                                                        setInvoiceValues((prevState: any) => ({
                                                                             ...prevState,
                                                                             servicesList: updatedServiceList
                                                                         }));

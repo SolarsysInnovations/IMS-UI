@@ -12,7 +12,6 @@ import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
-import { invoiceInitialValue } from '../../constants/forms/formikInitialValues';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 import { InvoiceInitialValueProps } from '../../types/types';
 import { useGetServiceQuery, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
@@ -75,7 +74,6 @@ const InvoiceEdit = () => {
     const [invoiceValues, setInvoiceValues] = useState(invoiceStateDetails);
     const { data: gstTypesData = [] } = useGetGstTypeQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxQuery();
-
 
     // * ----------- to generate the dropdown options -------------
     const customerName = generateOptions(customers, 'customerName', 'customerName');
@@ -192,7 +190,8 @@ const InvoiceEdit = () => {
             onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
                 try {
                     values.servicesList = invoiceValues.servicesList
-                    values.invoiceTotalAmount = invoiceTotalAmount ?? null;
+                    values.totalAmount = invoiceTotalAmount ?? null;
+                    console.log(values);
 
                     await updateInvoice({
                         id: values.id ?? undefined,
