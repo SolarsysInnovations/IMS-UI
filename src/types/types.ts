@@ -118,12 +118,10 @@ export interface InvoiceInitialValueProps {
     gstPercentage: number | null;
     startDate: string;
     dueDate: string;
-    endDate: string;
     gstInNumber: string;
     paymentTerms: string;
     invoiceStatus: string;
-    totalAmount: string;
-    invoiceTotalAmount: number | null | undefined;
+    totalAmount: number | null;
     discountPercentage: number | null;
     notes: string;
     termsAndConditions: string;

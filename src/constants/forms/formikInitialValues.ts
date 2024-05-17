@@ -102,15 +102,13 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
     paymentTerms: "",
     startDate: '',
     dueDate: '',
-    endDate: '',
     invoiceStatus: "Pending",
     discountPercentage: null,
-    invoiceTotalAmount: null,
+    totalAmount: null,
     notes: "Thanks for your business transaction",
-    totalAmount: "",
     termsAndConditions: "",
     taxAmount: {
-        tds: ""
+        tds: "",
     },
     servicesList: [],
 };
