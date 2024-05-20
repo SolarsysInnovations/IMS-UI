@@ -24,11 +24,9 @@ import { Link } from '@mui/material';
 import ModalUi from '../../components/ui/ModalUi'
 import AddLink from './link'
 import { Card, CardContent, Button } from '@mui/material';
+import { List, ListItem, ListItemText, TextField } from '@mui/material';
 
-
-
-
-const Settingscreen = () => {
+const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
   const navigate = useNavigate();
   const pathname = usePathname();
@@ -38,7 +36,14 @@ const Settingscreen = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [data, setData] = useState<any>();
   const { refetch } = useGetSettingQuery();
-
+  const [links, setLinks] = useState<string[]>([]); // Provide explicit type string[] for links
+  const [newLink, setNewLink] = useState('');
+  const handleAddLink = () => {
+    if (newLink.trim() !== '') {
+      setLinks([...links, newLink]);
+      setNewLink('');
+    }
+  }
 const onSubmit = async (values: any, actions: any) => {
    try {
        const id: number = values?._id
@@ -109,6 +114,21 @@ const buttons = [
   //   },
   // }));
 
+  const linkCreation = [
+    {
+      "href": "https://contents.tdscpc.gov.in/",
+      "icon": <LanguageIcon />,
+      "label": "TRACES",
+      "description": ""
+    },
+    {
+      "href": "https://tin.tin.nsdl.com/oltas/index",
+      "icon": <LanguageIcon />,
+      "label": "OLTAS Challan",
+      "description": ""
+    },
+  ]
+
   const StyledLink = styled('a')(({ theme }) => ({
     marginLeft: '8px',
     color: 'inherit', // Use your preferred initial color
@@ -169,8 +189,17 @@ const buttons = [
                     <AddLink />
                 </Box>
             </ModalUi>
-               <Typography mt={2} sx={{display:"flex",width:"380px", justifyContent:"space-between"}} variant="body1" >
-               <Card elevation={7} sx={{display:"flex",width:"180px"}}>
+               <Typography mt={2} sx={{display:"flex",width:"1020px",flexWrap:"wrap"}} variant="body1" >
+                {linkCreation && linkCreation.map((link, index) => (
+                    <Card elevation={7} sx={{display:"flex",width:"180px", margin: "10px"}} key={index}>
+                    <CardContent>
+                      <Typography variant="caption" sx={{display:"flex",width:"300px"}}>
+                      <Box sx={{alignItems:"center",display:"flex"}}>    {link.icon}<Link href={link.href}>{link.label}</Link></Box>
+                      </Typography>
+                    </CardContent>
+                    </Card>
+                  ))}
+                {/* <Card elevation={7} sx={{display:"flex",width:"180px"}}>
       <CardContent>
         <Typography variant="caption" sx={{display:"flex",width:"300px"}}>
         <Box sx={{alignItems:"center",display:"flex"}}>    <LanguageIcon /><Link href="https://contents.tdscpc.gov.in/">TRACES</Link></Box>
@@ -183,7 +212,7 @@ const buttons = [
       <Box sx={{alignItems:"center",display:"flex", }}> <LanguageIcon/><Link href="https://tin.tin.nsdl.com/oltas/index">OLTAS Challan</Link></Box>
 </Typography>
 </CardContent>
-      </Card> 
+      </Card>   */}
              </Typography>
              </Box> 
            </Container>
@@ -218,4 +247,4 @@ const buttons = [
   );
 };
 
-export default Settingscreen;
+export default SettingScreen;
