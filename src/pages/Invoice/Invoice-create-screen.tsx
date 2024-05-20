@@ -205,11 +205,11 @@ const CreateInvoice = () => {
                     // values.invoiceTotalAmount = invoiceTotalAmount
                     values.servicesList = invoiceValues.servicesList
                     values.totalAmount = invoiceTotalAmount ?? null;
-                    // await addInvoice(values);
+                    await addInvoice(values);
                     // alert(JSON.stringify(values));
                     console.log(values);
 
-                    // resetForm();
+                    resetForm();
                     setInvoiceValues({ ...invoiceInitialValue })
                 } catch (error) {
                     console.error("An error occurred during login:", error);

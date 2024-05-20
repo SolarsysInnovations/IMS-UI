@@ -19,7 +19,7 @@ interface InvoiceProps {
     paymentTerms: string;
     dueDate: string;
     invoiceStatus: string;
-    totalAmount:string;
+    totalAmount: string;
     servicesList: ServiceProps[];
 }
 
@@ -37,7 +37,7 @@ export const invoiceData: InvoiceProps[] = [
         paymentTerms: "",
         dueDate: "20-12-2024",
         invoiceStatus: "pending",
-        totalAmount:"2000",
+        totalAmount: "2000",
         servicesList: [
             {
                 serviceAccountingCode: "234923",
@@ -57,7 +57,7 @@ export const invoiceData: InvoiceProps[] = [
 
 export const invoiceType = [
     { value: "Retainer", label: "Retainer" },
-    { value: "Onetime", label: "Onetime" },
+    { value: "Service", label: "Service" },
 ]
 export const governmentGstType = [
     { value: "TDS", label: "TDS" },
