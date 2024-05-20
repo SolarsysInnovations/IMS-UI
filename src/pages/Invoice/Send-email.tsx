@@ -19,23 +19,26 @@ const SendEmail = () => {
   const [sendEmailNotifiction, { isSuccess, isError }] =
     useSendEmailNotifictionMutation();
   const [emailValues, setemailValues] = useState(SendEmailInitialValue);
-  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [showfilename, setShowFileName] = useState<String[]>([]);
   const [editor, setEditor] = useState<any>(null); // To keep reference of the editor
   const pathname = 'Send Email'
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      const file = files[0];
-      setUploadedFiles([...uploadedFiles, file.name]);
-      // Handle file upload logic here
-      console.log("Uploaded file:", file);
+      const fileName = files[0].name;
+      const fileslist = Array.from(files);
+      setUploadedFiles((prevFiles) => [...prevFiles, ...fileslist]);
+      setShowFileName([...showfilename, fileName]);
     }
   };
 
   const handleRemoveFile = (index: number) => {
     const updatedFiles = uploadedFiles.filter((_, i) => i !== index);
     setUploadedFiles(updatedFiles);
+    const updatedShowFiles = showfilename.filter((_, i) => i !== index);
+    setShowFileName(updatedShowFiles);
   };
 
   const toolbarItems = [
@@ -66,7 +69,7 @@ const SendEmail = () => {
       uploadedFiles.forEach((file) => {
         formData.append("file", file);
       });
-      console.log("formData", formData);
+      
       await sendEmailNotifiction(formData);
       resetForm();
       setUploadedFiles([]);
@@ -77,7 +80,7 @@ const SendEmail = () => {
       setSubmitting(false);
     }
   };
-
+  
   return (
     <>
       <Formik initialValues={emailValues} validationSchema={sendEmailValidationSchema} onSubmit={handleSubmit}>
@@ -160,9 +163,9 @@ const SendEmail = () => {
                           type="file"
                           onChange={(event) => {
                             handleFileUpload(event);
-                            setFieldValue("file", event.currentTarget.files?.[0] || null);
                           }}
                         />
+                        
                       </Button> 
                     </Box>
                   </Grid>
@@ -173,7 +176,7 @@ const SendEmail = () => {
                   </Grid>
                 </Grid>
                 <Grid container spacing={1}>
-                  {uploadedFiles && uploadedFiles.map((fileName, index) => (
+                  {showfilename && showfilename.map((fileName, index) => (
                     <>
                       <Grid item xs={5}>
                         <Box sx={{ mt: 1, display: "flex" }}>
