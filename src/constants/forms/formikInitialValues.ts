@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps } from "../../types/types";
 import ServicesList from "../../pages/service/service-list-screen";
 
 export const loginInitialValue: LoginProps = {
@@ -169,4 +169,12 @@ export const SendEmailInitialValue: SendEmailInitialValueProps = {
     recipientEmail: "",
     fromemail: "",
     file: null
+}
+
+export const RoleInitialValue: RoleInitialValueProps = {
+    userName: "",
+    email: "",
+    password: "",
+    role: "",
+    access:"",
 }

@@ -189,7 +189,7 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: Invoice
             <Grid container spacing={5}>
                 <Grid item xs={5} sx={{ display: " flex", justifyContent: "space-between" }}>
                     <ButtonSmallUi label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
-                    <ButtonSmallUi label="Email To" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); } } />
+                    <ButtonSmallUi label="Email" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); } } />
                 </Grid>
             </Grid>
 

@@ -53,34 +53,44 @@ export const sidebarTwo = [
     },
     {
         id: 6,
+        title: "Roles",
+        path: "/roles/list",
+        icon: Home,
+        isParent: true,
+        subItems: [
+            { title: "Create Roles", path: "/roles/create" },
+        ]
+    },
+    {
+        id: 7,
         title: "Settings",
         path: "/settings",
         icon: SettingsIcon,
         isParent: false
     },
     {
-        id: 7,
+        id: 8,
         title: "Demo",
         path: "/demo",
         icon: Home,
         isParent: false
     },
     {
-        id: 8,
+        id: 9,
         title: "DemoTwo",
         path: "/demo-two",
         icon: Home,
         isParent: false
     },
     {
-        id: 9,
+        id: 10,
         title: "Component",
         path: "/components",
         icon: Home,
         isParent: false
     },
     {
-        id: 10,
+        id: 11,
         title: "DynamicForm",
         path: "/dynamicForm",
         icon: Home,

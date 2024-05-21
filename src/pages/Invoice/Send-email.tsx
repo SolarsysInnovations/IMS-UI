@@ -169,10 +169,26 @@ const SendEmail = () => {
                     </Button>
                   </Box>
                 </Grid>
+                <Grid container spacing={1}>
+                  {showfilename && showfilename.map((fileName, index) => (
+                    <>
+                      <Grid item xs={5}>
+                        <Box sx={{ mt: 0, display: "flex" }}>
+                          <Typography>{fileName}</Typography>
+                        </Box>
+                      </Grid>
+                      <Grid item xs={7}>
+                        <Box sx={{ mt: 1, display: "flex" }}>
+                          <ButtonSmallUi color="secondary" onClick={() => handleRemoveFile(index)} label="Remove"/>
+                        </Box>
+                      </Grid>
+                    </>
+                  ))}
+                </Grid>
                 <Grid container spacing={2}>
                   <Grid item xs={10}>
                     <Box sx={{ mt: 3, display: "flex" }}>
-                      <Button
+                      <Button style={{ height: "26px",width: "fit-content", fontSize: "12px",borderRadius: "8px",boxShadow: "none" }}
                         component="label"
                         role={undefined}
                         variant="contained"
@@ -183,6 +199,7 @@ const SendEmail = () => {
                         <VisuallyHiddenInput
                           id="fileInput"
                           type="file"
+                          width="0px"
                           onChange={(event) => {
                             handleFileUpload(event);
                           }}
@@ -197,22 +214,7 @@ const SendEmail = () => {
                     </Box>
                   </Grid>
                 </Grid>
-                <Grid container spacing={1}>
-                  {showfilename && showfilename.map((fileName, index) => (
-                    <>
-                      <Grid item xs={5}>
-                        <Box sx={{ mt: 1, display: "flex" }}>
-                          <Typography>{fileName}</Typography>
-                        </Box>
-                      </Grid>
-                      <Grid item xs={7}>
-                        <Box sx={{ mt: 1, display: "flex" }}>
-                          <ButtonSmallUi color="secondary" onClick={() => handleRemoveFile(index)} label="Remove"/>
-                        </Box>
-                      </Grid>
-                    </>
-                  ))}
-                </Grid>
+                
               </Form>
             </div>
         )}
