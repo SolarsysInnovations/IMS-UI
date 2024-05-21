@@ -132,9 +132,9 @@ export const companyFields: FieldProps[] = [
             { name: 'companyWebsite', label: 'Company Website', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
             { name: 'companyTaxNumber', label: 'Company TaxNumber', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
             { name: 'companyRegNumber', label: 'Company RegNumber', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
-      ]
+        ]
     },
-   
+
 ];
 
 export const GstTypeFields: FieldProps[] = [
@@ -145,7 +145,7 @@ export const GstTypeFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             { name: 'gstName', label: 'Gst Name', type: 'text', gridSize: 3, validation: Yup.string().required('gstName is required') },
-            { name: 'gstPercentage', label: 'Gst Percentage', type: 'number', gridSize: 3, validation: Yup.string().required('gstPercentage is required'), endAdornment: "%" },
+            { name: 'gstPercentage', label: 'Gst', type: 'number', gridSize: 2, validation: Yup.string().required('gstPercentage is required'), endAdornment: "%" },
         ]
     },
 ];
@@ -158,7 +158,7 @@ export const TdsTaxFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             { name: 'taxName', label: 'Tax Name', type: 'text', gridSize: 3, validation: Yup.string().required('taxName is required') },
-            { name: 'taxPercentage', label: 'Tax Percentage', type: 'number', gridSize: 3, validation: Yup.string().required('taxPercentage is required'), endAdornment: "%" },
+            { name: 'taxPercentage', label: 'Tax', type: 'number', gridSize: 2, validation: Yup.string().required('taxPercentage is required'), endAdornment: "%" },
         ]
     },
 ];
@@ -171,7 +171,7 @@ export const paymentTermsFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             { name: 'termName', label: 'Term Name', type: 'text', gridSize: 4, validation: Yup.string().required('termName is required'), helperText: " Eg : Net 30 as 30 days" },
-            { name: 'totalDays', label: 'Total Days', type: 'number', gridSize: 3, validation: Yup.string().required('termName is required'), endAdornment: "Days", helperText: " Eg : No of days" },
+            { name: 'totalDays', label: '', type: 'number', gridSize: 3, validation: Yup.string().required('termName is required'), endAdornment: "Days", helperText: " Eg : No of days" },
         ]
     },
 ];

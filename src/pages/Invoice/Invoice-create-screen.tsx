@@ -12,7 +12,7 @@ import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
-import { invoiceInitialValue } from '../../constants/forms/formikInitialValues';
+import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 import { InvoiceInitialValueProps } from '../../types/types';
 import { useGetServiceQuery, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
@@ -40,14 +40,16 @@ import { addDays, format } from 'date-fns';
 import ServiceCreate from '../service/service-create-screen';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { clearData } from '../../redux-store/global/globalState';
+import SendEmail from './Send-email';
+import ServiceScreen from './service/ServiceScreen';
 
 interface Service {
     id: string; // Ensure id is mandatory
     serviceAccountingCode: string;
     serviceDescription: string;
     serviceAmount: number;
-    quantity: number;
-    price: number;
+    serviceQty: number;
+    serviceTotalAmount: number;
 }
 
 const CreateInvoice = () => {
@@ -74,7 +76,7 @@ const CreateInvoice = () => {
     const [modifiedServiceList, setModifiedServiceList] = React.useState<Service[]>([]);
     const [rows, setRows] = React.useState<any[]>([]); // Initialize rows as an empty array
     const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
-    const [invoiceValues, setInvoiceValues] = useState(invoiceInitialValue);
+    const [invoiceValues, setInvoiceValues] = useState(invoiceCreateInitialValue);
     const { data: gstTypesData = [] } = useGetGstTypeQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxQuery();
 
@@ -83,6 +85,7 @@ const CreateInvoice = () => {
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
+
     const PopupComponents = {
         GST_TYPE: 'gstType',
         PAYMENT_TERMS: 'paymentTerms',
@@ -90,9 +93,10 @@ const CreateInvoice = () => {
         SERVICES: 'services',
         INVOICE: 'invoice'
     }
+
     React.useEffect(() => {
         if (invoiceValues) {
-            const sumSubTotal = invoiceValues.servicesList.reduce((acc: any, row: any) => acc + row.price, 0)
+            const sumSubTotal = invoiceValues.servicesList.reduce((acc: any, row: any) => acc + row.serviceTotalAmount, 0)
             setSubTotalInvoiceAmount(sumSubTotal)
         }
     }, [invoiceValues]);
@@ -119,9 +123,9 @@ const CreateInvoice = () => {
                 id: `${rowIdCounter.current++}`, // Manually assign unique ID
                 serviceAccountingCode: s.serviceAccountingCode,
                 serviceDescription: s.serviceDescription,
-                quantity: 0,
+                serviceQty: 0,
                 serviceAmount: s.serviceAmount,
-                price: 0,
+                serviceTotalAmount: 0,
             }));
             setModifiedServiceList(mappedServiceList);
         }
@@ -130,15 +134,15 @@ const CreateInvoice = () => {
     const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const { value } = event.target;
         const parsedValue = parseInt(value); // Parse the value to an integer
-        setInvoiceValues(prevInvoiceValues => {
-            const updatedServicesList = prevInvoiceValues.servicesList.map((service, serviceIndex) => {
+        setInvoiceValues((prevInvoiceValues: any) => {
+            const updatedServicesList = prevInvoiceValues.servicesList.map((service: any, serviceIndex: any) => {
                 if (serviceIndex === index) {
-                    const quantity = isNaN(parsedValue) ? 0 : parsedValue; // If parsedValue is NaN, set quantity to 0
-                    const price = quantity * service.serviceAmount; // Calculate the amount
+                    const serviceQty = isNaN(parsedValue) ? 0 : parsedValue; // If parsedValue is NaN, set quantity to 0
+                    const serviceTotalAmount = serviceQty * service.serviceAmount; // Calculate the amount
                     return {
                         ...service,
-                        quantity,
-                        price // Update the amount in the service
+                        serviceQty,
+                        serviceTotalAmount // Update the amount in the service
                     };
                 }
                 return service;
@@ -155,12 +159,12 @@ const CreateInvoice = () => {
         const newRow = {
             id: `row_${Date.now()}`,
             serviceAccountingCode: "",
-            quantity: 0,
+            serviceQty: 0,
             serviceAmount: 0,
-            price: 0
+            serviceTotalAmount: 0
         };
         const updatedServicesList = [...invoiceValues.servicesList, newRow];
-        setInvoiceValues(prevState => ({
+        setInvoiceValues((prevState: any) => ({
             ...prevState,
             servicesList: updatedServicesList
         }));
@@ -168,12 +172,12 @@ const CreateInvoice = () => {
 
     const handleRemoveRow = (id: string) => {
         // Find the index of the row with the provided id in invoiceValues.servicesList
-        const index = invoiceValues.servicesList.findIndex(row => row.id === id);
+        const index = invoiceValues.servicesList.findIndex((row: any) => row.id === id);
         if (index !== -1) {
             // Create a new array without the removed row
-            const updatedServicesList = invoiceValues.servicesList.filter((_, idx) => idx !== index);
+            const updatedServicesList = invoiceValues.servicesList.filter((_: any, idx: any) => idx !== index);
             // Update the state with the new array
-            setInvoiceValues(prevState => ({
+            setInvoiceValues((prevState: any) => ({
                 ...prevState,
                 servicesList: updatedServicesList
             }));
@@ -197,13 +201,15 @@ const CreateInvoice = () => {
             validate={() => ({})}
             onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
                 try {
-                    values.invoiceTotalAmount = invoiceTotalAmount
+                    // values.invoiceTotalAmount = invoiceTotalAmount
                     values.servicesList = invoiceValues.servicesList
-                    values.invoiceTotalAmount = invoiceTotalAmount ?? null;
+                    values.totalAmount = invoiceTotalAmount ?? null;
                     await addInvoice(values);
                     // alert(JSON.stringify(values));
+                    console.log(values);
+
                     resetForm();
-                    setInvoiceValues({ ...invoiceInitialValue })
+                    setInvoiceValues({ ...invoiceValues })
                 } catch (error) {
                     console.error("An error occurred during login:", error);
                 }
@@ -221,9 +227,9 @@ const CreateInvoice = () => {
                                 label: 'Preview', icon: Add, onClick: () => {
                                     setIsModalOpen(true)
                                     // setInvoicePopup(true)
-                                    values.invoiceTotalAmount = invoiceTotalAmount
+                                    // values.invoiceTotalAmount = invoiceTotalAmount
                                     values.servicesList = invoiceValues.servicesList
-                                    values.invoiceTotalAmount = invoiceTotalAmount ?? null;
+                                    values.totalAmount = invoiceTotalAmount ?? null;
                                     setInvoiceFinalData(values as any)
                                 }
                             },
@@ -240,7 +246,7 @@ const CreateInvoice = () => {
                                         popUpComponent === PopupComponents.GST_TYPE ? <GstTypeScreen /> :
                                             popUpComponent === PopupComponents.PAYMENT_TERMS ? <PaymentTermsScreen /> :
                                                 popUpComponent === PopupComponents.TDS_TAX ? <TdsTaxScreen /> :
-                                                    popUpComponent === PopupComponents.SERVICES ? <ServiceCreate /> :
+                                                    popUpComponent === PopupComponents.SERVICES ? <ServiceScreen /> :
                                                         popUpComponent === PopupComponents.INVOICE ? <InvoiceUi /> : null
                                     }
                                 </>
@@ -274,7 +280,7 @@ const CreateInvoice = () => {
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                                <Grid item xs={12}>
                                     <Box>
                                         <RadioUi value={values.invoiceType} onChange={(newValue: any) => {
                                             if (newValue) {
@@ -288,7 +294,7 @@ const CreateInvoice = () => {
                                         />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={6}>
+                                {/* <Grid item xs={6}>
                                     <Box sx={{
                                         display: 'flex',
                                         flexDirection: 'column',
@@ -296,7 +302,7 @@ const CreateInvoice = () => {
                                     }}>
                                         <Typography variant="subtitle2" color="initial">Created at : {formatDate(values.invoiceDate)}</Typography>
                                     </Box>
-                                </Grid>
+                                </Grid> */}
                                 <Grid item xs={3}>
                                     <Box>
                                         <TextFieldUi
@@ -468,7 +474,7 @@ const CreateInvoice = () => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {invoiceValues?.servicesList?.map((item, index) => (
+                                                {invoiceValues?.servicesList?.map((item: any, index: any) => (
                                                     <TableRow key={item.id}>
                                                         <TableCell component="th" scope="row">
                                                             <SelectDropdown
@@ -488,7 +494,7 @@ const CreateInvoice = () => {
                                                                         if (selectedService) {
                                                                             const updatedServiceList = [...invoiceValues.servicesList];
                                                                             updatedServiceList[index] = { ...selectedService, id: item.id }; // Update the existing service in the list
-                                                                            setInvoiceValues(prevState => ({
+                                                                            setInvoiceValues((prevState: any) => ({
                                                                                 ...prevState,
                                                                                 servicesList: updatedServiceList
                                                                             }));
@@ -498,10 +504,10 @@ const CreateInvoice = () => {
                                                                         updatedServiceList[index] = {
                                                                             ...updatedServiceList[index],
                                                                             serviceAccountingCode: "",
-                                                                            quantity: 0,
-                                                                            price: 0
+                                                                            serviceQty: 0,
+                                                                            serviceTotalAmount: 0
                                                                         };
-                                                                        setInvoiceValues(prevState => ({
+                                                                        setInvoiceValues((prevState: any) => ({
                                                                             ...prevState,
                                                                             servicesList: updatedServiceList
                                                                         }));
@@ -512,7 +518,7 @@ const CreateInvoice = () => {
                                                         <TableCell align="right">
                                                             <TextFieldUi
                                                                 type='number'
-                                                                value={item?.quantity}
+                                                                value={item?.serviceQty}
                                                                 // label='INout sample'
                                                                 onChange={(e) => handleQuantityChange(e, index)}
                                                             />
@@ -522,7 +528,7 @@ const CreateInvoice = () => {
                                                             // label='INout sample'
                                                             />
                                                         </TableCell>
-                                                        <TableCell align="right">{item?.price}</TableCell>
+                                                        <TableCell align="right">{item?.serviceTotalAmount}</TableCell>
                                                         <TableCell align="right">
                                                             <ButtonSmallUi type='button' onClick={() => handleRemoveRow(item?.id)} label='Remove' />
                                                         </TableCell>
