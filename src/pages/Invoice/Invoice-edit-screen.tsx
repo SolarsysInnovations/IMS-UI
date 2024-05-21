@@ -285,10 +285,7 @@ const InvoiceEdit = () => {
                             setIsModalOpen(false)
                             setEmailPopUp(false)
                         }} >
-                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} emailModalOpen={setisEmailModalOpen} emailPopup={setEmailPopUp} isModalOpen={setIsModalOpen} />
-                            {emailPopUp && (
-                                <SendEmail />
-                            )}
+                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} />
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
