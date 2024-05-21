@@ -12,7 +12,7 @@ import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
-import { invoiceInitialValue } from '../../constants/forms/formikInitialValues';
+import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 import { InvoiceInitialValueProps } from '../../types/types';
 import { useGetServiceQuery, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
@@ -41,6 +41,7 @@ import ServiceCreate from '../service/service-create-screen';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { clearData } from '../../redux-store/global/globalState';
 import SendEmail from './Send-email';
+import ServiceScreen from './service/ServiceScreen';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -77,7 +78,7 @@ const CreateInvoice = () => {
     const [modifiedServiceList, setModifiedServiceList] = React.useState<Service[]>([]);
     const [rows, setRows] = React.useState<any[]>([]); // Initialize rows as an empty array
     const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
-    const [invoiceValues, setInvoiceValues] = useState(invoiceInitialValue);
+    const [invoiceValues, setInvoiceValues] = useState(invoiceCreateInitialValue);
     const { data: gstTypesData = [] } = useGetGstTypeQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxQuery();
 
@@ -210,7 +211,7 @@ const CreateInvoice = () => {
                     console.log(values);
 
                     resetForm();
-                    setInvoiceValues({ ...invoiceInitialValue })
+                    setInvoiceValues({ ...invoiceValues })
                 } catch (error) {
                     console.error("An error occurred during login:", error);
                 }
@@ -247,7 +248,7 @@ const CreateInvoice = () => {
                                         popUpComponent === PopupComponents.GST_TYPE ? <GstTypeScreen /> :
                                             popUpComponent === PopupComponents.PAYMENT_TERMS ? <PaymentTermsScreen /> :
                                                 popUpComponent === PopupComponents.TDS_TAX ? <TdsTaxScreen /> :
-                                                    popUpComponent === PopupComponents.SERVICES ? <ServiceCreate /> :
+                                                    popUpComponent === PopupComponents.SERVICES ? <ServiceScreen /> :
                                                         popUpComponent === PopupComponents.INVOICE ? <InvoiceUi /> : null
                                     }
                                 </>
@@ -285,7 +286,7 @@ const CreateInvoice = () => {
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                                <Grid item xs={12}>
                                     <Box>
                                         <RadioUi value={values.invoiceType} onChange={(newValue: any) => {
                                             if (newValue) {
@@ -299,7 +300,7 @@ const CreateInvoice = () => {
                                         />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={6}>
+                                {/* <Grid item xs={6}>
                                     <Box sx={{
                                         display: 'flex',
                                         flexDirection: 'column',
@@ -307,7 +308,7 @@ const CreateInvoice = () => {
                                     }}>
                                         <Typography variant="subtitle2" color="initial">Created at : {formatDate(values.invoiceDate)}</Typography>
                                     </Box>
-                                </Grid>
+                                </Grid> */}
                                 <Grid item xs={3}>
                                     <Box>
                                         <TextFieldUi

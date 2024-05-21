@@ -12,6 +12,7 @@ import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
+import { invoiceEditInitialValue } from '../../constants/forms/formikInitialValues';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 import { InvoiceInitialValueProps } from '../../types/types';
 import { useGetServiceQuery, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
@@ -19,7 +20,7 @@ import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { generateOptions } from '../../services/utils/dropdownOptions';
-import { useAddInvoiceMutation, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import { useAddInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
@@ -33,31 +34,39 @@ import GstTypeScreen from './GstType/GstTypeScreen';
 import TdsTaxScreen from './TdsTax/TdsTaxScreen';
 import { useGetPaymentTermsQuery } from '../../redux-store/invoice/paymentTerms';
 import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
+import { float } from 'html2canvas/dist/types/css/property-descriptors/float';
 import { formatDate } from '../../services/utils/dataFormatter';
+import { addDays, format } from 'date-fns';
+import ServiceCreate from '../service/service-create-screen';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import { clearData } from '../../redux-store/global/globalState';
+import SendEmail from './Send-email';
+import ServiceScreen from './service/ServiceScreen';
 
 interface Service {
     id: string; // Ensure id is mandatory
     serviceAccountingCode: string;
     serviceDescription: string;
     serviceAmount: number;
-    quantity: number;
-    price: number;
+    serviceQty: number;
+    serviceTotalAmount: number;
 }
 
 const InvoiceEdit = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const invoiceStateDetails = useSelector((state: any) => state.customerState.data);
-
     const pathname = usePathname();
     const navigate = useNavigate();
+    const invoiceStateDetails = useSelector((state: any) => state.customerState.data);
+
     // popUps
-    const [invoicePopUp, setInvoicePopup] = useState(false);
-    const [gstTypePopUp, setGstTypePopup] = useState(false);
-    const [tdsTaxPopUp, setTdsTaxPopup] = useState(false);
-    const [paymentTermsPopUp, setPaymentTermsPopUp] = useState(false);
+    const [popUpComponent, setPopUpComponent] = useState("");
+    const [invoiceFinalData, setInvoiceFinalData] = useState();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
-    const [updateInvoice, { isSuccess, isError, }] = useUpdateInvoiceMutation();
+    const [addInvoice, { isSuccess, isError, }] = useAddInvoiceMutation();
+    const [opendialogBox, setIsOpenDialogBox] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEmailModalOpen, setisEmailModalOpen] = useState(false);
+    const [emailPopUp, setEmailPopUp] = useState(false);
     const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
     const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
     const [discountAmount, setDiscountAmount] = useState<null | number>(null);
@@ -71,20 +80,32 @@ const InvoiceEdit = () => {
     const [modifiedServiceList, setModifiedServiceList] = React.useState<Service[]>([]);
     const [rows, setRows] = React.useState<any[]>([]); // Initialize rows as an empty array
     const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
-    const [invoiceValues, setInvoiceValues] = useState(invoiceStateDetails);
     const { data: gstTypesData = [] } = useGetGstTypeQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxQuery();
-
+    const [invoiceValues, setInvoiceValues] = useState(invoiceStateDetails);
     // * ----------- to generate the dropdown options -------------
     const customerName = generateOptions(customers, 'customerName', 'customerName');
-    const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName")
-    const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName")
-    const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName")
+    const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
+    const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
+    const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
+
+    console.log(invoiceStateDetails);
+
+    const PopupComponents = {
+        GST_TYPE: 'gstType',
+        PAYMENT_TERMS: 'paymentTerms',
+        TDS_TAX: 'tdsTax',
+        SERVICES: 'services',
+        INVOICE: 'invoice'
+    }
+
     React.useEffect(() => {
         if (invoiceValues) {
-            const sumSubTotal = invoiceValues.servicesList.reduce((acc: any, row: any) => acc + row.price, 0)
+            const sumSubTotal = invoiceValues.servicesList.reduce((acc: any, row: any) => acc + row.serviceTotalAmount, 0)
             setSubTotalInvoiceAmount(sumSubTotal)
+            setDiscountPercentage(invoiceValues.discountPercentage)
         }
+
     }, [invoiceValues]);
 
     React.useEffect(() => {
@@ -103,17 +124,15 @@ const InvoiceEdit = () => {
         setInvoiceTotalAmount(roundedInvoiceAmount);
     }, [discountPercentage, subTotalInvoiceAmount, selectedTds, invoiceStateDetails])
 
-
-
     React.useEffect(() => {
         if (serviceList) {
             const mappedServiceList = serviceList.map((s: any) => ({
                 id: `${rowIdCounter.current++}`, // Manually assign unique ID
                 serviceAccountingCode: s.serviceAccountingCode,
                 serviceDescription: s.serviceDescription,
-                quantity: 0,
+                serviceQty: 0,
                 serviceAmount: s.serviceAmount,
-                price: 0,
+                serviceTotalAmount: 0,
             }));
             setModifiedServiceList(mappedServiceList);
         }
@@ -125,12 +144,12 @@ const InvoiceEdit = () => {
         setInvoiceValues((prevInvoiceValues: any) => {
             const updatedServicesList = prevInvoiceValues.servicesList.map((service: any, serviceIndex: any) => {
                 if (serviceIndex === index) {
-                    const quantity = isNaN(parsedValue) ? 0 : parsedValue; // If parsedValue is NaN, set quantity to 0
-                    const price = quantity * service.serviceAmount; // Calculate the amount
+                    const serviceQty = isNaN(parsedValue) ? 0 : parsedValue; // If parsedValue is NaN, set quantity to 0
+                    const serviceTotalAmount = serviceQty * service.serviceAmount; // Calculate the amount
                     return {
                         ...service,
-                        quantity,
-                        price // Update the amount in the service
+                        serviceQty,
+                        serviceTotalAmount // Update the amount in the service
                     };
                 }
                 return service;
@@ -147,9 +166,9 @@ const InvoiceEdit = () => {
         const newRow = {
             id: `row_${Date.now()}`,
             serviceAccountingCode: "",
-            quantity: 0,
+            serviceQty: 0,
             serviceAmount: 0,
-            price: 0
+            serviceTotalAmount: 0
         };
         const updatedServicesList = [...invoiceValues.servicesList, newRow];
         setInvoiceValues((prevState: any) => ({
@@ -184,23 +203,21 @@ const InvoiceEdit = () => {
 
     return (
         <Formik
-            initialValues={invoiceValues || []}
+            initialValues={invoiceValues}
             // validationSchema={invoiceValidationSchema}
             validate={() => ({})}
             onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
                 try {
+                    // values.invoiceTotalAmount = invoiceTotalAmount
                     values.servicesList = invoiceValues.servicesList
                     values.totalAmount = invoiceTotalAmount ?? null;
+                    await addInvoice(values);
+                    // alert(JSON.stringify(values));
                     console.log(values);
 
-                    await updateInvoice({
-                        id: values.id ?? undefined,
-                        invoiceData: values
-                    });
-                    // // alert(JSON.stringify(values));
-
                     resetForm();
-                    navigate("/invoice/list");
+                    setInvoiceValues({ ...invoiceValues })
+                    navigate('/invoice/list')
                 } catch (error) {
                     console.error("An error occurred during login:", error);
                 }
@@ -210,45 +227,72 @@ const InvoiceEdit = () => {
             }}
         >
             {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => {
-                if (values.discountPercentage) {
-                    setDiscountPercentage(values.discountPercentage)
-                }
-                if (values.taxAmount.tds) {
-                    const selectedTdsTax = tdsTaxData?.find((item) => item.taxName === values.taxAmount.tds);
-                    const percentage = selectedTdsTax?.taxPercentage;
-                    setSelectedTdsAmount(percentage)
-                }
                 return (
                     <div>
                         <ToastUi autoClose={2000} />
                         <TableHeader headerName={pathname} buttons={[
-                            { label: 'Preview', icon: Add, onClick: () => setIsModalOpen(true) },
+                            {
+                                label: 'Preview', icon: Add, onClick: () => {
+                                    setIsModalOpen(true)
+                                    // setInvoicePopup(true)
+                                    // values.invoiceTotalAmount = invoiceTotalAmount
+                                    values.servicesList = invoiceValues.servicesList
+                                    values.totalAmount = invoiceTotalAmount ?? null;
+                                    setInvoiceFinalData(values as any)
+                                }
+                            },
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) },
                             { label: 'Save', icon: Add, onClick: handleSubmit },
                         ]} />
-                        <ModalUi topHeight='40%' open={isModalOpen} onClose={() => {
+                        {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
+                        <DialogBoxUi
+                            open={opendialogBox} // Set open to true to display the dialog initially
+                            // title="Custom Dialog Title"
+                            content={
+                                <>
+                                    {
+                                        popUpComponent === PopupComponents.GST_TYPE ? <GstTypeScreen /> :
+                                            popUpComponent === PopupComponents.PAYMENT_TERMS ? <PaymentTermsScreen /> :
+                                                popUpComponent === PopupComponents.TDS_TAX ? <TdsTaxScreen /> :
+                                                    popUpComponent === PopupComponents.SERVICES ? <ServiceScreen /> :
+                                                        popUpComponent === PopupComponents.INVOICE ? <InvoiceUi /> : null
+                                    }
+                                </>
+                            }
+                            // actions={
+                            //     <Button autoFocus onClick={handleClose}>
+                            //         Save changes
+                            //     </Button>
+                            // }
+                            handleClose={() => {
+                                setIsOpenDialogBox(false)
+                                setPopUpComponent("")
+
+                            }}
+                        />
+                        {/* <ModalUi topHeight='90%' open={isModalOpen} onClose={() => {
                             setIsModalOpen(false)
                             setInvoicePopup(false)
-                            setGstTypePopup(false)
-                            setTdsTaxPopup(false)
-                            setPaymentTermsPopUp(false)
                         }} >
                             <>
                                 {invoicePopUp && (
-                                    <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={values} />
+                                    <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData}  emailModalOpen={setisEmailModalOpen} emailPopup={setEmailPopUp} isModalOpen={setIsModalOpen} invoicePopup={setInvoicePopup} gstTypePopup={setGstTypePopup} tdsTaxPopup={setTdsTaxPopup} paymentTermsPopUp={setPaymentTermsPopUp}/>
                                 )}
-                                {gstTypePopUp && (
-                                    <GstTypeScreen />
-                                )}
-                                {tdsTaxPopUp && (
-                                    <TdsTaxScreen />
-                                )}
-                                {paymentTermsPopUp && (<PaymentTermsScreen />)}
                             </>
+                        </ModalUi> */}
+
+                        <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
+                            setIsModalOpen(false)
+                            setEmailPopUp(false)
+                        }} >
+                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} emailModalOpen={setisEmailModalOpen} emailPopup={setEmailPopUp} isModalOpen={setIsModalOpen} />
+                            {emailPopUp && (
+                                <SendEmail />
+                            )}
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                                <Grid item xs={12}>
                                     <Box>
                                         <RadioUi value={values.invoiceType} onChange={(newValue: any) => {
                                             if (newValue) {
@@ -262,15 +306,15 @@ const InvoiceEdit = () => {
                                         />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={6}>
+                                {/* <Grid item xs={6}>
                                     <Box sx={{
                                         display: 'flex',
                                         flexDirection: 'column',
                                         alignItems: 'flex-end',
                                     }}>
-                                        <Typography variant="subtitle2" color="initial">Created at : {formatDate(new Date(values.invoiceDate))}</Typography>
+                                        <Typography variant="subtitle2" color="initial">Created at : {formatDate(values.invoiceDate)}</Typography>
                                     </Box>
-                                </Grid>
+                                </Grid> */}
                                 <Grid item xs={3}>
                                     <Box>
                                         <TextFieldUi
@@ -293,6 +337,9 @@ const InvoiceEdit = () => {
                                         <SelectDropdown
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
+                                                    if (newValue) {
+                                                        const selectedCustomerDetails = customers?.find((customer: any) => newValue.value === customer?.customerName);
+                                                    }
                                                     setFieldValue("customerName", newValue.value)
                                                 } else {
                                                     setFieldValue("customerName", "")
@@ -310,8 +357,8 @@ const InvoiceEdit = () => {
                                     <Box>
                                         <SelectDropdown
                                             onMouseDown={() => {
-                                                setIsModalOpen(true)
-                                                setGstTypePopup(true)
+                                                setIsOpenDialogBox(true)
+                                                setPopUpComponent(PopupComponents.GST_TYPE)
                                                 // navigate("/customer/create")
                                             }}
                                             button={true}
@@ -345,6 +392,7 @@ const InvoiceEdit = () => {
                                             label='Gst Percentage'
                                             name='gstPercentage'
                                             type="number"
+                                            endAdornment="%"
                                             value={values.gstPercentage || ""}
                                             onChange={handleChange}
                                             error={touched.gstPercentage && Boolean(errors.gstPercentage)}
@@ -371,15 +419,18 @@ const InvoiceEdit = () => {
                                         <SelectDropdown
                                             button={true}
                                             onMouseDown={() => {
-                                                setIsModalOpen(true)
-                                                setPaymentTermsPopUp(true);
+                                                setPopUpComponent(PopupComponents.PAYMENT_TERMS);
+                                                setIsOpenDialogBox(true)
                                             }}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
                                                     const selectedPaymentTerms = paymentTerms?.find((item) => item.termName === newValue.value)
                                                     if (selectedPaymentTerms) {
-                                                        setFieldValue("startDate", selectedPaymentTerms.startDate)
-                                                        setFieldValue("dueDate", selectedPaymentTerms.dueDate)
+                                                        const today = new Date();
+                                                        const startDate = format(today, 'dd-MM-yyyy');
+                                                        const dueDate = format(addDays(today, selectedPaymentTerms.totalDays), 'dd-MM-yyyy')
+                                                        setFieldValue("startDate", startDate)
+                                                        setFieldValue("dueDate", dueDate)
                                                         setFieldValue("paymentTerms", newValue.value)
                                                     } else {
                                                         setFieldValue("startDate", "")
@@ -404,8 +455,10 @@ const InvoiceEdit = () => {
                                     <Box>
                                         <DatePickerUi
                                             label="Start Date"
-                                            onChange={(date: any) => setFieldValue("startDate", date)}
-                                            value={values.startDate ? formatDate(new Date(values.startDate)) : null}
+                                            onChange={(date: Date) => {
+                                                setFieldValue("startDate", date);
+                                            }}
+                                            value={values.startDate}
                                         />
                                     </Box>
                                 </Grid>
@@ -413,8 +466,10 @@ const InvoiceEdit = () => {
                                     <Box>
                                         <DatePickerUi
                                             label="Due Date"
-                                            onChange={(date: any) => console.log(date)}
-                                            value={values.dueDate ? formatDate(new Date(values.dueDate)) : null}
+                                            onChange={(date: Date) => {
+                                                setFieldValue("dueDate", date);
+                                            }}
+                                            value={values.dueDate}
                                         />
                                     </Box>
                                 </Grid>
@@ -436,8 +491,8 @@ const InvoiceEdit = () => {
                                                         <TableCell component="th" scope="row">
                                                             <SelectDropdown
                                                                 onMouseDown={() => {
-                                                                    // navigate("/customer/create")
-                                                                    console.log("Add new");
+                                                                    setIsOpenDialogBox(true)
+                                                                    setPopUpComponent(PopupComponents.SERVICES)
                                                                 }}
                                                                 button={true}
                                                                 options={modifiedServiceList.map((service) => ({
@@ -461,8 +516,8 @@ const InvoiceEdit = () => {
                                                                         updatedServiceList[index] = {
                                                                             ...updatedServiceList[index],
                                                                             serviceAccountingCode: "",
-                                                                            quantity: 0,
-                                                                            price: 0
+                                                                            serviceQty: 0,
+                                                                            serviceTotalAmount: 0
                                                                         };
                                                                         setInvoiceValues((prevState: any) => ({
                                                                             ...prevState,
@@ -475,7 +530,7 @@ const InvoiceEdit = () => {
                                                         <TableCell align="right">
                                                             <TextFieldUi
                                                                 type='number'
-                                                                value={item?.quantity}
+                                                                value={item?.serviceQty}
                                                                 // label='INout sample'
                                                                 onChange={(e) => handleQuantityChange(e, index)}
                                                             />
@@ -485,7 +540,7 @@ const InvoiceEdit = () => {
                                                             // label='INout sample'
                                                             />
                                                         </TableCell>
-                                                        <TableCell align="right">{item?.price}</TableCell>
+                                                        <TableCell align="right">{item?.serviceTotalAmount}</TableCell>
                                                         <TableCell align="right">
                                                             <ButtonSmallUi type='button' onClick={() => handleRemoveRow(item?.id)} label='Remove' />
                                                         </TableCell>
@@ -538,9 +593,10 @@ const InvoiceEdit = () => {
                                             {/* <Typography variant="body2" color="initial">Discount Amount Typography> */}
                                             <TextFieldUi
                                                 width='100px'
-                                                label='Discount %'
+                                                label='Discount'
                                                 name='discount'
                                                 type="number"
+                                                endAdornment="%"
                                                 value={values.discountPercentage ?? ""}
                                                 onChange={(e) => {
                                                     const value = e.target.value;
@@ -560,8 +616,8 @@ const InvoiceEdit = () => {
                                         <Box sx={{ display: "flex" }} >
                                             <SelectDropdown
                                                 onMouseDown={() => {
-                                                    setIsModalOpen(true)
-                                                    setTdsTaxPopup(true)
+                                                    setIsOpenDialogBox(true)
+                                                    setPopUpComponent(PopupComponents.TDS_TAX)
                                                     // navigate("/customer/create")
                                                 }}
                                                 button={true}

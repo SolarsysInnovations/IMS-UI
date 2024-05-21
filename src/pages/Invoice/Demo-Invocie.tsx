@@ -14,7 +14,7 @@ import { useAddCustomerMutation, useGetCustomersQuery } from '../../redux-store/
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import { ToastContainer, toast } from 'react-toastify';
 import { customerFields, invoiceFields } from '../../constants/form-data/form-data-json';
-import { customerInitialValues, invoiceInitialValue } from '../../constants/forms/formikInitialValues';
+import { customerInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { customerValidationSchema, invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
 import useSuccessToast from '../../hooks/useToast';

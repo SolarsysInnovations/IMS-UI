@@ -57,7 +57,7 @@ export const invoiceData: InvoiceProps[] = [
 
 export const invoiceType = [
     { value: "Retainer", label: "Retainer" },
-    { value: "Service", label: "Service" },
+    { value: "Onetime", label: "Onetime" },
 ]
 export const governmentGstType = [
     { value: "TDS", label: "TDS" },

@@ -109,7 +109,7 @@ interface TaxAmountProps {
     tds: string;
 };
 export interface InvoiceInitialValueProps {
-    id: number;
+    id?: string;
     invoiceDate: Date;
     invoiceType: string;
     invoiceNumber: string;
