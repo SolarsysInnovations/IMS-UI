@@ -47,7 +47,7 @@ const SettingScreen = () => {
 const onSubmit = async (values: any, actions: any) => {
    try {
        const id: number = values?._id
-       await updateSetting({
+       await addSetting({
            id: id,
            settings: values,
        });
@@ -116,13 +116,13 @@ const buttons = [
 
   const linkCreation = [
     {
-      "href": "https://contents.tdscpc.gov.in/",
+      "url": "https://contents.tdscpc.gov.in/",
       "icon": <LanguageIcon />,
       "label": "TRACES",
       "description": ""
     },
     {
-      "href": "https://tin.tin.nsdl.com/oltas/index",
+      "url": "https://tin.tin.nsdl.com/oltas/index",
       "icon": <LanguageIcon />,
       "label": "OLTAS Challan",
       "description": ""
@@ -194,7 +194,7 @@ const buttons = [
                     <Card elevation={7} sx={{display:"flex",width:"180px", margin: "10px"}} key={index}>
                     <CardContent>
                       <Typography variant="caption" sx={{display:"flex",width:"300px"}}>
-                      <Box sx={{alignItems:"center",display:"flex"}}>    {link.icon}<Link href={link.href}>{link.label}</Link></Box>
+                      <Box sx={{alignItems:"center",display:"flex"}}>    {link.icon}<Link href={link.url}>{link.label}</Link></Box>
                       </Typography>
                     </CardContent>
                     </Card>
