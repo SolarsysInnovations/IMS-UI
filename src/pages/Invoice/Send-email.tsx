@@ -169,6 +169,7 @@ const SendEmail = () => {
                     </Button>
                   </Box>
                 </Grid>
+                </Grid>
                 <Grid container spacing={1}>
                   {showfilename && showfilename.map((fileName, index) => (
                     <>
