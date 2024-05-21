@@ -90,8 +90,7 @@ export const dyserviceInitialValues: serviceCreationProps = {
 };
 
 //
-export const invoiceInitialValue: InvoiceInitialValueProps = {
-    id: 0,
+export const invoiceCreateInitialValue: InvoiceInitialValueProps = {
     invoiceDate: new Date(),
     invoiceType: "",
     invoiceNumber: "",
@@ -102,7 +101,30 @@ export const invoiceInitialValue: InvoiceInitialValueProps = {
     paymentTerms: "",
     startDate: '',
     dueDate: '',
-    invoiceStatus: "Pending",
+    invoiceStatus: "PENDING",
+    discountPercentage: null,
+    totalAmount: null,
+    notes: "Thanks for your business transaction",
+    termsAndConditions: "",
+    taxAmount: {
+        tds: "",
+    },
+    servicesList: [],
+};
+
+export const invoiceEditInitialValue: InvoiceInitialValueProps = {
+    id: "",
+    invoiceDate: new Date(),
+    invoiceType: "",
+    invoiceNumber: "",
+    customerName: "",
+    gstType: "",
+    gstPercentage: null,
+    gstInNumber: "",
+    paymentTerms: "",
+    startDate: '',
+    dueDate: '',
+    invoiceStatus: "PENDING",
     discountPercentage: null,
     totalAmount: null,
     notes: "Thanks for your business transaction",
