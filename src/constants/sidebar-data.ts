@@ -56,10 +56,7 @@ export const sidebarTwo = [
         title: "Roles",
         path: "/roles/list",
         icon: Home,
-        isParent: true,
-        subItems: [
-            { title: "Create Roles", path: "/roles/create" },
-        ]
+        isParent: false,
     },
     {
         id: 7,

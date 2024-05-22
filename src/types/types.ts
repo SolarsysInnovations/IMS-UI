@@ -193,12 +193,15 @@ export interface SendEmailInitialValueProps {
     recipientEmail: string;
     //description: string;
     file: File | null;
+    cc: string;
+    subject: string;
 }
 
 export interface RoleInitialValueProps {
-    userName: string,
-    email: string,
+    username: string,
     password: string,
-    role: string,
-    access:string,
+    userRole: string,
+    userEmail: string,
+    userAccess: string,
+    id:string,
 }

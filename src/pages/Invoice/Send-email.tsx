@@ -23,6 +23,7 @@ const SendEmail = () => {
   const [showfilename, setShowFileName] = useState<String[]>([]);
   const [editor, setEditor] = useState<any>(null); // To keep reference of the editor
   const pathname = 'Send Email'
+  const navigate = useNavigate();
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -95,7 +96,7 @@ const SendEmail = () => {
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid item xs={10}>
+                <Grid item xs={12}>
                   <Box>
                     <TextFieldUi
                       required={true}
@@ -115,7 +116,7 @@ const SendEmail = () => {
                 {/* {errors.fromemail && touched.fromemail && (
                     <div style={{ color: "red" }}>{errors.fromemail}</div>
                   )} */}
-                <Grid item xs={10}>
+                <Grid item xs={12}>
                   <Box>
                     <TextFieldUi
                       required={true}
@@ -135,6 +136,36 @@ const SendEmail = () => {
                   )} */}
                 <Grid item xs={12}>
                   <Box>
+                    <TextFieldUi
+                      required={true}
+                      fullWidth={false}
+                      label="CC"
+                      name="cc"
+                      type="email"
+                      value={values.cc || ""}
+                      onChange={handleChange}
+                      error={touched.cc && Boolean(errors.cc)}
+                      helperText={touched.cc && errors.cc}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12}>
+                  <Box>
+                    <TextFieldUi
+                      required={true}
+                      fullWidth={false}
+                      label="Subject"
+                      name="subject"
+                      type="text"
+                      value={values.subject || ""}
+                      onChange={handleChange}
+                      error={touched.subject && Boolean(errors.subject)}
+                      helperText={touched.subject && errors.subject}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12}>
+                  <Box>
                     {/* <Editor
                       initialValue=""
                       previewStyle="vertical"
@@ -145,30 +176,6 @@ const SendEmail = () => {
                       ref={(editor: any) => setEditor(editor)}
                     /> */}
                   </Box>
-                </Grid>
-              </Grid>
-              <Grid container spacing={2}>
-                <Grid item xs={10}>
-                  <Box sx={{ mt: 3, display: "flex" }}>
-                    <Button
-                      component="label"
-                      role={undefined}
-                      variant="contained"
-                      tabIndex={-1}
-                      startIcon={<CloudUploadIcon />}
-                    >
-                      Upload file
-                      <VisuallyHiddenInput
-                        id="fileInput"
-                        type="file"
-                        onChange={(event) => {
-                          handleFileUpload(event);
-                          setFieldValue("file", event.currentTarget.files?.[0] || null);
-                        }}
-                      />
-                    </Button>
-                  </Box>
-                </Grid>
                 </Grid>
                 <Grid container spacing={1}>
                   {showfilename && showfilename.map((fileName, index) => (
@@ -187,7 +194,7 @@ const SendEmail = () => {
                   ))}
                 </Grid>
                 <Grid container spacing={2}>
-                  <Grid item xs={10}>
+                  <Grid item xs={9}>
                     <Box sx={{ mt: 3, display: "flex" }}>
                       <Button style={{ height: "26px",width: "fit-content", fontSize: "12px",borderRadius: "8px",boxShadow: "none" }}
                         component="label"
@@ -210,14 +217,15 @@ const SendEmail = () => {
                     </Box>
                   </Grid>
                   <Grid item xs={2}>
-                    <Box sx={{ mt: 3, display: "flex" }}>
+                    <Box sx={{ mt: 3,gap: 1, display: "flex" }}>
+                      <ButtonSmallUi color="primary" label="Cancel" size="small" variant="contained" type="button" onClick={() => navigate(-1) } />
                       <ButtonSmallUi color="primary" label="Send" size="small" variant="contained" type="submit"/>
                     </Box>
                   </Grid>
                 </Grid>
-                
-              </Form>
-            </div>
+              </Grid>  
+            </Form>
+          </div>
         )}
       </Formik>
     </>

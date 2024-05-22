@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
+import { RoleInitialValueProps } from '../../types/types';
 
 
 const roleSlice = createSlice({
@@ -11,13 +12,13 @@ const roleSlice = createSlice({
         error: null,
     },
     reducers: {
-        setRoleData(state: { data: any; }, action: { payload: any; }) {
+        setRoleData(state, action) {
             state.data = action.payload;
         },
-        setRoleLoading(state: { loading: any; }, action: { payload: any; }) {
+        setRoleLoading(state, action) {
             state.loading = action.payload;
         },
-        setRoleError(state: { error: any; }, action: { payload: any; }) {
+        setRoleError(state, action) {
             state.error = action.payload;
         },
     },
@@ -25,11 +26,10 @@ const roleSlice = createSlice({
 
 export const roleApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getRole: builder.query<any[], void>({
+        getRole: builder.query<RoleInitialValueProps[], void>({
             query: () => ({
                 url: API_URLS.rolesList,
                 method: 'POST',
-
             }),
             // Set caching for 5 minutes (adjust the duration as needed)
             keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
@@ -42,28 +42,28 @@ export const roleApi = apiSlice.injectEndpoints({
                 body: role,
             }),
         }),
-        updateRole: builder.mutation<any, { id: number; role: Partial<any> }>({
-            query: ({ id, role }) => ({
-                url: API_URLS.rolesUpdate+`${id}`,
-                method: 'POST',
-                body: role,
-            }),
-        }),
-        deleteRole: builder.mutation<void, number>({
+        deleteRole: builder.mutation<void, string>({
             query: (id) => ({
                 url: API_URLS.rolesDelete+`${id}`,
                 method: 'POST',
             }),
         }),
-
-        getRoleById: builder.mutation<void, number>({
+        getRoleById: builder.mutation<void, string>({
             query: (id) => ({
                 url: API_URLS.rolesGet+`${id}`,
                 method: 'POST',
             }),
         }),
+        updateRole: builder.mutation<string, Partial<any>>({
+            query: (role) => ({
+                url: API_URLS.rolesUpdate+`${role.id}`,
+                method: 'POST',
+                body: role,
+            }),
+        })
     }),
 });
 
-
+export const { setRoleData, setRoleLoading, setRoleError } = roleSlice.actions;
+export { roleSlice };
 export const { useGetRoleQuery, useAddRoleMutation, useDeleteRoleMutation,useGetRoleByIdMutation,useUpdateRoleMutation } = roleApi;

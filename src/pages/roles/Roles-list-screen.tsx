@@ -1,48 +1,98 @@
 import React, { useState } from 'react';
-import GridDataUi from '../../components/GridTable/GridData';
-import { columns } from '../../constants/grid-table-data/Roles-table-data';
-import { useNavigate } from 'react-router-dom'
-import { Add } from '@mui/icons-material'
-import { useGetRoleQuery } from '../../redux-store/role/roleApi'
-import TableHeader from '../../components/layouts/TableHeader'
-import usePathname from '../../hooks/usePathname'
-import DialogBoxUi from "../../components/ui/DialogBox";
-import RolesCreate from './Roles-create-screen';
-import { height } from '@mui/system';
-
+import RolesGridDataUi from './Roles-table-data'
+import { Add } from '@mui/icons-material';
+import { useDeleteRoleMutation, useGetRoleQuery } from '../../redux-store/role/roleApi';
+import TableHeader from '../../components/layouts/TableHeader';
+import usePathname from '../../hooks/usePathname';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import RoleForm from './Roles-form';
+import { GridColDef } from '@mui/x-data-grid';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
+import { toast } from 'react-toastify';
+import { toastConfig } from '../../constants/forms/config/toastConfig';
 
 const RolesList: React.FC = () => {
-    
-    const [openemaildialogBox, setIsOpenEmailDialogBox] = useState(false);
-    const { data: roleDetails, error, isLoading } = useGetRoleQuery();
-    const buttons = [
-        { label: 'Create Role', icon: Add, onClick: () => {setIsOpenEmailDialogBox(true);} },
-    ];
-    const navigate = useNavigate();
+    const [openModal, setOpenModal] = useState(false);
+    const [roleId, setRoleId] = useState<string | null>(null);
+    const { data: roleDetails, refetch } = useGetRoleQuery();
     const pathname = usePathname();
+    const [deleteRole] = useDeleteRoleMutation();
+
+    const handleModalClose = () => {
+        setOpenModal(false);
+        refetch();
+    };
+
+    const handleAddClick = () => {
+        setRoleId(null);
+        setOpenModal(true);
+        setOpenModal(true);
+    }
+    
+    const buttons = [
+        { label: 'Create Role', icon: Add, onClick: handleAddClick },
+    ];
+    
+    const handleEditClick = (id: string) => {
+        setRoleId(id);
+        setOpenModal(true);
+    }
+
+    const handleDeleteClick = async (id: string) => {
+        const confirmed = window.confirm("Are you sure you want to delete this role?");
+        if (confirmed) {
+            await deleteRole(id);
+            toast.success("Successfully deleted the selected role", toastConfig);
+            refetch();
+        }
+    };
+
+    const columns: GridColDef[] = [
+        {
+            field: 'Action',
+            headerName: 'Action',
+            width: 140,
+            renderCell: undefined,
+        },
+        {
+            field: 'username',
+            headerName: 'User Name',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'userRole',
+            headerName: 'User Role',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'userEmail',
+            headerName: 'Email',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'userAccess',
+            headerName: 'Access',
+            width: 150,
+            editable: true,
+        },
+    ];
 
     return (
         <>
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} columns={columns || []} tableData={{} || []} checkboxSelection={false} />
-            <DialogBoxUi 
-                open={openemaildialogBox} // Set open to true to display the dialog initially
-                // title="Custom Dialog Title"
-                content={
-                   <RolesCreate />
-                }
-                handleClose={() => {
-                    setIsOpenEmailDialogBox(false)
-                }}
+            <RolesGridDataUi showToolbar={true} columns={columns || []} tableData={roleDetails || []} checkboxSelection={false} onRowEdit={(roleId) => handleEditClick(roleId)} 
+                onRowDelete={handleDeleteClick}/>
+            <DialogBoxUi
+                open={openModal}
+                content={<RoleForm roleId={roleId} onClose={handleModalClose} />}
+                handleClose={handleModalClose}
             />
         </>
     );
-
 };
 
-
-
-
 export default RolesList;
-
-

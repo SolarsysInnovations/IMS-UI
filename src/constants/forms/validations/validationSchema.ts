@@ -133,9 +133,9 @@ export const sendEmailValidationSchema = Yup.object().shape({
 });
 
 export const RoleValidationSchema = Yup.object().shape({
-    userName: Yup.string()
+    username: Yup.string()
         .required('Username is required'),
-    email: Yup.string()
+    userEmail: Yup.string()
         .email('Invalid email address')
         .required('Email is required'),
     password: Yup.string()

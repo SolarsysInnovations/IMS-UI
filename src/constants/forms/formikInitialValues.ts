@@ -168,13 +168,16 @@ export const AragingInitialValue: ArAgingInitialValueProps = {
 export const SendEmailInitialValue: SendEmailInitialValueProps = {
     recipientEmail: "",
     fromemail: "",
-    file: null
+    file: null,
+    cc: "",
+    subject:"",
 }
 
 export const RoleInitialValue: RoleInitialValueProps = {
-    userName: "",
-    email: "",
+    username: "",
+    userRole: "",
+    userEmail: "",
+    userAccess:"",
     password: "",
-    role: "",
-    access:"",
+    id:"",
 }

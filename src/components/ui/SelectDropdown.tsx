@@ -52,6 +52,7 @@ export default function SelectDropdown({ onMouseDown, button, width, error, help
       onChange={(event, newValue) => {
         onChange(newValue); // Pass the selected value to the parent component
       }}
+      isOptionEqualToValue={(option, value) => option.value === value.value}
       renderInput={(params) => <TextField error={error} helperText={helperText} sx={{ fontSize: "13px !important" }} variant='outlined' {...params} label={labelText} />}
 
       PaperComponent={({ children }) => {

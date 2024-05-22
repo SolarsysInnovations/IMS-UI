@@ -31,9 +31,7 @@ import ArAgingscreen from "./pages/reports/Reports-ar-aging";
 import Reportsinvoice from "./pages/reports/Reports-invoice";
 import DynamicForm from "./components/Demo-dynamic-form/DynamicFrom";
 import Settingscreen from "./pages/settings/settings";
-import RolesCreate from "./pages/roles/Roles-create-screen";
 import RolesList from "./pages/roles/Roles-list-screen";
-import RolesEdit from "./pages/roles/Roles-edit-screen";
 
 const initialValues = {
   "text-input": "",
@@ -79,9 +77,7 @@ function App() {
               <Route element={<ArAgingscreen />} path="/reports/araging" />
               <Route element={<Reportsinvoice />} path="/reports/invoice" />
               <Route element={<Settingscreen />} path="/settings" />
-              <Route path="/roles/create" element={<RolesCreate />} />
               <Route path="/roles/list" element={<RolesList />} />
-              <Route path="/roles/edit" element={<RolesEdit />} />
 
             </Route>
             <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
