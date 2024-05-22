@@ -25,6 +25,7 @@ import ModalUi from '../../components/ui/ModalUi'
 import AddLink from './link'
 import { Card, CardContent, Button } from '@mui/material';
 import { List, ListItem, ListItemText, TextField } from '@mui/material';
+import PreviewScreen from "./previewscreen";
 
 const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
@@ -175,7 +176,8 @@ const buttons = [
                    ]}
                   />
                 {/* </Typography> */}
-              </Box>
+                <PreviewScreen/>
+             </Box>
             </Container>
           )}
 
@@ -215,6 +217,7 @@ const buttons = [
       </Card>   */}
              </Typography>
              </Box> 
+             
            </Container>
           )}
 
@@ -233,7 +236,7 @@ const buttons = [
     <Typography variant="body1">
       SSINTEK :
       <StyledLink 
-        href="https://example.com/about-us" 
+        href="https://www.solarsystek.com/" 
         target="_blank" 
         rel="noopener noreferrer"
       >
