@@ -172,6 +172,7 @@ const buttons = [
                     validationSchema={companyValidationSchema}
                     onSubmit={onSubmit}
                     buttons={[
+                      { label: 'Edit', onClick: onSubmit },
                       { label: 'Save', onClick: onSubmit }
                    ]}
                   />

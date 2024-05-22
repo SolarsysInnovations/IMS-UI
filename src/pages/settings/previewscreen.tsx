@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useAddSettingMutation, useGetSettingQuery } from '../../../src/redux-store/settings/settingsApi';
-import { toastConfig } from '../../constants/forms/config/toastConfig';
-import { ToastContainer, toast } from 'react-toastify';
-import { companyFields, companyPreviewFields, linkFields } from '../../constants/form-data/form-data-json';
-import { companyInitialValues, linkInitialValues } from '../../constants/forms/formikInitialValues';
-import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
-import { linkValidationSchema } from '../../constants/forms/validations/validationSchema';
+import { ToastContainer } from 'react-toastify';
 import { Box, Grid } from "@mui/material";
-
-
 
 const PreviewScreen: React.FC = () => {
     const [addLink, { isLoading, isSuccess, isError, error }] = useAddSettingMutation();
     const { data: companyData, refetch: refetchCompanyData } = useGetSettingQuery();
     const [companyDetails, setCustomerDetails] = useState<any>(companyData)
 
-
+console.log("companyData", companyData);
     console.log("values", companyDetails);
     const onSubmit = async (values: any, actions: any) => {
         try {
@@ -26,18 +19,6 @@ const PreviewScreen: React.FC = () => {
         }
     };
     
-    // useEffect(() => {
-    //     if (invoiceData) {
-    //         const calculateTotal = invoiceData.servicesList.reduce((total: any, service: any) => {
-    //             return total + service.price;
-    //         }, 0)
-    //         setSubTotalAmount(calculateTotal);
-
-    //         const disAmount = (subTotalAmount * (invoiceData.discountPercentage ?? 0)) / 100;
-    //         setDiscountAmount(disAmount);
-    //     }
-    // }, [invoiceData, subTotalAmount])
-
     useEffect(() => {
          if (companyData) {
             setCustomerDetails(companyData)
