@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Formik } from "formik";
 // import { Editor } from "@toast-ui/react-editor";
 // import "@toast-ui/editor/dist/toastui-editor.css";
-import { Box, Grid, Button, Typography } from "@mui/material";
+import { Box, Grid, Button, Typography, IconButton } from "@mui/material";
 import TextFieldUi from "../../components/ui/TextField";
 import ButtonSmallUi from "../../components/ui/ButtonSmall";
 import { useSendEmailNotifictionMutation } from "../../redux-store/invoice/invcoiceApi";
@@ -14,6 +14,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import CancelIcon from '@mui/icons-material/Close';
 // import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
 import usePathname from "../../hooks/usePathname";
 import TableHeader from "../../components/layouts/TableHeader";
@@ -196,21 +197,23 @@ const SendEmail = () => {
                   {showfilename && showfilename.map((fileName, index) => (
                     <>
                       <Grid item xs={5}>
-                        <Box sx={{ mt: 0, display: "flex" }}>
+                        <Box sx={{ mt: 1,mb:-1, display: "flex",position:"relative",left:"15px" }}>
                           <Typography>{fileName}</Typography>
                         </Box>
                       </Grid>
                       <Grid item xs={7}>
                         <Box sx={{ mt: 1, display: "flex" }}>
-                          <ButtonSmallUi color="secondary" onClick={() => handleRemoveFile(index)} label="Remove"/>
-                        </Box>
+                          <IconButton onClick={() => handleRemoveFile(index)}>
+                            <CancelIcon color="secondary" sx={{ position:"relative"  }}/>
+                          </IconButton>
+                          </Box>
                       </Grid>
                     </>
                   ))}
                 </Grid>
                 <Grid container spacing={2}>
                   <Grid item xs={9}>
-                    <Box sx={{ mt: 3, display: "flex" }}>
+                    <Box sx={{ mt: 3, display: "flex",position:"relative",left:"15px" }}>
                       <Button style={{ height: "26px",width: "fit-content", fontSize: "12px",borderRadius: "8px",boxShadow: "none" }}
                         component="label"
                         role={undefined}

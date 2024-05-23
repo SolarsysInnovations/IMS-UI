@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import { Box, Grid } from "@mui/material";
+import { Box, Grid,Typography } from "@mui/material";
 import { RoleInitialValue } from '../../constants/forms/formikInitialValues';
 import { RoleValidationSchema } from '../../constants/forms/validations/validationSchema';
 import TextFieldUi from '../../components/ui/TextField';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
-import { useAddRoleMutation, useUpdateRoleMutation, useGetRoleByIdMutation } from '../../redux-store/role/roleApi';
+import { useAddRoleMutation, useUpdateRoleMutation, useGetRoleByIdMutation, useGetRoleQuery } from '../../redux-store/role/roleApi';
 import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import { RoleInitialValueProps } from '../../types/types';
@@ -18,12 +18,12 @@ interface RoleFormProps {
 }
 
 const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
+    // const { data: role, error, isLoading, refetch } = useGetRoleQuery();
     const [addRole] = useAddRoleMutation();
     const [updateRole] = useUpdateRoleMutation();
     const [GetRoleById] = useGetRoleByIdMutation();
     const [initialValues, setInitialValues] = useState(RoleInitialValue);
     const dispatch = useDispatch();
-
 
     useEffect(() => {
         if (roleId) {
@@ -61,6 +61,22 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
             {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
                 <Form onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            {values && values.id && (
+                                <Box>
+                                    <Typography variant="h5" color="initial">
+                                        Edit Role
+                                    </Typography>
+                                </Box>
+                            )}
+                            {initialValues.id == "" && (
+                                <Box>
+                                    <Typography variant="h5" color="initial">
+                                        Add Role
+                                    </Typography>
+                                </Box>
+                            )}
+                        </Grid>
                         <Grid item xs={6}>
                             <Box>
                                 <TextFieldUi
