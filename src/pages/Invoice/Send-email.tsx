@@ -12,6 +12,9 @@ import { SendEmailInitialValue } from '../../constants/forms/formikInitialValues
 import { useNavigate } from "react-router-dom";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
 import usePathname from "../../hooks/usePathname";
 import TableHeader from "../../components/layouts/TableHeader";
 
@@ -175,6 +178,18 @@ const SendEmail = () => {
                       toolbarItems={toolbarItems}
                       ref={(editor: any) => setEditor(editor)}
                     /> */}
+                    <CKEditor
+                      editor={ClassicEditor}
+                      data=""
+                      onReady={(editor) => {
+                        console.log('CKEditor React Component is ready to use!', editor);
+                        // CKEditorInspector.attach(editor);
+                      }}
+                      onChange={(event, editor) => {
+                        const data = editor.getData();
+                        console.log({ event, editor, data });
+                      }}
+                    />
                   </Box>
                 </Grid>
                 <Grid container spacing={1}>

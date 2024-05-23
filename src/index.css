@@ -9,6 +9,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+.ck-editor__editable_inline{
+  height: 250px;
+}
 /* ::-webkit-scrollbar-thumb {
   background: red; 
   border-radius: 10px;
