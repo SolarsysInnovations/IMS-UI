@@ -30,7 +30,7 @@ import DemoInvoice from "./pages/Invoice/Demo-Invocie";
 import ArAgingscreen from "./pages/reports/Reports-ar-aging";
 import Reportsinvoice from "./pages/reports/Reports-invoice";
 import DynamicForm from "./components/Demo-dynamic-form/DynamicFrom";
-import Settingscreen from "./pages/settings/settings";
+import SettingScreen from "./pages/settings/settings";
 
 const initialValues = {
   "text-input": "",
@@ -75,7 +75,7 @@ function App() {
               <Route element={<Reportscreen />} path="/reports" />
               <Route element={<ArAgingscreen />} path="/reports/araging" />
               <Route element={<Reportsinvoice />} path="/reports/invoice" />
-              <Route element={<Settingscreen />} path="/settings" />
+              <Route element={<SettingScreen />} path="/settings" />
 
             </Route>
             <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />

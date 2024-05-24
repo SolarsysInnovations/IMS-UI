@@ -31,12 +31,12 @@ const Reportscreen: React.FC = () => {
                         <RequestQuoteIcon /> Receivables
                      </Grid> */}
 
-        <div style={{display:"flex", marginTop:10}}>
+        {/* <div style={{display:"flex", marginTop:10}}>
             <div style={{fontWeight:'lighter', marginLeft:10}}>
         <RequestQuoteIcon />
         </div>
       <Typography variant="body1" marginLeft={1} style={{ fontWeight: 'bold' }}>Receivables</Typography>
-    </div>
+    </div> */}
 
                         
          <Grid container spacing={2} marginTop={-1} marginLeft={-2}>
