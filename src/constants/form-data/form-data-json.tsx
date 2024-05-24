@@ -56,20 +56,19 @@ export const customerFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             {
-                name: 'country', label: 'country/region', type: 'select', gridSize: 3, options: [{ value: "uk", label: "uk" },
-                { value: "australia", label: "australia" }], validation: Yup.string().required('paymentTerms is required')
+                name: 'country', label: 'country/region', type: 'select', gridSize: 3, options: [{ value: "india", label: "india" }], validation: Yup.string().required('paymentTerms is required')
             },
             { name: 'address', label: 'Address', type: 'text', gridSize: 3, validation: Yup.string().required('address is required') },
             {
                 name: 'city', label: 'City', type: 'select', gridSize: 3, options: [
-                    { value: "India", label: "India" },
-                    { value: "India", label: "India" }
+                    { value: "Chennai", label: "Chennai" },
+                    { value: "Trichy", label: "Trichy" }
                 ], validation: Yup.string().required('companyName is required')
             },
             {
                 name: 'state', label: 'State', type: 'select', gridSize: 3, options: [
-                    { value: "Chennai", label: "Chennai" },
-                    { value: "Trichy", label: "Trichy" }
+                    { value: "Tamilnadu", label: "Tamilnadu" },
+                    { value: "Karnataka", label: "Karnataka" }
                 ], validation: Yup.string().required('companyName is required')
             },
             { name: 'pinCode', label: 'PinCode', type: 'number', gridSize: 3, validation: Yup.string().required('pinCode is required') },

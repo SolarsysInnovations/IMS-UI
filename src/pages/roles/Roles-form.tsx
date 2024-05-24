@@ -11,6 +11,8 @@ import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import { RoleInitialValueProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
+import useSuccessToast from '../../hooks/useToast';
+import TableHeader from '../../components/layouts/TableHeader';
 
 interface RoleFormProps {
     roleId?: string | null;
@@ -20,7 +22,7 @@ interface RoleFormProps {
 const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
     // const { data: role, error, isLoading, refetch } = useGetRoleQuery();
     const [addRole] = useAddRoleMutation();
-    const [updateRole] = useUpdateRoleMutation();
+    const [updateRole , {isSuccess}] = useUpdateRoleMutation();
     const [GetRoleById] = useGetRoleByIdMutation();
     const [initialValues, setInitialValues] = useState(RoleInitialValue);
     const dispatch = useDispatch();
@@ -35,11 +37,15 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
         }
     }, [roleId, dispatch, GetRoleById]);
 
+    useSuccessToast({
+        isSuccess, message: "successfully updated the Role",
+    });
+
     const handleSubmit = async (values: RoleInitialValueProps, { setSubmitting, resetForm }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void }) => {
         try {
             if (roleId) {
                 await updateRole(values);
-                toast.success("Role successfully updated", toastConfig);
+                // toast.success("Role successfully updated", toastConfig);
             } else {
                 const formData = !roleId ? Object.fromEntries(Object.entries(values).filter(([key, value]) => key !== 'id')) : values;
            
@@ -64,16 +70,12 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
                         <Grid item xs={12}>
                             {values && values.id && (
                                 <Box>
-                                    <Typography variant="h5" color="initial">
-                                        Edit Role
-                                    </Typography>
+                                    <TableHeader headerName="Edit Role" />
                                 </Box>
                             )}
                             {initialValues.id == "" && (
                                 <Box>
-                                    <Typography variant="h5" color="initial">
-                                        Add Role
-                                    </Typography>
+                                    <TableHeader headerName="Add Role" />
                                 </Box>
                             )}
                         </Grid>

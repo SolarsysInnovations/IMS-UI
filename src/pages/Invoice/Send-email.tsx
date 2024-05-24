@@ -18,6 +18,8 @@ import CancelIcon from '@mui/icons-material/Close';
 // import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
 import usePathname from "../../hooks/usePathname";
 import TableHeader from "../../components/layouts/TableHeader";
+import useSuccessToast from "../../hooks/useToast";
+import useErrorToast from "../../hooks/useErrorToast";
 
 const SendEmail = () => {
   const [sendEmailNotifiction, { isSuccess, isError }] =
@@ -78,6 +80,7 @@ const SendEmail = () => {
       await sendEmailNotifiction(formData);
       resetForm();
       setUploadedFiles([]);
+      setShowFileName([]);
       console.log("Email sent successfully!");
     } catch (error) {
       console.error("An error occurred during sendemail:", error);
@@ -85,6 +88,9 @@ const SendEmail = () => {
       setSubmitting(false);
     }
   };
+
+  useSuccessToast({ isSuccess, message: "Email send successfully", });
+  useErrorToast({ isError, message: "Email not send successfully", });
   
   return (
     <>
@@ -95,9 +101,7 @@ const SendEmail = () => {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Box>
-                    <Typography variant="h5" color="initial">
-                      {pathname}
-                    </Typography>
+                    <TableHeader headerName={pathname} />
                   </Box>
                 </Grid>
                 <Grid item xs={12}>
@@ -141,7 +145,7 @@ const SendEmail = () => {
                 <Grid item xs={12}>
                   <Box>
                     <TextFieldUi
-                      required={true}
+                      required={false}
                       fullWidth={false}
                       label="CC"
                       name="cc"
@@ -156,7 +160,7 @@ const SendEmail = () => {
                 <Grid item xs={12}>
                   <Box>
                     <TextFieldUi
-                      required={true}
+                      required={false}
                       fullWidth={false}
                       label="Subject"
                       name="subject"
@@ -170,15 +174,6 @@ const SendEmail = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <Box>
-                    {/* <Editor
-                      initialValue=""
-                      previewStyle="vertical"
-                      height="280px"
-                      initialEditType="wysiwyg"
-                      hideModeSwitch={true}
-                      toolbarItems={toolbarItems}
-                      ref={(editor: any) => setEditor(editor)}
-                    /> */}
                     <CKEditor
                       editor={ClassicEditor}
                       data=""
