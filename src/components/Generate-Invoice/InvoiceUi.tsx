@@ -40,7 +40,6 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: Invoice
         }
     }, [invoiceData, subTotalAmount])
 
-
     useEffect(() => {
         if (invoiceData) {
             const details = invoiceData.customerName
@@ -48,7 +47,6 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: Invoice
             setCustomerDetails(customerDetails)
         }
     }, [customers, invoiceData])
-
 
     const printPDF = () => {
         const element = document.querySelector("#invoiceCapture");

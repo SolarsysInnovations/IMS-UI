@@ -124,7 +124,10 @@ export const columns: GridColDef[] = [
         field: 'invoiceStatus',
         headerName: 'Invoice Status',
         width: 150,
-        editable: false,
+        editable: true,
+        type: "singleSelect",
+        valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"]
+
     },
     {
         field: 'gstPercentage',

@@ -182,7 +182,7 @@ export interface companyInitialValueProps {
 
 }
 export interface linkCreationProps {
-    link: string;
+    label: string;
     url: string;
     description: string;
 };
