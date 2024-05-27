@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import { Box, Grid,Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { RoleInitialValue } from '../../constants/forms/formikInitialValues';
 import { RoleValidationSchema } from '../../constants/forms/validations/validationSchema';
 import TextFieldUi from '../../components/ui/TextField';
@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import { RoleInitialValueProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
+import TableHeader from '../../components/layouts/TableHeader';
 
 interface RoleFormProps {
     roleId?: string | null;
@@ -18,8 +19,7 @@ interface RoleFormProps {
 }
 
 const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
-    // const { data: role, error, isLoading, refetch } = useGetRoleQuery();
-    const [addRole] = useAddRoleMutation();
+    const [addRole, {isSuccess,isError}] = useAddRoleMutation();
     const [updateRole] = useUpdateRoleMutation();
     const [GetRoleById] = useGetRoleByIdMutation();
     const [initialValues, setInitialValues] = useState(RoleInitialValue);
@@ -64,16 +64,12 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
                         <Grid item xs={12}>
                             {values && values.id && (
                                 <Box>
-                                    <Typography variant="h5" color="initial">
-                                        Edit Role
-                                    </Typography>
+                                    <TableHeader headerName="Edit Role" />
                                 </Box>
                             )}
                             {initialValues.id == "" && (
                                 <Box>
-                                    <Typography variant="h5" color="initial">
-                                        Add Role
-                                    </Typography>
+                                    <TableHeader headerName="Add Role" />
                                 </Box>
                             )}
                         </Grid>
@@ -162,7 +158,6 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
 };
 
 export const roleOptions = [
-    { value: "SUPERADMIN", label: "SUPERADMIN" },
     { value: "ADMIN", label: "ADMIN" },
     { value: "APPROVER", label: "APPROVER" },
     { value: "ENDUSER", label: "ENDUSER" }

@@ -28,7 +28,6 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
         buttons.push({ label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) })
     }
 
-
     function showButton(){
         if (role === "APPROVER" || role === "STANDARD USER") {
             return true;
@@ -87,7 +86,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
             <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
-                <TableHeader headerName="Client Details"  buttons={buttons} />
+                <TableHeader headerName="Client Details" buttons={buttons} />
                 <Box sx={{ marginTop: "15px" }}>
                     <CustomerDetails details={customerData || []} />
                 </Box>

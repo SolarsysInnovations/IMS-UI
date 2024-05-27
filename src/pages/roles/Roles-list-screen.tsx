@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
+import ToastUi from '../../components/ui/ToastifyUi'
 
 const RolesList: React.FC = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -83,6 +84,7 @@ const RolesList: React.FC = () => {
 
     return (
         <>
+            <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
             <RolesGridDataUi showToolbar={true} columns={columns || []} tableData={roleDetails || []} checkboxSelection={false} onRowEdit={(roleId) => handleEditClick(roleId)} 
                 onRowDelete={handleDeleteClick}/>

@@ -195,7 +195,9 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: Invoice
                 open={openemaildialogBox} // Set open to true to display the dialog initially
                 // title="Custom Dialog Title"
                 content={
-                   <SendEmail />
+                    <SendEmail onClose={function (): void {
+                        setIsOpenEmailDialogBox(false)
+                    } } />
                 }
                 handleClose={() => {
                     setIsOpenEmailDialogBox(false)
