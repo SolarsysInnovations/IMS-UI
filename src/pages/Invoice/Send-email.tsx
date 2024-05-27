@@ -21,7 +21,11 @@ import TableHeader from "../../components/layouts/TableHeader";
 import useSuccessToast from "../../hooks/useToast";
 import useErrorToast from "../../hooks/useErrorToast";
 
-const SendEmail = () => {
+interface SendEmailProps {
+  onClose: () => void;
+}
+
+const SendEmail: React.FC<SendEmailProps> = ({ onClose }) => {
   const [sendEmailNotifiction, { isSuccess, isError }] =
     useSendEmailNotifictionMutation();
   const [emailValues, setemailValues] = useState(SendEmailInitialValue);
@@ -81,6 +85,7 @@ const SendEmail = () => {
       resetForm();
       setUploadedFiles([]);
       setShowFileName([]);
+      onClose()
       console.log("Email sent successfully!");
     } catch (error) {
       console.error("An error occurred during sendemail:", error);
