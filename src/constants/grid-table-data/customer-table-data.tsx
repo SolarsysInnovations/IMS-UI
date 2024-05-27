@@ -23,6 +23,10 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
     const navigate = useNavigate();
     const role = localStorage.getItem("userRole");
+    const buttons = [];
+    if (role != "APPROVER"  && role != "STANDARD USER") {
+        buttons.push({ label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) })
+    }
 
     function showButton(){
         if (role === "APPROVER" || role === "STANDARD USER") {
@@ -82,7 +86,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
             <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
-                <TableHeader headerName="Client Details"  />
+                <TableHeader headerName="Client Details" buttons={buttons} />
                 <Box sx={{ marginTop: "15px" }}>
                     <CustomerDetails details={customerData || []} />
                 </Box>

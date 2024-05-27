@@ -2,7 +2,7 @@ import { Field, FieldArray, useFormikContext } from "formik";
 import SelectDropdown from "../ui/SelectDropdown";
 import TextFieldUi from "../ui/TextField";
 import RadioUi from "../ui/RadioGroup";
-import { Grid, IconButton, Typography } from "@mui/material";
+import { Box, Grid, IconButton, Typography } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
 import ButtonSmallUi from "../ui/ButtonSmall";
 import { FieldProps, SubField } from "../../types/types";
@@ -165,17 +165,21 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                                                 </Field>
                                             </Grid>
                                         ))}
-                                        {/* <ButtonSmallUi type="button" variant='contained' onClick={() => remove(index)} label="Delete" /> */}
-                                        <IconButton size='small' sx={{mb:4}} color="error" onClick={() => remove(index)}>
-                                            <DeleteIcon />
-                                        </IconButton>
+                                        <Grid sx={{display:"flex"}}>
+                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1,height:"17px",display:"flex",ml:3}}>
+                                                <IconButton size='small'  onClick={() => remove(index)}>
+                                                    <DeleteIcon sx={{ color: `#ed5d5a`, fontSize: "18px" }} />
+                                                </IconButton>
+                                            </Box>
+                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1,height:"17px",display:"flex",ml:3 }}>
+                                                <IconButton size='small'  color="primary" onClick={() => push({})}>
+                                                    <AddIcon sx={{fontSize: "18px"}} />
+                                                </IconButton>
+                                            </Box>
+                                        </Grid>
                                     </React.Fragment>
                                 ))}
-                                {/* <ButtonSmallUi type="button" variant='contained' onClick={() => push({})} label={`Add `} /> */}
-                                <IconButton size='small' sx={{mb:4}} color="primary" onClick={() => push({})}>
-                                    <AddIcon />
-                                </IconButton>
-                                {/* ${field.label.slice(0, -1)} to add label */}
+                                
                             </>
                         )}
                     </FieldArray>
