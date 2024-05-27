@@ -36,12 +36,16 @@ export default function SelectDropdown({ onMouseDown, button, width, error, help
             backgroundColor: `action.hover`,
           },
         },
+        " & .MuiFormLabel-root": {
+          fontSize: "12px"
+        },
         '& .MuiAutocomplete-input': {
           fontSize: "12px"
         },
         '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
           fontSize: "12px"
         },
+        
       }}
       
       size='small'
@@ -53,7 +57,7 @@ export default function SelectDropdown({ onMouseDown, button, width, error, help
         onChange(newValue); // Pass the selected value to the parent component
       }}
       isOptionEqualToValue={(option, value) => option.value === value.value}
-      renderInput={(params) => <TextField error={error} helperText={helperText} sx={{ fontSize: "13px !important" }} variant='outlined' {...params} label={labelText} />}
+      renderInput={(params) => <TextField error={error} helperText={helperText} sx={{ fontSize: "12px !important" }} variant='outlined' {...params} label={labelText} />}
 
       PaperComponent={({ children }) => {
         return (

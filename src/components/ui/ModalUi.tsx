@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface ModalUiProps {
     children?: React.ReactNode;
@@ -36,7 +37,7 @@ export default function ModalUi({ topHeight, children, open, onClose }: ModalUiP
                     boxShadow: 24,
                     p: 4,
                 }}>
-                    <Button onClick={onClose} sx={{ position: 'absolute', top: '10px', right: '10px' }}>Close</Button>
+                    <Button onClick={onClose} sx={{ position: 'absolute', top: '10px', right: '10px' }}> <CloseIcon sx={{ width: "20px" }} /></Button>
                     {children}
                 </Box>
             </Modal>

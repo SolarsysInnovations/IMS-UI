@@ -213,7 +213,13 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                 open={openemaildialogBox} // Set open to true to display the dialog initially
                 // title="Custom Dialog Title"
                 content={
+<<<<<<< HEAD
                     <SendEmail />
+=======
+                    <SendEmail onClose={function (): void {
+                        setIsOpenEmailDialogBox(false)
+                    } } />
+>>>>>>> a59d1112d4f3228a4f2674b074e7eebbc8e3565c
                 }
                 handleClose={() => {
                     setIsOpenEmailDialogBox(false)
