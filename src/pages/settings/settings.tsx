@@ -65,7 +65,9 @@ const handleModalClose = () => {
 const buttons = [
   { label: 'Add Link', icon: Add, onClick: () => setOpenModal(true) },
 ];
-
+const button = [
+  { label: 'Edit', icon: Add, onClick: () => setOpenModal(true) },
+];
   const updateFormValue = (setFieldValue: Function) => {
     
 };
@@ -73,6 +75,7 @@ const buttons = [
     console.log(tabIndex);
     setCurrentTabIndex(tabIndex);
   };
+  
   // const AntSwitch = styled(Switch)(({ theme }) => ({
   //   width: 28,
   //   height: 16,
@@ -118,13 +121,13 @@ const buttons = [
   const linkCreation = [
     {
       "url": "https://contents.tdscpc.gov.in/",
-      "icon": <LanguageIcon />,
+      "icon": <LanguageIcon style={{ color: 'blue' }}/>,
       "label": "TRACES",
       "description": ""
     },
     {
-      "url": "https://tin.tin.nsdl.com/oltas/index",
-      "icon": <LanguageIcon />,
+      "url": "https://tin.tin.nsdl.com/oltas/servlet/QueryTaxpayer",
+      "icon": <LanguageIcon style={{ color: 'blue' }} />,
       "label": "OLTAS Challan",
       "description": ""
     },
@@ -162,7 +165,10 @@ const buttons = [
         {/* <Typography variant="body2">Multi Branch</Typography> */}
         {/* <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} /> */}
       {/* </Stack> */}
-                  <DynamicFormCreate
+      <TableHeader headerName={"Company Information"} buttons={button}/>
+      <PreviewScreen/> 
+      <ModalUi open={openModal} onClose={handleModalClose}>
+      <DynamicFormCreate
                   showTable={true}
                   headerName="Update your Company Information"
                     setData={setData}
@@ -172,12 +178,12 @@ const buttons = [
                     validationSchema={companyValidationSchema}
                     onSubmit={onSubmit}
                     buttons={[
-                      { label: 'Edit', onClick: onSubmit },
                       { label: 'Save', onClick: onSubmit }
                    ]}
                   />
+                  </ModalUi>
                 {/* </Typography> */}
-                <PreviewScreen/>
+                
              </Box>
             </Container>
           )}
@@ -197,7 +203,7 @@ const buttons = [
                     <Card elevation={7} sx={{display:"flex",width:"180px", margin: "10px"}} key={index}>
                     <CardContent>
                       <Typography variant="caption" sx={{display:"flex",width:"300px"}}>
-                      <Box sx={{alignItems:"center",display:"flex"}}>    {link.icon}<Link href={link.url}>{link.label}</Link></Box>
+                      <Box sx={{alignItems:"center",display:"flex"}}>    {link.icon}<a href={link.url}>{link.label}<StyledLink/></a></Box>
                       </Typography>
                     </CardContent>
                     </Card>

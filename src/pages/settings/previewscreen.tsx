@@ -7,7 +7,7 @@ const PreviewScreen: React.FC = () => {
     const [addLink, { isLoading, isSuccess, isError, error }] = useAddSettingMutation();
     const { data: companyData, refetch: refetchCompanyData } = useGetSettingQuery();
     const [companyDetails, setCustomerDetails] = useState<any>(companyData)
-
+    console.log("company", JSON.stringify(companyData));
 console.log("companyData", companyData);
     console.log("values", companyDetails);
     const onSubmit = async (values: any, actions: any) => {
@@ -33,7 +33,6 @@ console.log("companyData", companyData);
     return (
         <div>
             <ToastContainer />
-            <h5>Company Information</h5>
             <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>
             <Grid sx={{ marginTop: "0px" }} item xs={7}>
                 <Box gap={3}>
