@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import { Box, Grid,Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { RoleInitialValue } from '../../constants/forms/formikInitialValues';
 import { RoleValidationSchema } from '../../constants/forms/validations/validationSchema';
 import TextFieldUi from '../../components/ui/TextField';
@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import { RoleInitialValueProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
-import useSuccessToast from '../../hooks/useToast';
 import TableHeader from '../../components/layouts/TableHeader';
 
 interface RoleFormProps {
@@ -20,9 +19,8 @@ interface RoleFormProps {
 }
 
 const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
-    // const { data: role, error, isLoading, refetch } = useGetRoleQuery();
-    const [addRole] = useAddRoleMutation();
-    const [updateRole , {isSuccess}] = useUpdateRoleMutation();
+    const [addRole, {isSuccess,isError}] = useAddRoleMutation();
+    const [updateRole] = useUpdateRoleMutation();
     const [GetRoleById] = useGetRoleByIdMutation();
     const [initialValues, setInitialValues] = useState(RoleInitialValue);
     const dispatch = useDispatch();
@@ -37,15 +35,11 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
         }
     }, [roleId, dispatch, GetRoleById]);
 
-    useSuccessToast({
-        isSuccess, message: "successfully updated the Role",
-    });
-
     const handleSubmit = async (values: RoleInitialValueProps, { setSubmitting, resetForm }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void }) => {
         try {
             if (roleId) {
                 await updateRole(values);
-                // toast.success("Role successfully updated", toastConfig);
+                toast.success("Role successfully updated", toastConfig);
             } else {
                 const formData = !roleId ? Object.fromEntries(Object.entries(values).filter(([key, value]) => key !== 'id')) : values;
            
@@ -164,7 +158,6 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
 };
 
 export const roleOptions = [
-    { value: "SUPERADMIN", label: "SUPERADMIN" },
     { value: "ADMIN", label: "ADMIN" },
     { value: "APPROVER", label: "APPROVER" },
     { value: "ENDUSER", label: "ENDUSER" }
