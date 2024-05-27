@@ -1,5 +1,5 @@
-import { IconButton, Stack } from "@mui/material";
-import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
+import { Button, IconButton, Stack } from "@mui/material";
+import { GridColDef, GridDeleteIcon, GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -12,9 +12,40 @@ import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
 import { toastConfig } from "../../forms/config/toastConfig";
 import { toast } from "react-toastify";
 import { setCustomerData } from "../../../redux-store/customer/customerApi";
+import ButtonSmallUi from "../../../components/ui/ButtonSmall";
 
+
+const DownloadButtonRenderer = ({ row }: { row: any }) => {
+    const [downloadPdf, setDownloadPdf] = useState<boolean>(false);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [invoiceData, setInvoiceData] = useState<any>();
+
+    const handleOpenModal = () => {
+        setInvoiceData(row);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    return (
+        <>
+            <ButtonSmallUi
+                variant="outlined"
+                label="Download Pdf"
+                onClick={handleOpenModal}
+            />
+            <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
+                <InvoiceUi downloadPdf={downloadPdf} invoiceData={invoiceData} />
+            </ModalUi>
+        </>
+    );
+};
 
 const MyCellRenderer = ({ row }: { row: any }) => {
+
     const dispatch = useDispatch<AppDispatch>();
     const { data: invoice, error, isLoading, refetch } = useGetInvoiceQuery();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,6 +92,7 @@ const MyCellRenderer = ({ row }: { row: any }) => {
         }
         refetch();
     }, [D_Success]);
+
     return (
         <Stack direction="row" spacing={1}>
             <IconButton aria-label="" onClick={handleEditClick}>
@@ -82,6 +114,10 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     );
 };
 
+const handleInvoiceStatus = (params: any) => {
+    console.log(params.row);
+}
+
 export const columns: GridColDef[] = [
     {
         field: 'Action',
@@ -90,16 +126,16 @@ export const columns: GridColDef[] = [
         editable: false,
         renderCell: (params: any) => <MyCellRenderer row={params.row} />,
     },
-    {
-        field: 'id',
-        headerName: 'id',
-        width: 150,
-        editable: true,
-    },
+    // {
+    //     field: 'id',
+    //     headerName: 'id',
+    //     width: 150,
+    //     editable: true,
+    // },
     {
         field: 'invoiceType',
         headerName: 'Invoice Type',
-        width: 150,
+        width: 120,
         editable: true,
     },
     {
@@ -123,18 +159,22 @@ export const columns: GridColDef[] = [
     {
         field: 'invoiceStatus',
         headerName: 'Invoice Status',
-        width: 150,
+        width: 120,
         editable: true,
         type: "singleSelect",
-        valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"]
-
+        valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
+        renderCell: (params: any) => {
+            handleInvoiceStatus(params);
+            console.log(params.row.invoiceStatus);
+            return <>{params.value}</>; // Return the default cell content
+        }
     },
-    {
-        field: 'gstPercentage',
-        headerName: 'Gst Percentage',
-        width: 150,
-        editable: false,
-    },
+    // {
+    //     field: 'gstPercentage',
+    //     headerName: 'Gst Percentage',
+    //     width: 150,
+    //     editable: false,
+    // },
     // {
     //     field: 'fullName',
     //     headerName: 'Full name',
@@ -144,4 +184,24 @@ export const columns: GridColDef[] = [
     //     valueGetter: (params: GridValueGetterParams) =>
     //         `${params.row.firstName || ''} ${params.row.lastName || ''}`,
     // },
+    {
+        field: '',
+        headerName: '',
+        width: 80,
+        renderCell: () => (
+            <ButtonSmallUi
+                variant="outlined"
+                label="Email"
+            // style={{ marginLeft: 16 }}
+            />
+        ),
+    },
+    {
+        field: 'download',
+        width: 150,
+        editable: false,
+        headerName: '',
+        renderCell: (params: any) => <DownloadButtonRenderer row={params.row} />,
+    },
+
 ];

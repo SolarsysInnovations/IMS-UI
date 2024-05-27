@@ -24,7 +24,6 @@ const InvoiceList = () => {
             <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
             <GridDataUi showToolbar={true} columns={columns} tableData={invoiceList || []} checkboxSelection={false} />
-
         </>
     )
 }

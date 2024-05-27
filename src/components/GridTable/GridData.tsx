@@ -11,15 +11,15 @@ interface GridDataProps {
     hideFooter?: boolean;
     onCellEditor?: any;
     onCellEditStop?: any;
+    onEditStart?: any;
 }
-export default function GridDataUi({ onCellEditStop, onCellEditor, hideFooter, pagination, showToolbar, checkboxSelection, columns, tableData }: GridDataProps) {
+export default function GridDataUi({ onEditStart, onCellEditStop, onCellEditor, hideFooter, pagination, showToolbar, checkboxSelection, columns, tableData }: GridDataProps) {
     return (
         <Box sx={{ height: "fit-content", width: '100%', }}>
             <DataGrid
                 onCellEditStart={onCellEditor}
-                onRowEditStart={(params: any, event: any) => {
-                    const newValue = event.target.value;
-                }}
+                onRowEditStart={onEditStart}
+
                 onCellEditStop={onCellEditStop}
                 // onCellEditStop={(params: any, event: any) => {
                 //     const newValue = event.target.value;
@@ -70,8 +70,8 @@ export default function GridDataUi({ onCellEditStop, onCellEditor, hideFooter, p
                     }
 
                 }}
-                rows={tableData}
-                columns={columns}
+                rows={tableData || []}
+                columns={columns || []}
                 initialState={{
                     // * below pagination for grid table
                     pagination: {

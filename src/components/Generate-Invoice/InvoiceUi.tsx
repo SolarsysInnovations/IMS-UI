@@ -7,7 +7,7 @@ import TableContent from "./TableContent";
 import { formatDate } from "../../services/utils/dataFormatter";
 import ButtonSmallUi from "../ui/ButtonSmall";
 import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
-import { addDays, format } from "date-fns";
+import { addDays, format, parse } from "date-fns";
 import DialogBoxUi from "../ui/DialogBox";
 import SendEmail from "../../pages/Invoice/Send-email";
 
@@ -16,12 +16,13 @@ interface InvoiceUiProps {
     subtotal?: number | null;
     discount?: number | null;
     tds?: number | null;
-    isModalOpen?: any
+    isModalOpen?: any;
+    downloadPdf?: boolean;
 }
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: InvoiceUiProps) {
+function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) {
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [subTotalAmount, setSubTotalAmount] = useState<number>(0)
     const [customerDetails, setCustomerDetails] = useState<any>()
@@ -39,6 +40,12 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: Invoice
             setDiscountAmount(disAmount);
         }
     }, [invoiceData, subTotalAmount])
+
+    useEffect(() => {
+        if (downloadPdf) {
+            printPDF()
+        }
+    }, [downloadPdf])
 
     useEffect(() => {
         if (invoiceData) {
@@ -79,6 +86,13 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: Invoice
     if (!invoiceData) {
         return <div>No data available</div>;
     }
+
+    const parsedDueDate = invoiceData?.dueDate
+        ? parse(invoiceData.dueDate, 'dd-MM-yyyy', new Date())
+        : null;
+
+    // Check if the parsed date is valid
+    const isValidDate = parsedDueDate instanceof Date && !isNaN(parsedDueDate.getTime());
     return (
         <>
             <div className="App" id="invoiceCapture" style={{ padding: "50px 30px" }}>
@@ -128,7 +142,11 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: Invoice
                                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Payment Terms </span> <span>: {invoiceData?.paymentTerms}</span></p>
                             </div>
                             <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Due Date </span> <span>: {invoiceData?.dueDate ? format(addDays(new Date(invoiceData?.dueDate), 0), 'dd-MM-yyyy') : "N/A"}</span></p>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Due Date </span> <span>: {
+                                    isValidDate
+                                        ? format(addDays(parsedDueDate, 0), 'dd-MM-yyyy')
+                                        : "N/A"
+                                }</span></p>
                             </div>
                         </Box>
                     </Grid>
@@ -187,7 +205,7 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: Invoice
             <Grid container spacing={5}>
                 <Grid item xs={5} sx={{ display: " flex", justifyContent: "space-between" }}>
                     <ButtonSmallUi label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
-                    <ButtonSmallUi label="Email" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); } } />
+                    <ButtonSmallUi label="Email" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); }} />
                 </Grid>
             </Grid>
 
@@ -195,7 +213,7 @@ function InvoiceUi({ invoiceData, subtotal, discount, tds,isModalOpen }: Invoice
                 open={openemaildialogBox} // Set open to true to display the dialog initially
                 // title="Custom Dialog Title"
                 content={
-                   <SendEmail />
+                    <SendEmail />
                 }
                 handleClose={() => {
                     setIsOpenEmailDialogBox(false)
