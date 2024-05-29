@@ -6,10 +6,19 @@ import { Box, Grid } from "@mui/material";
 const PreviewScreen: React.FC = () => {
     const [addLink, { isLoading, isSuccess, isError, error }] = useAddSettingMutation();
     const { data: companyData, refetch: refetchCompanyData } = useGetSettingQuery();
-    const [companyDetails, setCustomerDetails] = useState<any>(companyData)
-    console.log("company", JSON.stringify(companyData));
-console.log("companyData", companyData);
-    console.log("values", companyDetails);
+
+    const [companyDetails, setCustomerDetails] = useState<any>();
+
+    useEffect(() => {
+        if (Array.isArray(companyData) && companyData.length > 0) {
+            const data = companyData[0]
+            console.log("new2",data);
+            setCustomerDetails(companyData[0]);
+        }
+    }, [companyData]);
+
+    console.log("new values", companyDetails);
+
     const onSubmit = async (values: any, actions: any) => {
         try {
             actions.resetForm();
@@ -21,6 +30,8 @@ console.log("companyData", companyData);
     
     useEffect(() => {
          if (companyData) {
+            console.log("company-data-log", companyData);
+            
             setCustomerDetails(companyData)
          }
      }, [])

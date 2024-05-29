@@ -5,27 +5,16 @@ import TableHeader from "../../components/layouts/TableHeader";
 import usePathname from "../../hooks/usePathname";
 import { useNavigate } from "react-router-dom";
 import Container from "@mui/material/Container";
-import { DynamicFormCreate } from "../../components/Form-renderer/Dynamic-form";
-import { companyFields } from "../../constants/form-data/form-data-json";
-import { companyValidationSchema } from "../../constants/forms/validations/validationSchema";
-import { companyInitialValues } from "../../constants/forms/formikInitialValues";
-import { useSelector } from "react-redux";
 import { useAddSettingMutation, useUpdateSettingMutation } from '../../redux-store/settings/settingsApi';
-import ButtonSmallUi from "../../components/ui/ButtonSmall";
-import { Formik, Form } from "formik";
-import { companyInitialValueProps } from "../../types/types";
 import { Add } from '@mui/icons-material'
 import { useGetSettingQuery } from "../../redux-store/settings/settingsApi";
-import Stack from '@mui/material/Stack';
-import Switch, { SwitchProps } from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 import LanguageIcon from '@mui/icons-material/Language';
-import { Link } from '@mui/material';
 import ModalUi from '../../components/ui/ModalUi'
 import AddLink from './link'
 import { Card, CardContent, Button } from '@mui/material';
-import { List, ListItem, ListItemText, TextField } from '@mui/material';
 import PreviewScreen from "./previewscreen";
+import UpdateScreen from "./updateSetting";
 
 const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
@@ -168,19 +157,7 @@ const button = [
       <TableHeader headerName={"Company Information"} buttons={button}/>
       <PreviewScreen/> 
       <ModalUi open={openModal} onClose={handleModalClose}>
-      <DynamicFormCreate
-                  showTable={true}
-                  headerName="Update your Company Information"
-                    setData={setData}
-                    updateFormValue={updateFormValue}
-                    fields={companyFields}
-                    initialValues={companyInitialValues || []}
-                    validationSchema={companyValidationSchema}
-                    onSubmit={onSubmit}
-                    buttons={[
-                      { label: 'Save', onClick: onSubmit }
-                   ]}
-                  />
+      <UpdateScreen />
                   </ModalUi>
                 {/* </Typography> */}
                 

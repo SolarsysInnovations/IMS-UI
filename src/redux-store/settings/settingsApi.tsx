@@ -57,7 +57,7 @@ export const settingsApi = apiSlice.injectEndpoints({
         }),
         getSettingById: builder.mutation<void, number>({
             query: (id) => ({
-                 url: `setting/get/${id}`,
+                 url: `setting/get`,
                 method: 'GET',
             }),
         }),
