@@ -6,6 +6,7 @@ interface AuthState {
     token: string | null;
     refreshToken: string | null; // Add refresh token
     userRole: string | null;
+    userName: string | null;
 }
 
 // Define the type for your user object
@@ -18,7 +19,7 @@ const tokenFromStorage = localStorage.getItem('token');
 const refreshTokenFromStorage = localStorage.getItem('refreshToken');
 
 // Define the initial state
-const initialState: AuthState = { user: null, token: tokenFromStorage || null, refreshToken: refreshTokenFromStorage || null, userRole: null };
+const initialState: AuthState = { user: null, token: tokenFromStorage || null, refreshToken: refreshTokenFromStorage || null, userRole: null, userName: null };
 
 // Create the authentication slice
 const authSlice = createSlice({
@@ -26,16 +27,19 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setCredentials: (state, action) => {
-            const { user, accessToken, refreshToken,userRole } = action.payload;
+            const { user, accessToken, refreshToken,userRole,userName } = action.payload;
             state.user = user;
             state.token = accessToken;
             state.refreshToken = refreshToken;
             state.userRole = userRole;
+            state.userName = userName;
             // Store tokens in local storage
             localStorage.setItem('token', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             localStorage.setItem('userRole', userRole);
+            localStorage.setItem('userName', userName);
             console.log(localStorage.getItem('userRole'));
+            console.log(localStorage.getItem('userName'));
         },
         logOut: (state) => {
             state.user = null;
@@ -45,6 +49,7 @@ const authSlice = createSlice({
             localStorage.removeItem('token');
             localStorage.removeItem('refreshToken');
             localStorage.removeItem('userRole');
+            localStorage.removeItem('userName');
         },
         updateAccessToken: (state, action) => {
             const { accessToken } = action.payload;

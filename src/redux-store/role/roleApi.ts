@@ -60,10 +60,24 @@ export const roleApi = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: role,
             }),
+        }),
+        rolesGetUser: builder.mutation<void, string>({
+            query: (userName) => ({
+                url: API_URLS.rolesGetUser+`${userName}`,
+                method: 'POST',
+                body: userName,
+            }),
+        }),
+        changePassword: builder.mutation<void, string>({
+            query: (userName) => ({
+                url: API_URLS.changePassword+`${userName}`,
+                method: 'POST',
+                body: userName,
+            }),
         })
     }),
 });
 
 export const { setRoleData, setRoleLoading, setRoleError } = roleSlice.actions;
 export { roleSlice };
-export const { useGetRoleQuery, useAddRoleMutation, useDeleteRoleMutation,useGetRoleByIdMutation,useUpdateRoleMutation } = roleApi;
+export const { useGetRoleQuery, useAddRoleMutation, useDeleteRoleMutation,useGetRoleByIdMutation,useUpdateRoleMutation,useChangePasswordMutation,useRolesGetUserMutation } = roleApi;

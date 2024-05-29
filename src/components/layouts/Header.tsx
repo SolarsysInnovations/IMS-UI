@@ -15,6 +15,7 @@ import {
   Divider,
   Tooltip
 } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useState } from 'react'
@@ -23,10 +24,19 @@ import SearchBarUi from '../ui/SearchBar'
 import { logOut } from '../../redux-store/auth/authSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../redux-store/store'
+import DialogBoxUi from "../ui/DialogBox";
+import UserProfile from '../ui/UserProfile'
+import ChangePassword from '../ui/ChangePassword'
+import { useNavigate } from 'react-router-dom'
+
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [popUpComponent, setPopUpComponent] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const open = Boolean(anchorEl)
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -36,6 +46,11 @@ export default function Header() {
 
     setAnchorEl(null)
   }
+
+  const PopupComponents = {
+        USER_PROFILE: 'userprofile',
+        CHANGE_PASSWORD: 'changepassword',
+    }
   return (
     <AppBar sx={{ width: "100%", boxShadow: 'none' }} position='sticky' color='transparent'>
       <Toolbar sx={{
@@ -59,11 +74,42 @@ export default function Header() {
 
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+            <Tooltip title="Add item">
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                aria-controls={open ? 'add-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                sx={{
+                  position: "relative",
+                  right:"10px",
+                  backgroundColor: 'grey',
+                  border: '1px solid grey',
+                  width: '20px',
+                  height: '20px',
+                  fontSize:"12px",
+                  '&:hover': {
+                    backgroundColor: 'grey',
+                  },
+                }}
+              >
+                <AddIcon sx={{ color: `white` }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Settings">
+              <ListItemIcon sx={{
+                    minWidth: "25px",
+                    color:"#6C737F"
+                  }} onClick={()=>{navigate("/settings")}}>
+                <Settings fontSize="small"  />
+              </ListItemIcon>
+            </Tooltip>
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleClick}
                 size="small"
-                sx={{ ml: 2 }}
+                // sx={{ ml: 2 }}
                 aria-controls={open ? 'account-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
@@ -108,11 +154,17 @@ export default function Header() {
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
-            <MenuItem onClick={handleClose}>
-              <Avatar /> Profile
+            <MenuItem onClick={() => {
+              setPopUpComponent(PopupComponents.USER_PROFILE);
+              setIsOpenDialogBox(true)
+            }}>
+              <Avatar /> User Profile
             </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <Avatar /> My account
+            <MenuItem onClick={() => {
+              setPopUpComponent(PopupComponents.CHANGE_PASSWORD);
+              setIsOpenDialogBox(true)
+            }}>
+              <Avatar /> Change Password
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleClose}>
@@ -121,8 +173,8 @@ export default function Header() {
               </ListItemIcon>
               Add another account
             </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <ListItemIcon>
+            <MenuItem onClick={()=>{navigate("/settings")}}>
+              <ListItemIcon >
                 <Settings fontSize="small" />
               </ListItemIcon>
               Settings
@@ -136,6 +188,23 @@ export default function Header() {
           </Menu>
         </Box>
       </Toolbar>
+        <DialogBoxUi
+          open={opendialogBox} // Set open to true to display the dialog initially
+          // title="Custom Dialog Title"
+          content={
+              <>
+                  {
+                      popUpComponent === PopupComponents.USER_PROFILE ? <UserProfile />  :
+                          popUpComponent === PopupComponents.CHANGE_PASSWORD ? <ChangePassword />  : null
+                  }
+              </>
+          }
+          handleClose={() => {
+            setIsOpenDialogBox(false)
+            setPopUpComponent("")
+          }}
+        />
     </AppBar>
+           
   )
 }

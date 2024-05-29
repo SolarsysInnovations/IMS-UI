@@ -142,3 +142,18 @@ export const RoleValidationSchema = Yup.object().shape({
         .max(255)
         .required('Password is required'),
 });
+
+export const PasswordValidationSchema = Yup.object().shape({
+    currentPassword: Yup.string()
+        .max(255)
+        .required('currentPassword is required'),
+    newPassword: Yup.string()
+        .min(8, 'New Password must be at least 8 characters long')
+        .max(255)
+        .notOneOf([Yup.ref('currentPassword'), null],'New Password cannot be the same as the Current Password')
+        .required('New Password is required'),
+    confirmPassword: Yup.string()
+        .max(255)
+        .oneOf([Yup.ref('newPassword')], 'Confirm Password must match New Password')
+        .required('confirmPassword is required'),
+})
