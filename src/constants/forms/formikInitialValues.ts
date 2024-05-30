@@ -186,4 +186,5 @@ export const ChangePasswordInitialValue: ChangePasswordInitialValueProps = {
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
+    userName: "",
 }

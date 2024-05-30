@@ -25,9 +25,10 @@ import { logOut } from '../../redux-store/auth/authSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../redux-store/store'
 import DialogBoxUi from "../ui/DialogBox";
-import UserProfile from '../ui/UserProfile'
-import ChangePassword from '../ui/ChangePassword'
+import UserProfile from '../../pages/profile/UserProfile'
+import ChangePassword from '../../pages/profile/ChangePassword'
 import { useNavigate } from 'react-router-dom'
+import ToastUi from '../../components/ui/ToastifyUi';
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -52,6 +53,8 @@ export default function Header() {
         CHANGE_PASSWORD: 'changepassword',
     }
   return (
+  <>
+    <ToastUi autoClose={1000} />
     <AppBar sx={{ width: "100%", boxShadow: 'none' }} position='sticky' color='transparent'>
       <Toolbar sx={{
         '& .MuiToolbar-root': {
@@ -189,13 +192,25 @@ export default function Header() {
         </Box>
       </Toolbar>
         <DialogBoxUi
-          open={opendialogBox} // Set open to true to display the dialog initially
+          open={opendialogBox}
+          maxwidth={{
+              "& .MuiDialog-container": {
+                  "& .MuiPaper-root": {
+                  width: "60%",
+                  maxWidth: "350px",
+                  },
+              },
+          }}
+           // Set open to true to display the dialog initially
           // title="Custom Dialog Title"
           content={
               <>
                   {
                       popUpComponent === PopupComponents.USER_PROFILE ? <UserProfile />  :
-                          popUpComponent === PopupComponents.CHANGE_PASSWORD ? <ChangePassword />  : null
+                  popUpComponent === PopupComponents.CHANGE_PASSWORD ? <ChangePassword onClose={function (): void {
+                    setIsOpenDialogBox(false)
+                    setPopUpComponent("")
+                  }} />  : null
                   }
               </>
           }
@@ -205,6 +220,6 @@ export default function Header() {
           }}
         />
     </AppBar>
-           
+   </>        
   )
 }

@@ -145,8 +145,8 @@ export const RoleValidationSchema = Yup.object().shape({
 
 export const PasswordValidationSchema = Yup.object().shape({
     currentPassword: Yup.string()
-        .max(255)
-        .required('currentPassword is required'),
+        .required('currentPassword is required')
+        .max(255),
     newPassword: Yup.string()
         .min(8, 'New Password must be at least 8 characters long')
         .max(255)

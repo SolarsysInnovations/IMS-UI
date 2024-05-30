@@ -15,6 +15,7 @@ import { AppDispatch } from '../../redux-store/store';
 type CustomizedDialogProps = {
     open?: boolean;
     title?: string;
+    maxwidth?: any;
     content?: React.ReactNode;
     actions?: React.ReactNode;
     handleClose?: () => void;
@@ -29,7 +30,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-const DialogBoxUi = ({ open: defaultOpen = false, title, content, actions, handleClose, }: CustomizedDialogProps) => {
+const DialogBoxUi = ({ open: defaultOpen = false, title, maxwidth,content, actions, handleClose, }: CustomizedDialogProps) => {
     const [open, setOpen] = React.useState(defaultOpen);
     const dispatch = useDispatch<AppDispatch>();
 
@@ -52,6 +53,7 @@ const DialogBoxUi = ({ open: defaultOpen = false, title, content, actions, handl
                 onClose={handleCloseDialog}
                 aria-labelledby="customized-dialog-title"
                 open={open}
+                sx={maxwidth}
             >
                 {/* <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
                     {title || "Modal title"}

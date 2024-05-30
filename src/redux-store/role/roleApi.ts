@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
-import { RoleInitialValueProps } from '../../types/types';
+import { ChangePasswordInitialValueProps, RoleInitialValueProps } from '../../types/types';
+import { string } from 'yup';
 
 
 const roleSlice = createSlice({
@@ -23,6 +24,8 @@ const roleSlice = createSlice({
         },
     },
 });
+
+const userName =localStorage.getItem("userName");
 
 export const roleApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -66,13 +69,13 @@ export const roleApi = apiSlice.injectEndpoints({
                 url: API_URLS.rolesGetUser+`${userName}`,
                 method: 'POST',
                 body: userName,
-            }),
+            }),//<any,{userName:string; values:ChangePasswordInitialValueProps}>
         }),
-        changePassword: builder.mutation<void, string>({
-            query: (userName) => ({
+        changePassword: builder.mutation<any, { userName:string; values: Partial<any> }>({
+            query: ({ userName, values }) => ({
                 url: API_URLS.changePassword+`${userName}`,
                 method: 'POST',
-                body: userName,
+                body: values,
             }),
         })
     }),

@@ -127,5 +127,5 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.ROLES_UPDATE]: `/update/`,
     [ApiEndpoint.ROLES_DELETE]: `/delete/`,
     //Changepassword
-    [ApiEndpoint.CHANGE_PASSWORD]: `/`
+    [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`
 };

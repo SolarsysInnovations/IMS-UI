@@ -206,8 +206,9 @@ export interface RoleInitialValueProps {
     id:string,
 }
 
-export interface ChangePasswordInitialValueProps{
+export interface ChangePasswordInitialValueProps {
     currentPassword: string;
     newPassword: string;
     confirmPassword: string;
+    userName: string;
 }
