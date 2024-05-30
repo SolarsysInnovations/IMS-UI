@@ -69,7 +69,7 @@ export const roleApi = apiSlice.injectEndpoints({
                 url: API_URLS.rolesGetUser+`${userName}`,
                 method: 'POST',
                 body: userName,
-            }),//<any,{userName:string; values:ChangePasswordInitialValueProps}>
+            }),
         }),
         changePassword: builder.mutation<any, { userName:string; values: Partial<any> }>({
             query: ({ userName, values }) => ({

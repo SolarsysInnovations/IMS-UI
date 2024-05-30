@@ -27,29 +27,6 @@ const UserProfile = () => {
     return (
         <>
             <TableHeader headerName="User Details" />
-            {/* <MenuItem sx={{ marginTop: "15px" }}>
-                <CustomerDetails details={userData || []} />
-            </MenuItem> */}
-            {/* <Table>
-                <TableBody>
-                    <TableRow>
-                        <TableCell sx={{fontWeight:"600"}}>Username:</TableCell>
-                        <TableCell>{userData?.username || ''}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell sx={{fontWeight:"600"}}>UserRole:</TableCell>
-                        <TableCell>{userData?.userRole || ''}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell sx={{fontWeight:"600"}}>Email:</TableCell>
-                        <TableCell>{userData?.userEmail || ''}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell sx={{fontWeight:"600"}}>UserMobile:</TableCell>
-                        <TableCell>{userData?.userMobile || ''}</TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table> */}
             <MenuItem>
                 <Typography variant="body2" >
                     <strong>Username:</strong> {userData?.username || ''}
@@ -70,11 +47,6 @@ const UserProfile = () => {
                     <strong>UserMobile:</strong> {userData?.userMobile || ''}
                 </Typography>
             </MenuItem>
-            {/* <MenuItem>
-                <Typography variant="body2">
-                    Date: 
-                </Typography>
-            </MenuItem> */}
         </>
     );
     

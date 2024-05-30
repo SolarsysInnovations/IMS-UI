@@ -75,17 +75,15 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
                             <Grid item xs={12}>
                                 <Box>
                                     <TextFieldUi
-                                        required={true}
-                                        fullWidth={false}
-                                        label="Current Password"
-                                        name="currentPassword"
-                                        type="password"
-                                        value={values.currentPassword}
-                                        onChange={handleChange}
-                                        // error={meta.touched && !!meta.error}
-                                        // helperText={meta.touched && meta.error}
-                                        error={touched.currentPassword && Boolean(errors.currentPassword)}
-                                        helperText={touched.currentPassword && errors.currentPassword}
+                                    required={true}
+                                    fullWidth={false}
+                                    label="Current Password"
+                                    name="currentPassword"
+                                    type="password"
+                                    value={values.currentPassword}
+                                    onChange={handleChange}
+                                    error={touched.currentPassword && Boolean(errors.currentPassword)}
+                                    helperText={touched.currentPassword && errors.currentPassword}
                                     />
                                 </Box>
                             </Grid>
