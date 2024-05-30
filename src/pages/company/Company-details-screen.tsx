@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useAddSettingMutation, useGetSettingQuery } from '../../../src/redux-store/settings/settingsApi';
+import { useAddSettingMutation, useGetSettingQuery } from '../../redux-store/settings/settingsApi';
 import { ToastContainer } from 'react-toastify';
 import { Box, Grid } from "@mui/material";
 
-const PreviewScreen: React.FC = () => {
+const CompanyDetailsScreen: React.FC = () => {
     const [addLink, { isLoading, isSuccess, isError, error }] = useAddSettingMutation();
     const { data: companyData, refetch: refetchCompanyData } = useGetSettingQuery();
 
@@ -18,15 +18,6 @@ const PreviewScreen: React.FC = () => {
     }, [companyData]);
 
     console.log("new values", companyDetails);
-
-    const onSubmit = async (values: any, actions: any) => {
-        try {
-            actions.resetForm();
-            await addLink(values);
-        } catch (error) {
-            console.log(error);
-        }
-    };
     
     useEffect(() => {
          if (companyData) {
@@ -86,4 +77,4 @@ const PreviewScreen: React.FC = () => {
     );
 };
 
-export default PreviewScreen;
+export default CompanyDetailsScreen;

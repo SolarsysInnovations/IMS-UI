@@ -11,10 +11,11 @@ import { useGetSettingQuery } from "../../redux-store/settings/settingsApi";
 import { styled } from '@mui/material/styles';
 import LanguageIcon from '@mui/icons-material/Language';
 import ModalUi from '../../components/ui/ModalUi'
-import AddLink from './link'
+import AddLink from '../links/link'
 import { Card, CardContent, Button } from '@mui/material';
-import PreviewScreen from "./previewscreen";
-import UpdateScreen from "./updateSetting";
+import CompanyDetailsScreen from "../company/Company-details-screen";
+import CreateCompany from "../company/Company-create-screen";
+import { useSelector } from "react-redux";
 
 const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
@@ -28,6 +29,8 @@ const SettingScreen = () => {
   const { refetch } = useGetSettingQuery();
   const [links, setLinks] = useState<string[]>([]); // Provide explicit type string[] for links
   const [newLink, setNewLink] = useState('');
+  const companyValue = useSelector((state: any) => state.globalState.data);
+  const [key, setKey] = useState<number>(0);
   const handleAddLink = () => {
     if (newLink.trim() !== '') {
       setLinks([...links, newLink]);
@@ -57,9 +60,7 @@ const buttons = [
 const button = [
   { label: 'Edit', icon: Add, onClick: () => setOpenModal(true) },
 ];
-  const updateFormValue = (setFieldValue: Function) => {
-    
-};
+
   const handleTabChange = (e: any, tabIndex: any) => {
     console.log(tabIndex);
     setCurrentTabIndex(tabIndex);
@@ -155,9 +156,9 @@ const button = [
         {/* <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} /> */}
       {/* </Stack> */}
       <TableHeader headerName={"Company Information"} buttons={button}/>
-      <PreviewScreen/> 
+      <CompanyDetailsScreen />
       <ModalUi open={openModal} onClose={handleModalClose}>
-      <UpdateScreen />
+      <CreateCompany companyValue={companyValue} key={key} />
                   </ModalUi>
                 {/* </Typography> */}
                 
