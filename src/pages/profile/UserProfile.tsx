@@ -29,22 +29,22 @@ const UserProfile = () => {
             <TableHeader headerName="User Details" />
             <MenuItem>
                 <Typography variant="body2" >
-                    <strong>Username:</strong> {userData?.username || ''}
+                    <strong>Username :</strong><span style={{ marginLeft: '13px' }}> {userData?.username || ''}</span>
                 </Typography>
             </MenuItem>
             <MenuItem>
                 <Typography variant="body2">
-                    <strong>UserRole:</strong> {userData?.userRole || ''}
+                    <strong>UserRole :</strong><span style={{ marginLeft: '18px' }}> {userData?.userRole || ''}</span>
                 </Typography>
             </MenuItem>
             <MenuItem>
                 <Typography variant="body2">
-                    <strong>Email:</strong> {userData?.userEmail || ''}
+                    <strong>Email :</strong><span style={{ marginLeft: '37px' }}> {userData?.userEmail || ''}</span>
                 </Typography>
             </MenuItem>
             <MenuItem>
                 <Typography variant="body2">
-                    <strong>UserMobile:</strong> {userData?.userMobile || ''}
+                    <strong>UserMobile :</strong> {userData?.userMobile || ''}
                 </Typography>
             </MenuItem>
         </>

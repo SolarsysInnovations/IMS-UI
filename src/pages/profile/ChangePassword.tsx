@@ -11,6 +11,7 @@ import { ChangePasswordInitialValueProps } from "../../types/types";
 import { useChangePasswordMutation, useRolesGetUserMutation } from "../../redux-store/role/roleApi";
 import { string } from "yup";
 import useSuccessToast from "../../hooks/useToast";
+import { Add } from "@mui/icons-material";
 
 
 interface ChangePasswordProps {
@@ -26,7 +27,13 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
     const [rolesGetUser] = useRolesGetUserMutation();
     const [userPassword, setUserPassword] = useState<string>();
     const userName = localStorage.getItem("userName");
+    const buttons = [
+        { label: 'Cancel', icon: Add, onClick: () => navigate(-1) },
+        { label: 'Update', icon: Add, onClick: () => handleSubmit }
+    ];
+
     
+
     useEffect(() => {
         if (userName) {
             rolesGetUser(userName).then(response => {
@@ -69,7 +76,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Box>
-                                    <TableHeader headerName={pathname} />
+                                    <TableHeader headerName={pathname} buttons={buttons} />
                                 </Box>
                             </Grid>
                             <Grid item xs={12}>
@@ -119,12 +126,6 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
                                     error={touched.confirmPassword && Boolean(errors.confirmPassword)}
                                     helperText={touched.confirmPassword && errors.confirmPassword}
                                     />
-                                </Box>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Box sx={{ mt: 1,gap: 1, display: "flex", float: "right" }}>
-                                    <ButtonSmallUi color="primary" label="Cancel" size="small" variant="contained" type="button" onClick={() => navigate(-1) } />
-                                    <ButtonSmallUi color="primary" label="Update" size="small" variant="contained" type="submit"/>
                                 </Box>
                             </Grid>
                         </Grid>

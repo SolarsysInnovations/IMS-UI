@@ -12,6 +12,7 @@ import { toastConfig } from '../../constants/forms/config/toastConfig';
 import { RoleInitialValueProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
 import TableHeader from '../../components/layouts/TableHeader';
+import { Add } from '@mui/icons-material';
 
 interface RoleFormProps {
     roleId?: string | null;
@@ -56,6 +57,16 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
         }
     };
 
+    const buttons:any = [];
+
+    if (initialValues.id == "" ) {
+        buttons.push({ label: 'Save', icon: Add, onClick: () => handleSubmit })
+    } else {
+        buttons.push({ label: 'Update', icon: Add, onClick: () => handleSubmit })
+    }
+
+    
+
     return (
         <Formik initialValues={initialValues} validationSchema={RoleValidationSchema} onSubmit={handleSubmit} enableReinitialize>
             {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
@@ -64,12 +75,12 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
                         <Grid item xs={12}>
                             {values && values.id && (
                                 <Box>
-                                    <TableHeader headerName="Edit Role" />
+                                    <TableHeader headerName="Edit Role" buttons={buttons} />
                                 </Box>
                             )}
                             {initialValues.id == "" && (
                                 <Box>
-                                    <TableHeader headerName="Add Role" />
+                                    <TableHeader headerName="Add Role" buttons={buttons} />
                                 </Box>
                             )}
                         </Grid>
@@ -137,18 +148,6 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
                                     helperText={touched.password && errors.password}
                                 />
                             </Box>
-                        </Grid>
-                        <Grid item xs={3}>
-                            {values && values.id && (
-                                <Box sx={{ position: "relative", left: "210px", top: "20px" }}>
-                                    <ButtonSmallUi color="primary" label="Update" size="small" variant="contained" type="submit" />
-                                </Box>
-                            )}
-                            {initialValues.id == "" && (
-                                <Box sx={{ position: "relative", left: "210px", top: "20px" }}>
-                                    <ButtonSmallUi color="primary" label="Save" size="small" variant="contained" type="submit" />
-                                </Box>
-                            )}
                         </Grid>
                     </Grid>
                 </Form>
