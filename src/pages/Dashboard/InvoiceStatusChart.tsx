@@ -12,9 +12,16 @@ export default function InvoiceStatus() {
             padding: "10px 0px",
             backgroundColor: "#fff",
             marginTop: "10px",
-            boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px"
         }}>
-            <Box>
+            <Box sx={{
+                ".css-t5k0nc-MuiResponsiveChart-container>svg": {
+                    width: "65% !important",
+                },
+                ".css-p66c7v-MuiResponsiveChart-container>svg": {
+                    width: "65% !important",
+                },
+            }}
+            >
                 <Typography variant="caption" >Invoice Status</Typography>
                 <PieChart
                     series={[
@@ -39,8 +46,7 @@ export default function InvoiceStatus() {
                         },
                     ]}
                     width={350}
-                    height={220}
-
+                    height={162}
                 />
             </Box>
         </Box>
