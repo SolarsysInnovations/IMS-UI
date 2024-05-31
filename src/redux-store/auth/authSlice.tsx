@@ -38,8 +38,8 @@ const authSlice = createSlice({
             localStorage.setItem('refresh', refresh);
             localStorage.setItem('userRole', userRole);
             localStorage.setItem('userName', userName);
-            console.log(localStorage.getItem('userRole'));
-            console.log(localStorage.getItem('userName'));
+            // console.log(localStorage.getItem('userRole'));
+            // console.log(localStorage.getItem('userName'));
         },
         logOut: (state) => {
             state.user = null;
