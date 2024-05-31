@@ -27,6 +27,9 @@ export interface TdsTaxProps {
 export interface TdsTaxFormProps {
     tdsTaxValue: TdsTaxProps;
 }
+export interface CompanyFormProps {
+    companyValue: companyInitialValueProps;
+}
 export interface PaymentTermsProps {
     id?: string,
     termName: string,
@@ -168,6 +171,7 @@ export interface serviceCreationProps {
 };
 //----------settings--------
 export interface companyInitialValueProps {
+    id: any;
     companyName: string;
     companyAddress: string;
     companyState: string;

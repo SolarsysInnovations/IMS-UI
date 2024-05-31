@@ -1,13 +1,13 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps } from "../../types/types";
-import ServicesList from "../../pages/service/service-list-screen";
+import { InvoiceInitialValueProps, LoginProps,companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps } from "../../types/types";
 
 export const loginInitialValue: LoginProps = {
     // email: "",
     username: "",
     password: "",
 }
-export const companyInitialValues = {
+export const companyInitialValues: companyInitialValueProps = {
+    id:"",
     companyName: "",
     companyAddress: "",
     companyState: "",

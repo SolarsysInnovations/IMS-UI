@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { useAddSettingMutation, useGetSettingQuery } from '../../../src/redux-store/settings/settingsApi';
+import { useAddSettingMutation, useGetSettingQuery } from '../../redux-store/settings/settingsApi';
 import { ToastContainer } from 'react-toastify';
 import { Box, Grid } from "@mui/material";
 
-const PreviewScreen: React.FC = () => {
+const CompanyDetailsScreen: React.FC = () => {
     const [addLink, { isLoading, isSuccess, isError, error }] = useAddSettingMutation();
     const { data: companyData, refetch: refetchCompanyData } = useGetSettingQuery();
-    const [companyDetails, setCustomerDetails] = useState<any>(companyData)
-    console.log("company", JSON.stringify(companyData));
-console.log("companyData", companyData);
-    console.log("values", companyDetails);
-    const onSubmit = async (values: any, actions: any) => {
-        try {
-            actions.resetForm();
-            await addLink(values);
-        } catch (error) {
-            console.log(error);
+
+    const [companyDetails, setCustomerDetails] = useState<any>();
+
+    useEffect(() => {
+        if (Array.isArray(companyData) && companyData.length > 0) {
+            const data = companyData[0]
+            console.log("new2",data);
+            setCustomerDetails(companyData[0]);
         }
-    };
+    }, [companyData]);
+
+    console.log("new values", companyDetails);
     
     useEffect(() => {
          if (companyData) {
+            console.log("company-data-log", companyData);
+            
             setCustomerDetails(companyData)
          }
      }, [])
@@ -75,4 +77,4 @@ console.log("companyData", companyData);
     );
 };
 
-export default PreviewScreen;
+export default CompanyDetailsScreen;

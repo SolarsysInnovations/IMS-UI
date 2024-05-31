@@ -5,29 +5,18 @@ import TableHeader from "../../components/layouts/TableHeader";
 import usePathname from "../../hooks/usePathname";
 import { useNavigate } from "react-router-dom";
 import Container from "@mui/material/Container";
-import { DynamicFormCreate } from "../../components/Form-renderer/Dynamic-form";
-import { companyFields } from "../../constants/form-data/form-data-json";
-import { companyValidationSchema } from "../../constants/forms/validations/validationSchema";
-import { companyInitialValues } from "../../constants/forms/formikInitialValues";
-import { useSelector } from "react-redux";
 import { useAddSettingMutation, useUpdateSettingMutation } from '../../redux-store/settings/settingsApi';
-import ButtonSmallUi from "../../components/ui/ButtonSmall";
-import { Formik, Form } from "formik";
-import { companyInitialValueProps } from "../../types/types";
 import { Add } from '@mui/icons-material'
 import { useGetSettingQuery } from "../../redux-store/settings/settingsApi";
-import Stack from '@mui/material/Stack';
-import Switch, { SwitchProps } from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 import LanguageIcon from '@mui/icons-material/Language';
-import { Link } from '@mui/material';
 import ModalUi from '../../components/ui/ModalUi'
-import AddLink from './link'
+import AddLink from '../links/link'
 import { Card, CardContent, Button } from '@mui/material';
-import { List, ListItem, ListItemText, TextField } from '@mui/material';
-import PreviewScreen from "./previewscreen";
+import CompanyDetailsScreen from "../company/Company-details-screen";
+import CreateCompany from "../company/Company-create-screen";
+import { useSelector } from "react-redux";
 import TaxConfig from "./TaxConfig";
-
 const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
   const navigate = useNavigate();
@@ -40,6 +29,8 @@ const SettingScreen = () => {
   const { refetch } = useGetSettingQuery();
   const [links, setLinks] = useState<string[]>([]); // Provide explicit type string[] for links
   const [newLink, setNewLink] = useState('');
+  const companyValue = useSelector((state: any) => state.globalState.data);
+  const [key, setKey] = useState<number>(0);
   const handleAddLink = () => {
     if (newLink.trim() !== '') {
       setLinks([...links, newLink]);
@@ -69,9 +60,7 @@ const SettingScreen = () => {
   const button = [
     { label: 'Edit', icon: Add, onClick: () => setOpenModal(true) },
   ];
-  const updateFormValue = (setFieldValue: Function) => {
 
-  };
   const handleTabChange = (e: any, tabIndex: any) => {
     console.log(tabIndex);
     setCurrentTabIndex(tabIndex);
@@ -167,21 +156,25 @@ const SettingScreen = () => {
             {/* <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} /> */}
             {/* </Stack> */}
             <TableHeader headerName={"Company Information"} buttons={button} />
-            <PreviewScreen />
+            <CompanyDetailsScreen />
             <ModalUi open={openModal} onClose={handleModalClose}>
-              <DynamicFormCreate
-                showTable={true}
-                headerName="Update your Company Information"
-                setData={setData}
-                updateFormValue={updateFormValue}
-                fields={companyFields}
-                initialValues={companyInitialValues || []}
-                validationSchema={companyValidationSchema}
-                onSubmit={onSubmit}
-                buttons={[
-                  { label: 'Save', onClick: onSubmit }
-                ]}
-              />
+              <CreateCompany companyValue={companyValue} key={key} />
+            </ModalUi>
+            {/* </Typography> */}
+
+          </Box>
+        </Container>
+      )}
+
+      {/* TAB 2 Contents */}
+      {currentTabIndex === 1 && (
+        <Container fixed>
+          <Box sx={{ ml: "-40px" }}>
+            <TableHeader headerName={"Links"} buttons={buttons} />
+            <ModalUi open={openModal} onClose={handleModalClose}>
+              <Box sx={{ marginTop: "5px", justifyContent: "center" }}>
+                <AddLink />
+              </Box>
             </ModalUi>
             {/* </Typography> */}
 
