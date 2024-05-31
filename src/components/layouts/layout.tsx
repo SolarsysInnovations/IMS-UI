@@ -8,7 +8,7 @@ import MainLayout from './SideBar';
 
 export const Layout = ({ children }: any) => {
     return (
-        <MainLayout >
+        <MainLayout  >
             {children}
         </MainLayout>
     );

@@ -11,11 +11,11 @@ import ModalUi from "../../../components/ui/ModalUi";
 import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
 import { toastConfig } from "../../forms/config/toastConfig";
 import { toast } from "react-toastify";
-import { setCustomerData } from "../../../redux-store/customer/customerApi";
+import { setCustomerData, useUpdateCustomerMutation } from "../../../redux-store/customer/customerApi";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
 
 
-const DownloadButtonRenderer = ({ row }: { row: any }) => {
+export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     const [downloadPdf, setDownloadPdf] = useState<boolean>(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,7 +44,7 @@ const DownloadButtonRenderer = ({ row }: { row: any }) => {
     );
 };
 
-const MyCellRenderer = ({ row }: { row: any }) => {
+export const MyCellRenderer = ({ row }: { row: any }) => {
 
     const dispatch = useDispatch<AppDispatch>();
     const { data: invoice, error, isLoading, refetch } = useGetInvoiceQuery();
@@ -53,6 +53,7 @@ const MyCellRenderer = ({ row }: { row: any }) => {
     const [deleteInvoice, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteInvoiceMutation();
     const navigate = useNavigate();
     const [getInvoice, { data: customerData, isSuccess: C_success, isError: C_error }] = useInvoiceGetByIdMutation<{ data: any, isSuccess: any, isError: any }>();
+    const [updateInvoice] = useUpdateCustomerMutation();
 
     useEffect(() => {
         refetch()
@@ -113,95 +114,3 @@ const MyCellRenderer = ({ row }: { row: any }) => {
         </Stack>
     );
 };
-
-const handleInvoiceStatus = (params: any) => {
-    console.log(params.row);
-}
-
-export const columns: GridColDef[] = [
-    {
-        field: 'Action',
-        headerName: 'Action',
-        width: 140,
-        editable: false,
-        renderCell: (params: any) => <MyCellRenderer row={params.row} />,
-    },
-    // {
-    //     field: 'id',
-    //     headerName: 'id',
-    //     width: 150,
-    //     editable: true,
-    // },
-    {
-        field: 'invoiceType',
-        headerName: 'Invoice Type',
-        width: 120,
-        editable: true,
-    },
-    {
-        field: 'invoiceNumber',
-        headerName: 'Invoice Number',
-        width: 150,
-        editable: true,
-    },
-    {
-        field: 'customerName',
-        headerName: 'Customer Name',
-        width: 150,
-        editable: false,
-    },
-    {
-        field: 'dueDate',
-        headerName: 'Due Date',
-        width: 150,
-        editable: false,
-    },
-    {
-        field: 'invoiceStatus',
-        headerName: 'Invoice Status',
-        width: 120,
-        editable: true,
-        type: "singleSelect",
-        valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
-        renderCell: (params: any) => {
-            handleInvoiceStatus(params);
-            console.log(params.row.invoiceStatus);
-            return <>{params.value}</>; // Return the default cell content
-        }
-    },
-    // {
-    //     field: 'gstPercentage',
-    //     headerName: 'Gst Percentage',
-    //     width: 150,
-    //     editable: false,
-    // },
-    // {
-    //     field: 'fullName',
-    //     headerName: 'Full name',
-    //     description: 'This column has a value getter and is not sortable.',
-    //     sortable: false,
-    //     width: 160,
-    //     valueGetter: (params: GridValueGetterParams) =>
-    //         `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    // },
-    {
-        field: '',
-        headerName: '',
-        width: 80,
-        renderCell: () => (
-            <ButtonSmallUi
-                variant="outlined"
-                label="Email"
-            // style={{ marginLeft: 16 }}
-            />
-        ),
-    },
-    {
-        field: 'download',
-        width: 150,
-        editable: false,
-        headerName: '',
-        renderCell: (params: any) => <DownloadButtonRenderer row={params.row} />,
-    },
-
-];

@@ -37,7 +37,7 @@ export default function Header() {
     setAnchorEl(null)
   }
   return (
-    <AppBar sx={{ width: "100%", boxShadow: 'none' }} position='sticky' color='transparent'>
+    <AppBar sx={{ width: "100%", boxShadow: 'none', backgroundColor: "#fbfbff !important" }} position='sticky' color='transparent'>
       <Toolbar sx={{
         '& .MuiToolbar-root': {
           minHeight: "20px !important",
