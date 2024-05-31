@@ -9,9 +9,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.ck-editor__editable_inline{
+.ck-editor__editable_inline {
   height: 250px;
 }
+
 /* ::-webkit-scrollbar-thumb {
   background: red; 
   border-radius: 10px;
@@ -28,12 +29,3 @@ code {
   box-shadow: inset 0 0 5px grey; 
   border-radius: 10px;
 }  */
-
-.css-q5skqe-MuiAutocomplete-listbox .MuiAutocomplete-option.Mui-focused {
-  background-color: #f7f7f7 !important;
-}
-
-.css-y8a4g5-MuiPaper-root-MuiTableContainer-root {
-  box-shadow: none !important;
-  border-radius: 0px !important;
-}

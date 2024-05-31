@@ -4,7 +4,7 @@ import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme/theme";
 import Login from "./pages/Login-screen";
-import Dashboard from "./pages/Dashboard-screen";
+import Dashboard from "./pages/Dashboard/Dashboard-screen";
 import ForgetPassword from "./pages/ForgetPassword-screen";
 import PrivateRoutes from "./services/utils/PrivateRoute";
 import Demo from "./pages/Demo-screen";

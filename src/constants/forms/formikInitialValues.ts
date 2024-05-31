@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps,companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps } from "../../types/types";
 import ServicesList from "../../pages/service/service-list-screen";
 
 export const loginInitialValue: LoginProps = {
@@ -7,7 +7,8 @@ export const loginInitialValue: LoginProps = {
     username: "",
     password: "",
 }
-export const companyInitialValues = {
+export const companyInitialValues: companyInitialValueProps = {
+    id:"",
     companyName: "",
     companyAddress: "",
     companyState: "",
