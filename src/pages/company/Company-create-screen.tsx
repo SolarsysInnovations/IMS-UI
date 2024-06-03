@@ -14,15 +14,19 @@ import { clearData } from '../../redux-store/global/globalState';
 import { useDispatch, UseDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import SettingScreen from '../settings/settings';
+import ModalUi from '../../components/ui/ModalUi';
 
 const CreateCompany = ({ companyValue }: CompanyFormProps) => {
+
+    
+    
     const dispatch = useDispatch<AppDispatch>();
 
     const [addCompany, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddSettingMutation();
 
     const [updateCompany, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateSettingMutation();
 
-    const { data: companyList, refetch } = useGetSettingQuery();
+    const { data: settingsList, refetch } = useGetSettingQuery();
 
     const initialValue = companyValue || companyInitialValues;
     
@@ -45,10 +49,11 @@ const CreateCompany = ({ companyValue }: CompanyFormProps) => {
      const updateFormValue = (setFieldValue: Function) => {
     
      };
-     
+     console.log("copmany value",companyValue);
     return (
         <div>
             <ToastContainer />
+           
             <DynamicFormCreate
                     showTable={true}
                     headerName="Update your Company Information"

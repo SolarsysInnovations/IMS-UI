@@ -1,13 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import { useAddSettingMutation, useGetSettingQuery } from '../../redux-store/settings/settingsApi';
+import { useAddSettingMutation, useGetSettingQuery , useGetSettingByIdMutation} from '../../redux-store/settings/settingsApi';
 import { ToastContainer } from 'react-toastify';
 import { Box, Grid } from "@mui/material";
+import TableHeader from "../../components/layouts/TableHeader";
+import { Add } from '@mui/icons-material'
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../redux-store/store";
+import usePathname from "../../hooks/usePathname";
+import { useNavigate } from "react-router-dom";
+import { setData } from '../../redux-store/global/globalState';
+import ModalUi from '../../components/ui/ModalUi';
+import CreateCompany from './Company-create-screen';
+import CompanyScreen from './Company-screen';
 
 const CompanyDetailsScreen: React.FC = () => {
-    const [addLink, { isLoading, isSuccess, isError, error }] = useAddSettingMutation();
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+    const pathname = usePathname();
+    const [addSetting, { isLoading, isSuccess, isError, error }] = useAddSettingMutation();
     const { data: companyData, refetch: refetchCompanyData } = useGetSettingQuery();
-
+    const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetSettingByIdMutation<{ data: any, isSuccess: any, isError: any }>();
+    const [openModal, setOpenModal] = React.useState(false);
+    const companyValue = useSelector((state: any) => state.globalState.data);
+    const [key, setKey] = useState<number>(0);
     const [companyDetails, setCustomerDetails] = useState<any>();
+    const { refetch } = useGetSettingQuery();
+
+    const button = [
+        { label: 'Edit', icon: Add, onClick: () => handleEditClick() },
+      ];
+      const handleEditClick = async () => {
+        try {
+             const response = await getData(companyDetails.id);
+             if ('data' in response) {
+                 const companyData = response.data;
+                 await dispatch(setData(companyData));
+                 setOpenModal(true);
+             } else {
+                 console.error('Error response:', response.error);
+             }
+         } catch (error) {
+             console.error('Error handling edit click:', error);
+         }
+      }
 
     useEffect(() => {
         if (Array.isArray(companyData) && companyData.length > 0) {
@@ -31,10 +66,18 @@ const CompanyDetailsScreen: React.FC = () => {
             refetchCompanyData();
         }
     }, [isSuccess, refetchCompanyData]);
-
+    const handleModalClose = () => {
+        refetch();
+        setOpenModal(false);
+      };
+      
     return (
         <div>
             <ToastContainer />
+            <ModalUi open={openModal} onClose={handleModalClose}>
+              <CompanyScreen />
+            </ModalUi>
+            <TableHeader headerName={"Company Information"} buttons={button}/>
             <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>
             <Grid sx={{ marginTop: "0px" }} item xs={7}>
                 <Box gap={3}>
