@@ -1,54 +1,73 @@
-import * as React from 'react';
-import { PieChart } from '@mui/x-charts/PieChart';
-import { Box, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import ReactApexChart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
+import { Card, CardContent } from '@mui/material';
 
-export default function InvoiceStatus() {
-    return (
-        <Box sx={{
-            // border: "1px solid #f1ecec",
-            justifyContent: "center",
-            display: "flex",
-            borderRadius: "15px",
-            padding: "10px 0px",
-            backgroundColor: "#fff",
-            marginTop: "10px",
-        }}>
-            <Box sx={{
-                ".css-t5k0nc-MuiResponsiveChart-container>svg": {
-                    width: "65% !important",
-                },
-                ".css-p66c7v-MuiResponsiveChart-container>svg": {
-                    width: "65% !important",
-                },
-            }}
-            >
-                <Typography variant="caption" >Invoice Status</Typography>
-                <PieChart
-                    series={[
-                        {
-                            data: [
-                                { id: 0, value: 30, label: 'paid', color: "#03C988" },
-                                { id: 1, value: 20, label: 'approved', color: "#6366F1" },
-                                { id: 2, value: 20, label: 'pending', color: "#ECB365" },
-                                { id: 3, value: 20, label: 'returned', color: "#1597BB" },
-                                { id: 4, value: 20, label: 'draft', color: "#EEEEEE" },
-                                { id: 5, value: 20, label: 'deleted', color: "#D21312" },
-                            ],
-                            innerRadius: 50,
-                            outerRadius: 100,
-                            paddingAngle: 5,
-                            cornerRadius: 5,
-                            startAngle: -180,
-                            endAngle: 180,
-                            cx: 100,
-                            cy: 100,
+const InvoiceStatus = () => {
+    const [chartData, setChartData] = useState<{
+        series: number[];
+        options: ApexOptions;
+    }>({
+        series: [44, 55, 41, 30, 30],
+        options: {
+            chart: {
+                type: 'donut',
 
+            },
+            plotOptions: {
+
+                pie: {
+
+                    startAngle: -90,
+                    endAngle: 270,
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                formatter: () => '198', // Example total
+                            },
                         },
-                    ]}
-                    width={350}
-                    height={162}
-                />
-            </Box>
-        </Box>
+                    },
+                },
+            },
+            stroke: {
+                width: 0, // Remove the gap between segments
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            // fill: {
+            //     type: 'gradient',
+            // },
+            colors: ['#635bff', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E',],
+            labels: ["Pending", "approved", "returned", "deleted", "draft"],
+            responsive: [
+                {
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 300,
+                            height: 200
+                        },
+                        legend: {
+                            position: 'bottom',
+                        },
+                    },
+                },
+            ],
+        },
+    });
+
+    return (
+        <Card sx={{ width: "300px", height: "185px" }}>
+            <div id="chart" style={{ padding: "0px", marginTop: "10px" }}>
+                <ReactApexChart options={chartData.options} series={chartData.series} type="donut" />
+            </div>
+            <div id="html-dist"></div>
+        </Card>
     );
-}
+};
+
+export default InvoiceStatus;
