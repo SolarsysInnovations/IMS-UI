@@ -56,42 +56,44 @@ const invoiceAmount = [
 export default function InvoiceAmount(): React.JSX.Element {
 
     return (
-        <Grid container>
-
-            {invoiceAmount?.map((data: any) => (
-                <Grid key={data.label} item xs={4}>
-                    <Card sx={{ width: "200px", height: "165px" }}>
-                        <CardContent>
-                            <Stack spacing={1}>
-                                <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={1}>
-                                    <Stack spacing={0}>
-                                        <Typography color="text.secondary" variant="overline">
-                                            {data.label}
-                                        </Typography>
-                                        <Typography variant="h5">{data.value}</Typography>
+        <>
+            <Typography variant="h6" color="initial">Overview</Typography>
+            <Grid container>
+                {invoiceAmount?.map((data: any) => (
+                    <Grid key={data.label} item xs={4}>
+                        <Card sx={{ width: "200px", height: "165px" }}>
+                            <CardContent>
+                                <Stack spacing={1}>
+                                    <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={1}>
+                                        <Stack spacing={0}>
+                                            <Typography color="text.secondary" variant="overline">
+                                                {data.label}
+                                            </Typography>
+                                            <Typography variant="h5">{data.value}</Typography>
+                                        </Stack>
+                                        <Avatar sx={{ backgroundColor: `${data.iconBg}`, height: '30px', width: '30px' }}>
+                                            {React.createElement(data.icon, { width: 20, height: 20 })}
+                                        </Avatar>
                                     </Stack>
-                                    <Avatar sx={{ backgroundColor: `${data.iconBg}`, height: '30px', width: '30px' }}>
-                                        {React.createElement(data.icon, { width: 20, height: 20 })}
-                                    </Avatar>
-                                </Stack>
 
-                                <Stack sx={{ alignItems: 'center', }} direction="row" spacing={2}>
-                                    <Stack sx={{ alignItems: 'center', }} direction="row" spacing={0.5}>
-                                        <ArrowDropDownIcon color="secondary" />
-                                        <Typography color="secondary" variant="body2">
-                                            diff%
+                                    <Stack sx={{ alignItems: 'center', }} direction="row" spacing={2}>
+                                        <Stack sx={{ alignItems: 'center', }} direction="row" spacing={0.5}>
+                                            <ArrowDropDownIcon color="secondary" />
+                                            <Typography color="secondary" variant="body2">
+                                                diff%
+                                            </Typography>
+                                        </Stack>
+                                        <Typography color="text.secondary" variant="caption">
+                                            Since last month
                                         </Typography>
                                     </Stack>
-                                    <Typography color="text.secondary" variant="caption">
-                                        Since last month
-                                    </Typography>
-                                </Stack>
 
-                            </Stack>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            ))}
-        </Grid>
+                                </Stack>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
+        </>
     );
 }

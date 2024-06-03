@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { Card, CardContent } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 
 const InvoiceStatus = () => {
     const [chartData, setChartData] = useState<{
@@ -41,8 +41,8 @@ const InvoiceStatus = () => {
             // fill: {
             //     type: 'gradient',
             // },
-            colors: ['#635bff', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E',],
-            labels: ["Pending", "approved", "returned", "deleted", "draft"],
+            colors: ['#F97300', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E',],
+            labels: ["returned", "Pending", "approved", "draft", "deleted"],
             responsive: [
                 {
                     breakpoint: 480,
@@ -61,12 +61,16 @@ const InvoiceStatus = () => {
     });
 
     return (
-        <Card sx={{ width: "300px", height: "185px" }}>
-            <div id="chart" style={{ padding: "0px", marginTop: "10px" }}>
-                <ReactApexChart options={chartData.options} series={chartData.series} type="donut" />
-            </div>
-            <div id="html-dist"></div>
-        </Card>
+        <>
+            <Card sx={{ width: "300px", height: "200px" }}>
+                <Typography sx={{ ml: 3, mt: 1 }} color="inherit" variant="body2">Invoice Status</Typography>
+                <div id="chart" style={{ padding: "0px", marginTop: "10px" }}>
+
+                    <ReactApexChart options={chartData.options} series={chartData.series} type="donut" />
+                </div>
+                <div id="html-dist"></div>
+            </Card>
+        </>
     );
 };
 
