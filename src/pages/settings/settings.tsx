@@ -1,65 +1,13 @@
 import React, { useState } from "react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import ToastUi from "../../components/ui/ToastifyUi";
-import TableHeader from "../../components/layouts/TableHeader";
-import usePathname from "../../hooks/usePathname";
-import { useNavigate } from "react-router-dom";
 import Container from "@mui/material/Container";
-import { useAddSettingMutation, useUpdateSettingMutation } from '../../redux-store/settings/settingsApi';
-import { Add } from '@mui/icons-material'
-import { useGetSettingQuery } from "../../redux-store/settings/settingsApi";
-import { styled } from '@mui/material/styles';
-import LanguageIcon from '@mui/icons-material/Language';
-import ModalUi from '../../components/ui/ModalUi'
-import AddLink from '../links/link'
-import { Card, CardContent, Button } from '@mui/material';
 import CompanyDetailsScreen from "../company/Company-details-screen";
-import CreateCompany from "../company/Company-create-screen";
-import { useSelector } from "react-redux";
-import TaxConfig from "./TaxConfig";
+import About from "../about/About";
+import AddLink from "../links/link";
+
 const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
-  const navigate = useNavigate();
-  const pathname = usePathname();
-  const [updateSetting,] = useUpdateSettingMutation();
-  const [addSetting, { isLoading, isSuccess, isError, error }] = useAddSettingMutation();
-  // const companyStateDetails = useSelector((state: any) => state.companyState.data);
-  const [openModal, setOpenModal] = React.useState(false);
-  const [data, setData] = useState<any>();
-  const { refetch } = useGetSettingQuery();
-  const [links, setLinks] = useState<string[]>([]); // Provide explicit type string[] for links
-  const [newLink, setNewLink] = useState('');
-  const companyValue = useSelector((state: any) => state.globalState.data);
-  const [key, setKey] = useState<number>(0);
-  const handleAddLink = () => {
-    if (newLink.trim() !== '') {
-      setLinks([...links, newLink]);
-      setNewLink('');
-    }
-  }
-  const onSubmit = async (values: any, actions: any) => {
-    try {
-      const id: number = values?._id
-      await addSetting({
-        id: id,
-        settings: values,
-      });
-      actions.resetForm();
-      // setserviceDetails();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleModalClose = () => {
-    refetch()
-    setOpenModal(false);
-  }
-  const buttons = [
-    { label: 'Add Link', icon: Add, onClick: () => setOpenModal(true) },
-  ];
-  const button = [
-    { label: 'Edit', icon: Add, onClick: () => setOpenModal(true) },
-  ];
 
   const handleTabChange = (e: any, tabIndex: any) => {
     console.log(tabIndex);
@@ -108,30 +56,6 @@ const SettingScreen = () => {
   //   },
   // }));
 
-  const linkCreation = [
-    {
-      "url": "https://contents.tdscpc.gov.in/",
-      "icon": <LanguageIcon style={{ color: 'blue' }} />,
-      "label": "TRACES",
-      "description": ""
-    },
-    {
-      "url": "https://tin.tin.nsdl.com/oltas/servlet/QueryTaxpayer",
-      "icon": <LanguageIcon style={{ color: 'blue' }} />,
-      "label": "OLTAS Challan",
-      "description": ""
-    },
-  ]
-
-  const StyledLink = styled('a')(({ theme }) => ({
-    marginLeft: '8px',
-    color: 'inherit', // Use your preferred initial color
-    textDecoration: 'none',
-    '&:hover': {
-      color: 'blue', // Change this to your preferred hover color
-      textDecoration: 'underline',
-    },
-  }));
   return (
     <React.Fragment>
       <ToastUi autoClose={1000} />
@@ -149,104 +73,41 @@ const SettingScreen = () => {
       {/* TAB 1 Contents */}
       {currentTabIndex === 0 && (
         <Container fixed>
-          <Box sx={{ ml: "-40px" }}>
+          <Box>
             {/* <Typography mt={2} variant="body1">
                 <Stack direction="row" spacing={1} alignItems="center"> */}
             {/* <Typography variant="body2">Multi Branch</Typography> */}
             {/* <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} /> */}
             {/* </Stack> */}
-            <TableHeader headerName={"Company Information"} buttons={button} />
             <CompanyDetailsScreen />
-            <ModalUi open={openModal} onClose={handleModalClose}>
-              <CreateCompany companyValue={companyValue} key={key} />
-            </ModalUi>
             {/* </Typography> */}
-
           </Box>
         </Container>
       )}
-
       {/* TAB 2 Contents */}
       {currentTabIndex === 1 && (
         <Container fixed>
-          <Box sx={{ ml: "-40px" }}>
-            <TableHeader headerName={"Links"} buttons={buttons} />
-            <ModalUi open={openModal} onClose={handleModalClose}>
-              <Box sx={{ marginTop: "5px", justifyContent: "center" }}>
-                <AddLink />
-              </Box>
-            </ModalUi>
-            {/* </Typography> */}
-
+          <Box>
+            <AddLink />
           </Box>
-        </Container>
-      )}
-
-      {/* TAB 2 Contents */}
-      {currentTabIndex === 1 && (
-        <Container fixed>
-          <Box sx={{ ml: "-40px" }}>
-            <TableHeader headerName={"Links"} buttons={buttons} />
-            <ModalUi open={openModal} onClose={handleModalClose}>
-              <Box sx={{ marginTop: "5px", justifyContent: "center" }}>
-                <AddLink />
-              </Box>
-            </ModalUi>
-            <Typography mt={2} sx={{ display: "flex", width: "1020px", flexWrap: "wrap" }} variant="body1" >
-              {linkCreation && linkCreation.map((link, index) => (
-                <Card elevation={7} sx={{ display: "flex", width: "180px", margin: "10px" }} key={index}>
-                  <CardContent>
-                    <Typography variant="caption" sx={{ display: "flex", width: "300px" }}>
-                      <Box sx={{ alignItems: "center", display: "flex" }}>    {link.icon}<a href={link.url}>{link.label}<StyledLink /></a></Box>
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ))}
-              {/* <Card elevation={7} sx={{display:"flex",width:"180px"}}>
-      <CardContent>
-        <Typography variant="caption" sx={{display:"flex",width:"300px"}}>
-        <Box sx={{alignItems:"center",display:"flex"}}>    <LanguageIcon /><Link href="https://contents.tdscpc.gov.in/">TRACES</Link></Box>
-        </Typography>
-      </CardContent>
-      </Card>
-      <Card elevation={7} sx={{display:"flex",width:"180px"}}>
-        <CardContent>
-        <Typography variant="caption" sx={{display:"flex",width:"300px"}}>
-      <Box sx={{alignItems:"center",display:"flex", }}> <LanguageIcon/><Link href="https://tin.tin.nsdl.com/oltas/index">OLTAS Challan</Link></Box>
-</Typography>
-</CardContent>
-      </Card>   */}
-            </Typography>
-          </Box>
-
         </Container>
       )}
 
       {/* TAB 3 Contents */}
       {currentTabIndex === 2 && (
         <Box sx={{ p: 3 }}>
-          <TaxConfig />
+          <Typography variant="h5">Tax</Typography>
+          <Typography></Typography>
         </Box>
       )}
 
       {/* TAB 4 Contents */}
       {currentTabIndex === 3 && (
         <Box sx={{ p: 3 }}>
-          <TableHeader headerName={"About Us"} />
-          <Typography variant="body1">
-            SSINTEK :
-            <StyledLink
-              href="https://www.solarsystek.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              www.ssintek.in
-            </StyledLink>
-          </Typography>
+          <About />
         </Box>
       )}
     </React.Fragment>
-    // </Formik>
   );
 };
 
