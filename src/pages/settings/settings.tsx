@@ -5,6 +5,7 @@ import Container from "@mui/material/Container";
 import CompanyDetailsScreen from "../company/Company-details-screen";
 import About from "../about/About";
 import AddLink from "../links/link";
+import TaxConfig from "./TaxConfig";
 
 const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
@@ -96,8 +97,7 @@ const SettingScreen = () => {
       {/* TAB 3 Contents */}
       {currentTabIndex === 2 && (
         <Box sx={{ p: 3 }}>
-          <Typography variant="h5">Tax</Typography>
-          <Typography></Typography>
+          <TaxConfig />
         </Box>
       )}
 
