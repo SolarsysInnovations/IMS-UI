@@ -43,7 +43,7 @@ export const linkApi = apiSlice.injectEndpoints({
 
         addLink: builder.mutation<any, Partial<any>>({
             query: (link) => ({
-                url: `Portal/createLinks`,
+                url: `link/create`,
                 method: 'POST',
                 body: link,
             }),

@@ -3,7 +3,7 @@ import { Box, Tab, Tabs, Typography } from "@mui/material";
 import ToastUi from "../../components/ui/ToastifyUi";
 import Container from "@mui/material/Container";
 import CompanyDetailsScreen from "../company/Company-details-screen";
-import AddLink from "../links/Link";
+import AddLink from "../links/Link-screen";
 import About from "../about/About";
 
 const SettingScreen = () => {

@@ -82,7 +82,7 @@ export const serviceValidationSchema = Yup.object().shape({
     serviceAmount: Yup.string().required('Amount is required'),
 });
 export const linkValidationSchema = Yup.object().shape({
-    link: Yup.string().required('Link is required'),
+    label: Yup.string().required('Link is required'),
     url: Yup.string().required('URL is required'),
     description: Yup.string().required('Description is required'),
 });

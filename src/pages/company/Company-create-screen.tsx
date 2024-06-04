@@ -19,7 +19,6 @@ import ModalUi from '../../components/ui/ModalUi';
 const CreateCompany = ({ companyValue }: CompanyFormProps) => {
 
     
-    
     const dispatch = useDispatch<AppDispatch>();
 
     const [addCompany, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddSettingMutation();
