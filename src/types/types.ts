@@ -209,3 +209,10 @@ export interface RoleInitialValueProps {
     userAccess: string,
     id:string,
 }
+
+export interface ChangePasswordInitialValueProps {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+    userName: string;
+}

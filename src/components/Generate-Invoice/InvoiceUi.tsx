@@ -23,7 +23,7 @@ interface InvoiceUiProps {
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) {
-    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
+    const { data: customers, error, isLoading, refetch,isSuccess } = useGetCustomersQuery();
     const [subTotalAmount, setSubTotalAmount] = useState<number>(0)
     const [customerDetails, setCustomerDetails] = useState<any>()
     const [discountAmount, setDiscountAmount] = useState<number>(0)
@@ -214,8 +214,14 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                 // title="Custom Dialog Title"
                 content={
                     <SendEmail onClose={function (): void {
-                        setIsOpenEmailDialogBox(false)
-                    }} />
+                        if (isSuccess) {
+                           setIsOpenEmailDialogBox(false) 
+                        }
+                        else {
+                            setIsOpenEmailDialogBox(true)
+                        }
+                        
+                    } } />
                 }
                 handleClose={() => {
                     setIsOpenEmailDialogBox(false)

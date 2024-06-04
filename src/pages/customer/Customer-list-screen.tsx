@@ -15,7 +15,7 @@ const CustomerList = () => {
     const role = localStorage.getItem("userRole");
     const buttons = [];
     
-    if (role != "APPROVER" && role != "STANDARD USER") {
+    if (role != "APPROVER" && role != "ENDUSER") {
         buttons.push({ label: 'Create Customer', icon: Add, onClick: () => navigate("/customer/create") })
     }
         

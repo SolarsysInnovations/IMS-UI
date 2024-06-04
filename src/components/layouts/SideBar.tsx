@@ -25,6 +25,7 @@ import { sidebarTwo } from '../../constants/sidebar-data';
 
 const drawerWidth = 250;
 
+const role = localStorage.getItem("userRole");
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   backgroundColor: "#1C2536",
@@ -127,88 +128,94 @@ export default function MainLayout({ children }: MainLayoutProps) {
         >
           <>
           
-            {sidebarTwo.map((item: any, index: number) => (
-              <React.Fragment key={item.id}>
-                <ListItemButton
-                  sx={{
-                    width: "200px",
-                    "&:hover": {
-                      backgroundColor: 'rgba(255, 255, 255, 0.067)'
-                    },
-                    backgroundColor: activeItem === item.path ? "rgba(255, 255, 255, 0.067) " : "",
-                    paddingTop: "2px",
-                    paddingBottom: "2px",
-                    marginTop: "10px",
-                    transition: "0.2s",
-                    marginLeft: open ? 2 : 0,
-                    borderRadius: "5px",
-                    minHeight: 10,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                  }}
-                  onClick={() => navigate(item.path)}
-                >
-                  <ListItemIcon sx={{
-                    minWidth: "43px",
-                  }}>
-                    {React.createElement(item.icon, {
-                      sx: {
-                        width: "22px",
-                        color: activeItem === item.path ? 'primary.main' : 'primary.light'
-                      }
-                    })}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === item.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600, marginLeft: "5px" }}>
-                        {capitalize(item.title)}
-                      </Typography>
-                    }
-                  />
-                  {item.subItems && (openIndex === index ? <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} /> : <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} />)}
+            {sidebarTwo.map((item: any, index: number) => {
+              if ((item && item.title === "Roles") && (role && role !== "SUPERADMIN")) {
+                return null;
+              } else {
+                return (
+                <React.Fragment key={item.id}>
+                    <ListItemButton
+                      sx={{
+                        width: "200px",
+                        "&:hover": {
+                          backgroundColor: 'rgba(255, 255, 255, 0.067)'
+                        },
+                        backgroundColor: activeItem === item.path ? "rgba(255, 255, 255, 0.067) " : "",
+                        paddingTop: "2px",
+                        paddingBottom: "2px",
+                        marginTop: "10px",
+                        transition: "0.2s",
+                        marginLeft: open ? 2 : 0,
+                        borderRadius: "5px",
+                        minHeight: 10,
+                        justifyContent: open ? 'initial' : 'center',
+                        px: 2.5,
+                      }}
+                      onClick={() => navigate(item.path)}
+                    >
+                      <ListItemIcon sx={{
+                        minWidth: "43px",
+                      }}>
+                        {React.createElement(item.icon, {
+                          sx: {
+                            width: "22px",
+                            color: activeItem === item.path ? 'primary.main' : 'primary.light'
+                          }
+                        })}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={
+                          <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === item.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600, marginLeft: "5px" }}>
+                            {capitalize(item.title)}
+                          </Typography>
+                        }
+                      />
+                      {item.subItems && (openIndex === index ? <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} /> : <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} />)}
 
-                </ListItemButton>
-                {item.subItems && (
-                  <Collapse in={openIndex === index} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      {item.subItems.map((subItem: any, subIndex: number) => (
-                        <ListItemButton
-                          key={subIndex}
-                          sx={{
-                            width: "200px",
-                            "&:hover": {
-                              backgroundColor: 'rgba(255, 255, 255, 0.067)'
-                            },
-                            backgroundColor: activeItem === subItem.path ? "rgba(255, 255, 255, 0.067) " : "",
-                            paddingTop: "2px",
-                            paddingBottom: "2px",
-                            marginTop: "10px",
-                            transition: "0.2s",
-                            marginLeft: open ? 2 : 2,
-                            borderRadius: "5px",
-                            minHeight: 10,
-                            justifyContent: open ? 'initial' : 'center',
-                            px: 2.5,
-                          }}
-                          onClick={() => navigate(subItem.path)}
-                        >
-                          <ListItemIcon sx={{ width: 'fit-content', minWidth: '20px !important' }}>
-                            <FiberManualRecordIcon sx={{ width: '10px', color: activeItem === subItem.path ? `primary.main` : `primary.light` }} />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === subItem.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>
-                                {capitalize(subItem.title)}
-                              </Typography>
-                            }
-                          />
-                        </ListItemButton>
-                      ))}
-                    </List>
-                  </Collapse>
-                )}
-              </React.Fragment>
-            ))}
+                    </ListItemButton>
+                    {item.subItems && (
+                      <Collapse in={openIndex === index} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                          {item.subItems.map((subItem: any, subIndex: number) => (
+                            <ListItemButton
+                              key={subIndex}
+                              sx={{
+                                width: "200px",
+                                "&:hover": {
+                                  backgroundColor: 'rgba(255, 255, 255, 0.067)'
+                                },
+                                backgroundColor: activeItem === subItem.path ? "rgba(255, 255, 255, 0.067) " : "",
+                                paddingTop: "2px",
+                                paddingBottom: "2px",
+                                marginTop: "10px",
+                                transition: "0.2s",
+                                marginLeft: open ? 2 : 2,
+                                borderRadius: "5px",
+                                minHeight: 10,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                              }}
+                              onClick={() => navigate(subItem.path)}
+                            >
+                              <ListItemIcon sx={{ width: 'fit-content', minWidth: '20px !important' }}>
+                                <FiberManualRecordIcon sx={{ width: '10px', color: activeItem === subItem.path ? `primary.main` : `primary.light` }} />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={
+                                  <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === subItem.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>
+                                    {capitalize(subItem.title)}
+                                  </Typography>
+                                }
+                              />
+                            </ListItemButton>
+                          ))}
+                        </List>
+                      </Collapse>
+                    )}
+                </React.Fragment>);
+              }
+              
+            })}
           </>
         </List>
         {/*  <Divider /> */}

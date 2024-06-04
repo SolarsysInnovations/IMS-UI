@@ -1,5 +1,6 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps,companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps,companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps } from "../../types/types";
+import ServicesList from "../../pages/service/service-list-screen";
 
 export const loginInitialValue: LoginProps = {
     // email: "",
@@ -180,4 +181,11 @@ export const RoleInitialValue: RoleInitialValueProps = {
     userAccess:"",
     password: "",
     id:"",
+}
+
+export const ChangePasswordInitialValue: ChangePasswordInitialValueProps = {
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+    userName: "",
 }
