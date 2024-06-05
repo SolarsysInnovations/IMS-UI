@@ -21,11 +21,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { sidebarTwo } from '../../constants/sidebar-data';
 
-
-
 const drawerWidth = 250;
 
-const role = localStorage.getItem("userRole");
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   backgroundColor: "#1C2536",
@@ -83,6 +80,7 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const [activeItem, setActiveItem] = React.useState<string>('');
+  const [role, setRole] = React.useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -105,6 +103,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
   React.useEffect(() => {
     setActiveItem(location.pathname)
   }, [location.pathname]);
+
+   React.useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    setRole(userRole);
+  }, []);
 
   return (
     <Box sx={{ display: 'flex' }}>
