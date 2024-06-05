@@ -13,6 +13,7 @@ import TableHeader from "../../components/layouts/TableHeader";
 import { setCustomerData, setCustomerError, setCustomerLoading, useDeleteCustomerMutation, useGetCustomerByIdMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { toastConfig } from "../forms/config/toastConfig";
 import useSuccessToast from "../../hooks/useToast";
+import BlockIcon from '@mui/icons-material/Block';
 
 const MyCellRenderer = ({ id, contactPersons }: any) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -24,12 +25,12 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     const navigate = useNavigate();
     const role = localStorage.getItem("userRole");
     const buttons = [];
-    if (role != "APPROVER"  && role != "STANDARD USER") {
+    if (role != "APPROVER"  && role != "ENDUSER") {
         buttons.push({ label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) })
     }
 
     function showButton(){
-        if (role === "APPROVER" || role === "STANDARD USER") {
+        if (role === "APPROVER" || role === "ENDUSER") {
             return true;
         }
         return false;

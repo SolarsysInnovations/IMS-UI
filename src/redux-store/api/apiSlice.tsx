@@ -12,7 +12,7 @@ interface RootState {
     auth: {
         user: any;
         token: string | null;
-        refreshToken?: string | null;
+        refresh?: string | null;
     };
 }
 
@@ -20,12 +20,12 @@ const baseQuery = fetchBaseQuery({
     baseUrl: BASE_LOCAL_URL,
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
-        const { token, refreshToken } = (getState() as RootState).auth;
+        const { token, refresh } = (getState() as RootState).auth;
         if (token) {
             headers.set('authorization', `Bearer ${token}`);
         }
-        if (refreshToken) {
-            headers.set('refresh', refreshToken);
+        if (refresh) {
+            headers.set('refresh', refresh);
         }
         return headers;
     }

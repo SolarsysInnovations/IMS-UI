@@ -3,8 +3,13 @@ import { Box, Tab, Tabs, Typography } from "@mui/material";
 import ToastUi from "../../components/ui/ToastifyUi";
 import Container from "@mui/material/Container";
 import CompanyDetailsScreen from "../company/Company-details-screen";
+<<<<<<< HEAD
 import AddLink from "../links/Link-screen";
+=======
+>>>>>>> feccd08d54bd9976abf988c5009a6979a9b276f9
 import About from "../about/About";
+import AddLink from "../links/link";
+import TaxConfig from "./TaxConfig";
 
 const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
@@ -84,7 +89,7 @@ const SettingScreen = () => {
           </Box>
         </Container>
       )}
-      {/* TAB 2 Contents */} 
+      {/* TAB 2 Contents */}
       {currentTabIndex === 1 && (
         <Container fixed>
           <Box>
@@ -96,15 +101,14 @@ const SettingScreen = () => {
       {/* TAB 3 Contents */}
       {currentTabIndex === 2 && (
         <Box sx={{ p: 3 }}>
-          <Typography variant="h5">Tax</Typography>
-          <Typography></Typography>
+          <TaxConfig />
         </Box>
       )}
 
       {/* TAB 4 Contents */}
       {currentTabIndex === 3 && (
         <Box sx={{ p: 3 }}>
-        <About />
+          <About />
         </Box>
       )}
     </React.Fragment>
