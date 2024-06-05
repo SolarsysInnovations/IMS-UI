@@ -50,6 +50,6 @@ export const linkApi = apiSlice.injectEndpoints({
         }),
     }),
 });
-export const { setServiceData, setServiceLoading, setServiceError, clearServiceData } = linkSlice.actions;
+
 export { linkSlice };
 export const { useGetLinkQuery, useAddLinkMutation } = linkApi;
