@@ -30,6 +30,9 @@ export interface TdsTaxFormProps {
 export interface CompanyFormProps {
     companyValue: companyInitialValueProps;
 }
+export interface LinkProps {
+    addLink: linkCreationProps;
+}
 export interface PaymentTermsProps {
     id?: string,
     termName: string,

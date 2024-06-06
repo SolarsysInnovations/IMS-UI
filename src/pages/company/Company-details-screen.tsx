@@ -26,6 +26,8 @@ const CompanyDetailsScreen: React.FC = () => {
     const [companyDetails, setCustomerDetails] = useState<any>();
     const { refetch } = useGetSettingQuery();
 
+    console.log("company details", companyDetails);
+    
     const button = [
         { label: 'Edit', icon: Add, onClick: () => handleEditClick() },
       ];
@@ -52,15 +54,13 @@ const CompanyDetailsScreen: React.FC = () => {
         }
     }, [companyData]);
 
-    console.log("new values", companyDetails);
     
     useEffect(() => {
          if (companyData) {
-            console.log("company-data-log", companyData);
-            
             setCustomerDetails(companyData)
          }
      }, [])
+
     useEffect(() => {
         if (isSuccess) {
             refetchCompanyData();
@@ -78,8 +78,9 @@ const CompanyDetailsScreen: React.FC = () => {
               <CompanyScreen />
             </ModalUi>
             <TableHeader headerName={"Company Information"} buttons={button}/>
+            {companyDetails && (
             <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>
-            <Grid sx={{ marginTop: "0px" }} item xs={7}>
+                <Grid sx={{ marginTop: "0px" }} item xs={7}>
                 <Box gap={3}>
                     <div>
                         <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company Name </span> <span>: {companyDetails?.companyName}</span></p>
@@ -116,6 +117,7 @@ const CompanyDetailsScreen: React.FC = () => {
                     </Grid>
 
             </Grid>
+            )}
         </div>
     );
 };

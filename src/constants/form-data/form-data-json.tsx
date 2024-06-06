@@ -109,7 +109,7 @@ export const linkFields: FieldProps[] = [
         subFields: [
             { name: 'label', label: 'Label', type: 'text', gridSize: 5, validation: Yup.string().required('Label is required',) },
             { name: 'url', label: 'URL', type: 'text', gridSize: 5, validation: Yup.string().required('URL is required') },
-            { name: 'description', label: 'Description', type: 'description', gridSize: 10, validation: Yup.string().required('Description is required') },
+            { name: 'description', label: 'Description', type: 'text', gridSize: 10, validation: Yup.string().required('Description is required') },
         ]
     },
 ];
