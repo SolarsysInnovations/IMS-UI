@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { InvoiceInitialValueProps,SendEmailInitialValueProps } from '../../types/types';
+import { InvoiceInitialValueProps, SendEmailInitialValueProps } from '../../types/types';
 import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { apiSlice } from '../api/apiSlice';
@@ -42,7 +42,7 @@ export const invoiceApi = apiSlice.injectEndpoints({
                 body: invoiceData,
             }),
         }),
-        updateInvoice: builder.mutation<any, { id: number; invoiceData: Partial<InvoiceInitialValueProps> }>({
+        updateInvoice: builder.mutation<any, { id: string; invoiceData: Partial<InvoiceInitialValueProps> }>({
             query: ({ id, invoiceData }) => ({
                 url: `${API_URLS.invoiceUpdate}/${id}`,
                 method: 'POST',
@@ -63,7 +63,7 @@ export const invoiceApi = apiSlice.injectEndpoints({
         }),
         sendEmailNotifiction: builder.mutation<any, Partial<FormData>>({
             query: (emailData) => ({
-                url:"https://ims-backend-9ghn.onrender.com/sendPDFByEmail", //API_URLS.sendEmail,
+                url: "https://ims-backend-9ghn.onrender.com/sendPDFByEmail", //API_URLS.sendEmail,
                 method: "POST",
                 body: emailData
             }),
@@ -71,4 +71,4 @@ export const invoiceApi = apiSlice.injectEndpoints({
     }),
 });
 
-export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation, useInvoiceGetByIdMutation,useSendEmailNotifictionMutation } = invoiceApi;
+export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation, useInvoiceGetByIdMutation, useSendEmailNotifictionMutation } = invoiceApi;

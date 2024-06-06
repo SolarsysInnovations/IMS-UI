@@ -13,6 +13,7 @@ import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ErrorIcon from '@mui/icons-material/Error';
 import DoneIcon from '@mui/icons-material/Done';
+import SelectDropdown from '../../components/ui/SelectDropdown';
 export interface BudgetProps {
     diff?: number;
     trend: 'up' | 'down';
@@ -52,44 +53,76 @@ const invoiceAmount = [
         decrementPercentage: 0,
     },
 ];
-
+const options = [
+    { label: "monthly", value: "monthly" },
+    { label: "weekly", value: "weekly" },
+    { label: "yearly", value: "yearly" },
+]
 export default function InvoiceAmount(): React.JSX.Element {
+
+    const [selectedValue, setSelectedValue] = React.useState({ label: "monthly", value: "monthly" });
+
+    const handleChange = (newValue: any) => {
+        console.log(newValue);
+        setSelectedValue(newValue);
+    };
 
     return (
         <>
-            <Typography variant="h6" color="initial">Overview</Typography>
+            <Grid container mb={0.5}>
+                <Grid item xs={4}>
+                    <Typography variant="h6" color="initial">Overview</Typography>
+                </Grid>
+                <Grid item xs={8} pr={2.5} sx={{ display: "flex", justifyContent: "right", }}>
+                    <SelectDropdown
+                        applySmallSizeStyle={true}
+                        value={selectedValue}
+                        defaultValue={{ label: "monthly", value: "monthly" }}
+                        options={options}
+                        onChange={handleChange}
+                    />
+                </Grid>
+            </Grid>
             <Grid container>
                 {invoiceAmount?.map((data: any) => (
                     <Grid key={data.label} item xs={4}>
-                        <Card sx={{ width: "200px", height: "165px" }}>
-                            <CardContent>
-                                <Stack spacing={1}>
-                                    <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={1}>
-                                        <Stack spacing={0}>
-                                            <Typography color="text.secondary" variant="overline">
-                                                {data.label}
-                                            </Typography>
-                                            <Typography variant="h5">{data.value}</Typography>
-                                        </Stack>
-                                        <Avatar sx={{ backgroundColor: `${data.iconBg}`, height: '30px', width: '30px' }}>
-                                            {React.createElement(data.icon, { width: 20, height: 20 })}
-                                        </Avatar>
+                        <Card sx={{ width: "180px", height: "140px", padding: "10px 15px" }}>
+                            <Stack spacing={1}>
+                                <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={1}>
+                                    <Stack spacing={0}>
+                                        <Typography color="text.secondary" variant="overline">
+                                            {data.label}
+                                        </Typography>
+                                        <Typography variant="h6">{data.value}</Typography>
                                     </Stack>
+                                    <Avatar sx={{ backgroundColor: `${data.iconBg}`, height: '30px', width: '30px' }}>
+                                        {React.createElement(data.icon, { width: 20, height: 20 })}
+                                    </Avatar>
+                                </Stack>
 
-                                    <Stack sx={{ alignItems: 'center', }} direction="row" spacing={2}>
-                                        <Stack sx={{ alignItems: 'center', }} direction="row" spacing={0.5}>
-                                            <ArrowDropDownIcon color="secondary" />
-                                            <Typography color="secondary" variant="body2">
-                                                diff%
-                                            </Typography>
-                                        </Stack>
+                                <Stack sx={{ alignItems: 'center', }} direction="row" spacing={2}>
+                                    <Box sx={{ display: "flex" }}>
                                         <Typography color="text.secondary" variant="caption">
-                                            Since last month
+                                            No of Invoice :
+                                        </Typography>
+                                        <Typography ml={1} color="" variant="caption">
+                                            23
+                                        </Typography>
+                                    </Box>
+                                </Stack>
+                                <Stack sx={{ alignItems: 'center', }} direction="row" spacing={2}>
+                                    <Stack sx={{ alignItems: 'center', }} direction="row" spacing={0.5}>
+                                        <ArrowDropDownIcon color="secondary" />
+                                        <Typography color="secondary" variant="body2">
+                                            diff%
                                         </Typography>
                                     </Stack>
-
+                                    <Typography color="text.secondary" variant="caption">
+                                        Since last month
+                                    </Typography>
                                 </Stack>
-                            </CardContent>
+
+                            </Stack>
                         </Card>
                     </Grid>
                 ))}

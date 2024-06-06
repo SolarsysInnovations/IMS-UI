@@ -18,7 +18,7 @@ const CustomerEdit: React.FC = () => {
     const navigate = useNavigate();
     const onSubmit = async (values: any, actions: any) => {
         try {
-            const id: number = values?._id
+            const id: number = values?.id
             await updateCustomer({
                 id: id,
                 customer: values,

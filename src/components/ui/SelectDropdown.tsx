@@ -19,12 +19,24 @@ interface SelectDropdownProps {
   width?: string;
   button?: boolean;
   onMouseDown?: () => void;
+  defaultValue?: any;
+  applySmallSizeStyle?: boolean;
 }
 
-export default function SelectDropdown({ onMouseDown, button, width, error, helperText, options, value, labelText, onChange }: SelectDropdownProps) {
+export default function SelectDropdown({ applySmallSizeStyle = false, defaultValue, onMouseDown, button, width, error, helperText, options, value, labelText, onChange }: SelectDropdownProps) {
   return (
     <Autocomplete
       sx={{
+
+        ...(applySmallSizeStyle && {
+          "& .MuiOutlinedInput-root.MuiInputBase-sizeSmall": {
+            paddingTop: "0px",
+            paddingBottom: "1px",
+            paddingLeft: "6px",
+            width: "130px",
+          },
+        }),
+
         width: `${width}`,
         borderRadius: "8px !important",
         '& .MuiOutlinedInput-root': {
@@ -45,9 +57,9 @@ export default function SelectDropdown({ onMouseDown, button, width, error, help
         '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
           fontSize: "12px"
         },
-        
+
       }}
-      
+      defaultValue={defaultValue}
       size='small'
       disablePortal
       id="combo-box-demo"

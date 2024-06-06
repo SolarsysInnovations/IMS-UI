@@ -23,16 +23,18 @@ interface InvoiceUiProps {
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) {
-    const { data: customers, error, isLoading, refetch,isSuccess } = useGetCustomersQuery();
+    const { data: customers, error, isLoading, refetch, isSuccess } = useGetCustomersQuery();
     const [subTotalAmount, setSubTotalAmount] = useState<number>(0)
     const [customerDetails, setCustomerDetails] = useState<any>()
     const [discountAmount, setDiscountAmount] = useState<number>(0)
     const [openemaildialogBox, setIsOpenEmailDialogBox] = useState(false);
 
+    console.log(invoiceData);
+
     useEffect(() => {
         if (invoiceData) {
             const calculateTotal = invoiceData.servicesList.reduce((total: any, service: any) => {
-                return total + service.price;
+                return total + service.serviceAmount;
             }, 0)
             setSubTotalAmount(calculateTotal);
 
@@ -180,7 +182,7 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                         <Box sx={{ display: "flex", justifyContent: "right", }} >
                             <div style={{ display: "flex", width: "250px", justifyContent: "space-between" }}>
                                 <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600" }}>Tax Amount</p>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>$46654</p>
+                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>{invoiceData.totalAmount}</p>
                             </div>
                         </Box>
                     </Grid>
@@ -215,13 +217,13 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                 content={
                     <SendEmail onClose={function (): void {
                         if (isSuccess) {
-                           setIsOpenEmailDialogBox(false) 
+                            setIsOpenEmailDialogBox(false)
                         }
                         else {
                             setIsOpenEmailDialogBox(true)
                         }
-                        
-                    } } />
+
+                    }} />
                 }
                 handleClose={() => {
                     setIsOpenEmailDialogBox(false)
