@@ -55,7 +55,7 @@ export const sidebarTwo = [
         id: 6,
         title: "Roles",
         path: "/roles/list",
-        icon: Home,
+        icon: TaskIcon,
         isParent: false,
     },
     {

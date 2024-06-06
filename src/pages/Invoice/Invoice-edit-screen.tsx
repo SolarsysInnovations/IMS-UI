@@ -20,7 +20,7 @@ import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { generateOptions } from '../../services/utils/dropdownOptions';
-import { useAddInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import { useAddInvoiceMutation, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
@@ -63,6 +63,7 @@ const InvoiceEdit = () => {
     const [invoiceFinalData, setInvoiceFinalData] = useState();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [addInvoice, { isSuccess, isError, }] = useAddInvoiceMutation();
+    const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEmailModalOpen, setisEmailModalOpen] = useState(false);
@@ -89,7 +90,7 @@ const InvoiceEdit = () => {
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
 
-    console.log(invoiceStateDetails);
+    console.log("details", invoiceStateDetails);
 
     const PopupComponents = {
         GST_TYPE: 'gstType',
@@ -211,7 +212,7 @@ const InvoiceEdit = () => {
                     // values.invoiceTotalAmount = invoiceTotalAmount
                     values.servicesList = invoiceValues.servicesList
                     values.totalAmount = invoiceTotalAmount ?? null;
-                    await addInvoice(values);
+                    await updateInvoice({ id: invoiceStateDetails.id, invoiceData: values });
                     // alert(JSON.stringify(values));
                     console.log(values);
 

@@ -65,7 +65,7 @@ const ArAgingscreen: React.FC = () => {
                 {({ errors, touched, values, setFieldValue, handleSubmit }) => (
                     <div>
                         <ToastUi autoClose={2000} />
-                        <TableHeader headerName={pathname} buttons={[
+                        <TableHeader headerName="Report Ageing" buttons={[
                             { label: 'Back', icon: Add, onClick: () => navigate(-1) }
                         ]} />
                         <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >

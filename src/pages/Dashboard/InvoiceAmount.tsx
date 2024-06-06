@@ -13,6 +13,7 @@ import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ErrorIcon from '@mui/icons-material/Error';
 import DoneIcon from '@mui/icons-material/Done';
+import SelectDropdown from '../../components/ui/SelectDropdown';
 export interface BudgetProps {
     diff?: number;
     trend: 'up' | 'down';
@@ -52,29 +53,63 @@ const invoiceAmount = [
         decrementPercentage: 0,
     },
 ];
-
+const options = [
+    { label: "monthly", value: "monthly" },
+    { label: "weekly", value: "weekly" },
+    { label: "yearly", value: "yearly" },
+]
 export default function InvoiceAmount(): React.JSX.Element {
 
-    return (
-        <Grid container>
+    const [selectedValue, setSelectedValue] = React.useState({ label: "monthly", value: "monthly" });
 
-            {invoiceAmount?.map((data: any) => (
-                <Grid key={data.label} item xs={4}>
-                    <Card sx={{ width: "200px", height: "165px" }}>
-                        <CardContent>
+    const handleChange = (newValue: any) => {
+        console.log(newValue);
+        setSelectedValue(newValue);
+    };
+
+    return (
+        <>
+            <Grid container mb={0.5}>
+                <Grid item xs={4}>
+                    <Typography variant="h6" color="initial">Overview</Typography>
+                </Grid>
+                <Grid item xs={8} pr={2.5} sx={{ display: "flex", justifyContent: "right", }}>
+                    <SelectDropdown
+                        applySmallSizeStyle={true}
+                        value={selectedValue}
+                        defaultValue={{ label: "monthly", value: "monthly" }}
+                        options={options}
+                        onChange={handleChange}
+                    />
+                </Grid>
+            </Grid>
+            <Grid container>
+                {invoiceAmount?.map((data: any) => (
+                    <Grid key={data.label} item xs={4}>
+                        <Card sx={{ width: "180px", height: "140px", padding: "10px 15px" }}>
                             <Stack spacing={1}>
                                 <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={1}>
                                     <Stack spacing={0}>
                                         <Typography color="text.secondary" variant="overline">
                                             {data.label}
                                         </Typography>
-                                        <Typography variant="h5">{data.value}</Typography>
+                                        <Typography variant="h6">{data.value}</Typography>
                                     </Stack>
                                     <Avatar sx={{ backgroundColor: `${data.iconBg}`, height: '30px', width: '30px' }}>
                                         {React.createElement(data.icon, { width: 20, height: 20 })}
                                     </Avatar>
                                 </Stack>
 
+                                <Stack sx={{ alignItems: 'center', }} direction="row" spacing={2}>
+                                    <Box sx={{ display: "flex" }}>
+                                        <Typography color="text.secondary" variant="caption">
+                                            No of Invoice :
+                                        </Typography>
+                                        <Typography ml={1} color="" variant="caption">
+                                            23
+                                        </Typography>
+                                    </Box>
+                                </Stack>
                                 <Stack sx={{ alignItems: 'center', }} direction="row" spacing={2}>
                                     <Stack sx={{ alignItems: 'center', }} direction="row" spacing={0.5}>
                                         <ArrowDropDownIcon color="secondary" />
@@ -88,10 +123,10 @@ export default function InvoiceAmount(): React.JSX.Element {
                                 </Stack>
 
                             </Stack>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            ))}
-        </Grid>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
+        </>
     );
 }
