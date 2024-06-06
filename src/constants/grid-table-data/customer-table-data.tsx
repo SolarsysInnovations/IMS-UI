@@ -14,6 +14,7 @@ import { setCustomerData, setCustomerError, setCustomerLoading, useDeleteCustome
 import { toastConfig } from "../forms/config/toastConfig";
 import useSuccessToast from "../../hooks/useToast";
 import BlockIcon from '@mui/icons-material/Block';
+import { styled } from '@mui/system';
 
 const MyCellRenderer = ({ id, contactPersons }: any) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -31,9 +32,16 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
     function showButton(){
         if (role === "APPROVER" || role === "ENDUSER") {
-            return true;
-        }
-        return false;
+           return {
+        disabled: true,
+        sx: {
+          color: 'grey.500',
+          cursor: 'not-allowed',
+          pointerEvents: 'auto',
+        },
+      };
+    }
+    return {};
     }
 
     const handleEditClick = async () => {
@@ -75,14 +83,23 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     };
     useSuccessToast({ isSuccess, message: "successfully deleted the new customer", })
 
+    const StyledIconButton = styled(IconButton)(({ theme }) => ({
+    padding: '3px',
+    '&.Mui-disabled': {
+        color: theme.palette.grey[500],
+        cursor: 'not-allowed',
+        pointerEvents: 'auto',
+    },
+    }));
+
     return (
         <Stack direction="row" spacing={1}>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick} disabled={showButton()}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
-            </IconButton>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick} disabled={showButton()}>
+            <StyledIconButton  aria-label="" onClick={handleEditClick} disabled={showButton().disabled} sx={showButton().sx} >
+                <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small'  />
+            </StyledIconButton>
+            <StyledIconButton aria-label="" onClick={handleDeleteClick} disabled={showButton().disabled} sx={showButton().sx}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
-            </IconButton>
+            </StyledIconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
