@@ -201,8 +201,6 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                         </Box>
                     </Grid>
                 </Grid>
-
-
             </div >
             <Grid container spacing={5}>
                 <Grid item xs={5} sx={{ display: " flex", justifyContent: "space-between" }}>
