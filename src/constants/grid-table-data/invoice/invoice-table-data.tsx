@@ -109,7 +109,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>
             <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
-                <InvoiceUi invoiceData={invoiceData} />
+                <InvoiceUi invoiceData={invoiceData}  isModalOpen={setIsModalOpen}/>
             </ModalUi>
         </Stack>
     );
