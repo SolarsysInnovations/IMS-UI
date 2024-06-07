@@ -121,11 +121,11 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.LINK_LIST]: `/link/list`,
     //Roles
     [ApiEndpoint.ROLES_GET]: `/role/get/`,
-    [ApiEndpoint.ROLES_GETUSER]: `/findByName`,
+    [ApiEndpoint.ROLES_GETUSER]: `/role/findByName/`,
     [ApiEndpoint.ROLES_LIST]: `/role/list`,
     [ApiEndpoint.ROLES_CREATE]: `/role/register`,
     [ApiEndpoint.ROLES_UPDATE]: `/role/update`,
     [ApiEndpoint.ROLES_DELETE]: `/role/delete/`,
     //Changepassword
-    [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword`
+    [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`
 };
