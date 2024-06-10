@@ -5,6 +5,7 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import TaskIcon from '@mui/icons-material/Task';
+import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 export const sidebarTwo = [
     {
@@ -55,7 +56,7 @@ export const sidebarTwo = [
         id: 6,
         title: "Roles",
         path: "/roles/list",
-        icon: TaskIcon,
+        icon: GroupsIcon,
         isParent: false,
     },
     {

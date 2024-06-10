@@ -23,7 +23,7 @@ const CompanyDetailsScreen: React.FC = () => {
     const [openModal, setOpenModal] = React.useState(false);
     const companyValue = useSelector((state: any) => state.globalState.data);
     const [key, setKey] = useState<number>(0);
-    const [companyDetails, setCustomerDetails] = useState<any>();
+    const [companyDetails, setCompanyDetails] = useState<any>();
     const { refetch } = useGetSettingQuery();
 
     console.log("company details", companyDetails);
@@ -46,28 +46,27 @@ const CompanyDetailsScreen: React.FC = () => {
          }
       }
 
-    useEffect(() => {
-        if (Array.isArray(companyData) && companyData.length > 0) {
-            const data = companyData[0]
-            console.log("new2",data);
-            setCustomerDetails(companyData[0]);
+      useEffect(() => {
+        if (companyData && companyData.length > 0) {
+            setCompanyDetails(companyData[0]);
         }
     }, [companyData]);
+;
 
     
-    useEffect(() => {
-         if (companyData) {
-            setCustomerDetails(companyData)
-         }
-     }, [])
+useEffect(() => {
+    if (pathname === "/settings") {
+        refetchCompanyData();
+    }
+}, [pathname, refetchCompanyData]);
 
-    useEffect(() => {
-        if (isSuccess) {
-            refetchCompanyData();
-        }
-    }, [isSuccess, refetchCompanyData]);
+    // useEffect(() => {
+    //     if (isSuccess) {
+    //         refetchCompanyData();
+    //     }
+    // }, [isSuccess, refetchCompanyData]);
     const handleModalClose = () => {
-        refetch();
+        refetchCompanyData();
         setOpenModal(false);
       };
       
