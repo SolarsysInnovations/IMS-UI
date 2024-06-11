@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Card, CardContent, IconButton } from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";
 import EditIcon from "@mui/icons-material/Edit";
@@ -7,6 +7,7 @@ import { useDeleteLinkMutation, useGetLinkByIdMutation, useGetLinkQuery } from "
 import { AppDispatch } from "../../redux-store/store";
 import { useDispatch } from "react-redux";
 import { setLinkData } from "../../redux-store/link/linkApi";
+
 const PortalLinkScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [newLink, setNewLink] = useState({
@@ -15,35 +16,43 @@ const PortalLinkScreen: React.FC = () => {
     description: "",
   });
   const { data: linkCreation, error, isLoading, refetch } = useGetLinkQuery();
-  const [deletedLink, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteLinkMutation<{ deletedService: any, error: any, isLoading: any, isSuccess: any, data: any }>();
-  const [ getLink, {  }] = useGetLinkByIdMutation();
+  const [deletedLink, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData }] = useDeleteLinkMutation<{ deletedService: any, error: any, isLoading: any, isSuccess: any, data: any }>();
+  const [getLink, {  }] = useGetLinkByIdMutation();
+  const [openModal, setOpenModal] = React.useState(false);
 
-    const [openModal, setOpenModal] = React.useState(false);
+  // Function to fetch links when component mounts and after deletion
+  useEffect(() => {
+    refetch();
+  }, [deletedData]); // Refetch data after deletion
 
-
-  const handleEditClick = async (id : string) => {
-    console.log("values",id);
+  const handleEditClick = async (id: string) => {
+    console.log("values", id);
     try {
-        const response = await getLink(id);
-        if ('data' in response) {
-            const linksData = response.data;
-            console.log("data",linksData);
-            await dispatch(setLinkData(linksData));
-            setOpenModal(true);
-        } else {
-            console.error('Error response:', response.error);
-        }
+      const response = await getLink(id);
+      if ('data' in response) {
+        const linksData = response.data;
+        console.log("data", linksData);
+        await dispatch(setLinkData(linksData));
+        setOpenModal(true);
+      } else {
+        console.error('Error response:', response.error);
+      }
     } catch (error) {
-        console.error('Error handling edit click:', error);
+      console.error('Error handling edit click:', error);
     }
-}
+  }
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = async (id: any) => {
     const confirmed = window.confirm("Are you sure you want to delete this link?");
     if (confirmed) {
-      // deletedLink(id);
+      try {
+        await deletedLink(id);
+        // Data will be refetched automatically due to useEffect
+      } catch (error) {
+        console.error('Error deleting link:', error);
+      }
     }
-};
+  };
 
   return (
     <div>
@@ -85,7 +94,7 @@ const PortalLinkScreen: React.FC = () => {
                         </IconButton>
                         <IconButton
                           style={{ color: "blue", fontSize: "inherit" }}
-                          onClick={() => handleDeleteClick}
+                          onClick={() => handleDeleteClick(link.id)}
                         >
                           <DeleteIcon style={{ fontSize: "inherit" }} />
                         </IconButton>
