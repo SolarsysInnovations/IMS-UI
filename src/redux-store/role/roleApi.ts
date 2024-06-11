@@ -4,7 +4,6 @@ import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { ChangePasswordInitialValueProps, RoleInitialValueProps } from '../../types/types';
 import { string } from 'yup';
 
-
 const roleSlice = createSlice({
     name: 'role',
     initialState: {

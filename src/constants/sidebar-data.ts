@@ -7,7 +7,6 @@ import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices
 import TaskIcon from '@mui/icons-material/Task';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
-import GroupsIcon from '@mui/icons-material/Groups';
 export const sidebarTwo = [
 
     {
