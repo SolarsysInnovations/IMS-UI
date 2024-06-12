@@ -31,7 +31,7 @@ const CreateCompany = ({ companyValue }: CompanyFormProps) => {
                 await addCompany(values);
             }
             actions.resetForm();
-            toast.success("Updated successfully!"); // Show toast after updating fields
+            // toast.success("Saved successfully!"); // Show toast after updating fields
             handleClose(); // Close modal after saving
         } catch (error) {
             console.error("An error occurred during form submission:", error);

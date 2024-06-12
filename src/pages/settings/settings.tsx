@@ -4,8 +4,8 @@ import ToastUi from "../../components/ui/ToastifyUi";
 import Container from "@mui/material/Container";
 import CompanyDetailsScreen from "../company/Company-details-screen";
 import About from "../about/About";
-import AddLink from "../links/Link-screen";
 import TaxConfig from "./TaxConfig";
+import LinkScreen from "../links/Portal-link-screen";
 
 const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
@@ -35,7 +35,7 @@ const SettingScreen = () => {
       case 0:
         return <CompanyDetailsScreen />;
       case 1:
-        return <AddLink />;
+        return <LinkScreen />;
       case 2:
         return <TaxConfig />;
       case 3:

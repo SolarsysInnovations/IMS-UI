@@ -41,7 +41,7 @@ export const linkApi = apiSlice.injectEndpoints({
         }),
         getLinkById: builder.mutation<void, string>({ // Changed to query
             query: (id) => ({
-                url: `/link/list`,
+                url: `/link/get/${id}`,
                 method: 'POST',
             }),
         }),
@@ -52,7 +52,7 @@ export const linkApi = apiSlice.injectEndpoints({
                 body: link,
             }),
         }),
-        updateLink: builder.mutation<any, { id: number; link: Partial<any> }>({
+        updateLink: builder.mutation<any, { id: any; link: Partial<any> }>({
             query: ({ id, link }) => ({
                 url: `/link/update/${id}`,
                 method: 'POST',
