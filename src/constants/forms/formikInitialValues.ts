@@ -46,7 +46,6 @@ export const serviceInitialValues = {
     serviceAmount: "",
 };
 export const linkInitialValues = {
-    id: "",
     label: "",
     url: "",
     description: "",

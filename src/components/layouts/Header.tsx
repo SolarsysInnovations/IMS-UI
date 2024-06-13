@@ -31,6 +31,8 @@ import { useNavigate } from 'react-router-dom'
 import ToastUi from '../../components/ui/ToastifyUi';
 import GroupIcon from '@mui/icons-material/Group';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import PersonIcon from '@mui/icons-material/Person';
+import LockIcon from '@mui/icons-material/Lock';
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -95,20 +97,8 @@ export default function Header() {
                 aria-controls={addMenuOpen ? 'add-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={addMenuOpen ? 'true' : undefined}
-                sx={{
-                  position: "relative",
-                  right:"10px",
-                  backgroundColor: 'grey',
-                  border: '1px solid grey',
-                  width: '20px',
-                  height: '20px',
-                  fontSize:"12px",
-                  '&:hover': {
-                    backgroundColor: 'grey',
-                  },
-                }}
               >
-                <AddIcon sx={{ color: `white` }} />
+                <AddIcon sx={{ color: `grey.500` }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Settings">
@@ -128,7 +118,7 @@ export default function Header() {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
               >
-                <AccountCircle sx={{ color: `grey.500` }} />
+                <PersonIcon sx={{ color: `grey.500` }} />
               </IconButton>
             </Tooltip>
           </Box>
@@ -171,29 +161,35 @@ export default function Header() {
             <MenuItem onClick={() => {
               setPopUpComponent(PopupComponents.USER_PROFILE);
               setIsOpenDialogBox(true)
-            }}>
-              <Avatar /> User Profile
+            }} sx={{fontSize:"14px"}} >
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
+              User Profile
             </MenuItem>
             <MenuItem onClick={() => {
               setPopUpComponent(PopupComponents.CHANGE_PASSWORD);
               setIsOpenDialogBox(true)
-            }}>
-              <Avatar /> Change Password
+            }} sx={{fontSize:"14px"}} >
+              <ListItemIcon>
+                <LockIcon />
+              </ListItemIcon>
+              Change Password
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleClose} sx={{fontSize:"14px"}}>
               <ListItemIcon>
                 <PersonAdd fontSize="small" />
               </ListItemIcon>
               Add another account
             </MenuItem>
-            <MenuItem onClick={()=>{navigate("/settings")}}>
+            <MenuItem onClick={()=>{navigate("/settings")}} sx={{fontSize:"14px"}}>
               <ListItemIcon >
                 <Settings fontSize="small" />
               </ListItemIcon>
               Settings
             </MenuItem>
-            <MenuItem onClick={() => dispatch(logOut())}>
+            <MenuItem onClick={() => dispatch(logOut())} sx={{fontSize:"14px"}}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
@@ -231,30 +227,30 @@ export default function Header() {
             > 
               <Box display='flex' justifyContent= 'space-between'>
                 <Box display= 'flex' flexDirection= 'column' pr={2}>
-                  <MenuItem onClick={handleClose}>
-                    <GroupIcon sx={{ color: `grey.500`,marginRight:"10px" }} />
+                  <MenuItem onClick={handleClose} sx={{fontSize:"14px"}}>
+                    <GroupIcon sx={{ color: `grey.500`,marginRight:"10px" }} fontSize="small" />
                     CUSTOMERS
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("roles/list")}>
-                    <AddIcon sx={{ color: `grey.500`,fontSize:"20px"}} />
+                  <MenuItem onClick={() => navigate("roles/list")} sx={{fontSize:"14px"}}>
+                    <AddIcon sx={{ color: `grey.500`}} fontSize="small" />
                     Add User
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("customer/create")}>
-                    <AddIcon sx={{ color: `grey.500`,fontSize:"20px"}} />
+                  <MenuItem onClick={() => navigate("customer/create")} sx={{fontSize:"14px"}}>
+                    <AddIcon sx={{ color: `grey.500`}} fontSize="small" />
                     Add Customer
                   </MenuItem>
                 </Box>
                 <Box display= 'flex' flexDirection='column' pr={2}>
-                  <MenuItem onClick={handleClose}>
-                    <ShoppingCartIcon sx={{ color: `grey.500`,marginRight:"10px" }} />
+                  <MenuItem onClick={handleClose} sx={{fontSize:"14px"}}>
+                    <ShoppingCartIcon sx={{ color: `grey.500`,marginRight:"10px" }} fontSize="small" />
                     PURCHASES
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("invoice/create")}>
-                    <AddIcon sx={{ color: `grey.500`,fontSize:"20px"}} />
+                  <MenuItem onClick={() => navigate("invoice/create")} sx={{fontSize:"14px"}}>
+                    <AddIcon sx={{ color: `grey.500`}} fontSize="small" />
                     Add Invoice
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("reports")}>
-                    <AddIcon sx={{ color: `grey.500`,fontSize:"20px"}} />
+                  <MenuItem onClick={() => navigate("reports")} sx={{fontSize:"14px"}}>
+                    <AddIcon sx={{ color: `grey.500`}} fontSize="small" />
                     Add Report
                   </MenuItem>
                 </Box>

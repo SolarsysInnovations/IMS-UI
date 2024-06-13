@@ -98,36 +98,20 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     return (
         <Stack direction="row" spacing={1}>
             <StyledIconButton aria-label="" onClick={handleEditClick} disabled={showButton().disabled} sx={showButton().sx} >
-                <EditIcon sx={{
-                    '&:hover': {
-                        color: "primary.main", // use this color for active buttons
-                    }, color: `grey.500`, fontSize: "15px"
-                }} fontSize='small' />
+                <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </StyledIconButton>
             <StyledIconButton aria-label="" onClick={handleDeleteClick} disabled={showButton().disabled} sx={showButton().sx}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
+                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </StyledIconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
-                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
+                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
-            {/* {getCustomerLoading ? (<BackDropUi onClose={() => { }} open={true} />) :
-                ( */}
-            <DialogBoxUi
-                open={openModal}
-                content={
-                    <>
-                        {getCustomerLoading ? (<LoaderUi />) :
-                            (
-                                <>
-                                    <TableHeader headerName="Client Details" buttons={buttons} />
-                                    <CustomerDetails details={customerData || []} />
-                                </>
-                            )
-                        }
-                    </>
-                }
-                handleClose={handleModalClose}
-            />
+            <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
+                <TableHeader headerName="Customer Details" buttons={buttons} />
+                <Box sx={{ marginTop: "15px" }}>
+                    <CustomerDetails details={customerData || []} />
+                </Box>
+            </ModalUi>
         </Stack>
     );
 };

@@ -97,16 +97,16 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
     return (
         <Stack direction="row" spacing={1}>
             <IconButton aria-label="" onClick={handleEditClick}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
+                <EditIcon sx={{ color: `grey.500`, fontSize: "16px",'&:hover': {color: 'blue'} }} fontSize='small' />
             </IconButton>
             <IconButton aria-label="" onClick={handleDeleteClick}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
+                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px",'&:hover': {color: 'blue'} }} fontSize='small' />
             </IconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={() => {
                 handleOpenModal()
                 setInvoiceData(row)
             }}>
-                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
+                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
             </IconButton>
             <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
                 <InvoiceUi invoiceData={invoiceData}  isModalOpen={setIsModalOpen}/>

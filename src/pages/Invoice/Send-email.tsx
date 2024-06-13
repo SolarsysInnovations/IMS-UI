@@ -5,7 +5,7 @@ import { Form, Formik } from "formik";
 import { Box, Grid, Button, Typography, IconButton } from "@mui/material";
 import TextFieldUi from "../../components/ui/TextField";
 import ButtonSmallUi from "../../components/ui/ButtonSmall";
-import { useSendEmailNotifictionMutation } from "../../redux-store/invoice/invcoiceApi";
+import { useSendEmailNotificationMutation } from "../../redux-store/invoice/invcoiceApi";
 import { SendEmailInitialValueProps } from "../../types/types";
 import { sendEmailValidationSchema } from "../../constants/forms/validations/validationSchema";
 import { SendEmailInitialValue } from '../../constants/forms/formikInitialValues';
@@ -27,7 +27,7 @@ interface SendEmailProps {
 
 const SendEmail: React.FC<SendEmailProps> = ({ onClose }) => {
   const [sendEmailNotifiction, { isSuccess, isError }] =
-    useSendEmailNotifictionMutation();
+    useSendEmailNotificationMutation();
   const [emailValues, setemailValues] = useState(SendEmailInitialValue);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showfilename, setShowFileName] = useState<String[]>([]);

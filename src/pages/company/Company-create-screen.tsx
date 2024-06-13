@@ -2,8 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Box } from "@mui/material";
-import { useGetSettingQuery } from "../../redux-store/settings/settingsApi";
-import { useAddSettingMutation, useUpdateSettingMutation } from '../../redux-store/settings/settingsApi';
+import { useGetCompanyQuery} from "../../redux-store/company/companyApi";
+import { useAddCompanyMutation, useUpdateCompanyMutation } from '../../redux-store/company/companyApi';
 import { DynamicFormCreate } from "../../components/Form-renderer/Dynamic-form";
 import { companyValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { companyInitialValues } from '../../constants/forms/formikInitialValues';
@@ -16,22 +16,22 @@ import { CompanyFormProps } from '../../types/types';
 const CreateCompany = ({ companyValue }: CompanyFormProps) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = useState(false);
-    const [addCompany, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddSettingMutation();
-    const [updateCompany, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateSettingMutation();
-    const { data: settingsList, refetch } = useGetSettingQuery();
+    const [addCompany, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddCompanyMutation();
+    const [updateCompany, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateCompanyMutation();
+    const { data: settingsList, refetch } = useGetCompanyQuery();
 
     const initialValue = companyValue || companyInitialValues;
 
     const onSubmit = async (values: CompanyFormProps, actions: any) => {
         try {
             if (companyValue) {
-                await updateCompany({ id: companyValue.id, settings: values });
+                await updateCompany({ id: companyValue.id, company: values });
                 dispatch(clearData());
             } else {
                 await addCompany(values);
             }
             actions.resetForm();
-            toast.success("Updated successfully!"); // Show toast after updating fields
+            // toast.success("Saved successfully!"); // Show toast after updating fields
             handleClose(); // Close modal after saving
         } catch (error) {
             console.error("An error occurred during form submission:", error);
