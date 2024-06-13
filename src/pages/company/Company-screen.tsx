@@ -4,7 +4,7 @@ import CreateCompany from "./Company-create-screen";
 
 const CompanyScreen = () => {
     const companyValue = useSelector((state: any) => state.globalState.data);
-    console.log("com value",companyValue);
+    console.log("company value",companyValue);
     
     const [key, setKey] = useState<number>(0);
 

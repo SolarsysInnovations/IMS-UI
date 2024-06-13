@@ -3,24 +3,24 @@ import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
 
 
-const settingSlice = createSlice({
-    name: 'settings',
+const companySlice = createSlice({
+    name: 'company',
     initialState: {
         data: null,
         loading: false,
         error: null,
     },
     reducers: {
-        setSettingsData(state, action) {
+        setCompanyData(state, action) {
             state.data = action.payload;
         },
-        setSettingsLoading(state, action) {
+        setCompanyLoading(state, action) {
             state.loading = action.payload;
         },
-        setSettingsError(state, action) {
+        setCompanyError(state, action) {
             state.error = action.payload;
         },
-        clearSettingsData: (state) => {
+        clearCompanyData: (state) => {
             state.data = null;
             state.loading = false;
             state.error = null;
@@ -29,9 +29,9 @@ const settingSlice = createSlice({
 });
 
 
-export const settingsApi = apiSlice.injectEndpoints({
+export const companyApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getSetting: builder.query<any[], void>({
+        getCompany: builder.query<any[], void>({
             query: () => ({
                 url: API_URLS.settingsList,
                 method: 'POST',
@@ -41,27 +41,27 @@ export const settingsApi = apiSlice.injectEndpoints({
             keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
         }),
 
-        addSetting: builder.mutation<any, Partial<any>>({
-            query: (settings) => ({
+        addCompany: builder.mutation<any, Partial<any>>({
+            query: (company) => ({
                 url: `/setting/create`,
                 method: 'POST',
-                body: settings,
+                body: company,
             }),
         }),
-        updateSetting: builder.mutation<any, { id: number; settings: Partial<any> }>({
-            query: ({ id, settings }) => ({
+        updateCompany: builder.mutation<any, { id: number; company: Partial<any> }>({
+            query: ({ id, company }) => ({
                 url: `/setting/update/${id}`,
                 method: 'POST',
-                body: settings,
+                body: company,
             }),
         }),
-        getSettingById: builder.mutation<void, number>({
+        getCompanyById: builder.mutation<void, number>({
             query: (id) => ({
                  url: `setting/get`,
                 method: 'POST',
             }),
         }),
-        getSettingByIdMutation: builder.mutation<void, number>({
+        getCompanyByIdMutation: builder.mutation<void, number>({
             query: (id) => ({
                  url: `setting/get/${id}`,
                 method: 'POST',
@@ -69,6 +69,6 @@ export const settingsApi = apiSlice.injectEndpoints({
         }),
     }),
 });
-export const { setSettingsData, setSettingsLoading, setSettingsError, clearSettingsData } = settingSlice.actions;
-export { settingSlice };
-export const { useGetSettingQuery, useAddSettingMutation, useGetSettingByIdMutation, useUpdateSettingMutation } = settingsApi;
+export const { setCompanyData, setCompanyLoading, setCompanyError, clearCompanyData } = companySlice.actions;
+export { companySlice };
+export const { useGetCompanyQuery, useAddCompanyMutation, useGetCompanyByIdMutation, useUpdateCompanyMutation } = companyApi;

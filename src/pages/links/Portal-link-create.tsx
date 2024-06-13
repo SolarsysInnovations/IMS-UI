@@ -1,113 +1,68 @@
-import React, { useState, useEffect } from "react";
-import { Box, Typography, Card, CardContent, IconButton } from "@mui/material";
-import LanguageIcon from "@mui/icons-material/Language";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useDeleteLinkMutation, useGetLinkByIdMutation, useGetLinkQuery } from "../../redux-store/link/linkApi";
-import { AppDispatch } from "../../redux-store/store";
-import { useDispatch } from "react-redux";
-import { setLinkData } from "../../redux-store/link/linkApi";
+import React, { useEffect, useState } from "react";
+import { ToastContainer, toast} from "react-toastify";
+import { linkFields } from "../../constants/form-data/form-data-json";
+import { linkInitialValues } from "../../constants/forms/formikInitialValues";
+import { DynamicFormCreate } from "../../components/Form-renderer/Dynamic-form";
+import { linkValidationSchema } from "../../constants/forms/validations/validationSchema";
+import { useAddLinkMutation, useGetLinkQuery } from "../../redux-store/link/linkApi";
+import { LinkFormProps } from "../../types/types";
+import { useUpdateLinkMutation} from "../../redux-store/link/linkApi";
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
+import { clearData } from "../../redux-store/global/globalState";
 
-const PortalLinkScreen: React.FC = () => {
+const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
+  const [openModal, setOpenModal] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const [newLink, setNewLink] = useState({
-    url: "",
-    label: "",
-    description: "",
-  });
-  const { data: linkCreation, error, isLoading, refetch } = useGetLinkQuery();
-  const [deletedLink, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData }] = useDeleteLinkMutation<{ deletedService: any, error: any, isLoading: any, isSuccess: any, data: any }>();
-  const [getLink, {  }] = useGetLinkByIdMutation();
-  const [openModal, setOpenModal] = React.useState(false);
+  const [addLink, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddLinkMutation();
+  const [updateLink, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateLinkMutation();
+  const { data: linkList, refetch } = useGetLinkQuery();
 
-  // Function to fetch links when component mounts and after deletion
-  useEffect(() => {
-    refetch();
-  }, [deletedData]); // Refetch data after deletion
-
-  const handleEditClick = async (id: string) => {
-    console.log("values", id);
+  const initialValue = linkValue || linkInitialValues;
+  console.log("values", initialValue);
+  const handleClose = () => {
+    setOpenModal(false);
+};
+const updateFormValue = (setFieldValue: Function) => {
+  // Update form values
+};
+  const onSubmit = async (values: LinkFormProps, actions: any) => {
     try {
-      const response = await getLink(id);
-      if ('data' in response) {
-        const linksData = response.data;
-        console.log("data", linksData);
-        await dispatch(setLinkData(linksData));
-        setOpenModal(true);
-      } else {
-        console.error('Error response:', response.error);
-      }
+        if (linkValue) {
+            await updateLink({ id: linkValue.id, link: values });
+            dispatch(clearData());
+        } else {
+            await addLink(values);
+        }
+        actions.resetForm();
+        toast.success("Updated successfully!"); // Show toast after updating fields
+        handleClose(); // Close modal after saving
     } catch (error) {
-      console.error('Error handling edit click:', error);
+        console.error("An error occurred during form submission:", error);
+        toast.error("Error occurred while saving fields."); // Show error toast if submission fails
     }
+};
+useEffect(() => {
+  if (isAddSuccess || isUpdateSuccess) {
+      refetch(); // Refetch data after successful add or update
   }
-
-  const handleDeleteClick = async (id: any) => {
-    const confirmed = window.confirm("Are you sure you want to delete this link?");
-    if (confirmed) {
-      try {
-        await deletedLink(id);
-        // Data will be refetched automatically due to useEffect
-      } catch (error) {
-        console.error('Error deleting link:', error);
-      }
-    }
-  };
+}, [isAddSuccess, isUpdateSuccess, refetch]);
 
   return (
     <div>
-      <Box>
-        <Typography
-          mt={2}
-          sx={{ display: "flex", width: "1020px", flexWrap: "wrap" }}
-          variant="body1"
-        >
-          {linkCreation &&
-            linkCreation.map((link, index) => (
-              <Card
-                elevation={7}
-                sx={{ display: "flex", width: "180px", margin: "10px" }}
-                key={index}
-              >
-                <CardContent>
-                  <Typography
-                    variant="caption"
-                    sx={{ display: "flex", width: "300px" }}
-                  >
-                    <Box sx={{ alignItems: "center", display: "flex" }}>
-                      <LanguageIcon
-                        style={{ color: "blue", marginRight: "2px" }}
-                      />
-                      <a href={link.url}>{link.label}</a>
-                      <Box
-                        sx={{
-                          marginLeft: "auto",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <IconButton
-                          style={{ color: "blue", fontSize: "inherit" }}
-                          onClick={() => handleEditClick(link.id)}
-                        >
-                          <EditIcon style={{ fontSize: "inherit" }} />
-                        </IconButton>
-                        <IconButton
-                          style={{ color: "blue", fontSize: "inherit" }}
-                          onClick={() => handleDeleteClick(link.id)}
-                        >
-                          <DeleteIcon style={{ fontSize: "inherit" }} />
-                        </IconButton>
-                      </Box>
-                    </Box>
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
-        </Typography>
-      </Box>
+      <ToastContainer />
+      <DynamicFormCreate
+        headerName="New Link"
+        updateFormValue={updateFormValue}
+        showTable={true}
+        fields={linkFields}
+        initialValues={initialValue || []}
+        validationSchema={linkValidationSchema}
+        onSubmit={onSubmit}
+        // buttons={[{ label: "Save", onClick: onSubmit }]}
+      />
     </div>
   );
 };
 
-export default PortalLinkScreen;
+export default PortalLinkCreate;
