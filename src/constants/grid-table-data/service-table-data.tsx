@@ -83,10 +83,10 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     return (
         <Stack direction="row" spacing={1}>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
+                <EditIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
             </IconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
+                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
             </IconButton>
             {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />

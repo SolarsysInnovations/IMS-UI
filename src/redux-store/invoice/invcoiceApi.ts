@@ -61,7 +61,7 @@ export const invoiceApi = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
-        sendEmailNotifiction: builder.mutation<any, Partial<FormData>>({
+        sendEmailNotification: builder.mutation<any, Partial<FormData>>({
             query: (emailData) => ({
                 url: "https://ims-backend-9ghn.onrender.com/sendPDFByEmail", //API_URLS.sendEmail,
                 method: "POST",
@@ -71,4 +71,4 @@ export const invoiceApi = apiSlice.injectEndpoints({
     }),
 });
 
-export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation, useInvoiceGetByIdMutation, useSendEmailNotifictionMutation } = invoiceApi;
+export const { useGetInvoiceQuery, useAddInvoiceMutation, useUpdateInvoiceMutation, useDeleteInvoiceMutation, useInvoiceGetByIdMutation, useSendEmailNotificationMutation } = invoiceApi;
