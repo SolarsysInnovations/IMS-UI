@@ -7,14 +7,18 @@ import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices
 import TaskIcon from '@mui/icons-material/Task';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
+import Dashboard from "../pages/Dashboard/Dashboard-screen";
+
 export const sidebarTwo = [
 
     {
         id: 1,
         title: "Dashboard",
         path: "/dashboard",
+
         icon: Home,
-        isParent: false
+        isParent: false,
+        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
     },
     {
         id: 2,
@@ -23,8 +27,10 @@ export const sidebarTwo = [
         icon: GroupIcon,
         isParent: true,
         subItems: [
-            { title: "Create Customer", path: "/customer/create" },
-        ]
+            { id: 1, title: "Create Customer", path: "/customer/create" },
+        ],
+        allowedRoles: ['SUPERADMIN', 'ADMIN',]
+
     },
     {
         id: 3,
@@ -33,8 +39,10 @@ export const sidebarTwo = [
         icon: ReceiptIcon,
         isParent: true,
         subItems: [
-            { title: "Create", path: "/invoice/create" },
-        ]
+            { id: 1, title: "Create", path: "/invoice/create" },
+        ],
+        allowedRoles: ['SUPERADMIN', 'ADMIN', "APPROVER"]
+
     },
     {
         id: 4,
@@ -45,13 +53,17 @@ export const sidebarTwo = [
         // subItems: [
         //     { title: "Create Services", path: "/service/create" },
         // ]
+        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
+
     },
     {
         id: 5,
         title: "Reports",
         path: "/reports",
         icon: TaskIcon,
-        isParent: false
+        isParent: false,
+        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
+
     },
     {
         id: 6,
@@ -59,41 +71,53 @@ export const sidebarTwo = [
         path: "/roles/list",
         icon: GroupsIcon,
         isParent: false,
+        allowedRoles: ['SUPERADMIN', 'ADMIN',]
+
     },
     {
         id: 7,
         title: "Settings",
         path: "/settings",
         icon: SettingsIcon,
-        isParent: false
+        isParent: false,
+        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
+
     },
     {
         id: 8,
         title: "Demo",
         path: "/demo",
         icon: Home,
-        isParent: false
+        isParent: false,
+        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
+
     },
     {
         id: 9,
         title: "DemoTwo",
         path: "/demo-two",
         icon: Home,
-        isParent: false
+        isParent: false,
+        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
+
     },
     {
         id: 10,
         title: "Component",
         path: "/components",
         icon: Home,
-        isParent: false
+        isParent: false,
+        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
+
     },
     {
         id: 11,
         title: "DynamicForm",
         path: "/dynamicForm",
         icon: Home,
-        isParent: false
+        isParent: false,
+        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
+
     },
 
 ];

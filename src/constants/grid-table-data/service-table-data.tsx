@@ -109,13 +109,13 @@ export const columns: GridColDef[] = [
         editable: false,
         renderCell: (params: any) => <MyCellRenderer id={params.row?.id} />,
     },
-    {
-        field: 'id',
-        headerName: 'id',
-        width: 200,
-        editable: true,
+    // {
+    //     field: 'id',
+    //     headerName: 'id',
+    //     width: 200,
+    //     editable: true,
 
-    },
+    // },
     {
         field: 'serviceAccountingCode',
         headerName: 'Service Code',

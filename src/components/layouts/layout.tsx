@@ -3,9 +3,6 @@ import { styled } from '@mui/material/styles';
 import MainLayout from './SideBar';
 
 
-
-
-
 export const Layout = ({ children }: any) => {
     return (
         <MainLayout  >

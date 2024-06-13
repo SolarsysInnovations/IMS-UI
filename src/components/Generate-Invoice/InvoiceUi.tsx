@@ -208,7 +208,6 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                     <ButtonSmallUi label="Email" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); }} />
                 </Grid>
             </Grid>
-
             <DialogBoxUi
                 open={openemaildialogBox} // Set open to true to display the dialog initially
                 // title="Custom Dialog Title"

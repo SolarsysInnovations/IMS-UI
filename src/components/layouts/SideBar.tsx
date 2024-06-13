@@ -20,6 +20,9 @@ import { Home, StarBorder } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { sidebarTwo } from '../../constants/sidebar-data';
+import { selectUserRole } from '../../redux-store/auth/authSlice';
+import { useSelector } from 'react-redux';
+
 
 const drawerWidth = 250;
 
@@ -83,6 +86,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [role, setRole] = React.useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const userRole = useSelector(selectUserRole);
 
   const [open, setOpen] = React.useState(true);
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
@@ -104,10 +108,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
     setActiveItem(location.pathname)
   }, [location.pathname]);
 
-   React.useEffect(() => {
+  React.useEffect(() => {
     const userRole = localStorage.getItem("userRole");
     setRole(userRole);
   }, []);
+
+  const isActive = (path: any) => location.pathname.startsWith(path);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -130,20 +136,18 @@ export default function MainLayout({ children }: MainLayoutProps) {
           disablePadding={true} sx={{ mt: 1, }}
         >
           <>
-          
+
             {sidebarTwo.map((item: any, index: number) => {
-              if ((item && item.title === "Roles") && (role && role !== "SUPERADMIN")) {
-                return null;
-              } else {
+              if (!item.allowedRoles || (userRole && item.allowedRoles.includes(userRole))) {
                 return (
-                <React.Fragment key={item.id}>
+                  <React.Fragment key={item.id}>
                     <ListItemButton
                       sx={{
                         width: "200px",
                         "&:hover": {
                           backgroundColor: 'rgba(255, 255, 255, 0.067)'
                         },
-                        backgroundColor: activeItem === item.path ? "rgba(255, 255, 255, 0.067) " : "",
+                        backgroundColor: isActive(item.path) ? "rgba(255, 255, 255, 0.067) " : "",
                         paddingTop: "2px",
                         paddingBottom: "2px",
                         marginTop: "10px",
@@ -162,7 +166,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                         {React.createElement(item.icon, {
                           sx: {
                             width: "22px",
-                            color: activeItem === item.path ? 'primary.main' : 'primary.light'
+                            color: isActive(item.path) ? 'primary.main' : 'primary.light'
                           }
                         })}
                       </ListItemIcon>
@@ -215,10 +219,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
                         </List>
                       </Collapse>
                     )}
-                </React.Fragment>);
+                  </React.Fragment>);
               }
-              
-            })}
+            }
+            )}
           </>
         </List>
         {/*  <Divider /> */}

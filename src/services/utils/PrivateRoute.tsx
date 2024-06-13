@@ -4,12 +4,33 @@ import { Layout } from '../../components/layouts/layout';
 import useAuthentication from '../../hooks/useAuthentication';
 import { selectCurrentToken } from '../../redux-store/auth/authSlice';
 import { useSelector } from 'react-redux';
+import { selectUserRole } from '../../redux-store/auth/authSlice';
+import MainLayout from '../../components/layouts/SideBar';
 
-const PrivateRoute = () => {
+
+interface RoleBasedRouteProps {
+    allowedRoles: string[];
+}
+
+const RoleBasedRoute = ({ allowedRoles }: RoleBasedRouteProps) => {
+
+    const userRole = useSelector(selectUserRole);
+    const location = useLocation();
+    console.log(userRole);
     const token = useSelector(selectCurrentToken)
-    const location = useLocation()
 
-    return token ? <Layout> <Outlet /> </Layout> : <Navigate to="/login" />;
+    if (!token) {
+        return <Navigate to="/login" state={{ from: location }} replace />;
+    }
+    if (allowedRoles && !allowedRoles.includes(userRole!)) {
+        return <Navigate to="/unauthorized" state={{ from: location }} replace />;
+    }
+
+    return (
+        <MainLayout>
+            <Outlet />
+        </MainLayout>
+    );
 };
 
-export default PrivateRoute;
+export default RoleBasedRoute;
