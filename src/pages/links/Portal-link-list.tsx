@@ -102,7 +102,7 @@ const PortalLinkList: React.FC = () => {
                   >
                     <Box sx={{ alignItems: "center", display: "flex" }}>
                       <LanguageIcon
-                        style={{ color: "blue", marginRight: "2px" }}
+                        style={{ color: "blue", marginLeft: "-10px" }}
                       />
                       <a href={link.url}>{link.label}</a>
                       <Box

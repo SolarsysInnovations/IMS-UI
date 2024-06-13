@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  useAddSettingMutation,
-  useGetSettingQuery,
-  useGetSettingByIdMutation,
-} from "../../redux-store/settings/settingsApi";
+  useAddCompanyMutation,
+  useGetCompanyQuery,
+  useGetCompanyByIdMutation,
+} from "../../redux-store/company/companyApi";
 import { ToastContainer } from "react-toastify";
 import { Box, Grid } from "@mui/material";
 import TableHeader from "../../components/layouts/TableHeader";
@@ -13,7 +13,6 @@ import { AppDispatch } from "../../redux-store/store";
 import usePathname from "../../hooks/usePathname";
 import { useNavigate } from "react-router-dom";
 import { setData } from "../../redux-store/global/globalState";
-import ModalUi from "../../components/ui/ModalUi";
 import CompanyScreen from "./Company-screen";
 import DialogBoxUi from "../../components/ui/DialogBox";
 
@@ -22,18 +21,15 @@ const CompanyDetailsScreen: React.FC = () => {
   const navigate = useNavigate();
   const pathname = usePathname();
   const [addSetting, { isLoading, isSuccess, isError, error }] =
-    useAddSettingMutation();
+    useAddCompanyMutation();
   const { data: companyData, refetch: refetchCompanyData } =
-    useGetSettingQuery();
+    useGetCompanyQuery();
   const [
     getData,
     { data: customerData, isSuccess: C_success, isError: C_error },
-  ] = useGetSettingByIdMutation<{ data: any; isSuccess: any; isError: any }>();
+  ] = useGetCompanyByIdMutation<{ data: any; isSuccess: any; isError: any }>();
   const [openModal, setOpenModal] = React.useState(false);
-  const companyValue = useSelector((state: any) => state.globalState.data);
-  const [key, setKey] = useState<number>(0);
   const [companyDetails, setCompanyDetails] = useState<any>();
-  const { refetch } = useGetSettingQuery();
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
 
   console.log("company details", companyDetails);
