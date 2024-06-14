@@ -23,7 +23,6 @@ import { sidebarTwo } from '../../constants/sidebar-data';
 import { selectUserRole } from '../../redux-store/auth/authSlice';
 import { useSelector } from 'react-redux';
 
-
 const drawerWidth = 250;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -137,7 +136,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         >
           <>
 
-            {sidebarTwo.map((item: any, index: number) => {
+            {sidebarTwo?.map((item: any, index: number) => {
               if (!item.allowedRoles || (userRole && item.allowedRoles.includes(userRole))) {
                 return (
                   <React.Fragment key={item.id}>

@@ -8,6 +8,37 @@ import TaskIcon from '@mui/icons-material/Task';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Dashboard from "../pages/Dashboard/Dashboard-screen";
+import Login from "../pages/Login-screen";
+import Unauthorized from "../unauthorized";
+import { Navigate } from "react-router-dom";
+import Reportscreen from "../pages/reports/Reportscreen";
+import ArAgingscreen from "../pages/reports/Reports-ar-aging";
+import Reportsinvoice from "../pages/reports/Reports-invoice";
+import SettingScreen from "../pages/settings/settings";
+import CustomerList from "../pages/customer/Customer-list-screen";
+import CustomerEdit from "../pages/customer/Customer-edit-screen";
+import CustomerCreate from "../pages/customer/Customer-create-screen";
+import CreateInvoice from "../pages/Invoice/Invoice-create-screen";
+import InvoiceList from "../pages/Invoice/Invoice-list-screen";
+import ServicesList from "../pages/service/service-list-screen";
+import CreateServices from "../pages/service/create-service-screen";
+import ServiceEditScreen from "../pages/service/service-edit-screen";
+import RolesList from "../pages/roles/Roles-list-screen";
+import { admins, allRoles } from "./data";
+
+
+
+type SidebarItem = {
+    id: number;
+    title: string;
+    path: string;
+    icon: React.ElementType;
+    isParent: boolean;
+    allowedRoles: string[];
+    element: JSX.Element;
+    subItems?: SidebarItem[];
+};
+
 
 export const sidebarTwo = [
 
@@ -15,10 +46,10 @@ export const sidebarTwo = [
         id: 1,
         title: "Dashboard",
         path: "/dashboard",
-
+        element: <Dashboard />,
         icon: Home,
         isParent: false,
-        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
+        allowedRoles: [...allRoles]
     },
     {
         id: 2,
@@ -29,8 +60,7 @@ export const sidebarTwo = [
         subItems: [
             { id: 1, title: "Create Customer", path: "/customer/create" },
         ],
-        allowedRoles: ['SUPERADMIN', 'ADMIN',]
-
+        allowedRoles: [...allRoles]
     },
     {
         id: 3,
@@ -41,8 +71,7 @@ export const sidebarTwo = [
         subItems: [
             { id: 1, title: "Create", path: "/invoice/create" },
         ],
-        allowedRoles: ['SUPERADMIN', 'ADMIN', "APPROVER"]
-
+        allowedRoles: [...allRoles]
     },
     {
         id: 4,
@@ -53,8 +82,7 @@ export const sidebarTwo = [
         // subItems: [
         //     { title: "Create Services", path: "/service/create" },
         // ]
-        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
-
+        allowedRoles: [...admins]
     },
     {
         id: 5,
@@ -62,8 +90,7 @@ export const sidebarTwo = [
         path: "/reports",
         icon: TaskIcon,
         isParent: false,
-        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
-
+        allowedRoles: [...admins]
     },
     {
         id: 6,
@@ -71,8 +98,7 @@ export const sidebarTwo = [
         path: "/roles/list",
         icon: GroupsIcon,
         isParent: false,
-        allowedRoles: ['SUPERADMIN', 'ADMIN',]
-
+        allowedRoles: [...admins]
     },
     {
         id: 7,
@@ -80,8 +106,7 @@ export const sidebarTwo = [
         path: "/settings",
         icon: SettingsIcon,
         isParent: false,
-        allowedRoles: ['SUPERADMIN', 'ADMIN', 'USER', 'APPROVER']
-
+        allowedRoles: [...allRoles]
     },
     {
         id: 8,
@@ -121,3 +146,4 @@ export const sidebarTwo = [
     },
 
 ];
+

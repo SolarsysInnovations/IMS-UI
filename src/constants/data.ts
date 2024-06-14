@@ -1,10 +1,4 @@
-interface TabData {
-    value: string,
-    label: string,
-}
-const tabs: TabData[] = [
-    { value: 'userName', label: 'User Name' },
-    { value: 'phoneNumber', label: 'phone Number' },
-];
+import { Roles } from "./Enums";
 
-export default tabs;
+export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
+export const admins = [Roles.SUPERADMIN, Roles.ADMIN];

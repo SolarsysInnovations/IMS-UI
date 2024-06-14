@@ -4,7 +4,6 @@ import ButtonUi from "../components/ui/Button";
 import Link from '@mui/material/Link';
 import palette from "../theme/create-pallet";
 import TabUi from "../components/ui/Tabs";
-import tabs from "../constants/data";
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
@@ -25,7 +24,6 @@ const ForgetPassword = () => {
         createPassword: Yup.string()
             .min(7)
             .required('Password is required'),
-
     });
 
     return (

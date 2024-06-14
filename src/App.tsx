@@ -20,26 +20,46 @@ import Settingscreen from "./pages/settings/settings";
 import RolesList from "./pages/roles/Roles-list-screen";
 import RoleBasedRoute from "./services/utils/PrivateRoute";
 import Unauthorized from "./unauthorized";
+import { Roles } from "./constants/Enums";
+import { admins, allRoles } from "./constants/data";
+
+
 
 const routesConfig = [
+
+  // * -------- login ---------
   { path: "/login", element: <Login />, allowedRoles: [] },
   { path: "/unauthorized", element: <Unauthorized />, allowedRoles: [] },
-  { path: "/", element: <Navigate to="/dashboard" />, allowedRoles: ["ADMIN", "USER", "APPROVER"] },
-  { path: "/dashboard", element: <Dashboard />, allowedRoles: ["ADMIN", "USER", "APPROVER"] },
-  { path: "/reports", element: <Reportscreen />, allowedRoles: ["ADMIN", "USER", "APPROVER"] },
-  { path: "/reports/araging", element: <ArAgingscreen />, allowedRoles: ["ADMIN", "USER", "APPROVER"] },
-  { path: "/reports/invoice", element: <Reportsinvoice />, allowedRoles: ["ADMIN", "USER", "APPROVER"] },
-  { path: "/settings", element: <Settingscreen />, allowedRoles: ["ADMIN", "USER", "APPROVER"] },
-  { path: "/customer-list", element: <CustomerList />, allowedRoles: ["ADMIN"] },
-  { path: "/customer/edit/:id", element: <CustomerEdit />, allowedRoles: ["ADMIN"] },
-  { path: "/customer/create", element: <CustomerCreate />, allowedRoles: ["ADMIN"] },
-  { path: "/invoice/list", element: <InvoiceList />, allowedRoles: ["ADMIN", "APPROVER"] },
-  { path: "/invoice/edit/:id", element: <CreateInvoice />, allowedRoles: ["ADMIN", "APPROVER"] },
-  { path: "/invoice/create", element: <CreateInvoice />, allowedRoles: ["ADMIN"] },
-  { path: "/services/list", element: <ServicesList />, allowedRoles: ["ADMIN"] },
-  { path: "/service/create", element: <CreateServices />, allowedRoles: ["ADMIN"] },
-  { path: "/service/edit/:id", element: <ServiceEditScreen />, allowedRoles: ["ADMIN"] },
-  { path: "/roles/list", element: <RolesList />, allowedRoles: ["ADMIN", "USER", "APPROVER"] },
+  { path: "/", element: <Navigate to="/dashboard" />, allowedRoles: [...allRoles] },
+
+  // * -------- dashboard ---------
+  { path: "/dashboard", element: <Dashboard />, allowedRoles: [...allRoles] },
+
+  // * -------- reports ---------
+  { path: "/reports", element: <Reportscreen />, allowedRoles: [...allRoles] },
+  { path: "/reports/araging", element: <ArAgingscreen />, allowedRoles: [...allRoles] },
+  { path: "/reports/invoice", element: <Reportsinvoice />, allowedRoles: [...allRoles] },
+
+  // * ---------- settings -----------
+  { path: "/settings", element: <Settingscreen />, allowedRoles: [...allRoles] },
+
+  // * ----------- customer ------------
+  { path: "/customer-list", element: <CustomerList />, allowedRoles: [...allRoles] },
+  { path: "/customer/edit/:id", element: <CustomerEdit />, allowedRoles: [...allRoles] },
+  { path: "/customer/create", element: <CustomerCreate />, allowedRoles: [...allRoles] },
+
+  // * ----------- invoice ------------
+  { path: "/invoice/list", element: <InvoiceList />, allowedRoles: [...allRoles] },
+  { path: "/invoice/edit/:id", element: <CreateInvoice />, allowedRoles: [...allRoles] },
+  { path: "/invoice/create", element: <CreateInvoice />, allowedRoles: [...allRoles] },
+
+  // * --------- service -----------
+  { path: "/services/list", element: <ServicesList />, allowedRoles: [...admins] },
+  { path: "/service/create", element: <CreateServices />, allowedRoles: [...admins] },
+  { path: "/service/edit/:id", element: <ServiceEditScreen />, allowedRoles: [...admins] },
+
+  // * -------- roles ---------
+  { path: "/roles/list", element: <RolesList />, allowedRoles: [...admins] },
 ];
 
 function App() {
