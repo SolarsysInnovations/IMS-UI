@@ -15,24 +15,35 @@ const ServiceEditScreen: React.FC = () => {
     const [updateService, { isLoading, isSuccess, isError, error }] = useUpdateServiceMutation();
     const serviceStateDetails = useSelector((state: any) => state.serviceState.data);
 
+    useEffect(() => {
+        console.log("Service State Details:", serviceStateDetails); // Check what is in serviceStateDetails
+    }, [serviceStateDetails]);
+
     const navigate = useNavigate();
     const onSubmit = async (values: any, actions: any) => {
         try {
-            const id: number = values?._id
-            await updateService({
-                id: id,
-                service: values,
-            });
-            actions.resetForm();
-            // setserviceDetails();
+            const id = values.id;
+            console.log("id", id); // Ensure id is correctly retrieved
+            if (id !== undefined) {
+                await updateService({
+                    id: id,
+                    service: values,
+                });
+                actions.resetForm();
+            } else {
+                console.error("ID is undefined");
+            }
         } catch (error) {
             console.log(error);
         }
     };
 
-    useSuccessToast({
-        isSuccess, message: "successfully edited the service",
-    });
+    // useSuccessToast({
+    //     isSuccess, message: "successfully edited the service",
+    //     navigate: () => {
+    //         navigate("/services/list");
+    //     }
+    // });
 
     return (
         <div>
@@ -42,14 +53,13 @@ const ServiceEditScreen: React.FC = () => {
                     headerName='Edit Service'
                     showTable={true}
                     fields={serviceFields}
-                    initialValues={serviceStateDetails || []}
+                    initialValues={serviceStateDetails || {}} // Ensure to default to an empty object
                     validationSchema={serviceValidationSchema}
                     onSubmit={onSubmit}
                 />
             )}
         </div>
-
     );
-
 };
 export default ServiceEditScreen;
+
