@@ -30,7 +30,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     const role = localStorage.getItem("userRole");
     const buttons = [];
     if (role != "APPROVER" && role != "ENDUSER") {
-        buttons.push({ label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) })
+        buttons.push({ label: 'Edit', icon: Add, onClick: () => handleEditClick() })
     }
 
     function showButton() {

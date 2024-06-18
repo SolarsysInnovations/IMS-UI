@@ -10,6 +10,8 @@ import { LocalStorageKeys, useLocalStorage } from '../../hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useSuccessToast from '../../hooks/useToast';
+import TableHeader from '../../components/layouts/TableHeader';
+import { Add } from '@mui/icons-material';
 
 const CustomerEdit: React.FC = () => {
     const [updateCustomer, { isLoading, isSuccess, isError, error }] = useUpdateCustomerMutation();
@@ -37,13 +39,23 @@ const CustomerEdit: React.FC = () => {
         }
     });
 
+    const pathname = "Customer Edit"
+    const buttons = [
+            { label: 'Back', icon: Add, onClick: () => navigate(-1) },
+            { label: 'Save', icon: Add,onClick: () => {
+            // Trigger form submission programmatically
+            document.querySelector('form')?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        }}
+        ];
+
     return (
         <div>
             {/* Use DynamicCustomerCreate with the required props */}
             <ToastContainer />
+            <TableHeader headerName={pathname} buttons={buttons} />
             {customerStateDetails && (
                 <DynamicFormCreate
-                    showTable={true}
+                    showTable={false}
                     fields={customerFields}
                     initialValues={customerStateDetails}
                     validationSchema={customerValidationSchema}
