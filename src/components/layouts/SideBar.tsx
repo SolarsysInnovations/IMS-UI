@@ -16,12 +16,11 @@ import { capitalize } from '../../services/utils/capitalization';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Collapse, ListSubheader } from '@mui/material';
 import Header from './Header';
-import { Home, StarBorder } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { sidebarTwo } from '../../constants/sidebar-data';
 import { selectUserRole } from '../../redux-store/auth/authSlice';
 import { useSelector } from 'react-redux';
+import { sidebarTwo } from '../../constants/data';
 
 const drawerWidth = 250;
 
@@ -135,7 +134,6 @@ export default function MainLayout({ children }: MainLayoutProps) {
           disablePadding={true} sx={{ mt: 1, }}
         >
           <>
-
             {sidebarTwo?.map((item: any, index: number) => {
               if (!item.allowedRoles || (userRole && item.allowedRoles.includes(userRole))) {
                 return (

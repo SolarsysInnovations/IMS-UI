@@ -4,7 +4,7 @@ import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import ToastUi from '../../components/ui/ToastifyUi';
 import { DownloadButtonRenderer, MyCellRenderer } from '../../constants/grid-table-data/invoice/invoice-table-data';
@@ -13,10 +13,13 @@ import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { GridColDef } from '@mui/x-data-grid';
 import { GridRenderCellParams } from '@mui/x-data-grid';
 import { useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
-
+import { selectUserRole } from '../../redux-store/auth/authSlice';
+import { Roles } from '../../constants/Enums';
 const invoiceOptions = ["DRAFT", "PENDING", "APPROVED", "PAID", "OVERDUE", "DELETE", "RETURNED",]
 
 const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
+
+
     const [status, setStatus] = useState(params.value);
     const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
     const { data: invoiceList, error, isLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
@@ -65,6 +68,8 @@ const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
 
 const InvoiceList = () => {
     const { data: invoiceList, error, isLoading, refetch } = useGetInvoiceQuery();
+    const userRole = useSelector(selectUserRole);
+    console.log(userRole);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const pathname = usePathname();
@@ -104,17 +109,7 @@ const InvoiceList = () => {
             width: 140,
             editable: false,
         },
-        {
-            field: 'invoiceStatus',
-            headerName: 'Invoice Status',
-            width: 120,
-            editable: true,
-            type: "singleSelect",
-            valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
-            renderCell: (params: GridRenderCellParams) => (
-                <InvoiceStatusCell params={params} />
-            ),
-        },
+
         // {
         //     field: '',
         //     headerName: '',
@@ -134,6 +129,31 @@ const InvoiceList = () => {
         //     renderCell: (params: any) => <DownloadButtonRenderer row={params.row} />,
         // },
     ];
+
+    if (userRole === Roles.ADMIN || Roles.APPROVER || Roles.SUPERADMIN) {
+        columns.push(
+            {
+                field: 'invoiceStatus',
+                headerName: 'Invoice Status',
+                width: 120,
+                editable: true,
+                type: "singleSelect",
+                valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
+                renderCell: (params: GridRenderCellParams) => (
+                    <InvoiceStatusCell params={params} />
+                ),
+            },
+        )
+    } else {
+        columns.push(
+            {
+                field: 'invoiceStatus',
+                headerName: 'Invoice Status',
+                width: 150,
+                editable: false,
+            },
+        )
+    }
 
     return (
         <>
