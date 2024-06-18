@@ -1,11 +1,11 @@
-import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
+import { API_URLS } from '../../constants/api-urls';
 import { apiSlice } from '../api/apiSlice';
 
 export const dashboardApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getDashboard: builder.query<any[], void>({
             query: () => ({
-                url: API_URLS.dashboardGet,
+                url: API_URLS.dashboardList,
                 method: 'POST',
 
             }),

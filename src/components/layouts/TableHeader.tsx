@@ -1,7 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 import ButtonSmallUi from '../ui/ButtonSmall';
-import { ButtonProps } from '@mui/material/Button';
 
 interface TableHeaderProps {
     headerName?: string;

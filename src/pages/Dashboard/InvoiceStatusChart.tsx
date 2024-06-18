@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { Card, CardContent, Grid, Typography } from '@mui/material';
+import { Card, Grid, Typography } from '@mui/material';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 
 const InvoiceStatus = () => {

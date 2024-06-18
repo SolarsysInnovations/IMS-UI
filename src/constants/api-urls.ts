@@ -65,7 +65,7 @@ export enum ApiEndpoint {
     //Changepassword
     CHANGE_PASSWORD = "changePassword",
     //Dashboard
-    DASHBOARD_GET = "dashboardGet"
+    DASHBOARD_GET = "dashboardList"
 }
 
 export type ApiUrls = {
