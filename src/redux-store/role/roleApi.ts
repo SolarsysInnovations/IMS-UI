@@ -4,7 +4,6 @@ import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { ChangePasswordInitialValueProps, RoleInitialValueProps } from '../../types/types';
 import { string } from 'yup';
 
-
 const roleSlice = createSlice({
     name: 'role',
     initialState: {
@@ -25,7 +24,7 @@ const roleSlice = createSlice({
     },
 });
 
-const userName =localStorage.getItem("userName");
+const userName = localStorage.getItem("userName");
 
 export const roleApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -37,7 +36,6 @@ export const roleApi = apiSlice.injectEndpoints({
             // Set caching for 5 minutes (adjust the duration as needed)
             keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
         }),
-
         addRole: builder.mutation<any, Partial<any>>({
             query: (role) => ({
                 url: API_URLS.rolesCreate,
@@ -47,33 +45,33 @@ export const roleApi = apiSlice.injectEndpoints({
         }),
         deleteRole: builder.mutation<void, string>({
             query: (id) => ({
-                url: API_URLS.rolesDelete+`${id}`,
+                url: API_URLS.rolesDelete + `${id}`,
                 method: 'POST',
             }),
         }),
         getRoleById: builder.mutation<void, string>({
             query: (id) => ({
-                url: API_URLS.rolesGet+`${id}`,
+                url: API_URLS.rolesGet + `${id}`,
                 method: 'POST',
             }),
         }),
-        updateRole: builder.mutation<string, Partial<any>>({
-            query: (role) => ({
-                url: API_URLS.rolesUpdate+`${role.id}`,
+        updateRole: builder.mutation<any, { id: string; roles: Partial<any> }>({
+            query: ({ id, roles }) => ({
+                url: `role/update/${id}`,
                 method: 'POST',
-                body: role,
+                body: roles,
             }),
         }),
         rolesGetUser: builder.mutation<void, string>({
             query: (userName) => ({
-                url: API_URLS.rolesGetUser+`${userName}`,
+                url: API_URLS.rolesGetUser + `${userName}`,
                 method: 'POST',
                 body: userName,
             }),
         }),
-        changePassword: builder.mutation<any, { userName:string; values: Partial<any> }>({
+        changePassword: builder.mutation<any, { userName: string; values: Partial<any> }>({
             query: ({ userName, values }) => ({
-                url: API_URLS.changePassword+`${userName}`,
+                url: API_URLS.changePassword + `${userName}`,
                 method: 'POST',
                 body: values,
             }),
@@ -83,4 +81,4 @@ export const roleApi = apiSlice.injectEndpoints({
 
 export const { setRoleData, setRoleLoading, setRoleError } = roleSlice.actions;
 export { roleSlice };
-export const { useGetRoleQuery, useAddRoleMutation, useDeleteRoleMutation,useGetRoleByIdMutation,useUpdateRoleMutation,useChangePasswordMutation,useRolesGetUserMutation } = roleApi;
+export const { useGetRoleQuery, useAddRoleMutation, useDeleteRoleMutation, useGetRoleByIdMutation, useUpdateRoleMutation, useChangePasswordMutation, useRolesGetUserMutation } = roleApi;

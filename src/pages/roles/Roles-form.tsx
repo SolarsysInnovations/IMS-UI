@@ -20,7 +20,7 @@ interface RoleFormProps {
 }
 
 const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
-    const [addRole, {isSuccess,isError}] = useAddRoleMutation();
+    const [addRole, { isSuccess, isError }] = useAddRoleMutation();
     const [updateRole] = useUpdateRoleMutation();
     const [GetRoleById] = useGetRoleByIdMutation();
     const [initialValues, setInitialValues] = useState(RoleInitialValue);
@@ -39,11 +39,11 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
     const handleSubmit = async (values: RoleInitialValueProps, { setSubmitting, resetForm }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void }) => {
         try {
             if (roleId) {
-                await updateRole(values);
+                await updateRole({ id: values.id, roles: values });
                 toast.success("Role successfully updated", toastConfig);
             } else {
                 const formData = !roleId ? Object.fromEntries(Object.entries(values).filter(([key, value]) => key !== 'id')) : values;
-           
+
                 await addRole(formData);
                 toast.success("Role successfully created", toastConfig);
             }
@@ -57,15 +57,13 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
         }
     };
 
-    const buttons:any = [];
+    const buttons: any = [];
 
-    if (initialValues.id == "" ) {
+    if (initialValues.id == "") {
         buttons.push({ label: 'Save', icon: Add, onClick: () => handleSubmit })
     } else {
         buttons.push({ label: 'Update', icon: Add, onClick: () => handleSubmit })
     }
-
-    
 
     return (
         <Formik initialValues={initialValues} validationSchema={RoleValidationSchema} onSubmit={handleSubmit} enableReinitialize>

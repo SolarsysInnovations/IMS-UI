@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_LOCAL_URL } from '../../constants/api-urls';
-import { setCredentials } from '../auth/authSlice';
+import { logOut, setCredentials } from '../auth/authSlice';
 
 
 interface Token {
@@ -50,11 +50,11 @@ const baseQueryWithReauth = async (
             api.dispatch(setCredentials({ ...refreshResult.data, user } as Token));
             result = await baseQuery(args, api, extraOptions);
         }
-        // else {
-        //     // If refresh fails, log out the user
-        //     api.dispatch(logOut());
-        //     return refreshResult; // Return the refresh error response
-        // }
+        else {
+            // If refresh fails, log out the user
+            api.dispatch(logOut());
+            return refreshResult; // Return the refresh error response
+        }
     }
 
     return result; // Return the original query result

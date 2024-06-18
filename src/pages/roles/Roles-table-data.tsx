@@ -32,10 +32,10 @@ const RolesGridDataUi: React.FC<GridDataProps> = ({ showToolbar, columns, tableD
                 renderCell: (params: GridRenderCellParams) => (
                     <Stack direction="row" spacing={1}>
                         <IconButton onClick={() => handleEditButtonClick(params.id.toString())}>
-                            <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small'/>
+                            <EditIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small'/>
                         </IconButton>
                         <IconButton sx={{ padding: "2px" }} aria-label="" onClick={() => handleDeleteButtonClick(params.id.toString())}>
-                            <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
+                            <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
                         </IconButton>
                     </Stack>
                 ),

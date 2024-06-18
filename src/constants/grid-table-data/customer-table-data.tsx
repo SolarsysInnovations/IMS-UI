@@ -14,26 +14,37 @@ import { setCustomerData, setCustomerError, setCustomerLoading, useDeleteCustome
 import { toastConfig } from "../forms/config/toastConfig";
 import useSuccessToast from "../../hooks/useToast";
 import BlockIcon from '@mui/icons-material/Block';
+import { styled } from '@mui/system';
+import DialogBoxUi from "../../components/ui/DialogBox";
+import BackDropUi from "../../components/ui/BackdropUi";
+import LoaderUi from "../../components/ui/LoaderUi";
 
 const MyCellRenderer = ({ id, contactPersons }: any) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
     const [deleteCustomer, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteCustomerMutation<{ deletedCustomer: any, error: any, isLoading: any, isSuccess: any, data: any }>();
-    const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCustomerByIdMutation<{ data: any, isSuccess: any, isError: any }>();
+    const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error, isLoading: getCustomerLoading }] = useGetCustomerByIdMutation<{ data: any, isSuccess: any, isError: any, isLoading: any }>();
 
     const navigate = useNavigate();
     const role = localStorage.getItem("userRole");
     const buttons = [];
-    if (role != "APPROVER"  && role != "ENDUSER") {
+    if (role != "APPROVER" && role != "ENDUSER") {
         buttons.push({ label: 'Edit', icon: Add, onClick: () => navigate(`/customer/edit/${id}`) })
     }
 
-    function showButton(){
+    function showButton() {
         if (role === "APPROVER" || role === "ENDUSER") {
-            return true;
+            return {
+                disabled: true,
+                sx: {
+                    color: 'grey.500',
+                    cursor: 'not-allowed',
+                    pointerEvents: 'auto',
+                },
+            };
         }
-        return false;
+        return {};
     }
 
     const handleEditClick = async () => {
@@ -75,19 +86,28 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     };
     useSuccessToast({ isSuccess, message: "successfully deleted the new customer", })
 
+    const StyledIconButton = styled(IconButton)(({ theme }) => ({
+        padding: '3px',
+        '&.Mui-disabled': {
+            color: theme.palette.grey[500],
+            cursor: 'not-allowed',
+            pointerEvents: 'auto',
+        },
+    }));
+
     return (
         <Stack direction="row" spacing={1}>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick} disabled={showButton()}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
-            </IconButton>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick} disabled={showButton()}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
-            </IconButton>
+            <StyledIconButton aria-label="" onClick={handleEditClick} disabled={showButton().disabled} sx={showButton().sx} >
+                <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
+            </StyledIconButton>
+            <StyledIconButton aria-label="" onClick={handleDeleteClick} disabled={showButton().disabled} sx={showButton().sx}>
+                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
+            </StyledIconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
-                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
+                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
             <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
-                <TableHeader headerName="Client Details" buttons={buttons} />
+                <TableHeader headerName="Customer Details" buttons={buttons} />
                 <Box sx={{ marginTop: "15px" }}>
                     <CustomerDetails details={customerData || []} />
                 </Box>

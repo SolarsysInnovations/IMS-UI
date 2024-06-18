@@ -14,3 +14,9 @@ export enum FieldType {
     MultiSelect = "multiSelect",
 }
 
+export enum Roles {
+    SUPERADMIN = "SUPERADMIN",
+    ADMIN = "ADMIN",
+    APPROVER = "APPROVER",
+    ENDUSER = "ENDUSER"
+}

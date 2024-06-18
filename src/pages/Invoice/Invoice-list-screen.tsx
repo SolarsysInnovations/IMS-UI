@@ -15,6 +15,7 @@ import { GridRenderCellParams } from '@mui/x-data-grid';
 import { useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 
 const invoiceOptions = ["DRAFT", "PENDING", "APPROVED", "PAID", "OVERDUE", "DELETE", "RETURNED",]
+
 const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
     const [status, setStatus] = useState(params.value);
     const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();

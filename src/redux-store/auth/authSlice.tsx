@@ -17,9 +17,9 @@ interface User {
 // Retrieve token and refresh token from local storage
 const tokenFromStorage = localStorage.getItem('token');
 const refreshTokenFromStorage = localStorage.getItem('refresh');
-
+const userRoleFromStorage = localStorage.getItem("userRole");
 // Define the initial state
-const initialState: AuthState = { user: null, token: tokenFromStorage || null, refresh: refreshTokenFromStorage || null, userRole: null, userName: null };
+const initialState: AuthState = { user: null, token: tokenFromStorage || null, refresh: refreshTokenFromStorage || null, userRole: userRoleFromStorage || null, userName: null };
 
 // Create the authentication slice
 const authSlice = createSlice({
@@ -27,7 +27,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setCredentials: (state, action) => {
-            const { user, accessToken, refresh,userRole,userName } = action.payload;
+            const { user, accessToken, refresh, userRole, userName } = action.payload;
             state.user = user;
             state.token = accessToken;
             state.refresh = refresh;
@@ -68,3 +68,5 @@ export default authSlice.reducer;
 export const selectCurrentUser = (state: { auth: AuthState }) => state.auth.user;
 export const selectCurrentToken = (state: { auth: AuthState }) => state.auth.token;
 export const selectRefreshToken = (state: { auth: AuthState }) => state.auth.refresh;
+export const selectUserRole = (state: { auth: AuthState }): string | null => state.auth.userRole;
+
