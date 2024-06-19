@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useSuccessToast from '../../hooks/useToast';
 import { ToastContainer, toast } from 'react-toastify';
+import ToastUi from '../../components/ui/ToastifyUi';
 
 const ServiceEditScreen: React.FC = () => {
     const [updateService, { isLoading, isSuccess, isError, error }] = useUpdateServiceMutation();
@@ -18,21 +19,22 @@ const ServiceEditScreen: React.FC = () => {
     const navigate = useNavigate();
     const onSubmit = async (values: any, actions: any) => {
         try {
-            const id: number = values?._id
+            const id: number = values?.id
             await updateService({
                 id: id,
                 service: values,
             });
-            actions.resetForm();
+            toast.success("successfully edited the service", toastConfig);
+            // actions.resetForm();
             // setserviceDetails();
         } catch (error) {
             console.log(error);
         }
     };
 
-    useSuccessToast({
-        isSuccess, message: "successfully edited the service",
-    });
+    // useSuccessToast({
+    //     isSuccess, message: "successfully edited the service",
+    // });
 
     return (
         <div>
