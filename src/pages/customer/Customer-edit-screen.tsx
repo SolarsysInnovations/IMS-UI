@@ -25,7 +25,7 @@ const CustomerEdit: React.FC = () => {
                 customer: values,
             });
             actions.resetForm();
-            // setCustomerDetails("")
+
         } catch (error) {
             console.log(error);
         }
