@@ -135,7 +135,7 @@ const Login = () => {
                 </Stack>
                 <FormHelperText sx={{ mt: 1 }}><Link style={{ color: palette.primary.main, textDecoration: 'none' }} to="/forgetPassword" >Forget Password ?</Link></FormHelperText>
                 <Box sx={{ mt: 2 }}>
-                  <ButtonUi loading={isSubmitting} color="primary" label='Login' variant='contained' type='submit' />
+                  <ButtonUi fullWidth={true} loading={isSubmitting} color="primary" label='Login' variant='contained' type='submit' />
                 </Box>
               </Form>
             </div>

@@ -32,7 +32,7 @@ const ButtonUi: React.FC<ButtonProps> = ({
   onClick,
   size = "medium", // Default size
   sx,
-  type = "button", // Default type
+  type = "submit", // Default type
   fullWidth = false,
   component,
   hasBackground = true, // Default to true
@@ -40,9 +40,14 @@ const ButtonUi: React.FC<ButtonProps> = ({
 }) => {
   return (
     <LoadingButton
-      sx={{ padding: "10px 16px", ...sx }}
+      sx={{
+        "& .css-cstir9-MuiButton-startIcon>*:nth-of-type(1)": {
+          fontSize: "15px",
+        },
+        padding: "10px 16px", ...sx
+      }}
       onClick={onClick}
-      fullWidth
+      fullWidth={fullWidth}
       size={size}
       variant={variant}
       type={type}

@@ -229,7 +229,7 @@ const theme = createTheme({
           //   backgroundColor: palette.primary.dark,
           // },
           ':disabled': {
-            backgroundColor: "#bdbdbd"
+            backgroundColor: "#9da4ae8c"
           }
         },
 

@@ -130,7 +130,8 @@ const InvoiceList = () => {
         // },
     ];
 
-    if (userRole === Roles.ADMIN || Roles.APPROVER || Roles.SUPERADMIN) {
+
+    if (userRole === Roles.ADMIN || userRole === Roles.APPROVER || userRole === Roles.SUPERADMIN) {
         columns.push(
             {
                 field: 'invoiceStatus',
@@ -144,7 +145,7 @@ const InvoiceList = () => {
                 ),
             },
         )
-    } else {
+    } else if (userRole === Roles.ENDUSER) {
         columns.push(
             {
                 field: 'invoiceStatus',
@@ -154,6 +155,7 @@ const InvoiceList = () => {
             },
         )
     }
+
 
     return (
         <>
