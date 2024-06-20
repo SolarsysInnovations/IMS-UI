@@ -5,6 +5,8 @@ import { Grid } from '@mui/material'
 import InvoiceAmount from './InvoiceAmount'
 
 const Dashboard = () => {
+
+
     return (
         <Grid container spacing={2} px={0}>
             <Grid item xs={8}>
@@ -14,7 +16,6 @@ const Dashboard = () => {
                 <InvoiceStatus />
             </Grid>
         </Grid>
-
     )
 }
 

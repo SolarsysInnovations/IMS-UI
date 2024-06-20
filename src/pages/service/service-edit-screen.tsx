@@ -20,20 +20,28 @@ const ServiceEditScreen: React.FC = () => {
     const [showSuccessToast, setShowSuccessToast] = useState(false); 
 
 
+    useEffect(() => {
+        console.log("Service State Details:", serviceStateDetails); // Check what is in serviceStateDetails
+    }, [serviceStateDetails]);
+
     const navigate = useNavigate();
     const onSubmit = async (values: any, actions: any) => {
         try {
-            const id: number = values?.id
-            await updateService({
-                id: id,
-                service: values,
-            });
-             setShowSuccessToast(true);
+            const id = values.id;
+            console.log("id", id); // Ensure id is correctly retrieved
+            if (id !== undefined) {
+                await updateService({
+                    id: id,
+                    service: values,
+                });
+                actions.resetForm();
+                setShowSuccessToast(true);
              setTimeout(() => {
                 setShowSuccessToast(false);
              }, 2000);
-            // actions.resetForm();
-            // setserviceDetails();
+            } else {
+                console.error("ID is undefined");
+            }
         } catch (error) {
             console.log(error);
         }
@@ -53,14 +61,13 @@ const ServiceEditScreen: React.FC = () => {
                     headerName='Edit Service'
                     showTable={true}
                     fields={serviceFields}
-                    initialValues={serviceStateDetails || []}
+                    initialValues={serviceStateDetails || {}} // Ensure to default to an empty object
                     validationSchema={serviceValidationSchema}
                     onSubmit={onSubmit}
                 />
             )}
         </div>
-
     );
-
 };
 export default ServiceEditScreen;
+

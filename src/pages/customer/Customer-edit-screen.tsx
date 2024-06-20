@@ -32,7 +32,7 @@ const CustomerEdit: React.FC = () => {
                 navigate(-1);
             }, 1000);
             actions.resetForm();
-            // setCustomerDetails("")
+
         } catch (error) {
             console.log(error);
         }
