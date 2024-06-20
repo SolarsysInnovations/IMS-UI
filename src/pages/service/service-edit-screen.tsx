@@ -34,7 +34,7 @@ const ServiceEditScreen: React.FC = () => {
                     id: id,
                     service: values,
                 });
-                actions.resetForm();
+                // actions.resetForm();
                 setShowSuccessToast(true);
              setTimeout(() => {
                 setShowSuccessToast(false);

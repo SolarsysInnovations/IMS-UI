@@ -19,7 +19,7 @@ import ServiceEditScreen from "../../pages/service/service-edit-screen";
 
 const id = 1
 
-const MyCellRenderer = ({ id, contactPersons }: any) => {
+const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () => void }) => {
     // const [serviceDetails, setServiceDetails] = useLocalStorage(LocalStorageKeys.SERVICE_EDIT, null);
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
@@ -67,12 +67,12 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
             console.error('Error handling edit click:', error);
         }
     }
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         toast.success("successfully deleted the new service", toastConfig)
-    //     }
-    //     refetch();
-    // }, [isSuccess, refetch])
+    useEffect(() => {
+        if (isSuccess) {
+            onDeleteSuccess();
+        }
+        refetch();
+    }, [isSuccess,  onDeleteSuccess]);
 
     const handleDeleteClick = () => {
         const confirmed = window.confirm("Are you sure you want to delete this service?");
@@ -101,13 +101,14 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 };
 
 
-export const columns: GridColDef[] = [
+export const columns = (onDeleteSuccess: () => void): GridColDef[] => [
+
     {
         field: 'Action',
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} onDeleteSuccess={onDeleteSuccess}  />,
     },
     // {
     //     field: 'id',

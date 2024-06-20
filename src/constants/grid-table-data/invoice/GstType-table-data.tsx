@@ -8,7 +8,7 @@ import { useDeleteGstTypeMutation, useGetGstTypeQuery, useGstTypeGetByIdMutation
 import { ToastContainer, toast } from "react-toastify";
 import { setData, clearData } from "../../../redux-store/global/globalState";
 
-const MyCellRenderer = ({ id }: { id: any }) => {
+const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () => void }) => {
     const dispatch = useDispatch<AppDispatch>();
     const value = useSelector((state: any) => state.globalState.data)
 
@@ -40,10 +40,10 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
     useEffect(() => {
         if (deleteSuccess) {
-
+            onDeleteSuccess();
         }
         refetch();
-    }, [deleteSuccess, refetch]);
+    }, [deleteSuccess, onDeleteSuccess]);
 
     return (
         <Stack direction="row" spacing={1}>
@@ -57,7 +57,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
         </Stack>
     );
 };
-export const gstTypeColumns: GridColDef[] = [
+export const gstTypeColumns = (onDeleteSuccess: () => void): GridColDef[] => [
 
     {
         field: 'gstName',
@@ -76,6 +76,6 @@ export const gstTypeColumns: GridColDef[] = [
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} onDeleteSuccess={onDeleteSuccess} />,
     },
 ];

@@ -20,7 +20,7 @@ const TdsTaxList = () => {
     const { data: getTdsTax, error, isLoading,refetch } = useGetTdsTaxQuery();
     const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
 
-     const handleDeleteSuccess = () => {
+    const handleDeleteSuccess = () => {
         setShowDeleteSuccessToast(true);
         setTimeout(() => {
             setShowDeleteSuccessToast(false);
@@ -30,21 +30,14 @@ const TdsTaxList = () => {
     };
     return (
         <>
-            {/* <ToastUi autoClose={1000} /> */}
-             {showDeleteSuccessToast && (
+            {showDeleteSuccessToast && (
                 <SnackBarUi
-                    message="Successfully deleted the service"
+                    message="Successfully deleted the TdsTax"
                     severity= "success"
                     isSubmitting={true}
                 />
-                // <SuccessToast
-                //     isSuccess={deleteSuccess}
-                //     message="Successfully deleted the service"
-                //     refetch={refetch}
-                //     navigate={() => {}}
-                // />
             )}
-            <GridDataUi showToolbar={false} onDeleteSuccess={handleDeleteSuccess} columns={tdsTaxColumns} tableData={getTdsTax || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={false} onDeleteSuccess={handleDeleteSuccess} columns={tdsTaxColumns(handleDeleteSuccess)}  tableData={getTdsTax || []} checkboxSelection={false} />
         </>
     )
 }

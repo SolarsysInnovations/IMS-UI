@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import GridDataUi from '../../../components/GridTable/GridData'
 import TableHeader from '../../../components/layouts/TableHeader'
 import usePathname from '../../../hooks/usePathname'
@@ -10,16 +10,33 @@ import ToastUi from '../../../components/ui/ToastifyUi'
 import { useGetServiceQuery } from '../../../redux-store/service/serviceApi'
 import { useGetGstTypeQuery } from '../../../redux-store/invoice/gstTypeApi'
 import { gstTypeColumns } from '../../../constants/grid-table-data/invoice/GstType-table-data'
+import SnackBarUi from '../../../components/ui/Snackbar'
 
 
 
 const GstTypeList = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { data: gstTypeList, error, isLoading } = useGetGstTypeQuery();
+    const { data: gstTypeList, error, isLoading, refetch } = useGetGstTypeQuery();
+    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
+
+    const handleDeleteSuccess = () => {
+        setShowDeleteSuccessToast(true);
+        setTimeout(() => {
+            setShowDeleteSuccessToast(false);
+        }, 3000);
+         refetch();
+         
+    };
     return (
         <>
-            <ToastUi autoClose={1000} />
-            <GridDataUi showToolbar={false} columns={gstTypeColumns} tableData={gstTypeList || []} checkboxSelection={false} />
+            {showDeleteSuccessToast && (
+                <SnackBarUi
+                    message="Successfully deleted the GstType"
+                    severity= "success"
+                    isSubmitting={true}
+                />
+            )}
+            <GridDataUi showToolbar={false} onDeleteSuccess={handleDeleteSuccess} columns={gstTypeColumns(handleDeleteSuccess)} tableData={gstTypeList || []} checkboxSelection={false} />
         </>
     )
 }

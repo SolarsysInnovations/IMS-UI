@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import GridDataUi from '../../components/GridTable/GridData'
 import TableHeader from '../../components/layouts/TableHeader'
 import usePathname from '../../hooks/usePathname'
@@ -13,6 +13,7 @@ import ModalUi from '../../components/ui/ModalUi'
 import { Box } from '@mui/material'
 import ServiceCreate from './service-create-screen'
 import { ToastContainer } from 'react-toastify'
+import SnackBarUi from '../../components/ui/Snackbar'
 
 
 
@@ -28,6 +29,16 @@ const ServicesList = () => {
         { label: 'Create Service List', icon: Add, onClick: () => setOpenModal(true) },
     ];
 
+     const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
+
+    const handleDeleteSuccess = () => {
+        setShowDeleteSuccessToast(true);
+        setTimeout(() => {
+            setShowDeleteSuccessToast(false);
+        }, 3000);
+        refetch();
+    }
+
     const pathname = usePathname();
     const handleModalClose = () => {
         refetch()
@@ -39,8 +50,15 @@ const ServicesList = () => {
     }, [serviceStateDetails])
     return (
         <>
+            {showDeleteSuccessToast && (
+                <SnackBarUi
+                    message="Successfully deleted the service"
+                    severity= "success"
+                    isSubmitting={true}
+                />
+            )}
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} columns={columns} tableData={serviceList || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={columns(handleDeleteSuccess)} tableData={serviceList || []} checkboxSelection={false} />
             <ModalUi open={openModal} onClose={handleModalClose}>
                 <Box sx={{ marginTop: "15px" }}>
                     <ServiceCreate />

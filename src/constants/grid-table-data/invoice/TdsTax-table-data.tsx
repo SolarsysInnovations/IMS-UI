@@ -41,19 +41,15 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
         const confirmed = window.confirm("Are you sure you want to delete this gst type?");
         if (confirmed) {
             deleteTdsTax(id)
-            
         }
     };
 
     useEffect(() => {
         if (deleteSuccess) {
             onDeleteSuccess();
-            // setShowDeleteSuccessToast(true);
-            // refetch();
-            // toast.success("successfully deleted the gst type", toastConfig)
         }
         refetch();
-    }, [deleteSuccess,onDeleteSuccess]);
+    }, [deleteSuccess,  onDeleteSuccess]);
 
     return (
         <Stack direction="row" spacing={1}>
@@ -67,7 +63,8 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
         </Stack>
     );
 };
-export const tdsTaxColumns: GridColDef[] = [
+
+export const tdsTaxColumns = (onDeleteSuccess: () => void): GridColDef[] => [
 
     {
         field: 'taxName',
@@ -86,6 +83,6 @@ export const tdsTaxColumns: GridColDef[] = [
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row.id} onDeleteSuccess={params.onDeleteSuccess} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row.id} onDeleteSuccess={onDeleteSuccess} />,
     },
 ];
