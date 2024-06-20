@@ -89,7 +89,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
     };
     useEffect(() => {
         if (D_Success) {
-            toast.success("successfully deleted the invoice", toastConfig)
+            // toast.success("successfully deleted the invoice", toastConfig)
         }
         refetch();
     }, [D_Success]);

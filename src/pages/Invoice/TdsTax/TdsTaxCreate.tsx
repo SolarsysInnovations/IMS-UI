@@ -27,15 +27,16 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
     const initialValue = tdsTaxValue || tdsTaxInitialValue;
 
 
+
     const onSubmit = useMemo(() => async (values: TdsTaxProps, actions: any) => {
         try {
             if (tdsTaxValue) {
                 await updateTdsTax({ id: tdsTaxValue.id, tdsTaxData: values });
-                dispatch(clearData());
+                // dispatch(clearData());
             } else {
                 await addTdsTax(values);
             }
-            actions.resetForm();
+            actions.resetForm();            
         } catch (error) {
             console.error("An error occurred during form submission:", error);
         } finally {
@@ -46,8 +47,18 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
     useEffect(() => {
         if (isAddSuccess || isUpdateSuccess) {
             refetch();
+            
         }
     }, [isAddSuccess, isUpdateSuccess]);
+
+    useEffect(() => {
+        if (isUpdateSuccess) {
+            setTimeout(() => {
+                dispatch(clearData());
+            }, 1000);   
+            
+        }
+    }, [isUpdateSuccess, dispatch]);
     return (
         <div>
             {/* Use DynamicServiceCreate with the required props */}

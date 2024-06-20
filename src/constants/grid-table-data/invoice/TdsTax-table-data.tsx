@@ -15,11 +15,13 @@ import { useDeleteTdsTaxMutation, useGetTdsTaxQuery, useTdsTaxGetByIdMutation } 
 import { setData, clearData } from "../../../redux-store/global/globalState";
 
 
-const MyCellRenderer = ({ id }: { id: any }) => {
+const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () => void }) => {
     const dispatch = useDispatch<AppDispatch>();
     const { data: getTdsTax, refetch } = useGetTdsTaxQuery();
     const [getPaymentTerm, { }] = useTdsTaxGetByIdMutation();
     const [deleteTdsTax, { isLoading: D_Loading, isSuccess: deleteSuccess }] = useDeleteTdsTaxMutation();
+
+    
 
     const handleEditClick = async () => {
         try {
@@ -39,15 +41,19 @@ const MyCellRenderer = ({ id }: { id: any }) => {
         const confirmed = window.confirm("Are you sure you want to delete this gst type?");
         if (confirmed) {
             deleteTdsTax(id)
+            
         }
     };
 
     useEffect(() => {
         if (deleteSuccess) {
+            onDeleteSuccess();
+            // setShowDeleteSuccessToast(true);
+            // refetch();
             // toast.success("successfully deleted the gst type", toastConfig)
         }
         refetch();
-    }, [deleteSuccess, refetch]);
+    }, [deleteSuccess,onDeleteSuccess]);
 
     return (
         <Stack direction="row" spacing={1}>
@@ -57,6 +63,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             <IconButton aria-label="" onClick={handleDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
             </IconButton>
+           
         </Stack>
     );
 };
@@ -79,6 +86,6 @@ export const tdsTaxColumns: GridColDef[] = [
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row.id} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row.id} onDeleteSuccess={params.onDeleteSuccess} />,
     },
 ];

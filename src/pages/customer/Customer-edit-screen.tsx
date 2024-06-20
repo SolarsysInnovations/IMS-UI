@@ -10,10 +10,12 @@ import { LocalStorageKeys, useLocalStorage } from '../../hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useSuccessToast from '../../hooks/useToast';
+import SnackBarUi from '../../components/ui/Snackbar';
 
 const CustomerEdit: React.FC = () => {
     const [updateCustomer, { isLoading, isSuccess, isError, error }] = useUpdateCustomerMutation();
     const customerStateDetails = useSelector((state: any) => state.customerState.data);
+    const [showSuccessToast, setShowSuccessToast] = useState(false); 
 
     const navigate = useNavigate();
     const onSubmit = async (values: any, actions: any) => {
@@ -24,6 +26,11 @@ const CustomerEdit: React.FC = () => {
                 id: id,
                 customer: values,
             });
+            setShowSuccessToast(true);
+            setTimeout(() => {
+                setShowSuccessToast(false);
+                navigate(-1);
+            }, 1000);
             actions.resetForm();
             // setCustomerDetails("")
         } catch (error) {
@@ -31,17 +38,16 @@ const CustomerEdit: React.FC = () => {
         }
     };
 
-    useSuccessToast({
-        isSuccess, message: "successfully edited the customer",
-        navigate: () => {
-            navigate(-1);
-        }
-    });
-
     return (
         <div>
             {/* Use DynamicCustomerCreate with the required props */}
-            <ToastContainer />
+            {showSuccessToast && (
+                <SnackBarUi
+                    message="Successfully edited the customer"
+                    severity="success"
+                    isSubmitting={true}
+                />
+            )}
             {customerStateDetails && (
                 <DynamicFormCreate
                     headerName='Customer Edit'

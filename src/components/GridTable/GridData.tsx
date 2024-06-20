@@ -12,8 +12,9 @@ interface GridDataProps {
     onCellEditor?: any;
     onCellEditStop?: any;
     onEditStart?: any;
+    onDeleteSuccess?: any;
 }
-export default function GridDataUi({ onEditStart, onCellEditStop, onCellEditor, hideFooter, pagination, showToolbar, checkboxSelection, columns, tableData }: GridDataProps) {
+export default function GridDataUi({ onEditStart, onCellEditStop, onCellEditor, hideFooter, pagination, showToolbar, checkboxSelection, columns, tableData,onDeleteSuccess }: GridDataProps) {
     return (
         <Box sx={{ height: "fit-content", width: '100%', }}>
             <DataGrid
