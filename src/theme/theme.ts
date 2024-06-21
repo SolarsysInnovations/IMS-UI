@@ -228,6 +228,9 @@ const theme = createTheme({
           // "&:hover": {
           //   backgroundColor: palette.primary.dark,
           // },
+          ':disabled': {
+            backgroundColor: "#9da4ae8c"
+          }
         },
 
         sizeSmall: {

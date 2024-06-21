@@ -23,10 +23,10 @@ export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error
                 // validate={() => ({})}
                 onSubmit={onSubmit}
             >
-                {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => {
+                {({ errors, touched, values, handleChange, handleSubmit, setFieldValue, isValid, dirty }) => {
                     const defaultButtons = [
                         { label: 'Back', icon: Add, onClick: () => navigate(-1) },
-                        { label: 'Save', icon: Add, onClick: handleSubmit } // Use handleSubmit here
+                        { label: 'Save', icon: Add, onClick: handleSubmit, disabled: !(isValid && dirty) } // Use handleSubmit here
                     ];
 
                     const resolvedButtons = buttons ? buttons.map((button: any) => ({

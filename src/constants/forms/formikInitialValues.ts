@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps,companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps } from "../../types/types";
 import ServicesList from "../../pages/service/service-list-screen";
 
 export const loginInitialValue: LoginProps = {
@@ -8,7 +8,7 @@ export const loginInitialValue: LoginProps = {
     password: "",
 }
 export const companyInitialValues: companyInitialValueProps = {
-    id:"",
+    id: "",
     companyName: "",
     companyAddress: "",
     companyState: "",
@@ -102,7 +102,7 @@ export const invoiceCreateInitialValue: InvoiceInitialValueProps = {
     paymentTerms: "",
     startDate: '',
     dueDate: '',
-    invoiceStatus: "PENDING",
+    invoiceStatus: "DRAFT",
     discountPercentage: null,
     totalAmount: null,
     notes: "Thanks for your business transaction",
@@ -171,16 +171,16 @@ export const SendEmailInitialValue: SendEmailInitialValueProps = {
     fromemail: "",
     file: null,
     cc: "",
-    subject:"",
+    subject: "",
 }
 
 export const RoleInitialValue: RoleInitialValueProps = {
     username: "",
     userRole: "",
     userEmail: "",
-    userAccess:"",
+    userAccess: "",
     password: "",
-    id:"",
+    id: "",
 }
 
 export const ChangePasswordInitialValue: ChangePasswordInitialValueProps = {

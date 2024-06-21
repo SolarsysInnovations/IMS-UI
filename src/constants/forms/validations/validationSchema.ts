@@ -29,31 +29,28 @@ export const invoiceValidationSchema = Yup.object({
         .min(0, 'gstPercentage must be a positive number')
         .max(999, 'gstPercentage must be a three-digit number')
         .required('gstPercentage is required'),
-    invoiceDate: Yup.string()
-        .max(255)
-        .required('paymentTerms is required'),
+    // invoiceDate: Yup.string()
+    //     .max(255)
+    //     .required('paymentTerms is required'),
     gstInNumber: Yup.string()
         .max(255)
         .required('country is required'),
-    discountAmount: Yup.string()
-        .max(255)
-        .required('country is required'),
+
     paymentTerms: Yup.string()
         .max(255)
         .required('address is required'),
-    dueDate: Yup.string()
-        .max(255)
-        .required('city is required'),
-    notes: Yup.string()
-        .max(255)
-        .required('notes is required'),
-    // invoiceStatus: Yup.string()
+    startDate: Yup.string()
+        .required('Due date is required')
+    // notes: Yup.string()
     //     .max(255)
-    //     .required('state is required'),
-    service: Yup.array()
-        .min(1, "At least one service must be selected")
-        .of(Yup.string())
-        .required("services is required"),
+    //     .required('notes is required'),
+    // // invoiceStatus: Yup.string()
+    // //     .max(255)
+    // //     .required('state is required'),
+    // service: Yup.array()
+    //     .min(1, "At least one service must be selected")
+    //     .of(Yup.string())
+    //     .required("services is required"),
 });
 
 export const customerValidationSchema = Yup.object().shape({
@@ -124,12 +121,12 @@ export const paymentTermsValidationSchema = Yup.object().shape({
 });
 
 export const sendEmailValidationSchema = Yup.object().shape({
-//   fromemail: Yup.string()
-//     .email("Invalid email address")
-//     .required("From Email is required"),
-  recipientEmail: Yup.string()
-    .email("Invalid email address")
-    .required("To Email is required"),
+    //   fromemail: Yup.string()
+    //     .email("Invalid email address")
+    //     .required("From Email is required"),
+    recipientEmail: Yup.string()
+        .email("Invalid email address")
+        .required("To Email is required"),
 });
 
 export const RoleValidationSchema = Yup.object().shape({
@@ -150,7 +147,7 @@ export const PasswordValidationSchema = Yup.object().shape({
     newPassword: Yup.string()
         .min(8, 'New Password must be at least 8 characters long')
         .max(255)
-        .notOneOf([Yup.ref('currentPassword'), null],'New Password cannot be the same as the Current Password')
+        .notOneOf([Yup.ref('currentPassword'), null], 'New Password cannot be the same as the Current Password')
         .required('New Password is required'),
     confirmPassword: Yup.string()
         .max(255)

@@ -18,7 +18,8 @@ const CustomerEdit: React.FC = () => {
     const navigate = useNavigate();
     const onSubmit = async (values: any, actions: any) => {
         try {
-            const id: number = values?.id
+            const
+             id: number = values?.id
             await updateCustomer({
                 id: id,
                 customer: values,
@@ -43,6 +44,7 @@ const CustomerEdit: React.FC = () => {
             <ToastContainer />
             {customerStateDetails && (
                 <DynamicFormCreate
+                    headerName='Customer Edit'
                     showTable={true}
                     fields={customerFields}
                     initialValues={customerStateDetails}

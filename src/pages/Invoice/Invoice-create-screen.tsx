@@ -68,7 +68,8 @@ const CreateInvoice = () => {
     const [discountAmount, setDiscountAmount] = useState<null | number>(null);
     const [selectedTds, setSelectedTdsAmount] = useState<number | null>(null);
     const [tdsAmount, setTdsAmount] = useState<number | null>(null);
-    const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>()
+    const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>();
+    const [showApproverButton, setShowApproverButton] = useState(false);
     // * * * * * * * grid table states * * * * * * * * *
     // const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
     const { data: serviceList } = useGetServiceQuery();
@@ -197,17 +198,15 @@ const CreateInvoice = () => {
     return (
         <Formik
             initialValues={invoiceValues}
-            // validationSchema={invoiceValidationSchema}
-            validate={() => ({})}
-            onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
+            validationSchema={invoiceValidationSchema}
+            // validate={() => ({})}
+            onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm, }) => {
                 try {
                     // values.invoiceTotalAmount = invoiceTotalAmount
                     values.servicesList = invoiceValues.servicesList
                     values.totalAmount = invoiceTotalAmount ?? null;
                     await addInvoice(values);
                     // alert(JSON.stringify(values));
-                    console.log(values);
-
                     resetForm();
                     setInvoiceValues({ ...invoiceValues })
                 } catch (error) {
@@ -218,11 +217,12 @@ const CreateInvoice = () => {
                 }
             }}
         >
-            {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => {
+            {({ errors, touched, values, handleChange, handleSubmit, setFieldValue, isValid, dirty }) => {
                 return (
                     <div>
                         <ToastUi autoClose={2000} />
                         <TableHeader headerName={pathname} buttons={[
+
                             {
                                 label: 'Preview', icon: Add, onClick: () => {
                                     setIsModalOpen(true)
@@ -231,10 +231,12 @@ const CreateInvoice = () => {
                                     values.servicesList = invoiceValues.servicesList
                                     values.totalAmount = invoiceTotalAmount ?? null;
                                     setInvoiceFinalData(values as any)
-                                }
+                                },
+                                disabled: !(isValid && dirty),
                             },
-                            { label: 'Back', icon: Add, onClick: () => navigate(-1) },
-                            { label: 'Save', icon: Add, onClick: handleSubmit },
+                            { label: 'Sent to Approver', disabled: !(isValid && dirty), onClick: handleSubmit },
+                            { label: 'Back', onClick: () => navigate(-1) },
+                            { label: 'Save', onClick: handleSubmit, disabled: !(isValid && dirty) },
                         ]} />
                         {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
                         <DialogBoxUi
@@ -276,7 +278,7 @@ const CreateInvoice = () => {
                         <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
                             setIsModalOpen(false)
                         }} >
-                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData}  isModalOpen={setIsModalOpen} />
+                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} isModalOpen={setIsModalOpen} />
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>

@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useSuccessToast from '../../hooks/useToast';
 import { ToastContainer, toast } from 'react-toastify';
+import ToastUi from '../../components/ui/ToastifyUi';
 
 const ServiceEditScreen: React.FC = () => {
     const [updateService, { isLoading, isSuccess, isError, error }] = useUpdateServiceMutation();
