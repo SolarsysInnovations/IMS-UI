@@ -16,9 +16,11 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
         label: option.label
     })) || [];
     return (
-        <Field name={subField.name}>
+        <Field name={subField.name} required={true} disabled={false}>
             {({ field: { value, onChange } }: any) => (
                 <SelectDropdown
+                    required={true}
+                    disabled={false}
                     labelText={subField.label}
                     value={options.find((opt: any) => opt.value === value)}
                     onChange={(newValue: any) => {
@@ -42,6 +44,8 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 
 const renderTextField = (field: any, meta: any, subField: SubField) => (
     <TextFieldUi
+        required={true}
+        disabled={false}
         {...field}
         // variant="outlined"
         // margin="normal"
@@ -59,6 +63,8 @@ const renderTextField = (field: any, meta: any, subField: SubField) => (
 
 const renderDatePickerField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => (
     <DatePickerUi
+        required={true}
+        disabled={false}
         {...field}
         label={subField.label}
         value={field.value}
@@ -81,7 +87,7 @@ const renderRadioField = (field: any, meta: any, subField: SubField, setFieldVal
     })) || [];
 
     return (
-        <RadioUi errorMsg={meta.touched && meta.error} options={options} value={field.value} onChange={(newValue: any) => {
+        <RadioUi errorMsg={meta.touched && meta.error} options={options} required={true} disabled={false} value={field.value} onChange={(newValue: any) => {
             if (newValue) {
                 setFieldValue(subField.name, newValue.target.value);
             } else {
