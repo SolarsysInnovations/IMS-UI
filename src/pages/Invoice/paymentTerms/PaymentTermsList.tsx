@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import GridDataUi from '../../../components/GridTable/GridData'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../redux-store/store'
@@ -13,14 +13,14 @@ const PaymentTermsList = () => {
     const { data: paymentTermsList, error, isLoading,refetch } = useGetPaymentTermsQuery();
     const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
 
-    const handleDeleteSuccess = () => {
+    const handleDeleteSuccess = useCallback(() => {
         setShowDeleteSuccessToast(true);
         setTimeout(() => {
             setShowDeleteSuccessToast(false);
         }, 3000);
          refetch();
          
-    };
+    },[refetch]);
 
     return (
         <>

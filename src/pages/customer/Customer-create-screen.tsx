@@ -22,15 +22,25 @@ const CustomerCreate: React.FC = () => {
     const onSubmit = async (values: any, actions: any) => {
         try {
             await addCustomer(values);
-            setShowSuccessToast(true);
-            setTimeout(() => {
-                setShowSuccessToast(false);
-            }, 2000);
+            // setShowSuccessToast(true);
+            // setTimeout(() => {
+            //     setShowSuccessToast(false);
+            // }, 2000);
             actions.resetForm();
         } catch (error) {
             console.log(error);
         }
     };
+
+     useEffect(() => {
+        if (isSuccess) {
+            setShowSuccessToast(true);
+            setTimeout(() => {
+                setShowSuccessToast(false);
+            }, 2000);
+        }
+        // refetch();
+    }, [isSuccess ]);
     // useSuccessToast({ isSuccess, message: "successfully created the customer" })
     return (
         <div>

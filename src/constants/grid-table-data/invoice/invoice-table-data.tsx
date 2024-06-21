@@ -44,7 +44,7 @@ export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     );
 };
 
-export const MyCellRenderer = ({ row }: { row: any }) => {
+export const MyCellRenderer = ({ row , onDeleteSuccess}: { row: any, onDeleteSuccess: () => void  }) => {
 
     const dispatch = useDispatch<AppDispatch>();
     const { data: invoice, error, isLoading, refetch } = useGetInvoiceQuery();
@@ -87,12 +87,18 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-    useEffect(() => {
+     useEffect(() => {
         if (D_Success) {
-            // toast.success("successfully deleted the invoice", toastConfig)
+            onDeleteSuccess();
         }
         refetch();
-    }, [D_Success]);
+    }, [D_Success,  onDeleteSuccess]);
+    // useEffect(() => {
+    //     if (D_Success) {
+    //         // toast.success("successfully deleted the invoice", toastConfig)
+    //     }
+    //     refetch();
+    // }, [D_Success]);
 
     return (
         <Stack direction="row" spacing={1}>

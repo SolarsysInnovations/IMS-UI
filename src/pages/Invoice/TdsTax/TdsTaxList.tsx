@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import GridDataUi from '../../../components/GridTable/GridData'
 import TableHeader from '../../../components/layouts/TableHeader'
 import usePathname from '../../../hooks/usePathname'
@@ -20,14 +20,14 @@ const TdsTaxList = () => {
     const { data: getTdsTax, error, isLoading,refetch } = useGetTdsTaxQuery();
     const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
 
-    const handleDeleteSuccess = () => {
+    const handleDeleteSuccess =useCallback(() => {
         setShowDeleteSuccessToast(true);
         setTimeout(() => {
             setShowDeleteSuccessToast(false);
         }, 3000);
          refetch();
          
-    };
+    },[refetch]);
     return (
         <>
             {showDeleteSuccessToast && (

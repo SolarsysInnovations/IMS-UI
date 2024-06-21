@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import GridDataUi from '../../../components/GridTable/GridData'
 import TableHeader from '../../../components/layouts/TableHeader'
 import usePathname from '../../../hooks/usePathname'
@@ -19,14 +19,14 @@ const GstTypeList = () => {
     const { data: gstTypeList, error, isLoading, refetch } = useGetGstTypeQuery();
     const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
 
-    const handleDeleteSuccess = () => {
+    const handleDeleteSuccess = useCallback(() => {
         setShowDeleteSuccessToast(true);
         setTimeout(() => {
             setShowDeleteSuccessToast(false);
         }, 3000);
          refetch();
          
-    };
+    },[refetch]);
     return (
         <>
             {showDeleteSuccessToast && (
