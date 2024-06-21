@@ -284,7 +284,7 @@ const CreateInvoice = () => {
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <Box>
-                                        <RadioUi value={values.invoiceType} onChange={(newValue: any) => {
+                                        <RadioUi value={values.invoiceType} required={true} disabled={false} onChange={(newValue: any) => {
                                             if (newValue) {
                                                 setFieldValue('invoiceType', newValue.target.value);
                                             } else {
