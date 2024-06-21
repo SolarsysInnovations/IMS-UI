@@ -37,7 +37,11 @@ const InvoiceStatus = () => {
                             total: {
                                 show: true,
                                 label: 'Total',
-                                formatter: () => '', 
+                                formatter: (w : any) => {
+                                    // Calculate the total
+                                    const total = w.globals.seriesTotals.reduce((a : any, b : any) => a + b, 0);
+                                    return total;
+                                }, 
                             },
                         },
                     },
