@@ -30,7 +30,7 @@ const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
             if (gstTypeValue) {
                 console.log(values);
                 await updateGstType({ id: gstTypeValue.id, gstTypeData: values });
-                dispatch(clearData());
+                // dispatch(clearData());
             } else {
                 await addGstType(values);
             }
@@ -49,11 +49,20 @@ const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
         }
     }, [isAddSuccess, isUpdateSuccess]);
 
+    useEffect(() => {
+        if (isUpdateSuccess) {
+            setTimeout(() => {
+                dispatch(clearData());
+            }, 1000);   
+            
+        }
+    }, [isUpdateSuccess, dispatch]);
+
     return (
         <div>
             <DynamicFormCreate
-                toastMessage={gstTypeValue ? 'Successfully Updated GST Type' : 'Successfully Created GST Type'}
-                isSuccessToast={isAddSuccess || isUpdateSuccess}
+                toastMessage={gstTypeValue ? 'Successfully Updated GST Type' : 'Successfully  Created GST Type'}
+                isSuccessToast={isUpdateSuccess || isAddSuccess}
                 headerName={gstTypeValue ? 'Edit GST Type' : 'Create GST Type'}
                 showTable={true}
                 fields={GstTypeFields}

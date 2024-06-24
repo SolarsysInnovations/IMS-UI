@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import GridDataUi from '../../../components/GridTable/GridData'
 import TableHeader from '../../../components/layouts/TableHeader'
 import usePathname from '../../../hooks/usePathname'
@@ -11,17 +11,33 @@ import { useGetServiceQuery } from '../../../redux-store/service/serviceApi'
 import { useGetGstTypeQuery } from '../../../redux-store/invoice/gstTypeApi'
 import { tdsTaxColumns } from '../../../constants/grid-table-data/invoice/TdsTax-table-data'
 import { useGetTdsTaxQuery } from '../../../redux-store/invoice/tdsTaxApi'
+import SnackBarUi from '../../../components/ui/Snackbar'
+import { MyCellRenderer } from '../../../constants/grid-table-data/invoice/invoice-table-data'
 
 const TdsTaxList = () => {
     const dispatch = useDispatch<AppDispatch>();
 
-    const { data: getTdsTax, error, isLoading } = useGetTdsTaxQuery();
+    const { data: getTdsTax, error, isLoading,refetch } = useGetTdsTaxQuery();
+    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
 
-
+    const handleDeleteSuccess =useCallback(() => {
+        setShowDeleteSuccessToast(true);
+        setTimeout(() => {
+            setShowDeleteSuccessToast(false);
+        }, 3000);
+         refetch();
+         
+    },[refetch]);
     return (
         <>
-            <ToastUi autoClose={1000} />
-            <GridDataUi showToolbar={false} columns={tdsTaxColumns} tableData={getTdsTax || []} checkboxSelection={false} />
+            {showDeleteSuccessToast && (
+                <SnackBarUi
+                    message="Successfully deleted the TdsTax"
+                    severity= "success"
+                    isSubmitting={true}
+                />
+            )}
+            <GridDataUi showToolbar={false} onDeleteSuccess={handleDeleteSuccess} columns={tdsTaxColumns(handleDeleteSuccess)}  tableData={getTdsTax || []} checkboxSelection={false} />
         </>
     )
 }

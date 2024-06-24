@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
@@ -19,6 +19,7 @@ import ButtonUi from '../../components/ui/Button';
 import SendEmail from './Send-email';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
+import SnackBarUi from '../../components/ui/Snackbar';
 const invoiceOptions = ["DRAFT", "PENDING", "APPROVED", "PAID", "OVERDUE", "DELETE", "RETURNED",]
 
 const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
@@ -144,6 +145,7 @@ const InvoiceList = () => {
     const buttons = [
         { label: 'Create Invoice', icon: Add, onClick: () => navigate("/invoice/create") },
     ];
+    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
 
     const columns: GridColDef[] = [
         {
@@ -186,59 +188,111 @@ const InvoiceList = () => {
                 <GridEmailButton params={params} />
             ),
         },
+    ]
 
-        // {
-        //     field: '',
-        //     headerName: '',
-        //     width: 80,
-        //     renderCell: () => (
-        //         <ButtonSmallUi
-        //             variant="outlined"
-        //             label="Email"
-        //         />
-        //     ),
-        // },
-        // {
-        //     field: 'download',
-        //     width: 150,
-        //     editable: false,
-        //     headerName: '',
-        //     renderCell: (params: any) => <DownloadButtonRenderer row={params.row} />,
-        // },
-    ];
+    const handleDeleteSuccess = useCallback(() => {
+        setShowDeleteSuccessToast(true);
+        setTimeout(() => {
+            setShowDeleteSuccessToast(false);
+        }, 3000);
+        refetch();
 
+    }, [refetch]);
+    const getColumns = (onDeleteSuccess: () => void): GridColDef[] => {
 
-    if (userRole === Roles.ADMIN || userRole === Roles.APPROVER || userRole === Roles.SUPERADMIN) {
-        columns.push(
+        const columns: GridColDef[] = [
             {
-                field: 'invoiceStatus',
-                headerName: 'Invoice Status',
-                width: 120,
-                editable: true,
-                type: "singleSelect",
-                valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
-                renderCell: (params: GridRenderCellParams) => (
-                    <InvoiceStatusCell params={params} />
-                ),
+                field: 'Action',
+                headerName: 'Action',
+                width: 140,
+                editable: false,
+                renderCell: (params: any) => <MyCellRenderer row={params.row} onDeleteSuccess={onDeleteSuccess} />,
             },
-        )
-    } else if (userRole === Roles.ENDUSER) {
-        columns.push(
             {
-                field: 'invoiceStatus',
-                headerName: 'Invoice Status',
+                field: 'invoiceType',
+                headerName: 'Invoice Type',
+                width: 140,
+                editable: true,
+            },
+            {
+                field: 'invoiceNumber',
+                headerName: 'Invoice Number',
+                width: 150,
+                editable: true,
+            },
+            {
+                field: 'customerName',
+                headerName: 'Customer Name',
                 width: 150,
                 editable: false,
             },
-        )
-    }
+            {
+                field: 'dueDate',
+                headerName: 'Due Date',
+                width: 140,
+                editable: false,
+            },
+
+            // {
+            //     field: '',
+            //     headerName: '',
+            //     width: 80,
+            //     renderCell: () => (
+            //         <ButtonSmallUi
+            //             variant="outlined"
+            //             label="Email"
+            //         />
+            //     ),
+            // },
+            // {
+            //     field: 'download',
+            //     width: 150,
+            //     editable: false,
+            //     headerName: '',
+            //     renderCell: (params: any) => <DownloadButtonRenderer row={params.row} />,
+            // },
+        ];
+
+
+        if (userRole === Roles.ADMIN || userRole === Roles.APPROVER || userRole === Roles.SUPERADMIN) {
+            columns.push(
+                {
+                    field: 'invoiceStatus',
+                    headerName: 'Invoice Status',
+                    width: 120,
+                    editable: true,
+                    type: "singleSelect",
+                    valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
+                    renderCell: (params: GridRenderCellParams) => (
+                        <InvoiceStatusCell params={params} />
+                    ),
+                },
+            )
+        } else if (userRole === Roles.ENDUSER) {
+            columns.push(
+                {
+                    field: 'invoiceStatus',
+                    headerName: 'Invoice Status',
+                    width: 150,
+                    editable: false,
+                },
+            )
+        }
+        return columns;
+    };
 
 
     return (
         <>
-            <ToastUi autoClose={1000} />
+            {showDeleteSuccessToast && (
+                <SnackBarUi
+                    message="Successfully deleted the invoice"
+                    severity="success"
+                    isSubmitting={true}
+                />
+            )}
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} columns={columns} tableData={invoiceList || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={getColumns(handleDeleteSuccess)} tableData={invoiceList || []} checkboxSelection={false} />
         </>
     );
 };

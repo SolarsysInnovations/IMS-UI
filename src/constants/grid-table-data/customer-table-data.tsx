@@ -19,7 +19,7 @@ import DialogBoxUi from "../../components/ui/DialogBox";
 import BackDropUi from "../../components/ui/BackdropUi";
 import LoaderUi from "../../components/ui/LoaderUi";
 
-const MyCellRenderer = ({ id, contactPersons }: any) => {
+const MyCellRenderer = ({ id, onDeleteSuccess }:{ id: any, onDeleteSuccess: () => void }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
@@ -84,7 +84,13 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
             deleteCustomer(id);
         }
     };
-    useSuccessToast({ isSuccess, message: "successfully deleted the new customer", })
+    useEffect(() => {
+        if (isSuccess) {
+            onDeleteSuccess();
+        }
+        refetch();
+    }, [isSuccess,  onDeleteSuccess]);
+    // useSuccessToast({ isSuccess, message: "successfully deleted the new customer", })
 
     const StyledIconButton = styled(IconButton)(({ theme }) => ({
         padding: '3px',
@@ -116,13 +122,13 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     );
 };
 
-export const columns: GridColDef[] = [
+export const columns= (onDeleteSuccess: () => void): GridColDef[] => [
     {
         field: 'Action',
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} onDeleteSuccess={onDeleteSuccess} />,
     },
     // { field: 'id', headerName: 'ID', width: 90 },
     {

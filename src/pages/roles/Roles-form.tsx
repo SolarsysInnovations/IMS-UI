@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, IconButton } from "@mui/material";
 import { RoleInitialValue } from '../../constants/forms/formikInitialValues';
 import { RoleValidationSchema } from '../../constants/forms/validations/validationSchema';
 import TextFieldUi from '../../components/ui/TextField';
@@ -12,7 +12,7 @@ import { toastConfig } from '../../constants/forms/config/toastConfig';
 import { RoleInitialValueProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
 import TableHeader from '../../components/layouts/TableHeader';
-import { Add } from '@mui/icons-material';
+import { Add, VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 
 interface RoleFormProps {
     roleId?: string | null;
@@ -25,6 +25,7 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
     const [GetRoleById] = useGetRoleByIdMutation();
     const [initialValues, setInitialValues] = useState(RoleInitialValue);
     const dispatch = useDispatch();
+    const [passwordVisible, setPasswordVisible] = useState(false);
 
     useEffect(() => {
         if (roleId) {
@@ -56,6 +57,7 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
             setSubmitting(false);
         }
     };
+
 
     const buttons: any = [];
 
@@ -134,17 +136,28 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
                         </Grid>
                         <Grid item xs={6}>
                             <Box>
-                                <TextFieldUi
-                                    required
-                                    fullWidth={false}
-                                    label="Password"
-                                    name="password"
-                                    type="password"
-                                    value={values.password}
-                                    onChange={handleChange}
-                                    error={touched.password && Boolean(errors.password)}
-                                    helperText={touched.password && errors.password}
-                                />
+                                {initialValues.id == "" && (
+                                    <TextFieldUi
+                                        endAdornment={passwordVisible ? <IconButton onClick={() => {
+                                            setPasswordVisible(!passwordVisible)
+                                        }}>
+                                            <VisibilityOutlined />
+                                        </IconButton> : <IconButton onClick={() => {
+                                            setPasswordVisible(!passwordVisible)
+                                        }}>
+                                            <VisibilityOff />
+                                        </IconButton>}
+                                        required
+                                        fullWidth={false}
+                                        label="Password"
+                                        name="password"
+                                        type={!passwordVisible ? 'password' : "text"}
+                                        value={values.password}
+                                        onChange={handleChange}
+                                        error={touched.password && Boolean(errors.password)}
+                                        helperText={touched.password && errors.password}
+                                    />
+                                )}
                             </Box>
                         </Grid>
                     </Grid>

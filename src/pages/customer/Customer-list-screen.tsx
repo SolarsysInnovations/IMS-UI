@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import GridDataUi from '../../components/GridTable/GridData'
 import TableHeader from '../../components/layouts/TableHeader'
 import usePathname from '../../hooks/usePathname'
@@ -7,10 +7,22 @@ import { useNavigate } from 'react-router-dom'
 import { columns } from '../../constants/grid-table-data/customer-table-data'
 import ToastUi from '../../components/ui/ToastifyUi'
 import { useGetCustomersQuery, useUpdateCustomerMutation } from '../../redux-store/customer/customerApi'
+import SnackBarUi from '../../components/ui/Snackbar'
 
 const CustomerList = () => {
     const [updateCustomer, { isSuccess, isError }] = useUpdateCustomerMutation();
-    const { data: customers, error, isLoading } = useGetCustomersQuery();
+    const { data: customers, error, isLoading , refetch} = useGetCustomersQuery();
+
+    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
+
+    const handleDeleteSuccess = useCallback(() => {
+        setShowDeleteSuccessToast(true);
+        setTimeout(() => {
+            setShowDeleteSuccessToast(false);
+        }, 3000);
+        refetch();
+    }, [refetch]);
+    
 
     const role = localStorage.getItem("userRole");
     const buttons = [];
@@ -25,9 +37,15 @@ const CustomerList = () => {
 
     return (
         <>
-            <ToastUi autoClose={1000} />
+            {showDeleteSuccessToast && (
+                <SnackBarUi
+                    message="Successfully deleted the customer"
+                    severity= "success"
+                    isSubmitting={true}
+                />
+            )}
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} columns={columns || []} tableData={customers || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={columns(handleDeleteSuccess)} tableData={customers || []} checkboxSelection={false} />
         </>
     )
 }

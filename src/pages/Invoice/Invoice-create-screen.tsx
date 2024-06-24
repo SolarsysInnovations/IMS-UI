@@ -305,7 +305,7 @@ const CreateInvoice = () => {
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <Box>
-                                        <RadioUi value={values.invoiceType} onChange={(newValue: any) => {
+                                        <RadioUi value={values.invoiceType} required={true} disabled={false} onChange={(newValue: any) => {
                                             if (newValue) {
                                                 setFieldValue('invoiceType', newValue.target.value);
                                             } else {
@@ -356,6 +356,7 @@ const CreateInvoice = () => {
                                                     setFieldValue("customerName", "")
                                                 }
                                             }}
+                                            required={true}
                                             options={customerName}
                                             value={values.customerName ? { value: values.customerName, label: values.customerName } : null}
                                             labelText='Customer Name'
@@ -388,6 +389,7 @@ const CreateInvoice = () => {
                                                     setFieldValue("gstPercentage", null)
                                                 }
                                             }}
+                                            required={true}
                                             options={gstTypeOptions}
                                             value={values.gstType ? { value: values.gstType, label: values.gstType } : null}
                                             labelText='Gst Type'
@@ -414,6 +416,7 @@ const CreateInvoice = () => {
                                 <Grid item xs={3}>
                                     <Box>
                                         <TextFieldUi
+                                            required={true}
                                             fullWidth={false}
                                             label='GstIn Number'
                                             name='gstInNumber'
@@ -453,6 +456,7 @@ const CreateInvoice = () => {
                                                     setFieldValue("dueDate", "")
                                                 }
                                             }}
+                                            required={true}
                                             options={paymentTermsOptions}
                                             value={values.paymentTerms ? { value: values.paymentTerms, label: values.paymentTerms } : null}
                                             labelText='Payment Terms'
@@ -465,6 +469,7 @@ const CreateInvoice = () => {
                                 <Grid item xs={2}>
                                     <Box>
                                         <DatePickerUi
+                                            required={true}
                                             label="Start Date"
                                             onChange={(date: Date) => {
                                                 setFieldValue("startDate", date);
@@ -476,6 +481,7 @@ const CreateInvoice = () => {
                                 <Grid item xs={2}>
                                     <Box>
                                         <DatePickerUi
+                                            required={true}
                                             label="Due Date"
                                             onChange={(date: Date) => {
                                                 setFieldValue("dueDate", date);

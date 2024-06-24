@@ -28,7 +28,7 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
         try {
             if (paymentTermsValue) {
                 await updatePaymentTerms({ id: paymentTermsValue.id, paymentTermsData: values });
-                dispatch(clearData());
+                // dispatch(clearData());
             } else {
                 await addPaymentTerms(values);
             }
@@ -46,10 +46,19 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
         }
     }, [isAddSuccess, isUpdateSuccess]);
 
+    useEffect(() => {
+        if (isUpdateSuccess) {
+            setTimeout(() => {
+                dispatch(clearData());
+            }, 1000);   
+            
+        }
+    }, [isUpdateSuccess, dispatch]);
+
     return (
         <div>
             <DynamicFormCreate
-                toastMessage={paymentTermsValue ? 'Successfully Updated Payment Terms' : 'Successfully Created Payment Terms'}
+                toastMessage={isUpdateSuccess && paymentTermsValue ? 'Successfully Updated Payment Terms' : 'Successfully Created Payment Terms'}
                 isSuccessToast={isAddSuccess || isUpdateSuccess}
                 headerName={paymentTermsValue ? 'Edit Payment Terms' : 'Create Payment Terms'}
                 showTable={true}

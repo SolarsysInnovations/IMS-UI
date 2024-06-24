@@ -15,7 +15,7 @@ import { useDeletePaymentTermsMutation, useGetPaymentTermsQuery, usePaymentTerms
 import { setData, clearData } from "../../../redux-store/global/globalState";
 
 
-const MyCellRenderer = ({ id }: { id: any }) => {
+const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () => void }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [getPaymentTerm, { }] = usePaymentTermsGetByIdMutation();
     const [deletePaymentTerms, { isLoading: D_Loading, isSuccess: deleteSuccess }] = useDeletePaymentTermsMutation();
@@ -45,10 +45,10 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
     useEffect(() => {
         if (deleteSuccess) {
-            // toast.success("successfully deleted the gst type", toastConfig)
+            onDeleteSuccess();
         }
         refetch();
-    }, [deleteSuccess, refetch]);
+    }, [deleteSuccess, onDeleteSuccess]);
 
     return (
         <Stack direction="row" spacing={1}>
@@ -61,7 +61,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
         </Stack>
     );
 };
-export const paymentTermsColumns: GridColDef[] = [
+export const paymentTermsColumns = (onDeleteSuccess: () => void): GridColDef[] => [
 
     {
         field: 'termName',
@@ -83,6 +83,6 @@ export const paymentTermsColumns: GridColDef[] = [
         // width: 100,
         headerAlign: 'center',
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row.id} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row.id} onDeleteSuccess={onDeleteSuccess} />,
     },
 ];
