@@ -21,6 +21,7 @@ const TextFieldUi = ({ width, required, label, value, onChange, disabled, endAdo
 
     return (
         <TextField
+
             required={required}
             variant="outlined"
             size="small"

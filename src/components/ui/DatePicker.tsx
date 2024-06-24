@@ -21,6 +21,7 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
     const parseDate = (value: any) => {
         return dayjs(value, 'DD-MM-YYYY');
     };
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker

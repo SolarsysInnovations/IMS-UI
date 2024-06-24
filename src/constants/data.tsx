@@ -25,6 +25,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Login from "../pages/Login-screen";
 import Dashboard from "../pages/Dashboard/Dashboard-screen";
+import InvoiceEdit from "../pages/Invoice/Invoice-edit-screen";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.SUPERADMIN, Roles.ADMIN];
@@ -54,7 +55,7 @@ export const routesConfig = [
 
   // * ----------- invoice ------------
   { path: "/invoice/list", element: <InvoiceList />, allowedRoles: [...allRoles] },
-  { path: "/invoice/edit/:id", element: <CreateInvoice />, allowedRoles: [...allRoles] },
+  { path: "/invoice/edit/:id", element: <InvoiceEdit />, allowedRoles: [...allRoles] },
   { path: "/invoice/create", element: <CreateInvoice />, allowedRoles: [...allRoles] },
 
   // * --------- service -----------
@@ -63,7 +64,7 @@ export const routesConfig = [
   { path: "/service/edit/:id", element: <ServiceEditScreen />, allowedRoles: [...admins] },
 
   // * -------- roles ---------
-  { path: "/roles/list", element: <RolesList />, allowedRoles: [...admins] },
+  { path: "/users/list", element: <RolesList />, allowedRoles: [...admins] },
 ];
 
 export const sidebarTwo = [
@@ -119,8 +120,8 @@ export const sidebarTwo = [
   },
   {
     id: 6,
-    title: "Roles",
-    path: "/roles/list",
+    title: "users",
+    path: "/users/list",
     icon: GroupsIcon,
     isParent: false,
     allowedRoles: [...admins]
@@ -170,3 +171,6 @@ export const sidebarTwo = [
 
   },
 ];
+
+
+export const invoiceStatusOptions = ['APPROVED', 'DELETE', 'RETURNED', 'DRAFT', 'PENDING', 'PAID'];

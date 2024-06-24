@@ -36,7 +36,7 @@ export default function TableContent({ tableData }: TableContentUiProps) {
             <table style={{ boxShadow: "none", width: "100%" }}>
                 <thead>
                     <tr>
-                        {tableRow.map((data, index) => (
+                        {tableRow?.map((data, index) => (
                             <th
                                 key={index}
                                 style={{
@@ -55,10 +55,10 @@ export default function TableContent({ tableData }: TableContentUiProps) {
                 <tbody>
                     {tableData?.servicesList?.map((data: any, index: number) => (
                         <tr key={index}>
-                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data.serviceAccountingCode}</td>
-                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data.serviceAmount}</td>
-                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data.serviceQty}</td>
-                            <td style={{ fontSize: "10px", padding: "10px 16px", textAlign: "right" }}>{data.serviceTotalAmount}</td>
+                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data?.serviceAccountingCode}</td>
+                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data?.serviceAmount}</td>
+                            <td style={{ fontSize: "10px", padding: "10px 16px" }}>{data?.serviceQty}</td>
+                            <td style={{ fontSize: "10px", padding: "10px 16px", textAlign: "right" }}>{data?.serviceTotalAmount}</td>
                         </tr>
                     ))}
                 </tbody>

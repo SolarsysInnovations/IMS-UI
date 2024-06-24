@@ -39,7 +39,7 @@ import { formatDate } from '../../services/utils/dataFormatter';
 import { addDays, format } from 'date-fns';
 import ServiceCreate from '../service/service-create-screen';
 import DialogBoxUi from '../../components/ui/DialogBox';
-import { clearData } from '../../redux-store/global/globalState';
+import { clearData, setData } from '../../redux-store/global/globalState';
 import SendEmail from './Send-email';
 import ServiceScreen from './service/ServiceScreen';
 
@@ -86,6 +86,10 @@ const CreateInvoice = () => {
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
+    const [preview, setPreview] = useState(true);
+
+    const invoiceData = useSelector((state: any) => state.globalState.data);
+    console.log(invoiceData);
 
     const PopupComponents = {
         GST_TYPE: 'gstType',
@@ -205,6 +209,7 @@ const CreateInvoice = () => {
                     // values.invoiceTotalAmount = invoiceTotalAmount
                     values.servicesList = invoiceValues.servicesList
                     values.totalAmount = invoiceTotalAmount ?? null;
+
                     await addInvoice(values);
                     // alert(JSON.stringify(values));
                     resetForm();
@@ -222,21 +227,36 @@ const CreateInvoice = () => {
                     <div>
                         <ToastUi autoClose={2000} />
                         <TableHeader headerName={pathname} buttons={[
-
                             {
                                 label: 'Preview', icon: Add, onClick: () => {
-                                    setIsModalOpen(true)
+                                    const updatedValue = {
+                                        ...values,
+                                        serviceList: invoiceValues.servicesList ?? null,
+                                        totalAmount: invoiceTotalAmount ?? null,
+                                    }
+
+                                    setIsModalOpen(true);
+                                    setPreview(false);
                                     // setInvoicePopup(true)
                                     // values.invoiceTotalAmount = invoiceTotalAmount
-                                    values.servicesList = invoiceValues.servicesList
-                                    values.totalAmount = invoiceTotalAmount ?? null;
-                                    setInvoiceFinalData(values as any)
+
+                                    dispatch(setData(updatedValue as any))
                                 },
                                 disabled: !(isValid && dirty),
                             },
-                            { label: 'Sent to Approver', disabled: !(isValid && dirty), onClick: handleSubmit },
+                            {
+                                label: 'Sent to Approver', disabled: !(isValid && dirty), onClick: () => {
+                                    values.invoiceStatus = "PENDING";
+                                    handleSubmit()
+                                }
+                            },
                             { label: 'Back', onClick: () => navigate(-1) },
-                            { label: 'Save', onClick: handleSubmit, disabled: !(isValid && dirty) },
+                            {
+                                label: 'Save', onClick: async () => {
+                                    handleSubmit()
+                                },
+                                disabled: !(isValid && dirty)
+                            },
                         ]} />
                         {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
                         <DialogBoxUi
@@ -276,9 +296,10 @@ const CreateInvoice = () => {
                         </ModalUi> */}
 
                         <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
+
                             setIsModalOpen(false)
                         }} >
-                            <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData} isModalOpen={setIsModalOpen} />
+                            <InvoiceUi preview={preview} discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} isModalOpen={setIsModalOpen} />
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>

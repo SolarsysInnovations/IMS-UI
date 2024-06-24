@@ -16,6 +16,7 @@ import GstTypeScreen from '../Invoice/GstType/GstTypeScreen';
 import PaymentTermsScreen from '../Invoice/paymentTerms/PaymentTermsScreen';
 import TdsTaxScreen from '../Invoice/TdsTax/TdsTaxScreen';
 import ServiceScreen from '../Invoice/service/ServiceScreen';
+import TableHeader from '../../components/layouts/TableHeader';
 
 
 const TaxConfig = () => {
@@ -62,6 +63,8 @@ const TaxConfig = () => {
             {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => {
                 return (
                     <div>
+
+                        <TableHeader headerName='Tax Types' />
                         <ToastUi autoClose={2000} />
 
                         {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
