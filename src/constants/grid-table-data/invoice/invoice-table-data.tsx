@@ -44,7 +44,7 @@ export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     );
 };
 
-export const MyCellRenderer = ({ row , onDeleteSuccess}: { row: any, onDeleteSuccess: () => void  }) => {
+export const MyCellRenderer = ({ row, onDeleteSuccess  }: { row: any, onDeleteSuccess: () => void  }) => {
 
     const dispatch = useDispatch<AppDispatch>();
     const { data: invoice, error, isLoading, refetch } = useGetInvoiceQuery();
@@ -103,12 +103,7 @@ export const MyCellRenderer = ({ row , onDeleteSuccess}: { row: any, onDeleteSuc
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-     useEffect(() => {
-        if (D_Success) {
-            onDeleteSuccess();
-        }
-        refetch();
-    }, [D_Success,  onDeleteSuccess]);
+
     // useEffect(() => {
     //     if (D_Success) {
     //         // toast.success("successfully deleted the invoice", toastConfig)

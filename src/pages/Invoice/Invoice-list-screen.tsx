@@ -145,7 +145,7 @@ const InvoiceList = () => {
     const buttons = [
         { label: 'Create Invoice', icon: Add, onClick: () => navigate("/invoice/create") },
     ];
-    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
+    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
 
     const handleDeleteSuccess = useCallback(() => {
         setShowDeleteSuccessToast(true);
@@ -188,6 +188,15 @@ const InvoiceList = () => {
                 headerName: 'Due Date',
                 width: 140,
                 editable: false,
+            },
+            {
+            field: 'email',
+            headerName: 'Email To',
+            width: 120,
+            editable: true,
+            renderCell: (params: GridRenderCellParams) => (
+                <GridEmailButton params={params} />
+            ),
             },
 
             // {
@@ -234,9 +243,9 @@ const InvoiceList = () => {
                 editable: false,
             },
         )
-    }
-     return columns;
+    }return columns;
     };
+    
 
 
     return (
