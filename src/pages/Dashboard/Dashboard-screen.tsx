@@ -1,22 +1,68 @@
-import React from 'react'
-import Typography from '@mui/material/Typography'
-import InvoiceStatus from './InvoiceStatusChart'
-import { Grid } from '@mui/material'
-import InvoiceAmount from './InvoiceAmount'
+import React, { useState } from "react";
+import { Grid, Typography, Box } from "@mui/material";
+import SelectDropdown from "../../components/ui/SelectDropdown";
+import InvoiceStatus from "./InvoiceStatusChart";
+import InvoiceAmount from "./InvoiceAmount";
 
-const Dashboard = () => {
-
-
-    return (
-        <Grid container spacing={2} px={0}>
-            <Grid item xs={8}>
-                <InvoiceAmount />
-            </Grid>
-            <Grid item xs={4} >
-                <InvoiceStatus />
-            </Grid>
-        </Grid>
-    )
+interface ValueProps {
+  label: string;
+  value: string;
 }
 
-export default Dashboard
+const options = [
+  { label: "monthly", value: "monthly" },
+  { label: "weekly", value: "weekly" },
+  { label: "yearly", value: "yearly" },
+];
+
+const Dashboard = () => {
+  const [selectedValue, setSelectedValue] = useState<ValueProps>({
+    label: "monthly",
+    value: "monthly",
+  });
+
+  const handleChange = (newValue: ValueProps | null) => {
+    if (newValue) {
+      setSelectedValue(newValue);
+    }
+  };
+
+  return (
+    <Box px={2} py={2}>
+      <Grid container spacing={2} mb={2}>
+        <Grid item xs={6} display="flex" alignItems="center">
+        </Grid>
+        <Grid
+          item
+          xs={6}
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="center"
+        >
+          <SelectDropdown
+            applySmallSizeStyle={true}
+            value={selectedValue}
+            options={options}
+            onChange={handleChange}
+          />
+        </Grid>
+      </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={8}>
+          <Typography variant="h6" gutterBottom>
+            Overview
+          </Typography>
+          <InvoiceAmount selectedValue={selectedValue} />
+        </Grid>
+        <Grid item xs={4}>
+          <Typography variant="h6" gutterBottom>
+            Invoice Status
+          </Typography>
+          <InvoiceStatus selectedValue={selectedValue} />
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
+
+export default Dashboard;
