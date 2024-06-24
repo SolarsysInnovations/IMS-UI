@@ -2,25 +2,16 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Typography,
-  Button,
-  Stack,
+  Box,
   Menu,
   MenuItem,
-  TextField,
-  InputAdornment,
-  Box,
-  Avatar,
   ListItemIcon,
   Divider,
   Tooltip
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
-import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useState } from 'react'
-import { AccountCircle, Login, Logout, PersonAdd, Search, SearchOffRounded, Settings } from '@mui/icons-material'
-import SearchBarUi from '../ui/SearchBar'
+import { AccountCircle, Logout, PersonAdd, Settings, Person, Lock } from '@mui/icons-material'
 import { logOut } from '../../redux-store/auth/authSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../redux-store/store'
@@ -31,262 +22,199 @@ import { useNavigate } from 'react-router-dom'
 import ToastUi from '../../components/ui/ToastifyUi';
 import GroupIcon from '@mui/icons-material/Group';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PersonIcon from '@mui/icons-material/Person';
-import LockIcon from '@mui/icons-material/Lock';
+
+const PopupComponents = {
+  USER_PROFILE: 'userprofile',
+  CHANGE_PASSWORD: 'changepassword',
+}
+
+const menuItems = [
+  { icon: <Person sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'User Profile', component: PopupComponents.USER_PROFILE },
+  { icon: <Lock sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'Change Password', component: PopupComponents.CHANGE_PASSWORD },
+  { icon: <PersonAdd sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'Add another account' },
+  { icon: <Settings sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'Settings', route: '/settings' },
+  { icon: <Logout sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'Logout', action: 'logout' },
+];
+
+const addMenuItems = [
+  {
+    title: 'CUSTOMERS', items: [
+      { icon: <GroupIcon sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'Add User', route: 'roles/list' },
+      { icon: <AddIcon sx={{ color: 'grey.500' }} />, text: 'Add Customer', route: 'customer/create' }
+    ]
+  },
+  {
+    title: 'PURCHASES', items: [
+      { icon: <ShoppingCartIcon sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'Add Invoice', route: 'invoice/create' },
+      { icon: <AddIcon sx={{ color: 'grey.500' }} />, text: 'Add Report', route: 'reports' }
+    ]
+  }
+];
+
+const MenuComponent = ({ anchorEl, open, handleClose, menuItems, onMenuItemClick }: any) => (
+  <Menu
+    anchorEl={anchorEl}
+    open={open}
+    onClose={handleClose}
+    PaperProps={{
+      elevation: 0,
+      sx: {
+        borderRadius: '5px',
+        filter: 'drop-shadow(0px 1px 1px rgba(0,0,0,0.32))',
+        mt: 1.5,
+        '&::before': {
+          content: '""',
+          display: 'block',
+          position: 'absolute',
+          top: 0,
+          right: 14,
+          width: 10,
+          height: 10,
+          bgcolor: 'background.paper',
+          transform: 'translateY(-50%) rotate(45deg)',
+          zIndex: 0,
+        },
+      },
+    }}
+    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+  >
+    {menuItems.map((item: any, index: any) => (
+      <MenuItem
+
+        key={index}
+        onClick={() => onMenuItemClick(item)}
+        sx={{
+          ":hover": {
+            color: "primary.dark"
+          },
+          fontSize: "13px"
+        }}
+      >
+        <ListItemIcon sx={{
+          "& .css-c7koz-MuiSvgIcon-root": {
+            width: "20px"
+          },
+          ":hover": {
+            color: "primary.dark"
+          },
+        }} >{item.icon}</ListItemIcon>
+        {item.text}
+      </MenuItem>
+    ))}
+  </Menu>
+);
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [addMenuAnchorEl, setAddMenuAnchorEl] = useState<null | HTMLElement>(null);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
   const [popUpComponent, setPopUpComponent] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const open = Boolean(anchorEl)
-  const addMenuOpen = Boolean(addMenuAnchorEl);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+  const handleMenuOpen = (setAnchor: any) => (event: any) => {
+    setAnchor(event.currentTarget);
   }
 
-  const handleClose = () => {
-
-    setAnchorEl(null)
+  const handleMenuClose = (setAnchor: any) => () => {
+    setAnchor(null);
   }
 
-  const handleAddMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAddMenuAnchorEl(event.currentTarget);
-  }
-
-  const handleAddMenuClose = () => {
+  const handleMenuItemClick = (item: any) => {
+    if (item.component) {
+      setPopUpComponent(item.component);
+      setIsOpenDialogBox(true);
+    } else if (item.route) {
+      navigate(item.route);
+    } else if (item.action === 'logout') {
+      dispatch(logOut());
+    }
+    setAnchorEl(null);
     setAddMenuAnchorEl(null);
   }
 
-  const PopupComponents = {
-        USER_PROFILE: 'userprofile',
-        CHANGE_PASSWORD: 'changepassword',
-    }
-  return (<>
-    <ToastUi autoClose={1000} />
-    <AppBar sx={{ width: "100%", boxShadow: 'none', backgroundColor: "#fbfbff !important" }} position='sticky' color='transparent'>
-      <Toolbar sx={{
-        '& .MuiToolbar-root': {
-          minHeight: "20px !important",
-        },
-        "@media (min-width: 600px)": {
-          minHeight: "43px",
-          paddingLeft: "15px !important",
-          paddingRight: "15px !important",
-        },
-        justifyContent: 'space-between',
-        backgroundColor: "#ffffff",
-      }}>
-        {/* <Box >
-          <Typography variant="h6" color="initial">Hello</Typography>
-        </Box> */}
-        <Box >
-          {/* <SearchBarUi /> */}
-        </Box>
-
-        <Box>
+  return (
+    <>
+      <ToastUi autoClose={1000} />
+      <AppBar sx={{ width: "100%", boxShadow: 'none', backgroundColor: "#fbfbff !important" }} position='sticky' color='transparent'>
+        <Toolbar sx={{
+          '@media (min-width: 600px)': {
+            minHeight: "43px",
+            paddingLeft: "15px !important",
+            paddingRight: "15px !important",
+          },
+          justifyContent: 'end',
+          backgroundColor: "#ffffff",
+        }}>
           <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
             <Tooltip title="Add item">
-              <IconButton
-                onClick={handleAddMenuClick}
-                size="small"
-                aria-controls={addMenuOpen ? 'add-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={addMenuOpen ? 'true' : undefined}
-              >
-                <AddIcon sx={{ color: `grey.500` }} />
+              <IconButton sx={{ width: "30px" }} onClick={handleMenuOpen(setAddMenuAnchorEl)} size="small">
+                <AddIcon sx={{
+                  ":hover": {
+                    color: "primary.main"
+                  }, color: 'grey.500', width: "20px"
+                }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Settings">
-              <ListItemIcon sx={{
-                    minWidth: "25px",
-                    color:"#6C737F"
-                  }} onClick={()=>{navigate("/settings")}}>
-                <Settings fontSize="small"  />
-              </ListItemIcon>
+              <IconButton sx={{ width: "30px" }} onClick={() => navigate("/settings")}>
+                <Settings sx={{
+                  ":hover": {
+                    color: "primary.main"
+                  },
+                  color: 'grey.500', width: "20px"
+                }} />
+              </IconButton>
             </Tooltip>
             <Tooltip title="Account settings">
-              <IconButton
-                onClick={handleClick}
-                size="small"
-                // sx={{ ml: 2 }}
-                aria-controls={open ? 'account-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-              >
-                <PersonIcon sx={{ color: `grey.500` }} />
+              <IconButton sx={{ width: "30px" }} onClick={handleMenuOpen(setAnchorEl)} size="small">
+                <Person sx={{
+                  ":hover": {
+                    color: "primary.main"
+                  }, color: 'grey.500', width: "20px"
+                }} />
               </IconButton>
             </Tooltip>
           </Box>
-          <Menu
+          <MenuComponent
             anchorEl={anchorEl}
-            id="account-menu"
-            open={open}
-            onClose={handleClose}
-            onClick={handleClose}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-
-                borderRadius: '13px',
-                filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.32))',
-                mt: 1.5,
-                '& .MuiAvatar-root': {
-                  width: 32,
-                  height: 32,
-                  ml: -0.5,
-                  mr: 1,
-                },
-                '&::before': {
-                  content: '""',
-                  display: 'block',
-                  position: 'absolute',
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
-                  bgcolor: 'background.paper',
-                  transform: 'translateY(-50%) rotate(45deg)',
-                  zIndex: 0,
-                },
-              },
-            }}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          >
-            <MenuItem onClick={() => {
-              setPopUpComponent(PopupComponents.USER_PROFILE);
-              setIsOpenDialogBox(true)
-            }} sx={{fontSize:"14px"}} >
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              User Profile
-            </MenuItem>
-            <MenuItem onClick={() => {
-              setPopUpComponent(PopupComponents.CHANGE_PASSWORD);
-              setIsOpenDialogBox(true)
-            }} sx={{fontSize:"14px"}} >
-              <ListItemIcon>
-                <LockIcon />
-              </ListItemIcon>
-              Change Password
-            </MenuItem>
-            <Divider />
-            <MenuItem onClick={handleClose} sx={{fontSize:"14px"}}>
-              <ListItemIcon>
-                <PersonAdd fontSize="small" />
-              </ListItemIcon>
-              Add another account
-            </MenuItem>
-            <MenuItem onClick={()=>{navigate("/settings")}} sx={{fontSize:"14px"}}>
-              <ListItemIcon >
-                <Settings fontSize="small" />
-              </ListItemIcon>
-              Settings
-            </MenuItem>
-            <MenuItem onClick={() => dispatch(logOut())} sx={{fontSize:"14px"}}>
-              <ListItemIcon>
-                <Logout fontSize="small" />
-              </ListItemIcon>
-              Logout
-            </MenuItem>
-          </Menu>
-          <Menu
-              anchorEl={addMenuAnchorEl}
-              id="add-menu"
-              open={addMenuOpen}
-              onClose={handleAddMenuClose}
-              onClick={handleAddMenuClose}
-              PaperProps={{
-                elevation: 0,
-                sx: {
-                  borderRadius: '13px',
-                  filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.32))',
-                  mt: 1.5,
-                  '&::before': {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: 'background.paper',
-                    transform: 'translateY(-50%) rotate(45deg)',
-                    zIndex: 0,
-                  },
-                },
-              }}
-              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-            > 
-              <Box display='flex' justifyContent= 'space-between'>
-                <Box display= 'flex' flexDirection= 'column' pr={2}>
-                  <MenuItem onClick={handleClose} sx={{fontSize:"14px"}}>
-                    <GroupIcon sx={{ color: `grey.500`,marginRight:"10px" }} fontSize="small" />
-                    CUSTOMERS
-                  </MenuItem>
-                  <MenuItem onClick={() => navigate("roles/list")} sx={{fontSize:"14px"}}>
-                    <AddIcon sx={{ color: `grey.500`}} fontSize="small" />
-                    Add User
-                  </MenuItem>
-                  <MenuItem onClick={() => navigate("customer/create")} sx={{fontSize:"14px"}}>
-                    <AddIcon sx={{ color: `grey.500`}} fontSize="small" />
-                    Add Customer
-                  </MenuItem>
-                </Box>
-                <Box display= 'flex' flexDirection='column' pr={2}>
-                  <MenuItem onClick={handleClose} sx={{fontSize:"14px"}}>
-                    <ShoppingCartIcon sx={{ color: `grey.500`,marginRight:"10px" }} fontSize="small" />
-                    PURCHASES
-                  </MenuItem>
-                  <MenuItem onClick={() => navigate("invoice/create")} sx={{fontSize:"14px"}}>
-                    <AddIcon sx={{ color: `grey.500`}} fontSize="small" />
-                    Add Invoice
-                  </MenuItem>
-                  <MenuItem onClick={() => navigate("reports")} sx={{fontSize:"14px"}}>
-                    <AddIcon sx={{ color: `grey.500`}} fontSize="small" />
-                    Add Report
-                  </MenuItem>
-                </Box>
-              </Box>
-            </Menu>
-        </Box>
-      </Toolbar>
+            open={Boolean(anchorEl)}
+            handleClose={handleMenuClose(setAnchorEl)}
+            menuItems={menuItems}
+            onMenuItemClick={handleMenuItemClick}
+          />
+          <MenuComponent
+            anchorEl={addMenuAnchorEl}
+            open={Boolean(addMenuAnchorEl)}
+            handleClose={handleMenuClose(setAddMenuAnchorEl)}
+            menuItems={addMenuItems.flatMap(group => group.items)}
+            onMenuItemClick={handleMenuItemClick}
+          />
+        </Toolbar>
         <DialogBoxUi
           open={opendialogBox}
           maxwidth={{
-              "& .MuiDialog-container": {
-                  "& .MuiPaper-root": {
-                  width: "60%",
-                  maxWidth: "350px",
-                  },
+            "& .MuiDialog-container": {
+              "& .MuiPaper-root": {
+                width: "60%",
+                maxWidth: "350px",
               },
+            },
           }}
-           // Set open to true to display the dialog initially
-          // title="Custom Dialog Title"
           content={
-              <>
-                {
-                  popUpComponent === PopupComponents.USER_PROFILE ? <UserProfile />  :
-                  popUpComponent === PopupComponents.CHANGE_PASSWORD ? <ChangePassword onClose={function (): void {
-                    setIsOpenDialogBox(false)
-                    setPopUpComponent("")
-                  }} />  : null
-                }
-              </>
+            popUpComponent === PopupComponents.USER_PROFILE ? <UserProfile /> :
+              popUpComponent === PopupComponents.CHANGE_PASSWORD ? <ChangePassword onClose={() => {
+                setIsOpenDialogBox(false);
+                setPopUpComponent("");
+              }} /> : null
           }
           handleClose={() => {
-            setIsOpenDialogBox(false)
-            setPopUpComponent("")
+            setIsOpenDialogBox(false);
+            setPopUpComponent("");
           }}
         />
-    </AppBar>
-   </>        
+      </AppBar>
+    </>
   )
 }

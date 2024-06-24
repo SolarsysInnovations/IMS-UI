@@ -10,6 +10,7 @@ import DatePickerUi from "../ui/DatePicker";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
 
+// Dropdown
 const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
     const options: any = subField.options?.map(option => ({
         value: option.value,
@@ -42,6 +43,7 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 
 const renderTextField = (field: any, meta: any, subField: SubField) => (
     <TextFieldUi
+
         {...field}
         // variant="outlined"
         // margin="normal"
@@ -100,6 +102,7 @@ interface FieldRendererProps {
     field: FieldProps;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }
+
 export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, field, setFieldValue, setData }) => {
     const { values } = useFormikContext<FormFieldProps>();
 
@@ -165,21 +168,21 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                                                 </Field>
                                             </Grid>
                                         ))}
-                                        <Grid sx={{display:"flex"}}>
-                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1,height:"17px",display:"flex",ml:3}}>
-                                                <IconButton size='small'  onClick={() => remove(index)}>
+                                        <Grid sx={{ display: "flex" }}>
+                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1, height: "17px", display: "flex", ml: 3 }}>
+                                                <IconButton size='small' onClick={() => remove(index)}>
                                                     <DeleteIcon sx={{ color: `#ed5d5a`, fontSize: "18px" }} />
                                                 </IconButton>
                                             </Box>
-                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1,height:"17px",display:"flex",ml:3 }}>
-                                                <IconButton size='small'  color="primary" onClick={() => push({})}>
-                                                    <AddIcon sx={{fontSize: "18px"}} />
+                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1, height: "17px", display: "flex", ml: 3 }}>
+                                                <IconButton size='small' color="primary" onClick={() => push({})}>
+                                                    <AddIcon sx={{ fontSize: "18px" }} />
                                                 </IconButton>
                                             </Box>
                                         </Grid>
                                     </React.Fragment>
                                 ))}
-                                
+
                             </>
                         )}
                     </FieldArray>

@@ -15,14 +15,67 @@ import { GridRenderCellParams } from '@mui/x-data-grid';
 import { useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { selectUserRole } from '../../redux-store/auth/authSlice';
 import { Roles } from '../../constants/Enums';
+import ButtonUi from '../../components/ui/Button';
+import SendEmail from './Send-email';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 const invoiceOptions = ["DRAFT", "PENDING", "APPROVED", "PAID", "OVERDUE", "DELETE", "RETURNED",]
 
 const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
 
+    const [status, setStatus] = useState(params.value);
+    const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
+    const { data: invoiceList, error, isLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
+
+    useEffect(() => {
+        getInvoiceList();
+    }, [updateSuccess])
+
+    const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
+        const newStatus = event.target.value as string;
+        setStatus(newStatus);
+
+        const updatedInvoice = {
+            ...params.row,
+            invoiceStatus: newStatus,
+        };
+
+
+        try {
+            const response = await updateInvoice({ id: updatedInvoice.id, invoiceData: updatedInvoice });
+            console.log("Update response:", response);
+            if ('error' in response) {
+                console.error("Error updating invoice status:", response.error);
+            } else {
+                console.log(`Invoice status updated: ${newStatus}`);
+            }
+        } catch (error) {
+            console.error('Error updating invoice status:', error);
+        }
+    };
+
+    return (
+        <select
+            value={status}
+            onChange={handleChange}
+            style={{ fontSize: "12px", padding: "5px 5px", borderRadius: "5px" }}
+        >
+            {invoiceOptions.map((option) => (
+                <option key={option} value={option}>{option}</option>
+            ))}
+        </select>
+    );
+};
+
+
+
+const GridEmailButton = ({ params }: { params: GridRenderCellParams }) => {
 
     const [status, setStatus] = useState(params.value);
     const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
     const { data: invoiceList, error, isLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
+    const [openemaildialogBox, setIsOpenEmailDialogBox] = useState(false);
+    const { data: customers, refetch, isSuccess } = useGetCustomersQuery();
 
     useEffect(() => {
         getInvoiceList();
@@ -53,26 +106,41 @@ const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
     };
 
     return (
-        <select
-            value={status}
-            onChange={handleChange}
-            style={{ fontSize: "12px", padding: "5px 5px", borderRadius: "5px" }}
-        >
-            {invoiceOptions.map((option) => (
-                <option key={option} value={option}>{option}</option>
-            ))}
-        </select>
+        <>
+            <ButtonUi smallButtonCss={true} size='small' variant='outlined' onClick={() => {
+                setIsOpenEmailDialogBox(true)
+            }} label='Email' />
+            <DialogBoxUi
+                open={openemaildialogBox} // Set open to true to display the dialog initially
+                // title="Custom Dialog Title"
+                content={
+                    <SendEmail onClose={function (): void {
+                        if (isSuccess) {
+                            setIsOpenEmailDialogBox(false)
+                        }
+                        else {
+                            setIsOpenEmailDialogBox(true)
+                        }
+
+                    }} />
+                }
+                handleClose={() => {
+                    setIsOpenEmailDialogBox(false)
+                }}
+            />
+        </>
     );
 };
 
-
 const InvoiceList = () => {
+
     const { data: invoiceList, error, isLoading, refetch } = useGetInvoiceQuery();
     const userRole = useSelector(selectUserRole);
-    console.log(userRole);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const pathname = usePathname();
+
+
     const buttons = [
         { label: 'Create Invoice', icon: Add, onClick: () => navigate("/invoice/create") },
     ];
@@ -108,6 +176,15 @@ const InvoiceList = () => {
             headerName: 'Due Date',
             width: 140,
             editable: false,
+        },
+        {
+            field: 'email',
+            headerName: 'Email To',
+            width: 120,
+            editable: true,
+            renderCell: (params: GridRenderCellParams) => (
+                <GridEmailButton params={params} />
+            ),
         },
 
         // {

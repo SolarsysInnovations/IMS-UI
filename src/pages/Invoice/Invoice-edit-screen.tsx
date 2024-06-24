@@ -11,13 +11,10 @@ import RadioUi from '../../components/ui/RadioGroup';
 import { Formik, Form } from 'formik';
 import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
-import { invoiceEditInitialValue } from '../../constants/forms/formikInitialValues';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 import { InvoiceInitialValueProps } from '../../types/types';
 import { useGetServiceQuery, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
 import DatePickerUi from '../../components/ui/DatePicker';
-import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { generateOptions } from '../../services/utils/dropdownOptions';
 import { useAddInvoiceMutation, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
@@ -34,15 +31,10 @@ import GstTypeScreen from './GstType/GstTypeScreen';
 import TdsTaxScreen from './TdsTax/TdsTaxScreen';
 import { useGetPaymentTermsQuery } from '../../redux-store/invoice/paymentTerms';
 import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
-import { float } from 'html2canvas/dist/types/css/property-descriptors/float';
-import { formatDate } from '../../services/utils/dataFormatter';
 import { addDays, format } from 'date-fns';
-import ServiceCreate from '../service/service-create-screen';
 import DialogBoxUi from '../../components/ui/DialogBox';
-import { clearData } from '../../redux-store/global/globalState';
-import SendEmail from './Send-email';
 import ServiceScreen from './service/ServiceScreen';
-
+import { clearData } from '../../redux-store/global/globalState';
 interface Service {
     id: string; // Ensure id is mandatory
     serviceAccountingCode: string;
@@ -56,7 +48,9 @@ const InvoiceEdit = () => {
     const dispatch = useDispatch<AppDispatch>();
     const pathname = usePathname();
     const navigate = useNavigate();
-    const invoiceStateDetails = useSelector((state: any) => state.customerState.data);
+    const invoiceStateDetails = useSelector((state: any) => state.globalState.data);
+
+    console.log("invoice details", invoiceStateDetails);
 
     // popUps
     const [popUpComponent, setPopUpComponent] = useState("");
@@ -214,11 +208,11 @@ const InvoiceEdit = () => {
                     values.totalAmount = invoiceTotalAmount ?? null;
                     await updateInvoice({ id: invoiceStateDetails.id, invoiceData: values });
                     // alert(JSON.stringify(values));
-                    console.log(values);
-
+                    // console.log(values);
                     resetForm();
                     setInvoiceValues({ ...invoiceValues })
                     navigate('/invoice/list')
+                    dispatch(clearData())
                 } catch (error) {
                     console.error("An error occurred during login:", error);
                 }
@@ -227,7 +221,7 @@ const InvoiceEdit = () => {
                 }
             }}
         >
-            {({ errors, touched, values, handleChange, handleSubmit, setFieldValue }) => {
+            {({ errors, touched, values, handleChange, handleSubmit, setFieldValue, isValid, dirty }) => {
                 return (
                     <div>
                         <ToastUi autoClose={2000} />
@@ -240,10 +234,22 @@ const InvoiceEdit = () => {
                                     values.servicesList = invoiceValues.servicesList
                                     values.totalAmount = invoiceTotalAmount ?? null;
                                     setInvoiceFinalData(values as any)
+                                },
+                                disabled: !(isValid && dirty),
+                            },
+                            {
+                                label: 'Sent to Approver', disabled: !(isValid && dirty), onClick: () => {
+                                    values.invoiceStatus = "PENDING";
+                                    handleSubmit()
                                 }
                             },
-                            { label: 'Back', icon: Add, onClick: () => navigate(-1) },
-                            { label: 'Save', icon: Add, onClick: handleSubmit },
+                            { label: 'Back', onClick: () => navigate(-1) },
+                            {
+                                label: 'Save', onClick: async () => {
+                                    handleSubmit()
+                                },
+                                disabled: !(isValid && dirty)
+                            },
                         ]} />
                         {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
                         <DialogBoxUi

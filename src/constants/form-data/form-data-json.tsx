@@ -156,7 +156,7 @@ export const TdsTaxFields: FieldProps[] = [
         type: 'section',
         titleGridSize: 12,
         subFields: [
-            { name: 'taxName', label: 'Tax Name', type: 'text', gridSize: 3, validation: Yup.string().required('taxName is required') },
+            { name: 'taxName', label: 'Tax Name', type: 'text', gridSize: 3, validation: Yup.string().required('taxName is required'), },
             { name: 'taxPercentage', label: 'Tax', type: 'number', gridSize: 2, validation: Yup.string().required('taxPercentage is required'), endAdornment: "%" },
         ]
     },

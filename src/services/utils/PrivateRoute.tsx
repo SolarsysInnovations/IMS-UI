@@ -16,7 +16,6 @@ const RoleBasedRoute = ({ allowedRoles }: RoleBasedRouteProps) => {
 
     const userRole = useSelector(selectUserRole);
     const location = useLocation();
-    console.log(userRole);
     const token = useSelector(selectCurrentToken)
 
     if (!token) {

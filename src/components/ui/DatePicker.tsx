@@ -13,15 +13,18 @@ interface DatePickerProps {
 }
 
 export default function DatePickerUi({ label, value, onChange }: DatePickerProps) {
+
     const formatDate = (date: any) => {
         return date.format('DD-MM-YYYY');
     };
     const parseDate = (value: any) => {
         return dayjs(value, 'DD-MM-YYYY');
     };
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+
                 value={value ? parseDate(value) : null}
                 onChange={(date) => onChange(formatDate(date))}
                 onError={(date) => {
