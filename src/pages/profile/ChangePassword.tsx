@@ -11,7 +11,7 @@ import { ChangePasswordInitialValueProps } from "../../types/types";
 import { useChangePasswordMutation, useRolesGetUserMutation } from "../../redux-store/role/roleApi";
 import { string } from "yup";
 import useSuccessToast from "../../hooks/useToast";
-import { Add } from "@mui/icons-material";
+import { Add, KeyboardBackspaceTwoTone, Save } from "@mui/icons-material";
 
 
 interface ChangePasswordProps {
@@ -28,8 +28,8 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
     const [userPassword, setUserPassword] = useState<string>();
     const userName = localStorage.getItem("userName");
     const buttons = [
-        { label: 'Cancel', icon: Add, onClick: () => navigate(-1) },
-        { label: 'Update', icon: Add, onClick: () => handleSubmit }
+        { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+        { label: 'Update', icon: Save, onClick: () => handleSubmit }
     ];
 
     

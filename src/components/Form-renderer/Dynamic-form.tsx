@@ -5,7 +5,7 @@ import { Form, Formik } from "formik";
 import TableHeader from "../layouts/TableHeader";
 import { Grid } from "@mui/material";
 import { FieldRenderer } from "./Form-fields-renderer";
-import { Add } from "@mui/icons-material";
+import { Add, KeyboardBackspaceTwoTone, Save } from "@mui/icons-material";
 import { useState } from "react";
 import SnackBarUi from "../ui/Snackbar";
 
@@ -25,8 +25,8 @@ export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error
             >
                 {({ errors, touched, values, handleChange, handleSubmit, setFieldValue, isValid, dirty }) => {
                     const defaultButtons = [
-                        { label: 'Back', icon: Add, onClick: () => navigate(-1) },
-                        { label: 'Save', icon: Add, onClick: handleSubmit, disabled: !(isValid && dirty) } // Use handleSubmit here
+                        { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+                        { label: 'Save', icon: Save, onClick: handleSubmit, disabled: !(isValid && dirty) } // Use handleSubmit here
                     ];
 
                     const resolvedButtons = buttons ? buttons.map((button: any) => ({

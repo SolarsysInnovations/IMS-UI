@@ -8,7 +8,7 @@ import { GstTypeFormProps, GstTypeProps } from '../../../types/types';
 import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
-import { Add } from "@mui/icons-material";
+import { Add, Save } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 
 // create and edit screen
@@ -70,7 +70,7 @@ const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
                 validationSchema={gstTypeValidationSchema}
                 onSubmit={onSubmit}
                 buttons={[
-                    { label: 'Save', icon: Add, onClick: onSubmit }
+                    { label: 'Save', icon: Save, onClick: onSubmit }
                 ]} />
         </div>
     );

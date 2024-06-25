@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import InfoIcon from '@mui/icons-material/Info';
 import TableHeader from "../../../src/components/layouts/TableHeader";
-import { Add } from "@mui/icons-material";
+import { Add, KeyboardBackspaceTwoTone } from "@mui/icons-material";
 import DescriptionIcon from '@mui/icons-material/Description';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import { Typography, IconButton } from '@mui/material';
@@ -25,7 +25,7 @@ const Reportscreen: React.FC = () => {
     return (
         <div>
               <TableHeader headerName={pathname} buttons={[
-                            { label: 'Back', icon: Add, onClick: () => navigate(-1) },
+                            { label: 'Back',  icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
                         ]} />
                         {/* <Grid container marginTop={3}>
                         <RequestQuoteIcon /> Receivables

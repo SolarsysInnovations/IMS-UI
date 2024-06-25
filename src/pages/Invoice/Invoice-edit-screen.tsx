@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import TableHeader from '../../components/layouts/TableHeader';
-import { Add } from '@mui/icons-material';
+import { Add, Approval, KeyboardBackspaceTwoTone, Save, Visibility } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -241,7 +241,7 @@ const InvoiceEdit = () => {
                             <ToastUi autoClose={2000} />
                             <TableHeader headerName={pathname} buttons={[
                                 {
-                                    label: 'Preview', icon: Add, onClick: () => {
+                                    label: 'Preview', icon: Visibility, onClick: () => {
                                         setIsModalOpen(true)
                                         // setInvoicePopup(true)
                                         // values.invoiceTotalAmount = invoiceTotalAmount
@@ -252,14 +252,14 @@ const InvoiceEdit = () => {
                                     disabled: !(isValid && dirty),
                                 },
                                 {
-                                    label: 'Sent to Approver', disabled: !(isValid && dirty), onClick: () => {
+                                    label: 'Sent to Approver',icon: Approval, disabled: !(isValid && dirty), onClick: () => {
                                         values.invoiceStatus = "PENDING";
                                         handleSubmit()
                                     }
                                 },
-                                { label: 'Back', onClick: () => navigate(-1) },
+                                { label: 'Back',icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
                                 {
-                                    label: 'Save', onClick: async () => {
+                                    label: 'Save',icon: Save, onClick: async () => {
                                         handleSubmit()
                                     },
                                     disabled: !(isValid && dirty)

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import TableHeader from '../../components/layouts/TableHeader';
-import { Add } from '@mui/icons-material';
+import { Add, KeyboardBackspaceTwoTone } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,7 +66,7 @@ const ArAgingscreen: React.FC = () => {
                     <div>
                         <ToastUi autoClose={2000} />
                         <TableHeader headerName="Report Ageing" buttons={[
-                            { label: 'Back', icon: Add, onClick: () => navigate(-1) }
+                            { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) }
                         ]} />
                         <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
                         </ModalUi>

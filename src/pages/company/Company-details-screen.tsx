@@ -7,7 +7,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import { Box, Grid } from "@mui/material";
 import TableHeader from "../../components/layouts/TableHeader";
-import { Add } from "@mui/icons-material";
+import { Add, Edit } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import usePathname from "../../hooks/usePathname";
@@ -35,7 +35,7 @@ const CompanyDetailsScreen: React.FC = () => {
   console.log("company details", companyDetails);
 
   const button = [
-    { label: "Edit", icon: Add, onClick: () => handleEditClick() },
+    { label: "Edit", icon: Edit, onClick: () => handleEditClick() },
   ];
   const handleEditClick = async () => {
     try {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Form, Formik } from 'formik';
 import { Box, Grid, IconButton } from "@mui/material";
 import { RoleInitialValue } from '../../constants/forms/formikInitialValues';
@@ -12,7 +13,7 @@ import { toastConfig } from '../../constants/forms/config/toastConfig';
 import { RoleInitialValueProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
 import TableHeader from '../../components/layouts/TableHeader';
-import { Add, VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
+import { Add, KeyboardBackspaceTwoTone, Save, VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 
 interface RoleFormProps {
     roleId?: string | null;
@@ -26,6 +27,7 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
     const [initialValues, setInitialValues] = useState(RoleInitialValue);
     const dispatch = useDispatch();
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (roleId) {
@@ -62,9 +64,13 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
     const buttons: any = [];
 
     if (initialValues.id == "") {
-        buttons.push({ label: 'Save', icon: Add, onClick: () => handleSubmit })
+        buttons.push(
+            { label: 'Back',  icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+            { label: 'Save', icon: Save, onClick: () => handleSubmit })
     } else {
-        buttons.push({ label: 'Update', icon: Add, onClick: () => handleSubmit })
+        buttons.push(
+            { label: 'Back',  icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+            { label: 'Update', icon: Save, onClick: () => handleSubmit })
     }
 
     return (

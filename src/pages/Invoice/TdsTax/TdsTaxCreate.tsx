@@ -13,6 +13,7 @@ import { TdsTaxFormProps, TdsTaxProps } from '../../../types/types';
 import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
+import { Save } from '@mui/icons-material';
 
 
 const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
@@ -72,7 +73,7 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
                 validationSchema={tdsTaxValidationSchema}
                 onSubmit={onSubmit}
                 buttons={[
-                   { label: 'Save', onClick: onSubmit }
+                   { label: 'Save',icon: Save, onClick: onSubmit }
                 ]}
             />
         </div>
