@@ -157,6 +157,7 @@ const InvoiceList = () => {
     },[refetch]);
 
     const getColumns = (onDeleteSuccess: () => void): GridColDef[] => {
+        // const columns= (onDeleteSuccess: () => void): GridColDef[] => [
         const columns: GridColDef[] = [
             {
                 field: 'Action',
@@ -190,13 +191,13 @@ const InvoiceList = () => {
                 editable: false,
             },
             {
-            field: 'email',
-            headerName: 'Email To',
-            width: 120,
-            editable: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <GridEmailButton params={params} />
-            ),
+                field: 'email',
+                headerName: 'Email To',
+                width: 120,
+                editable: true,
+                renderCell: (params: GridRenderCellParams) => (
+                    <GridEmailButton params={params} />
+                ),
             },
 
             // {
@@ -243,11 +244,10 @@ const InvoiceList = () => {
                 editable: false,
             },
         )
-    }return columns;
+    }
+    return columns;
     };
     
-
-
     return (
         <>
             {showDeleteSuccessToast && (

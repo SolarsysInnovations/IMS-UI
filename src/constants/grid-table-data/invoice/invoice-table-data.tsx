@@ -104,12 +104,12 @@ export const MyCellRenderer = ({ row, onDeleteSuccess  }: { row: any, onDeleteSu
         setIsModalOpen(false);
     };
 
-    // useEffect(() => {
-    //     if (D_Success) {
-    //         // toast.success("successfully deleted the invoice", toastConfig)
-    //     }
-    //     refetch();
-    // }, [D_Success]);
+    useEffect(() => {
+        if (D_Success) {
+            onDeleteSuccess();
+        }
+        refetch();
+    }, [D_Success, onDeleteSuccess]);
 
 
 

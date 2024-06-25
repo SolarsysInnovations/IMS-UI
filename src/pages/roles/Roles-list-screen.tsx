@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import ToastUi from '../../components/ui/ToastifyUi'
 import { useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import SnackBarUi from '../../components/ui/Snackbar';
 
 const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
@@ -72,6 +73,8 @@ const RolesList: React.FC = () => {
     const pathname = usePathname();
     const [deleteRole] = useDeleteRoleMutation();
 
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
+
     const handleModalClose = () => {
         setOpenModal(false);
         refetch();
@@ -96,7 +99,11 @@ const RolesList: React.FC = () => {
         const confirmed = window.confirm("Are you sure you want to delete this role?");
         if (confirmed) {
             await deleteRole(id);
-            toast.success("Successfully deleted the selected role", toastConfig);
+            setShowSuccessToast(true);
+                setTimeout(() => {
+                    setShowSuccessToast(false);
+                }, 2000);
+            // toast.success("Successfully deleted the selected role", toastConfig);
             refetch();
         }
     };
@@ -147,7 +154,13 @@ const RolesList: React.FC = () => {
 
     return (
         <>
-            <ToastUi autoClose={1000} />
+            {showSuccessToast && (
+                <SnackBarUi
+                    message="Role successfully deleted"
+                    severity="success"
+                    isSubmitting={true}
+                />
+            )}
             <TableHeader headerName={pathname} buttons={buttons} />
             <RolesGridDataUi showToolbar={true} columns={columns || []} tableData={roleDetails || []} checkboxSelection={false} onRowEdit={(roleId) => handleEditClick(roleId)}
                 onRowDelete={handleDeleteClick} />
