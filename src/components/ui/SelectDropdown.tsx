@@ -35,7 +35,7 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
             paddingTop: "0px",
             paddingBottom: "1px",
             paddingLeft: "6px",
-            width: "130px",
+            width: "110px",
           },
         }),
 
@@ -45,7 +45,7 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
           borderRadius: "8px !important",
           overflow: "hidden",
           borderColor: `action.active`,
-          transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
+          transition: `border-color 0.2s, box-shadow 0.2s,`,
           '&:hover': {
             backgroundColor: `action.hover`,
           },

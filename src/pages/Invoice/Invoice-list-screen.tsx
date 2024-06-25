@@ -20,11 +20,26 @@ import ButtonUi from '../../components/ui/Button';
 import SendEmail from './Send-email';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
-const invoiceOptions = ["DRAFT", "PENDING", "APPROVED", "PAID", "OVERDUE", "DELETE", "RETURNED",]
+import SelectDropdown from '../../components/ui/SelectDropdown';
+
+const invoiceOptions = [
+  { value: "DRAFT", label: "DRAFT" },
+  { value: "PENDING", label: "PENDING" },
+  { value: "APPROVED", label: "APPROVED" },
+  { value: "PAID", label: "PAID" },
+  { value: "OVERDUE", label: "OVERDUE" },
+  { value: "DELETE", label: "DELETE" },
+  { value: "RETURNED", label: "RETURNED" },
+];
+
+interface ValueProps {
+  value: string;
+  label: string;
+}
 
 const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
 
-    const [status, setStatus] = useState(params.value);
+    const [status, setStatus] = useState<ValueProps | null>(params.value);
     const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
     const { data: invoiceList, error, isLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
 
@@ -32,13 +47,13 @@ const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
         getInvoiceList();
     }, [updateSuccess])
 
-    const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
-        const newStatus = event.target.value as string;
-        setStatus(newStatus);
+    const handleChange = async (newValue: ValueProps | null) => {
+    if (newValue === null) return;
+        setStatus(newValue);
 
         const updatedInvoice = {
             ...params.row,
-            invoiceStatus: newStatus,
+            invoiceStatus: newValue,
         };
 
 
@@ -48,7 +63,7 @@ const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
             if ('error' in response) {
                 console.error("Error updating invoice status:", response.error);
             } else {
-                console.log(`Invoice status updated: ${newStatus}`);
+                console.log(`Invoice status updated: ${newValue}`);
             }
         } catch (error) {
             console.error('Error updating invoice status:', error);
@@ -56,15 +71,12 @@ const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
     };
 
     return (
-        <select
+        <SelectDropdown
+            options={invoiceOptions}
             value={status}
             onChange={handleChange}
-            style={{ fontSize: "12px", padding: "5px 5px", borderRadius: "5px" }}
-        >
-            {invoiceOptions.map((option) => (
-                <option key={option} value={option}>{option}</option>
-            ))}
-        </select>
+            applySmallSizeStyle
+        />
     );
 };
 

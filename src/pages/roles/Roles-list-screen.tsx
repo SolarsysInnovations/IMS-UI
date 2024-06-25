@@ -14,12 +14,22 @@ import { toastConfig } from '../../constants/forms/config/toastConfig';
 import ToastUi from '../../components/ui/ToastifyUi'
 import { useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import SnackBarUi from '../../components/ui/Snackbar';
+import SelectDropdown from '../../components/ui/SelectDropdown';
 
-const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
+const invoiceOptions = [
+    { value: "ADMIN", label: "ADMIN" },
+    { value: "APPROVER", label: "APPROVER" },
+    { value: "ENDUSER", label: "ENDUSER" },
+];
+
+interface ValueProps {
+  value: string;
+  label: string;
+}
 
 const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
 
-    const [status, setStatus] = useState(params.value);
+    const [status, setStatus] = useState<ValueProps | null>(params.value);
     const [updateRoles, { isSuccess: updateSuccess }] = useUpdateRoleMutation();
     const { data: rolesList, error, isLoading, refetch: fetchRolesList } = useGetRoleQuery();
 
@@ -27,14 +37,14 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
         fetchRolesList();
     }, [updateSuccess])
 
-    const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
-        const newStatus = event.target.value as string;
+    const handleChange = async (newValue: ValueProps | null) => {
+    if (newValue === null) return;
 
-        setStatus(newStatus);
+        setStatus(newValue);
 
         const updatedRoles = {
             ...params.row,
-            userRole: newStatus,
+            userRole: newValue,
         };
 
         console.log("Updating invoice with payload:", updatedRoles);
@@ -45,7 +55,7 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
             if ('error' in response) {
                 console.error("Error updating invoice status:", response.error);
             } else {
-                console.log(`Invoice status updated: ${newStatus}`);
+                console.log(`Invoice status updated: ${newValue}`);
             }
         } catch (error) {
             console.error('Error updating invoice status:', error);
@@ -53,15 +63,12 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
     };
 
     return (
-        <select
+        <SelectDropdown
+            options={invoiceOptions}
             value={status}
             onChange={handleChange}
-            style={{ fontSize: "12px", padding: "5px 5px", borderRadius: "5px" }}
-        >
-            {invoiceOptions.map((option) => (
-                <option key={option} value={option}>{option}</option>
-            ))}
-        </select>
+            applySmallSizeStyle
+        />
     );
 };
 
