@@ -10,6 +10,12 @@ import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { addDays, format, parse } from "date-fns";
 import DialogBoxUi from "../ui/DialogBox";
 import SendEmail from "../../pages/Invoice/Send-email";
+import SplitButton from "../ui/SplitButton";
+import ButtonUi from "../ui/Button";
+import { invoiceStatusOptions } from "../../constants/data";
+import { useUpdateInvoiceMutation, useInvoiceGetByIdMutation, useGetInvoiceQuery } from '../../redux-store/invoice/invcoiceApi';
+import { useDispatch, useSelector } from "react-redux";
+import { setData } from "../../redux-store/global/globalState";
 
 interface InvoiceUiProps {
     invoiceData?: any;
@@ -18,30 +24,35 @@ interface InvoiceUiProps {
     tds?: number | null;
     isModalOpen?: any;
     downloadPdf?: boolean;
+    preview?: boolean;
 }
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) {
+function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) {
     const { data: customers, error, isLoading, refetch, isSuccess } = useGetCustomersQuery();
     const [subTotalAmount, setSubTotalAmount] = useState<number>(0)
     const [customerDetails, setCustomerDetails] = useState<any>()
     const [discountAmount, setDiscountAmount] = useState<number>(0)
     const [openemaildialogBox, setIsOpenEmailDialogBox] = useState(false);
+    const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
+    const [getInvoiceById, { }] = useInvoiceGetByIdMutation();
 
-    console.log(invoiceData);
+    const invoiceData = useSelector((state: any) => state.globalState.data);
+    const dispatch = useDispatch();
+
+    console.log("invoiceData", invoiceData);
 
     useEffect(() => {
         if (invoiceData) {
-            const calculateTotal = invoiceData.servicesList.reduce((total: any, service: any) => {
+            const calculateTotal = invoiceData?.servicesList?.reduce((total: any, service: any) => {
                 return total + service.serviceAmount;
             }, 0)
             setSubTotalAmount(calculateTotal);
-
             const disAmount = (subTotalAmount * (invoiceData.discountPercentage ?? 0)) / 100;
             setDiscountAmount(disAmount);
         }
-    }, [invoiceData, subTotalAmount])
+    }, [invoiceData, subTotalAmount]);
 
     useEffect(() => {
         if (downloadPdf) {
@@ -56,6 +67,22 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
             setCustomerDetails(customerDetails)
         }
     }, [customers, invoiceData])
+
+    const handleOptionClick = async (option: any, index: any) => {
+        try {
+            const updatedInvoiceData = {
+                ...invoiceData,
+                invoiceStatus: option
+            };
+            await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
+
+            const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
+            dispatch(setData(fetchedInvoiceData))
+            // Optionally, update the state with the fetched data if needed
+        } catch (error) {
+            console.log("Error updating invoice data", error);
+        }
+    }
 
     const printPDF = () => {
         const element = document.querySelector("#invoiceCapture");
@@ -83,7 +110,7 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
             doc.save('Downld.pdf');
         });
     };
-    console.log("invoice", invoiceData);
+
 
     if (!invoiceData) {
         return <div>No data available</div>;
@@ -95,6 +122,9 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
 
     // Check if the parsed date is valid
     const isValidDate = parsedDueDate instanceof Date && !isNaN(parsedDueDate.getTime());
+
+    const currentInvoiceStatus = invoiceStatusOptions?.indexOf(invoiceData.invoiceStatus);
+
     return (
         <>
             <div className="App" id="invoiceCapture" style={{ padding: "50px 30px" }}>
@@ -117,7 +147,6 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                             </div>
                         </Box>
                     </Grid>
-
                 </Grid>
                 <Grid container sx={{ backgroundColor: "#f8f9f9", marginTop: "30px", padding: "20px 20px" }}>
                     <Grid sx={{ marginTop: "0px" }} item xs={4}>
@@ -131,8 +160,6 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                             <div>
                                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Phone </span> <span>: {customerDetails?.customerPhone}</span></p>
                             </div>
-
-
                         </Box>
                     </Grid>
                     <Grid sx={{ marginTop: "0px", }} item xs={4}>
@@ -152,7 +179,6 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                             </div>
                         </Box>
                     </Grid>
-
                 </Grid>
                 <Grid container>
                     <Grid sx={{ marginTop: "0px" }} item xs={12}>
@@ -202,12 +228,19 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                     </Grid>
                 </Grid>
             </div >
-            <Grid container spacing={5}>
-                <Grid item xs={5} sx={{ display: " flex", justifyContent: "space-between" }}>
-                    <ButtonSmallUi label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
-                    <ButtonSmallUi label="Email" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); }} />
+            {preview && (
+                <Grid container spacing={5}>
+                    <Grid item xs={12} >
+                        <Box gap={2} sx={{ display: "flex", justifyContent: "right" }}>
+                            <ButtonUi smallButtonCss={true} label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
+                            {/* {invoiceData?.invoiceStatus === "APPROVED" ? ( */}
+                            <ButtonUi disabled={invoiceData.invoiceStatus === "APPROVED" ? false : true} smallButtonCss={true} label="Email" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); }} />
+                            {/* ) : ""} */}
+                            <SplitButton disabledOptions={[currentInvoiceStatus]} options={invoiceStatusOptions} defaultIndex={currentInvoiceStatus} onOptionClick={handleOptionClick} />
+                        </Box>
+                    </Grid>
                 </Grid>
-            </Grid>
+            )}
             <DialogBoxUi
                 open={openemaildialogBox} // Set open to true to display the dialog initially
                 // title="Custom Dialog Title"
@@ -219,7 +252,6 @@ function InvoiceUi({ downloadPdf, invoiceData, subtotal, discount, tds, isModalO
                         else {
                             setIsOpenEmailDialogBox(true)
                         }
-
                     }} />
                 }
                 handleClose={() => {

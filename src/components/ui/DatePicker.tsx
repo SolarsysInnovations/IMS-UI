@@ -10,18 +10,22 @@ interface DatePickerProps {
     value?: any;
     onChange: (value: any) => void;
     label?: string;
+    required?: boolean;
+    disabled?: boolean;
 }
 
-export default function DatePickerUi({ label, value, onChange }: DatePickerProps) {
+export default function DatePickerUi({ label, value, disabled, required, onChange }: DatePickerProps) {
     const formatDate = (date: any) => {
         return date.format('DD-MM-YYYY');
     };
     const parseDate = (value: any) => {
         return dayjs(value, 'DD-MM-YYYY');
     };
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+                disabled={disabled}
                 value={value ? parseDate(value) : null}
                 onChange={(date) => onChange(formatDate(date))}
                 onError={(date) => {

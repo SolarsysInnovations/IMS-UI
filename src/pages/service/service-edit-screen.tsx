@@ -11,10 +11,14 @@ import { useSelector } from 'react-redux';
 import useSuccessToast from '../../hooks/useToast';
 import { ToastContainer, toast } from 'react-toastify';
 import ToastUi from '../../components/ui/ToastifyUi';
+import { Alert, AlertTitle, Snackbar } from '@mui/material';
+import SnackBarUi from '../../components/ui/Snackbar';
 
 const ServiceEditScreen: React.FC = () => {
     const [updateService, { isLoading, isSuccess, isError, error }] = useUpdateServiceMutation();
     const serviceStateDetails = useSelector((state: any) => state.serviceState.data);
+    const [showSuccessToast, setShowSuccessToast] = useState(false); 
+
 
     useEffect(() => {
         console.log("Service State Details:", serviceStateDetails); // Check what is in serviceStateDetails
@@ -30,7 +34,11 @@ const ServiceEditScreen: React.FC = () => {
                     id: id,
                     service: values,
                 });
-                actions.resetForm();
+                // actions.resetForm();
+                setShowSuccessToast(true);
+             setTimeout(() => {
+                setShowSuccessToast(false);
+             }, 2000);
             } else {
                 console.error("ID is undefined");
             }
@@ -39,16 +47,15 @@ const ServiceEditScreen: React.FC = () => {
         }
     };
 
-    // useSuccessToast({
-    //     isSuccess, message: "successfully edited the service",
-    //     navigate: () => {
-    //         navigate("/services/list");
-    //     }
-    // });
-
     return (
         <div>
-            <ToastContainer />
+            {showSuccessToast && (
+                <SnackBarUi
+                    message="Successfully edited the service"
+                    severity="success"
+                    isSubmitting={true}
+                />
+            )}
             {serviceStateDetails && (
                 <DynamicFormCreate
                     headerName='Edit Service'

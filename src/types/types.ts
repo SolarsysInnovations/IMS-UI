@@ -82,6 +82,8 @@ export interface SubField {
     startAdornment?: any;
     endAdornment?: any;
     helperText?: string;
+    required?: boolean;
+    disabled?: boolean;
 };
 
 export interface FieldProps {
@@ -90,6 +92,8 @@ export interface FieldProps {
     type: string;
     titleGridSize?: number;
     subFields?: SubField[];
+    required?: boolean;
+    disabled?: boolean;
 };
 
 

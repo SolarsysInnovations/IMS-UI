@@ -10,15 +10,18 @@ import DatePickerUi from "../ui/DatePicker";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
 
+// Dropdown
 const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
     const options: any = subField.options?.map(option => ({
         value: option.value,
         label: option.label
     })) || [];
     return (
-        <Field name={subField.name}>
+        <Field name={subField.name} required={true} disabled={false}>
             {({ field: { value, onChange } }: any) => (
                 <SelectDropdown
+                    required={true}
+                    disabled={false}
                     labelText={subField.label}
                     value={options.find((opt: any) => opt.value === value)}
                     onChange={(newValue: any) => {
@@ -42,6 +45,8 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 
 const renderTextField = (field: any, meta: any, subField: SubField) => (
     <TextFieldUi
+        required={true}
+        disabled={false}
         {...field}
         // variant="outlined"
         // margin="normal"
@@ -59,6 +64,8 @@ const renderTextField = (field: any, meta: any, subField: SubField) => (
 
 const renderDatePickerField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => (
     <DatePickerUi
+        required={true}
+        disabled={false}
         {...field}
         label={subField.label}
         value={field.value}
@@ -81,7 +88,7 @@ const renderRadioField = (field: any, meta: any, subField: SubField, setFieldVal
     })) || [];
 
     return (
-        <RadioUi errorMsg={meta.touched && meta.error} options={options} value={field.value} onChange={(newValue: any) => {
+        <RadioUi errorMsg={meta.touched && meta.error} options={options} required={true} disabled={false} value={field.value} onChange={(newValue: any) => {
             if (newValue) {
                 setFieldValue(subField.name, newValue.target.value);
             } else {
@@ -100,6 +107,7 @@ interface FieldRendererProps {
     field: FieldProps;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }
+
 export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, field, setFieldValue, setData }) => {
     const { values } = useFormikContext<FormFieldProps>();
 
@@ -165,21 +173,21 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                                                 </Field>
                                             </Grid>
                                         ))}
-                                        <Grid sx={{display:"flex"}}>
-                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1,height:"17px",display:"flex",ml:3}}>
-                                                <IconButton size='small'  onClick={() => remove(index)}>
+                                        <Grid sx={{ display: "flex" }}>
+                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1, height: "17px", display: "flex", ml: 3 }}>
+                                                <IconButton size='small' onClick={() => remove(index)}>
                                                     <DeleteIcon sx={{ color: `#ed5d5a`, fontSize: "18px" }} />
                                                 </IconButton>
                                             </Box>
-                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1,height:"17px",display:"flex",ml:3 }}>
-                                                <IconButton size='small'  color="primary" onClick={() => push({})}>
-                                                    <AddIcon sx={{fontSize: "18px"}} />
+                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1, height: "17px", display: "flex", ml: 3 }}>
+                                                <IconButton size='small' color="primary" onClick={() => push({})}>
+                                                    <AddIcon sx={{ fontSize: "18px" }} />
                                                 </IconButton>
                                             </Box>
                                         </Grid>
                                     </React.Fragment>
                                 ))}
-                                
+
                             </>
                         )}
                     </FieldArray>

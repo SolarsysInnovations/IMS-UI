@@ -20,6 +20,8 @@ interface ButtonProps {
   component?: React.ElementType;
   hasBackground?: boolean;
   loading?: boolean;
+  smallButtonCss?: boolean;
+  gridButton?: boolean;
 }
 
 const ButtonUi: React.FC<ButtonProps> = ({
@@ -36,7 +38,9 @@ const ButtonUi: React.FC<ButtonProps> = ({
   fullWidth = false,
   component,
   hasBackground = true, // Default to true
-  loading = false
+  loading = false,
+  smallButtonCss,
+  gridButton = true
 }) => {
   return (
     <LoadingButton
@@ -44,7 +48,20 @@ const ButtonUi: React.FC<ButtonProps> = ({
         "& .css-cstir9-MuiButton-startIcon>*:nth-of-type(1)": {
           fontSize: "15px",
         },
-        padding: "10px 16px", ...sx
+        padding: "10px 16px", ...sx,
+        ...(gridButton ? {
+          // border: " 1px solid #6366F1 !important",
+        } : {}),
+        ...(smallButtonCss ? {
+          borderRadius: "5px",
+          marginTop: "0px",
+          marginBottom: "0px",
+          padding: "3px 10px",
+          display: "flex",
+          fontSize: "11px",
+          boxShadow: "none",
+          alignItems: "center",
+        } : {})
       }}
       onClick={onClick}
       fullWidth={fullWidth}

@@ -21,9 +21,11 @@ interface SelectDropdownProps {
   onMouseDown?: () => void;
   defaultValue?: any;
   applySmallSizeStyle?: boolean;
+  required?: boolean;
+  disabled?: boolean;
 }
 
-export default function SelectDropdown({ applySmallSizeStyle = false, defaultValue, onMouseDown, button, width, error, helperText, options, value, labelText, onChange }: SelectDropdownProps) {
+export default function SelectDropdown({ applySmallSizeStyle = false, defaultValue, disabled, onMouseDown, button, width, error, helperText, options, value, labelText, required, onChange }: SelectDropdownProps) {
   return (
     <Autocomplete
       sx={{
@@ -59,6 +61,7 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
         },
 
       }}
+      disabled={disabled}
       defaultValue={defaultValue}
       size='small'
       disablePortal
@@ -69,7 +72,7 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
         onChange(newValue); // Pass the selected value to the parent component
       }}
       isOptionEqualToValue={(option, value) => option.value === value.value}
-      renderInput={(params) => <TextField error={error} helperText={helperText} sx={{ fontSize: "12px !important" }} variant='outlined' {...params} label={labelText} />}
+      renderInput={(params) => <TextField error={error} helperText={helperText} required={required} sx={{ fontSize: "12px !important" }} variant='outlined' {...params} label={labelText} />}
 
       PaperComponent={({ children }) => {
         return (
