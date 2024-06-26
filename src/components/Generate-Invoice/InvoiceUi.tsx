@@ -125,6 +125,8 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
 
     const currentInvoiceStatus = invoiceStatusOptions?.indexOf(invoiceData.invoiceStatus);
 
+    console.log("preview", preview);
+
     return (
         <>
             <div className="App" id="invoiceCapture" style={{ padding: "50px 30px" }}>

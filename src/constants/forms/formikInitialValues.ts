@@ -1,6 +1,7 @@
 import { number } from "yup";
 import { InvoiceInitialValueProps, LoginProps, companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps } from "../../types/types";
 import ServicesList from "../../pages/service/service-list-screen";
+import { format } from "path";
 
 export const loginInitialValue: LoginProps = {
     // email: "",
@@ -91,10 +92,21 @@ export const dyserviceInitialValues: serviceCreationProps = {
 };
 
 //
+
+const formatDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}${month}${day}`;
+}
+
+const currentDate = new Date();
+const defaultInvoiceType = `IMS-${formatDate(currentDate)}`;
+
 export const invoiceCreateInitialValue: InvoiceInitialValueProps = {
     invoiceDate: new Date(),
     invoiceType: "",
-    invoiceNumber: "",
+    invoiceNumber: defaultInvoiceType,
     customerName: "",
     gstType: "",
     gstPercentage: null,
