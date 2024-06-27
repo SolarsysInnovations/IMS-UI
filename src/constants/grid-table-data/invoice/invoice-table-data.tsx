@@ -22,8 +22,10 @@ export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     const [invoiceData, setInvoiceData] = useState<any>();
 
     const handleOpenModal = () => {
+
         setInvoiceData(row);
         setIsModalOpen(true);
+
     };
 
     const handleCloseModal = () => {
@@ -53,6 +55,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
     const [deleteInvoice, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteInvoiceMutation();
     const navigate = useNavigate();
     const [getInvoice, { data: customerData, isSuccess: C_success, isError: C_error }] = useInvoiceGetByIdMutation<{ data: any, isSuccess: any, isError: any }>();
+    const [preview, setPreview] = useState(false);
 
     const [updateInvoice] = useUpdateCustomerMutation();
 
@@ -98,6 +101,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
         }
     };
     const handleOpenModal = () => {
+        setPreview(true);
         setIsModalOpen(true);
     };
     const handleCloseModal = () => {
@@ -128,7 +132,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
             <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
-                <InvoiceUi invoiceData={invoiceData} isModalOpen={setIsModalOpen} />
+                <InvoiceUi preview={preview} invoiceData={invoiceData} isModalOpen={setIsModalOpen} />
             </ModalUi>
         </Stack>
     );

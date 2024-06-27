@@ -86,10 +86,12 @@ const CreateInvoice = () => {
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
-    const [preview, setPreview] = useState(true);
+    const [preview, setPreview] = useState(false);
+
+    console.log("data preview", preview);
+
 
     const invoiceData = useSelector((state: any) => state.globalState.data);
-    console.log(invoiceData);
 
     const PopupComponents = {
         GST_TYPE: 'gstType',
@@ -235,8 +237,8 @@ const CreateInvoice = () => {
                                         totalAmount: invoiceTotalAmount ?? null,
                                     }
 
-                                    setIsModalOpen(true);
                                     setPreview(false);
+                                    setIsModalOpen(true);
                                     // setInvoicePopup(true)
                                     // values.invoiceTotalAmount = invoiceTotalAmount
 
@@ -296,7 +298,7 @@ const CreateInvoice = () => {
                         </ModalUi> */}
 
                         <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
-
+                            setPreview(false);
                             setIsModalOpen(false)
                         }} >
                             <InvoiceUi preview={preview} discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} isModalOpen={setIsModalOpen} />
