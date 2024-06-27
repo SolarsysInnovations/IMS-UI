@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { Card, Grid, Typography } from '@mui/material';
-import SelectDropdown from '../../components/ui/SelectDropdown';
-import { useGetDashboardMutation } from '../../redux-store/dashboard/dashboardApi'; 
+import { useGetDashboardMutation } from '../../redux-store/dashboard/dashboardApi';
 
 interface ValueProps {
     label: string;
     value: string;
 }
 
-interface FilterValueProps {
-    filter: string;
+interface InvoiceStatusProps {
+    selectedValue: ValueProps;
 }
 
-const InvoiceStatus = () => {
-    const [selectedValue, setSelectedValue] = useState<ValueProps>({ label: "monthly", value: "monthly" });
-    const [selectedFilterValue, setSelectedFilterValue] = useState<FilterValueProps>({ filter: "monthly" });
-    const [getDashboard, { data: dashboardGet }] = useGetDashboardMutation(); 
-    const [totalValue, setTotalValue] = useState(0); 
+const InvoiceStatus: React.FC<InvoiceStatusProps> = ({ selectedValue }) => {
+    const [selectedFilterValue, setSelectedFilterValue] = useState({ filter: selectedValue.value });
+    const [getDashboard, { data: dashboardGet }] = useGetDashboardMutation();
+    const [totalValue, setTotalValue] = useState(0);
     const [chartData, setChartData] = useState<{
         series: number[];
-        options: any; 
+        options: any;
     }>({
         series: [],
         options: {
@@ -37,18 +35,17 @@ const InvoiceStatus = () => {
                             total: {
                                 show: true,
                                 label: 'Total',
-                                formatter: (w : any) => {
-                                    // Calculate the total
-                                    const total = w.globals.seriesTotals.reduce((a : any, b : any) => a + b, 0);
+                                formatter: (w: any) => {
+                                    const total = w.globals.seriesTotals.reduce((a: any, b: any) => a + b, 0);
                                     return total;
-                                }, 
+                                },
                             },
                         },
                     },
                 },
             },
             stroke: {
-                width: 0, 
+                width: 0,
             },
             dataLabels: {
                 enabled: false,
@@ -72,15 +69,12 @@ const InvoiceStatus = () => {
         },
     });
 
-
     useEffect(() => {
         const fetchDashboardData = async () => {
             const result = await getDashboard(selectedFilterValue);
             if (result && result.data) {
                 const processedData = processInvoiceStatusData(result.data);
-                console.log("Processed Data:", processedData);
-                setTotalValue(processedData.total); 
-                console.log("totalValue",processedData.total);
+                setTotalValue(processedData.total);
                 setChartData((prevChartData) => ({
                     series: [
                         processedData.returned,
@@ -117,13 +111,9 @@ const InvoiceStatus = () => {
         fetchDashboardData();
     }, [selectedFilterValue, getDashboard, totalValue]);
 
-    const handleChange = (newValue: ValueProps | null) => {
-        if (newValue) {
-            console.log('Selected value changed:', newValue);
-            setSelectedValue(newValue);
-            setSelectedFilterValue({ filter: newValue.value });
-        }
-    };
+    useEffect(() => {
+        setSelectedFilterValue({ filter: selectedValue.value });
+    }, [selectedValue]);
 
     const processInvoiceStatusData = (data: any) => {
         const invoiceStatusData = data.invoiceStatus || {};
@@ -138,29 +128,8 @@ const InvoiceStatus = () => {
         return { ...series, total };
     };
 
-    const options = [
-        { label: "monthly", value: "monthly" },
-        { label: "weekly", value: "weekly" },
-        { label: "yearly", value: "yearly" },
-    ];
-
     return (
         <>
-            <Grid container mb={0.5}>
-                <Grid item xs={4}>
-                    <Typography sx={{}} color="inherit" variant="subtitle2">Invoice Status</Typography>
-                </Grid>
-                <Grid item xs={8} pr={5} sx={{ display: "flex", justifyContent: "right" }}>
-                    <SelectDropdown
-                        applySmallSizeStyle={true}
-                        value={selectedValue}
-                        defaultValue={{ label: "monthly", value: "monthly" }}
-                        options={options}
-                        onChange={handleChange}
-                    />
-                </Grid>
-            </Grid>
-
             <Card sx={{ width: "300px", height: "160px" }}>
                 <div id="chart" style={{ padding: "0px", marginTop: "0px" }}>
                     <ReactApexChart options={chartData.options} series={chartData.series} type="donut" />
