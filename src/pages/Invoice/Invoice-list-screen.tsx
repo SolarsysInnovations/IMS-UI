@@ -142,6 +142,8 @@ const InvoiceList = () => {
     const pathname = usePathname();
 
 
+    console.log("invoiceList", invoiceList);
+
     const buttons = [
         { label: 'Create Invoice', icon: Add, onClick: () => navigate("/invoice/create") },
     ];
@@ -179,15 +181,15 @@ const InvoiceList = () => {
             width: 140,
             editable: false,
         },
-        {
-            field: 'email',
-            headerName: 'Email To',
-            width: 120,
-            editable: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <GridEmailButton params={params} />
-            ),
-        },
+        // {
+        //     field: 'email',
+        //     headerName: 'Email To',
+        //     width: 120,
+        //     editable: true,
+        //     renderCell: (params: GridRenderCellParams) => (
+        //         <GridEmailButton params={params} />
+        //     ),
+        // },
     ]
     if (userRole === Roles.ADMIN || userRole === Roles.APPROVER || userRole === Roles.SUPERADMIN) {
         columns.push(

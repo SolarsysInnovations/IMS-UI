@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // Define the type for your state
 interface AuthState {
     user: User | null;
-    token: string | null;
+    accessToken: string | null;
     refresh: string | null; // Add refresh token
     userRole: string | null;
     userName: string | null;
@@ -15,11 +15,11 @@ interface User {
 }
 
 // Retrieve token and refresh token from local storage
-const tokenFromStorage = localStorage.getItem('token');
+const tokenFromStorage = localStorage.getItem('accessToken');
 const refreshTokenFromStorage = localStorage.getItem('refresh');
 const userRoleFromStorage = localStorage.getItem("userRole");
 // Define the initial state
-const initialState: AuthState = { user: null, token: tokenFromStorage || null, refresh: refreshTokenFromStorage || null, userRole: userRoleFromStorage || null, userName: null };
+const initialState: AuthState = { user: null, accessToken: tokenFromStorage || null, refresh: refreshTokenFromStorage || null, userRole: userRoleFromStorage || null, userName: null };
 
 // Create the authentication slice
 const authSlice = createSlice({
@@ -29,33 +29,35 @@ const authSlice = createSlice({
         setCredentials: (state, action) => {
             const { user, accessToken, refresh, userRole, userName } = action.payload;
             state.user = user;
-            state.token = accessToken;
+            state.accessToken = accessToken;
             state.refresh = refresh;
             state.userRole = userRole;
             state.userName = userName;
             // Store tokens in local storage
-            localStorage.setItem('token', accessToken);
-            localStorage.setItem('refresh', refresh);
-            localStorage.setItem('userRole', userRole);
-            localStorage.setItem('userName', userName);
+            localStorage.setItem('accessToken', accessToken || "");
+            localStorage.setItem('refresh', refresh || "");
+            localStorage.setItem('userRole', userRole || "");
+            localStorage.setItem('userName', userName || "");
             // console.log(localStorage.getItem('userRole'));
             // console.log(localStorage.getItem('userName'));
         },
         logOut: (state) => {
             state.user = null;
-            state.token = null;
+            state.accessToken = null;
             state.refresh = null;
+            state.userRole = null; // Reset user role
+            state.userName = null; // Reset user name
             // Remove tokens from local storage
-            localStorage.removeItem('token');
+            localStorage.removeItem('accessToken');
             localStorage.removeItem('refresh');
             localStorage.removeItem('userRole');
             localStorage.removeItem('userName');
         },
         updateAccessToken: (state, action) => {
             const { accessToken } = action.payload;
-            state.token = accessToken;
+            state.accessToken = accessToken;
             // Update token in local storage
-            localStorage.setItem('token', accessToken);
+            localStorage.setItem('accessToken', accessToken || "");
         }
     },
 });
@@ -66,7 +68,7 @@ export default authSlice.reducer;
 
 // Define the selectors with type annotations
 export const selectCurrentUser = (state: { auth: AuthState }) => state.auth.user;
-export const selectCurrentToken = (state: { auth: AuthState }) => state.auth.token;
+export const selectCurrentToken = (state: { auth: AuthState }) => state.auth.accessToken;
 export const selectRefreshToken = (state: { auth: AuthState }) => state.auth.refresh;
 export const selectUserRole = (state: { auth: AuthState }): string | null => state.auth.userRole;
 

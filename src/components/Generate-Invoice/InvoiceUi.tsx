@@ -16,6 +16,7 @@ import { invoiceStatusOptions } from "../../constants/data";
 import { useUpdateInvoiceMutation, useInvoiceGetByIdMutation, useGetInvoiceQuery } from '../../redux-store/invoice/invcoiceApi';
 import { useDispatch, useSelector } from "react-redux";
 import { setData } from "../../redux-store/global/globalState";
+import TextFieldUi from "../ui/TextField";
 
 interface InvoiceUiProps {
     invoiceData?: any;
@@ -35,6 +36,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const [customerDetails, setCustomerDetails] = useState<any>()
     const [discountAmount, setDiscountAmount] = useState<number>(0)
     const [openemaildialogBox, setIsOpenEmailDialogBox] = useState(false);
+    const [commentPopUp, setCommentPopup] = useState(false);
     const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
     const [getInvoiceById, { }] = useInvoiceGetByIdMutation();
 
@@ -69,15 +71,32 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     }, [customers, invoiceData])
 
     const handleOptionClick = async (option: any, index: any) => {
+        setCommentPopup(true);
+        // try {
+        //     const updatedInvoiceData = {
+        //         ...invoiceData,
+        //         invoiceStatus: option
+        //     };
+        //     await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
+
+        //     const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
+        //     dispatch(setData(fetchedInvoiceData))
+        //     // Optionally, update the state with the fetched data if needed
+        // } catch (error) {
+        //     console.log("Error updating invoice data", error);
+        // }
+    }
+    const handleSentToApprover = async (e: any) => {
+        e.preventDefault();
         try {
             const updatedInvoiceData = {
                 ...invoiceData,
-                invoiceStatus: option
+                invoiceStatus: "PENDING"
             };
             await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
 
             const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
-            dispatch(setData(fetchedInvoiceData))
+            dispatch(setData(fetchedInvoiceData));
             // Optionally, update the state with the fetched data if needed
         } catch (error) {
             console.log("Error updating invoice data", error);
@@ -125,7 +144,6 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
 
     const currentInvoiceStatus = invoiceStatusOptions?.indexOf(invoiceData.invoiceStatus);
 
-    console.log("preview", preview);
 
     return (
         <>
@@ -231,15 +249,40 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 </Grid>
             </div >
             {preview && (
-                <Grid container spacing={5}>
+                <Grid sx={{
+                    '& .MuiGrid-item': {
+                        paddingTop: "10px"
+                    },
+                }} container spacing={5}>
                     <Grid item xs={12} >
                         <Box gap={2} sx={{ display: "flex", justifyContent: "right" }}>
                             <ButtonUi smallButtonCss={true} label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
                             {/* {invoiceData?.invoiceStatus === "APPROVED" ? ( */}
                             <ButtonUi disabled={invoiceData.invoiceStatus === "APPROVED" ? false : true} smallButtonCss={true} label="Email" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); }} />
+                            {/* sent to approver button */}
+                            <ButtonUi disabled={invoiceData.invoiceStatus === "DRAFT" ? false : true} smallButtonCss={true} label="Sent to Approver" variant="outlined" size="small"
+                                // async function inside synchronous
+                                onClick={(e: any) => {
+                                    (async () => {
+                                        await handleSentToApprover(e);
+                                    })();
+                                }} />
+
                             {/* ) : ""} */}
                             <SplitButton disabledOptions={[currentInvoiceStatus]} options={invoiceStatusOptions} defaultIndex={currentInvoiceStatus} onOptionClick={handleOptionClick} />
                         </Box>
+                    </Grid>
+                    <Grid mt={2} item xs={12} >
+                        <Typography variant="body2" color="initial">Write a reason why you change the status.</Typography>
+                    </Grid>
+                    <Grid item xs={12} >
+                        <TextFieldUi
+                            type="text"
+                            label="Write a comments here"
+                            onChange={() => { }}
+                            required={true}
+                            value=""
+                        />
                     </Grid>
                 </Grid>
             )}
@@ -258,6 +301,19 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 }
                 handleClose={() => {
                     setIsOpenEmailDialogBox(false)
+                }}
+            />
+
+            <DialogBoxUi
+                open={commentPopUp} // Set open to true to display the dialog initially
+                // title="Custom Dialog Title"
+                content={
+                    <>
+                        <h1>Hello world</h1>
+                    </>
+                }
+                handleClose={() => {
+                    setCommentPopup(false)
                 }}
             />
         </>
