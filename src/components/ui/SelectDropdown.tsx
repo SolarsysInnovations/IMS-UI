@@ -64,7 +64,7 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
       disabled={disabled}
       defaultValue={defaultValue}
       size='small'
-      disablePortal
+      disablePortal={false}
       id="combo-box-demo"
       options={options}
       value={value || null} // Update the type of value prop
