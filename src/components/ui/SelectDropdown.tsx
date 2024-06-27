@@ -35,7 +35,7 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
             paddingTop: "0px",
             paddingBottom: "1px",
             paddingLeft: "6px",
-            width: "110px",
+            width: "130px",
           },
         }),
 
@@ -45,7 +45,8 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
           borderRadius: "8px !important",
           overflow: "hidden",
           borderColor: `action.active`,
-          transition: `border-color 0.2s, box-shadow 0.2s,`,
+          // transition: `border-color 0.2s, box-shadow 0.2s,`,
+           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
           '&:hover': {
             backgroundColor: `action.hover`,
           },
@@ -64,7 +65,8 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
       disabled={disabled}
       defaultValue={defaultValue}
       size='small'
-      disablePortal={false}
+      disablePortal
+      // disablePortal={false}
       id="combo-box-demo"
       options={options}
       value={value || null} // Update the type of value prop

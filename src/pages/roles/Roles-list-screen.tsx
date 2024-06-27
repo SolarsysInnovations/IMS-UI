@@ -16,20 +16,23 @@ import { useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/
 import SnackBarUi from '../../components/ui/Snackbar';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 
-const invoiceOptions = [
-    { value: "ADMIN", label: "ADMIN" },
-    { value: "APPROVER", label: "APPROVER" },
-    { value: "ENDUSER", label: "ENDUSER" },
-];
+const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
-interface ValueProps {
-  value: string;
-  label: string;
-}
+// const invoiceOptions = [
+//     { value: "ADMIN", label: "ADMIN" },
+//     { value: "APPROVER", label: "APPROVER" },
+//     { value: "ENDUSER", label: "ENDUSER" },
+// ];
+
+// interface ValueProps {
+//   value: string;
+//   label: string;
+// }
 
 const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
 
-    const [status, setStatus] = useState<ValueProps | null>(params.value);
+    // const [status, setStatus] = useState<ValueProps | null>(params.value);
+    const [status, setStatus] = useState(params.value);
     const [updateRoles, { isSuccess: updateSuccess }] = useUpdateRoleMutation();
     const { data: rolesList, error, isLoading, refetch: fetchRolesList } = useGetRoleQuery();
 
@@ -37,14 +40,15 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
         fetchRolesList();
     }, [updateSuccess])
 
-    const handleChange = async (newValue: ValueProps | null) => {
-    if (newValue === null) return;
-
-        setStatus(newValue);
+    // const handleChange = async (newValue: ValueProps | null) => {
+    // if (newValue === null) return;
+        const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
+        const newStatus = event.target.value as string;
+        setStatus(newStatus);
 
         const updatedRoles = {
             ...params.row,
-            userRole: newValue,
+            userRole: newStatus,
         };
 
         console.log("Updating invoice with payload:", updatedRoles);
@@ -55,7 +59,7 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
             if ('error' in response) {
                 console.error("Error updating invoice status:", response.error);
             } else {
-                console.log(`Invoice status updated: ${newValue}`);
+                console.log(`Invoice status updated: ${newStatus}`);
             }
         } catch (error) {
             console.error('Error updating invoice status:', error);
@@ -63,12 +67,21 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
     };
 
     return (
-        <SelectDropdown
-            options={invoiceOptions}
+        <select
             value={status}
             onChange={handleChange}
-            applySmallSizeStyle
-        />
+            style={{ fontSize: "12px", padding: "5px 5px", borderRadius: "5px" }}
+        >
+            {invoiceOptions.map((option) => (
+                <option key={option} value={option}>{option}</option>
+            ))}
+        </select>
+        // <SelectDropdown
+        //     options={invoiceOptions}
+        //     value={status}
+        //     onChange={handleChange}
+        //     applySmallSizeStyle
+        // />
     );
 };
 
