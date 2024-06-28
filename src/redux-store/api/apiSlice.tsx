@@ -11,18 +11,22 @@ interface Token {
 interface RootState {
     auth: {
         user: any;
-        token: string | null;
+        accessToken: string | null;
         refresh?: string | null;
+        userRole?: string | null;
+        userName?: string | null;
     };
 }
 
+const userRole = localStorage.getItem("userRole");
+const userName = localStorage.getItem("userName");
 const baseQuery = fetchBaseQuery({
     baseUrl: BASE_LOCAL_URL,
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
-        const { token, refresh } = (getState() as RootState).auth;
-        if (token) {
-            headers.set('authorization', `Bearer ${token}`);
+        const { accessToken, refresh } = (getState() as RootState).auth;
+        if (accessToken) {
+            headers.set('authorization', `Bearer ${accessToken}`);
         }
         if (refresh) {
             headers.set('refresh', refresh);
@@ -31,34 +35,30 @@ const baseQuery = fetchBaseQuery({
     }
 });
 
-
 const baseQueryWithReauth = async (
     args: any,
     api: any,
     extraOptions: any
 ): Promise<any> => {
-
     // Execute the base query
     let result = await baseQuery(args, api, extraOptions);
-    // If the result is an error and its status is 403, attempt to refresh the token
+    // If the result is an error and its status is 403, attempt to refresh the accessToken
     if (result?.error?.status === 403 || result?.error?.status === 401) {
         const refreshResult = await baseQuery('/refresh', api, extraOptions);
 
-        // If refresh is successful, update the token and retry the original query
+        // If refresh is successful, update the accessToken and retry the original query
         if (refreshResult?.data) {
-            const user = (api.getState() as RootState).auth.user;
-            api.dispatch(setCredentials({ ...refreshResult.data, user } as Token));
+            console.log("data", refreshResult.data);
+            const { user } = (api.getState() as RootState).auth;
+            api.dispatch(setCredentials({ ...refreshResult.data, user, userRole, userName }));
             result = await baseQuery(args, api, extraOptions);
-        }
-        else {
+        } else {
             // If refresh fails, log out the user
             api.dispatch(logOut());
             return refreshResult; // Return the refresh error response
         }
     }
-
     return result; // Return the original query result
-
 };
 
 

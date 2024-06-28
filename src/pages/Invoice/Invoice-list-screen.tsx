@@ -169,6 +169,8 @@ const InvoiceList = () => {
     const pathname = usePathname();
 
 
+    console.log("invoiceList", invoiceList);
+
     const buttons = [
         { label: 'Create Invoice', icon: Add, onClick: () => navigate("/invoice/create") },
     ];

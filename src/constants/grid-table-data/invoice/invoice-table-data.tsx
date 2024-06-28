@@ -70,7 +70,7 @@ export const MyCellRenderer = ({ row, onDeleteSuccess  }: { row: any, onDeleteSu
                 const invoiceData = response.data;
                 console.log("invoiceData", invoiceData);
                 await dispatch(setData(invoiceData));
-                navigate(`/invoice/edit/${1}`);
+                navigate("/invoice/create");
             } else {
                 console.error('Error response:', response.error);
             }
