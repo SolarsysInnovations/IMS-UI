@@ -18,6 +18,8 @@ interface RootState {
     };
 }
 
+const userRole = localStorage.getItem("userRole");
+const userName = localStorage.getItem("userName");
 const baseQuery = fetchBaseQuery({
     baseUrl: BASE_LOCAL_URL,
     credentials: "include",
@@ -47,7 +49,7 @@ const baseQueryWithReauth = async (
         // If refresh is successful, update the accessToken and retry the original query
         if (refreshResult?.data) {
             console.log("data", refreshResult.data);
-            const { user, userRole, userName } = (api.getState() as RootState).auth;
+            const { user } = (api.getState() as RootState).auth;
             api.dispatch(setCredentials({ ...refreshResult.data, user, userRole, userName }));
             result = await baseQuery(args, api, extraOptions);
         } else {

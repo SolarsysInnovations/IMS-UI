@@ -26,6 +26,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Login from "../pages/Login-screen";
 import Dashboard from "../pages/Dashboard/Dashboard-screen";
 import InvoiceEdit from "../pages/Invoice/Invoice-edit-screen";
+import InvoiceCreateScreen from "../pages/Invoice/Invoice-create-screen";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.SUPERADMIN, Roles.ADMIN];
@@ -56,7 +57,7 @@ export const routesConfig = [
   // * ----------- invoice ------------
   { path: "/invoice/list", element: <InvoiceList />, allowedRoles: [...allRoles] },
   { path: "/invoice/edit/:id", element: <InvoiceEdit />, allowedRoles: [...allRoles] },
-  { path: "/invoice/create", element: <CreateInvoice />, allowedRoles: [...allRoles] },
+  { path: "/invoice/create", element: <InvoiceCreateScreen />, allowedRoles: [...allRoles] },
 
   // * --------- service -----------
   { path: "/services/list", element: <ServicesList />, allowedRoles: [...admins] },
