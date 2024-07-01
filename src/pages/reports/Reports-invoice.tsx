@@ -145,8 +145,7 @@ const Reportsinvoice: React.FC = () => {
                                 <Grid item xs={2}>
                                     <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />
                                 </Grid>
-                                <Grid container marginTop={5} marginLeft={2}>
-
+                                <Grid container marginTop={5} marginLeft={2} style={{ width: 'calc(100% - 16px)' }}>
                                     <GridDataUi showToolbar={true} columns={columns} tableData={tableData || []} checkboxSelection={false} />
                                 </Grid>
                             </Grid>

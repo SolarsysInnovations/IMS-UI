@@ -37,6 +37,7 @@ const ServiceEditScreen: React.FC = () => {
                 // actions.resetForm();
                 setShowSuccessToast(true);
              setTimeout(() => {
+                navigate('/services/list');
                 setShowSuccessToast(false);
              }, 2000);
             } else {
