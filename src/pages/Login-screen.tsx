@@ -27,12 +27,17 @@ interface LoginResponse {
   error?: any;
 }
 const Login = () => {
-  const [login, { isLoading }] = useLoginMutation()
+  const [login, { isLoading, error: loginError }] = useLoginMutation()
   const dispatch = useDispatch<AppDispatch>();
   const [userToken, setUserToken] = useLocalStorage(LocalStorageKeys.TOKEN, "");
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
+  useEffect(() => {
+    if (loginError) {
+      alert("Login failed. Please check your credentials and try again.");
+    }
+  }, [loginError]);
 
 
   return (
@@ -69,7 +74,7 @@ const Login = () => {
         }
       }}
     >
-      {({ errors, touched, values, handleChange, isSubmitting }) => (
+      {({ errors, touched, values, handleChange, isSubmitting, }) => (
         <Box
           sx={{
             mt: 3, backgroundColor: "background.paper", flex: "1 1 auto", alignItems: "center", display: "flex", justifyContent: "center",

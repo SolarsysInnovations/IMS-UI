@@ -20,7 +20,7 @@ import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { generateOptions } from '../../services/utils/dropdownOptions';
-import { useAddInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import { useAddInvoiceMutation, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
@@ -42,6 +42,7 @@ import DialogBoxUi from '../../components/ui/DialogBox';
 import { clearData, setData } from '../../redux-store/global/globalState';
 import SendEmail from './Send-email';
 import ServiceScreen from './service/ServiceScreen';
+import NestedModalUi from '../../components/ui/NestedModalui';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -90,6 +91,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
     const [preview, setPreview] = useState(false);
+    const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
 
     const PopupComponents = {
         GST_TYPE: 'gstType',
@@ -100,9 +102,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     }
 
     React.useEffect(() => {
+
         if (invoiceValues) {
             const sumSubTotal = invoiceValues.servicesList.reduce((acc: any, row: any) => acc + row.serviceTotalAmount, 0)
             setSubTotalInvoiceAmount(sumSubTotal)
+            setDiscountPercentage(invoiceValues.discountPercentage)
+            setSelectedTdsAmount(invoiceValues.taxAmount.tds)
         }
     }, [invoiceValues]);
 
@@ -111,6 +116,8 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         setDiscountAmount(disAmount)
         let tdsTax = null;
         if (selectedTds) {
+            console.log("selectedTds", selectedTds);
+
             let discountedAmount = (subTotalInvoiceAmount - disAmount) * (selectedTds) / 100;
             setTdsAmount(discountedAmount);
             tdsTax = discountedAmount
@@ -135,6 +142,15 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
             setModifiedServiceList(mappedServiceList);
         }
     }, [serviceList]);
+
+    // * this is for edit screen only
+    React.useEffect(() => {
+        if (invoiceValue) {
+            const data = tdsTaxData?.find((item) => item?.taxName === invoiceValues.taxAmount.tds)
+            setSelectedTdsAmount(data?.taxPercentage)
+        }
+        setTdsAmount(invoiceValues.taxAmount.tds)
+    }, [invoiceValue]);
 
     const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const { value } = event.target;
@@ -209,8 +225,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     // values.invoiceTotalAmount = invoiceTotalAmount
                     values.servicesList = invoiceValues.servicesList
                     values.totalAmount = invoiceTotalAmount ?? null;
-
-                    await addInvoice(values);
+                    if (invoiceValue) {
+                        await updateInvoice({ id: invoiceValue.id, invoiceData: values });
+                        dispatch(clearData())
+                    } else {
+                        await addInvoice(values);
+                    }
                     // alert(JSON.stringify(values));
                     resetForm();
                     setInvoiceValues({ ...invoiceValues })
@@ -234,13 +254,14 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         serviceList: invoiceValues.servicesList ?? null,
                                         totalAmount: invoiceTotalAmount ?? null,
                                     }
+                                    console.log("updatedValue", updatedValue);
+                                    dispatch(setData(updatedValue as any))
 
                                     setPreview(false);
                                     setIsModalOpen(true);
                                     // setInvoicePopup(true)
                                     // values.invoiceTotalAmount = invoiceTotalAmount
 
-                                    dispatch(setData(updatedValue as any))
                                 },
                                 disabled: !(isValid && dirty),
                             },
@@ -284,17 +305,13 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
 
                             }}
                         />
-                        {/* <ModalUi topHeight='90%' open={isModalOpen} onClose={() => {
+                        {/* invoice modal screen */}
+                        {/* <NestedModalUi handleClose={() => {
+                            setPreview(false);
                             setIsModalOpen(false)
-                            setInvoicePopup(false)
-                        }} >
-                            <>
-                                {invoicePopUp && (
-                                    <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData}  emailModalOpen={setisEmailModalOpen} emailPopup={setEmailPopUp} isModalOpen={setIsModalOpen} invoicePopup={setInvoicePopup} gstTypePopup={setGstTypePopup} tdsTaxPopup={setTdsTaxPopup} paymentTermsPopUp={setPaymentTermsPopUp}/>
-                                )}
-                            </>
-                        </ModalUi> */}
-
+                        }} open={isModalOpen} >
+                            <InvoiceUi preview={preview} discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} isModalOpen={setIsModalOpen} />
+                        </NestedModalUi> */}
                         <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
                             setPreview(false);
                             setIsModalOpen(false)
@@ -317,15 +334,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         />
                                     </Box>
                                 </Grid>
-                                {/* <Grid item xs={6}>
-                                    <Box sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'flex-end',
-                                    }}>
-                                        <Typography variant="subtitle2" color="initial">Created at : {formatDate(values.invoiceDate)}</Typography>
-                                    </Box>
-                                </Grid> */}
                                 <Grid item xs={3}>
                                     <Box>
                                         <TextFieldUi
@@ -376,7 +384,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             button={true}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    const selectedGstType = gstTypesData.find((item) => item.gstName === newValue.value)
+                                                    const selectedGstType = gstTypesData.find((item: any) => item.gstName === newValue.value)
                                                     if (selectedGstType) {
                                                         setFieldValue("gstPercentage", selectedGstType.gstPercentage)
                                                         setFieldValue("gstType", newValue.value)
@@ -438,7 +446,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             }}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    const selectedPaymentTerms = paymentTerms?.find((item) => item.termName === newValue.value)
+                                                    const selectedPaymentTerms = paymentTerms?.find((item: any) => item.termName === newValue.value)
                                                     if (selectedPaymentTerms) {
                                                         const today = new Date();
                                                         const startDate = format(today, 'dd-MM-yyyy');
@@ -641,7 +649,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                                 width='150px'
                                                 onChange={(newValue: any) => {
                                                     if (newValue) {
-                                                        const selectedTdsTax = tdsTaxData.find((item) => item.taxName === newValue.value);
+                                                        const selectedTdsTax = tdsTaxData.find((item: any) => item.taxName === newValue.value);
                                                         if (selectedTdsTax) {
                                                             setFieldValue("taxAmount.tds", newValue.value)
                                                             setSelectedTdsAmount(selectedTdsTax.taxPercentage)

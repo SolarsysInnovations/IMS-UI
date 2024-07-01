@@ -56,7 +56,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
     const navigate = useNavigate();
     const [getInvoice, { data: customerData, isSuccess: C_success, isError: C_error }] = useInvoiceGetByIdMutation<{ data: any, isSuccess: any, isError: any }>();
     const [preview, setPreview] = useState(false);
-
+    const [nestedOpen, setNestedOpen] = useState(false);
     const [updateInvoice] = useUpdateCustomerMutation();
 
     useEffect(() => {
@@ -115,6 +115,9 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
     //     refetch();
     // }, [D_Success]);
 
+
+
+    console.log("invoiceData", invoiceData);
 
 
     return (

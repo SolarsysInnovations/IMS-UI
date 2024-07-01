@@ -19,6 +19,7 @@ import ButtonUi from '../../components/ui/Button';
 import SendEmail from './Send-email';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
+import { clearData } from '../../redux-store/global/globalState';
 const invoiceOptions = ["DRAFT", "PENDING", "APPROVED", "PAID", "OVERDUE", "DELETE", "RETURNED",]
 
 const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
@@ -145,7 +146,12 @@ const InvoiceList = () => {
     console.log("invoiceList", invoiceList);
 
     const buttons = [
-        { label: 'Create Invoice', icon: Add, onClick: () => navigate("/invoice/create") },
+        {
+            label: 'Create Invoice', icon: Add, onClick: () => {
+                dispatch(clearData())
+                navigate("/invoice/create")
+            }
+        },
     ];
     const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
 
