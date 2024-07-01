@@ -23,6 +23,7 @@ interface LoginResponse {
     refresh: any;
     userRole: any;
     userName: any;
+    userEmail: string | null;
   };
   error?: any;
 }
@@ -53,8 +54,8 @@ const Login = () => {
           if (loginResult.data && "accessToken" in loginResult.data) {
             // Check if the response contains a refresh token
             if (loginResult.data.accessToken) {
-              const { user, accessToken, refresh, userRole, userName } = loginResult.data;
-              dispatch(setCredentials({ user, accessToken, refresh, userRole, userName }));
+              const { user, accessToken, refresh, userRole, userName, userEmail } = loginResult.data;
+              dispatch(setCredentials({ user, accessToken, refresh, userRole, userName, userEmail }));
             } else {
               const { user, accessToken } = loginResult.data;
               dispatch(setCredentials({ user, accessToken }));
@@ -67,7 +68,6 @@ const Login = () => {
             console.error("Access token not found in login response:", loginResult);
           }
           resetForm();
-
         } catch (error) {
           console.error("An error occurred during login:", error);
           console.log("Error details:", error); // Add this line to log the error object
@@ -110,13 +110,13 @@ const Login = () => {
                 <Stack spacing={3}>
                   <TextFieldLarge
                     fullWidth={false}
-                    label='User Name '
-                    name='username'
-                    type='username'
-                    value={values.username}
+                    label='User Email '
+                    name='userEmail'
+                    type='text'
+                    value={values.userEmail}
                     onChange={handleChange}
-                    error={touched.username && Boolean(errors.username)}
-                    helperText={touched.username && errors.username}
+                    error={touched.userEmail && Boolean(errors.userEmail)}
+                    helperText={touched.userEmail && errors.userEmail}
                   />
                   <TextFieldLarge
                     endAdornment={passwordVisible ? <IconButton onClick={() => {

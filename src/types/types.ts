@@ -2,8 +2,8 @@ import * as Yup from 'yup';
 
 // -------- customer ------------------------
 export interface LoginProps {
-    // email: string;
-    username: string;
+    userEmail: string;
+    // username: string;
     password: string;
 };
 
@@ -62,6 +62,7 @@ export interface FormProps {
     fields: FieldProps[];
     initialValues: any;
     validationSchema: any;
+    onClose?: () => void;
     showTable?: boolean;
     onSubmit: (values: any, actions: any) => void;
     setData?: any;
@@ -218,7 +219,7 @@ export interface RoleInitialValueProps {
     userRole: string,
     userEmail: string,
     userAccess: string,
-    id:string,
+    id: string,
 }
 
 export interface ChangePasswordInitialValueProps {

@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { useAddServiceMutation, useGetServiceByIdMutation, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
-import { toastConfig } from '../../constants/forms/config/toastConfig';
+import { useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
 import { serviceFields } from '../../constants/form-data/form-data-json';
-import { serviceInitialValues } from '../../constants/forms/formikInitialValues';
-import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
-import { LocalStorageKeys, useLocalStorage } from '../../hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import useSuccessToast from '../../hooks/useToast';
-import { ToastContainer, toast } from 'react-toastify';
-import ToastUi from '../../components/ui/ToastifyUi';
-import { Alert, AlertTitle, Snackbar } from '@mui/material';
 import SnackBarUi from '../../components/ui/Snackbar';
+import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 
 const ServiceEditScreen: React.FC = () => {
     const [updateService, { isLoading, isSuccess, isError, error }] = useUpdateServiceMutation();
     const serviceStateDetails = useSelector((state: any) => state.serviceState.data);
     const [showSuccessToast, setShowSuccessToast] = useState(false); 
-
+    const [isPopupOpen, setIsPopupOpen] = useState(true); // State to control popup visibility
 
     useEffect(() => {
         console.log("Service State Details:", serviceStateDetails); // Check what is in serviceStateDetails
+
+        // Add event listener for back button
+        const handlePopState = () => {
+            setIsPopupOpen(false); // Close the popup
+        };
+
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+        };
     }, [serviceStateDetails]);
 
     const navigate = useNavigate();
@@ -34,12 +38,11 @@ const ServiceEditScreen: React.FC = () => {
                     id: id,
                     service: values,
                 });
-                // actions.resetForm();
                 setShowSuccessToast(true);
-             setTimeout(() => {
-                navigate('/services/list');
-                setShowSuccessToast(false);
-             }, 2000);
+                setTimeout(() => {
+                    navigate('/services/list');
+                    setShowSuccessToast(false);
+                }, 2000);
             } else {
                 console.error("ID is undefined");
             }
@@ -57,7 +60,7 @@ const ServiceEditScreen: React.FC = () => {
                     isSubmitting={true}
                 />
             )}
-            {serviceStateDetails && (
+            {isPopupOpen && serviceStateDetails && (
                 <DynamicFormCreate
                     headerName='Edit Service'
                     showTable={true}
@@ -65,10 +68,11 @@ const ServiceEditScreen: React.FC = () => {
                     initialValues={serviceStateDetails || {}} // Ensure to default to an empty object
                     validationSchema={serviceValidationSchema}
                     onSubmit={onSubmit}
+                    onClose={() => setIsPopupOpen(false)} // Pass handler to close popup
                 />
             )}
         </div>
     );
 };
-export default ServiceEditScreen;
 
+export default ServiceEditScreen;

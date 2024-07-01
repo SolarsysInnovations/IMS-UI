@@ -23,6 +23,8 @@ import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 
 import { clearData } from '../../redux-store/global/globalState';
+import useErrorHandler from '../../hooks/useErrorHanlder';
+import { Typography } from '@mui/material';
 const invoiceOptions = ["DRAFT", "PENDING", "APPROVED", "PAID", "OVERDUE", "DELETE", "RETURNED",]
 
 // const invoiceOptions = [
@@ -135,6 +137,7 @@ const GridEmailButton = ({ params }: { params: GridRenderCellParams }) => {
 
     return (
         <>
+
             <ButtonUi smallButtonCss={true} size='small' variant='outlined' onClick={() => {
                 setIsOpenEmailDialogBox(true)
             }} label='Email' />
@@ -163,12 +166,12 @@ const GridEmailButton = ({ params }: { params: GridRenderCellParams }) => {
 
 const InvoiceList = () => {
 
-    const { data: invoiceList, error, isLoading, refetch } = useGetInvoiceQuery();
     const userRole = useSelector(selectUserRole);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const pathname = usePathname();
-
+    const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceQuery();
+    const invoiceListErrorMessage = useErrorHandler(errorInvoiceList);
 
     console.log("invoiceList", invoiceList);
 
@@ -293,7 +296,9 @@ const InvoiceList = () => {
                 />
             )}
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={getColumns(handleDeleteSuccess)} tableData={invoiceList || []} checkboxSelection={false} />
+            {invoiceListErrorMessage ? <Typography variant="caption" color="initial">Error :{invoiceListErrorMessage}</Typography> :
+                <GridDataUi showToolbar={true} columns={columns} tableData={invoiceList || []} checkboxSelection={false} />
+            }
         </>
     );
 };

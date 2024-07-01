@@ -1,12 +1,12 @@
 import * as Yup from 'yup';
 
 export const loginValidationSchema = Yup.object({
-    // email: Yup.string()
-    //     .email('Must be a valid email')
-    //     .max(255)
-    //     .required('Email is required'),
-    username: Yup.string()
+    userEmail: Yup.string()
+        .email('Must be a valid email')
+        .max(255)
         .required('Email is required'),
+    // username: Yup.string()
+    //     .required('Email is required'),
     password: Yup.string()
         .max(255)
         .required('Password is required'),
@@ -109,6 +109,12 @@ export const tdsTaxValidationSchema = Yup.object().shape({
     //     .min(0, 'gstPercentage must be a positive number')
     //     // .max(999, 'gstPercentage must be a three-digit number')
     //     .required('gstPercentage is required'),
+});
+
+export const InvoiceEmailReasonValidationSchemas = Yup.object().shape({
+    fromMail: Yup.string().email('Invalid email format').required('Required'),
+    toMail: Yup.string().email('Invalid email format').required('Required'),
+    reason: Yup.string().required('Required')
 });
 
 export const paymentTermsValidationSchema = Yup.object().shape({

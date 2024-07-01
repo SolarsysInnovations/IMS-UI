@@ -9,24 +9,27 @@ import { Add, KeyboardBackspaceTwoTone, Save } from "@mui/icons-material";
 import { useState } from "react";
 import SnackBarUi from "../ui/Snackbar";
 
-export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error, headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit }: FormProps) => {
+export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error, headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit, onClose }: FormProps) => {
 
     const pathname = usePathname();
     const navigate = useNavigate();
 
+    const handleBackClick = () => {
+        onClose?.();
+        navigate(0); // Navigate back
+    };
 
     return (
         <div>
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
-                // validate={() => ({})}
                 onSubmit={onSubmit}
             >
                 {({ errors, touched, values, handleChange, handleSubmit, setFieldValue, isValid, dirty }) => {
                     const defaultButtons = [
-                        { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
-                        { label: 'Save', icon: Save, onClick: handleSubmit, disabled: !(isValid && dirty) } // Use handleSubmit here
+                        { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: handleBackClick },
+                        { label: 'Save', icon: Add, onClick: handleSubmit, disabled: !(isValid && dirty) } // Use handleSubmit here
                     ];
 
                     const resolvedButtons = buttons ? buttons.map((button: any) => ({

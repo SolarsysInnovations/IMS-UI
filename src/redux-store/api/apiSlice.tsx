@@ -15,6 +15,7 @@ interface RootState {
         refresh?: string | null;
         userRole?: string | null;
         userName?: string | null;
+        userEmail?: string | null;
     };
 }
 
@@ -50,7 +51,8 @@ const baseQueryWithReauth = async (
             const { user } = (api.getState() as RootState).auth;
             const refreshedUserRole = localStorage.getItem('userRole');
             const refreshedUserName = localStorage.getItem('userName');
-            api.dispatch(setCredentials({ ...refreshResult.data, user, userRole: refreshedUserRole, userName: refreshedUserName }));
+            const refreshedUserEmail = localStorage.getItem('userEmail');
+            api.dispatch(setCredentials({ ...refreshResult.data, user, userRole: refreshedUserRole, userName: refreshedUserName, userEmail: refreshedUserEmail }));
             result = await baseQuery(args, api, extraOptions);
         } else {
             // If refresh fails, log out the user
