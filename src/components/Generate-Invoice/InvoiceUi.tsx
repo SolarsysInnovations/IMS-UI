@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import jsPdf from "jspdf";
 import html2canvas from "html2canvas";
-import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Grid, Stack, Typography } from "@mui/material";
 import { Document, Page, pdfjs } from "react-pdf";
 import TableContent from "./TableContent";
 import { formatDate } from "../../services/utils/dataFormatter";
@@ -17,6 +17,10 @@ import { useUpdateInvoiceMutation, useInvoiceGetByIdMutation, useGetInvoiceQuery
 import { useDispatch, useSelector } from "react-redux";
 import { setData } from "../../redux-store/global/globalState";
 import TextFieldUi from "../ui/TextField";
+import ModalUi from "../ui/ModalUi";
+import TableHeader from "../layouts/TableHeader";
+import { Add, EmailOutlined } from "@mui/icons-material";
+import TextAreaUi from "../ui/TextArea";
 
 interface InvoiceUiProps {
     invoiceData?: any;
@@ -42,7 +46,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
 
     const invoiceData = useSelector((state: any) => state.globalState.data);
     const dispatch = useDispatch();
-
+    const [nestedOpen, setNestedOpen] = useState(false);
     console.log("invoiceData", invoiceData);
 
     useEffect(() => {
@@ -68,23 +72,24 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
             const customerDetails = customers?.find((customer: any) => details === customer.customerName)
             setCustomerDetails(customerDetails)
         }
-    }, [customers, invoiceData])
+    }, [customers, invoiceData]);
 
     const handleOptionClick = async (option: any, index: any) => {
-        setCommentPopup(true);
-        // try {
-        //     const updatedInvoiceData = {
-        //         ...invoiceData,
-        //         invoiceStatus: option
-        //     };
-        //     await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
 
-        //     const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
-        //     dispatch(setData(fetchedInvoiceData))
-        //     // Optionally, update the state with the fetched data if needed
-        // } catch (error) {
-        //     console.log("Error updating invoice data", error);
-        // }
+        // setCommentPopup(true);
+        setNestedOpen(true);
+        try {
+            const updatedInvoiceData = {
+                ...invoiceData,
+                invoiceStatus: option
+            };
+            // await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
+            // const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
+            dispatch(setData(updatedInvoiceData));
+            // Optionally, update the state with the fetched data if needed
+        } catch (error) {
+            console.log("Error updating invoice data", error);
+        }
     }
     const handleSentToApprover = async (e: any) => {
         e.preventDefault();
@@ -143,6 +148,10 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const isValidDate = parsedDueDate instanceof Date && !isNaN(parsedDueDate.getTime());
 
     const currentInvoiceStatus = invoiceStatusOptions?.indexOf(invoiceData.invoiceStatus);
+
+    const handleCloseNested = () => {
+        setNestedOpen(false);
+    };
 
 
     return (
@@ -258,21 +267,35 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                         <Box gap={2} sx={{ display: "flex", justifyContent: "right" }}>
                             <ButtonUi smallButtonCss={true} label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
                             {/* {invoiceData?.invoiceStatus === "APPROVED" ? ( */}
-                            <ButtonUi disabled={invoiceData.invoiceStatus === "APPROVED" ? false : true} smallButtonCss={true} label="Email" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); }} />
+                            <ButtonUi disabled={invoiceData.invoiceStatus === "APPROVED" ? false : true} smallButtonCss={true} label="Email to Customer" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); }} />
                             {/* sent to approver button */}
-                            <ButtonUi disabled={invoiceData.invoiceStatus === "DRAFT" ? false : true} smallButtonCss={true} label="Sent to Approver" variant="outlined" size="small"
+                            {/* <ButtonUi disabled={invoiceData.invoiceStatus === "DRAFT" ? false : true} smallButtonCss={true} label="Sent to Approver" variant="outlined" size="small"
                                 // async function inside synchronous
                                 onClick={(e: any) => {
                                     (async () => {
                                         await handleSentToApprover(e);
                                     })();
-                                }} />
+                                }} /> */}
 
                             {/* ) : ""} */}
                             <SplitButton disabledOptions={[currentInvoiceStatus]} options={invoiceStatusOptions} defaultIndex={currentInvoiceStatus} onOptionClick={handleOptionClick} />
                         </Box>
                     </Grid>
-                    <Grid mt={2} item xs={12} >
+                    <ModalUi open={nestedOpen} onClose={handleCloseNested}>
+                        <Box mt={3}>
+                            <TableHeader headerName="Email the Reason" buttons={[
+                                { label: 'Back', icon: Add, onClick: () => { } },
+                                { label: 'Save', icon: Add, onClick: () => { } },
+                            ]} />
+                            <Box mt={4}>
+                                <TextFieldUi type="text" label="Mail To" onChange={() => { }} value="hello@gmail.com" />
+                            </Box>
+                            <Box mt={2}>
+                                <TextAreaUi rows={4} label="Write the reason and submit" value="" onChange={() => { }} />
+                            </Box>
+                        </Box>
+                    </ModalUi>
+                    {/* <Grid mt={2} item xs={12} >
                         <Typography variant="body2" color="initial">Write a reason why you change the status.</Typography>
                     </Grid>
                     <Grid item xs={12} >
@@ -283,7 +306,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                             required={true}
                             value=""
                         />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             )}
             <DialogBoxUi
@@ -303,8 +326,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                     setIsOpenEmailDialogBox(false)
                 }}
             />
-
-            <DialogBoxUi
+            {/* <DialogBoxUi
                 open={commentPopUp} // Set open to true to display the dialog initially
                 // title="Custom Dialog Title"
                 content={
@@ -315,7 +337,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 handleClose={() => {
                     setCommentPopup(false)
                 }}
-            />
+            /> */}
         </>
     );
 }

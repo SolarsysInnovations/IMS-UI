@@ -35,7 +35,6 @@ export const invoiceValidationSchema = Yup.object({
     gstInNumber: Yup.string()
         .max(255)
         .required('country is required'),
-
     paymentTerms: Yup.string()
         .max(255)
         .required('address is required'),

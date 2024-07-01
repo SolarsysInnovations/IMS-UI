@@ -20,7 +20,7 @@ import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { generateOptions } from '../../services/utils/dropdownOptions';
-import { useAddInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import { useAddInvoiceMutation, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
@@ -43,6 +43,7 @@ import { clearData, setData } from '../../redux-store/global/globalState';
 import SendEmail from './Send-email';
 import ServiceScreen from './service/ServiceScreen';
 import SnackBarUi from '../../components/ui/Snackbar';
+import NestedModalUi from '../../components/ui/NestedModalui';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -91,6 +92,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
     const [preview, setPreview] = useState(false);
+    const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
 
     const [showSuccessToast, setShowSuccessToast] = useState(false); 
 
@@ -103,9 +105,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     }
 
     React.useEffect(() => {
+
         if (invoiceValues) {
             const sumSubTotal = invoiceValues.servicesList.reduce((acc: any, row: any) => acc + row.serviceTotalAmount, 0)
             setSubTotalInvoiceAmount(sumSubTotal)
+            setDiscountPercentage(invoiceValues.discountPercentage)
+            setSelectedTdsAmount(invoiceValues.taxAmount.tds)
         }
     }, [invoiceValues]);
 
@@ -114,6 +119,8 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         setDiscountAmount(disAmount)
         let tdsTax = null;
         if (selectedTds) {
+            console.log("selectedTds", selectedTds);
+
             let discountedAmount = (subTotalInvoiceAmount - disAmount) * (selectedTds) / 100;
             setTdsAmount(discountedAmount);
             tdsTax = discountedAmount
@@ -138,6 +145,15 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
             setModifiedServiceList(mappedServiceList);
         }
     }, [serviceList]);
+
+    // * this is for edit screen only
+    React.useEffect(() => {
+        if (invoiceValue) {
+            const data = tdsTaxData?.find((item) => item?.taxName === invoiceValues.taxAmount.tds)
+            setSelectedTdsAmount(data?.taxPercentage)
+        }
+        setTdsAmount(invoiceValues.taxAmount.tds)
+    }, [invoiceValue]);
 
     const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const { value } = event.target;

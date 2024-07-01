@@ -84,6 +84,7 @@ export interface SubField {
     helperText?: string;
     required?: boolean;
     disabled?: boolean;
+    component?: (props: any) => JSX.Element;
 };
 
 export interface FieldProps {
@@ -94,6 +95,8 @@ export interface FieldProps {
     subFields?: SubField[];
     required?: boolean;
     disabled?: boolean;
+    gridSize?: any;
+    component?: (props: any) => JSX.Element;
 };
 
 
