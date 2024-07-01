@@ -9,6 +9,7 @@ import { FieldProps, SubField } from "../../types/types";
 import DatePickerUi from "../ui/DatePicker";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
+import TextAreaUi from "../ui/TextArea";
 
 // Dropdown
 const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
@@ -45,6 +46,25 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 
 const renderTextField = (field: any, meta: any, subField: SubField) => (
     <TextFieldUi
+        required={true}
+        disabled={false}
+        {...field}
+        // variant="outlined"
+        // margin="normal"
+        value={field.value || ""}
+        startAdornment={subField.startAdornment ? <span>{subField.startAdornment}</span> : undefined}
+        endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
+        type={subField.type}
+        fullWidth
+        id={subField.name}
+        label={subField.label}
+        error={meta.touched && !!meta.error}
+        helperText={subField?.helperText}
+    />
+);
+
+const renderTextArea = (field: any, meta: any, subField: SubField) => (
+    <TextAreaUi
         required={true}
         disabled={false}
         {...field}

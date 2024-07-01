@@ -251,7 +251,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 label: 'Preview', icon: Add, onClick: () => {
                                     const updatedValue = {
                                         ...values,
-                                        serviceList: invoiceValues.servicesList ?? null,
+                                        servicesList: invoiceValues.servicesList ?? null,
                                         totalAmount: invoiceTotalAmount ?? null,
                                     }
                                     console.log("updatedValue", updatedValue);
@@ -259,6 +259,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
 
                                     setPreview(false);
                                     setIsModalOpen(true);
+
                                     // setInvoicePopup(true)
                                     // values.invoiceTotalAmount = invoiceTotalAmount
 

@@ -4,10 +4,11 @@ import ServicesList from "../../pages/service/service-list-screen";
 import { format } from "path";
 
 export const loginInitialValue: LoginProps = {
-    // email: "",
-    username: "",
+    userEmail: "",
+    // username: "",
     password: "",
 }
+
 export const companyInitialValues: companyInitialValueProps = {
     id: "",
     companyName: "",
@@ -20,7 +21,6 @@ export const companyInitialValues: companyInitialValueProps = {
     companyWebsite: "",
     companyTaxNumber: "",
     companyRegNumber: "",
-
 };
 
 export const customerInitialValues = {
@@ -55,6 +55,13 @@ export const gstTypeInitialValue: GstTypeProps = {
     gstName: "",
     gstPercentage: 0,
 };
+
+export const invoiceMailReasonInitialValue = {
+    fromMail: "",
+    toMail: "",
+    reason: "",
+};
+
 export const tdsTaxInitialValue: TdsTaxProps = {
     taxName: "",
     taxPercentage: 0,

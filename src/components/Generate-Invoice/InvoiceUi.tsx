@@ -21,6 +21,8 @@ import ModalUi from "../ui/ModalUi";
 import TableHeader from "../layouts/TableHeader";
 import { Add, EmailOutlined } from "@mui/icons-material";
 import TextAreaUi from "../ui/TextArea";
+import * as Yup from 'yup';
+import MailReason from "./MailReason";
 
 interface InvoiceUiProps {
     invoiceData?: any;
@@ -45,9 +47,10 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const [getInvoiceById, { }] = useInvoiceGetByIdMutation();
 
     const invoiceData = useSelector((state: any) => state.globalState.data);
+    console.log("invoice Data ", invoiceData);
+
     const dispatch = useDispatch();
     const [nestedOpen, setNestedOpen] = useState(false);
-    console.log("invoiceData", invoiceData);
 
     useEffect(() => {
         if (invoiceData) {
@@ -152,6 +155,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const handleCloseNested = () => {
         setNestedOpen(false);
     };
+
 
 
     return (
@@ -282,18 +286,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                         </Box>
                     </Grid>
                     <ModalUi open={nestedOpen} onClose={handleCloseNested}>
-                        <Box mt={3}>
-                            <TableHeader headerName="Email the Reason" buttons={[
-                                { label: 'Back', icon: Add, onClick: () => { } },
-                                { label: 'Save', icon: Add, onClick: () => { } },
-                            ]} />
-                            <Box mt={4}>
-                                <TextFieldUi type="text" label="Mail To" onChange={() => { }} value="hello@gmail.com" />
-                            </Box>
-                            <Box mt={2}>
-                                <TextAreaUi rows={4} label="Write the reason and submit" value="" onChange={() => { }} />
-                            </Box>
-                        </Box>
+                        <MailReason />
                     </ModalUi>
                     {/* <Grid mt={2} item xs={12} >
                         <Typography variant="body2" color="initial">Write a reason why you change the status.</Typography>

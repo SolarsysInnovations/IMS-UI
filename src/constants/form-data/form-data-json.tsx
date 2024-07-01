@@ -148,6 +148,20 @@ export const GstTypeFields: FieldProps[] = [
         ]
     },
 ];
+export const InvoiceMailReasonFields: FieldProps[] = [
+    {
+        name: 'mail Reason',
+        label: '',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'fromMail', label: 'From Mail', required: false, type: 'text', gridSize: 12, validation: Yup.string().required('gstName is required') },
+            { name: 'toMail', disabled: false, label: 'To Mail', type: 'text', gridSize: 12, validation: Yup.string().required('gstPercentage is required'), },
+            { name: 'reason', disabled: false, label: 'reason', type: 'text', gridSize: 12, validation: Yup.string().required('gstPercentage is required'), },
+        ]
+    },
+];
+
 
 export const TdsTaxFields: FieldProps[] = [
     {

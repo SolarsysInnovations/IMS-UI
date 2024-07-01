@@ -12,8 +12,10 @@ interface TextAreaUiProps {
   value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   variant?: "outlined" | "standard" | "filled";
+  required?: boolean;
+  disabled?: boolean;
 }
-export default function TextAreaUi({ variant, onChange, value, size, defaultValue, label, helperText, rows }: TextAreaUiProps) {
+export default function TextAreaUi({ error, disabled = false, required = false, variant, onChange, value, size, defaultValue, label, helperText, rows }: TextAreaUiProps) {
   return (
     <Box
       component="form"
@@ -43,9 +45,12 @@ export default function TextAreaUi({ variant, onChange, value, size, defaultValu
       autoComplete="off"
     >
       <TextField
+        disabled={disabled}
+        required={required}
         onChange={onChange}
         size={size || "small"}
         helperText={helperText}
+        error={error}
         fullWidth
         id="outlined-basic" label={label}
         variant={variant || "outlined"}
