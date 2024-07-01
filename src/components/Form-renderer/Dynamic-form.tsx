@@ -6,26 +6,28 @@ import TableHeader from "../layouts/TableHeader";
 import { Grid } from "@mui/material";
 import { FieldRenderer } from "./Form-fields-renderer";
 import { Add } from "@mui/icons-material";
-import { useState } from "react";
 import SnackBarUi from "../ui/Snackbar";
 
-export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error, headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit }: FormProps) => {
+export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error, headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit, onClose }: FormProps) => {
 
     const pathname = usePathname();
     const navigate = useNavigate();
 
+    const handleBackClick = () => {
+        onClose?.();
+        navigate(0); // Navigate back
+    };
 
     return (
         <div>
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
-                // validate={() => ({})}
                 onSubmit={onSubmit}
             >
                 {({ errors, touched, values, handleChange, handleSubmit, setFieldValue, isValid, dirty }) => {
                     const defaultButtons = [
-                        { label: 'Back', icon: Add, onClick: () => navigate(-1) },
+                        { label: 'Back', icon: Add, onClick: handleBackClick },
                         { label: 'Save', icon: Add, onClick: handleSubmit, disabled: !(isValid && dirty) } // Use handleSubmit here
                     ];
 

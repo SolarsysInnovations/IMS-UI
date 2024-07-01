@@ -62,6 +62,7 @@ export interface FormProps {
     fields: FieldProps[];
     initialValues: any;
     validationSchema: any;
+    onClose?: () => void;
     showTable?: boolean;
     onSubmit: (values: any, actions: any) => void;
     setData?: any;
