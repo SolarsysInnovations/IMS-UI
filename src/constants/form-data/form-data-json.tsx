@@ -58,13 +58,6 @@ export const customerFields: FieldProps[] = [
         subFields: [
             {
                 name: 'country', required: true, disabled: false, label: 'country/region', type: 'select', gridSize: 3, validation: Yup.string().required('paymentTerms is required'),
-                component: (props) => (
-                    <CountryDropdown
-                        value={props.value}
-                        onChange={(val) => props.onChange(val)}
-                        classes="country-dropdown"
-                    />
-                ),
             },
             { name: 'address', required: true, disabled: false, label: 'Address', type: 'text', gridSize: 3, validation: Yup.string().required('address is required') },
             {
@@ -72,14 +65,6 @@ export const customerFields: FieldProps[] = [
             },
             {
                 name: 'state', required: true, disabled: false, label: 'State', type: 'select', gridSize: 3, validation: Yup.string().required('companyName is required'),
-                component: (props) => (
-                    <RegionDropdown
-                        country={props.country}
-                        value={props.value}
-                        onChange={(val) => props.onChange(val)}
-                        classes="region-dropdown"
-                    />
-                ),
             },
             { name: 'pinCode', required: true, disabled: false, label: 'PinCode', type: 'number', gridSize: 3, validation: Yup.string().required('pinCode is required') },
         ]
@@ -217,57 +202,57 @@ export const invoiceFields: FieldProps[] = [
     },
 ]
 
-const MyForm: React.FC = () => {
-    const [country, setCountry] = useState('');
-    const [region, setRegion] = useState('');
+// const MyForm: React.FC = () => {
+//     const [country, setCountry] = useState('');
+//     const [region, setRegion] = useState('');
 
-    const handleCountryChange = (val: string) => {
-        setCountry(val);
-        setRegion('');  // Reset region when country changes
-    };
+//     const handleCountryChange = (val: string) => {
+//         setCountry(val);
+//         setRegion('');  // Reset region when country changes
+//     };
 
-    const handleRegionChange = (val: string) => {
-        setRegion(val);
-    };
+//     const handleRegionChange = (val: string) => {
+//         setRegion(val);
+//     };
 
-    const renderField = (field: FieldProps) => {
-        if (field.component) {
-            return field.component({
-                value: field.name === 'country' ? country : region,
-                onChange: field.name === 'country' ? handleCountryChange : handleRegionChange,
-                country: country
-            });
-        }
+//     const renderField = (field: FieldProps) => {
+//         if (field.component) {
+//             return field.component({
+//                 value: field.name === 'country' ? country : region,
+//                 onChange: field.name === 'country' ? handleCountryChange : handleRegionChange,
+//                 country: country
+//             });
+//         }
 
-        return (
-            <input
-                type={field.type || 'text'}
-                required={field.required}
-                disabled={field.disabled}
-                name={field.name}
-                className={`grid-item grid-size-${field.gridSize}`}
-            />
-        );
-    };
+//         return (
+//             <input
+//                 type={field.type || 'text'}
+//                 required={field.required}
+//                 disabled={field.disabled}
+//                 name={field.name}
+//                 className={`grid-item grid-size-${field.gridSize}`}
+//             />
+//         );
+//     };
 
-    return (
-        <form>
-            {customerFields.map((section, index) => (
-                <div key={index} className={`section-title grid-size-${section.titleGridSize}`}>
-                    {section.label && <h3>{section.label}</h3>}
-                    {section.subFields?.map((field, idx) => (
-                        <div key={idx} className={`grid-item grid-size-${field.gridSize}`}>
-                            <label>{field.label}</label>
-                            {renderField(field)}
-                        </div>
-                    ))}
-                </div>
-            ))}
-        </form>
-    );
-};
+//     return (
+//         <form>
+//             {customerFields.map((section, index) => (
+//                 <div key={index} className={`section-title grid-size-${section.titleGridSize}`}>
+//                     {section.label && <h3>{section.label}</h3>}
+//                     {section.subFields?.map((field, idx) => (
+//                         <div key={idx} className={`grid-item grid-size-${field.gridSize}`}>
+//                             <label>{field.label}</label>
+//                             {renderField(field)}
+//                         </div>
+//                     ))}
+//                 </div>
+//             ))}
+//         </form>
+//     );
+// };
 
-export default MyForm;
+// export default MyForm;
 
 
 

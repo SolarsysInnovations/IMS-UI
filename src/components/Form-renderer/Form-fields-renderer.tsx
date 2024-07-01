@@ -9,6 +9,17 @@ import { FieldProps, SubField } from "../../types/types";
 import DatePickerUi from "../ui/DatePicker";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
+import CountrySelector from "../../constants/country-selector";
+import RegionSelector from "../../constants/region-selector";
+
+interface CountrySelector {
+    countryValueType: string;
+    valueType: string;
+    onChange: (newValue: any) => void;
+    value: any;
+    error: any;
+    helperText: any;
+}
 
 // Dropdown
 const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
@@ -16,31 +27,55 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
         value: option.value,
         label: option.label
     })) || [];
-    return (
-        <Field name={subField.name} required={true} disabled={false}>
-            {({ field: { value, onChange } }: any) => (
-                <SelectDropdown
-                    required={true}
-                    disabled={false}
-                    labelText={subField.label}
-                    value={options.find((opt: any) => opt.value === value)}
-                    onChange={(newValue: any) => {
-                        if (newValue) {
-                            onChange(newValue.value);
-                            setFieldValue(subField.name, newValue.value);
-                        } else {
-                            setFieldValue(subField.name, '');
-                            onChange("");
-                        }
-                    }}
-                    options={options}
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched && meta.error}
-                />
-            )}
-        </Field>
+    console.log("subField.type", subField);
+    if (subField.type === 'select' && (subField.name === 'country' || subField.name === 'state')) {
+        return (
 
-    );
+            <Field name={subField.name} required={true} disabled={false}>
+                {({ field: { value, onChange } }: any) => (
+                    <CountrySelector
+                        countryValueType="short"
+                        valueType="short"
+                        onChange={(newValue: any) => {
+                            onChange(newValue);
+                            setFieldValue(subField.name, newValue);
+                        }}
+                        value={value}
+                        // options={options}
+                        error={meta.touched && Boolean(meta.error)}
+                        helperText={meta.touched && meta.error}
+                        {...({} as any)}
+                    />
+                )}
+            </Field>
+        );
+    }
+    else {
+        return (
+            <Field name={subField.name} required={true} disabled={false}>
+                {({ field: { value, onChange } }: any) => (
+                    <SelectDropdown
+                        required={true}
+                        disabled={false}
+                        labelText={subField.label}
+                        value={options.find((opt: any) => opt.value === value)}
+                        onChange={(newValue: any) => {
+                            if (newValue) {
+                                onChange(newValue.value);
+                                setFieldValue(subField.name, newValue.value);
+                            } else {
+                                setFieldValue(subField.name, '');
+                                onChange("");
+                            }
+                        }}
+                        options={options}
+                        error={meta.touched && Boolean(meta.error)}
+                        helperText={meta.touched && meta.error}
+                    />
+                )}
+            </Field>
+        );
+    }
 };
 
 const renderTextField = (field: any, meta: any, subField: SubField) => (
