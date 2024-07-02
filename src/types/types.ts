@@ -227,3 +227,11 @@ export interface ChangePasswordInitialValueProps {
     confirmPassword: string;
     userName: string;
 }
+
+
+export interface InvoiceMailReasonProps {
+    id?: string;
+    fromMail: string;
+    toMail: string;
+    reason: string;
+}

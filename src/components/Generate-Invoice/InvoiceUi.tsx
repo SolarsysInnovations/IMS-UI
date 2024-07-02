@@ -15,7 +15,7 @@ import ButtonUi from "../ui/Button";
 import { invoiceStatusOptions } from "../../constants/data";
 import { useUpdateInvoiceMutation, useInvoiceGetByIdMutation, useGetInvoiceQuery } from '../../redux-store/invoice/invcoiceApi';
 import { useDispatch, useSelector } from "react-redux";
-import { setData } from "../../redux-store/global/globalState";
+import { clearData, setData } from "../../redux-store/global/globalState";
 import TextFieldUi from "../ui/TextField";
 import ModalUi from "../ui/ModalUi";
 import TableHeader from "../layouts/TableHeader";
@@ -80,20 +80,26 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const handleOptionClick = async (option: any, index: any) => {
 
         // setCommentPopup(true);
-        setNestedOpen(true);
-        try {
-            const updatedInvoiceData = {
-                ...invoiceData,
-                invoiceStatus: option
-            };
-            // await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
-            // const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
-            dispatch(setData(updatedInvoiceData));
-            // Optionally, update the state with the fetched data if needed
-        } catch (error) {
-            console.log("Error updating invoice data", error);
+        if (invoiceData.invoiceStatus !== option) {
+
+            try {
+                const updatedInvoiceData = {
+                    ...invoiceData,
+                    invoiceStatus: option
+                };
+                console.log(updatedInvoiceData);
+                setNestedOpen(true)
+                // await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
+                // const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
+                dispatch(clearData());
+                dispatch(setData(updatedInvoiceData));
+                // Optionally, update the state with the fetched data if needed
+            } catch (error) {
+                console.log("Error updating invoice data", error);
+            }
         }
     }
+
     const handleSentToApprover = async (e: any) => {
         e.preventDefault();
         try {
@@ -102,12 +108,11 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 invoiceStatus: "PENDING"
             };
 
-            console.log(updatedInvoiceData);
-
-            // await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
+            await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
 
             const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
             dispatch(setData(fetchedInvoiceData));
+            isModalOpen(false);
             // Optionally, update the state with the fetched data if needed
         } catch (error) {
             console.log("Error updating invoice data", error);
@@ -291,7 +296,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                         </Box>
                     </Grid>
                     <ModalUi open={nestedOpen} onClose={handleCloseNested}>
-                        <MailReason />
+                        <MailReason invoiceData={invoiceData} />
                     </ModalUi>
                     {/* <Grid mt={2} item xs={12} >
                         <Typography variant="body2" color="initial">Write a reason why you change the status.</Typography>

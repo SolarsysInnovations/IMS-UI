@@ -170,13 +170,13 @@ const InvoiceList = () => {
             field: 'invoiceType',
             headerName: 'Invoice Type',
             width: 140,
-            editable: true,
+            editable: false,
         },
         {
             field: 'invoiceNumber',
             headerName: 'Invoice Number',
             width: 150,
-            editable: true,
+            editable: false,
         },
         {
             field: 'customerName',
@@ -190,6 +190,12 @@ const InvoiceList = () => {
             width: 140,
             editable: false,
         },
+        {
+            field: 'invoiceStatus',
+            headerName: 'Invoice Status',
+            width: 150,
+            editable: false,
+        },
         // {
         //     field: 'email',
         //     headerName: 'Email To',
@@ -201,30 +207,30 @@ const InvoiceList = () => {
         // },
     ]
 
-    if (userRole === Roles.ADMIN || userRole === Roles.APPROVER || userRole === Roles.SUPERADMIN) {
-        columns.push(
-            {
-                field: 'invoiceStatus',
-                headerName: 'Invoice Status',
-                width: 120,
-                editable: true,
-                type: "singleSelect",
-                valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
-                renderCell: (params: GridRenderCellParams) => (
-                    <InvoiceStatusCell params={params} />
-                ),
-            },
-        )
-    } else if (userRole === Roles.ENDUSER) {
-        columns.push(
-            {
-                field: 'invoiceStatus',
-                headerName: 'Invoice Status',
-                width: 150,
-                editable: false,
-            },
-        )
-    }
+    // if (userRole === Roles.ADMIN || userRole === Roles.APPROVER || userRole === Roles.SUPERADMIN) {
+    //     columns.push(
+    //         {
+    //             field: 'invoiceStatus',
+    //             headerName: 'Invoice Status',
+    //             width: 120,
+    //             editable: true,
+    //             type: "singleSelect",
+    //             valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
+    //             renderCell: (params: GridRenderCellParams) => (
+    //                 <InvoiceStatusCell params={params} />
+    //             ),
+    //         },
+    //     )
+    // } else if (userRole === Roles.ENDUSER) {
+    //     columns.push(
+    //         {
+    //             field: 'invoiceStatus',
+    //             headerName: 'Invoice Status',
+    //             width: 150,
+    //             editable: false,
+    //         },
+    //     )
+    // }
 
     return (
         <>
