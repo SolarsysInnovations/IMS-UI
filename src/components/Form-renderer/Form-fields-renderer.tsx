@@ -63,7 +63,7 @@ const renderTextField = (field: any, meta: any, subField: SubField) => (
     />
 );
 
-const renderTextArea = (field: any, meta: any, subField: SubField) => (
+const renderTextArea = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => (
     <TextAreaUi
         required={true}
         disabled={false}
@@ -75,10 +75,18 @@ const renderTextArea = (field: any, meta: any, subField: SubField) => (
         endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
         type={subField.type}
         fullWidth
+        rows={subField.rows || 3}
         id={subField.name}
         label={subField.label}
         error={meta.touched && !!meta.error}
         helperText={subField?.helperText}
+        onChange={(e: any) => {
+            if (e) {
+                setFieldValue(subField.name, e.target.value);
+            } else {
+                setFieldValue(subField.name, '');
+            }
+        }}
     />
 );
 
@@ -164,7 +172,10 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                                         return renderSelectField(field, meta, subField, setFieldValue);
                                     } else if (subField.type === "radio") {
                                         return renderRadioField(field, meta, subField, setFieldValue);
-                                    } else {
+                                    } else if (subField.type === "textArea") {
+                                        return renderTextArea(field, meta, subField, setFieldValue);
+                                    }
+                                    else {
                                         return renderTextField(field, meta, subField);
                                     }
                                 }}

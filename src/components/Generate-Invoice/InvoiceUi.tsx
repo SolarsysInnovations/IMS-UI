@@ -101,7 +101,10 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 ...invoiceData,
                 invoiceStatus: "PENDING"
             };
-            await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
+
+            console.log(updatedInvoiceData);
+
+            // await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
 
             const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
             dispatch(setData(fetchedInvoiceData));
@@ -272,14 +275,16 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                             <ButtonUi smallButtonCss={true} label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
                             {/* {invoiceData?.invoiceStatus === "APPROVED" ? ( */}
                             <ButtonUi disabled={invoiceData.invoiceStatus === "APPROVED" ? false : true} smallButtonCss={true} label="Email to Customer" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); }} />
+
                             {/* sent to approver button */}
-                            {/* <ButtonUi disabled={invoiceData.invoiceStatus === "DRAFT" ? false : true} smallButtonCss={true} label="Sent to Approver" variant="outlined" size="small"
+
+                            <ButtonUi disabled={invoiceData.invoiceStatus === "DRAFT" ? false : true} smallButtonCss={true} label="Sent to Approver" variant="contained" size="small"
                                 // async function inside synchronous
                                 onClick={(e: any) => {
                                     (async () => {
                                         await handleSentToApprover(e);
                                     })();
-                                }} /> */}
+                                }} />
 
                             {/* ) : ""} */}
                             <SplitButton disabledOptions={[currentInvoiceStatus]} options={invoiceStatusOptions} defaultIndex={currentInvoiceStatus} onOptionClick={handleOptionClick} />

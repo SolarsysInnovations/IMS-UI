@@ -55,9 +55,10 @@ export const gstTypeInitialValue: GstTypeProps = {
     gstName: "",
     gstPercentage: 0,
 };
+const fromMail = localStorage.getItem("userEmail");
 
 export const invoiceMailReasonInitialValue = {
-    fromMail: "",
+    fromMail: fromMail || "",
     toMail: "",
     reason: "",
 };

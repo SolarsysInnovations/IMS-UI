@@ -22,7 +22,6 @@ const MailReason = () => {
 
     const dispatch = useDispatch<AppDispatch>();
 
-
     const onSubmit = useMemo(() => async (values: GstTypeProps, actions: any) => {
         try {
             // if (gstTypeValue) {
@@ -65,6 +64,10 @@ const MailReason = () => {
                 initialValues={invoiceMailReasonInitialValue || []}
                 validationSchema={InvoiceEmailReasonValidationSchemas}
                 onSubmit={onSubmit}
+                buttons={[
+                    { label: 'Back', onClick: () => navigate(-1) },
+                    { label: 'Send', onClick: () => { }, },
+                ]}
             />
         </div>
     );

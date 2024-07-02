@@ -200,6 +200,7 @@ const InvoiceList = () => {
         //     ),
         // },
     ]
+
     if (userRole === Roles.ADMIN || userRole === Roles.APPROVER || userRole === Roles.SUPERADMIN) {
         columns.push(
             {
@@ -224,7 +225,6 @@ const InvoiceList = () => {
             },
         )
     }
-
 
     return (
         <>

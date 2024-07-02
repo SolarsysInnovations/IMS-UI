@@ -85,6 +85,7 @@ export interface SubField {
     helperText?: string;
     required?: boolean;
     disabled?: boolean;
+    rows?: number;
 };
 
 export interface FieldProps {
@@ -95,6 +96,7 @@ export interface FieldProps {
     subFields?: SubField[];
     required?: boolean;
     disabled?: boolean;
+    rows?: number;
 };
 
 
