@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
-import { CompanyFields } from '../../constants/form-data/form-data-json';
+import { AdminFields } from '../../constants/form-data/form-data-json';
 import { customerInitialValues } from '../../constants/forms/formikInitialValues';
 import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
 
@@ -27,7 +27,7 @@ const AdminCreate: React.FC<AdminCreateProps> = ({ setFormData, onSubmit }) => {
             updateFormValue={updateFormValue}
             showTable={true}
             headerName='Admin Profile'
-            fields={CompanyFields}
+            fields={AdminFields}
             initialValues={customerInitialValues}
             validationSchema={customerValidationSchema}
             onSubmit={handleSubmit}
