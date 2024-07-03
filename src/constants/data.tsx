@@ -27,6 +27,9 @@ import Login from "../pages/Login-screen";
 import Dashboard from "../pages/Dashboard/Dashboard-screen";
 import InvoiceEdit from "../pages/Invoice/Invoice-edit-screen";
 import InvoiceCreateScreen from "../pages/Invoice/Invoice-create-screen";
+import CompanyList from "../pages/company/companyListScreen";
+import CompanyAdminCreate from "../pages/company/companyAdminCreateScreen";
+
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.SUPERADMIN, Roles.ADMIN];
@@ -66,6 +69,10 @@ export const routesConfig = [
 
   // * -------- roles ---------
   { path: "/users/list", element: <RolesList />, allowedRoles: [...admins] },
+
+   // * -------- company ---------
+   { path: "/company", element: <CompanyList />, allowedRoles: [...allRoles] },
+   { path: "/company/create", element: <CompanyAdminCreate /> , allowedRoles: [...allRoles] },
 ];
 
 export const sidebarTwo = [
@@ -137,6 +144,14 @@ export const sidebarTwo = [
   },
   {
     id: 8,
+    title: "Company",
+    path: "/company",
+    icon: Home,
+    isParent: true,
+    allowedRoles: [...allRoles]
+  },
+  {
+    id: 8,
     title: "Demo",
     path: "/demo",
     icon: Home,
@@ -175,3 +190,79 @@ export const sidebarTwo = [
 
 
 export const invoiceStatusOptions = ['APPROVED', 'DELETE', 'RETURNED', 'DRAFT', 'PENDING', 'PAID'];
+
+
+export const sampleData =
+[
+  {
+    id: 1,
+    companyName: "Company A",
+    userName: "Alice",
+    userRole: "Manager",
+    userAccess: "100"
+  },
+  {
+    id: 2,
+    companyName: "Company B",
+    userName: "Bob",
+    userRole: "Developer",
+    userAccess: "75"
+  },
+  {
+    id: 3,
+    companyName: "Company C",
+    userName: "Charlie",
+    userRole: "Designer",
+    userAccess: "80"
+  },
+  {
+    id: 4,
+    companyName: "Company D",
+    userName: "David",
+    userRole: "Analyst",
+    userAccess: "90"
+  },
+  {
+    id: 5,
+    companyName: "Company E",
+    userName: "Eve",
+    userRole: "HR",
+    userAccess: "70"
+  },
+  {
+    id: 6,
+    companyName: "Company F",
+    userName: "Frank",
+    userRole: "Support",
+    userAccess: "60"
+  },
+  {
+    id: 7,
+    companyName: "Company G",
+    userName: "Grace",
+    userRole: "Executive",
+    userAccess: "95"
+  },
+  {
+    id: 8,
+    companyName: "Company H",
+    userName: "Hank",
+    userRole: "Sales",
+    userAccess: "85"
+  },
+  {
+    id: 9,
+    companyName: "Company I",
+    userName: "Ivy",
+    userRole: "Marketing",
+    userAccess: "78"
+  },
+  {
+    id: 10,
+    companyName: "Company J",
+    userName: "Jack",
+    userRole: "Consultant",
+    userAccess: "88"
+  }
+];
+

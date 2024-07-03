@@ -43,7 +43,7 @@ const CustomerCreate: React.FC = () => {
     }, [isSuccess ]);
     // useSuccessToast({ isSuccess, message: "successfully created the customer" })
     return (
-        <div>
+        <>
             {/* Use DynamicCustomerCreate with the required props */}
             {showSuccessToast && (
                 <SnackBarUi
@@ -61,7 +61,7 @@ const CustomerCreate: React.FC = () => {
                 validationSchema={customerValidationSchema}
                 onSubmit={onSubmit}
             />
-        </div>
+        </>
     );
 };
 

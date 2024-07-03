@@ -3,40 +3,33 @@ import {
   useAddCompanyMutation,
   useGetCompanyQuery,
   useGetCompanyByIdMutation,
-} from "../../redux-store/company/companyApi";
+} from "../../../redux-store/company/companyApi";
 import { ToastContainer } from "react-toastify";
 import { Box, Grid } from "@mui/material";
-import TableHeader from "../../components/layouts/TableHeader";
+import TableHeader from "../../../components/layouts/TableHeader";
 import { Add } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../redux-store/store";
-import usePathname from "../../hooks/usePathname";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux-store/store";
+import usePathname from "../../../hooks/usePathname";
 import { useNavigate } from "react-router-dom";
-import { setData } from "../../redux-store/global/globalState";
+import { setData } from "../../../redux-store/global/globalState";
 import CompanyScreen from "./Company-screen";
-import DialogBoxUi from "../../components/ui/DialogBox";
+import DialogBoxUi from "../../../components/ui/DialogBox";
 
 const CompanyDetailsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const pathname = usePathname();
-  const [addSetting, { isLoading, isSuccess, isError, error }] =
-    useAddCompanyMutation();
-  const { data: companyData, refetch: refetchCompanyData } =
-    useGetCompanyQuery();
-  const [
-    getData,
-    { data: customerData, isSuccess: C_success, isError: C_error },
-  ] = useGetCompanyByIdMutation<{ data: any; isSuccess: any; isError: any }>();
-  const [openModal, setOpenModal] = React.useState(false);
-  const [companyDetails, setCompanyDetails] = useState<any>();
+  const [addSetting, { isLoading, isSuccess, isError, error }] = useAddCompanyMutation();
+  const { data: companyData, refetch: refetchCompanyData } = useGetCompanyQuery();
+  const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCompanyByIdMutation();
+
+  const [openModal, setOpenModal] = useState(false);
+  const [companyDetails, setCompanyDetails] = useState<any>(null);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
 
   console.log("company details", companyDetails);
 
-  const button = [
-    { label: "Edit", icon: Add, onClick: () => handleEditClick() },
-  ];
   const handleEditClick = async () => {
     try {
       const response = await getData(companyDetails.id);
@@ -70,20 +63,18 @@ const CompanyDetailsScreen: React.FC = () => {
     setOpenModal(false);
   };
 
+  const button = [
+    { label: "Edit", icon: Add, onClick: handleEditClick },
+  ];
+
   return (
-    <div>
+    <>
       <ToastContainer />
       <DialogBoxUi
         open={opendialogBox}
-        content={
-          <>
-        <CompanyScreen />
-      </>
-      }
-      handleClose={() => {
-        setIsOpenDialogBox(false);
-      }}
-    />
+        content={<CompanyScreen />}
+        handleClose={() => setIsOpenDialogBox(false)}
+      />
       <TableHeader headerName={"Company Information"} buttons={button} />
       {companyDetails && (
         <Grid
@@ -101,8 +92,8 @@ const CompanyDetailsScreen: React.FC = () => {
                       display: "inline-block",
                     }}
                   >
-                    Company Name{" "}
-                  </span>{" "}
+                    Company Name
+                  </span>
                   <span>: {companyDetails?.companyName}</span>
                 </p>
               </div>
@@ -115,8 +106,8 @@ const CompanyDetailsScreen: React.FC = () => {
                       display: "inline-block",
                     }}
                   >
-                    Company Address{" "}
-                  </span>{" "}
+                    Company Address
+                  </span>
                   <span>: {companyDetails?.companyAddress}</span>
                 </p>
               </div>
@@ -129,8 +120,8 @@ const CompanyDetailsScreen: React.FC = () => {
                       display: "inline-block",
                     }}
                   >
-                    Company State{" "}
-                  </span>{" "}
+                    Company State
+                  </span>
                   <span>: {companyDetails?.companyState}</span>
                 </p>
               </div>
@@ -144,7 +135,7 @@ const CompanyDetailsScreen: React.FC = () => {
                     }}
                   >
                     Company Country
-                  </span>{" "}
+                  </span>
                   <span>: {companyDetails?.companyCountry}</span>
                 </p>
               </div>
@@ -157,8 +148,8 @@ const CompanyDetailsScreen: React.FC = () => {
                       display: "inline-block",
                     }}
                   >
-                    Company E-mail{" "}
-                  </span>{" "}
+                    Company E-mail
+                  </span>
                   <span>: {companyDetails?.companyEmail}</span>
                 </p>
               </div>
@@ -176,7 +167,7 @@ const CompanyDetailsScreen: React.FC = () => {
                     }}
                   >
                     Company Phone
-                  </span>{" "}
+                  </span>
                   <span>: {companyDetails?.companyPhone}</span>
                 </p>
               </div>
@@ -190,7 +181,7 @@ const CompanyDetailsScreen: React.FC = () => {
                     }}
                   >
                     Company Cell
-                  </span>{" "}
+                  </span>
                   <span>: {companyDetails?.companyCell}</span>
                 </p>
               </div>
@@ -204,7 +195,7 @@ const CompanyDetailsScreen: React.FC = () => {
                     }}
                   >
                     Company Website
-                  </span>{" "}
+                  </span>
                   <span>: {companyDetails?.companyWebsite}</span>
                 </p>
               </div>
@@ -218,7 +209,7 @@ const CompanyDetailsScreen: React.FC = () => {
                     }}
                   >
                     Company Tax Num
-                  </span>{" "}
+                  </span>
                   <span>: {companyDetails?.companyTaxNumber}</span>
                 </p>
               </div>
@@ -232,7 +223,7 @@ const CompanyDetailsScreen: React.FC = () => {
                     }}
                   >
                     Company Reg Num
-                  </span>{" "}
+                  </span>
                   <span>: {companyDetails?.companyRegNumber}</span>
                 </p>
               </div>
@@ -240,7 +231,7 @@ const CompanyDetailsScreen: React.FC = () => {
           </Grid>
         </Grid>
       )}
-    </div>
+    </>
   );
 };
 

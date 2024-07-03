@@ -2,10 +2,6 @@ import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 import { FieldProps } from "../../types/types";
-import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
-import { generateOptions } from "../../services/utils/dropdownOptions";
-
-
 
 export const customerFields: FieldProps[] = [
     {
@@ -97,6 +93,44 @@ export const serviceFields: FieldProps[] = [
             { name: 'serviceAccountingCode', required: true, disabled: false, label: 'Service AccountingCode', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
             { name: 'serviceDescription', required: true, disabled: false, label: 'Service Description', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
             { name: 'serviceAmount', required: true, disabled: false, label: 'Service Amount', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
+        ]
+    },
+];
+
+export const CompanyFields: FieldProps[] = [
+    {
+        name: 'Service Accounting Code',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'serviceAccountingCode', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
+            { name: 'serviceDescription', required: true, disabled: false, label: 'Company Address', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
+            { name: 'serviceAmount', required: true, disabled: false, label: 'Company State', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+            { name: 'serviceAccountingCode', required: true, disabled: false, label: 'Company Country', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
+            { name: 'serviceDescription', required: true, disabled: false, label: 'Company Email', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
+            { name: 'serviceAmount', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
+            { name: 'serviceAmount', required: true, disabled: false, label: 'Company Cell', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
+            { name: 'serviceAmount', required: true, disabled: false, label: 'Company Website', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+            { name: 'serviceAmount', required: true, disabled: false, label: 'Company TaxNumber', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
+            { name: 'serviceAmount', required: true, disabled: false, label: 'Company RegNumber', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
+
+        ]
+    },
+];
+
+export const AdminFields: FieldProps[] = [
+    {
+        name: 'Service Accounting Code',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'serviceAccountingCode', required: true, disabled: false, label: 'User Name', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
+            { name: 'serviceDescription', required: true, disabled: false, label: 'User E-mail', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
+            { name: 'serviceAmount', required: true, disabled: false, label: 'Password', type: 'text', gridSize: 5, validation: Yup.string().required('Amount is required') },
+            { name: 'serviceAccountingCode', required: true, disabled: false, label: 'User Role', type: 'text', gridSize: 5, validation: Yup.string().required('Service Accounting Code is required',) },
+            { name: 'serviceDescription', required: true, disabled: false, label: 'User Mobile', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required') },
+            { name: 'serviceAmount', required: true, disabled: false, label: 'User Access', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
+            { name: 'serviceAmount', required: true, disabled: false, label: 'Company Name', type: 'number', gridSize: 5, validation: Yup.string().required('Amount is required') },
         ]
     },
 ];

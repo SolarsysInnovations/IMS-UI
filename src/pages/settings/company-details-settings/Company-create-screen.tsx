@@ -2,16 +2,16 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Box } from "@mui/material";
-import { useGetCompanyQuery} from "../../redux-store/company/companyApi";
-import { useAddCompanyMutation, useUpdateCompanyMutation } from '../../redux-store/company/companyApi';
-import { DynamicFormCreate } from "../../components/Form-renderer/Dynamic-form";
-import { companyValidationSchema } from '../../constants/forms/validations/validationSchema';
-import { companyInitialValues } from '../../constants/forms/formikInitialValues';
-import { companyFields } from '../../constants/form-data/form-data-json';
-import { clearData } from '../../redux-store/global/globalState';
+import { useGetCompanyQuery} from "../../../redux-store/company/companyApi";
+import { useAddCompanyMutation, useUpdateCompanyMutation } from '../../../redux-store/company/companyApi';
+import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
+import { companyValidationSchema } from '../../../constants/forms/validations/validationSchema';
+import { companyInitialValues } from '../../../constants/forms/formikInitialValues';
+import { companyFields } from '../../../constants/form-data/form-data-json';
+import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
-import { CompanyFormProps } from '../../types/types';
+import { AppDispatch } from '../../../redux-store/store';
+import { CompanyFormProps } from '../../../types/types';
 
 const CreateCompany = ({ companyValue }: CompanyFormProps) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -54,7 +54,7 @@ const CreateCompany = ({ companyValue }: CompanyFormProps) => {
     }, [isAddSuccess, isUpdateSuccess, refetch]);
 
     return (
-        <div>
+        <>
             <ToastContainer />
             <DynamicFormCreate
                 showTable={true}
@@ -68,7 +68,7 @@ const CreateCompany = ({ companyValue }: CompanyFormProps) => {
                     { label: 'Save', onClick: onSubmit }
                 ]}
             />
-        </div>
+        </>
     );
 };
 
