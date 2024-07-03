@@ -35,9 +35,9 @@ export default function ModalUi({ topHeight, children, open, onClose }: ModalUiP
                     bgcolor: 'background.paper',
                     borderRadius: "10px",
                     boxShadow: 24,
-                    p: 4,
+                    p: 6,
                 }}>
-                    <Button onClick={onClose} sx={{ position: 'absolute', top: '10px', right: '10px' }}> <CloseIcon sx={{ width: "20px" }} /></Button>
+                    <Button onClick={onClose} sx={{ position: 'absolute', top: '10px', right: '10px' }}> <CloseIcon sx={{ width: "15px" }} /></Button>
                     {children}
                 </Box>
             </Modal>

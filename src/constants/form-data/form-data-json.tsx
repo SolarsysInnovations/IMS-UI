@@ -152,7 +152,7 @@ export const InvoiceMailReasonFields: FieldProps[] = [
         subFields: [
             { name: 'fromMail', label: 'From Mail', required: false, type: 'text', gridSize: 12, validation: Yup.string().required('gstName is required') },
             { name: 'toMail', disabled: false, label: 'To Mail', type: 'text', gridSize: 12, validation: Yup.string().required('gstPercentage is required'), },
-            { name: 'reason', disabled: false, label: 'reason', type: 'text', gridSize: 12, validation: Yup.string().required('gstPercentage is required'), },
+            { name: 'reason', disabled: false, label: 'reason', rows: 4, type: 'textArea', gridSize: 12, validation: Yup.string().required('gstPercentage is required'), },
         ]
     },
 ];

@@ -10,12 +10,12 @@ interface TextAreaUiProps {
   size?: "small" | "medium" | undefined;
   error?: boolean | undefined;
   value?: string | number;
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  variant?: "outlined" | "standard" | "filled";
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void; variant?: "outlined" | "standard" | "filled";
   required?: boolean;
   disabled?: boolean;
+  type?: "text" | "password" | "number" | "email" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "color";
 }
-export default function TextAreaUi({ error, disabled = false, required = false, variant, onChange, value, size, defaultValue, label, helperText, rows }: TextAreaUiProps) {
+export default function TextAreaUi({ type, error, disabled = false, required = false, variant, onChange, value, size, defaultValue, label, helperText, rows }: TextAreaUiProps) {
   return (
     <Box
       component="form"
@@ -45,6 +45,7 @@ export default function TextAreaUi({ error, disabled = false, required = false, 
       autoComplete="off"
     >
       <TextField
+        type={type}
         disabled={disabled}
         required={required}
         onChange={onChange}

@@ -14,9 +14,8 @@ export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error
     const pathname = usePathname();
     const navigate = useNavigate();
 
-    const handleBackClick = () => {
-        onClose?.();
-        navigate(0); // Navigate back
+    const handleClick = () => {
+        navigate(-1); // Navigate back to the previous page
     };
 
     return (
@@ -27,8 +26,9 @@ export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error
                 onSubmit={onSubmit}
             >
                 {({ errors, touched, values, handleChange, handleSubmit, setFieldValue, isValid, dirty }) => {
+
                     const defaultButtons = [
-                        { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: handleBackClick },
+                        { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: handleClick },
                         { label: 'Save', icon: Save, onClick: handleSubmit, disabled: !(isValid && dirty) } // Use handleSubmit here
                     ];
 
@@ -36,6 +36,7 @@ export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error
                         ...button,
                         onClick: button.label === 'Save' ? handleSubmit : button.onClick
                     })) : defaultButtons;
+
                     return (
                         <>
                             {showTable && (

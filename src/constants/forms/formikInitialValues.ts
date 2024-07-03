@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps } from "../../types/types";
 import ServicesList from "../../pages/service/service-list-screen";
 import { format } from "path";
 
@@ -55,9 +55,10 @@ export const gstTypeInitialValue: GstTypeProps = {
     gstName: "",
     gstPercentage: 0,
 };
+const fromMail = localStorage.getItem("userEmail");
 
-export const invoiceMailReasonInitialValue = {
-    fromMail: "",
+export const invoiceMailReasonInitialValue: InvoiceMailReasonProps = {
+    fromMail: fromMail || "",
     toMail: "",
     reason: "",
 };

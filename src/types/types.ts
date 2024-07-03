@@ -87,7 +87,6 @@ export interface SubField {
     required?: boolean;
     disabled?: boolean;
     rows?: number;
-    component?: (props: any) => JSX.Element;
 };
 
 export interface FieldProps {
@@ -98,8 +97,7 @@ export interface FieldProps {
     subFields?: SubField[];
     required?: boolean;
     disabled?: boolean;
-    gridSize?: any;
-    component?: (props: any) => JSX.Element;
+    rows?: number;
 };
 
 
@@ -229,4 +227,12 @@ export interface ChangePasswordInitialValueProps {
     newPassword: string;
     confirmPassword: string;
     userName: string;
+}
+
+
+export interface InvoiceMailReasonProps {
+    id?: string;
+    fromMail: string;
+    toMail: string;
+    reason: string;
 }
