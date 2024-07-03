@@ -297,7 +297,7 @@ const InvoiceList = () => {
             )}
             <TableHeader headerName={pathname} buttons={buttons} />
             {invoiceListErrorMessage ? <Typography variant="caption" color="initial">Error :{invoiceListErrorMessage}</Typography> :
-                <GridDataUi showToolbar={true} columns={columns} tableData={invoiceList || []} checkboxSelection={false} />
+                <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={getColumns(handleDeleteSuccess)} tableData={invoiceList || []} checkboxSelection={false} />
             }
         </>
     );

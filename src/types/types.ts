@@ -72,6 +72,7 @@ export interface FormProps {
     error?: any;
     toastMessage?: string;
     buttons?: any;
+    rows?: number;
 };
 export interface SubField {
     name: string;
@@ -85,6 +86,7 @@ export interface SubField {
     helperText?: string;
     required?: boolean;
     disabled?: boolean;
+    rows?: number;
     component?: (props: any) => JSX.Element;
 };
 
