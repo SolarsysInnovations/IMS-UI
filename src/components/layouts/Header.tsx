@@ -29,11 +29,11 @@ const PopupComponents = {
 }
 
 const menuItems = [
-  { icon: <Person sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'User Profile', component: PopupComponents.USER_PROFILE },
-  { icon: <Lock sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'Change Password', component: PopupComponents.CHANGE_PASSWORD },
-  { icon: <PersonAdd sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'Add another account' },
-  { icon: <Settings sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'Settings', route: '/settings' },
-  { icon: <Logout sx={{ color: 'grey.500', marginRight: "10px" }} />, text: 'Logout', action: 'logout' },
+  { icon: <Person sx={{ color: 'grey.500', marginRight: "10px", ":hover": {color: "primary.dark"} }} />, text: 'User Profile', component: PopupComponents.USER_PROFILE },
+  { icon: <Lock sx={{ color: 'grey.500', marginRight: "10px", ":hover": {color: "primary.dark"} }} />, text: 'Change Password', component: PopupComponents.CHANGE_PASSWORD },
+  { icon: <PersonAdd sx={{ color: 'grey.500', marginRight: "10px", ":hover": {color: "primary.dark"} }} />, text: 'Add another account' },
+  { icon: <Settings sx={{ color: 'grey.500', marginRight: "10px", ":hover": {color: "primary.dark"} }} />, text: 'Settings', route: '/settings' },
+  { icon: <Logout sx={{ color: 'grey.500', marginRight: "10px", ":hover": {color: "primary.dark"} }} />, text: 'Logout', action: 'logout' },
 ];
 
 const addMenuItems = [
