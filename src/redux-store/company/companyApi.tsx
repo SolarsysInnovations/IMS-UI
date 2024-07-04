@@ -57,16 +57,16 @@ export const companyApi = apiSlice.injectEndpoints({
         }),
         getCompanyById: builder.mutation<void, number>({
             query: (id) => ({
-                 url: `setting/get`,
+                url: `setting/get/${id}`,
                 method: 'POST',
             }),
         }),
-        getCompanyByIdMutation: builder.mutation<void, number>({
-            query: (id) => ({
-                 url: `setting/get/${id}`,
-                method: 'POST',
-            }),
-        }),
+        // getCompanyByIdMutation: builder.mutation<void, number>({
+        //     query: (id) => ({
+        //          url: `setting/get/${id}`,
+        //         method: 'POST',
+        //     }),
+        // }),
     }),
 });
 export const { setCompanyData, setCompanyLoading, setCompanyError, clearCompanyData } = companySlice.actions;
