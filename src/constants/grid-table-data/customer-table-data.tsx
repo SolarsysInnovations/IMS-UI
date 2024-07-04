@@ -5,33 +5,44 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import React, { useEffect } from "react";
-import { toast } from "react-toastify";
 import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
 import CustomerDetails from "../../pages/customer/customerDetails";
 import TableHeader from "../../components/layouts/TableHeader";
-import { setCustomerData, setCustomerError, setCustomerLoading, useDeleteCustomerMutation, useGetCustomerByIdMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
-import { toastConfig } from "../forms/config/toastConfig";
-import useSuccessToast from "../../hooks/useToast";
-import BlockIcon from '@mui/icons-material/Block';
+import { setCustomerData, useDeleteCustomerMutation, useGetCustomerByIdMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { styled } from '@mui/system';
-import DialogBoxUi from "../../components/ui/DialogBox";
-import BackDropUi from "../../components/ui/BackdropUi";
-import LoaderUi from "../../components/ui/LoaderUi";
+import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
+import { setData } from "../../redux-store/global/globalState";
 
-const MyCellRenderer = ({ id, onDeleteSuccess }:{ id: any, onDeleteSuccess: () => void }) => {
+const MyCellRenderer = ({ id, }: { id: any, }) => {
+
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
-    const [deleteCustomer, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteCustomerMutation<{ deletedCustomer: any, error: any, isLoading: any, isSuccess: any, data: any }>();
-    const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error, isLoading: getCustomerLoading }] = useGetCustomerByIdMutation<{ data: any, isSuccess: any, isError: any, isLoading: any }>();
+    const [deleteCustomer, { isLoading: deleteCustomerLoading, error: deleteCustomerErrorObject, isSuccess: deleteCustomerSuccess, isError: deleteCustomerError, data: deletedData, }] = useDeleteCustomerMutation();
+    const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error, isLoading: getCustomerLoading, }] = useGetCustomerByIdMutation();
 
     const navigate = useNavigate();
+
     const role = localStorage.getItem("userRole");
+
     const buttons = [];
+
     if (role != "APPROVER" && role != "ENDUSER") {
         buttons.push({ label: 'Edit', icon: Add, onClick: () => handleEditClick() })
-    }
+    };
+
+    useEffect(() => {
+        refetch();
+    }, [deleteCustomerSuccess, refetch]);
+
+    useSnackbarNotifications({
+        error: deleteCustomerError,
+        errorMessage: 'Error adding Customer',
+        errorObject: deleteCustomerErrorObject,
+        success: deleteCustomerSuccess,
+        successMessage: 'Customer deleted successfully',
+    })
 
     function showButton() {
         if (role === "APPROVER" || role === "ENDUSER") {
@@ -53,8 +64,8 @@ const MyCellRenderer = ({ id, onDeleteSuccess }:{ id: any, onDeleteSuccess: () =
             if ('data' in response) {
                 const customerData = response.data;
                 // console.log(customerData);
-                await dispatch(setCustomerData(customerData));
-                navigate(`/customer/edit/${id}`);
+                await dispatch(setData(customerData));
+                navigate('/customer/create');
             } else {
                 console.error('Error response:', response.error);
             }
@@ -74,9 +85,6 @@ const MyCellRenderer = ({ id, onDeleteSuccess }:{ id: any, onDeleteSuccess: () =
 
     const handleModalClose = () => setOpenModal(false);
 
-    useEffect(() => {
-        refetch();
-    }, [isSuccess, refetch])
 
     const handleDeleteClick = () => {
         const confirmed = window.confirm("Are you sure you want to delete this customer?");
@@ -84,14 +92,8 @@ const MyCellRenderer = ({ id, onDeleteSuccess }:{ id: any, onDeleteSuccess: () =
             deleteCustomer(id);
         }
     };
-    useEffect(() => {
-        if (isSuccess) {
-            onDeleteSuccess();
-        }
-        refetch();
-    }, [isSuccess,  onDeleteSuccess]);
-    // useSuccessToast({ isSuccess, message: "successfully deleted the new customer", })
 
+    // useSuccessToast({ isSuccess, message: "successfully deleted the new customer", })
     const StyledIconButton = styled(IconButton)(({ theme }) => ({
         padding: '3px',
         '&.Mui-disabled': {
@@ -122,13 +124,13 @@ const MyCellRenderer = ({ id, onDeleteSuccess }:{ id: any, onDeleteSuccess: () =
     );
 };
 
-export const columns= (onDeleteSuccess: () => void): GridColDef[] => [
+export const columns: GridColDef[] = [
     {
         field: 'Action',
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} onDeleteSuccess={onDeleteSuccess} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} />,
     },
     // { field: 'id', headerName: 'ID', width: 90 },
     {
