@@ -97,8 +97,6 @@ const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
     );
 };
 
-
-
 const GridEmailButton = ({ params }: { params: GridRenderCellParams }) => {
 
     const [status, setStatus] = useState(params.value);

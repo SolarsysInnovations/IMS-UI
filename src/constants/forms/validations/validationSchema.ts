@@ -3,8 +3,20 @@ import * as Yup from 'yup';
 export const loginValidationSchema = Yup.object({
     userEmail: Yup.string()
         .email('Must be a valid email')
-        .max(255)
-        .required('Email is required'),
+        .max(255, 'Email must be at most 255 characters')
+        .required('Email is required')
+        .test(
+            'valid-domain',
+            'Invalid email domain',
+            (value) => {
+                const forbiddenDomains = ['email.com'];
+                if (value) {
+                    const domain = value.split('@')[1];
+                    return !forbiddenDomains.includes(domain);
+                }
+                return true;
+            }
+        ),
     // username: Yup.string()
     //     .required('Email is required'),
     password: Yup.string()

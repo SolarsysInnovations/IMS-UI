@@ -6,7 +6,6 @@ import ArAgingscreen from "../pages/reports/Reports-ar-aging";
 import Reportsinvoice from "../pages/reports/Reports-invoice";
 import SettingScreen from "../pages/settings/settings";
 import CustomerList from "../pages/customer/Customer-list-screen";
-import CustomerEdit from "../pages/customer/Customer-edit-screen";
 import CustomerCreate from "../pages/customer/Customer-create-screen";
 import InvoiceList from "../pages/Invoice/Invoice-list-screen";
 import CreateInvoice from "../pages/Invoice/Invoice-create-screen";
@@ -25,14 +24,13 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Login from "../pages/Login-screen";
 import Dashboard from "../pages/Dashboard/Dashboard-screen";
-import InvoiceEdit from "../pages/Invoice/Invoice-edit-screen";
 import InvoiceCreateScreen from "../pages/Invoice/Invoice-create-screen";
+import CustomerScreen from "../pages/customer/Customer-screen";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.SUPERADMIN, Roles.ADMIN];
 
 export const routesConfig = [
-
   // * -------- login ---------
   { path: "/login", element: <Login />, allowedRoles: [] },
   { path: "/unauthorized", element: <Unauthorized />, allowedRoles: [] },
@@ -51,12 +49,10 @@ export const routesConfig = [
 
   // * ----------- customer ------------
   { path: "/customer-list", element: <CustomerList />, allowedRoles: [...allRoles] },
-  { path: "/customer/edit/:id", element: <CustomerEdit />, allowedRoles: [...allRoles] },
-  { path: "/customer/create", element: <CustomerCreate />, allowedRoles: [...allRoles] },
+  { path: "/customer/create", element: <CustomerScreen />, allowedRoles: [...allRoles] },
 
   // * ----------- invoice ------------
   { path: "/invoice/list", element: <InvoiceList />, allowedRoles: [...allRoles] },
-  { path: "/invoice/edit/:id", element: <InvoiceEdit />, allowedRoles: [...allRoles] },
   { path: "/invoice/create", element: <InvoiceCreateScreen />, allowedRoles: [...allRoles] },
 
   // * --------- service -----------
@@ -69,7 +65,6 @@ export const routesConfig = [
 ];
 
 export const sidebarTwo = [
-
   {
     id: 1,
     title: "Dashboard",
@@ -172,6 +167,5 @@ export const sidebarTwo = [
 
   },
 ];
-
 
 export const invoiceStatusOptions = ['APPROVED', 'DELETE', 'RETURNED', 'DRAFT', 'PENDING', 'PAID'];

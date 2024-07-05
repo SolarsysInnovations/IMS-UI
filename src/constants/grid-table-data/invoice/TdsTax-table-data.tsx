@@ -21,8 +21,6 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
     const [getPaymentTerm, { }] = useTdsTaxGetByIdMutation();
     const [deleteTdsTax, { isLoading: D_Loading, isSuccess: deleteSuccess }] = useDeleteTdsTaxMutation();
 
-    
-
     const handleEditClick = async () => {
         try {
             const response = await getPaymentTerm(id);
@@ -49,7 +47,7 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
             onDeleteSuccess();
         }
         refetch();
-    }, [deleteSuccess,  onDeleteSuccess]);
+    }, [deleteSuccess, onDeleteSuccess]);
 
     return (
         <Stack direction="row" spacing={1}>
@@ -59,13 +57,12 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
             <IconButton aria-label="" onClick={handleDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px" }} fontSize='small' />
             </IconButton>
-           
+
         </Stack>
     );
 };
 
 export const tdsTaxColumns = (onDeleteSuccess: () => void): GridColDef[] => [
-
     {
         field: 'taxName',
         headerName: 'tax Name',

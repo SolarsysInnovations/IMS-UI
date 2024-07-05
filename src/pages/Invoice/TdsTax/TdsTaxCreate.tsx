@@ -27,8 +27,6 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
 
     const initialValue = tdsTaxValue || tdsTaxInitialValue;
 
-
-
     const onSubmit = useMemo(() => async (values: TdsTaxProps, actions: any) => {
         try {
             if (tdsTaxValue) {
@@ -37,7 +35,7 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
             } else {
                 await addTdsTax(values);
             }
-            actions.resetForm();            
+            actions.resetForm();
         } catch (error) {
             console.error("An error occurred during form submission:", error);
         } finally {
@@ -48,7 +46,7 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
     useEffect(() => {
         if (isAddSuccess || isUpdateSuccess) {
             refetch();
-            
+
         }
     }, [isAddSuccess, isUpdateSuccess]);
 
@@ -56,8 +54,8 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
         if (isUpdateSuccess) {
             setTimeout(() => {
                 dispatch(clearData());
-            }, 1000);   
-            
+            }, 1000);
+
         }
     }, [isUpdateSuccess, dispatch]);
     return (
