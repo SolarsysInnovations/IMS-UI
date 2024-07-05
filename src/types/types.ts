@@ -195,6 +195,31 @@ export interface companyInitialValueProps {
 
 
 }
+export interface companyDetailsInitialValueProps {
+    id: any;
+    companyName: string;
+    companyAddress: string;
+    companyState: string;
+    companyCountry: string;
+    companyEmail: string;
+    companyPhone: string;
+    companyCell: string;
+    companyWebsite: string;
+    companyTaxNumber: string;
+    companyRegNumber: string;
+}
+export interface adminInitialValueProps {
+    id: any;
+    userName: string;
+    userEmail: string;
+    password: string;
+    userRole: string;
+    userMobile: string;
+    userAccess: string;
+    description: string;
+    companyName: string;
+    companyId: string;
+}
 export interface linkCreationProps {
     id: string;
     label: string;

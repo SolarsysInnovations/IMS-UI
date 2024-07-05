@@ -2,8 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Box } from "@mui/material";
-import { useGetCompanyQuery} from "../../../redux-store/company/companyApi";
-import { useAddCompanyMutation, useUpdateCompanyMutation } from '../../../redux-store/company/companyApi';
+import { useGetCompanySettingQuery} from "../../../redux-store/settings/companyDetailsApi";
+import { useAddCompanySettingMutation, useUpdateCompanySettingMutation } from '../../../redux-store/settings/companyDetailsApi';
 import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
 import { companyValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { companyInitialValues } from '../../../constants/forms/formikInitialValues';
@@ -16,9 +16,9 @@ import { CompanyFormProps } from '../../../types/types';
 const CreateCompany = ({ companyValue }: CompanyFormProps) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = useState(false);
-    const [addCompany, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddCompanyMutation();
-    const [updateCompany, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateCompanyMutation();
-    const { data: settingsList, refetch } = useGetCompanyQuery();
+    const [addCompany, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddCompanySettingMutation();
+    const [updateCompany, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateCompanySettingMutation();
+    const { data: settingsList, refetch } = useGetCompanySettingQuery();
 
     const initialValue = companyValue || companyInitialValues;
 

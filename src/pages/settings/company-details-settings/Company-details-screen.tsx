@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  useAddCompanyMutation,
-  useGetCompanyQuery,
-  useGetCompanyByIdMutation,
-} from "../../../redux-store/company/companyApi";
+  useAddCompanySettingMutation,
+  useGetCompanySettingQuery,
+  useGetCompanySettingByIdMutation,
+} from "../../../redux-store/settings/companyDetailsApi";
 import { ToastContainer } from "react-toastify";
 import { Box, Grid } from "@mui/material";
 import TableHeader from "../../../components/layouts/TableHeader";
@@ -20,9 +20,9 @@ const CompanyDetailsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const pathname = usePathname();
-  const [addSetting, { isLoading, isSuccess, isError, error }] = useAddCompanyMutation();
-  const { data: companyData, refetch: refetchCompanyData } = useGetCompanyQuery();
-  const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCompanyByIdMutation();
+  const [addSetting, { isLoading, isSuccess, isError, error }] = useAddCompanySettingMutation();
+  const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingQuery();
+  const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCompanySettingByIdMutation();
 
   const [openModal, setOpenModal] = useState(false);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
