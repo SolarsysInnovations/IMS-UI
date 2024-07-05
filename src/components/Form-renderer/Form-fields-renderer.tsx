@@ -205,6 +205,15 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
     }
   }, [memoizedUpdateFormValue, setFieldValue]);
 
+  useEffect(() => {
+    if (values.country) {
+      setSelectedCountry(values.country);
+    }
+    if (values.state) {
+      setSelectedRegion(values.state);
+    }
+  }, [values.country, values.state]);
+
   switch (field.type) {
     case 'section':
       return (
