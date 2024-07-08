@@ -1,64 +1,113 @@
-import React, { useEffect, useState } from 'react';
-import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useGetCompanyQuery, useAddCompanyMutation, useUpdateCompanyMutation } from '../../redux-store/company/companiesApi';
 import { CompanyFields } from '../../constants/form-data/form-data-json';
-import { companyDetailsInitialValues } from '../../constants/forms/formikInitialValues';
+import { companyInitialValues, customerInitialValues } from '../../constants/forms/formikInitialValues';
+import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { companyValidationSchema } from '../../constants/forms/validations/validationSchema';
-import { useAddCompanyMutation } from '../../redux-store/company/companiesApi';
-import SnackBarUi from '../../components/ui/Snackbar';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { companyDetailsInitialValueProps } from '../../types/types';
+import { clearData } from '../../redux-store/global/globalState';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
 
-interface CompanyCreateProps {
-    setFormData: (data: any) => void;
-    onSubmit: (values: any) => void;
-}
+interface CompanyValueProps {
+    companyEditInitialValues: any;
+};
 
-const CompanyCreate: React.FC<CompanyCreateProps> = ({ setFormData, onSubmit }) => {
-    const [addCompany, { isLoading, isSuccess, isError, error }] = useAddCompanyMutation();
-    const [showSuccessToast, setShowSuccessToast] = useState(false);
+const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
 
-    const updateFormValue = (setFieldValue: Function) => {
-        // Implement if needed
-    };
 
-    const handleFormSubmit = async (values: any, actions: any) => {
-        try {
-            await addCompany(values);
-            actions.resetForm();
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    console.log("companyEditInitialValues initial",companyEditInitialValues);
+    
+    const [addCompany, { isLoading: companyAddLoading, isSuccess: companyAddSuccess, isError: companyAddError, error: companyAddErrorObject }] = useAddCompanyMutation();
+
+    const [updateCompany, { isLoading: companyUpdateLoading, isSuccess: companyUpdateSuccess, isError: companyUpdateError, error: companyUpdateErrorObject }] = useUpdateCompanyMutation();
+
+    const { data: company, error, isLoading, refetch } = useGetCompanyQuery();
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    const [data, setData] = useState<any>();
+
+    useSnackbarNotifications({
+        error: companyAddError,
+        errorObject: companyAddErrorObject,
+        errorMessage: 'Error creating Company',
+        success: companyAddSuccess,
+        successMessage: 'Company created successfully',
+    });
+
+    useSnackbarNotifications({
+        error: companyUpdateError,
+        errorObject: companyUpdateErrorObject,
+        errorMessage: 'Error updating Company',
+        success: companyUpdateSuccess,
+        successMessage: 'Company update successfully',
+    });
 
     useEffect(() => {
-        if (isSuccess) {
-            setShowSuccessToast(true);
-            setTimeout(() => {
-                setShowSuccessToast(false);
-            }, 2000);
-        }
-    }, [isSuccess]);
+        refetch();
+    }, [companyAddSuccess, companyUpdateSuccess, refetch]);
 
-    const handleSubmit = (values: any) => {
-        setFormData(values);
-        handleFormSubmit(values, {});
-    };
+    const initialValues = companyEditInitialValues || companyInitialValues;
+
+    const onSubmit = useMemo(() => async (values: companyDetailsInitialValueProps, actions: any) => {
+        try {
+            console.log("values",values);
+            
+            if (companyEditInitialValues) {
+                const id: number = values?.id
+                await updateCompany({ id: id, company: values, });
+                dispatch(clearData());
+                actions.resetForm();
+            } else {
+                const transformedData = {
+                    register: {
+                        userName: values.userName,
+                        userEmail: values.userEmail,
+                        password: values.password,
+                        userRole: values.userRole,
+                        userMobile: values.userMobile,
+                        userAccess: values.userAccess,
+                        description: values.description,
+                    },
+                    companyDetails: {
+                        // id: values.id,
+                        companyName: values.companyName,
+                        companyAddress: values.companyAddress,
+                        companyState: values.companyState,
+                        companyCountry: values.companyCountry,
+                        companyEmail: values.companyEmail,
+                        companyPhone: values.companyPhone,
+                        companyCell: values.companyCell,
+                        companyWebsite: values.companyWebsite,
+                        companyTaxNumber: values.companyTaxNumber,
+                        companyRegNumber: values.companyRegNumber
+                    }
+                };
+                console.log('transformedData',transformedData);
+                
+                await addCompany(transformedData);
+                dispatch(clearData());
+                actions.resetForm();
+            }
+        } catch (error) {
+            console.error("An error occurred during form submission:", error);
+        } finally {
+            actions.setSubmitting(false);
+        }
+    }, [addCompany, updateCompany, companyEditInitialValues, dispatch]);
 
     return (
         <>
-            {showSuccessToast && (
-                <SnackBarUi
-                    message="Successfully created the company"
-                    severity="success"
-                    isSubmitting={true}
-                />
-            )}
             <DynamicFormCreate
-                setData={setFormData}
-                updateFormValue={updateFormValue}
+                setData={setData}
+                // updateFormValue={updateFormValue}
                 showTable={true}
                 fields={CompanyFields}
-                initialValues={companyDetailsInitialValues}
+                initialValues={initialValues}
                 validationSchema={companyValidationSchema}
-                onSubmit={handleSubmit}
+                onSubmit={onSubmit}
             />
         </>
     );

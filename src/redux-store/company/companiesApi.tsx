@@ -57,7 +57,7 @@ export const companyApi = apiSlice.injectEndpoints({
         }),
         getCompanyDataById: builder.mutation<void, number>({
             query: (id) => ({
-                 url: `/company/get/${id}`,
+                 url: `company/get/${id}`,
                 method: 'POST',
             }),
         }),

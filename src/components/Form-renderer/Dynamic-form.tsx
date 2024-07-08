@@ -9,13 +9,19 @@ import { Grid } from "@mui/material";
 import { FieldRenderer } from "./Form-fields-renderer";
 import { Add } from "@mui/icons-material";
 import SnackBarUi from "../ui/Snackbar";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux-store/store";
+import { clearData } from "../../redux-store/global/globalState";
 
 export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error, headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit, onClose }: FormProps) => {
 
     const pathname = usePathname();
     const navigate = useNavigate();
 
+    const dispatch = useDispatch<AppDispatch>();
+    
     const handleClick = () => {
+        dispatch(clearData());
         navigate(-1); // Navigate back to the previous page
     };
 

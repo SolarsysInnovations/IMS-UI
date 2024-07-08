@@ -7,12 +7,16 @@ import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { companyFields } from '../../constants/form-data/form-data-json';
 import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
 
-const CompanyEdit: React.FC = () => {
+interface CompanyDetailsProps {
+    details: any;
+}
+
+const CompanyEdit = ({ details }: CompanyDetailsProps) => {
     const [updateCompany, { isLoading, isSuccess, isError, error }] = useUpdateCompanyMutation();
     const companyStateDetails = useSelector((state: any) => state.companyState?.data ?? {});
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     const onSubmit = async (values: any, actions: any) => {
         try {
@@ -48,7 +52,7 @@ const CompanyEdit: React.FC = () => {
                     headerName='Customer Edit'
                     showTable={true}
                     fields={companyFields}
-                    initialValues={companyStateDetails}
+                    initialValues={details || companyStateDetails}
                     validationSchema={customerValidationSchema}
                     onSubmit={onSubmit}
                 />

@@ -192,8 +192,6 @@ export interface companyInitialValueProps {
     companyWebsite: string;
     companyTaxNumber: string;
     companyRegNumber: string;
-
-
 }
 export interface companyDetailsInitialValueProps {
     id: any;
@@ -207,9 +205,6 @@ export interface companyDetailsInitialValueProps {
     companyWebsite: string;
     companyTaxNumber: string;
     companyRegNumber: string;
-}
-export interface adminInitialValueProps {
-    id: any;
     userName: string;
     userEmail: string;
     password: string;
@@ -217,7 +212,6 @@ export interface adminInitialValueProps {
     userMobile: string;
     userAccess: string;
     description: string;
-    companyName: string;
     companyId: string;
 }
 export interface linkCreationProps {

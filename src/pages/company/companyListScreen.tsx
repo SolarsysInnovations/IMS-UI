@@ -11,9 +11,9 @@ import ModalUi from '../../components/ui/ModalUi';
 import { Box } from '@mui/material';
 import CompanyCreate from './companyCreate';
 import { columns } from '../../constants/grid-table-data/company-table-data';
-import { useGetCompanyQuery , useUpdateCompanyMutation} from '../../redux-store/company/companiesApi';
+import { useGetCompanyQuery, useUpdateCompanyMutation } from '../../redux-store/company/companiesApi';
 
-type CompanyData = {
+export type CompanyData = {
     id: string;
     companyName: string;
     companyAddress: string;
@@ -35,19 +35,20 @@ type CompanyData = {
     description: string;
     registerCompanyId: string;
 };
-const CompanyList = () => {
 
+const CompanyList = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const [updateCustomer, { isSuccess, isError }] = useUpdateCompanyMutation();
-    const { data: company, error, isLoading , refetch} = useGetCompanyQuery();
+    const { data: company, error, isLoading, refetch } = useGetCompanyQuery();
     const [companyFormData, setCompanyFormData] = useState<any>({});
-    const [openModal, setOpenModal] = React.useState(false);
-    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
-
+    const [openModal, setOpenModal] = useState(false);
+    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
     const [mergedData, setMergedData] = useState<CompanyData[]>([]);
-    
 
+
+    console.log('company vaadasd',company);
+    
     useEffect(() => {
         if (company && !isLoading && !error) {
             const mergedArray: CompanyData[] = company.map((item: any) => ({
@@ -62,21 +63,26 @@ const CompanyList = () => {
                 description: item.register.description,
                 registerCompanyId: item.register.companyId
             }));
-            console.log("mergedArray new",mergedArray);
-            setMergedData(mergedArray); 
+            console.log("mergedArray new", mergedArray);
+            setMergedData(mergedArray);
             console.log('company data', company);
             console.log("merged data", mergedData);
         }
     }, [company, isLoading, error]);
-    
-    if(mergedData){
-        console.log("hellow data",mergedData);
-    }
-    
+
+
     const buttons = [
         { label: 'Create Company', icon: Add, onClick: () => navigate("/company/create") },
     ];
 
+    const handleDeleteSuccess = useCallback(() => {
+        setShowDeleteSuccessToast(true);
+        setTimeout(() => {
+            setShowDeleteSuccessToast(false);
+        }, 3000);
+        refetch();
+    }, [refetch]);
+    
     const handleSubmit = async (values: any) => {
         try {
             // Handle submission logic
@@ -85,14 +91,6 @@ const CompanyList = () => {
             console.log(error);
         }
     };
-    
-    const handleDeleteSuccess = useCallback(() => {
-        setShowDeleteSuccessToast(true);
-        setTimeout(() => {
-            setShowDeleteSuccessToast(false);
-        }, 3000);
-        // Handle refetch logic if necessary
-    }, []);
 
     const pathname = usePathname();
     const handleModalClose = () => {
@@ -100,18 +98,10 @@ const CompanyList = () => {
         setOpenModal(false);
     };
 
-    
-
     return (
         <>
-            
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={columns(handleDeleteSuccess)} tableData={mergedData || []} checkboxSelection={false} />
-            <ModalUi open={openModal} onClose={handleModalClose}>
-                <Box sx={{ marginTop: "15px" }}>
-                    <CompanyCreate setFormData={setCompanyFormData} onSubmit={handleSubmit} />
-                </Box>
-            </ModalUi>
+            <GridDataUi showToolbar={true}  columns={columns}  onDeleteSuccess={handleDeleteSuccess} tableData={mergedData || []} checkboxSelection={false} /> 
         </>
     );
 };
