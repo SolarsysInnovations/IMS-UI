@@ -43,6 +43,9 @@ import { clearData, setData } from '../../redux-store/global/globalState';
 import SendEmail from './Send-email';
 import ServiceScreen from './service/ServiceScreen';
 import NestedModalUi from '../../components/ui/NestedModalui';
+import SnackBarUi from '../../components/ui/Snackbar';
+import { showSnackbar } from '../../redux-store/global/snackBarSlice';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -64,7 +67,8 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const [popUpComponent, setPopUpComponent] = useState("");
     const [invoiceFinalData, setInvoiceFinalData] = useState();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
-    const [addInvoice, { isSuccess, isError, }] = useAddInvoiceMutation();
+    const [addInvoice, { isSuccess: addInvoiceSuccess, isError: addInvoiceError, error: addInvoiceErrorObject }] = useAddInvoiceMutation();
+    const [updateInvoice, { isSuccess: invoiceUpdatedSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
@@ -91,7 +95,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
     const [preview, setPreview] = useState(false);
-    const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
+
 
     const PopupComponents = {
         GST_TYPE: 'gstType',
@@ -146,7 +150,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     // * this is for edit screen only
     React.useEffect(() => {
         if (invoiceValue) {
-            const data = tdsTaxData?.find((item) => item?.taxName === invoiceValues.taxAmount.tds)
+            const data = tdsTaxData?.find((item: any) => item?.taxName === invoiceValues.taxAmount.tds)
             setSelectedTdsAmount(data?.taxPercentage)
         }
         setTdsAmount(invoiceValues.taxAmount.tds)
@@ -209,11 +213,21 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         refetch()
     }, [dispatch, refetch])
 
-    useEffect(() => {
-        if (isSuccess) {
-            toast.success("successfully created the new  Invoice", toastConfig)
-        }
-    }, [isSuccess])
+    useSnackbarNotifications({
+        success: addInvoiceSuccess,
+        error: addInvoiceError,
+        successMessage: "Invoice added successfully",
+        errorMessage: 'Error adding invoice',
+        errorObject: addInvoiceErrorObject,
+    });
+
+    useSnackbarNotifications({
+        success: invoiceUpdatedSuccess,
+        error: invoiceUpdateError,
+        successMessage: 'Invoice updated successfully',
+        errorMessage: 'Error updating invoice',
+        errorObject: invoiceUpdateErrorObject,
+    });
 
     return (
         <Formik
@@ -227,9 +241,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     values.totalAmount = invoiceTotalAmount ?? null;
                     if (invoiceValue) {
                         await updateInvoice({ id: invoiceValue.id, invoiceData: values });
-                        dispatch(clearData())
+                        dispatch(clearData());
+                        resetForm();
+                        navigate(-1);
                     } else {
                         await addInvoice(values);
+                        resetForm();
                     }
                     // alert(JSON.stringify(values));
                     resetForm();
@@ -245,7 +262,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
             {({ errors, touched, values, handleChange, handleSubmit, setFieldValue, isValid, dirty }) => {
                 return (
                     <div>
-                        <ToastUi autoClose={2000} />
+
                         <TableHeader headerName={pathname} buttons={[
                             {
                                 label: 'Preview', icon: Add, onClick: () => {

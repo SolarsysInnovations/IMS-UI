@@ -11,9 +11,9 @@ import SnackBarUi from '../../components/ui/Snackbar'
 
 const CustomerList = () => {
     const [updateCustomer, { isSuccess, isError }] = useUpdateCustomerMutation();
-    const { data: customers, error, isLoading , refetch} = useGetCustomersQuery();
+    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
 
-    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
+    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
 
     const handleDeleteSuccess = useCallback(() => {
         setShowDeleteSuccessToast(true);
@@ -22,30 +22,21 @@ const CustomerList = () => {
         }, 3000);
         refetch();
     }, [refetch]);
-    
 
     const role = localStorage.getItem("userRole");
     const buttons = [];
-    
+
     if (role != "APPROVER" && role != "ENDUSER") {
         buttons.push({ label: 'Create Customer', icon: Add, onClick: () => navigate("/customer/create") })
     }
-        
-    
+
     const navigate = useNavigate();
     const pathname = usePathname();
 
     return (
         <>
-            {showDeleteSuccessToast && (
-                <SnackBarUi
-                    message="Successfully deleted the customer"
-                    severity= "success"
-                    isSubmitting={true}
-                />
-            )}
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={columns(handleDeleteSuccess)} tableData={customers || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={columns} tableData={customers || []} checkboxSelection={false} />
         </>
     )
 }

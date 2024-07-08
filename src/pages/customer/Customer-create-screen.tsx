@@ -1,63 +1,78 @@
-import React, { useEffect, useState } from 'react';
-import { useAddCustomerMutation } from '../../redux-store/customer/customerApi';
-import { toastConfig } from '../../constants/forms/config/toastConfig';
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useAddCustomerMutation, useGetCustomersQuery, useUpdateCustomerMutation } from '../../redux-store/customer/customerApi';
 import { customerFields } from '../../constants/form-data/form-data-json';
 import { customerInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
-import useSuccessToast from '../../hooks/useToast';
-import SnackBarUi from '../../components/ui/Snackbar';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { DyCreateCustomerProps } from '../../types/types';
+import { clearData } from '../../redux-store/global/globalState';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
 
-const CustomerCreate: React.FC = () => {
-    const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
+interface CustomerValueProps {
+    customerEditInitialValues: any;
+};
+
+const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
+
+    const [addCustomer, { isLoading: customerAddLoading, isSuccess: customerAddSuccess, isError: customerAddError, error: customerAddErrorObject }] = useAddCustomerMutation();
+    const [updateCustomer, { isLoading: customerUpdateLoading, isSuccess: customerUpdateSuccess, isError: customerUpdateError, error: customerUpdateErrorObject }] = useUpdateCustomerMutation();
+    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
+
+    const dispatch = useDispatch<AppDispatch>();
+
     const [data, setData] = useState<any>();
-    const [showSuccessToast, setShowSuccessToast] = useState(false); 
 
-    const updateFormValue = (setFieldValue: Function) => {
-        // if (data?.customerName === "arun") {
-        //     setFieldValue("companyName", "arun");
-        // }
-    };
-    const onSubmit = async (values: any, actions: any) => {
+    useSnackbarNotifications({
+        error: customerAddError,
+        errorObject: customerAddErrorObject,
+        errorMessage: 'Error creating Customer',
+        success: customerAddSuccess,
+        successMessage: 'Customer created successfully',
+    });
+
+    useSnackbarNotifications({
+        error: customerUpdateError,
+        errorObject: customerUpdateErrorObject,
+        errorMessage: 'Error updating Customer',
+        success: customerUpdateSuccess,
+        successMessage: 'Customer update successfully',
+    });
+
+    useEffect(() => {
+        refetch();
+    }, [customerAddSuccess, customerUpdateSuccess, refetch]);
+
+    const initialValues = customerEditInitialValues || customerInitialValues;
+
+    const onSubmit = useMemo(() => async (values: DyCreateCustomerProps, actions: any) => {
         try {
-            await addCustomer(values);
-            // setShowSuccessToast(true);
-            // setTimeout(() => {
-            //     setShowSuccessToast(false);
-            // }, 2000);
-            actions.resetForm();
+            if (customerEditInitialValues) {
+                const id: number = values?.id
+                await updateCustomer({ id: id, customer: values, });
+                dispatch(clearData());
+                actions.resetForm();
+            } else {
+                await addCustomer(values);
+                dispatch(clearData());
+                actions.resetForm();
+            }
         } catch (error) {
-            console.log(error);
+            console.error("An error occurred during form submission:", error);
+        } finally {
+            actions.setSubmitting(false);
         }
-    };
+    }, [addCustomer, updateCustomer, customerEditInitialValues, dispatch]);
 
-     useEffect(() => {
-        if (isSuccess) {
-            setShowSuccessToast(true);
-            setTimeout(() => {
-                setShowSuccessToast(false);
-            }, 2000);
-        }
-        // refetch();
-    }, [isSuccess ]);
-    // useSuccessToast({ isSuccess, message: "successfully created the customer" })
     return (
-        <>
-            {/* Use DynamicCustomerCreate with the required props */}
-            {showSuccessToast && (
-                <SnackBarUi
-                    message="Successfully created the customer"
-                    severity="success"
-                    isSubmitting={true}
-                />
-            )}
+        <div>
             <DynamicFormCreate
                 setData={setData}
-                updateFormValue={updateFormValue}
+                // updateFormValue={updateFormValue}
                 showTable={true}
                 fields={customerFields}
-                initialValues={customerInitialValues}
+                initialValues={initialValues}
                 validationSchema={customerValidationSchema}
                 onSubmit={onSubmit}
             />

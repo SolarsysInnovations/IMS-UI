@@ -14,6 +14,8 @@ import { toast } from "react-toastify";
 import { setCustomerData, useUpdateCustomerMutation } from "../../../redux-store/customer/customerApi";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
 import { setData } from "../../../redux-store/global/globalState";
+import SnackBarUi from "../../../components/ui/Snackbar";
+import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 
 export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     const [downloadPdf, setDownloadPdf] = useState<boolean>(false);
@@ -49,19 +51,27 @@ export const DownloadButtonRenderer = ({ row }: { row: any }) => {
 export const MyCellRenderer = ({ row }: { row: any }) => {
 
     const dispatch = useDispatch<AppDispatch>();
-    const { data: invoice, error, isLoading, refetch } = useGetInvoiceQuery();
+    const { data: invoice, error, isLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [invoiceData, setInvoiceData] = useState<any>();
-    const [deleteInvoice, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteInvoiceMutation();
+    const [deleteInvoice, { isSuccess: invoiceDeleteSuccess, isError: invoiceDeleteError, error: invoiceDeleteErrorObject }] = useDeleteInvoiceMutation();
+    const [getInvoice, { data, isSuccess: getInvoiceSuccess, isError: getInvoiceError, error: getInvoiceErrorObject }] = useInvoiceGetByIdMutation();
     const navigate = useNavigate();
-    const [getInvoice, { data: customerData, isSuccess: C_success, isError: C_error }] = useInvoiceGetByIdMutation<{ data: any, isSuccess: any, isError: any }>();
     const [preview, setPreview] = useState(false);
     const [nestedOpen, setNestedOpen] = useState(false);
     const [updateInvoice] = useUpdateCustomerMutation();
 
     useEffect(() => {
-        refetch()
-    }, [dispatch, refetch]);
+        getInvoiceList()
+    }, [dispatch, getInvoiceList, invoiceDeleteSuccess]);
+
+    useSnackbarNotifications({
+        error: invoiceDeleteError,
+        errorMessage: 'Error adding invoice',
+        success: invoiceDeleteSuccess,
+        successMessage: 'Invoice deleted successfully',
+        errorObject: invoiceDeleteErrorObject,
+    })
 
     const handleEditClick = async () => {
         try {
@@ -78,6 +88,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
             console.error('Error handling edit click:', error);
         }
     }
+
     const handleDetails = async (row: any) => {
         try {
             const response = await getInvoice(row.id);
@@ -108,35 +119,25 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
         setIsModalOpen(false);
     };
 
-    // useEffect(() => {
-    //     if (D_Success) {
-    //         // toast.success("successfully deleted the invoice", toastConfig)
-    //     }
-    //     refetch();
-    // }, [D_Success]);
-
-
-
-    console.log("invoiceData", invoiceData);
-
-
     return (
-        <Stack direction="row" spacing={1}>
-            <IconButton aria-label="" onClick={handleEditClick}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "16px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
-            <IconButton aria-label="" onClick={handleDeleteClick}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={() => {
-                handleDetails(row)
-                setInvoiceData(row)
-            }}>
-                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
-            <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
-                <InvoiceUi preview={preview} invoiceData={invoiceData} isModalOpen={setIsModalOpen} />
-            </ModalUi>
-        </Stack>
+        <>
+            <Stack direction="row" spacing={1}>
+                <IconButton aria-label="" onClick={handleEditClick}>
+                    <EditIcon sx={{ color: `grey.500`, fontSize: "16px", '&:hover': { color: 'blue' } }} fontSize='small' />
+                </IconButton>
+                <IconButton aria-label="" onClick={handleDeleteClick}>
+                    <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px", '&:hover': { color: 'blue' } }} fontSize='small' />
+                </IconButton>
+                <IconButton sx={{ padding: "3px" }} aria-label="" onClick={() => {
+                    handleDetails(row)
+                    setInvoiceData(row)
+                }}>
+                    <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
+                </IconButton>
+                <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
+                    <InvoiceUi preview={preview} invoiceData={invoiceData} isModalOpen={setIsModalOpen} />
+                </ModalUi>
+            </Stack>
+        </>
     );
 };
