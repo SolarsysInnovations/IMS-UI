@@ -10,18 +10,28 @@ import { DynamicFormCreate } from '../Form-renderer/Dynamic-form';
 import { GstTypeFields, InvoiceMailReasonFields } from '../../constants/form-data/form-data-json';
 import { InvoiceEmailReasonValidationSchemas, gstTypeValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { invoiceMailReasonInitialValue } from '../../constants/forms/formikInitialValues';
-import { useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import { useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 
 // create and edit screen
 
-
 const MailReason = ({ invoiceData }: any) => {
 
-    const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
+    const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject, isLoading: invoiceUpdateLoading }] = useUpdateInvoiceMutation();
 
     const navigate = useNavigate();
 
+    const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceQuery();
+
     // const invoiceData = useSelector((state: any) => state.globalState.data);
+
+    useSnackbarNotifications({
+        error: invoiceUpdateError,
+        errorObject: invoiceUpdateErrorObject,
+        errorMessage: 'Error updating Invoice',
+        success: invoiceUpdateSuccess,
+        successMessage: 'Invoice update successfully',
+    });
 
     const dispatch = useDispatch<AppDispatch>();
 

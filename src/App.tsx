@@ -9,7 +9,7 @@ import { selectCurrentToken } from "./redux-store/auth/authSlice";
 
 function App() {
 
-  const token = useSelector(selectCurrentToken)
+  const token = useSelector(selectCurrentToken);
 
   return (
     <ThemeProvider theme={theme}>
@@ -37,7 +37,7 @@ function App() {
       </BrowserRouter>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
 

@@ -13,12 +13,17 @@ import { useDispatch } from "react-redux";
 import EditIcon from '@mui/icons-material/Edit';
 import { useDeletePaymentTermsMutation, useGetPaymentTermsQuery, usePaymentTermsGetByIdMutation } from "../../../redux-store/invoice/paymentTerms";
 import { setData, clearData } from "../../../redux-store/global/globalState";
+import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 
 
-const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () => void }) => {
+const MyCellRenderer = ({ id }: { id: any, }) => {
+
     const dispatch = useDispatch<AppDispatch>();
+
     const [getPaymentTerm, { }] = usePaymentTermsGetByIdMutation();
-    const [deletePaymentTerms, { isLoading: D_Loading, isSuccess: deleteSuccess }] = useDeletePaymentTermsMutation();
+
+    const [deletePaymentTerms, { isLoading: paymentTermsDeleteLoading, isSuccess: paymentTermsSuccess, error: paymentTermsErrorObject, isError: paymentTermsError }] = useDeletePaymentTermsMutation();
+
     const { data: getPaymentTermsList, refetch } = useGetPaymentTermsQuery();
 
     const handleEditClick = async () => {
@@ -43,12 +48,13 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
         }
     };
 
-    useEffect(() => {
-        if (deleteSuccess) {
-            onDeleteSuccess();
-        }
-        refetch();
-    }, [deleteSuccess, onDeleteSuccess]);
+    useSnackbarNotifications({
+        error: paymentTermsError,
+        errorObject: paymentTermsErrorObject,
+        errorMessage: 'Error updating Payment Terms',
+        success: paymentTermsSuccess,
+        successMessage: 'Update Terms updated successfully',
+    });
 
     return (
         <Stack direction="row" spacing={1}>
@@ -61,7 +67,7 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
         </Stack>
     );
 };
-export const paymentTermsColumns = (onDeleteSuccess: () => void): GridColDef[] => [
+export const paymentTermsColumns: GridColDef[] = [
 
     {
         field: 'termName',
@@ -83,6 +89,6 @@ export const paymentTermsColumns = (onDeleteSuccess: () => void): GridColDef[] =
         // width: 100,
         headerAlign: 'center',
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row.id} onDeleteSuccess={onDeleteSuccess} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row.id} />,
     },
 ];

@@ -13,13 +13,14 @@ import { useDispatch } from "react-redux";
 import EditIcon from '@mui/icons-material/Edit';
 import { useDeleteTdsTaxMutation, useGetTdsTaxQuery, useTdsTaxGetByIdMutation } from "../../../redux-store/invoice/tdsTaxApi";
 import { setData, clearData } from "../../../redux-store/global/globalState";
+import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 
 
-const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () => void }) => {
+const MyCellRenderer = ({ id }: { id: any, }) => {
     const dispatch = useDispatch<AppDispatch>();
     const { data: getTdsTax, refetch } = useGetTdsTaxQuery();
     const [getPaymentTerm, { }] = useTdsTaxGetByIdMutation();
-    const [deleteTdsTax, { isLoading: D_Loading, isSuccess: deleteSuccess }] = useDeleteTdsTaxMutation();
+    const [deleteTdsTax, { isLoading: tdsTaxDeleteLoading, isSuccess: tdsTaxDeleteSuccess, isError: tdsTaxDeleteError, error: tdsTaxDeleteErrorObject }] = useDeleteTdsTaxMutation();
 
     const handleEditClick = async () => {
         try {
@@ -35,19 +36,20 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
         }
     };
 
+    useSnackbarNotifications({
+        error: tdsTaxDeleteError,
+        errorObject: tdsTaxDeleteErrorObject,
+        errorMessage: 'Error updating TdsTax',
+        success: tdsTaxDeleteSuccess,
+        successMessage: 'TdsTax update successfully',
+    });
+
     const handleDeleteClick = () => {
         const confirmed = window.confirm("Are you sure you want to delete this gst type?");
         if (confirmed) {
             deleteTdsTax(id)
         }
     };
-
-    useEffect(() => {
-        if (deleteSuccess) {
-            onDeleteSuccess();
-        }
-        refetch();
-    }, [deleteSuccess, onDeleteSuccess]);
 
     return (
         <Stack direction="row" spacing={1}>
@@ -62,7 +64,7 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
     );
 };
 
-export const tdsTaxColumns = (onDeleteSuccess: () => void): GridColDef[] => [
+export const tdsTaxColumns: GridColDef[] = [
     {
         field: 'taxName',
         headerName: 'tax Name',
@@ -80,6 +82,6 @@ export const tdsTaxColumns = (onDeleteSuccess: () => void): GridColDef[] => [
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row.id} onDeleteSuccess={onDeleteSuccess} />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row.id} />,
     },
 ];
