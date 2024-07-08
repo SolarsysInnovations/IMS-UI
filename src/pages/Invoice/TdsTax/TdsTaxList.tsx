@@ -24,7 +24,7 @@ const TdsTaxList = () => {
         <>
             <GridDataUi showToolbar={false} columns={tdsTaxColumns} tableData={getTdsTax || []} checkboxSelection={false} />
         </>
-    )
+    );
 }
 
 export default TdsTaxList

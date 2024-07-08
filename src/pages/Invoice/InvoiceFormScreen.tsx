@@ -73,7 +73,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
     const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
-    const [discountAmount, setDiscountAmount] = useState<null | number>(null);
+    const [discountAmount, setDiscountAmount] = useState<number | null>(null);
     const [selectedTds, setSelectedTdsAmount] = useState<number | null>(null);
     const [tdsAmount, setTdsAmount] = useState<number | null>(null);
     const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>();
@@ -95,7 +95,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
     const [preview, setPreview] = useState(false);
-
 
     const PopupComponents = {
         GST_TYPE: 'gstType',
@@ -120,11 +119,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         setDiscountAmount(disAmount)
         let tdsTax = null;
         if (selectedTds) {
-            console.log("selectedTds", selectedTds);
-
             let discountedAmount = (subTotalInvoiceAmount - disAmount) * (selectedTds) / 100;
+            console.log('discountedAmount', discountedAmount);
+
             setTdsAmount(discountedAmount);
-            tdsTax = discountedAmount
+            tdsTax = discountedAmount;
         } else {
             setTdsAmount(null);
         }
@@ -146,6 +145,9 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
             setModifiedServiceList(mappedServiceList);
         }
     }, [serviceList]);
+
+    console.log("modifiedServiceList", modifiedServiceList);
+
 
     // * this is for edit screen only
     React.useEffect(() => {

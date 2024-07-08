@@ -63,7 +63,7 @@ const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
         errorMessage: 'Error updating Gst Type',
         success: gstTypeUpdateSuccess,
         successMessage: 'Gst Type updated successfully',
-    })
+    });
 
     return (
         <div>

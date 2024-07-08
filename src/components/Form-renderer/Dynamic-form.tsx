@@ -33,7 +33,7 @@ export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error
 
                     const resolvedButtons = buttons ? buttons.map((button: any) => ({
                         ...button,
-                        onClick: button.label === 'Save' ? handleSubmit : button.onClick
+                        onClick: button.label ? handleSubmit : button.onClick
                     })) : defaultButtons;
 
                     return (

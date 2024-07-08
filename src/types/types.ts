@@ -58,6 +58,14 @@ export interface DyCreateCustomerProps {
     contactPerson: ContactPersonProps[];
 };
 
+// types.ts
+export interface ButtonProps {
+    label: string;
+    icon?: React.ElementType;
+    onClick: (event?: React.FormEvent<HTMLButtonElement>) => void;
+    disabled?: boolean;
+};
+
 export interface FormProps {
     fields: FieldProps[];
     initialValues: any;
