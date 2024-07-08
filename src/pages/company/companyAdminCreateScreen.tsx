@@ -5,14 +5,13 @@ import { useAddCustomerMutation } from '../../redux-store/customer/customerApi';
 import CompanyCreate from './companyCreate';
 import AdminCreate from './AdminCreate';
 import SnackBarUi from '../../components/ui/Snackbar';
-import { sampleData } from '../../constants/data';
 
 const CompanyAdminCreate: React.FC = () => {
     const [addCustomer, { isSuccess }] = useAddCustomerMutation();
     const [showSuccessToast, setShowSuccessToast] = useState(false);
     const [companyFormData, setCompanyFormData] = useState<any>({});
     const [adminFormData, setAdminFormData] = useState<any>({});
-    const [serviceList, setServiceList] = useState(sampleData);
+    const [serviceList, setServiceList] = useState<any>({});
 
     const handleSave = async (combinedData: any) => {
         try {
