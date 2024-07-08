@@ -66,7 +66,7 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
     }, [addCustomer, updateCustomer, customerEditInitialValues, dispatch]);
 
     return (
-        <div>
+        <>
             <DynamicFormCreate
                 setData={setData}
                 // updateFormValue={updateFormValue}

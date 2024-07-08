@@ -26,6 +26,8 @@ import Login from "../pages/Login-screen";
 import Dashboard from "../pages/Dashboard/Dashboard-screen";
 import InvoiceCreateScreen from "../pages/Invoice/Invoice-create-screen";
 import CustomerScreen from "../pages/customer/Customer-screen";
+import CompanyList from "../pages/company/companyListScreen";
+import CompanyAdminCreate from "../pages/company/companyAdminCreateScreen";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.SUPERADMIN, Roles.ADMIN];
