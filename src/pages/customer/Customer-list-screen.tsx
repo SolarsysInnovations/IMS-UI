@@ -7,9 +7,6 @@ import { useNavigate } from 'react-router-dom'
 import { columns } from '../../constants/grid-table-data/customer-table-data'
 import ToastUi from '../../components/ui/ToastifyUi'
 import { useGetCustomersQuery, useUpdateCustomerMutation } from '../../redux-store/customer/customerApi'
-import SnackBarUi from '../../components/ui/Snackbar'
-import csc from "country-state-city";
-import { Country, State, City } from 'country-state-city';
 
 const CustomerList = () => {
 
