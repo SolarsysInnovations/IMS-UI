@@ -65,7 +65,9 @@ export enum ApiEndpoint {
     //Changepassword
     CHANGE_PASSWORD = "changePassword",
     //Dashboard
-    DASHBOARD_GET = "dashboardGet"
+    DASHBOARD_GET = "dashboardGet",
+    //Company
+    COMPANY_GET = "companyGet",
 }
 
 export type ApiUrls = {
@@ -131,5 +133,8 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.ROLES_UPDATE]: `/role/update`,
     [ApiEndpoint.ROLES_DELETE]: `/role/delete/`,
     //Changepassword
-    [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`
+    [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
+    //
+    [ApiEndpoint.COMPANY_GET]: `/company/list`,
+
 };

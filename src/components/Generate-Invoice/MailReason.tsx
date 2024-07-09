@@ -10,33 +10,46 @@ import { DynamicFormCreate } from '../Form-renderer/Dynamic-form';
 import { GstTypeFields, InvoiceMailReasonFields } from '../../constants/form-data/form-data-json';
 import { InvoiceEmailReasonValidationSchemas, gstTypeValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { invoiceMailReasonInitialValue } from '../../constants/forms/formikInitialValues';
-import { useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import { useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 
 // create and edit screen
 
+const MailReason = ({ invoiceData, setNestedOpen }: any) => {
 
-const MailReason = ({ invoiceData }: any) => {
-
-    const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
+    const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject, isLoading: invoiceUpdateLoading }] = useUpdateInvoiceMutation();
 
     const navigate = useNavigate();
 
+    const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
+
     // const invoiceData = useSelector((state: any) => state.globalState.data);
+
+    useSnackbarNotifications({
+        error: invoiceUpdateError,
+        errorObject: invoiceUpdateErrorObject,
+        errorMessage: 'Error updating Invoice',
+        success: invoiceUpdateSuccess,
+        successMessage: 'Invoice update successfully',
+    });
 
     const dispatch = useDispatch<AppDispatch>();
 
     const onSubmit = useMemo(() => async (values: InvoiceMailReasonProps, actions: any) => {
         try {
             if (invoiceData) {
+                //console.log("values", values);
                 const updatedInvoice = {
                     ...invoiceData,
                     invoiceReason: values.reason,
                     mailTo: values.toMail,
                     // invoiceStatus: invoiceData.invoiceStatus
                 }
-                console.log("updatedInvoice", updatedInvoice);
+                // console.log("updatedInvoice", updatedInvoice);
                 await updateInvoice({ id: invoiceData.id, invoiceData: updatedInvoice });
+                setNestedOpen(false);
                 dispatch(clearData());
+                getInvoiceList();
             }
             actions.resetForm();
         } catch (error) {
@@ -44,7 +57,7 @@ const MailReason = ({ invoiceData }: any) => {
         } finally {
             actions.setSubmitting(false);
         }
-    }, [invoiceData, updateInvoice, dispatch]);
+    }, [invoiceData, updateInvoice, dispatch,]);
 
     return (
         <div>
@@ -52,13 +65,12 @@ const MailReason = ({ invoiceData }: any) => {
                 headerName="Send a Reason To Email"
                 showTable={true}
                 fields={InvoiceMailReasonFields}
-                initialValues={invoiceMailReasonInitialValue || []}
+                initialValues={invoiceMailReasonInitialValue}
                 validationSchema={InvoiceEmailReasonValidationSchemas}
                 onSubmit={onSubmit}
-            // buttons={[
-            //     { label: 'Back', onClick: () => navigate(-1) },
-            //     { label: 'Send', onClick: () => { }, },
-            // ]}
+                buttons={[
+                    { label: 'Send', onClick: onSubmit },
+                ]}
             />
         </div>
     );

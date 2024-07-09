@@ -23,6 +23,7 @@ import { Add, EmailOutlined } from "@mui/icons-material";
 import TextAreaUi from "../ui/TextArea";
 import * as Yup from 'yup';
 import MailReason from "./MailReason";
+import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 
 interface InvoiceUiProps {
     invoiceData?: any;
@@ -37,20 +38,30 @@ interface InvoiceUiProps {
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) {
-    const { data: customers, error, isLoading, refetch, isSuccess } = useGetCustomersQuery();
+    const { data: customers, error: customerListError, isLoading: customerListLoading, refetch, isSuccess } = useGetCustomersQuery();
     const [subTotalAmount, setSubTotalAmount] = useState<number>(0)
     const [customerDetails, setCustomerDetails] = useState<any>()
     const [discountAmount, setDiscountAmount] = useState<number>(0)
     const [openemaildialogBox, setIsOpenEmailDialogBox] = useState(false);
     const [commentPopUp, setCommentPopup] = useState(false);
-    const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
+    const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject, isLoading: invoiceUpdateLoading }] = useUpdateInvoiceMutation();
     const [getInvoiceById, { }] = useInvoiceGetByIdMutation();
+    const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
 
     const invoiceData = useSelector((state: any) => state.globalState.data);
     console.log("invoice Data ", invoiceData);
 
     const dispatch = useDispatch();
     const [nestedOpen, setNestedOpen] = useState(false);
+
+    // * --------------- invoice update snackbar ----------------
+    useSnackbarNotifications({
+        error: invoiceUpdateError,
+        errorObject: invoiceUpdateErrorObject,
+        errorMessage: 'Error updating Invoice',
+        success: invoiceUpdateSuccess,
+        successMessage: 'Invoice update successfully',
+    });
 
     useEffect(() => {
         if (invoiceData) {
@@ -67,7 +78,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
         if (downloadPdf) {
             printPDF()
         }
-    }, [downloadPdf])
+    }, [downloadPdf]);
 
     useEffect(() => {
         if (invoiceData) {
@@ -78,7 +89,6 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     }, [customers, invoiceData]);
 
     const handleOptionClick = async (option: any, index: any) => {
-
         // setCommentPopup(true);
         if (invoiceData.invoiceStatus !== option) {
 
@@ -88,7 +98,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                     invoiceStatus: option
                 };
                 console.log(updatedInvoiceData);
-                setNestedOpen(true)
+                setNestedOpen(true);
                 // await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
                 // const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
                 dispatch(clearData());
@@ -98,7 +108,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 console.log("Error updating invoice data", error);
             }
         }
-    }
+    };
 
     const handleSentToApprover = async (e: any) => {
         e.preventDefault();
@@ -107,9 +117,8 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 ...invoiceData,
                 invoiceStatus: "PENDING"
             };
-
             await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
-
+            getInvoiceList();
             const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
             dispatch(setData(fetchedInvoiceData));
             isModalOpen(false);
@@ -117,7 +126,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
         } catch (error) {
             console.log("Error updating invoice data", error);
         }
-    }
+    };
 
     const printPDF = () => {
         const element = document.querySelector("#invoiceCapture");
@@ -149,7 +158,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
 
     if (!invoiceData) {
         return <div>No data available</div>;
-    }
+    };
 
     const parsedDueDate = invoiceData?.dueDate
         ? parse(invoiceData.dueDate, 'dd-MM-yyyy', new Date())
@@ -163,8 +172,6 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const handleCloseNested = () => {
         setNestedOpen(false);
     };
-
-
 
     return (
         <>
@@ -296,7 +303,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                         </Box>
                     </Grid>
                     <ModalUi open={nestedOpen} onClose={handleCloseNested}>
-                        <MailReason invoiceData={invoiceData} />
+                        <MailReason invoiceData={invoiceData} setNestedOpen={setNestedOpen} />
                     </ModalUi>
                     {/* <Grid mt={2} item xs={12} >
                         <Typography variant="body2" color="initial">Write a reason why you change the status.</Typography>

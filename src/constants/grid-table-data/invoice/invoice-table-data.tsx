@@ -71,7 +71,7 @@ export const MyCellRenderer = ({ row, onDeleteSuccess  }: { row: any, onDeleteSu
         success: invoiceDeleteSuccess,
         successMessage: 'Invoice deleted successfully',
         errorObject: invoiceDeleteErrorObject,
-    })
+    });
 
     const handleEditClick = async () => {
         try {

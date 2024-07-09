@@ -1,3 +1,5 @@
+// src/components/Form-renderer/Dynamic-form.tsx
+
 import { useNavigate } from "react-router-dom";
 import usePathname from "../../hooks/usePathname";
 import { FieldProps, FormProps } from "../../types/types";
@@ -8,13 +10,19 @@ import { FieldRenderer } from "./Form-fields-renderer";
 import { Add, KeyboardBackspaceTwoTone, Save } from "@mui/icons-material";
 import { useState } from "react";
 import SnackBarUi from "../ui/Snackbar";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux-store/store";
+import { clearData } from "../../redux-store/global/globalState";
 
 export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error, headerName, setData, updateFormValue, showTable, fields, initialValues, validationSchema, onSubmit, onClose }: FormProps) => {
 
     const pathname = usePathname();
     const navigate = useNavigate();
 
+    const dispatch = useDispatch<AppDispatch>();
+    
     const handleClick = () => {
+        dispatch(clearData());
         navigate(-1); // Navigate back to the previous page
     };
 
@@ -34,7 +42,7 @@ export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error
 
                     const resolvedButtons = buttons ? buttons.map((button: any) => ({
                         ...button,
-                        onClick: button.label === 'Save' ? handleSubmit : button.onClick
+                        onClick: button.label ? handleSubmit : button.onClick
                     })) : defaultButtons;
 
                     return (

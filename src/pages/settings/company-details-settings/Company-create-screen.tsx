@@ -2,24 +2,24 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Box } from "@mui/material";
-import { useGetCompanyQuery} from "../../redux-store/company/companyApi";
-import { useAddCompanyMutation, useUpdateCompanyMutation } from '../../redux-store/company/companyApi';
-import { DynamicFormCreate } from "../../components/Form-renderer/Dynamic-form";
-import { companyValidationSchema } from '../../constants/forms/validations/validationSchema';
-import { companyInitialValues } from '../../constants/forms/formikInitialValues';
-import { companyFields } from '../../constants/form-data/form-data-json';
-import { clearData } from '../../redux-store/global/globalState';
+import { useGetCompanySettingQuery} from "../../../redux-store/settings/companyDetailsApi";
+import { useAddCompanySettingMutation, useUpdateCompanySettingMutation } from '../../../redux-store/settings/companyDetailsApi';
+import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
+import { companyValidationSchema } from '../../../constants/forms/validations/validationSchema';
+import { companyInitialValues } from '../../../constants/forms/formikInitialValues';
+import { companyFields } from '../../../constants/form-data/form-data-json';
+import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
-import { CompanyFormProps } from '../../types/types';
+import { AppDispatch } from '../../../redux-store/store';
+import { CompanyFormProps } from '../../../types/types';
 import { Save } from '@mui/icons-material';
 
 const CreateCompany = ({ companyValue }: CompanyFormProps) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = useState(false);
-    const [addCompany, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddCompanyMutation();
-    const [updateCompany, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateCompanyMutation();
-    const { data: settingsList, refetch } = useGetCompanyQuery();
+    const [addCompany, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddCompanySettingMutation();
+    const [updateCompany, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateCompanySettingMutation();
+    const { data: settingsList, refetch } = useGetCompanySettingQuery();
 
     const initialValue = companyValue || companyInitialValues;
 
@@ -55,7 +55,7 @@ const CreateCompany = ({ companyValue }: CompanyFormProps) => {
     }, [isAddSuccess, isUpdateSuccess, refetch]);
 
     return (
-        <div>
+        <>
             <ToastContainer />
             <DynamicFormCreate
                 showTable={true}
@@ -69,7 +69,7 @@ const CreateCompany = ({ companyValue }: CompanyFormProps) => {
                     { label: 'Save',icon: Save, onClick: onSubmit }
                 ]}
             />
-        </div>
+        </>
     );
 };
 

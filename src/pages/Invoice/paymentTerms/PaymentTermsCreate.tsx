@@ -9,15 +9,16 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import { useAddPaymentTermsMutation, useGetPaymentTermsQuery, useUpdatePaymentTermsMutation } from '../../../redux-store/invoice/paymentTerms';
 import { Save } from '@mui/icons-material';
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 
 
 // create and edit
 
 const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
 
-    const [addPaymentTerms, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddPaymentTermsMutation();
+    const [addPaymentTerms, { isLoading: paymentTermsAddLoading, isSuccess: paymentTermsAddSuccess, isError: paymentTermsAddError, error: paymentTermsErrorObject }] = useAddPaymentTermsMutation();
 
-    const [updatePaymentTerms, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdatePaymentTermsMutation();
+    const [updatePaymentTerms, { isLoading: paymentTermsLoading, isSuccess: paymentTermsUpdateSuccess, isError: paymentTermsUpdateError, error: paymentTermsUpdateErrorObject, }] = useUpdatePaymentTermsMutation();
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -29,38 +30,44 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
         try {
             if (paymentTermsValue) {
                 await updatePaymentTerms({ id: paymentTermsValue.id, paymentTermsData: values });
-                // dispatch(clearData());
             } else {
                 await addPaymentTerms(values);
             }
             actions.resetForm();
+            refetch();
+            if (paymentTermsValue) {
+                setTimeout(() => dispatch(clearData()), 1000)
+            }
         } catch (error) {
             console.error("An error occurred during form submission:", error);
         } finally {
             actions.setSubmitting(false);
         }
-    }, [addPaymentTerms, updatePaymentTerms, paymentTermsValue]);
+    }, [addPaymentTerms, updatePaymentTerms, paymentTermsValue, refetch, dispatch]);
 
-    useEffect(() => {
-        if (isAddSuccess || isUpdateSuccess) {
-            refetch();
-        }
-    }, [isAddSuccess, isUpdateSuccess]);
+    // * --------- add paymentTerms ------------
+    useSnackbarNotifications({
+        error: paymentTermsAddError,
+        errorObject: paymentTermsErrorObject,
+        errorMessage: 'Error creating Payment Terms',
+        success: paymentTermsAddSuccess,
+        successMessage: 'Payment Terms created successfully',
+    });
 
-    useEffect(() => {
-        if (isUpdateSuccess) {
-            setTimeout(() => {
-                dispatch(clearData());
-            }, 1000);   
-            
-        }
-    }, [isUpdateSuccess, dispatch]);
+    // * --------- updating paymentTerms ------------
+    useSnackbarNotifications({
+        error: paymentTermsUpdateError,
+        errorObject: paymentTermsUpdateErrorObject,
+        errorMessage: 'Error updating Payment Terms',
+        success: paymentTermsUpdateSuccess,
+        successMessage: 'Payment Terms updated successfully',
+    });
 
     return (
         <div>
             <DynamicFormCreate
-                toastMessage={isUpdateSuccess && paymentTermsValue ? 'Successfully Updated Payment Terms' : 'Successfully Created Payment Terms'}
-                isSuccessToast={isAddSuccess || isUpdateSuccess}
+                // toastMessage={isUpdateSuccess && paymentTermsValue ? 'Successfully Updated Payment Terms' : 'Successfully Created Payment Terms'}
+                // isSuccessToast={isAddSuccess || isUpdateSuccess}
                 headerName={paymentTermsValue ? 'Edit Payment Terms' : 'Create Payment Terms'}
                 showTable={true}
                 fields={paymentTermsFields}

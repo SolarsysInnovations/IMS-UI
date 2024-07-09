@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps, companyDetailsInitialValueProps } from "../../types/types";
 import ServicesList from "../../pages/service/service-list-screen";
 import { format } from "path";
 
@@ -23,6 +23,28 @@ export const companyInitialValues: companyInitialValueProps = {
     companyRegNumber: "",
 };
 
+export const companyDetailsInitialValues: companyDetailsInitialValueProps = {
+    id: "",
+    companyName: "",
+    companyAddress: "",
+    companyState: "",
+    companyCountry: "",
+    companyEmail: "",
+    companyPhone: "",
+    companyCell: "",
+    companyWebsite: "",
+    companyTaxNumber: "",
+    companyRegNumber: "",
+    userName: "",
+    userEmail: "",
+    password: "",
+    userRole: "",
+    userMobile: "",
+    userAccess: "",
+    description: "",
+    companyId: ""
+};
+
 export const customerInitialValues = {
     customerType: "",
     customerName: "",
@@ -41,6 +63,7 @@ export const customerInitialValues = {
         contactPhone: '',
     },],
 };
+
 export const serviceInitialValues = {
     serviceAccountingCode: "",
     serviceDescription: "",

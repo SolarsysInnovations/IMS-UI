@@ -33,7 +33,7 @@ export const companyApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getCompany: builder.query<any[], void>({
             query: () => ({
-                url: API_URLS.settingsList,
+                url: API_URLS.companyGet,
                 method: 'POST',
 
             }),
@@ -43,21 +43,27 @@ export const companyApi = apiSlice.injectEndpoints({
 
         addCompany: builder.mutation<any, Partial<any>>({
             query: (company) => ({
-                url: `/setting/create`,
+                url: `/company/create`,
                 method: 'POST',
                 body: company,
             }),
         }),
         updateCompany: builder.mutation<any, { id: number; company: Partial<any> }>({
             query: ({ id, company }) => ({
-                url: `/setting/update/${id}`,
+                url: `company/update/${id}`,
                 method: 'POST',
                 body: company,
             }),
         }),
-        getCompanyById: builder.mutation<void, number>({
+        getCompanyDataById: builder.mutation<void, number>({
             query: (id) => ({
-                url: `setting/get/${id}`,
+                 url: `company/get/${id}`,
+                method: 'POST',
+            }),
+        }),
+        deleteCompany: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `company/delete/${id}`,
                 method: 'POST',
             }),
         }),
@@ -71,4 +77,4 @@ export const companyApi = apiSlice.injectEndpoints({
 });
 export const { setCompanyData, setCompanyLoading, setCompanyError, clearCompanyData } = companySlice.actions;
 export { companySlice };
-export const { useGetCompanyQuery, useAddCompanyMutation, useGetCompanyByIdMutation, useUpdateCompanyMutation } = companyApi;
+export const { useGetCompanyQuery, useAddCompanyMutation, useGetCompanyDataByIdMutation, useUpdateCompanyMutation, useDeleteCompanyMutation } = companyApi;

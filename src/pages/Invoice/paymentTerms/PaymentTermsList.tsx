@@ -10,28 +10,21 @@ import SnackBarUi from '../../../components/ui/Snackbar'
 const PaymentTermsList = () => {
     const dispatch = useDispatch<AppDispatch>();
 
-    const { data: paymentTermsList, error, isLoading,refetch } = useGetPaymentTermsQuery();
-    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
+    const { data: paymentTermsList, error, isLoading, refetch } = useGetPaymentTermsQuery();
+    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
 
     const handleDeleteSuccess = useCallback(() => {
         setShowDeleteSuccessToast(true);
         setTimeout(() => {
             setShowDeleteSuccessToast(false);
         }, 3000);
-         refetch();
-         
-    },[refetch]);
+        refetch();
+
+    }, [refetch]);
 
     return (
         <>
-            {showDeleteSuccessToast && (
-                <SnackBarUi
-                    message="Successfully deleted the paymentTerms"
-                    severity= "success"
-                    isSubmitting={true}
-                />
-            )}
-            <GridDataUi showToolbar={false} onDeleteSuccess={handleDeleteSuccess}  columns={paymentTermsColumns(handleDeleteSuccess)} tableData={paymentTermsList || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={false} onDeleteSuccess={handleDeleteSuccess} columns={paymentTermsColumns} tableData={paymentTermsList || []} checkboxSelection={false} />
         </>
     )
 }

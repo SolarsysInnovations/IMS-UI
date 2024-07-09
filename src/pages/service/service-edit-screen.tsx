@@ -12,7 +12,9 @@ const ServiceEditScreen: React.FC = () => {
     const serviceStateDetails = useSelector((state: any) => state.serviceState.data);
     const [showSuccessToast, setShowSuccessToast] = useState(false); 
     const [isPopupOpen, setIsPopupOpen] = useState(true); // State to control popup visibility
-
+    const handleBackClick = () => {
+        navigate(0); // Navigate back
+      };
     useEffect(() => {
         console.log("Service State Details:", serviceStateDetails); // Check what is in serviceStateDetails
 
@@ -52,7 +54,7 @@ const ServiceEditScreen: React.FC = () => {
     };
 
     return (
-        <div>
+        <>
             {showSuccessToast && (
                 <SnackBarUi
                     message="Successfully edited the service"
@@ -68,10 +70,13 @@ const ServiceEditScreen: React.FC = () => {
                     initialValues={serviceStateDetails || {}} // Ensure to default to an empty object
                     validationSchema={serviceValidationSchema}
                     onSubmit={onSubmit}
-                    onClose={() => setIsPopupOpen(false)} // Pass handler to close popup
+                    buttons={[
+                        { label: "Back", onClick: handleBackClick },
+                        { label: "Save", onClick: onSubmit }
+                      ]}
                 />
             )}
-        </div>
+        </>
     );
 };
 

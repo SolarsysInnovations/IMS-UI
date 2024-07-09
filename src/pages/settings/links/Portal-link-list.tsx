@@ -3,12 +3,12 @@ import { Box, Typography, Card, CardContent, IconButton, CardHeader } from "@mui
 import LanguageIcon from "@mui/icons-material/Language";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useDeleteLinkMutation, useGetLinkByIdMutation, useGetLinkQuery } from "../../redux-store/link/linkApi";
-import { AppDispatch } from "../../redux-store/store";
+import { useDeleteLinkMutation, useGetLinkByIdMutation, useGetLinkQuery } from "../../../redux-store/link/linkApi";
+import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { setData } from "../../redux-store/global/globalState";
-import DialogBoxUi from "../../components/ui/DialogBox";
+import { setData } from "../../../redux-store/global/globalState";
+import DialogBoxUi from "../../../components/ui/DialogBox";
 import PortalLinkCreate from "./Portal-link-create";
 
 const PortalLinkList: React.FC = () => {
