@@ -14,6 +14,7 @@ import { RoleInitialValueProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
 import TableHeader from '../../components/layouts/TableHeader';
 import { Add, KeyboardBackspaceTwoTone, Save, VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 
 interface RoleFormProps {
     roleId?: string | null;
@@ -21,8 +22,8 @@ interface RoleFormProps {
 }
 
 const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
-    const [addRole, { isSuccess, isError }] = useAddRoleMutation();
-    const [updateRole] = useUpdateRoleMutation();
+    const [addRole,{ isSuccess: addRoleSuccess, isError: addRoleError, error: addRoleErrorObject }] = useAddRoleMutation();
+    const [updateRole,{ isSuccess: roleUpdateSuccess, isError: roleUpdateError, error: roleUpdateErrorObject }] = useUpdateRoleMutation();
     const [GetRoleById] = useGetRoleByIdMutation();
     const [initialValues, setInitialValues] = useState(RoleInitialValue);
     const dispatch = useDispatch();
@@ -39,16 +40,30 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
         }
     }, [roleId, dispatch, GetRoleById]);
 
+
+    useSnackbarNotifications({
+        error: addRoleError,
+        errorMessage: 'Error adding role',
+        success: addRoleSuccess,
+        successMessage: 'Role added successfully',
+        errorObject: addRoleErrorObject,
+    })
+
+    useSnackbarNotifications({
+        error: roleUpdateError,
+        errorMessage: 'Error updating role',
+        success: roleUpdateSuccess,
+        successMessage: 'Role updated successfully',
+        errorObject: roleUpdateErrorObject,
+    })
+
     const handleSubmit = async (values: RoleInitialValueProps, { setSubmitting, resetForm }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void }) => {
         try {
             if (roleId) {
                 await updateRole({ id: values.id, roles: values });
-                toast.success("Role successfully updated", toastConfig);
             } else {
                 const formData = !roleId ? Object.fromEntries(Object.entries(values).filter(([key, value]) => key !== 'id')) : values;
-
                 await addRole(formData);
-                toast.success("Role successfully created", toastConfig);
             }
             resetForm();
             onClose();

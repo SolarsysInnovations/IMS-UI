@@ -125,7 +125,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.DASHBOARD_GET]: `/dashboard`,
     //Roles
     [ApiEndpoint.ROLES_GET]: `/role/get/`,
-    [ApiEndpoint.ROLES_GETUSER]: `/role/findByName/`,
+    [ApiEndpoint.ROLES_GETUSER]: `/role/findByEmail/`,
     [ApiEndpoint.ROLES_LIST]: `/role/list`,
     [ApiEndpoint.ROLES_CREATE]: `/role/register`,
     [ApiEndpoint.ROLES_UPDATE]: `/role/update`,

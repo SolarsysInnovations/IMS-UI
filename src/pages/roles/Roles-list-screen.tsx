@@ -15,6 +15,7 @@ import ToastUi from '../../components/ui/ToastifyUi'
 import { useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import SnackBarUi from '../../components/ui/Snackbar';
 import SelectDropdown from '../../components/ui/SelectDropdown';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 
 const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
@@ -91,9 +92,15 @@ const RolesList: React.FC = () => {
     const [roleId, setRoleId] = useState<string | null>(null);
     const { data: roleDetails, refetch } = useGetRoleQuery();
     const pathname = usePathname();
-    const [deleteRole] = useDeleteRoleMutation();
+    const [deleteRole,{ isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteRoleMutation();
 
-    const [showSuccessToast, setShowSuccessToast] = useState(false);
+    useSnackbarNotifications({
+        error: roleDeleteError,
+        errorMessage: 'Error deleting role',
+        success: roleDeleteSuccess,
+        successMessage: 'Role deleted successfully',
+        errorObject: roleDeleteErrorObject,
+    })
 
     const handleModalClose = () => {
         setOpenModal(false);
@@ -119,10 +126,6 @@ const RolesList: React.FC = () => {
         const confirmed = window.confirm("Are you sure you want to delete this role?");
         if (confirmed) {
             await deleteRole(id);
-            setShowSuccessToast(true);
-                setTimeout(() => {
-                    setShowSuccessToast(false);
-                }, 2000);
             // toast.success("Successfully deleted the selected role", toastConfig);
             refetch();
         }
@@ -174,13 +177,6 @@ const RolesList: React.FC = () => {
 
     return (
         <>
-            {showSuccessToast && (
-                <SnackBarUi
-                    message="Role successfully deleted"
-                    severity="success"
-                    isSubmitting={true}
-                />
-            )}
             <TableHeader headerName={pathname} buttons={buttons} />
             <RolesGridDataUi showToolbar={true} columns={columns || []} tableData={roleDetails || []} checkboxSelection={false} onRowEdit={(roleId) => handleEditClick(roleId)}
                 onRowDelete={handleDeleteClick} />

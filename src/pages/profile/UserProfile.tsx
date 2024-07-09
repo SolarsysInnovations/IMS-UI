@@ -6,22 +6,22 @@ import CustomerDetails from "../customer/customerDetails";
 
 const UserProfile = () => {
 
-    const userName=localStorage.getItem("userName");
-    // console.log(localStorage.getItem("userid"));
+    const userName = localStorage.getItem("userName");
+    const userEmail = localStorage.getItem("userEmail");
     const [userData, setUserData] = useState<any | null>(null);
     const [rolesGetUser] = useRolesGetUserMutation();
    
 
     useEffect(() => {
-        if (userName) {
-            rolesGetUser(userName).then(response => {
+        if (userEmail) {
+            rolesGetUser(userEmail).then(response => {
                 if (response && response.data) {
                     setUserData(response[`data`]);
                     // console.log("response", response);
                 }                
             })
         } 
-    }, [userName, rolesGetUser]);
+    }, [userEmail, rolesGetUser]);
     
 
     return (
