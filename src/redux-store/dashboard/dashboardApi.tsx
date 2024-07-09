@@ -20,7 +20,13 @@ export const dashboardApi = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
+        getApproverDashboard: builder.mutation<any, void>({
+            query: () => ({
+                url: API_URLS.dashboardApprover,
+                method: 'POST',
+            }),
+        }),
     }),
 });
 
-export const { useGetDashboardMutation, useGetSuperAdminDashboardMutation } = dashboardApi;
+export const { useGetDashboardMutation, useGetSuperAdminDashboardMutation , useGetApproverDashboardMutation} = dashboardApi;
