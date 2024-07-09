@@ -334,7 +334,8 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         </NestedModalUi> */}
                         <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
                             setPreview(false);
-                            setIsModalOpen(false)
+                            setIsModalOpen(false);
+                            dispatch(clearData());
                         }} >
                             <InvoiceUi preview={preview} discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} isModalOpen={setIsModalOpen} />
                         </ModalUi>
