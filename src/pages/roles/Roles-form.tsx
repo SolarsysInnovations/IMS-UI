@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Form, Formik } from 'formik';
 import { Box, Grid, IconButton } from "@mui/material";
 import { RoleInitialValue } from '../../constants/forms/formikInitialValues';
@@ -12,7 +13,8 @@ import { toastConfig } from '../../constants/forms/config/toastConfig';
 import { RoleInitialValueProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
 import TableHeader from '../../components/layouts/TableHeader';
-import { Add, VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
+import { Add, KeyboardBackspaceTwoTone, Save, VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 
 interface RoleFormProps {
     roleId?: string | null;
@@ -20,12 +22,13 @@ interface RoleFormProps {
 }
 
 const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
-    const [addRole, { isSuccess, isError }] = useAddRoleMutation();
-    const [updateRole] = useUpdateRoleMutation();
+    const [addRole,{ isSuccess: addRoleSuccess, isError: addRoleError, error: addRoleErrorObject }] = useAddRoleMutation();
+    const [updateRole,{ isSuccess: roleUpdateSuccess, isError: roleUpdateError, error: roleUpdateErrorObject }] = useUpdateRoleMutation();
     const [GetRoleById] = useGetRoleByIdMutation();
     const [initialValues, setInitialValues] = useState(RoleInitialValue);
     const dispatch = useDispatch();
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (roleId) {
@@ -37,16 +40,30 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
         }
     }, [roleId, dispatch, GetRoleById]);
 
+
+    useSnackbarNotifications({
+        error: addRoleError,
+        errorMessage: 'Error adding role',
+        success: addRoleSuccess,
+        successMessage: 'Role added successfully',
+        errorObject: addRoleErrorObject,
+    })
+
+    useSnackbarNotifications({
+        error: roleUpdateError,
+        errorMessage: 'Error updating role',
+        success: roleUpdateSuccess,
+        successMessage: 'Role updated successfully',
+        errorObject: roleUpdateErrorObject,
+    })
+
     const handleSubmit = async (values: RoleInitialValueProps, { setSubmitting, resetForm }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void }) => {
         try {
             if (roleId) {
                 await updateRole({ id: values.id, roles: values });
-                toast.success("Role successfully updated", toastConfig);
             } else {
                 const formData = !roleId ? Object.fromEntries(Object.entries(values).filter(([key, value]) => key !== 'id')) : values;
-
                 await addRole(formData);
-                toast.success("Role successfully created", toastConfig);
             }
             resetForm();
             onClose();
@@ -62,9 +79,13 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
     const buttons: any = [];
 
     if (initialValues.id == "") {
-        buttons.push({ label: 'Save', icon: Add, onClick: () => handleSubmit })
+        buttons.push(
+            { label: 'Back',  icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+            { label: 'Save', icon: Save, onClick: () => handleSubmit })
     } else {
-        buttons.push({ label: 'Update', icon: Add, onClick: () => handleSubmit })
+        buttons.push(
+            { label: 'Back',  icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+            { label: 'Update', icon: Save, onClick: () => handleSubmit })
     }
 
     return (

@@ -13,7 +13,7 @@ import { toastConfig } from "../../forms/config/toastConfig";
 import { toast } from "react-toastify";
 import { setCustomerData, useUpdateCustomerMutation } from "../../../redux-store/customer/customerApi";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
-import { setData } from "../../../redux-store/global/globalState";
+import { clearData, setData } from "../../../redux-store/global/globalState";
 import SnackBarUi from "../../../components/ui/Snackbar";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 
@@ -48,7 +48,7 @@ export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     );
 };
 
-export const MyCellRenderer = ({ row }: { row: any }) => {
+export const MyCellRenderer = ({ row, onDeleteSuccess  }: { row: any, onDeleteSuccess: () => void  }) => {
 
     const dispatch = useDispatch<AppDispatch>();
     const { data: invoice, error, isLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
@@ -95,7 +95,8 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
             if ('data' in response) {
                 const invoiceData = response.data;
                 console.log("invoiceData", invoiceData);
-                await dispatch(setData(invoiceData));
+                dispatch(clearData());
+                dispatch(setData(invoiceData));
                 handleOpenModal();
             } else {
                 console.error('Error response:', response.error);

@@ -12,6 +12,7 @@ import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import { CompanyFormProps } from '../../../types/types';
+import { Save } from '@mui/icons-material';
 
 const CreateCompany = ({ companyValue }: CompanyFormProps) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -65,7 +66,7 @@ const CreateCompany = ({ companyValue }: CompanyFormProps) => {
                 validationSchema={companyValidationSchema}
                 onSubmit={onSubmit}
                 buttons={[
-                    { label: 'Save', onClick: onSubmit }
+                    { label: 'Save',icon: Save, onClick: onSubmit }
                 ]}
             />
         </>

@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import React, { useEffect } from "react";
-import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import { Add, Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
 import CustomerDetails from "../../pages/customer/customerDetails";
 import TableHeader from "../../components/layouts/TableHeader";
@@ -29,7 +30,7 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     const buttons = [];
 
     if (role != "APPROVER" && role != "ENDUSER") {
-        buttons.push({ label: 'Edit', icon: Add, onClick: () => handleEditClick() })
+        buttons.push({ label: 'Edit', icon: Edit, onClick: () => handleEditClick() })
     };
 
     useEffect(() => {

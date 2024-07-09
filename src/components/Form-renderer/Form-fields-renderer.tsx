@@ -1,47 +1,85 @@
+import React, { useState, useEffect, useMemo } from 'react';
 import { Field, FieldArray, useFormikContext } from "formik";
 import SelectDropdown from "../ui/SelectDropdown";
 import TextFieldUi from "../ui/TextField";
 import RadioUi from "../ui/RadioGroup";
 import { Box, Grid, IconButton, Typography } from "@mui/material";
-import React, { useEffect, useMemo } from "react";
 import ButtonSmallUi from "../ui/ButtonSmall";
 import { FieldProps, SubField } from "../../types/types";
 import DatePickerUi from "../ui/DatePicker";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import TextAreaUi from "../ui/TextArea";
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 
-// Dropdown
-const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
-    const options: any = subField.options?.map(option => ({
-        value: option.value,
-        label: option.label
-    })) || [];
+const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void, selectedCountry: string, selectedRegion: string, handleCountryChange: (val: string) => void, handleRegionChange: (val: string) => void) => {
+
+  const options = subField.options?.map((option: { value: any; label: any; }) => ({
+    value: option.value,
+    label: option.label
+  })) || [];
+
+  if (subField.type === 'select' && subField.name === 'country') {
     return (
-        <Field name={subField.name} required={true} disabled={false}>
-            {({ field: { value, onChange } }: any) => (
-                <SelectDropdown
-                    required={true}
-                    disabled={false}
-                    labelText={subField.label}
-                    value={options.find((opt: any) => opt.value === value)}
-                    onChange={(newValue: any) => {
-                        if (newValue) {
-                            onChange(newValue.value);
-                            setFieldValue(subField.name, newValue.value);
-                        } else {
-                            setFieldValue(subField.name, '');
-                            onChange("");
-                        }
-                    }}
-                    options={options}
-                    error={meta.touched && Boolean(meta.error)}
-                    helperText={meta.touched && meta.error}
-                />
-            )}
-        </Field>
-
+      <Field name={subField.name} required={true} disabled={false}>
+        {({ field: { value } }: any) => (
+            <CountryDropdown
+                defaultOptionLabel="Country"
+                value={value || ''}
+                onChange={(val) => {
+                handleCountryChange(val);
+                setFieldValue(subField.name, val);
+                setFieldValue('state', ''); // Reset state when country changes
+                }}
+                classes="custom-dropdown"
+            />
+        )}
+      </Field>
     );
+  } else if (subField.type === 'select' && subField.name === 'state') {
+    return (
+      <Field name={subField.name} required={true} disabled={false}>
+        {({ field: { value } }: any) => (
+            <RegionDropdown
+                defaultOptionLabel="State"
+                blankOptionLabel="State"
+                country={selectedCountry}
+                value={value || ''}
+                onChange={(val) => {
+                handleRegionChange(val);
+                setFieldValue(subField.name, val);
+                }}
+                classes="custom-dropdown"
+            />
+        )}
+      </Field>
+    );
+  } else {
+    return (
+      <Field name={subField.name} required={true} disabled={false}>
+        {({ field: { value, onChange } }: any) => (
+          <SelectDropdown
+            required={true}
+            disabled={false}
+            labelText={subField.label}
+            value={options.find((opt: { value: any; }) => opt.value === value)}
+            onChange={(newValue) => {
+              if (newValue) {
+                onChange(newValue.value);
+                setFieldValue(subField.name, newValue.value);
+              } else {
+                setFieldValue(subField.name, '');
+                onChange("");
+              }
+            }}
+            options={options}
+            error={meta.touched && Boolean(meta.error)}
+            helperText={meta.touched && meta.error}
+          />
+        )}
+      </Field>
+    );
+  }
 };
 
 const renderTextField = (field: any, meta: any, subField: SubField) => (
@@ -128,119 +166,137 @@ const renderRadioField = (field: any, meta: any, subField: SubField, setFieldVal
 };
 
 type FormFieldProps = {
-    [key: string]: string;
+  [key: string]: string;
 };
+
 interface FieldRendererProps {
-    updateFormValue: any;
-    setData: any;
-    field: FieldProps;
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  updateFormValue: any;
+  setData: any;
+  field: FieldProps;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }
 
 export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, field, setFieldValue, setData }) => {
-    const { values } = useFormikContext<FormFieldProps>();
+  const { values } = useFormikContext<FormFieldProps>();
 
-    // Memoize the updateFormValue function to prevent unnecessary re-renders
-    const memoizedUpdateFormValue = useMemo(() => updateFormValue, [updateFormValue]);
+  const [selectedCountry, setSelectedCountry] = useState<string>('');
+  const [selectedRegion, setSelectedRegion] = useState<string>('');
 
-    useEffect(() => {
-        if (setData) {
-            setData(values);
-        }
-    }, [values, setData])
+  const handleCountryChange = (val: string) => {
+    setSelectedCountry(val); // Update the selected country
+  };
 
-    useEffect(() => {
-        if (memoizedUpdateFormValue) {
-            memoizedUpdateFormValue(setFieldValue);
-        }
-    }, [memoizedUpdateFormValue, setFieldValue]);
+  const handleRegionChange = (val: string) => {
+    setSelectedRegion(val); // Update the selected region
+  };
 
+  // Memoize the updateFormValue function to prevent unnecessary re-renders
+  const memoizedUpdateFormValue = useMemo(() => updateFormValue, [updateFormValue]);
 
-    switch (field.type) {
-        case 'section':
-            return (
-                <>
-                    <Grid item xs={field?.titleGridSize}>
-                        <Typography variant="body2" gutterBottom>{field?.label}</Typography>
-                    </Grid>
-                    {field.subFields?.map((subField: SubField) => (
-                        <Grid pb={2} pl={2} xs={subField.gridSize} key={subField.name}>
-                            <Field name={subField.name}>
-                                {({ field, meta }: any) => {
-                                    if (subField.type === "date") {
-                                        return renderDatePickerField(field, meta, subField, setFieldValue);
-                                    } else if (subField.type === "select") {
-                                        return renderSelectField(field, meta, subField, setFieldValue);
-                                    } else if (subField.type === "radio") {
-                                        return renderRadioField(field, meta, subField, setFieldValue);
-                                    } else if (subField.type === "textArea") {
-                                        return renderTextArea(field, meta, subField, setFieldValue);
-                                    }
-                                    else {
-                                        return renderTextField(field, meta, subField);
-                                    }
-                                }}
-                            </Field>
-                        </Grid>
-                    ))}
-                </>
-            );
-        case 'array':
-            return (
-                <>
-                    <Grid item xs={field?.titleGridSize}>
-                        <Typography variant="body2" gutterBottom>{field?.label}</Typography>
-                    </Grid>
-                    <FieldArray name={field.name}>
-                        {({ push, remove, form }: any) => (
-                            <>
-                                {form.values[field.name]?.map((item: any, index: number) => (
-                                    <React.Fragment key={index}>
-                                        {field.subFields?.map((subField: SubField) => (
-                                            <Grid pb={2} pl={2} xs={subField.gridSize} key={subField.name}>
-                                                <Field name={`${field.name}.${index}.${subField.name}`}>
-                                                    {({ field, meta }: any) => (
-                                                        renderTextField(field, meta, subField)
-                                                    )}
-                                                </Field>
-                                            </Grid>
-                                        ))}
-                                        <Grid sx={{ display: "flex" }}>
-                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1, height: "17px", display: "flex", ml: 3 }}>
-                                                <IconButton size='small' onClick={() => remove(index)}>
-                                                    <DeleteIcon sx={{ color: `#ed5d5a`, fontSize: "18px" }} />
-                                                </IconButton>
-                                            </Box>
-                                            <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1, height: "17px", display: "flex", ml: 3 }}>
-                                                <IconButton size='small' color="primary" onClick={() => push({})}>
-                                                    <AddIcon sx={{ fontSize: "18px" }} />
-                                                </IconButton>
-                                            </Box>
-                                        </Grid>
-                                    </React.Fragment>
-                                ))}
-
-                            </>
-                        )}
-                    </FieldArray>
-                </>
-            );
-        case 'object':
-            return (
-                <div>
-                    <Typography variant="body2" gutterBottom>{field?.label}</Typography>
-                    {field.subFields?.map((subField: SubField) => (
-                        <div key={subField.name}>
-                            <Field name={`${field.name}.${subField.name}`}>
-                                {({ field, meta }: any) => (
-                                    renderTextField(field, meta, subField)
-                                )}
-                            </Field>
-                        </div>
-                    ))}
-                </div>
-            );
-        default:
-            return null;
+  useEffect(() => {
+    if (setData) {
+      setData(values);
     }
+  }, [values, setData]);
+
+  useEffect(() => {
+    if (memoizedUpdateFormValue) {
+      memoizedUpdateFormValue(setFieldValue);
+    }
+  }, [memoizedUpdateFormValue, setFieldValue]);
+
+  useEffect(() => {
+    if (values.country) {
+      setSelectedCountry(values.country);
+    }
+    if (values.state) {
+      setSelectedRegion(values.state);
+    }
+  }, [values.country, values.state]);
+
+  switch (field.type) {
+    case 'section':
+      return (
+        <>
+          <Grid item xs={field?.titleGridSize}>
+            <Typography variant="body2" gutterBottom>{field?.label}</Typography>
+          </Grid>
+          {field.subFields?.map((subField: SubField) => (
+            <Grid pb={2} pl={2} xs={subField.gridSize} key={subField.name}>
+              <Field name={subField.name}>
+                {({ field, meta }: any) => {
+                  if (subField.type === "date") {
+                    return renderDatePickerField(field, meta, subField, setFieldValue);
+                  } else if (subField.type === "select") {
+                    return renderSelectField(field, meta, subField, setFieldValue, selectedCountry, selectedRegion, handleCountryChange, handleRegionChange);
+                  } else if (subField.type === "radio") {
+                    return renderRadioField(field, meta, subField, setFieldValue);
+                  } else if (subField.type === "textArea") {
+                    return renderTextArea(field, meta, subField, setFieldValue);
+                  } else {
+                    return renderTextField(field, meta, subField);
+                  }
+                }}
+              </Field>
+            </Grid>
+          ))}
+        </>
+      );
+    case 'array':
+      return (
+        <>
+          <Grid item xs={field?.titleGridSize}>
+            <Typography variant="body2" gutterBottom>{field?.label}</Typography>
+          </Grid>
+          <FieldArray name={field.name}>
+            {({ push, remove, form }: any) => (
+              <>
+                {form.values[field.name]?.map((item: any, index: number) => (
+                  <React.Fragment key={index}>
+                    {field.subFields?.map((subField: SubField) => (
+                      <Grid pb={2} pl={2} xs={subField.gridSize} key={subField.name}>
+                        <Field name={`${field.name}.${index}.${subField.name}`}>
+                          {({ field, meta }: any) => (
+                            renderTextField(field, meta, subField)
+                          )}
+                        </Field>
+                      </Grid>
+                    ))}
+                    <Grid sx={{ display: "flex" }}>
+                      <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1, height: "17px", display: "flex", ml: 3 }}>
+                        <IconButton size='small' onClick={() => remove(index)}>
+                          <DeleteIcon sx={{ color: `#ed5d5a`, fontSize: "18px" }} />
+                        </IconButton>
+                      </Box>
+                      <Box sx={{ border: '1px solid #c4c4c4', borderRadius: 2, p: 1, height: "17px", display: "flex", ml: 3 }}>
+                        <IconButton size='small' color="primary" onClick={() => push({})}>
+                          <AddIcon sx={{ fontSize: "18px" }} />
+                        </IconButton>
+                      </Box>
+                    </Grid>
+                  </React.Fragment>
+                ))}
+              </>
+            )}
+          </FieldArray>
+        </>
+      );
+    case 'object':
+      return (
+        <div>
+          <Typography variant="body2" gutterBottom>{field?.label}</Typography>
+          {field.subFields?.map((subField: SubField) => (
+            <div key={subField.name}>
+              <Field name={`${field.name}.${subField.name}`}>
+                {({ field, meta }: any) => (
+                  renderTextField(field, meta, subField)
+                )}
+              </Field>
+            </div>
+          ))}
+        </div>
+      );
+    default:
+      return null;
+  }
 };

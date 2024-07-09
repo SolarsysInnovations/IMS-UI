@@ -51,13 +51,6 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
 export const columns: GridColDef[] = [
     {
-        field: 'id',
-        headerName: 'id',
-        width: 200,
-        editable: true,
-        
-    },
-    {
         field: 'customerName',
         headerName: 'Customer Name',
         width: 180,

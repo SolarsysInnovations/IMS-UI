@@ -8,6 +8,7 @@ import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import { useAddPaymentTermsMutation, useGetPaymentTermsQuery, useUpdatePaymentTermsMutation } from '../../../redux-store/invoice/paymentTerms';
+import { Save } from '@mui/icons-material';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 
 
@@ -74,7 +75,7 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
                 validationSchema={paymentTermsValidationSchema}
                 onSubmit={onSubmit}
                 buttons={[
-                    { label: 'Save', onClick: onSubmit }
+                    { label: 'Save',icon: Save, onClick: onSubmit }
                 ]}
             />
         </div>
