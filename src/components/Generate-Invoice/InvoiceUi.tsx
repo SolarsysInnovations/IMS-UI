@@ -49,7 +49,6 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const invoiceData = useSelector((state: any) => state.globalState.data);
-    console.log("invoice Data ", invoiceData);
 
     const dispatch = useDispatch();
     const [nestedOpen, setNestedOpen] = useState(false);

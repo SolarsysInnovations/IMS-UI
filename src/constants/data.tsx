@@ -32,6 +32,7 @@ import CompanyScreen from "../pages/company/companyScreen";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.SUPERADMIN, Roles.ADMIN];
+export const superAdmin = [Roles.SUPERADMIN,]
 
 export const routesConfig = [
   // * -------- login ---------
@@ -66,9 +67,9 @@ export const routesConfig = [
   // * -------- roles ---------
   { path: "/users/list", element: <RolesList />, allowedRoles: [...admins] },
 
-   // * -------- company ---------
-   { path: "/company", element: <CompanyList />, allowedRoles: [...allRoles] },
-   { path: "/company/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
+  // * -------- company ---------
+  { path: "/company", element: <CompanyList />, allowedRoles: [...allRoles] },
+  { path: "/company/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
 ];
 
 export const sidebarTwo = [
