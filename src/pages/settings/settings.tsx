@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import ToastUi from "../../components/ui/ToastifyUi";
 import Container from "@mui/material/Container";
-import CompanyDetailsScreen from "../company/Company-details-screen";
+import CompanyDetailsScreen from "./company-details-settings/Company-details-screen";
 import About from "../about/About";
 import TaxConfig from "./TaxConfig";
-import LinkScreen from "../links/Portal-link-screen";
+import LinkScreen from "./links/Portal-link-screen";
 
 const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);

@@ -200,8 +200,27 @@ export interface companyInitialValueProps {
     companyWebsite: string;
     companyTaxNumber: string;
     companyRegNumber: string;
-
-
+}
+export interface companyDetailsInitialValueProps {
+    id: any;
+    companyName: string;
+    companyAddress: string;
+    companyState: string;
+    companyCountry: string;
+    companyEmail: string;
+    companyPhone: string;
+    companyCell: string;
+    companyWebsite: string;
+    companyTaxNumber: string;
+    companyRegNumber: string;
+    userName: string;
+    userEmail: string;
+    password: string;
+    userRole: string;
+    userMobile: string;
+    userAccess: string;
+    description: string;
+    companyId: string;
 }
 export interface linkCreationProps {
     id: string;

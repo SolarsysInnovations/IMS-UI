@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { linkFields } from "../../constants/form-data/form-data-json";
-import { linkInitialValues } from "../../constants/forms/formikInitialValues";
-import { DynamicFormCreate } from "../../components/Form-renderer/Dynamic-form";
-import { linkValidationSchema } from "../../constants/forms/validations/validationSchema";
-import { useAddLinkMutation, useGetLinkQuery, useUpdateLinkMutation } from "../../redux-store/link/linkApi";
-import { LinkFormProps } from "../../types/types";
+import { linkFields } from "../../../constants/form-data/form-data-json";
+import { linkInitialValues } from "../../../constants/forms/formikInitialValues";
+import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
+import { linkValidationSchema } from "../../../constants/forms/validations/validationSchema";
+import { useAddLinkMutation, useGetLinkQuery, useUpdateLinkMutation } from "../../../redux-store/link/linkApi";
+import { LinkFormProps } from "../../../types/types";
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
-import { clearData } from "../../redux-store/global/globalState";
+import { AppDispatch } from '../../../redux-store/store';
+import { clearData } from "../../../redux-store/global/globalState";
 import { useNavigate } from 'react-router-dom';
 
 const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
@@ -55,7 +55,7 @@ const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
   }, [isAddSuccess, isUpdateSuccess, refetch]);
 
   return (
-    <div>
+    <>
       <ToastContainer />
       <DynamicFormCreate
         headerName="New Link"
@@ -70,7 +70,7 @@ const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
           { label: "Save", onClick: onSubmit }
         ]}
       />
-    </div>
+    </>
   );
 };
 

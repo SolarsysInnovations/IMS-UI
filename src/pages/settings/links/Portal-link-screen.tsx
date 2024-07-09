@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import PortalLinkList from "./Portal-link-list";
-import TableHeader from "../../components/layouts/TableHeader";
+import TableHeader from "../../../components/layouts/TableHeader";
 import { Add } from "@mui/icons-material";
-import DialogBoxUi from "../../components/ui/DialogBox";
+import DialogBoxUi from "../../../components/ui/DialogBox";
 import PortalLinkCreate from "./Portal-link-create";
 
 const LinkScreen = () => {
