@@ -15,17 +15,36 @@ import { GridRenderCellParams } from '@mui/x-data-grid';
 import { useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { selectUserRole } from '../../redux-store/auth/authSlice';
 import { Roles } from '../../constants/Enums';
+import SnackBarUi from '../../components/ui/Snackbar';
 import ButtonUi from '../../components/ui/Button';
 import SendEmail from './Send-email';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
+import SelectDropdown from '../../components/ui/SelectDropdown';
+
 import { clearData } from '../../redux-store/global/globalState';
 import useErrorHandler from '../../hooks/useErrorHanlder';
 import { Typography } from '@mui/material';
 const invoiceOptions = ["DRAFT", "PENDING", "APPROVED", "PAID", "OVERDUE", "DELETE", "RETURNED",]
 
+// const invoiceOptions = [
+//   { value: "DRAFT", label: "DRAFT" },
+//   { value: "PENDING", label: "PENDING" },
+//   { value: "APPROVED", label: "APPROVED" },
+//   { value: "PAID", label: "PAID" },
+//   { value: "OVERDUE", label: "OVERDUE" },
+//   { value: "DELETE", label: "DELETE" },
+//   { value: "RETURNED", label: "RETURNED" },
+// ];
+
+// interface ValueProps {
+//   value: string;
+//   label: string;
+// }
+
 const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
 
+    // const [status, setStatus] = useState<ValueProps | null>(params.value);
     const [status, setStatus] = useState(params.value);
     const [updateInvoice, { isSuccess: updateSuccess }] = useUpdateInvoiceMutation();
     const { data: invoiceList, error, isLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
@@ -34,6 +53,8 @@ const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
         getInvoiceList();
     }, [updateSuccess])
 
+    // const handleChange = async (newValue: ValueProps | null) => {
+    // if (newValue === null) return;
     const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
         const newStatus = event.target.value as string;
         setStatus(newStatus);
@@ -58,7 +79,7 @@ const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
     };
 
     return (
-        <select
+         <select
             value={status}
             onChange={handleChange}
             style={{ fontSize: "12px", padding: "5px 5px", borderRadius: "5px" }}
@@ -67,6 +88,12 @@ const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
                 <option key={option} value={option}>{option}</option>
             ))}
         </select>
+        // <SelectDropdown
+        //     options={invoiceOptions}
+        //     value={status}
+        //     onChange={handleChange}
+        //     applySmallSizeStyle
+        // />
     );
 };
 
@@ -156,85 +183,119 @@ const InvoiceList = () => {
     ];
     const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
 
-    const columns: GridColDef[] = [
-        {
-            field: 'Action',
-            headerName: 'Action',
-            width: 140,
-            editable: false,
-            renderCell: (params: any) => <MyCellRenderer row={params.row} />,
-        },
-        {
-            field: 'invoiceType',
-            headerName: 'Invoice Type',
-            width: 140,
-            editable: false,
-        },
-        {
-            field: 'invoiceNumber',
-            headerName: 'Invoice Number',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'customerName',
-            headerName: 'Customer Name',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'dueDate',
-            headerName: 'Due Date',
-            width: 140,
-            editable: false,
-        },
-        {
-            field: 'invoiceStatus',
-            headerName: 'Invoice Status',
-            width: 150,
-            editable: false,
-        },
-        // {
-        //     field: 'email',
-        //     headerName: 'Email To',
-        //     width: 120,
-        //     editable: true,
-        //     renderCell: (params: GridRenderCellParams) => (
-        //         <GridEmailButton params={params} />
-        //     ),
-        // },
-    ]
+    const handleDeleteSuccess = useCallback(() => {
+        setShowDeleteSuccessToast(true);
+        setTimeout(() => {
+            setShowDeleteSuccessToast(false);
+        }, 3000);
+         refetch();
+         
+    },[refetch]);
 
-    // if (userRole === Roles.ADMIN || userRole === Roles.APPROVER || userRole === Roles.SUPERADMIN) {
-    //     columns.push(
-    //         {
-    //             field: 'invoiceStatus',
-    //             headerName: 'Invoice Status',
-    //             width: 120,
-    //             editable: true,
-    //             type: "singleSelect",
-    //             valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
-    //             renderCell: (params: GridRenderCellParams) => (
-    //                 <InvoiceStatusCell params={params} />
-    //             ),
-    //         },
-    //     )
-    // } else if (userRole === Roles.ENDUSER) {
-    //     columns.push(
-    //         {
-    //             field: 'invoiceStatus',
-    //             headerName: 'Invoice Status',
-    //             width: 150,
-    //             editable: false,
-    //         },
-    //     )
-    // }
+    const getColumns = (onDeleteSuccess: () => void): GridColDef[] => {
+        // const columns= (onDeleteSuccess: () => void): GridColDef[] => [
+        const columns: GridColDef[] = [
+            {
+                field: 'Action',
+                headerName: 'Action',
+                width: 140,
+                editable: false,
+                renderCell: (params: any) => <MyCellRenderer row={params.row} onDeleteSuccess={onDeleteSuccess} />,
+            },
+            {
+                field: 'invoiceType',
+                headerName: 'Invoice Type',
+                width: 140,
+                editable: true,
+            },
+            {
+                field: 'invoiceNumber',
+                headerName: 'Invoice Number',
+                width: 150,
+                editable: true,
+            },
+            {
+                field: 'customerName',
+                headerName: 'Customer Name',
+                width: 150,
+                editable: false,
+            },
+            {
+                field: 'dueDate',
+                headerName: 'Due Date',
+                width: 140,
+                editable: false,
+            },
+            {
+                field: 'email',
+                headerName: 'Email To',
+                width: 120,
+                editable: true,
+                renderCell: (params: GridRenderCellParams) => (
+                    <GridEmailButton params={params} />
+                ),
+            },
 
+            // {
+            //     field: '',
+            //     headerName: '',
+            //     width: 80,
+            //     renderCell: () => (
+            //         <ButtonSmallUi
+            //             variant="outlined"
+            //             label="Email"
+            //         />
+            //     ),
+            // },
+            // {
+            //     field: 'download',
+            //     width: 150,
+            //     editable: false,
+            //     headerName: '',
+            //     renderCell: (params: any) => <DownloadButtonRenderer row={params.row} />,
+            // },
+        ];
+
+
+    if (userRole === Roles.ADMIN || userRole === Roles.APPROVER || userRole === Roles.SUPERADMIN) {
+        columns.push(
+            {
+                field: 'invoiceStatus',
+                headerName: 'Invoice Status',
+                width: 120,
+                editable: true,
+                type: "singleSelect",
+                valueOptions: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
+                renderCell: (params: GridRenderCellParams) => (
+                    <InvoiceStatusCell params={params} />
+                ),
+            },
+        )
+    } else if (userRole === Roles.ENDUSER) {
+        columns.push(
+            {
+                field: 'invoiceStatus',
+                headerName: 'Invoice Status',
+                width: 150,
+                editable: false,
+            },
+        )
+    }
+    return columns;
+    };
+    
     return (
         <>
+            {showDeleteSuccessToast && (
+                <SnackBarUi
+                    message="Successfully deleted the invoice"
+                    severity= "success"
+                    isSubmitting={true}
+                />
+            )}
             <TableHeader headerName={pathname} buttons={buttons} />
             {invoiceListErrorMessage ? <Typography variant="caption" color="initial">Error :{invoiceListErrorMessage}</Typography> :
-                <GridDataUi showToolbar={true} columns={columns} tableData={invoiceList || []} checkboxSelection={false} />
+                <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={getColumns(handleDeleteSuccess)} tableData={invoiceList || []} checkboxSelection={false} />
             }
         </>
     );

@@ -80,6 +80,7 @@ export interface FormProps {
     error?: any;
     toastMessage?: string;
     buttons?: any;
+    rows?: number;
 };
 export interface SubField {
     name: string;

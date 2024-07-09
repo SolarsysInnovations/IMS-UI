@@ -48,7 +48,7 @@ export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     );
 };
 
-export const MyCellRenderer = ({ row }: { row: any }) => {
+export const MyCellRenderer = ({ row, onDeleteSuccess  }: { row: any, onDeleteSuccess: () => void  }) => {
 
     const dispatch = useDispatch<AppDispatch>();
     const { data: invoice, error, isLoading, refetch: getInvoiceList } = useGetInvoiceQuery();

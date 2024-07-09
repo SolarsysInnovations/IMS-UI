@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import TableHeader from '../../components/layouts/TableHeader';
-import { Add } from '@mui/icons-material';
+import { Add, Approval, KeyboardBackspaceTwoTone, Save, Visibility } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -278,22 +278,22 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
 
                                     setPreview(false);
                                     setIsModalOpen(true);
-
                                     // setInvoicePopup(true)
                                     // values.invoiceTotalAmount = invoiceTotalAmount
 
+                                    dispatch(setData(updatedValue as any))
                                 },
                                 disabled: !(isValid && dirty),
                             },
                             {
-                                label: 'Sent to Approver', disabled: !(isValid && dirty), onClick: () => {
+                                label: 'Sent to Approver', icon: Approval, disabled: !(isValid && dirty), onClick: () => {
                                     values.invoiceStatus = "PENDING";
                                     handleSubmit()
                                 }
                             },
-                            { label: 'Back', onClick: () => navigate(-1) },
+                            { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
                             {
-                                label: 'Save', onClick: async () => {
+                                label: 'Save', icon: Save, onClick: async () => {
                                     handleSubmit()
                                 },
                                 disabled: !(isValid && dirty)
@@ -325,17 +325,20 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
 
                             }}
                         />
-                        {/* invoice modal screen */}
-                        {/* <NestedModalUi handleClose={() => {
-                            setPreview(false);
-                            setIsModalOpen(false)
-                        }} open={isModalOpen} >
-                            <InvoiceUi preview={preview} discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} isModalOpen={setIsModalOpen} />
-                        </NestedModalUi> */}
+                        {/* <ModalUi topHeight='90%' open={isModalOpen} onClose={() => {
+                                setIsModalOpen(false)
+                                setInvoicePopup(false)
+                            }} >
+                                <>
+                                    {invoicePopUp && (
+                                        <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData}  emailModalOpen={setisEmailModalOpen} emailPopup={setEmailPopUp} isModalOpen={setIsModalOpen} invoicePopup={setInvoicePopup} gstTypePopup={setGstTypePopup} tdsTaxPopup={setTdsTaxPopup} paymentTermsPopUp={setPaymentTermsPopUp}/>
+                                    )}
+                                </>
+                            </ModalUi> */}
+
                         <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
                             setPreview(false);
-                            setIsModalOpen(false);
-                            dispatch(clearData());
+                            setIsModalOpen(false)
                         }} >
                             <InvoiceUi preview={preview} discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} isModalOpen={setIsModalOpen} />
                         </ModalUi>
@@ -355,6 +358,15 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         />
                                     </Box>
                                 </Grid>
+                                {/* <Grid item xs={6}>
+                                        <Box sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'flex-end',
+                                        }}>
+                                            <Typography variant="subtitle2" color="initial">Created at : {formatDate(values.invoiceDate)}</Typography>
+                                        </Box>
+                                    </Grid> */}
                                 <Grid item xs={3}>
                                     <Box>
                                         <TextFieldUi
@@ -405,7 +417,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             button={true}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    const selectedGstType = gstTypesData.find((item: any) => item.gstName === newValue.value)
+                                                    const selectedGstType = gstTypesData.find((item) => item.gstName === newValue.value)
                                                     if (selectedGstType) {
                                                         setFieldValue("gstPercentage", selectedGstType.gstPercentage)
                                                         setFieldValue("gstType", newValue.value)
@@ -467,7 +479,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             }}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    const selectedPaymentTerms = paymentTerms?.find((item: any) => item.termName === newValue.value)
+                                                    const selectedPaymentTerms = paymentTerms?.find((item) => item.termName === newValue.value)
                                                     if (selectedPaymentTerms) {
                                                         const today = new Date();
                                                         const startDate = format(today, 'dd-MM-yyyy');
@@ -670,7 +682,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                                 width='150px'
                                                 onChange={(newValue: any) => {
                                                     if (newValue) {
-                                                        const selectedTdsTax = tdsTaxData.find((item: any) => item.taxName === newValue.value);
+                                                        const selectedTdsTax = tdsTaxData.find((item) => item.taxName === newValue.value);
                                                         if (selectedTdsTax) {
                                                             setFieldValue("taxAmount.tds", newValue.value)
                                                             setSelectedTdsAmount(selectedTdsTax.taxPercentage)

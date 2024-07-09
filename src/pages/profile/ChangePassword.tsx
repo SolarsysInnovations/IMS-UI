@@ -11,7 +11,7 @@ import { ChangePasswordInitialValueProps } from "../../types/types";
 import { useChangePasswordMutation, useRolesGetUserMutation } from "../../redux-store/role/roleApi";
 import { string } from "yup";
 import useSuccessToast from "../../hooks/useToast";
-import { Add } from "@mui/icons-material";
+import { Add, KeyboardBackspaceTwoTone, Save } from "@mui/icons-material";
 
 
 interface ChangePasswordProps {
@@ -27,27 +27,36 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
     const [rolesGetUser] = useRolesGetUserMutation();
     const [userPassword, setUserPassword] = useState<string>();
     const userName = localStorage.getItem("userName");
+    const userEmail = localStorage.getItem("userEmail");
     const buttons = [
-        { label: 'Cancel', icon: Add, onClick: () => navigate(-1) },
-        { label: 'Update', icon: Add, onClick: () => handleSubmit }
+        { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+        { label: 'Update', icon: Save, onClick: () => handleSubmit }
     ];
 
     
 
     useEffect(() => {
-        if (userName) {
-            rolesGetUser(userName).then(response => {
+        if (userEmail) {
+            rolesGetUser(userEmail).then(response => {
                 if (response && response.data) {
                     let pwd = (response[`data`] && response[`data`][`password`]) ? response[`data`][`password`] : '';
-                    setUserPassword(pwd);
+                    console.log("pwd",pwd)
+                    try {
+                        const decodedPassword = atob(pwd);
+                        console.log("decode password",decodedPassword);
+                        setUserPassword(decodedPassword);
+                    } catch (e) {
+                        console.error("Invalid base64 string",e);
+                    }
                 }                
             })
         } 
-    }, [userName, rolesGetUser]);
+    }, [userEmail, rolesGetUser]);
      
     const handleSubmit = async (values: ChangePasswordInitialValueProps, { setSubmitting, resetForm, setFieldError }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void;  setFieldError: (field: string, message: string) => void }) => {
         try {
-           if (values.currentPassword !== userPassword) {
+            if (values.currentPassword !== userPassword) {
+               console.log("currentpwd",values)
                 setFieldError('currentPassword', 'Current password is incorrect');
                 setSubmitting(false);
                 return;

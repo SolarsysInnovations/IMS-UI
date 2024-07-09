@@ -2,6 +2,11 @@ import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 import { FieldProps } from "../../types/types";
+import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
+import { generateOptions } from "../../services/utils/dropdownOptions";
+import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
+import { useState } from "react";
+
 
 export const customerFields: FieldProps[] = [
     {
@@ -52,20 +57,14 @@ export const customerFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             {
-                name: 'country', required: true, disabled: false, label: 'country/region', type: 'select', gridSize: 3, options: [{ value: "india", label: "india" }], validation: Yup.string().required('paymentTerms is required')
+                name: 'country', required: true, disabled: false, label: 'country/region', type: 'select', gridSize: 3, validation: Yup.string().required('paymentTerms is required'),
             },
             { name: 'address', required: true, disabled: false, label: 'Address', type: 'text', gridSize: 3, validation: Yup.string().required('address is required') },
             {
-                name: 'city', required: true, disabled: false, label: 'City', type: 'select', gridSize: 3, options: [
-                    { value: "Chennai", label: "Chennai" },
-                    { value: "Trichy", label: "Trichy" }
-                ], validation: Yup.string().required('companyName is required')
+                name: 'city', required: true, disabled: false, label: 'City', type: 'text', gridSize: 3, validation: Yup.string().required('companyName is required'),
             },
             {
-                name: 'state', required: true, disabled: false, label: 'State', type: 'select', gridSize: 3, options: [
-                    { value: "Tamilnadu", label: "Tamilnadu" },
-                    { value: "Karnataka", label: "Karnataka" }
-                ], validation: Yup.string().required('companyName is required')
+                name: 'state', required: true, disabled: false, label: 'State', type: 'select', gridSize: 3, validation: Yup.string().required('companyName is required'),
             },
             { name: 'pinCode', required: true, disabled: false, label: 'PinCode', type: 'number', gridSize: 3, validation: Yup.string().required('pinCode is required') },
         ]
@@ -254,6 +253,58 @@ export const invoiceFields: FieldProps[] = [
         ]
     },
 ]
+
+// const MyForm: React.FC = () => {
+//     const [country, setCountry] = useState('');
+//     const [region, setRegion] = useState('');
+
+//     const handleCountryChange = (val: string) => {
+//         setCountry(val);
+//         setRegion('');  // Reset region when country changes
+//     };
+
+//     const handleRegionChange = (val: string) => {
+//         setRegion(val);
+//     };
+
+//     const renderField = (field: FieldProps) => {
+//         if (field.component) {
+//             return field.component({
+//                 value: field.name === 'country' ? country : region,
+//                 onChange: field.name === 'country' ? handleCountryChange : handleRegionChange,
+//                 country: country
+//             });
+//         }
+
+//         return (
+//             <input
+//                 type={field.type || 'text'}
+//                 required={field.required}
+//                 disabled={field.disabled}
+//                 name={field.name}
+//                 className={`grid-item grid-size-${field.gridSize}`}
+//             />
+//         );
+//     };
+
+//     return (
+//         <form>
+//             {customerFields.map((section, index) => (
+//                 <div key={index} className={`section-title grid-size-${section.titleGridSize}`}>
+//                     {section.label && <h3>{section.label}</h3>}
+//                     {section.subFields?.map((field, idx) => (
+//                         <div key={idx} className={`grid-item grid-size-${field.gridSize}`}>
+//                             <label>{field.label}</label>
+//                             {renderField(field)}
+//                         </div>
+//                     ))}
+//                 </div>
+//             ))}
+//         </form>
+//     );
+// };
+
+// export default MyForm;
 
 
 

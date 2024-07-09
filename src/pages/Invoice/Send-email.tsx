@@ -18,15 +18,14 @@ import CancelIcon from '@mui/icons-material/Close';
 // import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
 import usePathname from "../../hooks/usePathname";
 import TableHeader from "../../components/layouts/TableHeader";
-import useSuccessToast from "../../hooks/useToast";
-import useErrorToast from "../../hooks/useErrorToast";
+import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 
 interface SendEmailProps {
   onClose: () => void;
 }
 
 const SendEmail: React.FC<SendEmailProps> = ({ onClose }) => {
-  const [sendEmailNotifiction, { isSuccess, isError }] =
+  const [sendEmailNotifiction,{ isSuccess: sendEmailSuccess, isError: sendEmailError, error: sendEmailErrorObject }] =
     useSendEmailNotificationMutation();
   const [emailValues, setemailValues] = useState(SendEmailInitialValue);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -94,9 +93,14 @@ const SendEmail: React.FC<SendEmailProps> = ({ onClose }) => {
     }
   };
 
-  useSuccessToast({ isSuccess, message: "Email send successfully", });
-  useErrorToast({ isError, message: "Email not send successfully", });
-  
+  useSnackbarNotifications({
+        success: sendEmailSuccess,
+        error: sendEmailError,
+        successMessage: "Email send successfully",
+        errorMessage: 'Error sending email',
+        errorObject: sendEmailErrorObject,
+    });
+
   return (
     <>
       <Formik initialValues={emailValues} validationSchema={sendEmailValidationSchema} onSubmit={handleSubmit}>

@@ -13,11 +13,26 @@ import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import ToastUi from '../../components/ui/ToastifyUi'
 import { useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import SnackBarUi from '../../components/ui/Snackbar';
+import SelectDropdown from '../../components/ui/SelectDropdown';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 
 const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
+// const invoiceOptions = [
+//     { value: "ADMIN", label: "ADMIN" },
+//     { value: "APPROVER", label: "APPROVER" },
+//     { value: "ENDUSER", label: "ENDUSER" },
+// ];
+
+// interface ValueProps {
+//   value: string;
+//   label: string;
+// }
+
 const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
 
+    // const [status, setStatus] = useState<ValueProps | null>(params.value);
     const [status, setStatus] = useState(params.value);
     const [updateRoles, { isSuccess: updateSuccess }] = useUpdateRoleMutation();
     const { data: rolesList, error, isLoading, refetch: fetchRolesList } = useGetRoleQuery();
@@ -26,9 +41,10 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
         fetchRolesList();
     }, [updateSuccess])
 
-    const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
+    // const handleChange = async (newValue: ValueProps | null) => {
+    // if (newValue === null) return;
+        const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
         const newStatus = event.target.value as string;
-
         setStatus(newStatus);
 
         const updatedRoles = {
@@ -61,6 +77,12 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
                 <option key={option} value={option}>{option}</option>
             ))}
         </select>
+        // <SelectDropdown
+        //     options={invoiceOptions}
+        //     value={status}
+        //     onChange={handleChange}
+        //     applySmallSizeStyle
+        // />
     );
 };
 
@@ -70,7 +92,15 @@ const RolesList: React.FC = () => {
     const [roleId, setRoleId] = useState<string | null>(null);
     const { data: roleDetails, refetch } = useGetRoleQuery();
     const pathname = usePathname();
-    const [deleteRole] = useDeleteRoleMutation();
+    const [deleteRole,{ isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteRoleMutation();
+
+    useSnackbarNotifications({
+        error: roleDeleteError,
+        errorMessage: 'Error deleting role',
+        success: roleDeleteSuccess,
+        successMessage: 'Role deleted successfully',
+        errorObject: roleDeleteErrorObject,
+    })
 
     const handleModalClose = () => {
         setOpenModal(false);
@@ -96,7 +126,7 @@ const RolesList: React.FC = () => {
         const confirmed = window.confirm("Are you sure you want to delete this role?");
         if (confirmed) {
             await deleteRole(id);
-            toast.success("Successfully deleted the selected role", toastConfig);
+            // toast.success("Successfully deleted the selected role", toastConfig);
             refetch();
         }
     };
@@ -147,7 +177,6 @@ const RolesList: React.FC = () => {
 
     return (
         <>
-            <ToastUi autoClose={1000} />
             <TableHeader headerName={pathname} buttons={buttons} />
             <RolesGridDataUi showToolbar={true} columns={columns || []} tableData={roleDetails || []} checkboxSelection={false} onRowEdit={(roleId) => handleEditClick(roleId)}
                 onRowDelete={handleDeleteClick} />

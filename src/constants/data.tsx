@@ -29,6 +29,7 @@ import CustomerScreen from "../pages/customer/Customer-screen";
 import CompanyList from "../pages/company/companyListScreen";
 import CompanyCreate from "../pages/company/companyCreate";
 import CompanyScreen from "../pages/company/companyScreen";
+import SuperAdminDashboardScreen from "../pages/Dashboard/superAdmin-dashboard/DashboardScreen";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.SUPERADMIN, Roles.ADMIN];
@@ -70,6 +71,11 @@ export const routesConfig = [
   // * -------- company ---------
   { path: "/company", element: <CompanyList />, allowedRoles: [...allRoles] },
   { path: "/company/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
+
+  // * -------- super admin ---------
+  { path: "/super-admin", element: <SuperAdminDashboardScreen />, allowedRoles: [...allRoles] },
+  { path: "/super-admin/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
+
 ];
 
 export const sidebarTwo = [
@@ -147,7 +153,15 @@ export const sidebarTwo = [
     allowedRoles: [...allRoles]
   },
   {
-    id: 8,
+    id: 9,
+    title: "Dashboard Super Admin",
+    path: "/super-admin",
+    icon: Home,
+    isParent: true,
+    allowedRoles: [...allRoles]
+  },
+  {
+    id: 10,
     title: "Demo",
     path: "/demo",
     icon: Home,
@@ -156,7 +170,7 @@ export const sidebarTwo = [
 
   },
   {
-    id: 9,
+    id: 11,
     title: "DemoTwo",
     path: "/demo-two",
     icon: Home,
@@ -165,7 +179,7 @@ export const sidebarTwo = [
 
   },
   {
-    id: 10,
+    id: 12,
     title: "Component",
     path: "/components",
     icon: Home,
@@ -174,7 +188,7 @@ export const sidebarTwo = [
 
   },
   {
-    id: 11,
+    id: 13,
     title: "DynamicForm",
     path: "/dynamicForm",
     icon: Home,
@@ -185,3 +199,6 @@ export const sidebarTwo = [
 ];
 
 export const invoiceStatusOptions = ['APPROVED', 'DELETE', 'RETURNED', 'DRAFT', 'PENDING', 'PAID'];
+
+
+
