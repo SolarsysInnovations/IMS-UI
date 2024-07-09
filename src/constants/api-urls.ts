@@ -68,6 +68,8 @@ export enum ApiEndpoint {
     DASHBOARD_GET = "dashboardGet",
     //Company
     COMPANY_GET = "companyGet",
+    // super admin
+    DASHBOARD_SUPER_ADMIN = "dashboardSuperAdmin",
 }
 
 export type ApiUrls = {
@@ -134,7 +136,9 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.ROLES_DELETE]: `/role/delete/`,
     //Changepassword
     [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
-    //
+    // company
     [ApiEndpoint.COMPANY_GET]: `/company/list`,
+    // dashboard super admin 
+    [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/superAdmin/dashboard/overview`
 
 };
