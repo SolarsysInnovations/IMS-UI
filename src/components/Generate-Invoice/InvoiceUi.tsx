@@ -47,7 +47,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject, isLoading: invoiceUpdateLoading }] = useUpdateInvoiceMutation();
     const [getInvoiceById, { }] = useInvoiceGetByIdMutation();
     const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
-
+    const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const invoiceData = useSelector((state: any) => state.globalState.data);
     console.log("invoice Data ", invoiceData);
 
@@ -79,6 +79,15 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
             printPDF()
         }
     }, [downloadPdf]);
+
+    useEffect(() => {
+        if (invoiceData) {
+            const currentInvoiceStatus = invoiceStatusOptions.indexOf(invoiceData.invoiceStatus);
+            if (currentInvoiceStatus !== -1) {
+                setCurrentInvoiceStatus(currentInvoiceStatus);
+            }
+        }
+    }, [invoiceData]);
 
     useEffect(() => {
         if (invoiceData) {
@@ -166,8 +175,6 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
 
     // Check if the parsed date is valid
     const isValidDate = parsedDueDate instanceof Date && !isNaN(parsedDueDate.getTime());
-
-    const currentInvoiceStatus = invoiceStatusOptions?.indexOf(invoiceData.invoiceStatus);
 
     const handleCloseNested = () => {
         setNestedOpen(false);
@@ -299,7 +306,13 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                                 }} />
 
                             {/* ) : ""} */}
-                            <SplitButton disabledOptions={[currentInvoiceStatus]} options={invoiceStatusOptions} defaultIndex={currentInvoiceStatus} onOptionClick={handleOptionClick} />
+                            <SplitButton
+                                key={currentInvoiceStatus} // Ensure re-render
+                                disabledOptions={[currentInvoiceStatus === -1 ? 0 : currentInvoiceStatus]}
+                                options={invoiceStatusOptions}
+                                defaultIndex={currentInvoiceStatus}
+                                onOptionClick={handleOptionClick}
+                            />
                         </Box>
                     </Grid>
                     <ModalUi open={nestedOpen} onClose={handleCloseNested}>
