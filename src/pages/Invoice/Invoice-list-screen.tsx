@@ -15,7 +15,6 @@ import { GridRenderCellParams } from '@mui/x-data-grid';
 import { useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { selectUserRole } from '../../redux-store/auth/authSlice';
 import { Roles } from '../../constants/Enums';
-import SnackBarUi from '../../components/ui/Snackbar';
 import ButtonUi from '../../components/ui/Button';
 import SendEmail from './Send-email';
 import DialogBoxUi from '../../components/ui/DialogBox';
@@ -181,26 +180,14 @@ const InvoiceList = () => {
             }
         },
     ];
-    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
 
-    const handleDeleteSuccess = useCallback(() => {
-        setShowDeleteSuccessToast(true);
-        setTimeout(() => {
-            setShowDeleteSuccessToast(false);
-        }, 3000);
-         refetch();
-         
-    },[refetch]);
-
-    const getColumns = (onDeleteSuccess: () => void): GridColDef[] => {
-        // const columns= (onDeleteSuccess: () => void): GridColDef[] => [
         const columns: GridColDef[] = [
             {
                 field: 'Action',
                 headerName: 'Action',
                 width: 140,
                 editable: false,
-                renderCell: (params: any) => <MyCellRenderer row={params.row} onDeleteSuccess={onDeleteSuccess} />,
+                renderCell: (params: any) => <MyCellRenderer row={params.row} />,
             },
             {
                 field: 'invoiceType',
@@ -281,21 +268,12 @@ const InvoiceList = () => {
             },
         )
     }
-    return columns;
-    };
     
     return (
         <>
-            {showDeleteSuccessToast && (
-                <SnackBarUi
-                    message="Successfully deleted the invoice"
-                    severity= "success"
-                    isSubmitting={true}
-                />
-            )}
             <TableHeader headerName={pathname} buttons={buttons} />
             {invoiceListErrorMessage ? <Typography variant="caption" color="initial">Error :{invoiceListErrorMessage}</Typography> :
-                <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={getColumns(handleDeleteSuccess)} tableData={invoiceList || []} checkboxSelection={false} />
+                <GridDataUi showToolbar={true} columns={columns || []} tableData={invoiceList || []} checkboxSelection={false} />
             }
         </>
     );

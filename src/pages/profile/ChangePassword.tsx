@@ -12,6 +12,8 @@ import { useChangePasswordMutation, useRolesGetUserMutation } from "../../redux-
 import { string } from "yup";
 import useSuccessToast from "../../hooks/useToast";
 import { Add, KeyboardBackspaceTwoTone, Save } from "@mui/icons-material";
+import CryptoJS from 'crypto-js';
+import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 
 
 interface ChangePasswordProps {
@@ -23,17 +25,23 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
     const pathname = "Change Password"
     const navigate = useNavigate();
     const [passwordValues, setpasswordValues] = useState(ChangePasswordInitialValue);
-    const [changePassword, { isSuccess, isError }] = useChangePasswordMutation();
+    const [changePassword, { isSuccess: changePasswordSuccess, isError: changePasswordError, error: changePasswordErrorObject }] = useChangePasswordMutation();
     const [rolesGetUser] = useRolesGetUserMutation();
     const [userPassword, setUserPassword] = useState<string>();
     const userName = localStorage.getItem("userName");
     const userEmail = localStorage.getItem("userEmail");
     const buttons = [
-        { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+        { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => onClose() },
         { label: 'Update', icon: Save, onClick: () => handleSubmit }
     ];
 
-    
+    useSnackbarNotifications({
+        error: changePasswordError,
+        errorMessage: 'Error changing password',
+        success: changePasswordSuccess,
+        successMessage: 'Password update successfully',
+        errorObject: changePasswordErrorObject,
+    });    
 
     useEffect(() => {
         if (userEmail) {
@@ -41,13 +49,13 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
                 if (response && response.data) {
                     let pwd = (response[`data`] && response[`data`][`password`]) ? response[`data`][`password`] : '';
                     console.log("pwd",pwd)
-                    try {
-                        const decodedPassword = atob(pwd);
-                        console.log("decode password",decodedPassword);
-                        setUserPassword(decodedPassword);
-                    } catch (e) {
-                        console.error("Invalid base64 string",e);
-                    }
+                    // try {
+                    //     const decodedPassword = decryptData(pwd);
+                    //     console.log("decodepassword",decodedPassword)
+                    //     setUserPassword(decodedPassword);
+                    // } catch (e) {
+                    //     console.error("Invalid encrypted string", e);
+                    // }
                 }                
             })
         } 
@@ -75,8 +83,19 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
         }
     };
 
-    useSuccessToast({ isSuccess, message: "Password update successfully", });
-    
+
+    // const generateSecretKey = () => {
+    //     const secretKey = CryptoJS.lib.WordArray.random(16); // Adjust the length as per your requirement
+    //     return CryptoJS.enc.Base64.stringify(secretKey);
+    // };
+
+    // const secretKey = generateSecretKey();
+    // console.log("secretkey",secretKey)
+    // const decryptData = (ciphertext:string) => {
+    //     const bytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
+    //     const originalData = bytes.toString(CryptoJS.enc.Utf8);
+    //     return originalData;
+    // };
     return (
         <>
             <Formik initialValues={passwordValues} validationSchema={PasswordValidationSchema} validateOnChange={true} validateOnBlur={true} onSubmit={handleSubmit}>

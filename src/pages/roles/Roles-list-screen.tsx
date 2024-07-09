@@ -139,7 +139,7 @@ const RolesList: React.FC = () => {
             renderCell: undefined,
         },
         {
-            field: 'username',
+            field: 'userName',
             headerName: 'User Name',
             width: 150,
             editable: true,

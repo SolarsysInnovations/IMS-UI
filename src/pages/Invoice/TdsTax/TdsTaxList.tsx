@@ -18,7 +18,6 @@ const TdsTaxList = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     const { data: getTdsTax, error, isLoading, refetch } = useGetTdsTaxQuery();
-    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
 
     return (
         <>

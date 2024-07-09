@@ -13,16 +13,6 @@ const CustomerList = () => {
     const [updateCustomer, { isSuccess, isError }] = useUpdateCustomerMutation();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
 
-    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
-
-    const handleDeleteSuccess = useCallback(() => {
-        setShowDeleteSuccessToast(true);
-        setTimeout(() => {
-            setShowDeleteSuccessToast(false);
-        }, 3000);
-        refetch();
-    }, [refetch]);
-
     const role = localStorage.getItem("userRole");
     const buttons = [];
 
@@ -36,7 +26,7 @@ const CustomerList = () => {
     return (
         <>
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={columns} tableData={customers || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} columns={columns} tableData={customers || []} checkboxSelection={false} />
         </>
     )
 }

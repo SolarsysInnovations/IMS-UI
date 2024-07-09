@@ -80,11 +80,11 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
 
     if (initialValues.id == "") {
         buttons.push(
-            { label: 'Back',  icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+            { label: 'Back',  icon: KeyboardBackspaceTwoTone, onClick: () => onClose() },
             { label: 'Save', icon: Save, onClick: () => handleSubmit })
     } else {
         buttons.push(
-            { label: 'Back',  icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+            { label: 'Back',  icon: KeyboardBackspaceTwoTone, onClick: () => onClose() },
             { label: 'Update', icon: Save, onClick: () => handleSubmit })
     }
 
@@ -111,12 +111,12 @@ const RoleForm: React.FC<RoleFormProps> = ({ roleId, onClose }) => {
                                     required
                                     fullWidth={false}
                                     label="User Name"
-                                    name="username"
+                                    name="userName"
                                     type="text"
-                                    value={values.username}
+                                    value={values.userName}
                                     onChange={handleChange}
-                                    error={touched.username && Boolean(errors.username)}
-                                    helperText={touched.username && errors.username}
+                                    error={touched.userName && Boolean(errors.userName)}
+                                    helperText={touched.userName && errors.userName}
                                 />
                             </Box>
                         </Grid>
