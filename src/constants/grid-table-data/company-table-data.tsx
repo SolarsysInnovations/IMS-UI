@@ -23,7 +23,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = React.useState(false);
   const { data: services, refetch } = useGetCompanyQuery();
-  const [deleteCompany] = useDeleteCompanyMutation();
+  const [deleteCompany, { isLoading: deleteCompanyLoading, error: deleteCompanyErrorObject, isSuccess: deleteCompanySuccess, isError: deleteCompanyError, data: deletedData, }] = useDeleteCompanyMutation();
   const [getCompany, { data: companyData }] = useGetCompanyDataByIdMutation();
   const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
   useEffect(() => {
     refetch();
-  }, [deleteCompany, refetch]);
+  }, [deleteCompanySuccess, refetch]);
 
   const handleEditClick = async () => {
     try {
@@ -60,7 +60,9 @@ const MyCellRenderer = ({ id }: { id: any }) => {
         const companyData = response.data;
         console.log("edit company data",companyData);
         dispatch(setData(companyData));
+        
         navigate("/company/create");
+
       } else {
         console.error("Error response:", response.error);
       }
