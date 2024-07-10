@@ -55,6 +55,8 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [getDashboard] = useGetApproverDashboardMutation();
+  const [selectedFilterValue, setSelectedFilterValue] = useState({ filter: selectedValue.value });
+
 
   useEffect(() => {
     fetchDashboardData(selectedValue.value);
@@ -64,7 +66,7 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
     console.log("Fetching data for:", value); // Debug log
     setLoading(true);
     try {
-      const response = await getDashboard().unwrap(); // Call without parameters
+      const response = await getDashboard(selectedFilterValue).unwrap();
       if (response && response.invoiceOverview) {
         const { total, paid, unPaid } = response.invoiceOverview;
         setInvoiceAmount([
@@ -104,6 +106,10 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
       setLoading(false);
     }
   };
+  
+  useEffect(() => {
+    setSelectedFilterValue({ filter: selectedValue.value });
+}, [selectedValue]);
 
   return (
     <Grid container spacing={2}>

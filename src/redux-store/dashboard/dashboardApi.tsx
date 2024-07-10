@@ -20,10 +20,11 @@ export const dashboardApi = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
-        getApproverDashboard: builder.mutation<any, void>({
-            query: () => ({
+        getApproverDashboard: builder.mutation<any, Partial<any>>({
+            query: (dashboard) => ({
                 url: API_URLS.dashboardApprover,
                 method: 'POST',
+                body: dashboard,
             }),
         }),
     }),
