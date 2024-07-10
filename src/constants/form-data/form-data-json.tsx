@@ -68,8 +68,12 @@ export const customerFields: FieldProps[] = [
             {
                 name: 'city', required: true, disabled: false, label: 'City', type: 'selectCity', gridSize: 3, validation: Yup.string().required('companyName is required'),
             },
-            { name: 'address', required: true, disabled: false, label: 'Address', type: 'text', gridSize: 3, validation: Yup.string().required('address is required') },
-            { name: 'pinCode', required: true, disabled: false, label: 'PinCode', type: 'number', gridSize: 3, validation: Yup.string().required('pinCode is required') },
+            {
+                name: 'address', required: true, disabled: false, label: 'Address', type: 'text', gridSize: 3, validation: Yup.string().required('address is required')
+            },
+            {
+                name: 'pinCode', required: true, disabled: false, label: 'PinCode', type: 'number', gridSize: 3, validation: Yup.string().required('pinCode is required')
+            },
         ]
     },
     {
