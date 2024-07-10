@@ -3,7 +3,7 @@ import { Grid, Typography, Box } from "@mui/material";
 import SelectDropdown from "../../../components/ui/SelectDropdown";
 import InvoiceStatus from "../InvoiceStatusChart";
 import InvoiceAmount from "../approver-dashboard/InvoiceAmount";
-import ApproverOverView from "./ApproverOverview";
+import EnduserOverView from "./EnduserOverview";
 
 interface ValueProps {
   label: string;
@@ -16,7 +16,7 @@ const options = [
   { label: "yearly", value: "yearly" },
 ];
 
-const ApproverDashboardScreen = () => {
+const EnduserDashboardScreen = () => {
   const [selectedValue, setSelectedValue] = useState<ValueProps>({
     label: "monthly",
     value: "monthly",
@@ -56,11 +56,11 @@ const ApproverDashboardScreen = () => {
         </Grid> <Grid sx={{marginTop:"20px"}}><Typography variant="h6" gutterBottom>
             Pending Invoices
           </Typography>
-        <ApproverOverView />
+        <EnduserOverView />
         </Grid>
       </Grid>
     </Box>
   );
 };
 
-export default ApproverDashboardScreen;
+export default EnduserDashboardScreen;

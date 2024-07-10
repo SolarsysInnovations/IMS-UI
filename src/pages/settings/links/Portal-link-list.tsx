@@ -104,7 +104,7 @@ const PortalLinkList: React.FC = () => {
                       <LanguageIcon
                         style={{ color: "blue", marginLeft: "-10px" }}
                       />
-                      <a href={link.url}>{link.label}</a>
+                       <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
                       <Box
                         sx={{
                           marginLeft: "auto",
