@@ -78,7 +78,7 @@ const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
     };
 
     return (
-         <select
+        <select
             value={status}
             onChange={handleChange}
             style={{ fontSize: "12px", padding: "5px 5px", borderRadius: "5px" }}
@@ -214,14 +214,20 @@ const InvoiceList = () => {
                 editable: false,
             },
             {
-                field: 'email',
-                headerName: 'Email To',
-                width: 120,
-                editable: true,
-                renderCell: (params: GridRenderCellParams) => (
-                    <GridEmailButton params={params} />
-                ),
+                field: 'invoiceStatus',
+                headerName: 'Invoice Status',
+                width: 150,
+                editable: false,
             },
+            // {
+            //     field: 'email',
+            //     headerName: 'Email To',
+            //     width: 120,
+            //     editable: true,
+            //     renderCell: (params: GridRenderCellParams) => (
+            //         <GridEmailButton params={params} />
+            //     ),
+            // },
 
             // {
             //     field: '',

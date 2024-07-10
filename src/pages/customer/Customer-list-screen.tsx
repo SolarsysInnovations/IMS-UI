@@ -10,8 +10,8 @@ import { useGetCustomersQuery, useUpdateCustomerMutation } from '../../redux-sto
 
 const CustomerList = () => {
 
-    // console.log("Hello world", Country.getAllCountries());
-    // console.log("Hello world", State.getAllStates());
+    console.log("Hello world", Country.getAllCountries());
+    console.log("Hello world", State.getAllStates());
 
     const [updateCustomer, { isSuccess, isError }] = useUpdateCustomerMutation();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
