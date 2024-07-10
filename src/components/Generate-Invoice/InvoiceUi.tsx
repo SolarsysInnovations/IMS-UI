@@ -107,8 +107,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 };
                 console.log(updatedInvoiceData);
                 setNestedOpen(true);
-                // await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
-                // const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
+
                 dispatch(clearData());
                 dispatch(setData(updatedInvoiceData));
                 // Optionally, update the state with the fetched data if needed

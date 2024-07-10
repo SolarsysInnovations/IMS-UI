@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 import { FieldProps } from "../../types/types";
 import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
-import { generateOptions } from "../../services/utils/dropdownOptions";
 import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
 import { useState } from "react";
+import { Country, State, City } from 'country-state-city';
+import { generateOptions } from '../../services/utils/dropdownOptions';
 
-
+console.log("Hello world", State.getAllStates());
+const country = Country.getAllCountries();
+const countryOptions = generateOptions(country, "name", "name");
 export const customerFields: FieldProps[] = [
     {
         type: 'section',
@@ -57,15 +60,15 @@ export const customerFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             {
-                name: 'country', required: true, disabled: false, label: 'country/region', type: 'select', gridSize: 3, validation: Yup.string().required('paymentTerms is required'),
+                name: 'country', required: true, disabled: false, label: 'country/region', type: 'selectCountry', gridSize: 3, validation: Yup.string().required('paymentTerms is required'),
+            },
+            {
+                name: 'state', required: true, disabled: false, label: 'State', type: 'selectState', gridSize: 3, validation: Yup.string().required('companyName is required'),
+            },
+            {
+                name: 'city', required: true, disabled: false, label: 'City', type: 'selectCity', gridSize: 3, validation: Yup.string().required('companyName is required'),
             },
             { name: 'address', required: true, disabled: false, label: 'Address', type: 'text', gridSize: 3, validation: Yup.string().required('address is required') },
-            {
-                name: 'city', required: true, disabled: false, label: 'City', type: 'text', gridSize: 3, validation: Yup.string().required('companyName is required'),
-            },
-            {
-                name: 'state', required: true, disabled: false, label: 'State', type: 'select', gridSize: 3, validation: Yup.string().required('companyName is required'),
-            },
             { name: 'pinCode', required: true, disabled: false, label: 'PinCode', type: 'number', gridSize: 3, validation: Yup.string().required('pinCode is required') },
         ]
     },
@@ -131,7 +134,7 @@ export const CompanyFields: FieldProps[] = [
 
         ]
     },
-   
+
 ];
 
 export const CompanyCreateFields: FieldProps[] = [
