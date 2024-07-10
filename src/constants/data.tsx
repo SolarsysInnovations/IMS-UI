@@ -30,6 +30,7 @@ import CompanyList from "../pages/company/companyListScreen";
 import CompanyCreate from "../pages/company/companyCreate";
 import CompanyScreen from "../pages/company/companyScreen";
 import SuperAdminDashboardScreen from "../pages/Dashboard/superAdmin-dashboard/DashboardScreen";
+import ApproverDashboardScreen from "../pages/Dashboard/approver-dashboard/DashboardScreen";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.SUPERADMIN, Roles.ADMIN];
@@ -75,6 +76,9 @@ export const routesConfig = [
   // * -------- super admin ---------
   { path: "/super-admin", element: <SuperAdminDashboardScreen />, allowedRoles: [...allRoles] },
   { path: "/super-admin/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
+
+  // * -------- approver ---------
+  { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...allRoles] },
 
 ];
 

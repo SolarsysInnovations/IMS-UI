@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useGetCompanyQuery, useAddCompanyMutation, useUpdateCompanyMutation } from '../../redux-store/company/companiesApi';
-import { CompanyFields } from '../../constants/form-data/form-data-json';
-import { companyInitialValues, customerInitialValues } from '../../constants/forms/formikInitialValues';
+import { CompanyEditFields, CompanyCreateFields, CompanyFields } from '../../constants/form-data/form-data-json';
+import { companyInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { companyValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
@@ -15,19 +15,14 @@ interface CompanyValueProps {
 };
 
 const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
+    console.log("companyEditInitialValues initial", companyEditInitialValues);
 
-
-    console.log("companyEditInitialValues initial",companyEditInitialValues);
-    
     const [addCompany, { isLoading: companyAddLoading, isSuccess: companyAddSuccess, isError: companyAddError, error: companyAddErrorObject }] = useAddCompanyMutation();
-
     const [updateCompany, { isLoading: companyUpdateLoading, isSuccess: companyUpdateSuccess, isError: companyUpdateError, error: companyUpdateErrorObject }] = useUpdateCompanyMutation();
-
     const { data: company, error, isLoading, refetch } = useGetCompanyQuery();
-
     const dispatch = useDispatch<AppDispatch>();
-
-    const [data, setData] = useState<any>();
+    
+    const initialValues = companyEditInitialValues || companyInitialValues;
 
     useSnackbarNotifications({
         error: companyAddError,
@@ -42,22 +37,43 @@ const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
         errorObject: companyUpdateErrorObject,
         errorMessage: 'Error updating Company',
         success: companyUpdateSuccess,
-        successMessage: 'Company update successfully',
+        successMessage: 'Company updated successfully',
     });
 
     useEffect(() => {
         refetch();
     }, [companyAddSuccess, companyUpdateSuccess, refetch]);
 
-    const initialValues = companyEditInitialValues || companyInitialValues;
-
     const onSubmit = useMemo(() => async (values: companyDetailsInitialValueProps, actions: any) => {
         try {
-            console.log("values",values);
-            
+            console.log("values", values);
+
             if (companyEditInitialValues) {
-                const id: number = values?.id
-                await updateCompany({ id: id, company: values, });
+                const id: number = values?.id;
+                const transformedData = {
+                    register: {
+                        userName: values.userName,
+                        userEmail: values.userEmail,
+                        // password: values.password,
+                        userRole: values.userRole,
+                        userMobile: values.userMobile,
+                        userAccess: values.userAccess,
+                        description: values.description,
+                    },
+                    companyDetails: {
+                        companyName: values.companyName,
+                        companyAddress: values.companyAddress,
+                        companyState: values.companyState,
+                        companyCountry: values.companyCountry,
+                        companyEmail: values.companyEmail,
+                        companyPhone: values.companyPhone,
+                        companyCell: values.companyCell,
+                        companyWebsite: values.companyWebsite,
+                        companyTaxNumber: values.companyTaxNumber,
+                        companyRegNumber: values.companyRegNumber
+                    }
+                };
+                await updateCompany({ id: id, company: transformedData });
                 dispatch(clearData());
                 actions.resetForm();
             } else {
@@ -72,7 +88,6 @@ const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
                         description: values.description,
                     },
                     companyDetails: {
-                        // id: values.id,
                         companyName: values.companyName,
                         companyAddress: values.companyAddress,
                         companyState: values.companyState,
@@ -85,8 +100,8 @@ const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
                         companyRegNumber: values.companyRegNumber
                     }
                 };
-                console.log('transformedData',transformedData);
-                
+                console.log('transformedData', transformedData);
+
                 await addCompany(transformedData);
                 dispatch(clearData());
                 actions.resetForm();
@@ -98,13 +113,12 @@ const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
         }
     }, [addCompany, updateCompany, companyEditInitialValues, dispatch]);
 
+    
     return (
         <>
             <DynamicFormCreate
-                setData={setData}
-                // updateFormValue={updateFormValue}
                 showTable={true}
-                fields={CompanyFields}
+                fields={Object.keys(companyEditInitialValues).length === 0 ? CompanyFields : CompanyEditFields}
                 initialValues={initialValues}
                 validationSchema={companyValidationSchema}
                 onSubmit={onSubmit}
