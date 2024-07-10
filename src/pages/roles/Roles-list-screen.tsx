@@ -1,90 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import RolesGridDataUi from './Roles-table-data'
+import React, { useState } from 'react';
 import { Add } from '@mui/icons-material';
-import { useDeleteRoleMutation, useGetRoleQuery, useUpdateRoleMutation } from '../../redux-store/role/roleApi';
+import { useGetRoleQuery } from '../../redux-store/role/roleApi';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import RoleForm from './Roles-form';
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
-import { toast } from 'react-toastify';
-import { toastConfig } from '../../constants/forms/config/toastConfig';
-import ToastUi from '../../components/ui/ToastifyUi'
-import { useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
-import SnackBarUi from '../../components/ui/Snackbar';
-import SelectDropdown from '../../components/ui/SelectDropdown';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-
-const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
-
-// const invoiceOptions = [
-//     { value: "ADMIN", label: "ADMIN" },
-//     { value: "APPROVER", label: "APPROVER" },
-//     { value: "ENDUSER", label: "ENDUSER" },
-// ];
-
-// interface ValueProps {
-//   value: string;
-//   label: string;
-// }
-
-const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
-
-    // const [status, setStatus] = useState<ValueProps | null>(params.value);
-    const [status, setStatus] = useState(params.value);
-    const [updateRoles, { isSuccess: updateSuccess }] = useUpdateRoleMutation();
-    const { data: rolesList, error, isLoading, refetch: fetchRolesList } = useGetRoleQuery();
-
-    useEffect(() => {
-        fetchRolesList();
-    }, [updateSuccess])
-
-    // const handleChange = async (newValue: ValueProps | null) => {
-    // if (newValue === null) return;
-        const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
-        const newStatus = event.target.value as string;
-        setStatus(newStatus);
-
-        const updatedRoles = {
-            ...params.row,
-            userRole: newStatus,
-        };
-
-        console.log("Updating invoice with payload:", updatedRoles);
-
-        try {
-            const response = await updateRoles({ id: updatedRoles.id, roles: updatedRoles });
-            console.log("Update response:", response);
-            if ('error' in response) {
-                console.error("Error updating invoice status:", response.error);
-            } else {
-                console.log(`Invoice status updated: ${newStatus}`);
-            }
-        } catch (error) {
-            console.error('Error updating invoice status:', error);
-        }
-    };
-
-    return (
-        <select
-            value={status}
-            onChange={handleChange}
-            style={{ fontSize: "12px", padding: "5px 5px", borderRadius: "5px" }}
-        >
-            {invoiceOptions.map((option) => (
-                <option key={option} value={option}>{option}</option>
-            ))}
-        </select>
-        // <SelectDropdown
-        //     options={invoiceOptions}
-        //     value={status}
-        //     onChange={handleChange}
-        //     applySmallSizeStyle
-        // />
-    );
-};
+import GridDataUi from '../../components/GridTable/GridData';
+import { columns } from './Roles-table-data';
+import { RolesFields } from '../../constants/form-data/form-data-json';
 
 
 const RolesList: React.FC = () => {
@@ -92,15 +15,6 @@ const RolesList: React.FC = () => {
     const [roleId, setRoleId] = useState<string | null>(null);
     const { data: roleDetails, refetch } = useGetRoleQuery();
     const pathname = usePathname();
-    const [deleteRole,{ isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteRoleMutation();
-
-    useSnackbarNotifications({
-        error: roleDeleteError,
-        errorMessage: 'Error deleting role',
-        success: roleDeleteSuccess,
-        successMessage: 'Role deleted successfully',
-        errorObject: roleDeleteErrorObject,
-    })
 
     const handleModalClose = () => {
         setOpenModal(false);
@@ -117,72 +31,13 @@ const RolesList: React.FC = () => {
         { label: 'Create Role', icon: Add, onClick: handleAddClick },
     ];
 
-    const handleEditClick = (id: string) => {
-        setRoleId(id);
-        setOpenModal(true);
-    }
-
-    const handleDeleteClick = async (id: string) => {
-        const confirmed = window.confirm("Are you sure you want to delete this role?");
-        if (confirmed) {
-            await deleteRole(id);
-            // toast.success("Successfully deleted the selected role", toastConfig);
-            refetch();
-        }
-    };
-
-    const columns: GridColDef[] = [
-        {
-            field: 'Action',
-            headerName: 'Action',
-            width: 140,
-            renderCell: undefined,
-        },
-        {
-            field: 'userName',
-            headerName: 'User Name',
-            width: 150,
-            editable: true,
-        },
-        // {
-        //     field: 'userRole',
-        //     headerName: 'User Role',
-        //     width: 150,
-        //     editable: true,
-        // },
-        {
-            field: 'userEmail',
-            headerName: 'Email',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'userAccess',
-            headerName: 'Access',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'userRole',
-            headerName: 'User Role',
-            width: 120,
-            editable: true,
-            type: "singleSelect",
-            valueOptions: ["ADMIN", "APPROVER", "ENDUSER",],
-            renderCell: (params: GridRenderCellParams) => (
-                <RolesDropdown params={params} />
-            ),
-        },
-    ];
-
     return (
         <>
             <TableHeader headerName={pathname} buttons={buttons} />
-            <RolesGridDataUi showToolbar={true} columns={columns || []} tableData={roleDetails || []} checkboxSelection={false} onRowEdit={(roleId) => handleEditClick(roleId)}
-                onRowDelete={handleDeleteClick} />
+            <GridDataUi showToolbar={true} columns={columns || []} tableData={roleDetails || []} checkboxSelection={false}  />
             <DialogBoxUi
                 open={openModal}
-                content={<RoleForm roleId={roleId} onClose={handleModalClose} />}
+                content={<RoleForm onClose={handleModalClose} RolesEditInitialValues={undefined} HeaderName="Create Role" RolesFields={RolesFields} />}
                 handleClose={handleModalClose}
             />
         </>
