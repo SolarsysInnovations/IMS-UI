@@ -10,6 +10,8 @@ import ErrorIcon from "@mui/icons-material/Error";
 import DoneIcon from "@mui/icons-material/Done";
 import { useGetApproverDashboardMutation } from "../../../redux-store/dashboard/dashboardApi";
 import { useState, useEffect } from "react";
+import GridDataUi from "../../../components/GridTable/GridData";
+import { columns } from "../superAdmin-dashboard/CompanyOverView";
 
 interface ValueProps {
   label: string;
@@ -27,8 +29,7 @@ const initialInvoiceAmountState = [
     iconBg: "#635bff",
     value: 0,
     childLabel: "Invoice child label",
-    months: "months",
-    noOfInvoices: 0,
+    months: "monthly",
   },
   {
     label: "Approved Invoices",
@@ -36,8 +37,7 @@ const initialInvoiceAmountState = [
     iconBg: "#4E9F3D",
     value: 0,
     childLabel: "Invoice child label",
-    months: "months",
-    noOfInvoices: 0,
+    months: "monthly",
   },
   {
     label: "Pending Invoices",
@@ -45,8 +45,7 @@ const initialInvoiceAmountState = [
     iconBg: "#FF204E",
     value: 0,
     childLabel: "Invoice child label",
-    months: "months",
-    noOfInvoices: 0,
+    months: "monthly",
   },
 ];
 
@@ -55,47 +54,42 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [getDashboard] = useGetApproverDashboardMutation();
-  const [selectedFilterValue, setSelectedFilterValue] = useState({ filter: selectedValue.value });
-
 
   useEffect(() => {
     fetchDashboardData(selectedValue.value);
   }, [selectedValue]);
 
-  const fetchDashboardData = async (value: string) => {
-    console.log("Fetching data for:", value); // Debug log
+  const fetchDashboardData = async (filterValue: string) => {
+    console.log("Fetching data for:", filterValue); // Debug log
     setLoading(true);
     try {
-      const response = await getDashboard(selectedFilterValue).unwrap();
-      if (response && response.invoiceOverview) {
-        const { total, paid, unPaid } = response.invoiceOverview;
+      const response = await getDashboard({ filter: filterValue }).unwrap();
+      console.log("response", response);
+      if (response) {
         setInvoiceAmount([
           {
             label: "Total Invoices",
             icon: CurrencyRupeeIcon,
             iconBg: "#635bff",
-            value: total.totalAmount.toFixed(2),
+            value: response.totalInvoices,
             childLabel: "Invoice child label",
-            months: value,
-            noOfInvoices: total.noOfInvoices,
+            months: filterValue,
           },
           {
             label: "Approved Invoices",
             icon: DoneIcon,
             iconBg: "#4E9F3D",
-            value: paid.totalAmount.toFixed(2),
+            value: response.approvedInvoices,
             childLabel: "Invoice child label",
-            months: value,
-            noOfInvoices: paid.noOfInvoices,
+            months: filterValue,
           },
           {
             label: "Pending Invoices",
             icon: ErrorIcon,
             iconBg: "#FF204E",
-            value: unPaid.totalAmount.toFixed(2),
+            value: response.pendingInvoices,
             childLabel: "Invoice child label",
-            months: value,
-            noOfInvoices: unPaid.noOfInvoices,
+            months: filterValue,
           },
         ]);
       }
@@ -106,16 +100,12 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
       setLoading(false);
     }
   };
-  
-  useEffect(() => {
-    setSelectedFilterValue({ filter: selectedValue.value });
-}, [selectedValue]);
 
   return (
     <Grid container spacing={2}>
       {invoiceAmount.map((data, index) => (
         <Grid key={index} item xs={4}>
-          <Card sx={{ width: "180px", height: "140px", padding: "10px 15px" }}>
+          <Card sx={{ width: "180px", height: "80px", padding: "10px 15px" }}>
             <Stack spacing={1}>
               <Stack
                 direction="row"
@@ -128,20 +118,9 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
                   </Typography>
                   <Typography variant="h6">{data.value}</Typography>
                 </Stack>
-                <Avatar
-                  sx={{ backgroundColor: `${data.iconBg}`, height: "30px", width: "30px" }}
-                >
+                <Avatar sx={{ backgroundColor: "#635bff", height: '30px', width: '30px' }}>
                   {React.createElement(data.icon, { width: 20, height: 20 })}
                 </Avatar>
-              </Stack>
-
-              <Stack sx={{ alignItems: "center" }} direction="row" spacing={1}>
-                <Typography color="text.secondary" variant="caption">
-                  No of Invoices:
-                </Typography>
-                <Typography ml={1} color="text.secondary" variant="caption">
-                  {data.noOfInvoices}
-                </Typography>
               </Stack>
               <Stack sx={{ alignItems: "center" }} direction="row" spacing={1}>
                 <Stack sx={{ alignItems: "center" }} direction="row" spacing={0.5}>
@@ -158,6 +137,8 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
           </Card>
         </Grid>
       ))}
+     <Grid item xs={12}>
+  </Grid>
     </Grid>
   );
 };

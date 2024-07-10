@@ -3,6 +3,7 @@ import { Grid, Typography, Box } from "@mui/material";
 import SelectDropdown from "../../../components/ui/SelectDropdown";
 import InvoiceStatus from "../InvoiceStatusChart";
 import InvoiceAmount from "../approver-dashboard/InvoiceAmount";
+import ApproverOverView from "./ApproverOverview";
 
 interface ValueProps {
   label: string;
@@ -30,8 +31,7 @@ const ApproverDashboardScreen = () => {
   return (
     <Box px={2} py={2}>
       <Grid container spacing={2} mb={2}>
-        <Grid item xs={6} display="flex" alignItems="center">
-        </Grid>
+        <Grid item xs={6} display="flex" alignItems="center"></Grid>
         <Grid
           item
           xs={6}
@@ -47,19 +47,14 @@ const ApproverDashboardScreen = () => {
           />
         </Grid>
       </Grid>
-      <Grid container spacing={2}>
+      <Grid item xs={12}>
         <Grid item xs={8}>
           <Typography variant="h6" gutterBottom>
             Overview
           </Typography>
           <InvoiceAmount selectedValue={selectedValue} />
         </Grid>
-        <Grid item xs={4}>
-          {/* <Typography variant="h6" gutterBottom>
-            Invoice Status
-          </Typography> */}
-          {/* <InvoiceStatus selectedValue={selectedValue} /> */}
-        </Grid>
+        <ApproverOverView />
       </Grid>
     </Box>
   );
