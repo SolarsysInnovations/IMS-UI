@@ -14,7 +14,6 @@ import {
   setCompanyData,
 } from "../../redux-store/company/companiesApi";
 import React from "react";
-import CompanyEdit from "../../pages/company/companyEditscreen";
 import { setData } from "../../redux-store/global/globalState";
 import TableHeader from "../../components/layouts/TableHeader";
 import CompanyDetails from "../../pages/company/companyDetailsScreen";
