@@ -310,7 +310,12 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                     return renderDatePickerField(field, meta, subField, setFieldValue);
                   } else if (subField.type === "select") {
                     return renderSelectField(field, meta, subField, setFieldValue,);
-                  } else if (subField.type === "selectCountry" || "selectState" || "selectCity") {
+
+                  } else if (subField.type === "radio") {
+                    return renderRadioField(field, meta, subField, setFieldValue);
+                  } else if (subField.type === "textArea") {
+                    return renderTextArea(field, meta, subField, setFieldValue);
+                  } else if (subField.type === "selectCountry" || subField.type === "selectState" || subField.type === "selectCity") {
                     let options = [];
                     if (subField.type === "selectCountry") {
                       options = countryOptions;
@@ -327,14 +332,12 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                         subField={subField}
                         setFieldValue={setFieldValue}
                       />
-                    );
-                  } else if (subField.type === "radio") {
-                    return renderRadioField(field, meta, subField, setFieldValue);
-                  } else if (subField.type === "textArea") {
-                    return renderTextArea(field, meta, subField, setFieldValue);
-                  } else {
+                    )
+                  }
+                  else {
                     return renderTextField(field, meta, subField);
                   }
+
                 }}
               </Field>
             </Grid>
