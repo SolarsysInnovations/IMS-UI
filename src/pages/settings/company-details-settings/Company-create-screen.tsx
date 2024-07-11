@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Box } from "@mui/material";
-import { useGetCompanySettingQuery} from "../../../redux-store/settings/companyDetailsApi";
+import { useGetCompanySettingQuery } from "../../../redux-store/settings/companyDetailsApi";
 import { useAddCompanySettingMutation, useUpdateCompanySettingMutation } from '../../../redux-store/settings/companyDetailsApi';
 import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
 import { companyValidationSchema } from '../../../constants/forms/validations/validationSchema';
@@ -15,10 +15,14 @@ import { CompanyFormProps } from '../../../types/types';
 import { Save } from '@mui/icons-material';
 
 const CreateCompany = ({ companyValue }: CompanyFormProps) => {
+
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = useState(false);
+
     const [addCompany, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddCompanySettingMutation();
+
     const [updateCompany, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateCompanySettingMutation();
+
     const { data: settingsList, refetch } = useGetCompanySettingQuery();
 
     const initialValue = companyValue || companyInitialValues;
@@ -66,7 +70,7 @@ const CreateCompany = ({ companyValue }: CompanyFormProps) => {
                 validationSchema={companyValidationSchema}
                 onSubmit={onSubmit}
                 buttons={[
-                    { label: 'Save',icon: Save, onClick: onSubmit }
+                    { label: 'Save', icon: Save, onClick: onSubmit }
                 ]}
             />
         </>

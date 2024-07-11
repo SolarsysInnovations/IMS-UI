@@ -7,13 +7,13 @@ import {
   MenuItem,
   ListItemIcon,
   Divider,
-  Tooltip
+  Tooltip, Typography
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react'
 import { AccountCircle, Logout, PersonAdd, Settings, Person, Lock } from '@mui/icons-material'
-import { logOut } from '../../redux-store/auth/authSlice'
-import { useDispatch } from 'react-redux'
+import { logOut, selectUserName } from '../../redux-store/auth/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../../redux-store/store'
 import DialogBoxUi from "../ui/DialogBox";
 import UserProfile from '../../pages/profile/UserProfile'
@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom'
 import ToastUi from '../../components/ui/ToastifyUi';
 import GroupIcon from '@mui/icons-material/Group';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { capitalize } from '../../services/utils/capitalization';
 
 const PopupComponents = {
   USER_PROFILE: 'userprofile',
@@ -29,11 +30,11 @@ const PopupComponents = {
 }
 
 const menuItems = [
-  { icon: <Person sx={{ color: 'grey.500', marginRight: "10px", ":hover": {color: "primary.main"} }} />, text: 'User Profile', component: PopupComponents.USER_PROFILE },
-  { icon: <Lock sx={{ color: 'grey.500', marginRight: "10px", ":hover": {color: "primary.main"} }} />, text: 'Change Password', component: PopupComponents.CHANGE_PASSWORD },
-  { icon: <PersonAdd sx={{ color: 'grey.500', marginRight: "10px", ":hover": {color: "primary.main"} }} />, text: 'Add another account' },
-  { icon: <Settings sx={{ color: 'grey.500', marginRight: "10px", ":hover": {color: "primary.main"} }} />, text: 'Settings', route: '/settings' },
-  { icon: <Logout sx={{ color: 'grey.500', marginRight: "10px", ":hover": {color: "primary.main"} }} />, text: 'Logout', action: 'logout' },
+  { icon: <Person sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'User Profile', component: PopupComponents.USER_PROFILE },
+  { icon: <Lock sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'Change Password', component: PopupComponents.CHANGE_PASSWORD },
+  { icon: <PersonAdd sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'Add another account' },
+  { icon: <Settings sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'Settings', route: '/settings' },
+  { icon: <Logout sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'Logout', action: 'logout' },
 ];
 
 const addMenuItems = [
@@ -113,6 +114,8 @@ export default function Header() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
+  const userName = useSelector(selectUserName);
+
   const handleMenuOpen = (setAnchor: any) => (event: any) => {
     setAnchor(event.currentTarget);
   }
@@ -176,6 +179,7 @@ export default function Header() {
                 }} />
               </IconButton>
             </Tooltip>
+            <Typography variant="caption" color="initial">{capitalize(userName)}</Typography>
           </Box>
           <MenuComponent
             anchorEl={anchorEl}

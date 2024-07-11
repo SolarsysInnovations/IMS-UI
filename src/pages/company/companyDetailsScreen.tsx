@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { CompanyData } from './companyListScreen';
 
 interface CompanyDetailsProps {
     details?: any;
@@ -11,10 +10,10 @@ interface CompanyDetailsProps {
 const CompanyDetails = () => {
     const companyValue = useSelector((state: any) => state.globalState.data);
     const [mergedData, setMergedData] = useState<any>({});
-    console.log("companyValue",companyValue);
+    console.log("companyValue", companyValue);
 
-    console.log("mergedData",mergedData);
-    
+    console.log("mergedData", mergedData);
+
     useEffect(() => {
         if (companyValue) {
             const mergedObject = {

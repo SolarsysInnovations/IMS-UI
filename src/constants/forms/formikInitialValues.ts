@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, companyInitialValueProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps, companyDetailsInitialValueProps } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps, CompanyInitialValueProps } from "../../types/types";
 import ServicesList from "../../pages/service/service-list-screen";
 import { format } from "path";
 
@@ -9,32 +9,9 @@ export const loginInitialValue: LoginProps = {
     password: "",
 }
 
-export const companyInitialValues: companyInitialValueProps = {
+export const companyInitialValues: CompanyInitialValueProps = {
+    // * ---------- user registration ----------
     id: "",
-    companyName: "",
-    companyAddress: "",
-    companyState: "",
-    companyCountry: "",
-    companyEmail: "",
-    companyPhone: "",
-    companyCell: "",
-    companyWebsite: "",
-    companyTaxNumber: "",
-    companyRegNumber: "",
-};
-
-export const companyDetailsInitialValues: companyDetailsInitialValueProps = {
-    id: "",
-    companyName: "",
-    companyAddress: "",
-    companyState: "",
-    companyCountry: "",
-    companyEmail: "",
-    companyPhone: "",
-    companyCell: "",
-    companyWebsite: "",
-    companyTaxNumber: "",
-    companyRegNumber: "",
     userName: "",
     userEmail: "",
     password: "",
@@ -42,7 +19,18 @@ export const companyDetailsInitialValues: companyDetailsInitialValueProps = {
     userMobile: "",
     userAccess: "",
     description: "",
-    companyId: ""
+    // companyName: "Marvel",
+    // * ---------- company information ----------
+    companyName: "",
+    companyEmail: "",
+    companyPhone: "",
+    companyCell: "",
+    companyCountry: "",
+    companyState: "",
+    companyAddress: "",
+    companyWebsite: "",
+    companyTaxNumber: "",
+    companyRegNumber: ""
 };
 
 export const customerInitialValues = {

@@ -68,6 +68,10 @@ export enum ApiEndpoint {
     DASHBOARD_GET = "dashboardGet",
     //Company
     COMPANY_GET = "companyGet",
+    COMPANY_LIST = "companyList",
+    COMPANY_CREATE = "companyCreate",
+    COMPANY_UPDATE = "companyUpdate",
+    COMPANY_DELETE = "companyDelete",
     // super admin
     DASHBOARD_SUPER_ADMIN = "dashboardSuperAdmin",
     //approver
@@ -140,9 +144,13 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
     // company
     [ApiEndpoint.COMPANY_GET]: `/company/list`,
+    [ApiEndpoint.COMPANY_CREATE]: `/company/create`,
+    [ApiEndpoint.COMPANY_UPDATE]: `/company/update`,
+    [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
+    [ApiEndpoint.COMPANY_LIST]: `/company/list`,
     // dashboard super admin 
     [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/superAdmin/dashboard/overview`,
-        // dashboard super admin 
+    // dashboard super admin 
     [ApiEndpoint.DASHBOARD_APPROVER]: `/approver/dashboard`
 
 };

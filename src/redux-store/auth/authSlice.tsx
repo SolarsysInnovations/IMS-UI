@@ -20,8 +20,17 @@ const tokenFromStorage = localStorage.getItem('accessToken');
 const refreshTokenFromStorage = localStorage.getItem('refresh');
 const userRoleFromStorage = localStorage.getItem("userRole");
 const userEmailFromStorage = localStorage.getItem("userEmail");
+const userNameFromStorage = localStorage.getItem("userName");
+
 // Define the initial state
-const initialState: AuthState = { user: null, accessToken: tokenFromStorage || null, refresh: refreshTokenFromStorage || null, userRole: userRoleFromStorage || null, userName: null, userEmail: userEmailFromStorage || null };
+const initialState: AuthState = {
+    user: null,
+    accessToken: tokenFromStorage || null,
+    refresh: refreshTokenFromStorage || null,
+    userRole: userRoleFromStorage || null,
+    userName: userNameFromStorage || null,
+    userEmail: userEmailFromStorage || null
+};
 
 // Create the authentication slice
 const authSlice = createSlice({
@@ -42,8 +51,6 @@ const authSlice = createSlice({
             localStorage.setItem('userRole', userRole || "");
             localStorage.setItem('userName', userName || "");
             localStorage.setItem('userEmail', userEmail || "");
-            // console.log(localStorage.getItem('userRole'));
-            // console.log(localStorage.getItem('userName'));
         },
         logOut: (state) => {
             state.user = null;
@@ -77,4 +84,4 @@ export const selectCurrentUser = (state: { auth: AuthState }) => state.auth.user
 export const selectCurrentToken = (state: { auth: AuthState }) => state.auth.accessToken;
 export const selectRefreshToken = (state: { auth: AuthState }) => state.auth.refresh;
 export const selectUserRole = (state: { auth: AuthState }): string | null => state.auth.userRole;
-
+export const selectUserName = (state: { auth: AuthState }): string | null => state.auth.userName;

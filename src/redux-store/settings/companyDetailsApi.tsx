@@ -48,7 +48,7 @@ export const settingscompanyApi = apiSlice.injectEndpoints({
                 body: company,
             }),
         }),
-        updateCompanySetting: builder.mutation<any, { id: number; company: Partial<any> }>({
+        updateCompanySetting: builder.mutation<any, { id: string | undefined; company: Partial<any> }>({
             query: ({ id, company }) => ({
                 url: `/setting/update/${id}`,
                 method: 'POST',
@@ -57,13 +57,13 @@ export const settingscompanyApi = apiSlice.injectEndpoints({
         }),
         getCompanySettingById: builder.mutation<void, number>({
             query: (id) => ({
-                 url: `setting/get`,
+                url: `setting/get`,
                 method: 'POST',
             }),
         }),
         getCompanySettingByIdMutation: builder.mutation<void, number>({
             query: (id) => ({
-                 url: `setting/get/${id}`,
+                url: `setting/get/${id}`,
                 method: 'POST',
             }),
         }),

@@ -246,37 +246,47 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
 
   console.log("field", field.subFields);
 
+  const filteredData = field.subFields?.filter((data) => data.type === "selectCountry" || data.type === "selectState" || data.type === "selectCity");
+
+  console.log("filteredData", filteredData);
+
   const { values } = useFormikContext<FormFieldProps>();
 
   console.log("values", values);
-  const country = Country.getAllCountries();
-  const countryOptionsGenerate = generateOptions(Country.getAllCountries(), "name", "isoCode");
-  console.log("countryOptions", countryOptionsGenerate);
+
+  const countryOptionsGenerate = useMemo(
+    () => generateOptions(Country.getAllCountries(), "name", "isoCode"),
+    []
+  );
 
   const [countryOptions, setCountryOptions] = useState<any[]>(countryOptionsGenerate || []);
-  // country
-  // const countryData = useSelector((state: any) => state.globalState.data);
-  const [stateOptions, setStateOptions] = useState([]);
+  const [stateOptions, setStateOptions] = useState<any[]>([]);
   const [cityOptions, setCityOptions] = useState<any[]>([]);
-  // console.log("countryData", countryData);
-  const state = State.getAllStates();
-  console.log("state", state);
+
+  console.log("countryOptions", countryOptions);
+  console.log("stateOptions", stateOptions);
+  console.log("cityOptions", cityOptions);
 
   useEffect(() => {
-    if (values) {
-      const getStateByIsoCode = State.getStatesOfCountry(values.country);
-      console.log("getStateByIsoCode", getStateByIsoCode);
-      console.log(getStateByIsoCode);
+    if (filteredData) {
+      const selectedCountryField = filteredData.find((data) => data.type === "selectCountry");
+      const selectedStateField = filteredData.find((data) => data.type === "selectState");
+
+      if (!selectedCountryField || !selectedStateField) return;
+
+      const getStateByIsoCode = State.getStatesOfCountry(values[selectedCountryField.name]);
       const stateOptionsData = generateOptions(getStateByIsoCode, "name", "isoCode");
-      setStateOptions(stateOptionsData)
-      const citiesOfAllStates = City.getCitiesOfState(values.country, values.state);
-      const generateCityOptions = generateOptions(citiesOfAllStates, "name", "name")
+      setStateOptions(stateOptionsData);
+
+      const citiesOfAllStates = City.getCitiesOfState(values[selectedCountryField.name], values[selectedStateField.name]);
+
+      const generateCityOptions = generateOptions(citiesOfAllStates, "name", "name");
       setCityOptions(generateCityOptions);
-      console.log("citiesOfAllStates", generateCityOptions);
+
     }
   }, [values]);
 
-  console.log("selectedCountry", stateOptions);
+
 
   // Memoize the updateFormValue function to prevent unnecessary re-renders
   const memoizedUpdateFormValue = useMemo(() => updateFormValue, [updateFormValue]);
@@ -292,8 +302,6 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
       memoizedUpdateFormValue(setFieldValue);
     }
   }, [memoizedUpdateFormValue, setFieldValue]);
-
-
 
   switch (field.type) {
     case 'section':
@@ -337,7 +345,6 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                   else {
                     return renderTextField(field, meta, subField);
                   }
-
                 }}
               </Field>
             </Grid>
