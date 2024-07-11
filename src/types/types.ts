@@ -241,7 +241,7 @@ export interface SendEmailInitialValueProps {
 }
 
 export interface RoleInitialValueProps {
-    username: string,
+    userName: string,
     password: string,
     userRole: string,
     userEmail: string,

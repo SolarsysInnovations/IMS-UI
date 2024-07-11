@@ -29,7 +29,7 @@ const UserProfile = () => {
             <TableHeader headerName="User Details" />
             <MenuItem>
                 <Typography variant="body2" >
-                    <strong>Username :</strong><span style={{ marginLeft: '13px' }}> {userData?.username || ''}</span>
+                    <strong>UserName :</strong><span style={{ marginLeft: '13px' }}> {userData?.userName || ''}</span>
                 </Typography>
             </MenuItem>
             <MenuItem>

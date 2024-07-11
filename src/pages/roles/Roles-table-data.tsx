@@ -1,131 +1,172 @@
-import React from 'react';
-import { DataGrid, GridColDef, GridToolbar, GridRenderCellParams } from '@mui/x-data-grid';
+import React, { useEffect, useState } from 'react';
+import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton, Stack } from '@mui/material';
 import { GridDeleteIcon } from "@mui/x-data-grid";
-import Box from '@mui/material/Box';
+import { useDeleteRoleMutation, useGetRoleByIdMutation, useGetRoleQuery, useUpdateRoleMutation,setRoleData } from '../../redux-store/role/roleApi';
+import usePathname from '../../hooks/usePathname';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { AppDispatch } from '../../redux-store/store';
+import { useDispatch } from 'react-redux';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import RoleForm from './Roles-form';
+import { RolesEditFields } from '../../constants/form-data/form-data-json';
 
-interface GridDataProps {
-    showToolbar: boolean;
-    columns: GridColDef[];
-    tableData: any[];
-    checkboxSelection: boolean;
-    onRowEdit?: (id: string) => void;
-    onRowDelete: (id: string) => void;
-}
+const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
-const RolesGridDataUi: React.FC<GridDataProps> = ({ showToolbar, columns, tableData, checkboxSelection, onRowEdit, onRowDelete }) => {
+const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
 
-    const handleEditButtonClick = (id: string) => {
-        if (onRowEdit) {
-            onRowEdit(id);
+    const [status, setStatus] = useState(params.value);
+    const [updateRoles, { isSuccess: updateSuccess }] = useUpdateRoleMutation();
+    const { data: rolesList, error, isLoading, refetch: fetchRolesList } = useGetRoleQuery();
+
+    useEffect(() => {
+        if (updateSuccess) {
+            fetchRolesList();
+        }
+    }, [updateSuccess, fetchRolesList]);
+
+    const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
+        const newStatus = event.target.value as string;
+        setStatus(newStatus);
+
+        const updatedRoles = {
+            ...params.row,
+            userRole: newStatus,
+        };
+
+        console.log("Updating invoice with payload:", updatedRoles);
+
+        try {
+            const response = await updateRoles({ id: updatedRoles.id, roles: updatedRoles });
+            console.log("Update response:", response);
+            if ('error' in response) {
+                console.error("Error updating invoice status:", response.error);
+            } else {
+                console.log(`Invoice status updated: ${newStatus}`);
+            }
+        } catch (error) {
+            console.error('Error updating invoice status:', error);
         }
     };
-    const handleDeleteButtonClick = (id: string) => {
-        onRowDelete(id);
-    };
-
-    const modifiedColumns = columns.map(col => {
-        if (col.field === 'Action') {
-            return {
-                ...col,
-                renderCell: (params: GridRenderCellParams) => (
-                    <Stack direction="row" spacing={1}>
-                        <IconButton onClick={() => handleEditButtonClick(params.id.toString())}>
-                            <EditIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small'/>
-                        </IconButton>
-                        <IconButton sx={{ padding: "2px" }} aria-label="" onClick={() => handleDeleteButtonClick(params.id.toString())}>
-                            <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
-                        </IconButton>
-                    </Stack>
-                ),
-            };
-        }
-        return col;
-    });
 
     return (
-        <Box sx={{ height: "fit-content", width: '100%', }}>
-            <DataGrid
-                rows={tableData}
-                columns={modifiedColumns}
-                initialState={{
-                    // * below pagination for grid table
-                    pagination: {
-                        paginationModel: {
-                            pageSize: 8,
-                        },
-                    },
-                }}
-                checkboxSelection={checkboxSelection}
-                disableRowSelectionOnClick
-                components={{
-                    Toolbar: showToolbar ? () => <div>Toolbar</div> : undefined,
-                }}
-                 localeText={{
-                    toolbarDensity: 'Size',
-                    toolbarDensityLabel: 'Size',
-                    toolbarDensityCompact: 'Small',
-                    toolbarDensityStandard: 'Medium',
-                    toolbarDensityComfortable: 'Large',
-                }}
-                slots={{
-                    toolbar: showToolbar ? GridToolbar : undefined,
-                }}
-
-                slotProps={{
-                    toolbar: {
-                        printOptions: { disableToolbarButton: true },
-                        csvOptions: { disableToolbarButton: false },
-                        showQuickFilter: true,
-                    }
-                }}
-                rowHeight={40}
-                columnBuffer={2} columnThreshold={2}
-                pageSizeOptions={[15]}
-                sx={{
-                    overflow: "hidden",
-                    borderRadius: "10px",
-                    "& .MuiDataGrid-root": {
-                        color: `#fff`
-                    },
-                    "& .MuiIconButton-label": {
-                        color: `#fff`
-                    },
-                    "& .MuiDataGrid-toolbarContainer": {
-                        padding: " 2px 4px 0px 0px",
-                        backgroundColor: "#fafaff",
-                        borderTopLeftRadius: "10px",
-                        borderTopRightRadius: "10px",
-                    },
-                    "& .MuiButton-root": {
-                        color: "grey.600",
-                        backgroundColor: "transparent",
-                    },
-                    "& ::-webkit-scrollbar": {
-                        height: "8px!important",
-                        width: "80px!important",
-
-                    },
-                    "& ::-webkit-scrollbar-track": {
-                        backgroundColor: "#f5f5f5"
-                    },
-                    "& ::-webkit-scrollbar-thumb": {
-                        width: "80px!important",
-                        borderRadius: "10px",
-                        backgroundColor: "grey.200"
-                    },
-                    "& .css-ha70k2-MuiInputBase-root-MuiInput-root": {
-                        fontSize: "12px"
-                    },
-                    ".css-1qgbav7-MuiButtonBase-root-MuiButton-root": {
-                        fontSize: "12px"
-                    }
-
-                }}
-            />
-        </Box>
+        <select
+            value={status}
+            onChange={handleChange}
+            style={{ fontSize: "12px", padding: "5px 5px", borderRadius: "5px" }}
+        >
+            {invoiceOptions.map((option) => (
+                <option key={option} value={option}>{option}</option>
+            ))}
+        </select>
     );
 };
+const MyCellRenderer = ({ id, }: { id: any, }) => {
 
-export default RolesGridDataUi;
+    const dispatch = useDispatch<AppDispatch>();
+    const [openModal, setOpenModal] = useState(false);
+    const [roleId, setRoleId] = useState<string | null>(null);
+    const [rolesData, setRolesData] = useState(null);
+    const { data: roleDetails, refetch } = useGetRoleQuery();
+    const pathname = usePathname();
+    const { data: roles, error, isLoading, refetch: fetchRolesList } = useGetRoleQuery();
+    const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetRoleByIdMutation();
+    const [deleteRole,{ isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteRoleMutation();
+
+    useEffect(() => {
+        dispatch(setRoleData(roleData));
+    }, [roleData, dispatch, C_success])
+
+    useSnackbarNotifications({
+        error: roleDeleteError,
+        errorMessage: 'Error deleting role',
+        success: roleDeleteSuccess,
+        successMessage: 'Role deleted successfully',
+        errorObject: roleDeleteErrorObject,
+    })
+
+    const handleModalClose = () => {
+        setOpenModal(false);
+        refetch();
+    };
+
+    const handleEditClick = async () => {
+        try {
+            const response = await getRole(id);
+            console.log("response",response)
+            if ('data' in response) {
+                const roleData = response.data;
+                await dispatch(setRoleData(roleData));
+                setOpenModal(true);
+            } else {
+                console.error('Error response:', response.error);
+            }
+        } catch (error) {
+            console.error('Error handling edit click:', error);
+        }
+    }
+
+    const handleDeleteClick = () => {
+        const confirmed = window.confirm("Are you sure you want to delete this role?");
+        if (confirmed) {
+            deleteRole(id);
+        }
+    };
+
+    return (
+        <Stack direction="row" spacing={1}>
+            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
+                <EditIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
+            </IconButton>
+            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
+                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
+            </IconButton>
+            <DialogBoxUi
+                open={openModal}
+                content={<RoleForm onClose={handleModalClose} RolesEditInitialValues={roleData} HeaderName="Update Role" RolesFields={RolesEditFields}/>}
+                handleClose={handleModalClose}
+            />
+        </Stack>
+    );
+
+}
+    
+export const columns: GridColDef[] = [
+        {
+            field: 'Action',
+            headerName: 'Action',
+            width: 140,
+            editable: false,
+            renderCell: (params: any) => <MyCellRenderer id={params.row?.id}  />,
+        },
+        {
+            field: 'userName',
+            headerName: 'User Name',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'userEmail',
+            headerName: 'Email',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'userAccess',
+            headerName: 'Access',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'userRole',
+            headerName: 'User Role',
+            width: 120,
+            editable: true,
+            type: "singleSelect",
+            valueOptions: ["ADMIN", "APPROVER", "ENDUSER",],
+            renderCell: (params: GridRenderCellParams) => (
+                <RolesDropdown params={params} />
+            ),
+        },
+    ];

@@ -1,7 +1,7 @@
 import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
-import { FieldProps } from "../../types/types";
+import { FieldProps} from "../../types/types";
 import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
 import { useState } from "react";
@@ -326,58 +326,50 @@ export const invoiceFields: FieldProps[] = [
     },
 ]
 
-// const MyForm: React.FC = () => {
-//     const [country, setCountry] = useState('');
-//     const [region, setRegion] = useState('');
-
-//     const handleCountryChange = (val: string) => {
-//         setCountry(val);
-//         setRegion('');  // Reset region when country changes
-//     };
-
-//     const handleRegionChange = (val: string) => {
-//         setRegion(val);
-//     };
-
-//     const renderField = (field: FieldProps) => {
-//         if (field.component) {
-//             return field.component({
-//                 value: field.name === 'country' ? country : region,
-//                 onChange: field.name === 'country' ? handleCountryChange : handleRegionChange,
-//                 country: country
-//             });
-//         }
-
-//         return (
-//             <input
-//                 type={field.type || 'text'}
-//                 required={field.required}
-//                 disabled={field.disabled}
-//                 name={field.name}
-//                 className={`grid-item grid-size-${field.gridSize}`}
-//             />
-//         );
-//     };
-
-//     return (
-//         <form>
-//             {customerFields.map((section, index) => (
-//                 <div key={index} className={`section-title grid-size-${section.titleGridSize}`}>
-//                     {section.label && <h3>{section.label}</h3>}
-//                     {section.subFields?.map((field, idx) => (
-//                         <div key={idx} className={`grid-item grid-size-${field.gridSize}`}>
-//                             <label>{field.label}</label>
-//                             {renderField(field)}
-//                         </div>
-//                     ))}
-//                 </div>
-//             ))}
-//         </form>
-//     );
-// };
-
-// export default MyForm;
+export const RolesFields: FieldProps[] = [
+    {
+        type: 'section',
+        titleGridSize: 12,
+        name: "info",
+        subFields: [
+            { name: 'userName', required: true, disabled: false, label: 'user Name', type: 'text', gridSize: 6, validation: Yup.string().required('userName is required') },
+            {
+                name: 'userRole', required: true, disabled: false, label: 'user Role', type: 'select', gridSize: 6, options: [
+                { value: "ADMIN", label: "ADMIN" },
+                { value: "APPROVER", label: "APPROVER" },
+                { value: "ENDUSER", label: "ENDUSER" },
+            ], validation: Yup.string().required('userRole is required') },
+            { name: 'userEmail', required: true, disabled: false, label: 'user Email', type: 'email', gridSize: 6, validation: Yup.string().required('userEmail is required') },
+            {
+                name: 'userAccess', required: true, disabled: false, label: 'user Access', type: 'select', gridSize: 6, options: [
+                { value: "Full Access", label: "Full Access" },
+                { value: "Limited Access", label: "Limited Access" }
+            ], validation: Yup.string().required('userAccess is required') },
+            { name: 'password', required: true, disabled: false, label: 'Password', type: 'password', gridSize: 6, validation: Yup.string().required('password is required') },
+        ]
+    },
+];
 
 
-
-// !  --------------------------
+export const RolesEditFields: FieldProps[] = [
+    {
+        type: 'section',
+        titleGridSize: 12,
+        name: "info",
+        subFields: [
+            { name: 'userName', required: true, disabled: false, label: 'user Name', type: 'text', gridSize: 6, validation: Yup.string().required('userName is required') },
+            {
+                name: 'userRole', required: true, disabled: false, label: 'user Role', type: 'select', gridSize: 6, options: [
+                { value: "ADMIN", label: "ADMIN" },
+                { value: "APPROVER", label: "APPROVER" },
+                { value: "ENDUSER", label: "ENDUSER" },
+            ], validation: Yup.string().required('userRole is required') },
+            { name: 'userEmail', required: true, disabled: false, label: 'user Email', type: 'email', gridSize: 6, validation: Yup.string().required('userEmail is required') },
+            {
+                name: 'userAccess', required: true, disabled: false, label: 'user Access', type: 'select', gridSize: 6, options: [
+                { value: "Full Access", label: "Full Access" },
+                { value: "Limited Access", label: "Limited Access" }
+            ], validation: Yup.string().required('userAccess is required') }
+        ]
+    },
+];

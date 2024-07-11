@@ -43,7 +43,6 @@ const CompanyList = () => {
     const { data: company, error, isLoading, refetch } = useGetCompanyQuery();
     const [companyFormData, setCompanyFormData] = useState<any>({});
     const [openModal, setOpenModal] = useState(false);
-    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
     const [mergedData, setMergedData] = useState<CompanyData[]>([]);
 
 
@@ -74,14 +73,6 @@ const CompanyList = () => {
     const buttons = [
         { label: 'Create Company', icon: Add, onClick: () => navigate("/company/create") },
     ];
-
-    const handleDeleteSuccess = useCallback(() => {
-        setShowDeleteSuccessToast(true);
-        setTimeout(() => {
-            setShowDeleteSuccessToast(false);
-        }, 3000);
-        refetch();
-    }, [refetch]);
     
     const handleSubmit = async (values: any) => {
         try {
@@ -101,7 +92,7 @@ const CompanyList = () => {
     return (
         <>
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true}  columns={columns}  onDeleteSuccess={handleDeleteSuccess} tableData={mergedData || []} checkboxSelection={false} /> 
+            <GridDataUi showToolbar={true}  columns={columns} tableData={mergedData || []} checkboxSelection={false} /> 
         </>
     );
 };

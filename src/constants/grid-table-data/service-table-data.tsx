@@ -19,7 +19,7 @@ import ServiceEditScreen from "../../pages/service/service-edit-screen";
 
 const id = 1
 
-const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () => void }) => {
+const MyCellRenderer = ({ id }: { id: any }) => {
     // const [serviceDetails, setServiceDetails] = useLocalStorage(LocalStorageKeys.SERVICE_EDIT, null);
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
@@ -67,12 +67,6 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
             console.error('Error handling edit click:', error);
         }
     }
-    useEffect(() => {
-        if (isSuccess) {
-            onDeleteSuccess();
-        }
-        refetch();
-    }, [isSuccess,  onDeleteSuccess]);
 
     const handleDeleteClick = () => {
         const confirmed = window.confirm("Are you sure you want to delete this service?");
@@ -101,14 +95,14 @@ const MyCellRenderer = ({ id, onDeleteSuccess }: { id: any, onDeleteSuccess: () 
 };
 
 
-export const columns = (onDeleteSuccess: () => void): GridColDef[] => [
+export const columns: GridColDef[] = [
 
     {
         field: 'Action',
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} onDeleteSuccess={onDeleteSuccess}  />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row?.id}  />,
     },
     // {
     //     field: 'id',

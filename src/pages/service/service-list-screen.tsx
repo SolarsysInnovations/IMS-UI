@@ -29,16 +29,6 @@ const ServicesList = () => {
         { label: 'Create Service List', icon: Add, onClick: () => setOpenModal(true) },
     ];
 
-     const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
-
-    const handleDeleteSuccess = useCallback(() => {
-        setShowDeleteSuccessToast(true);
-        setTimeout(() => {
-            setShowDeleteSuccessToast(false);
-        }, 3000);
-        refetch();
-    },[refetch]);
-
     const pathname = usePathname();
     const handleModalClose = () => {
         refetch()
@@ -50,15 +40,8 @@ const ServicesList = () => {
     }, [serviceStateDetails])
     return (
         <>
-            {showDeleteSuccessToast && (
-                <SnackBarUi
-                    message="Successfully deleted the service"
-                    severity= "success"
-                    isSubmitting={true}
-                />
-            )}
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} onDeleteSuccess={handleDeleteSuccess} columns={columns(handleDeleteSuccess)} tableData={serviceList || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} columns={columns || []} tableData={serviceList || []} checkboxSelection={false} />
             <ModalUi open={openModal} onClose={handleModalClose}>
                 <Box sx={{ marginTop: "15px" }}>
                     <ServiceCreate />
