@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { setCountry, setData } from '../../redux-store/global/globalState';
 import { getStateByCodeAndCountry } from 'country-state-city/lib/state';
+import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 
 console.log("Hello world", Country.getAllCountries());
 
@@ -149,6 +150,7 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 };
 
 const renderTextField = (field: any, meta: any, subField: SubField) => (
+  //return (
   <TextFieldUi
     required={true}
     disabled={false}
@@ -165,6 +167,35 @@ const renderTextField = (field: any, meta: any, subField: SubField) => (
     error={meta.touched && !!meta.error}
     helperText={subField?.helperText}
   />
+  //)
+);
+
+const renderPasswordField = (field: any, meta: any, subField: SubField, passwordVisible: boolean, setPasswordVisible: { (value: React.SetStateAction<boolean>): void; (arg0: boolean): void; }) => (
+  //return (
+  <TextFieldUi
+    required={true}
+    disabled={false}
+    {...field}
+    endAdornment={passwordVisible ? <IconButton onClick={() => {
+      setPasswordVisible(!passwordVisible)
+    }}>
+      <VisibilityOutlined />
+    </IconButton> : <IconButton onClick={() => {
+      setPasswordVisible(!passwordVisible)
+    }}>
+      <VisibilityOff />
+    </IconButton>}
+    value={field.value || ""}
+    startAdornment={subField.startAdornment ? <span>{subField.startAdornment}</span> : undefined}
+    //endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
+    type={passwordVisible ? 'text' : subField.type}
+    fullWidth
+    id={subField.name}
+    label={subField.label}
+    error={meta.touched && !!meta.error}
+    helperText={subField?.helperText}
+  />
+  //)
 );
 
 const renderTextArea = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => (
@@ -266,6 +297,11 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
   console.log("countryOptions", countryOptions);
   console.log("stateOptions", stateOptions);
   console.log("cityOptions", cityOptions);
+  // console.log("countryData", countryData);
+  const state = State.getAllStates();
+  console.log("state", state);
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   useEffect(() => {
     if (filteredData) {
@@ -341,6 +377,9 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                         setFieldValue={setFieldValue}
                       />
                     )
+                  }
+                  else if (subField.type === 'password') {
+                    return renderPasswordField(field, meta, subField, passwordVisible, setPasswordVisible)
                   }
                   else {
                     return renderTextField(field, meta, subField);

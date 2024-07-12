@@ -11,20 +11,10 @@ const PaymentTermsList = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     const { data: paymentTermsList, error, isLoading, refetch } = useGetPaymentTermsQuery();
-    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false);
-
-    const handleDeleteSuccess = useCallback(() => {
-        setShowDeleteSuccessToast(true);
-        setTimeout(() => {
-            setShowDeleteSuccessToast(false);
-        }, 3000);
-        refetch();
-
-    }, [refetch]);
 
     return (
         <>
-            <GridDataUi showToolbar={false} onDeleteSuccess={handleDeleteSuccess} columns={paymentTermsColumns} tableData={paymentTermsList || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={false} columns={paymentTermsColumns} tableData={paymentTermsList || []} checkboxSelection={false} />
         </>
     )
 }

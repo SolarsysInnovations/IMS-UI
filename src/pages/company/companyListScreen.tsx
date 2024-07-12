@@ -19,15 +19,14 @@ const CompanyList = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+
     const [updateCustomer, { isSuccess, isError }] = useUpdateCompanyMutation();
+
     const { data: company, error, isLoading, refetch } = useGetCompanyQuery();
 
-    console.log("companyList", company);
-
     const [mergedData, setMergedData] = useState<any[]>([]);
-    const pathname = usePathname();
 
-    console.log('company vaadasd', company);
+    const pathname = usePathname();
 
     useEffect(() => {
         if (company && !isLoading && !error) {
@@ -45,10 +44,7 @@ const CompanyList = () => {
                 companyName: item.companyDetails.companyName,
                 companyPhone: item.companyDetails.companyPhone
             }));
-            console.log("mergedArray new", mergedArray);
             setMergedData(mergedArray);
-            console.log('company data', company);
-            console.log("merged data", mergedData);
         }
     }, [company, isLoading, error]);
 

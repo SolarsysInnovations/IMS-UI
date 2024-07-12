@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useGetCompanyQuery, useAddCompanyMutation, useUpdateCompanyMutation } from '../../redux-store/company/companiesApi';
-import { CompanyFields } from '../../constants/form-data/form-data-json';
+import { CompanyEditFields, CompanyFields } from '../../constants/form-data/form-data-json';
 import { companyInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { companyValidationSchema } from '../../constants/forms/validations/validationSchema';
@@ -12,9 +12,10 @@ import { CompanyInitialValueProps } from '../../types/types';
 
 interface CompanyValueProps {
     companyEditInitialValues: any;
+    mode: 'create' | 'edit';
 };
 
-const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
+const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) => {
 
     const [addCompany, { isLoading: companyAddLoading, isSuccess: companyAddSuccess, isError: companyAddError, error: companyAddErrorObject }] = useAddCompanyMutation();
 
@@ -25,6 +26,7 @@ const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const initialValues = companyEditInitialValues || companyInitialValues;
+    const fields = mode === 'create' ? CompanyFields : CompanyEditFields;
 
     useSnackbarNotifications({
         error: companyAddError,
@@ -48,41 +50,57 @@ const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
 
     const onSubmit = useMemo(() => async (values: CompanyInitialValueProps, actions: any) => {
         try {
-            console.log("values", values);
-
-            const isEditMode = Boolean(values.id);
-
-            const transformedData = {
-                register: {
-                    userName: values.userName,
-                    userEmail: values.userEmail,
-                    password: values.password,
-                    userRole: values.userRole,
-                    userMobile: values.userMobile,
-                    userAccess: values.userAccess,
-                    description: values.description,
-                },
-                companyDetails: {
-                    companyName: values.companyName,
-                    companyAddress: values.companyAddress,
-                    companyState: values.companyState,
-                    companyCountry: values.companyCountry,
-                    companyEmail: values.companyEmail,
-                    companyPhone: values.companyPhone,
-                    companyCell: values.companyCell,
-                    companyWebsite: values.companyWebsite,
-                    companyTaxNumber: values.companyTaxNumber,
-                    companyRegNumber: values.companyRegNumber
-                }
-            };
-
-            if (isEditMode) {
-                const id = values.id;
+            const id = values.id;
+            if (mode === 'edit' && companyEditInitialValues) {
+                const transformedData = {
+                    register: {
+                        userName: values.userName,
+                        userEmail: values.userEmail,
+                        // password: values.password,
+                        userRole: values.userRole,
+                        userMobile: values.userMobile,
+                        userAccess: values.userAccess,
+                        description: values.description,
+                    },
+                    companyDetails: {
+                        companyName: values.companyName,
+                        companyAddress: values.companyAddress,
+                        companyState: values.companyState,
+                        companyCountry: values.companyCountry,
+                        companyEmail: values.companyEmail,
+                        companyPhone: values.companyPhone,
+                        companyCell: values.companyCell,
+                        companyWebsite: values.companyWebsite,
+                        companyTaxNumber: values.companyTaxNumber,
+                        companyRegNumber: values.companyRegNumber
+                    }
+                };
                 await updateCompany({ id, company: transformedData });
-                console.log('Company updated:', transformedData);
             } else {
+                const transformedData = {
+                    register: {
+                        userName: values.userName,
+                        userEmail: values.userEmail,
+                        password: values.password,
+                        userRole: values.userRole,
+                        userMobile: values.userMobile,
+                        userAccess: values.userAccess,
+                        description: values.description,
+                    },
+                    companyDetails: {
+                        companyName: values.companyName,
+                        companyAddress: values.companyAddress,
+                        companyState: values.companyState,
+                        companyCountry: values.companyCountry,
+                        companyEmail: values.companyEmail,
+                        companyPhone: values.companyPhone,
+                        companyCell: values.companyCell,
+                        companyWebsite: values.companyWebsite,
+                        companyTaxNumber: values.companyTaxNumber,
+                        companyRegNumber: values.companyRegNumber
+                    }
+                };
                 await addCompany(transformedData);
-                console.log('Company added:', transformedData);
             }
 
             dispatch(clearData());
@@ -93,7 +111,7 @@ const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
         } finally {
             actions.setSubmitting(false);
         }
-    }, [updateCompany, dispatch]);
+    }, [updateCompany, dispatch, addCompany, companyEditInitialValues, mode]);
 
 
     return (
@@ -101,7 +119,7 @@ const CompanyCreate = ({ companyEditInitialValues }: CompanyValueProps) => {
             <DynamicFormCreate
                 showTable={true}
                 // fields={Object.keys(companyEditInitialValues).length === 0 ? CompanyFields : CompanyEditFields}
-                fields={CompanyFields}
+                fields={fields}
                 initialValues={initialValues}
                 validationSchema={companyValidationSchema}
                 onSubmit={onSubmit}

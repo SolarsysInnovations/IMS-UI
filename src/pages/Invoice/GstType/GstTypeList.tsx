@@ -16,27 +16,11 @@ import SnackBarUi from '../../../components/ui/Snackbar'
 
 const GstTypeList = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { data: gstTypeList, error, isLoading, refetch } = useGetGstTypeQuery();
-    const [showDeleteSuccessToast, setShowDeleteSuccessToast] = useState(false); 
+    const { data: gstTypeList, error, isLoading, refetch } = useGetGstTypeQuery(); 
 
-    const handleDeleteSuccess = useCallback(() => {
-        setShowDeleteSuccessToast(true);
-        setTimeout(() => {
-            setShowDeleteSuccessToast(false);
-        }, 3000);
-         refetch();
-         
-    },[refetch]);
     return (
         <>
-            {showDeleteSuccessToast && (
-                <SnackBarUi
-                    message="Successfully deleted the GstType"
-                    severity= "success"
-                    isSubmitting={true}
-                />
-            )}
-            <GridDataUi showToolbar={false} onDeleteSuccess={handleDeleteSuccess} columns={gstTypeColumns(handleDeleteSuccess)} tableData={gstTypeList || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={false} columns={gstTypeColumns} tableData={gstTypeList || []} checkboxSelection={false} />
         </>
     )
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Card, CardContent, IconButton, CardHeader } from "@mui/material";
+import { Box, Typography, Card, CardContent, IconButton, CardHeader, Grid } from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -71,69 +71,67 @@ const PortalLinkList: React.FC = () => {
 
   return (
     <div>
-      <Box>
-        <DialogBoxUi
-          open={opendialogBox}
-          content={
-            <>
-              <PortalLinkCreate linkValue={linkValue} key={key} />
-            </>
-          }
-          handleClose={() => {
-            setIsOpenDialogBox(false);
-          }}
-        />
-        <Typography
-          mt={2}
-          sx={{ display: "flex", width: "1020px", flexWrap: "wrap" }}
-          variant="body1"
-        >
-          {linkCreation &&
-            linkCreation.map((link) => (
+    <Box>
+      <DialogBoxUi
+        open={opendialogBox}
+        content={
+          <>
+            <PortalLinkCreate linkValue={linkValue} key={key} />
+          </>
+        }
+        handleClose={() => {
+          setIsOpenDialogBox(false);
+        }}
+      />
+      <Grid container spacing={2} mt={1} sx={{ width: "1020px" }}>
+        {linkCreation &&
+          linkCreation.map((link) => (
+            <Grid item xs={3} key={link.id}>
               <Card
-                elevation={7}
-                sx={{ display: "flex", width: "180px", margin: "10px", height: "72px" }}
-                key={link.id} // Use unique ID for key
-              > 
-                <CardContent>
-                  <Typography
-                    variant="caption"
-                    sx={{ display: "flex", width: "300px", marginTop: "-10px" }}
-                  >
-                    <Box sx={{ alignItems: "center", display: "flex" }}>
-                      <LanguageIcon
-                        style={{ color: "blue", marginLeft: "-10px" }}
-                      />
-                      <a href={link.url}>{link.label}</a>
-                      <Box
-                        sx={{
-                          marginLeft: "auto",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
+                elevation={2}
+                sx={{ width: "200px", height: "40px", marginBottom:"15px", borderRadius:"7px"}}
+              >
+                <CardContent sx={{ padding: 2 }}>
+                  <Box sx={{ alignItems: "center", display: "flex", marginTop:"-10px"}}>
+                    <LanguageIcon
+                      style={{ color: "blue", marginLeft: "-10px", height:"15px" }}
+                    />
+                    <a
+                      href={link.url} target="_blank" rel="noopener noreferrer"
+                      style={{ fontSize: "12px", marginLeft: "2px" }}
+                    >
+                      {link.label}
+                    </a>
+                    <Box
+                      sx={{
+                        marginLeft: "auto",
+                        display: "flex",
+                        alignItems: "center",
+                       
+                      }}
+                    >
+                      <IconButton
+                        style={{ color: "blue", height:"5px" ,fontSize: "small" }}
+                        onClick={() => handleEditClick(link.id)}
                       >
-                        <IconButton
-                          style={{ color: "blue", fontSize: "inherit" }}
-                          onClick={() => handleEditClick(link.id)}
-                        >
-                          <EditIcon style={{ fontSize: "inherit" }} />
-                        </IconButton>
-                        <IconButton
-                          style={{ color: "blue", fontSize: "inherit" }}
-                          onClick={() => handleDeleteClick(link.id)}
-                        >
-                          <DeleteIcon style={{ fontSize: "inherit" }} />
-                        </IconButton>
-                      </Box>
+                        <EditIcon style={{ fontSize: "small" }} />
+                      </IconButton>
+                      <IconButton
+                        style={{ color: "blue", fontSize: "small" }}
+                        onClick={() => handleDeleteClick(link.id)}
+                      >
+                        <DeleteIcon style={{ fontSize: "small" }} />
+                      </IconButton>
                     </Box>
-                    
-                  </Typography>
+                  </Box>
                 </CardContent>
               </Card>
-            ))} 
-        </Typography>
-      </Box>
-    </div>
+            </Grid>
+          ))}
+      </Grid>
+    </Box>
+  </div>
+  
   );
 };
 

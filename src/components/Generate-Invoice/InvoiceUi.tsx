@@ -56,13 +56,13 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const dispatch = useDispatch();
     const [nestedOpen, setNestedOpen] = useState(false);
 
-    // * --------------- invoice update snackbar ----------------
+    // * --------------- invoice sent to approver update snackbar ----------------
     useSnackbarNotifications({
         error: invoiceUpdateError,
         errorObject: invoiceUpdateErrorObject,
-        errorMessage: 'Error updating Invoice',
+        errorMessage: 'Error when sending Invoice to approver',
         success: invoiceUpdateSuccess,
-        successMessage: 'Invoice update successfully',
+        successMessage: 'Invoice send to approver and updated successfully',
     });
 
     useEffect(() => {

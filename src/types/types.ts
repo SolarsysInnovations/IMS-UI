@@ -29,6 +29,7 @@ export interface TdsTaxFormProps {
 }
 export interface CompanyFormProps {
     companyValue: CompanyInitialValueProps;
+    mode?: 'create' | 'edit';
 }
 export interface LinkFormProps {
     linkValue: linkCreationProps;
@@ -230,7 +231,7 @@ export interface SendEmailInitialValueProps {
 }
 
 export interface RoleInitialValueProps {
-    username: string,
+    userName: string,
     password: string,
     userRole: string,
     userEmail: string,

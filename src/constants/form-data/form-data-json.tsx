@@ -125,7 +125,54 @@ export const CompanyFields: FieldProps[] = [
                 name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'text', gridSize: 5,
             },
             {
-                name: 'userAccess', required: true, options: [{ value: "limited", label: "Limited" },], disabled: false, label: 'User Access', type: 'select', gridSize: 5,
+                name: 'userAccess', required: true, options: [{ value: "Limited Access", label: "Limited Access" },], disabled: false, label: 'User Access', type: 'select', gridSize: 5,
+            },
+            {
+                name: 'description', required: true, disabled: false, label: 'Description', type: 'textArea', gridSize: 5,
+            },
+        ]
+    },
+    {
+        name: 'Company Information',
+        label: 'Company Information :',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyName', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 5, },
+            { name: 'companyEmail', required: true, disabled: false, label: 'Company Email', type: 'text', gridSize: 5, },
+            { name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5, },
+            { name: 'companyCell', required: true, disabled: false, label: 'Company Cell', type: 'number', gridSize: 5, },
+            { name: 'companyCountry', required: true, disabled: false, label: 'Company Country', type: 'selectCountry', gridSize: 5, },
+            { name: 'companyState', required: true, disabled: false, label: 'Company State', type: 'selectState', gridSize: 5, },
+            { name: 'companyAddress', required: true, disabled: false, label: 'Company Address', type: 'text', gridSize: 5, },
+            { name: 'companyWebsite', required: true, disabled: false, label: 'Company Website', type: 'text', gridSize: 5, },
+            { name: 'companyTaxNumber', required: true, disabled: false, label: 'Company TaxNumber', type: 'text', gridSize: 5, },
+            { name: 'companyRegNumber', required: true, disabled: false, label: 'Company RegNumber', type: 'text', gridSize: 5, },
+        ]
+    },
+];
+
+export const CompanyEditFields: FieldProps[] = [
+    {
+        name: 'Admin Profile',
+        label: 'Admin Profile :',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            {
+                name: 'userName', required: true, disabled: false, label: 'User Name', type: 'text', gridSize: 5,
+            },
+            {
+                name: 'userEmail', required: true, disabled: false, label: 'User E-mail', type: 'text', gridSize: 5,
+            },
+            {
+                name: 'userRole', required: true, disabled: false, label: 'userRole', type: 'select', gridSize: 5, options: [{ value: "ADMIN", label: "ADMIN" }],
+            },
+            {
+                name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'text', gridSize: 5,
+            },
+            {
+                name: 'userAccess', required: true, options: [{ value: "Limited Access", label: "Limited Access" },], disabled: false, label: 'User Access', type: 'select', gridSize: 5,
             },
             {
                 name: 'description', required: true, disabled: false, label: 'Description', type: 'textArea', gridSize: 5,
@@ -166,26 +213,7 @@ export const linkFields: FieldProps[] = [
 ];
 
 
-export const companyFields: FieldProps[] = [
-    {
-        name: 'Company Name',
-        type: 'section',
-        titleGridSize: 12,
-        subFields: [
-            { name: 'companyName', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 4, validation: Yup.string().required('Company Name is required',) },
-            { name: 'companyAddress', required: true, disabled: false, label: 'Company Address', type: 'text', gridSize: 4, validation: Yup.string().required('Company Address is required') },
-            { name: 'companyState', required: true, disabled: false, label: 'Company State', type: 'text', gridSize: 4, validation: Yup.string().required('Company State is required') },
-            { name: 'companyCountry', required: true, disabled: false, label: 'Company Country', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
-            { name: 'companyEmail', required: true, disabled: false, label: 'Company Email', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
-            { name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
-            { name: 'companyCell', required: true, disabled: false, label: 'Company Cell', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
-            { name: 'companyWebsite', required: true, disabled: false, label: 'Company Website', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
-            { name: 'companyTaxNumber', required: true, disabled: false, label: 'Company TaxNumber', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
-            { name: 'companyRegNumber', required: true, disabled: false, label: 'Company RegNumber', type: 'text', gridSize: 4, validation: Yup.string().required('Amount is required') },
-        ]
-    },
 
-];
 
 export const GstTypeFields: FieldProps[] = [
     {
@@ -272,58 +300,54 @@ export const invoiceFields: FieldProps[] = [
     },
 ]
 
-// const MyForm: React.FC = () => {
-//     const [country, setCountry] = useState('');
-//     const [region, setRegion] = useState('');
-
-//     const handleCountryChange = (val: string) => {
-//         setCountry(val);
-//         setRegion('');  // Reset region when country changes
-//     };
-
-//     const handleRegionChange = (val: string) => {
-//         setRegion(val);
-//     };
-
-//     const renderField = (field: FieldProps) => {
-//         if (field.component) {
-//             return field.component({
-//                 value: field.name === 'country' ? country : region,
-//                 onChange: field.name === 'country' ? handleCountryChange : handleRegionChange,
-//                 country: country
-//             });
-//         }
-
-//         return (
-//             <input
-//                 type={field.type || 'text'}
-//                 required={field.required}
-//                 disabled={field.disabled}
-//                 name={field.name}
-//                 className={`grid-item grid-size-${field.gridSize}`}
-//             />
-//         );
-//     };
-
-//     return (
-//         <form>
-//             {customerFields.map((section, index) => (
-//                 <div key={index} className={`section-title grid-size-${section.titleGridSize}`}>
-//                     {section.label && <h3>{section.label}</h3>}
-//                     {section.subFields?.map((field, idx) => (
-//                         <div key={idx} className={`grid-item grid-size-${field.gridSize}`}>
-//                             <label>{field.label}</label>
-//                             {renderField(field)}
-//                         </div>
-//                     ))}
-//                 </div>
-//             ))}
-//         </form>
-//     );
-// };
-
-// export default MyForm;
+export const RolesFields: FieldProps[] = [
+    {
+        type: 'section',
+        titleGridSize: 12,
+        name: "info",
+        subFields: [
+            { name: 'userName', required: true, disabled: false, label: 'user Name', type: 'text', gridSize: 6, validation: Yup.string().required('userName is required') },
+            {
+                name: 'userRole', required: true, disabled: false, label: 'user Role', type: 'select', gridSize: 6, options: [
+                    { value: "ADMIN", label: "ADMIN" },
+                    { value: "APPROVER", label: "APPROVER" },
+                    { value: "ENDUSER", label: "ENDUSER" },
+                ], validation: Yup.string().required('userRole is required')
+            },
+            { name: 'userEmail', required: true, disabled: false, label: 'user Email', type: 'email', gridSize: 6, validation: Yup.string().required('userEmail is required') },
+            {
+                name: 'userAccess', required: true, disabled: false, label: 'user Access', type: 'select', gridSize: 6, options: [
+                    { value: "Full Access", label: "Full Access" },
+                    { value: "Limited Access", label: "Limited Access" }
+                ], validation: Yup.string().required('userAccess is required')
+            },
+            { name: 'password', required: true, disabled: false, label: 'Password', type: 'password', gridSize: 6, validation: Yup.string().required('password is required') },
+        ]
+    },
+];
 
 
-
-// !  --------------------------
+export const RolesEditFields: FieldProps[] = [
+    {
+        type: 'section',
+        titleGridSize: 12,
+        name: "info",
+        subFields: [
+            { name: 'userName', required: true, disabled: false, label: 'user Name', type: 'text', gridSize: 6, validation: Yup.string().required('userName is required') },
+            {
+                name: 'userRole', required: true, disabled: false, label: 'user Role', type: 'select', gridSize: 6, options: [
+                    { value: "ADMIN", label: "ADMIN" },
+                    { value: "APPROVER", label: "APPROVER" },
+                    { value: "ENDUSER", label: "ENDUSER" },
+                ], validation: Yup.string().required('userRole is required')
+            },
+            { name: 'userEmail', required: true, disabled: false, label: 'user Email', type: 'email', gridSize: 6, validation: Yup.string().required('userEmail is required') },
+            {
+                name: 'userAccess', required: true, disabled: false, label: 'user Access', type: 'select', gridSize: 6, options: [
+                    { value: "Full Access", label: "Full Access" },
+                    { value: "Limited Access", label: "Limited Access" }
+                ], validation: Yup.string().required('userAccess is required')
+            }
+        ]
+    },
+];

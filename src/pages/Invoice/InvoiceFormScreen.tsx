@@ -20,7 +20,7 @@ import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { generateOptions } from '../../services/utils/dropdownOptions';
-import { useAddInvoiceMutation, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
+import { useAddInvoiceMutation, useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { toast } from 'react-toastify';
 import { toastConfig } from '../../constants/forms/config/toastConfig';
 import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
@@ -66,7 +66,8 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     // popUps
     const [popUpComponent, setPopUpComponent] = useState("");
     const [invoiceFinalData, setInvoiceFinalData] = useState();
-    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
+    const { data: customers, error, isLoading, refetch: customerRefetch } = useGetCustomersQuery();
+    const { data: invoiceList, refetch: invoiceRefetch } = useGetInvoiceQuery();
     const [addInvoice, { isSuccess: addInvoiceSuccess, isError: addInvoiceError, error: addInvoiceErrorObject }] = useAddInvoiceMutation();
     const [updateInvoice, { isSuccess: invoiceUpdatedSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
@@ -103,6 +104,30 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         SERVICES: 'services',
         INVOICE: 'invoice'
     }
+
+    useEffect(() => {
+        customerRefetch()
+    }, [dispatch, customerRefetch,])
+
+    useEffect(() => {
+        invoiceRefetch()
+    }, [addInvoiceSuccess, invoiceRefetch]);
+
+    useSnackbarNotifications({
+        success: addInvoiceSuccess,
+        error: addInvoiceError,
+        successMessage: "Invoice added successfully",
+        errorMessage: 'Error adding invoice',
+        errorObject: addInvoiceErrorObject,
+    });
+
+    useSnackbarNotifications({
+        success: invoiceUpdatedSuccess,
+        error: invoiceUpdateError,
+        successMessage: 'Invoice updated successfully',
+        errorMessage: 'Error updating invoice',
+        errorObject: invoiceUpdateErrorObject,
+    });
 
     React.useEffect(() => {
 
@@ -211,25 +236,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         }
     };
 
-    useEffect(() => {
-        refetch()
-    }, [dispatch, refetch])
 
-    useSnackbarNotifications({
-        success: addInvoiceSuccess,
-        error: addInvoiceError,
-        successMessage: "Invoice added successfully",
-        errorMessage: 'Error adding invoice',
-        errorObject: addInvoiceErrorObject,
-    });
-
-    useSnackbarNotifications({
-        success: invoiceUpdatedSuccess,
-        error: invoiceUpdateError,
-        successMessage: 'Invoice updated successfully',
-        errorMessage: 'Error updating invoice',
-        errorObject: invoiceUpdateErrorObject,
-    });
 
     return (
         <Formik

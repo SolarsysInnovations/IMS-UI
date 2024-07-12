@@ -10,9 +10,6 @@ interface CompanyDetailsProps {
 const CompanyDetails = () => {
     const companyValue = useSelector((state: any) => state.globalState.data);
     const [mergedData, setMergedData] = useState<any>({});
-    console.log("companyValue", companyValue);
-
-    console.log("mergedData", mergedData);
 
     useEffect(() => {
         if (companyValue) {
@@ -20,10 +17,7 @@ const CompanyDetails = () => {
                 ...companyValue.companyDetails,
                 ...companyValue.register
             };
-            console.log("mergedObject new", mergedObject);
             setMergedData(mergedObject);
-            console.log('companyValue data', companyValue);
-            console.log("merged data", mergedData);
         }
     }, [companyValue]);
 
