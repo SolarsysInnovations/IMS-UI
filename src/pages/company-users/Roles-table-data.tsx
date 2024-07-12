@@ -108,11 +108,12 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     }
 
     const handleDeleteClick = () => {
-        console.log("id", id);
-        // const confirmed = window.confirm("Are you sure you want to delete this role?");
-        // if (confirmed) {
-        //     deleteRole(id);
-        // }
+        if (id) {
+            const confirmed = window.confirm("Are you sure you want to delete this role?");
+            if (confirmed) {
+                deleteRole(id);
+            }
+        }
     };
 
     return (
@@ -140,8 +141,7 @@ export const columns: GridColDef[] = [
         width: 140,
         editable: false,
         renderCell: (params: any) => {
-            const id = params.row;
-            console.log("Cell ID:", id);
+            const id = params.row.id;
             return <MyCellRenderer id={id} />;
         }
     },
