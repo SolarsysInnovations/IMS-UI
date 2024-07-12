@@ -35,7 +35,6 @@ export const companyApi = apiSlice.injectEndpoints({
             query: () => ({
                 url: API_URLS.companyGet,
                 method: 'POST',
-
             }),
             // Set caching for 5 minutes (adjust the duration as needed)
             keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
@@ -43,12 +42,12 @@ export const companyApi = apiSlice.injectEndpoints({
 
         addCompany: builder.mutation<any, Partial<any>>({
             query: (company) => ({
-                url: `/company/create`,
+                url: API_URLS.companyCreate,
                 method: 'POST',
                 body: company,
             }),
         }),
-        updateCompany: builder.mutation<any, { id: number; company: Partial<any> }>({
+        updateCompany: builder.mutation<any, { id: string | undefined; company: Partial<any> }>({
             query: ({ id, company }) => ({
                 url: `company/update/${id}`,
                 method: 'POST',
@@ -57,7 +56,7 @@ export const companyApi = apiSlice.injectEndpoints({
         }),
         getCompanyDataById: builder.mutation<void, number>({
             query: (id) => ({
-                 url: `company/get/${id}`,
+                url: `company/get/${id}`,
                 method: 'POST',
             }),
         }),

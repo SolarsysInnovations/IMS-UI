@@ -68,12 +68,16 @@ export enum ApiEndpoint {
     DASHBOARD_GET = "dashboardGet",
     //Company
     COMPANY_GET = "companyGet",
+    COMPANY_LIST = "companyList",
+    COMPANY_CREATE = "companyCreate",
+    COMPANY_UPDATE = "companyUpdate",
+    COMPANY_DELETE = "companyDelete",
     // super admin
     DASHBOARD_SUPER_ADMIN = "dashboardSuperAdmin",
     //approver
     DASHBOARD_APPROVER = "dashboardApprover",
     //enduser
-    DASHBOARD_ENDUSER = "dashboardEnduser"
+    DASHBOARD_ENDUSER = "dashboardEndUser"
 }
 
 export type ApiUrls = {
@@ -135,18 +139,21 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.ROLES_LIST]: `/role/list`,
     [ApiEndpoint.ROLES_CREATE]: `/role/register`,
     [ApiEndpoint.ROLES_UPDATE]: `/role/update`,
-    [ApiEndpoint.ROLES_DELETE]: `/role/delete/`,
+    [ApiEndpoint.ROLES_DELETE]: `/role/delete`,
     //Changepassword
     [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
     // company
     [ApiEndpoint.COMPANY_GET]: `/company/list`,
+    [ApiEndpoint.COMPANY_CREATE]: `/company/create`,
+    [ApiEndpoint.COMPANY_UPDATE]: `/company/update`,
+    [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
+    [ApiEndpoint.COMPANY_LIST]: `/company/list`,
     //dashboard endpoints
-     [ApiEndpoint.DASHBOARD_GET]: `/admin/dashboard`,
+    [ApiEndpoint.DASHBOARD_GET]: `/dashboard/admin`,
     // dashboard super admin 
-    [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/superAdmin/dashboard`,
-    // dashboard super admin 
+    [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/dashboard/superAdmin`,
+    // dashboard super admin  
     [ApiEndpoint.DASHBOARD_APPROVER]: `/dashboard/approver`,
-    // dashboard enduser 
-    [ApiEndpoint.DASHBOARD_ENDUSER]: `/dashboard/enduser`
+    [ApiEndpoint.DASHBOARD_ENDUSER]: `/dashboard/standarduser`
 
 };

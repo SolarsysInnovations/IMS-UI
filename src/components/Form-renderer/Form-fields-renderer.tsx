@@ -151,50 +151,50 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 
 const renderTextField = (field: any, meta: any, subField: SubField) => (
   //return (
-    <TextFieldUi
-      required={true}
-      disabled={false}
-      {...field}
-      // variant="outlined"
-      // margin="normal"
-      value={field.value || ""}
-      startAdornment={subField.startAdornment ? <span>{subField.startAdornment}</span> : undefined}
-      endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
-      type={subField.type}
-      fullWidth
-      id={subField.name}
-      label={subField.label}
-      error={meta.touched && !!meta.error}
-      helperText={subField?.helperText}
-    />
+  <TextFieldUi
+    required={true}
+    disabled={false}
+    {...field}
+    // variant="outlined"
+    // margin="normal"
+    value={field.value || ""}
+    startAdornment={subField.startAdornment ? <span>{subField.startAdornment}</span> : undefined}
+    endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
+    type={subField.type}
+    fullWidth
+    id={subField.name}
+    label={subField.label}
+    error={meta.touched && !!meta.error}
+    helperText={subField?.helperText}
+  />
   //)
 );
 
-const renderPasswordField = (field: any, meta: any, subField: SubField, passwordVisible: boolean, setPasswordVisible: { (value: React.SetStateAction<boolean>): void; (arg0: boolean): void; } ) => (
+const renderPasswordField = (field: any, meta: any, subField: SubField, passwordVisible: boolean, setPasswordVisible: { (value: React.SetStateAction<boolean>): void; (arg0: boolean): void; }) => (
   //return (
-    <TextFieldUi
-      required={true}
-      disabled={false}
-      {...field}
-      endAdornment={passwordVisible ? <IconButton onClick={() => {
-                      setPasswordVisible(!passwordVisible)
-                    }}>
-                      <VisibilityOutlined />
-                    </IconButton> : <IconButton onClick={() => {
-                      setPasswordVisible(!passwordVisible)
-                    }}>
-                      <VisibilityOff />
-                    </IconButton>}
-      value={field.value || ""}
-      startAdornment={subField.startAdornment ? <span>{subField.startAdornment}</span> : undefined}
-      //endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
-      type={passwordVisible ? 'text' : subField.type}
-      fullWidth
-      id={subField.name}
-      label={subField.label}
-      error={meta.touched && !!meta.error}
-      helperText={subField?.helperText}
-    />
+  <TextFieldUi
+    required={true}
+    disabled={false}
+    {...field}
+    endAdornment={passwordVisible ? <IconButton onClick={() => {
+      setPasswordVisible(!passwordVisible)
+    }}>
+      <VisibilityOutlined />
+    </IconButton> : <IconButton onClick={() => {
+      setPasswordVisible(!passwordVisible)
+    }}>
+      <VisibilityOff />
+    </IconButton>}
+    value={field.value || ""}
+    startAdornment={subField.startAdornment ? <span>{subField.startAdornment}</span> : undefined}
+    //endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
+    type={passwordVisible ? 'text' : subField.type}
+    fullWidth
+    id={subField.name}
+    label={subField.label}
+    error={meta.touched && !!meta.error}
+    helperText={subField?.helperText}
+  />
   //)
 );
 
@@ -277,39 +277,52 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
 
   console.log("field", field.subFields);
 
+  const filteredData = field.subFields?.filter((data) => data.type === "selectCountry" || data.type === "selectState" || data.type === "selectCity");
+
+  console.log("filteredData", filteredData);
+
   const { values } = useFormikContext<FormFieldProps>();
 
   console.log("values", values);
-  const country = Country.getAllCountries();
-  const countryOptionsGenerate = generateOptions(Country.getAllCountries(), "name", "isoCode");
-  console.log("countryOptions", countryOptionsGenerate);
+
+  const countryOptionsGenerate = useMemo(
+    () => generateOptions(Country.getAllCountries(), "name", "isoCode"),
+    []
+  );
 
   const [countryOptions, setCountryOptions] = useState<any[]>(countryOptionsGenerate || []);
-  // country
-  // const countryData = useSelector((state: any) => state.globalState.data);
-  const [stateOptions, setStateOptions] = useState([]);
+  const [stateOptions, setStateOptions] = useState<any[]>([]);
   const [cityOptions, setCityOptions] = useState<any[]>([]);
+
+  console.log("countryOptions", countryOptions);
+  console.log("stateOptions", stateOptions);
+  console.log("cityOptions", cityOptions);
   // console.log("countryData", countryData);
   const state = State.getAllStates();
   console.log("state", state);
-  
+
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   useEffect(() => {
-    if (values) {
-      const getStateByIsoCode = State.getStatesOfCountry(values.country);
-      console.log("getStateByIsoCode", getStateByIsoCode);
-      console.log(getStateByIsoCode);
+    if (filteredData) {
+      const selectedCountryField = filteredData.find((data) => data.type === "selectCountry");
+      const selectedStateField = filteredData.find((data) => data.type === "selectState");
+
+      if (!selectedCountryField || !selectedStateField) return;
+
+      const getStateByIsoCode = State.getStatesOfCountry(values[selectedCountryField.name]);
       const stateOptionsData = generateOptions(getStateByIsoCode, "name", "isoCode");
-      setStateOptions(stateOptionsData)
-      const citiesOfAllStates = City.getCitiesOfState(values.country, values.state);
-      const generateCityOptions = generateOptions(citiesOfAllStates, "name", "name")
+      setStateOptions(stateOptionsData);
+
+      const citiesOfAllStates = City.getCitiesOfState(values[selectedCountryField.name], values[selectedStateField.name]);
+
+      const generateCityOptions = generateOptions(citiesOfAllStates, "name", "name");
       setCityOptions(generateCityOptions);
-      console.log("citiesOfAllStates", generateCityOptions);
+
     }
   }, [values]);
 
-  console.log("selectedCountry", stateOptions);
+
 
   // Memoize the updateFormValue function to prevent unnecessary re-renders
   const memoizedUpdateFormValue = useMemo(() => updateFormValue, [updateFormValue]);
@@ -325,8 +338,6 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
       memoizedUpdateFormValue(setFieldValue);
     }
   }, [memoizedUpdateFormValue, setFieldValue]);
-
-
 
   switch (field.type) {
     case 'section':

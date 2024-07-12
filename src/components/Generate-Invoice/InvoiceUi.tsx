@@ -50,16 +50,19 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const invoiceData = useSelector((state: any) => state.globalState.data);
 
+
+    console.log("invoiceData", invoiceData);
+
     const dispatch = useDispatch();
     const [nestedOpen, setNestedOpen] = useState(false);
 
-    // * --------------- invoice update snackbar ----------------
+    // * --------------- invoice sent to approver update snackbar ----------------
     useSnackbarNotifications({
         error: invoiceUpdateError,
         errorObject: invoiceUpdateErrorObject,
-        errorMessage: 'Error updating Invoice',
+        errorMessage: 'Error when sending Invoice to approver',
         success: invoiceUpdateSuccess,
-        successMessage: 'Invoice update successfully',
+        successMessage: 'Invoice send to approver and updated successfully',
     });
 
     useEffect(() => {
@@ -120,13 +123,34 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const handleSentToApprover = async (e: any) => {
         e.preventDefault();
         try {
-            const updatedInvoiceData = {
-                ...invoiceData,
-                invoiceStatus: "PENDING"
+            const invoicePayload = {
+                id: invoiceData.id,
+                invoiceType: invoiceData.invoiceType,
+                invoiceNumber: invoiceData.invoiceNumber,
+                customerName: invoiceData.customerName,
+                gstType: invoiceData.gstType,
+                gstPercentage: invoiceData.gstPercentage,
+                invoiceDate: invoiceData.invoiceDate,
+                paymentTerms: invoiceData.paymentTerms,
+                startDate: invoiceData.startDate,
+                dueDate: invoiceData.dueDate,
+                invoiceStatus: "PENDING",
+                lastModified: invoiceData.lastModified,
+                gstInNumber: invoiceData.gstInNumber,
+                retainerFee: invoiceData.retainerFee,
+                notes: invoiceData.retainerFee,
+                termsAndConditions: invoiceData.termsAndConditions,
+                servicesList: [...invoiceData.servicesList],
+                taxAmount: invoiceData.taxAmount,
+                discountPercentage: invoiceData.discountPercentage,
+                totalAmount: invoiceData.totalAmount,
+                createdBy: invoiceData.createdBy,
+                updatedBy: invoiceData.updatedBy,
+                companyName: invoiceData.companyName,
             };
-            await updateInvoice({ id: updatedInvoiceData.id, invoiceData: updatedInvoiceData });
+            await updateInvoice({ id: invoicePayload.id, invoiceData: invoicePayload });
             getInvoiceList();
-            const fetchedInvoiceData = await getInvoiceById(updatedInvoiceData.id).unwrap();
+            const fetchedInvoiceData = await getInvoiceById(invoicePayload.id).unwrap();
             dispatch(setData(fetchedInvoiceData));
             isModalOpen(false);
             // Optionally, update the state with the fetched data if needed

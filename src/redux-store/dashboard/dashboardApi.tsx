@@ -26,7 +26,7 @@ export const dashboardApi = apiSlice.injectEndpoints({
         }),
         getEndUserDashboard: builder.mutation<any, Partial<any>>({
             query: (dashboard) => ({
-                url: API_URLS.dashboardEnduser,
+                url: API_URLS.dashboardEndUser,
                 method: 'POST',
                 body: dashboard,
             }),

@@ -11,9 +11,10 @@ import SnackBarUi from '../../components/ui/Snackbar';
 
 
 const ServiceCreate: React.FC = () => {
+
     const [addService, { isLoading, isSuccess, isError, error }] = useAddServiceMutation();
     const { data: serviceList, refetch } = useGetServiceQuery();
-    const [showSuccessToast, setShowSuccessToast] = useState(false); 
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
 
     const onSubmit = async (values: any, actions: any) => {
         try {
@@ -27,9 +28,11 @@ const ServiceCreate: React.FC = () => {
             console.log(error);
         }
     };
+
     useEffect(() => {
         refetch()
-    }, [isSuccess])
+    }, [isSuccess]);
+
     return (
         <div>
             {/* Use DynamicServiceCreate with the required props */}

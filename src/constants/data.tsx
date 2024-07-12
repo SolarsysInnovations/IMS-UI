@@ -12,7 +12,6 @@ import CreateInvoice from "../pages/Invoice/Invoice-create-screen";
 import ServicesList from "../pages/service/service-list-screen";
 import CreateServices from "../pages/service/create-service-screen";
 import ServiceEditScreen from "../pages/service/service-edit-screen";
-import RolesList from "../pages/roles/Roles-list-screen";
 import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded, SettingsSuggestRounded } from "@mui/icons-material"
 import DemoScreen from "../pages/Demo-screen";
 import GroupIcon from '@mui/icons-material/Group';
@@ -23,7 +22,7 @@ import TaskIcon from '@mui/icons-material/Task';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Login from "../pages/Login-screen";
-import Dashboard from "../pages/Dashboard/Dashboard-screen";
+import Dashboard from "../pages/Dashboard/Admin-dashboard/Dashboard-screen";
 import InvoiceCreateScreen from "../pages/Invoice/Invoice-create-screen";
 import CustomerScreen from "../pages/customer/Customer-screen";
 import CompanyList from "../pages/company/companyListScreen";
@@ -32,10 +31,29 @@ import CompanyScreen from "../pages/company/companyScreen";
 import SuperAdminDashboardScreen from "../pages/Dashboard/superAdmin-dashboard/DashboardScreen";
 import ApproverDashboardScreen from "../pages/Dashboard/approver-dashboard/DashboardScreen";
 import EnduserDashboardScreen from "../pages/Dashboard/End-user dashboard/DashboardScreen";
+import UserScreen from "../pages/company-users/UserScreen";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
-export const admins = [Roles.SUPERADMIN, Roles.ADMIN];
+export const admins = [Roles.ADMIN];
 export const superAdmin = [Roles.SUPERADMIN,]
+
+const getUserRole = () => {
+  return localStorage.getItem('userRole');
+};
+
+const getDashboardComponent = (role: any) => {
+  switch (role) {
+    case Roles.SUPERADMIN:
+      return <SuperAdminDashboardScreen />;
+    case Roles.APPROVER:
+      return <ApproverDashboardScreen />;
+    case Roles.ENDUSER:
+      return <EnduserDashboardScreen />;
+    default:
+      return <Dashboard />;
+  }
+};
+const userRole = getUserRole();
 
 export const routesConfig = [
   // * -------- login ---------
@@ -44,7 +62,11 @@ export const routesConfig = [
   { path: "/", element: <Navigate to="/dashboard" />, allowedRoles: [...allRoles] },
 
   // * -------- dashboard ---------
-  { path: "/dashboard", element: <Dashboard />, allowedRoles: [...allRoles] },
+  { path: "/dashboard", element: getDashboardComponent(userRole), allowedRoles: [...allRoles] },
+
+  // * ----------- customers ------------
+  { path: "/customer-list", element: <CustomerList />, allowedRoles: [...admins] },
+  { path: "/customer/create", element: <CustomerScreen />, allowedRoles: [...admins] },
 
   // * -------- reports ---------
   { path: "/reports", element: <Reportscreen />, allowedRoles: [...allRoles] },
@@ -54,9 +76,6 @@ export const routesConfig = [
   // * ---------- settings -----------
   { path: "/settings", element: <SettingScreen />, allowedRoles: [...allRoles] },
 
-  // * ----------- customer ------------
-  { path: "/customer-list", element: <CustomerList />, allowedRoles: [...allRoles] },
-  { path: "/customer/create", element: <CustomerScreen />, allowedRoles: [...allRoles] },
 
   // * ----------- invoice ------------
   { path: "/invoice/list", element: <InvoiceList />, allowedRoles: [...allRoles] },
@@ -67,23 +86,22 @@ export const routesConfig = [
   { path: "/service/create", element: <CreateServices />, allowedRoles: [...admins] },
   { path: "/service/edit/:id", element: <ServiceEditScreen />, allowedRoles: [...admins] },
 
-  // * -------- roles ---------
-  { path: "/users/list", element: <RolesList />, allowedRoles: [...admins] },
+  // * -------- company users ---------
+  { path: "/company/user/list", element: <UserScreen />, allowedRoles: [...allRoles] },
 
   // * -------- company ---------
-  { path: "/company", element: <CompanyList />, allowedRoles: [...allRoles] },
-  { path: "/company/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
+  { path: "/company", element: <CompanyList />, allowedRoles: [...superAdmin] },
+  { path: "/company/create", element: <CompanyScreen />, allowedRoles: [...superAdmin] },
 
-  // * -------- super admin ---------
-  { path: "/super-admin", element: <SuperAdminDashboardScreen />, allowedRoles: [...allRoles] },
-  { path: "/super-admin/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
+  // // * -------- super admin ---------
+  // { path: "/super-admin", element: <SuperAdminDashboardScreen />, allowedRoles: [...allRoles] },
+  // { path: "/super-admin/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
 
-  // * -------- approver ---------
-  { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...allRoles] },
+  // // * -------- approver ---------
+  // { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...allRoles] },
 
-  // * -------- enduser ---------
-  { path: "/enduser", element: <EnduserDashboardScreen />, allowedRoles: [...allRoles] },
-
+  // // * -------- enduser ---------
+  // { path: "/enduser", element: <EnduserDashboardScreen />, allowedRoles: [...allRoles] },
 ];
 
 export const sidebarTwo = [
@@ -104,7 +122,7 @@ export const sidebarTwo = [
     subItems: [
       { id: 1, title: "Create Customer", path: "/customer/create" },
     ],
-    allowedRoles: [...allRoles]
+    allowedRoles: [...admins]
   },
   {
     id: 3,
@@ -115,7 +133,7 @@ export const sidebarTwo = [
     subItems: [
       { id: 1, title: "Create", path: "/invoice/create" },
     ],
-    allowedRoles: [...allRoles]
+    allowedRoles: [Roles.APPROVER, Roles.ENDUSER, Roles.ADMIN]
   },
   {
     id: 4,
@@ -158,52 +176,33 @@ export const sidebarTwo = [
     path: "/company",
     icon: Home,
     isParent: true,
-    allowedRoles: [...allRoles]
+    allowedRoles: [...superAdmin]
   },
   {
     id: 9,
-    title: "Dashboard Super Admin",
-    path: "/super-admin",
+    title: "Company Users",
+    path: "/company/user/list",
     icon: Home,
     isParent: true,
     allowedRoles: [...allRoles]
   },
-  {
-    id: 10,
-    title: "Demo",
-    path: "/demo",
-    icon: Home,
-    isParent: false,
-    allowedRoles: [...admins]
+  // {
+  //   id: 9,
+  //   title: "Super Admin Dashboard",
+  //   path: "/super-admin",
+  //   icon: Home,
+  //   isParent: true,
+  //   allowedRoles: [...allRoles]
+  // },
+  // {
+  //   id: 10,
+  //   title: "Approver Dashboard",
+  //   path: "/approver",
+  //   icon: Home,
+  //   isParent: true,
+  //   allowedRoles: [...allRoles]
+  // },
 
-  },
-  {
-    id: 11,
-    title: "DemoTwo",
-    path: "/demo-two",
-    icon: Home,
-    isParent: false,
-    allowedRoles: [...admins]
-
-  },
-  {
-    id: 12,
-    title: "Component",
-    path: "/components",
-    icon: Home,
-    isParent: false,
-    allowedRoles: [...admins]
-
-  },
-  {
-    id: 13,
-    title: "DynamicForm",
-    path: "/dynamicForm",
-    icon: Home,
-    isParent: false,
-    allowedRoles: [...admins]
-
-  },
 ];
 
 export const invoiceStatusOptions = ['APPROVED', 'DELETE', 'RETURNED', 'DRAFT', 'PENDING', 'PAID'];

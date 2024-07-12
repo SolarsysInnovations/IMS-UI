@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { Card, Grid, Typography } from '@mui/material';
-import { useGetDashboardMutation } from '../../redux-store/dashboard/dashboardApi';
+import { useGetDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
 
 interface ValueProps {
     label: string;

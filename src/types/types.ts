@@ -28,7 +28,8 @@ export interface TdsTaxFormProps {
     tdsTaxValue: TdsTaxProps;
 }
 export interface CompanyFormProps {
-    companyValue: companyInitialValueProps;
+    companyValue: CompanyInitialValueProps;
+    mode?: 'create' | 'edit';
 }
 export interface LinkFormProps {
     linkValue: linkCreationProps;
@@ -189,31 +190,8 @@ export interface serviceCreationProps {
     amount: number;
 };
 //----------settings--------
-export interface companyInitialValueProps {
-    id: any;
-    companyName: string;
-    companyAddress: string;
-    companyState: string;
-    companyCountry: string;
-    companyEmail: string;
-    companyPhone: string;
-    companyCell: string;
-    companyWebsite: string;
-    companyTaxNumber: string;
-    companyRegNumber: string;
-}
-export interface companyDetailsInitialValueProps {
-    id: any;
-    companyName: string;
-    companyAddress: string;
-    companyState: string;
-    companyCountry: string;
-    companyEmail: string;
-    companyPhone: string;
-    companyCell: string;
-    companyWebsite: string;
-    companyTaxNumber: string;
-    companyRegNumber: string;
+export interface CompanyInitialValueProps {
+    id?: string;
     userName: string;
     userEmail: string;
     password: string;
@@ -221,8 +199,20 @@ export interface companyDetailsInitialValueProps {
     userMobile: string;
     userAccess: string;
     description: string;
-    companyId: string;
-}
+    // companyName: "Marvel",
+    companyName: string;
+    companyAddress: string;
+    companyState: string;
+    companyCountry: string;
+    companyEmail: string;
+    companyPhone: string;
+    companyCell: string;
+    companyWebsite: string;
+    companyTaxNumber: string;
+    companyRegNumber: string;
+};
+
+
 export interface linkCreationProps {
     id: string;
     label: string;
@@ -241,12 +231,12 @@ export interface SendEmailInitialValueProps {
 }
 
 export interface RoleInitialValueProps {
+    id?: string,
     userName: string,
     password: string,
     userRole: string,
     userEmail: string,
     userAccess: string,
-    id: string,
 }
 
 export interface ChangePasswordInitialValueProps {

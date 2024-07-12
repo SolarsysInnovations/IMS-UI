@@ -8,7 +8,7 @@ import { Grid } from '@mui/material';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ErrorIcon from '@mui/icons-material/Error';
 import DoneIcon from '@mui/icons-material/Done';
-import { useGetDashboardMutation } from '../../redux-store/dashboard/dashboardApi';
+import { useGetDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
 import { useState, useEffect } from 'react';
 
 interface ValueProps {

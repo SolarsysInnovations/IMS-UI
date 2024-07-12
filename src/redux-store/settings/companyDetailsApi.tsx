@@ -48,7 +48,7 @@ export const settingscompanyApi = apiSlice.injectEndpoints({
                 body: company,
             }),
         }),
-        updateCompanySetting: builder.mutation<any, { id: number; company: Partial<any> }>({
+        updateCompanySetting: builder.mutation<any, { id: string | undefined; company: Partial<any> }>({
             query: ({ id, company }) => ({
                 url: `/settings/update/${id}`,
                 method: 'POST',

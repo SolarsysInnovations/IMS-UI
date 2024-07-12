@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Grid, Typography, Box } from "@mui/material";
-import SelectDropdown from "../../components/ui/SelectDropdown";
-import InvoiceStatus from "./InvoiceStatusChart";
+import SelectDropdown from "../../../components/ui/SelectDropdown";
 import InvoiceAmount from "./InvoiceAmount";
+import InvoiceStatus from "./InvoiceStatusChart";
 
 interface ValueProps {
   label: string;

@@ -4,17 +4,18 @@ import CreateCompany from "./Company-create-screen";
 
 const CompanyScreen = () => {
     const companyValue = useSelector((state: any) => state.globalState.data);
-    console.log("company value",companyValue);
-    
+    console.log("company value", companyValue);
+
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
         setKey((prev) => prev + 1)
     }, [companyValue])
 
+    const mode = companyValue ? 'edit' : 'create';
     return (
-       <>
-       <CreateCompany companyValue={companyValue} key={key} />
+        <>
+            <CreateCompany companyValue={companyValue} key={key} mode={mode} />
         </>
     );
 };
