@@ -9,6 +9,7 @@ const options = [
   { label: "monthly", value: "monthly" },
   { label: "weekly", value: "weekly" },
   { label: "yearly", value: "yearly" },
+  { label: "overall", value: "overall" },
 ];
 export interface ApproverOverViewData {
   totalInvoices: number;
@@ -84,9 +85,9 @@ const ApproverDashboardScreen = () => {
         </Grid>{" "}
         <Grid sx={{ marginTop: "20px" }}>
           <Typography variant="h6" gutterBottom>
-            Pending Invoices
+            My Invoices
           </Typography>
-          <EndUserOverViewList />
+          <EndUserOverViewList selectedValue={selectedValue} />
         </Grid>
       </Grid>
     </Box>

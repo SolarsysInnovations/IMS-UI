@@ -8,14 +8,9 @@ import { Grid } from "@mui/material";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import ErrorIcon from "@mui/icons-material/Error";
 import DoneIcon from "@mui/icons-material/Done";
-import { useGetApproverDashboardMutation } from "../../../redux-store/dashboard/dashboardApi";
 import { useState, useEffect } from "react";
-import GridDataUi from "../../../components/GridTable/GridData";
-import { columns } from "../superAdmin-dashboard/CompanyOverView";
-import { ApproverOverViewData } from "./DashboardScreen";
 
-
-const ApproverInvoiceOverView = ({ approverOverViewData } : any) => {
+const ApproverInvoiceOverView = ({ approverOverViewData }: any) => {
 
   const [invoiceAmount, setInvoiceAmount] = useState([
     {
@@ -24,6 +19,7 @@ const ApproverInvoiceOverView = ({ approverOverViewData } : any) => {
       iconBg: "#635bff",
       value: approverOverViewData?.totalInvoices || 0,
       childLabel: "Invoice child label",
+      cardBg: "#e0e0ff",
     },
     {
       label: "Approved Invoices",
@@ -31,6 +27,7 @@ const ApproverInvoiceOverView = ({ approverOverViewData } : any) => {
       iconBg: "#4E9F3D",
       value: approverOverViewData?.approvedInvoices || 0,
       childLabel: "Invoice child label",
+      cardBg: "#e0ffe0",
     },
     {
       label: "Pending Invoices",
@@ -38,6 +35,7 @@ const ApproverInvoiceOverView = ({ approverOverViewData } : any) => {
       iconBg: "#FF204E",
       value: approverOverViewData?.pendingInvoices || 0,
       childLabel: "Invoice child label",
+      cardBg: "#ffe0e0",
     },
   ]);
 
@@ -50,6 +48,7 @@ const ApproverInvoiceOverView = ({ approverOverViewData } : any) => {
           iconBg: "#635bff",
           value: approverOverViewData.totalInvoices,
           childLabel: "Invoice child label",
+          cardBg: "#e0e0ff",
         },
         {
           label: "Approved Invoices",
@@ -57,6 +56,7 @@ const ApproverInvoiceOverView = ({ approverOverViewData } : any) => {
           iconBg: "#4E9F3D",
           value: approverOverViewData.approvedInvoices,
           childLabel: "Invoice child label",
+          cardBg: "#e0ffe0",
         },
         {
           label: "Pending Invoices",
@@ -64,19 +64,17 @@ const ApproverInvoiceOverView = ({ approverOverViewData } : any) => {
           iconBg: "#FF204E",
           value: approverOverViewData.pendingInvoices,
           childLabel: "Invoice child label",
+          cardBg: "#ffe0e0",
         },
       ]);
     }
   }, [approverOverViewData]);
 
-
-  console.log(approverOverViewData);
-  
   return (
     <Grid container spacing={2}>
       {invoiceAmount.map((data, index) => (
         <Grid key={index} item xs={4}>
-          <Card sx={{ width: "180px", height: "80px", padding: "10px 15px" }}>
+          <Card sx={{ backgroundColor: data.cardBg, width: "180px", height: "80px", padding: "10px 15px" }}>
             <Stack spacing={1}>
               <Stack
                 direction="row"
@@ -89,7 +87,7 @@ const ApproverInvoiceOverView = ({ approverOverViewData } : any) => {
                   </Typography>
                   <Typography variant="h6">{data.value}</Typography>
                 </Stack>
-                <Avatar sx={{ backgroundColor: "#635bff", height: '30px', width: '30px' }}>
+                <Avatar sx={{ backgroundColor: data.iconBg, height: '30px', width: '30px' }}>
                   {React.createElement(data.icon, { width: 20, height: 20 })}
                 </Avatar>
               </Stack>
@@ -103,14 +101,14 @@ const ApproverInvoiceOverView = ({ approverOverViewData } : any) => {
                 <Typography color="text.secondary" variant="caption">
                   Since last 
                 </Typography>
-                {/* {data.months} */}
+                 {/* {data.months} */}
               </Stack>
             </Stack>
           </Card>
         </Grid>
       ))}
-     <Grid item xs={12}>
-  </Grid>
+      <Grid item xs={12}>
+      </Grid>
     </Grid>
   );
 };

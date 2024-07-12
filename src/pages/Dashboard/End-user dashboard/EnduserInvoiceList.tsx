@@ -35,7 +35,10 @@ export const columns: GridColDef[] = [
         editable: true,
     },
 ];
-const EndUserOverViewList = () => {
+export interface EndUserInvoiceListProps {
+    selectedValue: string | null;
+  }
+const EndUserOverViewList :React.FC<EndUserInvoiceListProps> = ({ selectedValue })=> {
 
     const [getDashboard, { data, isLoading, isError }] = useGetEndUserDashboardMutation();
     const [companyOverviewList, setCompanyOverviewList] = useState<any[]>([]);
@@ -43,9 +46,9 @@ const EndUserOverViewList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getDashboard({}).unwrap();
+                const response = await getDashboard({ filter: selectedValue }).unwrap();
                 console.log(response);
-                setCompanyOverviewList(response.companyOverview || []);
+                setCompanyOverviewList(response.allInvoicesList || []);    
             } catch (error) {
                 console.error("Failed to fetch data", error);
             }
@@ -58,7 +61,7 @@ const EndUserOverViewList = () => {
 
     return (
         <>
-  <GridDataUi showToolbar={false} columns={columns} tableData={[]} checkboxSelection={false} />
+  <GridDataUi showToolbar={false} columns={columns} tableData={companyOverviewList} checkboxSelection={false} />
   </>
     )
 }

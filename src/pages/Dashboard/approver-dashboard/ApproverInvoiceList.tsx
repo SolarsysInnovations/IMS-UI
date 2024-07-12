@@ -36,14 +36,18 @@ export const columns: GridColDef[] = [
     },
 ];
 
-const ApproverInvoiceList = () => {
+export interface ApproverInvoiceListProps {
+    selectedValue: string | null;
+  }
+
+  const ApproverInvoiceList: React.FC<ApproverInvoiceListProps> = ({ selectedValue }) => {
     const [getDashboard, { data, isLoading, isError, error }] = useGetApproverDashboardMutation();
     const [companyOverviewList, setCompanyOverviewList] = useState<any[]>([]);
 
         useEffect(() => {
             const fetchData = async () => {
                 try {
-                    const response = await getDashboard({}).unwrap();
+                    const response = await getDashboard({ filter: selectedValue }).unwrap();
                     console.log(response);
                     setCompanyOverviewList(response.pendingInvoicesList || []);
                 } catch (error) {

@@ -100,10 +100,10 @@ export const routesConfig = [
   // { path: "/super-admin/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
 
   // // * -------- approver ---------
-  // { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...allRoles] },
+  { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...allRoles] },
 
   // // * -------- enduser ---------
-  // { path: "/enduser", element: <EnduserDashboardScreen />, allowedRoles: [...allRoles] },
+  { path: "/enduser", element: <EnduserDashboardScreen />, allowedRoles: [...allRoles] },
 ];
 
 export const sidebarTwo = [
