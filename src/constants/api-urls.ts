@@ -131,15 +131,14 @@ export const API_URLS: ApiUrls = {
     //link endpoints
     [ApiEndpoint.LINK_CREATE]: `/link/create`,
     [ApiEndpoint.LINK_LIST]: `/link/list`,
-    //dashboard endpoints
-    [ApiEndpoint.DASHBOARD_GET]: `/dashboard`,
+
     //Roles
     [ApiEndpoint.ROLES_GET]: `/role/get/`,
     [ApiEndpoint.ROLES_GETUSER]: `/role/findByEmail/`,
     [ApiEndpoint.ROLES_LIST]: `/role/list`,
     [ApiEndpoint.ROLES_CREATE]: `/role/register`,
     [ApiEndpoint.ROLES_UPDATE]: `/role/update`,
-    [ApiEndpoint.ROLES_DELETE]: `/role/delete/`,
+    [ApiEndpoint.ROLES_DELETE]: `/role/delete`,
     //Changepassword
     [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
     // company
@@ -148,9 +147,10 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.COMPANY_UPDATE]: `/company/update`,
     [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
     [ApiEndpoint.COMPANY_LIST]: `/company/list`,
+    //dashboard endpoints
+    [ApiEndpoint.DASHBOARD_GET]: `/dashboard/admin`,
     // dashboard super admin 
-    [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/superAdmin/dashboard/overview`,
-    // dashboard super admin 
+    [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/dashboard/superAdmin`,
+    // dashboard super admin  
     [ApiEndpoint.DASHBOARD_APPROVER]: `/approver/dashboard`
-
 };

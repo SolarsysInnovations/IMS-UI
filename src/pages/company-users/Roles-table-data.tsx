@@ -3,13 +3,12 @@ import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton, Stack } from '@mui/material';
 import { GridDeleteIcon } from "@mui/x-data-grid";
-import { useDeleteRoleMutation, useGetRoleByIdMutation, useGetRoleQuery, useUpdateRoleMutation,setRoleData } from '../../redux-store/role/roleApi';
+import { useDeleteRoleMutation, useGetRoleByIdMutation, useGetRoleQuery, useUpdateRoleMutation, setRoleData } from '../../redux-store/role/roleApi';
 import usePathname from '../../hooks/usePathname';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { AppDispatch } from '../../redux-store/store';
 import { useDispatch } from 'react-redux';
 import DialogBoxUi from '../../components/ui/DialogBox';
-import RoleForm from './Roles-form';
 import { RolesEditFields } from '../../constants/form-data/form-data-json';
 
 const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
@@ -35,10 +34,8 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
             userRole: newStatus,
         };
 
-        console.log("Updating invoice with payload:", updatedRoles);
-
         try {
-            const response = await updateRoles({ id: updatedRoles.id, roles: updatedRoles });
+            const response = await updateRoles({ id: updatedRoles.id, data: updatedRoles });
             console.log("Update response:", response);
             if ('error' in response) {
                 console.error("Error updating invoice status:", response.error);
@@ -70,9 +67,12 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     const [rolesData, setRolesData] = useState(null);
     const { data: roleDetails, refetch } = useGetRoleQuery();
     const pathname = usePathname();
+
     const { data: roles, error, isLoading, refetch: fetchRolesList } = useGetRoleQuery();
+
     const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetRoleByIdMutation();
-    const [deleteRole,{ isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteRoleMutation();
+
+    const [deleteRole, { isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteRoleMutation();
 
     useEffect(() => {
         dispatch(setRoleData(roleData));
@@ -94,7 +94,7 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     const handleEditClick = async () => {
         try {
             const response = await getRole(id);
-            console.log("response",response)
+            console.log("response", response)
             if ('data' in response) {
                 const roleData = response.data;
                 await dispatch(setRoleData(roleData));
@@ -108,65 +108,70 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     }
 
     const handleDeleteClick = () => {
-        const confirmed = window.confirm("Are you sure you want to delete this role?");
-        if (confirmed) {
-            deleteRole(id);
-        }
+        console.log("id", id);
+        // const confirmed = window.confirm("Are you sure you want to delete this role?");
+        // if (confirmed) {
+        //     deleteRole(id);
+        // }
     };
 
     return (
         <Stack direction="row" spacing={1}>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
+                <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
+                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
-            <DialogBoxUi
+            {/* <DialogBoxUi
                 open={openModal}
                 content={<RoleForm onClose={handleModalClose} RolesEditInitialValues={roleData} HeaderName="Update Role" RolesFields={RolesEditFields}/>}
                 handleClose={handleModalClose}
-            />
+            /> */}
         </Stack>
     );
 
 }
-    
+
 export const columns: GridColDef[] = [
-        {
-            field: 'Action',
-            headerName: 'Action',
-            width: 140,
-            editable: false,
-            renderCell: (params: any) => <MyCellRenderer id={params.row?.id}  />,
-        },
-        {
-            field: 'userName',
-            headerName: 'User Name',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'userEmail',
-            headerName: 'Email',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'userAccess',
-            headerName: 'Access',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'userRole',
-            headerName: 'User Role',
-            width: 120,
-            editable: true,
-            type: "singleSelect",
-            valueOptions: ["ADMIN", "APPROVER", "ENDUSER",],
-            renderCell: (params: GridRenderCellParams) => (
-                <RolesDropdown params={params} />
-            ),
-        },
-    ];
+    {
+        field: 'Action',
+        headerName: 'Action',
+        width: 140,
+        editable: false,
+        renderCell: (params: any) => {
+            const id = params.row;
+            console.log("Cell ID:", id);
+            return <MyCellRenderer id={id} />;
+        }
+    },
+    {
+        field: 'userName',
+        headerName: 'User Name',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'userEmail',
+        headerName: 'Email',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'userAccess',
+        headerName: 'Access',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'userRole',
+        headerName: 'User Role',
+        width: 120,
+        editable: true,
+        type: "singleSelect",
+        valueOptions: ["ADMIN", "APPROVER", "ENDUSER",],
+        renderCell: (params: GridRenderCellParams) => (
+            <RolesDropdown params={params} />
+        ),
+    },
+];

@@ -231,12 +231,12 @@ export interface SendEmailInitialValueProps {
 }
 
 export interface RoleInitialValueProps {
+    id?: string,
     userName: string,
     password: string,
     userRole: string,
     userEmail: string,
     userAccess: string,
-    id: string,
 }
 
 export interface ChangePasswordInitialValueProps {

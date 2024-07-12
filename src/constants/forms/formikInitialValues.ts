@@ -208,12 +208,12 @@ export const SendEmailInitialValue: SendEmailInitialValueProps = {
 }
 
 export const RoleInitialValue: RoleInitialValueProps = {
+    id: "",
     userName: "",
     userRole: "",
     userEmail: "",
     userAccess: "",
     password: "",
-    id: "",
 }
 
 export const ChangePasswordInitialValue: ChangePasswordInitialValueProps = {

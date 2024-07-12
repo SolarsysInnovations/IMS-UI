@@ -37,15 +37,15 @@ export const roleApi = apiSlice.injectEndpoints({
             keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
         }),
         addRole: builder.mutation<any, Partial<any>>({
-            query: (role) => ({
+            query: (data) => ({
                 url: API_URLS.rolesCreate,
                 method: 'POST',
-                body: role,
+                body: data,
             }),
         }),
         deleteRole: builder.mutation<void, string>({
             query: (id) => ({
-                url: API_URLS.rolesDelete + `${id}`,
+                url: `${API_URLS.rolesDelete}/${id}`,
                 method: 'POST',
             }),
         }),
@@ -55,11 +55,11 @@ export const roleApi = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
-        updateRole: builder.mutation<any, { id: string; roles: Partial<any> }>({
-            query: ({ id, roles }) => ({
+        updateRole: builder.mutation<any, { id: string | undefined; data: Partial<any> }>({
+            query: ({ id, data }) => ({
                 url: `role/update/${id}`,
                 method: 'POST',
-                body: roles,
+                body: data,
             }),
         }),
         rolesGetUser: builder.mutation<void, string>({

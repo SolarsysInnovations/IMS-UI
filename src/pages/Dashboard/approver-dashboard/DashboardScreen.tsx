@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Grid, Typography, Box } from "@mui/material";
 import SelectDropdown from "../../../components/ui/SelectDropdown";
-import InvoiceStatus from "../InvoiceStatusChart";
+import InvoiceStatus from "../Admin-dashboard/InvoiceStatusChart";
 import InvoiceAmount from "../approver-dashboard/InvoiceAmount";
 import ApproverOverView from "./ApproverOverview";
 
@@ -53,10 +53,10 @@ const ApproverDashboardScreen = () => {
             Overview
           </Typography>
           <InvoiceAmount selectedValue={selectedValue} />
-        </Grid> <Grid sx={{marginTop:"20px"}}><Typography variant="h6" gutterBottom>
-            Pending Invoices
-          </Typography>
-        <ApproverOverView />
+        </Grid> <Grid sx={{ marginTop: "20px" }}><Typography variant="h6" gutterBottom>
+          Pending Invoices
+        </Typography>
+          <ApproverOverView />
         </Grid>
       </Grid>
     </Box>
