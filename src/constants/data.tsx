@@ -156,11 +156,11 @@ export const sidebarTwo = [
   },
   {
     id: 6,
-    title: "users",
-    path: "/users/list",
+    title: "Company Users",
+    path: "/company/user/list",
     icon: GroupsIcon,
-    isParent: false,
-    allowedRoles: [...admins]
+    isParent: true,
+    allowedRoles: [...allRoles]
   },
   {
     id: 7,
@@ -178,14 +178,7 @@ export const sidebarTwo = [
     isParent: true,
     allowedRoles: [...superAdmin]
   },
-  {
-    id: 9,
-    title: "Company Users",
-    path: "/company/user/list",
-    icon: Home,
-    isParent: true,
-    allowedRoles: [...allRoles]
-  },
+
   // {
   //   id: 9,
   //   title: "Super Admin Dashboard",
