@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import GridDataUi from '../../../components/GridTable/GridData'
 import { GridColDef } from '@mui/x-data-grid';
-import { useGetSuperAdminDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
+import { useGetEndUserDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
 
 export const columns: GridColDef[] = [
     {
-        field: 'name',
+        field: 'customerName',
         headerName: 'Name',
         width: 200,
         editable: true,
     },
     {
-        field: 'invoiceNum',
+        field: 'invoiceNumber',
         headerName: 'Invoice Number',
         width: 200,
         editable: true,
@@ -35,15 +35,15 @@ export const columns: GridColDef[] = [
         editable: true,
     },
 ];
-const ApproverOverView = () => {
+const EndUserOverViewList = () => {
 
-    const [getDashboard, { data, isLoading, isError }] = useGetSuperAdminDashboardMutation();
+    const [getDashboard, { data, isLoading, isError }] = useGetEndUserDashboardMutation();
     const [companyOverviewList, setCompanyOverviewList] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getDashboard().unwrap();
+                const response = await getDashboard({}).unwrap();
                 console.log(response);
                 setCompanyOverviewList(response.companyOverview || []);
             } catch (error) {
@@ -63,4 +63,4 @@ const ApproverOverView = () => {
     )
 }
 
-export default ApproverOverView
+export default EndUserOverViewList ;

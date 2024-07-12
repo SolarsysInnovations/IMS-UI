@@ -1,30 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Typography, Box } from "@mui/material";
 import SelectDropdown from "../../../components/ui/SelectDropdown";
-import InvoiceStatus from "../InvoiceStatusChart";
-import InvoiceAmount from "../approver-dashboard/InvoiceAmount";
-import EnduserOverView from "./EnduserOverview";
-
-interface ValueProps {
-  label: string;
-  value: string;
-}
+import { useGetEndUserDashboardMutation } from "../../../redux-store/dashboard/dashboardApi";
+import EndUserOverViewList from "./EnduserInvoiceList";
+import EndUserInvoiceOverView from "./EnduserInvoiceOverView";
 
 const options = [
   { label: "monthly", value: "monthly" },
   { label: "weekly", value: "weekly" },
   { label: "yearly", value: "yearly" },
 ];
+export interface ApproverOverViewData {
+  totalInvoices: number;
+  pendingInvoices: number;
+  approvedInvoices: number;
+}
 
-const EnduserDashboardScreen = () => {
-  const [selectedValue, setSelectedValue] = useState<ValueProps>({
-    label: "monthly",
-    value: "monthly",
-  });
 
-  const handleChange = (newValue: ValueProps | null) => {
+const ApproverDashboardScreen = () => {
+  const [getDashboard, { data, isLoading, isError, error }] =
+    useGetEndUserDashboardMutation();
+
+  const [selectedValue, setSelectedValue] = useState('');
+
+  const [approverOverViewData, setApproverOverViewData] = useState<ApproverOverViewData | null>(null);
+
+  console.log("approverOverViewData",approverOverViewData);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            console.log("selectedValue", selectedValue);
+            const response = await getDashboard({ filter: selectedValue }).unwrap();
+            const approverOverViewData = {
+              totalInvoices: response.totalInvoices,
+              pendingInvoices: response.pendingInvoices,
+              approvedInvoices: response.approvedInvoices,
+            }
+            setApproverOverViewData(approverOverViewData || {});
+            console.log(response);
+            
+        } catch (error) {
+            console.error('Failed to fetch data:', error);
+        }
+    };
+
+    if (selectedValue !== null) {
+        fetchData();
+    }
+}, [selectedValue, getDashboard]);
+
+  const handleChange = (newValue: any) => {
     if (newValue) {
-      setSelectedValue(newValue);
+      setSelectedValue(newValue.value);
     }
   };
 
@@ -41,7 +69,7 @@ const EnduserDashboardScreen = () => {
         >
           <SelectDropdown
             applySmallSizeStyle={true}
-            value={selectedValue}
+            value={selectedValue ? {label : selectedValue , value : selectedValue} : null}
             options={options}
             onChange={handleChange}
           />
@@ -52,15 +80,17 @@ const EnduserDashboardScreen = () => {
           <Typography variant="h6" gutterBottom>
             Overview
           </Typography>
-          <InvoiceAmount selectedValue={selectedValue} />
-        </Grid> <Grid sx={{marginTop:"20px"}}><Typography variant="h6" gutterBottom>
+          <EndUserInvoiceOverView  approverOverViewData={approverOverViewData}/>
+        </Grid>{" "}
+        <Grid sx={{ marginTop: "20px" }}>
+          <Typography variant="h6" gutterBottom>
             Pending Invoices
           </Typography>
-        <EnduserOverView />
+          <EndUserOverViewList />
         </Grid>
       </Grid>
     </Box>
   );
 };
 
-export default EnduserDashboardScreen;
+export default ApproverDashboardScreen;

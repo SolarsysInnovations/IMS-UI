@@ -43,30 +43,31 @@ export const settingscompanyApi = apiSlice.injectEndpoints({
 
         addCompanySetting: builder.mutation<any, Partial<any>>({
             query: (company) => ({
-                url: `/setting/create`,
+                url: API_URLS.settingsCreate,
                 method: 'POST',
                 body: company,
             }),
         }),
         updateCompanySetting: builder.mutation<any, { id: number; company: Partial<any> }>({
             query: ({ id, company }) => ({
-                url: `/setting/update/${id}`,
+                url: `/settings/update/${id}`,
                 method: 'POST',
                 body: company,
             }),
         }),
         getCompanySettingById: builder.mutation<void, number>({
             query: (id) => ({
-                 url: `setting/get`,
+                url: `settings/get/${id}`,
                 method: 'POST',
             }),
         }),
-        getCompanySettingByIdMutation: builder.mutation<void, number>({
-            query: (id) => ({
-                 url: `setting/get/${id}`,
-                method: 'POST',
-            }),
-        }),
+        // getCompanySettingByIdMutation: builder.mutation<void, number>({
+        //     query: (id) => ({
+        //          url: `settings/get/${id}`,
+        //         method: 'POST',
+               
+        //     }),
+        // }),
     }),
 });
 export const { setCompanyData, setCompanyLoading, setCompanyError, clearCompanyData } = companySlice.actions;

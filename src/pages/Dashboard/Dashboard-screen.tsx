@@ -13,6 +13,8 @@ const options = [
   { label: "monthly", value: "monthly" },
   { label: "weekly", value: "weekly" },
   { label: "yearly", value: "yearly" },
+  // { label: "halfyear", value: "halfyear" },
+  // { label: "overall", value: "overall" },
 ];
 
 const Dashboard = () => {

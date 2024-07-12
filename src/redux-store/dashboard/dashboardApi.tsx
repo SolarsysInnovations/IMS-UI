@@ -2,8 +2,6 @@ import { API_URLS } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
 
-
-
 export const dashboardApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getDashboard: builder.mutation<any, Partial<any>>({
@@ -12,7 +10,6 @@ export const dashboardApi = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: dashboard,
             }),
-
         }),
         getSuperAdminDashboard: builder.mutation<any, void>({
             query: () => ({
@@ -27,7 +24,14 @@ export const dashboardApi = apiSlice.injectEndpoints({
                 body: dashboard,
             }),
         }),
+        getEndUserDashboard: builder.mutation<any, Partial<any>>({
+            query: (dashboard) => ({
+                url: API_URLS.dashboardEnduser,
+                method: 'POST',
+                body: dashboard,
+            }),
+        }),
     }),
 });
 
-export const { useGetDashboardMutation, useGetSuperAdminDashboardMutation , useGetApproverDashboardMutation} = dashboardApi;
+export const { useGetDashboardMutation, useGetEndUserDashboardMutation,useGetSuperAdminDashboardMutation, useGetApproverDashboardMutation } = dashboardApi;

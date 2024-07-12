@@ -49,7 +49,7 @@ export enum ApiEndpoint {
     //send Email
     SEND_EMAIL = "sendEmail",
     //settings
-    SETTINGS_UPDATE = "settingsUpdate",
+    SETTINGS_GET = "settingsGet",
     SETTINGS_CREATE = "settingsCreate",
     SETTINGS_LIST = "settingsList",
     //Link
@@ -71,7 +71,9 @@ export enum ApiEndpoint {
     // super admin
     DASHBOARD_SUPER_ADMIN = "dashboardSuperAdmin",
     //approver
-    DASHBOARD_APPROVER = "dashboardApprover"
+    DASHBOARD_APPROVER = "dashboardApprover",
+    //enduser
+    DASHBOARD_ENDUSER = "dashboardEnduser"
 }
 
 export type ApiUrls = {
@@ -121,14 +123,12 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.PAYMENT_TERMS_UPDATE]: '/paymentTerms/update',
     [ApiEndpoint.SEND_EMAIL]: "/sendPDFByEmail",
     //settings endpoints
-    [ApiEndpoint.SETTINGS_CREATE]: `/setting/create`,
-    [ApiEndpoint.SETTINGS_UPDATE]: `/setting/update`,
-    [ApiEndpoint.SETTINGS_LIST]: `/setting/list`,
+    [ApiEndpoint.SETTINGS_CREATE]: `/settings/create`,
+    [ApiEndpoint.SETTINGS_LIST]: `/settings/list`,
+    [ApiEndpoint.SETTINGS_GET]: `settings/get`,
     //link endpoints
     [ApiEndpoint.LINK_CREATE]: `/link/create`,
     [ApiEndpoint.LINK_LIST]: `/link/list`,
-    //dashboard endpoints
-    [ApiEndpoint.DASHBOARD_GET]: `/dashboard`,
     //Roles
     [ApiEndpoint.ROLES_GET]: `/role/get/`,
     [ApiEndpoint.ROLES_GETUSER]: `/role/findByEmail/`,
@@ -140,9 +140,13 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
     // company
     [ApiEndpoint.COMPANY_GET]: `/company/list`,
+    //dashboard endpoints
+     [ApiEndpoint.DASHBOARD_GET]: `/admin/dashboard`,
     // dashboard super admin 
-    [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/superAdmin/dashboard/overview`,
-        // dashboard super admin 
-    [ApiEndpoint.DASHBOARD_APPROVER]: `/approver/dashboard`
+    [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/superAdmin/dashboard`,
+    // dashboard super admin 
+    [ApiEndpoint.DASHBOARD_APPROVER]: `/dashboard/approver`,
+    // dashboard enduser 
+    [ApiEndpoint.DASHBOARD_ENDUSER]: `/dashboard/enduser`
 
 };
