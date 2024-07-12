@@ -84,7 +84,9 @@ export const routesConfig = [
   // * --------- service -----------
   { path: "/services/list", element: <ServicesList />, allowedRoles: [...admins] },
   { path: "/service/create", element: <CreateServices />, allowedRoles: [...admins] },
-  { path: "/service/edit/:id", element: <ServiceEditScreen />, allowedRoles: [...admins] },
+  { path: "/service/edit/:id", element: <ServiceEditScreen onSuccess={function (): void {
+    throw new Error("Function not implemented.");
+  } } />, allowedRoles: [...admins] },
 
   // * -------- company users ---------
   { path: "/company/user/list", element: <UserScreen />, allowedRoles: [...allRoles] },

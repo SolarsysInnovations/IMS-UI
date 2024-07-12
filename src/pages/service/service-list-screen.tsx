@@ -1,21 +1,20 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
-import GridDataUi from '../../components/GridTable/GridData'
-import TableHeader from '../../components/layouts/TableHeader'
-import usePathname from '../../hooks/usePathname'
-import { Add } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../redux-store/store'
-import ToastUi from '../../components/ui/ToastifyUi'
-import { columns } from '../../constants/grid-table-data/service-table-data'
-import { useGetServiceQuery } from '../../redux-store/service/serviceApi'
-import ModalUi from '../../components/ui/ModalUi'
-import { Box } from '@mui/material'
-import ServiceCreate from './service-create-screen'
-import { ToastContainer } from 'react-toastify'
-import SnackBarUi from '../../components/ui/Snackbar'
-
-
+import React, { useEffect, useState } from 'react';
+import GridDataUi from '../../components/GridTable/GridData';
+import TableHeader from '../../components/layouts/TableHeader';
+import usePathname from '../../hooks/usePathname';
+import { Add } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux-store/store';
+import ToastUi from '../../components/ui/ToastifyUi';
+import { columns } from '../../constants/grid-table-data/service-table-data';
+import { useGetServiceQuery } from '../../redux-store/service/serviceApi';
+import ModalUi from '../../components/ui/ModalUi';
+import { Box } from '@mui/material';
+import ServiceCreate from './service-create-screen';
+import ServiceEditScreen from './service-edit-screen'; // Import the edit screen
+import { ToastContainer } from 'react-toastify';
+import SnackBarUi from '../../components/ui/Snackbar';
 
 const ServicesList = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -23,32 +22,44 @@ const ServicesList = () => {
     const { data: serviceList, error, isLoading, refetch } = useGetServiceQuery();
     const serviceStateDetails = useSelector((state: any) => state.serviceState.data);
 
-    const [openModal, setOpenModal] = React.useState(false);
+    const [openModal, setOpenModal] = useState(false);
+    const [editMode, setEditMode] = useState(false); // State to determine if edit mode is active
 
     const buttons = [
-        { label: 'Create Service List', icon: Add, onClick: () => setOpenModal(true) },
+        { label: 'Create Service List', icon: Add, onClick: () => { setOpenModal(true); setEditMode(false); } },
     ];
 
     const pathname = usePathname();
     const handleModalClose = () => {
-        refetch()
+        refetch();
         setOpenModal(false);
-    }
+    };
+
+    const handleEditClick = (serviceId : any) => {
+        // Logic to fetch and set the service data to be edited
+        setEditMode(true);
+        setOpenModal(true);
+    };
 
     useEffect(() => {
         refetch();
-    }, [serviceStateDetails])
+    }, [serviceStateDetails]);
+
     return (
         <>
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} columns={columns || []} tableData={serviceList || []} checkboxSelection={false} />
+            <GridDataUi showToolbar={true} columns={columns || []} tableData={serviceList || []} checkboxSelection={false} onEditClick={handleEditClick} />
             <ModalUi open={openModal} onClose={handleModalClose}>
                 <Box sx={{ marginTop: "15px" }}>
-                    <ServiceCreate />
+                    {editMode ? (
+                        <ServiceEditScreen onSuccess={handleModalClose} />
+                    ) : (
+                        <ServiceCreate onSuccess={handleModalClose} />
+                    )}
                 </Box>
             </ModalUi>
         </>
-    )
-}
+    );
+};
 
-export default ServicesList
+export default ServicesList;
