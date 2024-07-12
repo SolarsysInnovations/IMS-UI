@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import GridDataUi from '../../../components/GridTable/GridData'
 import { GridColDef } from '@mui/x-data-grid';
 import { useGetSuperAdminDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
+import { Box } from '@mui/material';
 
 export const columns: GridColDef[] = [
     {
@@ -23,30 +24,13 @@ export const columns: GridColDef[] = [
         editable: true,
     },
 ];
-const CompanyOverView = () => {
-
-    const [getDashboard, { data, isLoading, isError }] = useGetSuperAdminDashboardMutation();
-    const [companyOverviewList, setCompanyOverviewList] = useState<any[]>([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await getDashboard().unwrap();
-                console.log(response);
-                setCompanyOverviewList(response.companyOverview || []);
-            } catch (error) {
-                console.error("Failed to fetch data", error);
-            }
-        };
-
-        fetchData();
-    }, [getDashboard]);
-
-    console.log("companyOverviewList", companyOverviewList);
+const CompanyOverView = ({ companyOverviewData }: any) => {
 
     return (
         <>
-            <GridDataUi showToolbar={false} columns={columns} tableData={[]} checkboxSelection={false} />
+            <Box mt={3} >
+                <GridDataUi showToolbar={false} columns={columns} tableData={companyOverviewData} checkboxSelection={false} />
+            </Box>
         </>
     )
 }
