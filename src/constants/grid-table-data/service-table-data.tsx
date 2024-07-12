@@ -87,7 +87,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             </IconButton> */}
             <ModalUi open={openModal} onClose={handleModalClose}>
                 <Box sx={{ marginTop: "15px" }}>
-                    <ServiceEditScreen />
+                <ServiceEditScreen onSuccess={handleModalClose} />
                 </Box>
             </ModalUi>
         </Stack>

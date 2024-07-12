@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
+import { useUpdateServiceMutation, useGetServiceQuery } from '../../redux-store/service/serviceApi';
 import { serviceFields } from '../../constants/form-data/form-data-json';
 import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SnackBarUi from '../../components/ui/Snackbar';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 
-const ServiceEditScreen: React.FC = () => {
-    const [updateService, { isLoading, isSuccess, isError, error }] = useUpdateServiceMutation();
+interface ServiceEditScreenProps {
+    onSuccess: () => void;
+}
+
+const ServiceEditScreen: React.FC<ServiceEditScreenProps> = ({ onSuccess }) => {
+    const [updateService, { isLoading: serviceUpdateLoading, isSuccess: serviceUpdateSuccess, isError: serviceUpdateError, error: serviceUpdateErrorObject }] = useUpdateServiceMutation();
     const serviceStateDetails = useSelector((state: any) => state.serviceState.data);
     const [showSuccessToast, setShowSuccessToast] = useState(false); 
+    const { data: service, error, isLoading, refetch } = useGetServiceQuery();
     const [isPopupOpen, setIsPopupOpen] = useState(true); // State to control popup visibility
     const handleBackClick = () => {
         navigate(0); // Navigate back
       };
+    
     useEffect(() => {
         console.log("Service State Details:", serviceStateDetails); // Check what is in serviceStateDetails
 
@@ -29,6 +36,21 @@ const ServiceEditScreen: React.FC = () => {
             window.removeEventListener('popstate', handlePopState);
         };
     }, [serviceStateDetails]);
+
+    useSnackbarNotifications({
+        error: serviceUpdateError,
+        errorObject: serviceUpdateErrorObject,
+        errorMessage: 'Error updating Service',
+        success: serviceUpdateSuccess,
+        successMessage: 'Service updated successfully',
+    });
+
+    useEffect(() => {
+        refetch();
+        if (serviceUpdateSuccess) {
+            onSuccess();
+        }
+    }, [serviceUpdateSuccess, refetch, onSuccess]);
 
     const navigate = useNavigate();
     const onSubmit = async (values: any, actions: any) => {
@@ -55,13 +77,6 @@ const ServiceEditScreen: React.FC = () => {
 
     return (
         <>
-            {showSuccessToast && (
-                <SnackBarUi
-                    message="Successfully edited the service"
-                    severity="success"
-                    isSubmitting={true}
-                />
-            )}
             {isPopupOpen && serviceStateDetails && (
                 <DynamicFormCreate
                     headerName='Edit Service'

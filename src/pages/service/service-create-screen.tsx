@@ -8,13 +8,35 @@ import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
 import useSuccessToast from '../../hooks/useToast';
 import SnackBarUi from '../../components/ui/Snackbar';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 
+interface ServiceCreateProps {
+    onSuccess: () => void;
+}
 
-const ServiceCreate: React.FC = () => {
+const ServiceCreate: React.FC<ServiceCreateProps> = ({ onSuccess }) => {
 
-    const [addService, { isLoading, isSuccess, isError, error }] = useAddServiceMutation();
+    const [addService, { isLoading: serviceAddLoading, isSuccess: serviceAddSuccess, isError: serviceAddError, error: serviceAddErrorObject }] = useAddServiceMutation();
     const { data: serviceList, refetch } = useGetServiceQuery();
     const [showSuccessToast, setShowSuccessToast] = useState(false);
+
+    useSnackbarNotifications({
+        error: serviceAddError,
+        errorObject: serviceAddErrorObject,
+        errorMessage: 'Error creating Service',
+        success: serviceAddSuccess,
+        successMessage: 'Service created successfully',
+    });
+
+    useEffect(() => {
+        refetch();
+    }, [serviceAddSuccess, refetch]);
+    
+    useEffect(() => {
+        if (serviceAddSuccess) {
+            onSuccess();
+        }
+    }, [serviceAddSuccess, onSuccess]);
 
     const onSubmit = async (values: any, actions: any) => {
         try {
@@ -29,20 +51,8 @@ const ServiceCreate: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        refetch()
-    }, [isSuccess]);
-
     return (
-        <div>
-            {/* Use DynamicServiceCreate with the required props */}
-            {showSuccessToast && (
-                <SnackBarUi
-                    message="Successfully created the service"
-                    severity="success"
-                    isSubmitting={true}
-                />
-            )}
+        <>
             <DynamicFormCreate
                 headerName='Create Service'
                 showTable={true}
@@ -51,7 +61,7 @@ const ServiceCreate: React.FC = () => {
                 validationSchema={serviceValidationSchema}
                 onSubmit={onSubmit}
             />
-        </div>
+        </>
     );
 };
 

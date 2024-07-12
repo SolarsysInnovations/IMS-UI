@@ -13,6 +13,7 @@ interface GridDataProps {
     onCellEditStop?: any;
     onEditStart?: any;
     onDeleteSuccess?: any;
+    onEditClick?:any;
 }
 export default function GridDataUi({ onEditStart, onCellEditStop, onCellEditor, hideFooter, pagination, showToolbar, checkboxSelection, columns, tableData, onDeleteSuccess }: GridDataProps) {
     const modifiedColumns = columns.map((column : GridColDef) => {
