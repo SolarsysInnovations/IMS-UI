@@ -87,7 +87,7 @@ export const routesConfig = [
   { path: "/service/edit/:id", element: <ServiceEditScreen />, allowedRoles: [...admins] },
 
   // * -------- company users ---------
-  { path: "/company/user/list", element: <UserScreen />, allowedRoles: [...allRoles] },
+  { path: "/user/list", element: <UserScreen />, allowedRoles: [...allRoles] },
 
   // * -------- company ---------
   { path: "/company", element: <CompanyList />, allowedRoles: [...superAdmin] },
@@ -156,8 +156,8 @@ export const sidebarTwo = [
   },
   {
     id: 6,
-    title: "Company Users",
-    path: "/company/user/list",
+    title: "Users",
+    path: "/user/list",
     icon: GroupsIcon,
     isParent: true,
     allowedRoles: [...allRoles]
