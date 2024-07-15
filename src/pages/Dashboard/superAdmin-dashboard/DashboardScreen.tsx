@@ -17,15 +17,33 @@ import CompanyOverView from './CompanyOverView';
 const SuperAdminDashboardScreen = () => {
 
     const [getDashboard, { data, isLoading, isError }] = useGetSuperAdminDashboardMutation();
+    const [superAdminOverviewData, setSuperAdminOverviewData] = useState({});
+    const [companyOverviewData, setCompanyOverviewData] = useState<any[]>();
 
     useEffect(() => {
-        getDashboard();
+        const fetchData = async () => {
+            try {
+                const response = await getDashboard().unwrap();
+                const overviewData = {
+                    totalNoOfCompany: response.totalNoOfCompany,
+                    totalNoOfInvoices: response.totalNoOfInvoices,
+                }
+                const invoiceListData = [
+                    ...response.companyOverview
+                ]
+                setCompanyOverviewData(invoiceListData || [])
+                setSuperAdminOverviewData(overviewData);
+            } catch (error) {
+                console.error("Error fetching data", error);
+            }
+        }
+        fetchData();
     }, [getDashboard]);
 
     return (
         <>
-            <DashboardOverviewUi />
-            <CompanyOverView />
+            <DashboardOverviewUi overviewData={superAdminOverviewData} />
+            <CompanyOverView companyOverviewData={companyOverviewData} />
         </>
     );
 };
