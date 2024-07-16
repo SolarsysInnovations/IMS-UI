@@ -35,7 +35,9 @@ import UserScreen from "../pages/company-users/UserScreen";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.ADMIN];
-export const superAdmin = [Roles.SUPERADMIN,]
+export const superAdmin = [Roles.SUPERADMIN,];
+export const standardUser = [Roles.ENDUSER,];
+export const approver = [Roles.APPROVER,]
 
 const getUserRole = () => {
   return localStorage.getItem('userRole');
@@ -100,10 +102,10 @@ export const routesConfig = [
   // { path: "/super-admin/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
 
   // // * -------- approver ---------
-  { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...allRoles] },
+  { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...approver] },
 
   // // * -------- enduser ---------
-  { path: "/enduser", element: <EnduserDashboardScreen />, allowedRoles: [...allRoles] },
+  { path: "/standarduser", element: <EnduserDashboardScreen />, allowedRoles: [...standardUser] },
 ];
 
 export const sidebarTwo = [
