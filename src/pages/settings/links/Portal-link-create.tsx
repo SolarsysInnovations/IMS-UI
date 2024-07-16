@@ -28,6 +28,7 @@ const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
     // Update form values
   };
   const handleBackClick = () => {
+    handleClose(); // Close modal
     navigate(0); // Navigate back
   };
 

@@ -33,7 +33,7 @@ const menuItems = [
   { icon: <Person sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'User Profile', component: PopupComponents.USER_PROFILE },
   { icon: <Lock sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'Change Password', component: PopupComponents.CHANGE_PASSWORD },
   { icon: <PersonAdd sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'Add another account' },
-  { icon: <Settings sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'Settings', route: '/settings' },
+  // { icon: <Settings sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'Settings', route: '/settings' },
   { icon: <Logout sx={{ color: 'grey.500', marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: 'Logout', action: 'logout' },
 ];
 
@@ -160,16 +160,16 @@ export default function Header() {
                 }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Settings">
-              <IconButton sx={{ width: "30px" }} onClick={() => navigate("/settings")}>
-                <Settings sx={{
+            {/* <Tooltip title="Settings"> */}
+              {/* <IconButton sx={{ width: "30px" }} onClick={() => navigate("/settings")}> */}
+                {/* <Settings sx={{
                   ":hover": {
                     color: "primary.main"
                   },
                   color: 'grey.500', width: "20px"
-                }} />
-              </IconButton>
-            </Tooltip>
+                }} /> */}
+              {/* </IconButton> */}
+            {/* </Tooltip> */}
             <Tooltip title="Account settings">
               <IconButton sx={{ width: "30px" }} onClick={handleMenuOpen(setAnchorEl)} size="small">
                 <Person sx={{

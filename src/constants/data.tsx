@@ -164,7 +164,7 @@ export const sidebarTwo = [
     path: "/user/list",
     icon: GroupsIcon,
     isParent: true,
-    allowedRoles: [...allRoles]
+    allowedRoles: [Roles.SUPERADMIN, Roles.ADMIN],
   },
   {
     id: 7,
