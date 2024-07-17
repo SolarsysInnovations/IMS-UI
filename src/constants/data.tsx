@@ -32,6 +32,7 @@ import SuperAdminDashboardScreen from "../pages/Dashboard/superAdmin-dashboard/D
 import ApproverDashboardScreen from "../pages/Dashboard/approver-dashboard/DashboardScreen";
 import EnduserDashboardScreen from "../pages/Dashboard/End-user dashboard/DashboardScreen";
 import UserScreen from "../pages/company-users/UserScreen";
+import SettingRoleScreen from "../pages/settings/settings-role";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.ADMIN];
@@ -56,6 +57,7 @@ const getDashboardComponent = (role: any) => {
   }
 };
 const userRole = getUserRole();
+console.log("userRole", userRole);
 
 export const routesConfig = [
   // * -------- login ---------
@@ -77,8 +79,7 @@ export const routesConfig = [
 
   // * ---------- settings -----------
   { path: "/settings", element: <SettingScreen />, allowedRoles: [...allRoles] },
-
-
+  { path: "/settings/Role", element: <SettingRoleScreen />, allowedRoles: [...superAdmin, ...approver, ...standardUser] },
   // * ----------- invoice ------------
   { path: "/invoice/list", element: <InvoiceList />, allowedRoles: [...allRoles] },
   { path: "/invoice/create", element: <InvoiceCreateScreen />, allowedRoles: [...allRoles] },
@@ -169,11 +170,17 @@ export const sidebarTwo = [
   {
     id: 7,
     title: "Settings",
-    path: "/settings",
+    path:
+      userRole === Roles.SUPERADMIN
+        ? "/settings/Role"
+        : userRole === Roles.APPROVER || userRole === Roles.ENDUSER
+        ? "/settings/Role"
+        : "/settings",
     icon: SettingsIcon,
     isParent: false,
-    allowedRoles: [...allRoles]
+    allowedRoles: [...allRoles] ,
   },
+
   {
     id: 8,
     title: "Company",
