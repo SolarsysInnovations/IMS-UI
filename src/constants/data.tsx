@@ -172,7 +172,7 @@ export const sidebarTwo = [
     title: "Settings",
     path:
       userRole === Roles.SUPERADMIN
-        ? "/settings/Role"
+        ? "/settings/Role" 
         : userRole === Roles.APPROVER || userRole === Roles.ENDUSER
         ? "/settings/Role"
         : "/settings",

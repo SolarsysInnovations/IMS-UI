@@ -24,6 +24,15 @@ const CompanyDetailsScreen: React.FC = () => {
   const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingQuery();
   const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCompanySettingByIdMutation();
 
+  const userDetailsFromStorage = window.localStorage.getItem("userDetails");
+
+  // Parse userDetails if it exists
+  let userDetails = userDetailsFromStorage ? JSON.parse(userDetailsFromStorage) : null;
+  console.log("userDetails",userDetails);
+
+console.log("userDetails",userDetails);
+  
+  
   const [openModal, setOpenModal] = useState(false);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
@@ -35,7 +44,7 @@ const CompanyDetailsScreen: React.FC = () => {
   ];
   const handleEditClick = async () => {
     try {
-      const response = await getData(companyDetails.id);
+      const response = await getData(userDetails.companyDetails.id);
       if ("data" in response) {
         const companyData = response.data;
         await dispatch(setData(companyData));
@@ -93,7 +102,7 @@ const CompanyDetailsScreen: React.FC = () => {
                   >
                     Company Name
                   </span>
-                  <span>: {companyDetails?.companyName}</span>
+                  <span>: {userDetails?.companyDetails.companyName}</span>
                 </p>
               </div>
               <div>
@@ -107,7 +116,7 @@ const CompanyDetailsScreen: React.FC = () => {
                   >
                     Company Address
                   </span>
-                  <span>: {companyDetails?.companyAddress}</span>
+                  <span>: {userDetails?.companyDetails.companyAddress}</span>
                 </p>
               </div>
               <div>
@@ -121,7 +130,7 @@ const CompanyDetailsScreen: React.FC = () => {
                   >
                     Company State
                   </span>
-                  <span>: {companyDetails?.companyState}</span>
+                  <span>: {userDetails?.companyDetails.companyState}</span>
                 </p>
               </div>
               <div>
@@ -135,7 +144,7 @@ const CompanyDetailsScreen: React.FC = () => {
                   >
                     Company Country
                   </span>
-                  <span>: {companyDetails?.companyCountry}</span>
+                  <span>: {userDetails?.companyDetails.companyCountry}</span>
                 </p>
               </div>
               <div>
@@ -149,7 +158,7 @@ const CompanyDetailsScreen: React.FC = () => {
                   >
                     Company E-mail
                   </span>
-                  <span>: {companyDetails?.companyEmail}</span>
+                  <span>: {userDetails?.companyDetails.companyEmail}</span>
                 </p>
               </div>
             </Box>
@@ -167,7 +176,7 @@ const CompanyDetailsScreen: React.FC = () => {
                   >
                     Company Phone
                   </span>
-                  <span>: {companyDetails?.companyPhone}</span>
+                  <span>: {userDetails?.companyDetails.companyPhone}</span>
                 </p>
               </div>
               <div>
@@ -181,7 +190,7 @@ const CompanyDetailsScreen: React.FC = () => {
                   >
                     Company Cell
                   </span>
-                  <span>: {companyDetails?.companyCell}</span>
+                  <span>: {userDetails?.companyDetails.companyCell}</span>
                 </p>
               </div>
               <div>
@@ -195,7 +204,7 @@ const CompanyDetailsScreen: React.FC = () => {
                   >
                     Company Website
                   </span>
-                  <span>: {companyDetails?.companyWebsite}</span>
+                  <span>: {userDetails?.companyDetails.companyWebsite}</span>
                 </p>
               </div>
               <div>
@@ -209,7 +218,7 @@ const CompanyDetailsScreen: React.FC = () => {
                   >
                     Company Tax Num
                   </span>
-                  <span>: {companyDetails?.companyTaxNumber}</span>
+                  <span>: {userDetails?.companyDetails.companyTaxNumber}</span>
                 </p>
               </div>
               <div>
@@ -223,7 +232,7 @@ const CompanyDetailsScreen: React.FC = () => {
                   >
                     Company Reg Num
                   </span>
-                  <span>: {companyDetails?.companyRegNumber}</span>
+                  <span>: {userDetails?.companyDetails.companyRegNumber}</span>
                 </p>
               </div>
             </Box>
