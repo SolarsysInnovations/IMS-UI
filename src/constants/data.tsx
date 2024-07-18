@@ -35,6 +35,12 @@ import UserScreen from "../pages/company-users/UserScreen";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.ADMIN];
+export const exceptEndUser = [
+  Roles.SUPERADMIN,
+  Roles.ADMIN,
+  Roles.APPROVER
+];
+export const endUser=[Roles.ENDUSER];
 export const superAdmin = [Roles.SUPERADMIN,]
 
 const getUserRole = () => {
@@ -42,15 +48,15 @@ const getUserRole = () => {
 };
 
 const getDashboardComponent = (role: any) => {
-  switch (role) {
+  switch (role) { case Roles.ADMIN:
+      return <Dashboard />;
     case Roles.SUPERADMIN:
       return <SuperAdminDashboardScreen />;
     case Roles.APPROVER:
       return <ApproverDashboardScreen />;
     case Roles.ENDUSER:
       return <EnduserDashboardScreen />;
-    default:
-      return <Dashboard />;
+    
   }
 };
 const userRole = getUserRole();
@@ -154,7 +160,7 @@ export const sidebarTwo = [
     path: "/reports",
     icon: TaskIcon,
     isParent: false,
-    allowedRoles: [...admins]
+    allowedRoles: [...admins, ...endUser]
   },
   {
     id: 6,
@@ -162,7 +168,7 @@ export const sidebarTwo = [
     path: "/user/list",
     icon: GroupsIcon,
     isParent: true,
-    allowedRoles: [...allRoles]
+    allowedRoles: [...exceptEndUser]
   },
   {
     id: 7,

@@ -18,7 +18,7 @@ export interface ApproverOverViewData {
 
 
 const ApproverDashboardScreen = () => {
-  const [getDashboard, { data, isLoading, isError, error }] =
+  const [getEndUserDashboard, { data, isLoading, isError, error }] =
     useGetEndUserDashboardMutation();
 
   const [selectedValue, setSelectedValue] = useState('');
@@ -31,7 +31,7 @@ const ApproverDashboardScreen = () => {
     const fetchData = async () => {
         try {
             console.log("selectedValue", selectedValue);
-            const response = await getDashboard({ filter: selectedValue }).unwrap();
+            const response = await getEndUserDashboard({ filter: selectedValue }).unwrap();
             const approverOverViewData = {
               totalInvoices: response.totalInvoices,
               pendingInvoices: response.pendingInvoices,
@@ -48,7 +48,7 @@ const ApproverDashboardScreen = () => {
     if (selectedValue !== null) {
         fetchData();
     }
-}, [selectedValue, getDashboard]);
+}, [selectedValue, getEndUserDashboard]);
 
   const handleChange = (newValue: any) => {
     if (newValue) {
