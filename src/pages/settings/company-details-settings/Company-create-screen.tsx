@@ -5,34 +5,56 @@ import { Box } from "@mui/material";
 import { useGetCompanySettingQuery } from "../../../redux-store/settings/companyDetailsApi";
 import { useAddCompanySettingMutation, useUpdateCompanySettingMutation } from '../../../redux-store/settings/companyDetailsApi';
 import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
-import { companyValidationSchema } from '../../../constants/forms/validations/validationSchema';
+import { companyDetailsValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { companyInitialValues } from '../../../constants/forms/formikInitialValues';
 import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import { CompanyFormProps } from '../../../types/types';
 import { Save } from '@mui/icons-material';
-import { CompanyEditFields, CompanyFields } from '../../../constants/form-data/form-data-json';
+import { CompanyEditFields, CompanyDetailsFields } from '../../../constants/form-data/form-data-json';
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 
 const CreateCompany = ({ companyValue, mode }: CompanyFormProps) => {
 
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = useState(false);
 
-    const [addCompany, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddCompanySettingMutation();
+    const [addCompany, { isLoading: companyAddLoading, isSuccess: companyAddSuccess, isError: companyAddError, error: companyAddErrorObject }] = useAddCompanySettingMutation();
 
-    const [updateCompany, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateCompanySettingMutation();
+    const [updateCompany, { isLoading: companyUpdateLoading, isSuccess: companyUpdateSuccess, isError: companyUpdateError, error: companyUpdateErrorObject }] = useUpdateCompanySettingMutation();
 
     const { data: settingsList, refetch } = useGetCompanySettingQuery();
 
     const initialValue = companyValue || companyInitialValues;
 
-    const fields = mode === 'create' ? CompanyFields : CompanyEditFields;
+    const fields = CompanyDetailsFields ;
 
     console.log("mode", mode);
     console.log("fields", fields);
     console.log("companyValue", companyValue);
 
+    useSnackbarNotifications({
+        error: companyAddError,
+        errorObject: companyAddErrorObject,
+        errorMessage: 'Error creating Company',
+        success: companyAddSuccess,
+        successMessage: 'Company created successfully',
+    });
+
+    useSnackbarNotifications({
+        error: companyUpdateError,
+        errorObject: companyUpdateErrorObject,
+        errorMessage: 'Error updating Company',
+        success: companyUpdateSuccess,
+        successMessage: 'Company updated successfully',
+    });
+
+    useEffect(() => {
+        refetch();
+    }, [companyAddSuccess, companyUpdateSuccess, refetch]);
+
+    
 
     const onSubmit = async (values: CompanyFormProps, actions: any) => {
         try {
@@ -58,11 +80,11 @@ const CreateCompany = ({ companyValue, mode }: CompanyFormProps) => {
         setOpenModal(false);
     };
 
-    useEffect(() => {
-        if (isAddSuccess || isUpdateSuccess) {
-            refetch(); // Refetch data after successful add or update
-        }
-    }, [isAddSuccess, isUpdateSuccess, refetch]);
+    // useEffect(() => {
+    //     if (isAddSuccess || isUpdateSuccess) {
+    //         refetch(); // Refetch data after successful add or update
+    //     }
+    // }, [isAddSuccess, isUpdateSuccess, refetch]);
 
     return (
         <>
@@ -73,11 +95,9 @@ const CreateCompany = ({ companyValue, mode }: CompanyFormProps) => {
                 updateFormValue={updateFormValue}
                 fields={fields}
                 initialValues={initialValue || []}
-                validationSchema={companyValidationSchema}
+                validationSchema={companyDetailsValidationSchema}
                 onSubmit={onSubmit}
-                buttons={[
-                    { label: 'Save', icon: Save, onClick: onSubmit }
-                ]}
+                
             />
         </>
     );
