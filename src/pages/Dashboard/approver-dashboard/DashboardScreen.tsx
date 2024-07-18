@@ -16,7 +16,6 @@ export interface ApproverOverViewData {
   approvedInvoices: number;
 }
 
-
 const ApproverDashboardScreen = () => {
   const [getDashboard, { data, isLoading, isError, error }] =
     useGetApproverDashboardMutation();
@@ -84,9 +83,9 @@ const ApproverDashboardScreen = () => {
         </Grid>{" "}
         <Grid sx={{ marginTop: "20px" }}>
           <Typography variant="h6" gutterBottom>
-            Pending Invoices
+            Recent Invoices
           </Typography>
-          <ApproverInvoiceList />
+          <ApproverInvoiceList selectedValue={selectedValue} />
         </Grid>
       </Grid>
     </Box>

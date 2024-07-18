@@ -101,7 +101,26 @@ export const serviceFields: FieldProps[] = [
         ]
     },
 ];
-
+export const CompanyDetailsFields: FieldProps[]=[
+    {
+        name: 'Company Information',
+        label: 'Company Information :',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'companyName', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 5, },
+            { name: 'companyEmail', required: true, disabled: false, label: 'Company Email', type: 'text', gridSize: 5, },
+            { name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5, },
+            { name: 'companyCell', required: true, disabled: false, label: 'Company Cell', type: 'number', gridSize: 5, },
+            { name: 'companyCountry', required: true, disabled: false, label: 'Company Country', type: 'selectCountry', gridSize: 5, },
+            { name: 'companyState', required: true, disabled: false, label: 'Company State', type: 'selectState', gridSize: 5, },
+            { name: 'companyAddress', required: true, disabled: false, label: 'Company Address', type: 'text', gridSize: 5, },
+            { name: 'companyWebsite', required: true, disabled: false, label: 'Company Website', type: 'text', gridSize: 5, },
+            { name: 'companyTaxNumber', required: true, disabled: false, label: 'Company TaxNumber', type: 'text', gridSize: 5, },
+            { name: 'companyRegNumber', required: true, disabled: false, label: 'Company RegNumber', type: 'text', gridSize: 5, },
+        ]
+    },
+]
 export const CompanyFields: FieldProps[] = [
     {
         name: 'Admin Profile',

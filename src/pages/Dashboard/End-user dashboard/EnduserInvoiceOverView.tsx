@@ -24,6 +24,7 @@ const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
       iconBg: "#635bff",
       value: approverOverViewData?.totalInvoices || 0,
       childLabel: "Invoice child label",
+      cardBg: "#e0e0ff",
     },
     {
       label: "Approved Invoices",
@@ -31,6 +32,7 @@ const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
       iconBg: "#4E9F3D",
       value: approverOverViewData?.approvedInvoices || 0,
       childLabel: "Invoice child label",
+      cardBg: "#e0ffe0",
     },
     {
       label: "Pending Invoices",
@@ -38,6 +40,7 @@ const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
       iconBg: "#FF204E",
       value: approverOverViewData?.pendingInvoices || 0,
       childLabel: "Invoice child label",
+      cardBg: "#ffe0e0",
     },
   ]);
 
@@ -50,6 +53,7 @@ const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
           iconBg: "#635bff",
           value: approverOverViewData.totalInvoices,
           childLabel: "Invoice child label",
+          cardBg: "#e0e0ff",
         },
         {
           label: "Approved Invoices",
@@ -57,6 +61,7 @@ const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
           iconBg: "#4E9F3D",
           value: approverOverViewData.approvedInvoices,
           childLabel: "Invoice child label",
+          cardBg: "#e0ffe0",
         },
         {
           label: "Pending Invoices",
@@ -64,6 +69,7 @@ const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
           iconBg: "#FF204E",
           value: approverOverViewData.pendingInvoices,
           childLabel: "Invoice child label",
+          cardBg: "#ffe0e0",
         },
       ]);
     }
@@ -76,7 +82,7 @@ const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
     <Grid container spacing={2}>
       {invoiceAmount.map((data, index) => (
         <Grid key={index} item xs={4}>
-          <Card sx={{ width: "180px", height: "80px", padding: "10px 15px" }}>
+          <Card sx={{ backgroundColor: data.cardBg, width: "180px", height: "80px", padding: "10px 15px" }}>
             <Stack spacing={1}>
               <Stack
                 direction="row"

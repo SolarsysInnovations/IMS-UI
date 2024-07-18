@@ -186,12 +186,12 @@ const MenuComponent = ({
       >
         <ListItemIcon
           sx={{
-          "& .css-c7koz-MuiSvgIcon-root": {
+            "& .css-c7koz-MuiSvgIcon-root": {
               width: "20px",
-          },
-          ":hover": {
+            },
+            ":hover": {
               color: "primary.dark",
-          },
+            },
           }}
         >
           {item.icon}
@@ -258,16 +258,16 @@ export default function Header() {
                 }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Settings">
-              <IconButton sx={{ width: "30px" }} onClick={() => navigate("/settings")}>
-                <Settings sx={{
+            {/* <Tooltip title="Settings"> */}
+            {/* <IconButton sx={{ width: "30px" }} onClick={() => navigate("/settings")}> */}
+            {/* <Settings sx={{
                   ":hover": {
                     color: "primary.main"
                   },
                   color: 'grey.500', width: "20px"
-                }} />
-              </IconButton>
-            </Tooltip>
+                }} /> */}
+            {/* </IconButton> */}
+            {/* </Tooltip> */}
             <Tooltip title="Account settings">
               <IconButton sx={{ width: "30px" }} onClick={handleMenuOpen(setAnchorEl)} size="small">
                 <Person sx={{

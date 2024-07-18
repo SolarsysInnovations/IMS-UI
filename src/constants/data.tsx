@@ -32,23 +32,21 @@ import SuperAdminDashboardScreen from "../pages/Dashboard/superAdmin-dashboard/D
 import ApproverDashboardScreen from "../pages/Dashboard/approver-dashboard/DashboardScreen";
 import EnduserDashboardScreen from "../pages/Dashboard/End-user dashboard/DashboardScreen";
 import UserScreen from "../pages/company-users/UserScreen";
+import SettingRoleScreen from "../pages/settings/settings-role";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
 export const admins = [Roles.ADMIN];
-export const exceptEndUser = [
-  Roles.SUPERADMIN,
-  Roles.ADMIN,
-  Roles.APPROVER
-];
-export const endUser=[Roles.ENDUSER];
-export const superAdmin = [Roles.SUPERADMIN,]
+export const superAdmin = [Roles.SUPERADMIN,];
+export const standardUser = [Roles.ENDUSER,];
+export const approver = [Roles.APPROVER,]
 
 const getUserRole = () => {
   return localStorage.getItem('userRole');
 };
 
 const getDashboardComponent = (role: any) => {
-  switch (role) { case Roles.ADMIN:
+  switch (role) {
+    case Roles.ADMIN:
       return <Dashboard />;
     case Roles.SUPERADMIN:
       return <SuperAdminDashboardScreen />;
@@ -56,10 +54,11 @@ const getDashboardComponent = (role: any) => {
       return <ApproverDashboardScreen />;
     case Roles.ENDUSER:
       return <EnduserDashboardScreen />;
-    
+
   }
 };
 const userRole = getUserRole();
+console.log("userRole", userRole);
 
 export const routesConfig = [
   // * -------- login ---------
@@ -81,8 +80,7 @@ export const routesConfig = [
 
   // * ---------- settings -----------
   { path: "/settings", element: <SettingScreen />, allowedRoles: [...allRoles] },
-
-
+  { path: "/settings/Role", element: <SettingRoleScreen />, allowedRoles: [...superAdmin, ...approver, ...standardUser] },
   // * ----------- invoice ------------
   { path: "/invoice/list", element: <InvoiceList />, allowedRoles: [...allRoles] },
   { path: "/invoice/create", element: <InvoiceCreateScreen />, allowedRoles: [...allRoles] },
@@ -90,9 +88,11 @@ export const routesConfig = [
   // * --------- service -----------
   { path: "/services/list", element: <ServicesList />, allowedRoles: [...admins] },
   { path: "/service/create", element: <CreateServices />, allowedRoles: [...admins] },
-  { path: "/service/edit/:id", element: <ServiceEditScreen onSuccess={function (): void {
-    throw new Error("Function not implemented.");
-  } } />, allowedRoles: [...admins] },
+  {
+    path: "/service/edit/:id", element: <ServiceEditScreen onSuccess={function (): void {
+      throw new Error("Function not implemented.");
+    }} />, allowedRoles: [...admins]
+  },
 
   // * -------- company users ---------
   { path: "/user/list", element: <UserScreen />, allowedRoles: [...allRoles] },
@@ -106,10 +106,10 @@ export const routesConfig = [
   // { path: "/super-admin/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
 
   // // * -------- approver ---------
-  // { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...allRoles] },
+  { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...approver] },
 
   // // * -------- enduser ---------
-  // { path: "/enduser", element: <EnduserDashboardScreen />, allowedRoles: [...allRoles] },
+  { path: "/standarduser", element: <EnduserDashboardScreen />, allowedRoles: [...standardUser] },
 ];
 
 export const sidebarTwo = [
@@ -160,7 +160,7 @@ export const sidebarTwo = [
     path: "/reports",
     icon: TaskIcon,
     isParent: false,
-    allowedRoles: [...admins, ...endUser]
+    allowedRoles: [...admins,]
   },
   {
     id: 6,
@@ -168,16 +168,22 @@ export const sidebarTwo = [
     path: "/user/list",
     icon: GroupsIcon,
     isParent: true,
-    allowedRoles: [...exceptEndUser]
+    allowedRoles: [Roles.SUPERADMIN, Roles.ADMIN],
   },
   {
     id: 7,
     title: "Settings",
-    path: "/settings",
+    path:
+      userRole === Roles.SUPERADMIN
+        ? "/settings/Role"
+        : userRole === Roles.APPROVER || userRole === Roles.ENDUSER
+          ? "/settings/Role"
+          : "/settings",
     icon: SettingsIcon,
     isParent: false,
-    allowedRoles: [...allRoles]
+    allowedRoles: [...allRoles],
   },
+
   {
     id: 8,
     title: "Company",

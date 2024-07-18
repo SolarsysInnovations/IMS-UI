@@ -113,6 +113,19 @@ export const companyValidationSchema = Yup.object().shape({
     userAccess: Yup.string().required('User access is required'),
 });
 
+export const companyDetailsValidationSchema = Yup.object().shape({
+    companyName: Yup.string().required('Company Name is required'),
+    companyAddress: Yup.string().required('Company Address is required'),
+    companyState: Yup.string().required('Company State is required'),
+    companyCountry: Yup.string().required('Company Country is required'),
+    companyEmail: Yup.string().required('Company Email is required'),
+    companyPhone: Yup.string().required('Company Phone is required'),
+    companyCell: Yup.string().required('Company Cell is required'),
+    companyWebsite: Yup.string().required('Company Website is required'),
+    companyTaxNumber: Yup.string().required('Company Tax Number is required'),
+    companyRegNumber: Yup.string().required('Company Reg Number is required'),
+    
+});
 export const gstTypeValidationSchema = Yup.object().shape({
     gstName: Yup.string().required('gstName is required'),
     // gstPercentage: Yup.number()
