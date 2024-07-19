@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import { Grid } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { useSelector } from 'react-redux';
 
 interface CompanyDetailsProps {
-    details?: any;
+    details?: any; // You can replace 'any' with a more specific type if needed
 }
 
-const CompanyDetails = () => {
-    const companyValue = useSelector((state: any) => state.globalState.data);
-    const [mergedData, setMergedData] = useState<any>({});
+const CompanyDetails: React.FC<CompanyDetailsProps> = () => {
+    const companyValue = useSelector((state: any) => state.globalState.data); // Replace 'any' with specific type if possible
+    const [mergedData, setMergedData] = useState<{ [key: string]: any }>({});
 
     useEffect(() => {
-        if (companyValue) {
+        if (companyValue && companyValue.companyDetails && companyValue.register) {
             const mergedObject = {
                 ...companyValue.companyDetails,
                 ...companyValue.register
@@ -20,6 +20,10 @@ const CompanyDetails = () => {
             setMergedData(mergedObject);
         }
     }, [companyValue]);
+
+    if (!companyValue || !companyValue.companyDetails || !companyValue.register) {
+        return null; // Or display a loading indicator or placeholder
+    }
 
     return (
         <Grid container spacing={2}>
@@ -29,7 +33,7 @@ const CompanyDetails = () => {
                         <strong>{key}:</strong>
                         {Array.isArray(value) ? (
                             <>
-                                {value?.map((item, index) => (
+                                {value.map((item: any, index: number) => (
                                     <div key={index}>
                                         {Object.entries(item).map(([subKey, subValue]) => (
                                             <div key={subKey}>

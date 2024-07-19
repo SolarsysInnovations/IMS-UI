@@ -16,7 +16,7 @@ import {
 import React from "react";
 import { setData } from "../../redux-store/global/globalState";
 import TableHeader from "../../components/layouts/TableHeader";
-import CompanyDetails from "../../pages/company/companyDetailsScreen";
+import CompanyDetails from "../../pages/super-admin-company/companyDetailsScreen";
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 
 const MyCellRenderer = ({ id }: { id: any }) => {

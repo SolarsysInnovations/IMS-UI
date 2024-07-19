@@ -13,10 +13,10 @@ import { AppDispatch } from "../../../redux-store/store";
 import usePathname from "../../../hooks/usePathname";
 import { useNavigate } from "react-router-dom";
 import { setData } from "../../../redux-store/global/globalState";
-import CompanyScreen from "./Company-screen";
 import DialogBoxUi from "../../../components/ui/DialogBox";
+import SettingsCompanyScreen from "./SettingsCompanyScreen";
 
-const CompanyDetailsScreen: React.FC = () => {
+const SettingsCompanyDetailsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const pathname = usePathname();
@@ -24,14 +24,14 @@ const CompanyDetailsScreen: React.FC = () => {
   const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingQuery();
   const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCompanySettingByIdMutation();
 
+
+  // Parse userDetails if it exists
   const userDetailsFromStorage = window.localStorage.getItem("userDetails");
 
   // Parse userDetails if it exists
   let userDetails = userDetailsFromStorage ? JSON.parse(userDetailsFromStorage) : null;
-  console.log("userDetails",userDetails);
-
-console.log("userDetails",userDetails);
   
+  console.log("userDetails", userDetails);
   
   const [openModal, setOpenModal] = useState(false);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
@@ -80,7 +80,7 @@ console.log("userDetails",userDetails);
       <ToastContainer />
       <DialogBoxUi
         open={opendialogBox}
-        content={<CompanyScreen />}
+        content={<SettingsCompanyScreen />}
         handleClose={() => setIsOpenDialogBox(false)}
       />
       <TableHeader headerName={"Company Information"} buttons={button} />
@@ -243,4 +243,4 @@ console.log("userDetails",userDetails);
   );
 };
 
-export default CompanyDetailsScreen;
+export default SettingsCompanyDetailsScreen;

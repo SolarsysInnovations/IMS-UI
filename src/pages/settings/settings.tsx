@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import ToastUi from "../../components/ui/ToastifyUi";
 import Container from "@mui/material/Container";
-import CompanyDetailsScreen from "./company-details-settings/Company-details-screen";
 import About from "../about/About";
 import TaxConfig from "./TaxConfig";
 import LinkScreen from "./links/Portal-link-screen";
+import SettingsCompanyDetailsScreen from "./settings-company/SettingsCompanyDetailsScreen";
 
 const SettingScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
@@ -33,7 +33,7 @@ const SettingScreen = () => {
   const renderTabContent = () => {
     switch (currentTabIndex) {
       case 0:
-        return <CompanyDetailsScreen />;
+        return <SettingsCompanyDetailsScreen />;
       case 1:
         return <LinkScreen />;
       case 2:

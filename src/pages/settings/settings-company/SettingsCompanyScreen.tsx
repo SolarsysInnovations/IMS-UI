@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import CreateCompany from "./Company-create-screen";
+import SettingsCompanyForm from "./SettingsCompanyForm";
 
-const CompanyScreen = () => {
+const SettingsCompanyScreen = () => {
     const companyValue = useSelector((state: any) => state.globalState.data);
     console.log("company value", companyValue);
 
@@ -10,13 +10,13 @@ const CompanyScreen = () => {
 
     useEffect(() => {
         setKey((prev) => prev + 1)
-    }, [companyValue])
+    }, [companyValue]);
 
     const mode = companyValue ? 'edit' : 'create';
     return (
         <>
-            <CreateCompany companyValue={companyValue} key={key} mode={mode} />
+            <SettingsCompanyForm companyValue={companyValue} key={key} mode={mode} />
         </>
     );
 };
-export default CompanyScreen;
+export default SettingsCompanyScreen;

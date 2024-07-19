@@ -22,7 +22,7 @@ import {
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 import { setCredentials } from "../../../redux-store/auth/authSlice";
 
-const CreateCompany = ({ companyValue, mode }: CompanyFormProps) => {
+const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [openModal, setOpenModal] = useState(false);
 
@@ -158,4 +158,4 @@ const CreateCompany = ({ companyValue, mode }: CompanyFormProps) => {
   );
 };
 
-export default CreateCompany;
+export default SettingsCompanyForm;
