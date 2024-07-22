@@ -3,7 +3,7 @@ import { useGetCompanyQuery, useAddCompanyMutation, useUpdateCompanyMutation } f
 import { CompanyEditFields, CompanyFields } from '../../constants/form-data/form-data-json';
 import { companyInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
-import { companyValidationSchema } from '../../constants/forms/validations/validationSchema';
+import { companyDetailsValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { clearData } from '../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
@@ -69,7 +69,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyCountry: values.companyCountry,
                         companyEmail: values.companyEmail,
                         companyPhone: values.companyPhone,
-                        companyCell: values.companyCell,
                         companyWebsite: values.companyWebsite,
                         companyTaxNumber: values.companyTaxNumber,
                         companyRegNumber: values.companyRegNumber
@@ -94,7 +93,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyCountry: values.companyCountry,
                         companyEmail: values.companyEmail,
                         companyPhone: values.companyPhone,
-                        companyCell: values.companyCell,
                         companyWebsite: values.companyWebsite,
                         companyTaxNumber: values.companyTaxNumber,
                         companyRegNumber: values.companyRegNumber
@@ -121,7 +119,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                 // fields={Object.keys(companyEditInitialValues).length === 0 ? CompanyFields : CompanyEditFields}
                 fields={fields}
                 initialValues={initialValues}
-                validationSchema={companyValidationSchema}
+                validationSchema={companyDetailsValidationSchema}
                 onSubmit={onSubmit}
             />
         </>

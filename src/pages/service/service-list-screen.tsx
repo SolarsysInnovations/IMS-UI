@@ -29,6 +29,7 @@ const ServicesList = () => {
         { label: 'Create Service List', icon: Add, onClick: () => { setOpenModal(true); setEditMode(false); } },
     ];
 
+
     const pathname = usePathname();
     const handleModalClose = () => {
         refetch();
@@ -41,9 +42,15 @@ const ServicesList = () => {
         setOpenModal(true);
     };
 
+  
+
     useEffect(() => {
         refetch();
-    }, [serviceStateDetails]);
+       
+    }, []);
+
+    console.log("data",serviceList); 
+
 
     return (
         <>
