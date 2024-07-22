@@ -57,8 +57,8 @@ const getDashboardComponent = (role: any) => {
 
   }
 };
-const userRole = getUserRole();
-console.log("userRole", userRole);
+export const userRole = getUserRole();
+//console.log("userRole", userRole);
 
 export const routesConfig = [
   // * -------- login ---------
