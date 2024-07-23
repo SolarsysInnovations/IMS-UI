@@ -127,9 +127,9 @@ export const sidebarTwo = [
     path: "/customer-list",
     icon: GroupIcon,
     isParent: true,
-    subItems: [
-      { id: 1, title: "Create Customer", path: "/customer/create" },
-    ],
+    // subItems: [
+    //   { id: 1, title: "Create Customer", path: "/customer/create" },
+    // ],
     allowedRoles: [...admins]
   },
   {
@@ -138,9 +138,9 @@ export const sidebarTwo = [
     path: "/invoice/list",
     icon: ReceiptIcon,
     isParent: true,
-    subItems: [
-      { id: 1, title: "Create", path: "/invoice/create" },
-    ],
+    // subItems: [
+    //   { id: 1, title: "Create", path: "/invoice/create" },
+    // ],
     allowedRoles: [Roles.APPROVER, Roles.ENDUSER, Roles.ADMIN]
   },
   {
@@ -212,7 +212,13 @@ export const sidebarTwo = [
 
 ];
 
-export const invoiceStatusOptions = ['APPROVED', 'DELETE', 'RETURNED', 'DRAFT', 'PENDING', 'PAID'];
-
+export const invoiceStatusOptions = admins
+  ? ["DRAFT", "PAID"]
+  : approver
+  ? ["PENDING", "APPROVED", "DELETE", "RETURNED"]
+  :  
+  ["DRAFT", "PAID"]
+ // : ["APPROVED", "DELETE", "RETURNED", "DRAFT", "PENDING", "PAID"];
+ 
 
 

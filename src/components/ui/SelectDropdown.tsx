@@ -3,7 +3,8 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Button, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
+import { userRole } from '../../constants/data';
+import { Roles } from '../../constants/Enums';
 interface ValueProps {
   value: string;
   label: string;
@@ -87,7 +88,7 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
                 sx={{ justifyContent: "flex-start", pl: 2 }}
                 onMouseDown={onMouseDown}
               >
-                + Add New
+                {  (Roles.ENDUSER!==userRole )?"+ Add New":""}
               </Button>
             )}
           </Paper>
