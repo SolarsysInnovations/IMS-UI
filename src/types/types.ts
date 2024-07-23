@@ -82,6 +82,8 @@ export interface FormProps {
     toastMessage?: string;
     buttons?: any;
     rows?: number;
+  
+
 };
 export interface SubField {
     name: string;

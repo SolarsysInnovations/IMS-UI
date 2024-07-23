@@ -8,13 +8,14 @@ import { ToastContainer } from "react-toastify";
 import { Box, Grid } from "@mui/material";
 import TableHeader from "../../../components/layouts/TableHeader";
 import { Add, Edit } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import usePathname from "../../../hooks/usePathname";
 import { useNavigate } from "react-router-dom";
 import { setData } from "../../../redux-store/global/globalState";
 import DialogBoxUi from "../../../components/ui/DialogBox";
 import SettingsCompanyScreen from "./SettingsCompanyScreen";
+import { selectUserRole } from "../../../redux-store/auth/authSlice"; 
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,24 +25,21 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingQuery();
   const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCompanySettingByIdMutation();
 
-
   // Parse userDetails if it exists
   const userDetailsFromStorage = window.localStorage.getItem("userDetails");
-
-  // Parse userDetails if it exists
   let userDetails = userDetailsFromStorage ? JSON.parse(userDetailsFromStorage) : null;
-  
+
   console.log("userDetails", userDetails);
-  
+
   const [openModal, setOpenModal] = useState(false);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
 
   console.log("company details", companyDetails);
 
-  const button = [
-    { label: "Edit", icon: Edit, onClick: () => handleEditClick() },
-  ];
+
+  const userRole = useSelector(selectUserRole);
+
   const handleEditClick = async () => {
     try {
       const response = await getData(userDetails.companyDetails.id);
@@ -74,6 +72,9 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
     refetchCompanyData();
     setOpenModal(false);
   };
+
+ 
+  const button = userRole !== "APPROVER" && userRole !== "ENDUSER" ? [{ label: "Edit", icon: Edit, onClick: () => handleEditClick() }] : [];
 
   return (
     <>

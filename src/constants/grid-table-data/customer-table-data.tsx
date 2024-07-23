@@ -15,23 +15,15 @@ import { styled } from '@mui/system';
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 import { setData } from "../../redux-store/global/globalState";
 
-const MyCellRenderer = ({ id, }: { id: any, }) => {
-
+const MyCellRenderer = ({ id }: { id: any }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
-    const [deleteCustomer, { isLoading: deleteCustomerLoading, error: deleteCustomerErrorObject, isSuccess: deleteCustomerSuccess, isError: deleteCustomerError, data: deletedData, }] = useDeleteCustomerMutation();
-    const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error, isLoading: getCustomerLoading, }] = useGetCustomerByIdMutation();
-
+    const [deleteCustomer, { isLoading: deleteCustomerLoading, error: deleteCustomerErrorObject, isSuccess: deleteCustomerSuccess, isError: deleteCustomerError, data: deletedData }] = useDeleteCustomerMutation();
+    const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error, isLoading: getCustomerLoading }] = useGetCustomerByIdMutation();
     const navigate = useNavigate();
 
     const role = localStorage.getItem("userRole");
-
-    const buttons = [];
-
-    if (role != "APPROVER" && role != "ENDUSER") {
-        buttons.push({ label: 'Edit', icon: Edit, onClick: () => handleEditClick() })
-    };
 
     useEffect(() => {
         refetch();
@@ -43,28 +35,13 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
         errorObject: deleteCustomerErrorObject,
         success: deleteCustomerSuccess,
         successMessage: 'Customer deleted successfully',
-    })
-
-    function showButton() {
-        if (role === "APPROVER" || role === "ENDUSER") {
-            return {
-                disabled: true,
-                sx: {
-                    color: 'grey.500',
-                    cursor: 'not-allowed',
-                    pointerEvents: 'auto',
-                },
-            };
-        }
-        return {};
-    }
+    });
 
     const handleEditClick = async () => {
         try {
             const response = await getCustomer(id);
             if ('data' in response) {
                 const customerData = response.data;
-                // console.log(customerData);
                 await dispatch(setData(customerData));
                 navigate('/customer/create');
             } else {
@@ -73,7 +50,7 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
         } catch (error) {
             console.error('Error handling edit click:', error);
         }
-    }
+    };
 
     const handleModalOpen = async () => {
         setOpenModal(true);
@@ -82,10 +59,9 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
         } catch (error) {
             console.error('Error fetching customer data:', error);
         }
-    }
+    };
 
     const handleModalClose = () => setOpenModal(false);
-
 
     const handleDeleteClick = () => {
         const confirmed = window.confirm("Are you sure you want to delete this customer?");
@@ -94,7 +70,6 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
         }
     };
 
-    // useSuccessToast({ isSuccess, message: "successfully deleted the new customer", })
     const StyledIconButton = styled(IconButton)(({ theme }) => ({
         padding: '3px',
         '&.Mui-disabled': {
@@ -106,17 +81,21 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
 
     return (
         <Stack direction="row" spacing={1}>
-            <StyledIconButton aria-label="" onClick={handleEditClick} disabled={showButton().disabled} sx={showButton().sx} >
-                <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </StyledIconButton>
-            <StyledIconButton aria-label="" onClick={handleDeleteClick} disabled={showButton().disabled} sx={showButton().sx}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </StyledIconButton>
+            {role !== "ENDUSER" && (
+                <StyledIconButton aria-label="" onClick={handleEditClick}>
+                    <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
+                </StyledIconButton>
+            )}
+            {role !== "ENDUSER" && (
+                <StyledIconButton aria-label="" onClick={handleDeleteClick}>
+                    <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
+                </StyledIconButton>
+            )}
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
             <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
-                <TableHeader headerName="Customer Details" buttons={buttons} />
+                <TableHeader headerName="Customer Details" />
                 <Box sx={{ marginTop: "15px" }}>
                     <CustomerDetails details={customerData || []} />
                 </Box>
@@ -133,7 +112,6 @@ export const columns: GridColDef[] = [
         editable: false,
         renderCell: (params: any) => <MyCellRenderer id={params.row?.id} />,
     },
-    // { field: 'id', headerName: 'ID', width: 90 },
     {
         field: 'customerName',
         headerName: 'Customer Name',
@@ -164,6 +142,7 @@ export const columns: GridColDef[] = [
         width: 150,
         editable: false,
     },
+
     // {
     //     field: "country",
     //     editable: true,

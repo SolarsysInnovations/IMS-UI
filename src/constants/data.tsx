@@ -70,8 +70,8 @@ export const routesConfig = [
   { path: "/dashboard", element: getDashboardComponent(userRole), allowedRoles: [...allRoles] },
 
   // * ----------- customers ------------
-  { path: "/customer-list", element: <CustomerList />, allowedRoles: [...admins] },
-  { path: "/customer/create", element: <CustomerScreen />, allowedRoles: [...admins] },
+  { path: "/customer-list", element: <CustomerList />, allowedRoles: [...admins,...standardUser] },
+  { path: "/customer/create", element: <CustomerScreen />, allowedRoles: [...admins, ...standardUser] },
 
   // * -------- reports ---------
   { path: "/reports", element: <Reportscreen />, allowedRoles: [...allRoles] },
@@ -130,7 +130,7 @@ export const sidebarTwo = [
     subItems: [
       { id: 1, title: "Create Customer", path: "/customer/create" },
     ],
-    allowedRoles: [...admins]
+    allowedRoles: [...admins, ...standardUser]
   },
   {
     id: 3,
@@ -160,7 +160,7 @@ export const sidebarTwo = [
     path: "/reports",
     icon: TaskIcon,
     isParent: false,
-    allowedRoles: [...admins,]
+    allowedRoles: [...admins,...standardUser]
   },
   {
     id: 6,
