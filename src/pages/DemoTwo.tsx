@@ -77,7 +77,7 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
                         mt: 10,
                     }}>
                         <Box gap={3} >
-                            <Typography variant="subtitle2" color="initial">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</Typography>
+                            <Typography variant="subtitle2" color="initial">Thanks for your bussiness</Typography>
                         </Box>
                         <Box gap={3} >
                             <Typography variant="subtitle2" color="initial">Sub Total : <span>443</span></Typography>
