@@ -12,7 +12,11 @@ import DialogBoxUi from "../ui/DialogBox";
 import SendEmail from "../../pages/Invoice/Send-email";
 import SplitButton from "../ui/SplitButton";
 import ButtonUi from "../ui/Button";
-import { invoiceStatusOptions } from "../../constants/data";
+import {
+  invoiceStatusOptions,
+} from "../../constants/data";
+import { Roles } from "../../constants/Enums";
+import { userRole } from "../../constants/data";
 import { useUpdateInvoiceMutation, useInvoiceGetByIdMutation, useGetInvoiceQuery } from '../../redux-store/invoice/invcoiceApi';
 import { useDispatch, useSelector } from "react-redux";
 import { clearData, setData } from "../../redux-store/global/globalState";
@@ -201,146 +205,388 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     const handleCloseNested = () => {
         setNestedOpen(false);
     };
-
+const exceptApprover: any = Roles.APPROVER === userRole;
     return (
-        <>
-            <div className="App" id="invoiceCapture" style={{ padding: "50px 30px" }}>
-                <Grid container sx={{ borderBottom: "1px solid #dadada", paddingBottom: "15px" }}>
-                    <Grid sx={{ marginTop: "0px", display: 'flex', alignContent: "flex-start", alignItems: 'flex-start', }} item xs={6.5}>
-                        <Box>
-                            <h1 style={{ marginTop: "0px", textAlign: "left" }}>INVOICE</h1>
-                        </Box>
-                    </Grid>
-                    <Grid sx={{ marginTop: "0px", paddingBottom: "10px", display: 'flex', alignItems: 'right', justifyContent: 'left' }} item xs={5.5}>
-                        <Box>
-                            <div>
-                                <p style={{ fontSize: "14px", fontWeight: "600", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500" }}>SOLARSYS</span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}> <span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Address :</span> <span>1/305, Thillai Nagar, Trichy 905 606 </span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Phone :</span> <span>983894833</span></p>
-                            </div>
-                        </Box>
-                    </Grid>
-                </Grid>
-                <Grid container sx={{ backgroundColor: "#f8f9f9", marginTop: "30px", padding: "20px 20px" }}>
-                    <Grid sx={{ marginTop: "0px" }} item xs={4}>
-                        <Box gap={3}>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Billed To </span> <span>: {customerDetails?.customerName}</span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Email </span> <span>: {customerDetails?.customerEmail}</span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "60px", display: "inline-block" }}>Phone </span> <span>: {customerDetails?.customerPhone}</span></p>
-                            </div>
-                        </Box>
-                    </Grid>
-                    <Grid sx={{ marginTop: "0px", }} item xs={4}>
-                        <Box gap={3}>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Invoice No </span> <span>: {invoiceData?.invoiceNumber}</span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Payment Terms </span> <span>: {invoiceData?.paymentTerms}</span></p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}><span style={{ fontWeight: "500", width: "100px", display: "inline-block" }}>Due Date </span> <span>: {
-                                    isValidDate
-                                        ? format(addDays(parsedDueDate, 0), 'dd-MM-yyyy')
-                                        : "N/A"
-                                }</span></p>
-                            </div>
-                        </Box>
-                    </Grid>
-                </Grid>
-                <Grid container>
-                    <Grid sx={{ marginTop: "0px" }} item xs={12}>
-                        <Box sx={{ mt: 5 }}>
-                            <TableContent tableData={invoiceData || []} />
-                        </Box>
-                    </Grid>
-                </Grid>
-                <Grid container>
-                    <Grid sx={{ marginTop: "0px" }} item xs={12}>
-                        <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }} >
-                            <div style={{ display: "flex", width: "250px", justifyContent: "space-between" }}>
-                                <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600" }}>Sub total</p>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>{subTotalAmount}</p>
-                            </div>
-                        </Box>
-                    </Grid>
-                    <Grid sx={{ marginTop: "0px" }} item xs={12}>
-                        <Box sx={{ display: "flex", justifyContent: "right", }} >
-                            <div style={{ display: "flex", width: "250px", justifyContent: "space-between" }}>
-                                <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600" }}>Discount Amount</p>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>-{discountAmount}</p>
-                            </div>
-                        </Box>
-                    </Grid>
-                    <Grid sx={{ marginTop: "0px" }} item xs={12}>
-                        <Box sx={{ display: "flex", justifyContent: "right", }} >
-                            <div style={{ display: "flex", width: "250px", justifyContent: "space-between" }}>
-                                <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600" }}>Tax Amount</p>
-                                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>{invoiceData.totalAmount}</p>
-                            </div>
-                        </Box>
-                    </Grid>
-                </Grid>
-                <Grid container>
-                    <Grid sx={{ marginTop: "20px" }} item xs={12}>
-                        <Box >
-                            <div>
-                                <p style={{ fontSize: "12px", }}><span style={{ fontWeight: "500", width: "130px", display: "inline-block" }}>Notes </span> : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</p>
-                            </div>
-                        </Box>
-                        <Box >
-                            <div>
-                                <p style={{ fontSize: "12px", }}><span style={{ fontWeight: "500", width: "130px", display: "inline-block" }}>Terms & Conditions </span> : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</p>
-                            </div>
-                        </Box>
-                    </Grid>
-                </Grid>
-            </div >
-            {preview && (
-                <Grid sx={{
-                    '& .MuiGrid-item': {
-                        paddingTop: "10px"
-                    },
-                }} container spacing={5}>
-                    <Grid item xs={12} >
-                        <Box gap={2} sx={{ display: "flex", justifyContent: "right" }}>
-                            <ButtonUi smallButtonCss={true} label="Generate PDF" variant="contained" size="small" onClick={printPDF} />
-                            {/* {invoiceData?.invoiceStatus === "APPROVED" ? ( */}
-                            <ButtonUi disabled={invoiceData.invoiceStatus === "APPROVED" ? false : true} smallButtonCss={true} label="Email to Customer" variant="contained" size="small" onClick={() => { setIsOpenEmailDialogBox(true); isModalOpen(false); }} />
+      <>
+        <div
+          className="App"
+          id="invoiceCapture"
+          style={{ padding: "50px 30px" }}
+        >
+          <Grid
+            container
+            sx={{ borderBottom: "1px solid #dadada", paddingBottom: "15px" }}
+          >
+            <Grid
+              sx={{
+                marginTop: "0px",
+                display: "flex",
+                alignContent: "flex-start",
+                alignItems: "flex-start",
+              }}
+              item
+              xs={6.5}
+            >
+              <Box>
+                <h1 style={{ marginTop: "0px", textAlign: "left" }}>INVOICE</h1>
+              </Box>
+            </Grid>
+            <Grid
+              sx={{
+                marginTop: "0px",
+                paddingBottom: "10px",
+                display: "flex",
+                alignItems: "right",
+                justifyContent: "left",
+              }}
+              item
+              xs={5.5}
+            >
+              <Box>
+                <div>
+                  <p
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      margin: "0 0 5px 0",
+                    }}
+                  >
+                    <span style={{ fontWeight: "500" }}>SOLARSYS</span>
+                  </p>
+                </div>
+                <div>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    {" "}
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        width: "60px",
+                        display: "inline-block",
+                      }}
+                    >
+                      Address :
+                    </span>{" "}
+                    <span>1/305, Thillai Nagar, Trichy 905 606 </span>
+                  </p>
+                </div>
+                <div>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        width: "60px",
+                        display: "inline-block",
+                      }}
+                    >
+                      Phone :
+                    </span>{" "}
+                    <span>983894833</span>
+                  </p>
+                </div>
+              </Box>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            sx={{
+              backgroundColor: "#f8f9f9",
+              marginTop: "30px",
+              padding: "20px 20px",
+            }}
+          >
+            <Grid sx={{ marginTop: "0px" }} item xs={4}>
+              <Box gap={3}>
+                <div>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        width: "60px",
+                        display: "inline-block",
+                      }}
+                    >
+                      Billed To{" "}
+                    </span>{" "}
+                    <span>: {customerDetails?.customerName}</span>
+                  </p>
+                </div>
+                <div>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        width: "60px",
+                        display: "inline-block",
+                      }}
+                    >
+                      Email{" "}
+                    </span>{" "}
+                    <span>: {customerDetails?.customerEmail}</span>
+                  </p>
+                </div>
+                <div>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        width: "60px",
+                        display: "inline-block",
+                      }}
+                    >
+                      Phone{" "}
+                    </span>{" "}
+                    <span>: {customerDetails?.customerPhone}</span>
+                  </p>
+                </div>
+              </Box>
+            </Grid>
+            <Grid sx={{ marginTop: "0px" }} item xs={4}>
+              <Box gap={3}>
+                <div>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        width: "100px",
+                        display: "inline-block",
+                      }}
+                    >
+                      Invoice No{" "}
+                    </span>{" "}
+                    <span>: {invoiceData?.invoiceNumber}</span>
+                  </p>
+                </div>
+                <div>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        width: "100px",
+                        display: "inline-block",
+                      }}
+                    >
+                      Payment Terms{" "}
+                    </span>{" "}
+                    <span>: {invoiceData?.paymentTerms}</span>
+                  </p>
+                </div>
+                <div>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        width: "100px",
+                        display: "inline-block",
+                      }}
+                    >
+                      Due Date{" "}
+                    </span>{" "}
+                    <span>
+                      :{" "}
+                      {isValidDate
+                        ? format(addDays(parsedDueDate, 0), "dd-MM-yyyy")
+                        : "N/A"}
+                    </span>
+                  </p>
+                </div>
+              </Box>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid sx={{ marginTop: "0px" }} item xs={12}>
+              <Box sx={{ mt: 5 }}>
+                <TableContent tableData={invoiceData || []} />
+              </Box>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid sx={{ marginTop: "0px" }} item xs={12}>
+              <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "250px",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: "13px",
+                      margin: "0 0 5px 0",
+                      fontWeight: "600",
+                    }}
+                  >
+                    Sub total
+                  </p>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    {subTotalAmount}
+                  </p>
+                </div>
+              </Box>
+            </Grid>
+            <Grid sx={{ marginTop: "0px" }} item xs={12}>
+              <Box sx={{ display: "flex", justifyContent: "right" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "250px",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: "13px",
+                      margin: "0 0 5px 0",
+                      fontWeight: "600",
+                    }}
+                  >
+                    Discount Amount
+                  </p>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    -{discountAmount}
+                  </p>
+                </div>
+              </Box>
+            </Grid>
+            <Grid sx={{ marginTop: "0px" }} item xs={12}>
+              <Box sx={{ display: "flex", justifyContent: "right" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "250px",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: "13px",
+                      margin: "0 0 5px 0",
+                      fontWeight: "600",
+                    }}
+                  >
+                    Tax Amount
+                  </p>
+                  <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                    {invoiceData.totalAmount}
+                  </p>
+                </div>
+              </Box>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid sx={{ marginTop: "20px" }} item xs={12}>
+              <Box>
+                <div>
+                  <p style={{ fontSize: "12px" }}>
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        width: "130px",
+                        display: "inline-block",
+                      }}
+                    >
+                      Notes{" "}
+                    </span>{" "}
+                    : Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Delectus, doloribus!
+                  </p>
+                </div>
+              </Box>
+              <Box>
+                <div>
+                  <p style={{ fontSize: "12px" }}>
+                    <span
+                      style={{
+                        fontWeight: "500",
+                        width: "130px",
+                        display: "inline-block",
+                      }}
+                    >
+                      Terms & Conditions{" "}
+                    </span>{" "}
+                    : Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Delectus, doloribus!
+                  </p>
+                </div>
+              </Box>
+            </Grid>
+          </Grid>
+        </div>
+        {preview && (
+          <Grid
+            sx={{
+              "& .MuiGrid-item": {
+                paddingTop: "10px",
+              },
+            }}
+            container
+            spacing={5}
+          >
+            <Grid item xs={12}>
+              <Box gap={2} sx={{ display: "flex", justifyContent: "right" }}>
+                <ButtonUi
+                  smallButtonCss={true}
+                  label="Generate PDF"
+                  variant="contained"
+                  size="small"
+                  onClick={printPDF}
+                />
+                {/* {invoiceData?.invoiceStatus === "APPROVED" ? ( */}
+                {!exceptApprover && (
+                  <ButtonUi
+                    disabled={
+                      invoiceData.invoiceStatus === "APPROVED" ? false : true
+                    }
+                    smallButtonCss={true}
+                    label="Email to Customer"
+                    variant="contained"
+                    size="small"
+                    onClick={() => {
+                      setIsOpenEmailDialogBox(true);
+                      isModalOpen(false);
+                    }}
+                  />
+                )}
 
-                            {/* sent to approver button */}
+                {/* sent to approver button */}
 
-                            <ButtonUi disabled={invoiceData.invoiceStatus === "DRAFT" ? false : true} smallButtonCss={true} label="Sent to Approver" variant="contained" size="small"
-                                // async function inside synchronous
-                                onClick={(e: any) => {
-                                    (async () => {
-                                        await handleSentToApprover(e);
-                                    })();
-                                }} />
+                {!exceptApprover && (
+                  <ButtonUi
+                    disabled={
+                      invoiceData.invoiceStatus === "DRAFT" ? false : true
+                    }
+                    smallButtonCss={true}
+                    label="Sent to Approver"
+                    variant="contained"
+                    size="small"
+                    // async function inside synchronous
+                    onClick={(e: any) => {
+                      (async () => {
+                        await handleSentToApprover(e);
+                      })();
+                    }}
+                  />
+                )}
 
-                            {/* ) : ""} */}
-                            <SplitButton
-                                key={currentInvoiceStatus} // Ensure re-render
-                                disabledOptions={[currentInvoiceStatus === -1 ? 0 : currentInvoiceStatus]}
-                                options={invoiceStatusOptions}
-                                defaultIndex={currentInvoiceStatus}
-                                onOptionClick={handleOptionClick}
-                            />
-                        </Box>
-                    </Grid>
-                    <ModalUi open={nestedOpen} onClose={handleCloseNested}>
-                        <MailReason invoiceData={invoiceData} setNestedOpen={setNestedOpen} />
-                    </ModalUi>
-                    {/* <Grid mt={2} item xs={12} >
+                {/* ) : ""} */}
+                <SplitButton
+                  key={currentInvoiceStatus} // Ensure re-render
+                  disabledOptions={[
+                    currentInvoiceStatus === -1 ? 0 : currentInvoiceStatus,
+                  ]}
+                  options={invoiceStatusOptions}
+                  defaultIndex={currentInvoiceStatus}
+                  onOptionClick={handleOptionClick}
+                />
+              </Box>
+            </Grid>
+            <ModalUi open={nestedOpen} onClose={handleCloseNested}>
+              <MailReason
+                invoiceData={invoiceData}
+                setNestedOpen={setNestedOpen}
+              />
+            </ModalUi>
+            {/* <Grid mt={2} item xs={12} >
                         <Typography variant="body2" color="initial">Write a reason why you change the status.</Typography>
                     </Grid>
                     <Grid item xs={12} >
@@ -352,26 +598,27 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                             value=""
                         />
                     </Grid> */}
-                </Grid>
-            )}
-            <DialogBoxUi
-                open={openemaildialogBox} // Set open to true to display the dialog initially
-                // title="Custom Dialog Title"
-                content={
-                    <SendEmail onClose={function (): void {
-                        if (isSuccess) {
-                            setIsOpenEmailDialogBox(false)
-                        }
-                        else {
-                            setIsOpenEmailDialogBox(true)
-                        }
-                    }} />
+          </Grid>
+        )}
+        <DialogBoxUi
+          open={openemaildialogBox} // Set open to true to display the dialog initially
+          // title="Custom Dialog Title"
+          content={
+            <SendEmail
+              onClose={function (): void {
+                if (isSuccess) {
+                  setIsOpenEmailDialogBox(false);
+                } else {
+                  setIsOpenEmailDialogBox(true);
                 }
-                handleClose={() => {
-                    setIsOpenEmailDialogBox(false)
-                }}
+              }}
             />
-            {/* <DialogBoxUi
+          }
+          handleClose={() => {
+            setIsOpenEmailDialogBox(false);
+          }}
+        />
+        {/* <DialogBoxUi
                 open={commentPopUp} // Set open to true to display the dialog initially
                 // title="Custom Dialog Title"
                 content={
@@ -383,7 +630,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                     setCommentPopup(false)
                 }}
             /> */}
-        </>
+      </>
     );
 }
 
