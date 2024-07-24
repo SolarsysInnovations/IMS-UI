@@ -54,11 +54,11 @@ const getDashboardComponent = (role: any) => {
       return <ApproverDashboardScreen />;
     case Roles.ENDUSER:
       return <EnduserDashboardScreen />;
-
   }
 };
-export const userRole = getUserRole();
-//console.log("userRole", userRole);
+
+const userRole = getUserRole();
+console.log("userRole", userRole);
 
 export const routesConfig = [
   // * -------- login ---------
@@ -138,9 +138,9 @@ export const sidebarTwo = [
     path: "/invoice/list",
     icon: ReceiptIcon,
     isParent: true,
-    subItems: [
-      { id: 1, title: "Create", path: "/invoice/create" },
-    ],
+    // subItems: [
+    //   { id: 1, title: "Create", path: "/invoice/create" },
+    // ],
     allowedRoles: [Roles.APPROVER, Roles.ENDUSER, Roles.ADMIN]
   },
   {
@@ -212,7 +212,13 @@ export const sidebarTwo = [
 
 ];
 
-export const invoiceStatusOptions = ['APPROVED', 'DELETE', 'RETURNED', 'DRAFT', 'PENDING', 'PAID'];
-
+export const invoiceStatusOptions = admins
+  ? ["DRAFT", "PAID"]
+  : approver
+  ? ["PENDING", "APPROVED", "DELETE", "RETURNED"]
+  :  
+  ["DRAFT", "PAID"]
+ // : ["APPROVED", "DELETE", "RETURNED", "DRAFT", "PENDING", "PAID"];
+ 
 
 
