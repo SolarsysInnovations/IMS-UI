@@ -54,9 +54,9 @@ const getDashboardComponent = (role: any) => {
       return <ApproverDashboardScreen />;
     case Roles.ENDUSER:
       return <EnduserDashboardScreen />;
-
   }
 };
+
 const userRole = getUserRole();
 console.log("userRole", userRole);
 
