@@ -56,9 +56,8 @@ const getDashboardComponent = (role: any) => {
       return <EnduserDashboardScreen />;
   }
 };
-
-const userRole = getUserRole();
-console.log("userRole", userRole);
+export const userRole = getUserRole();
+//console.log("userRole", userRole);
 
 export const routesConfig = [
   // * -------- login ---------
