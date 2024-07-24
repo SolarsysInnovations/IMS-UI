@@ -158,12 +158,6 @@ export const columns: GridColDef[] = [
         editable: true,
     },
     {
-        field: 'userAccess',
-        headerName: 'Access',
-        width: 150,
-        editable: true,
-    },
-    {
         field: 'userRole',
         headerName: 'User Role',
         width: 120,

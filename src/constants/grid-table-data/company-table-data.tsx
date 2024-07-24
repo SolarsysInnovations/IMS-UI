@@ -165,11 +165,5 @@ export const columns: GridColDef[] = [
     width: 150,
     editable: false,
   },
-  {
-    field: "userAccess",
-    headerName: "User Access",
-    width: 150,
-    editable: false,
-  },
 
 ];

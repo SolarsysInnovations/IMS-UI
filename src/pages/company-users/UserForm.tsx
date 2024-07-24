@@ -61,7 +61,6 @@ const UserForm = ({ userEditValue, mode }: UserValueProps) => {
                     password: values.password,
                     userRole: values.userRole,
                     userMobile: values.userMobile,
-                    userAccess: values.userAccess,
                     description: values.description,
                     companyName: values.companyName,
                 }

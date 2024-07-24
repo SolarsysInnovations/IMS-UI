@@ -199,7 +199,6 @@ export interface CompanyInitialValueProps {
     password: string;
     userRole: string;
     userMobile: string;
-    userAccess: string;
     description: string;
     // companyName: "Marvel",
     companyName: string;
@@ -208,7 +207,6 @@ export interface CompanyInitialValueProps {
     companyCountry: string;
     companyEmail: string;
     companyPhone: string;
-    companyCell: string;
     companyWebsite: string;
     companyTaxNumber: string;
     companyRegNumber: string;

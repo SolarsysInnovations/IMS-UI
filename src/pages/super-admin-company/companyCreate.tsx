@@ -59,7 +59,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         // password: values.password,
                         userRole: values.userRole,
                         userMobile: values.userMobile,
-                        userAccess: values.userAccess,
                         description: values.description,
                     },
                     companyDetails: {
@@ -83,7 +82,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         password: values.password,
                         userRole: values.userRole,
                         userMobile: values.userMobile,
-                        userAccess: values.userAccess,
                         description: values.description,
                     },
                     companyDetails: {
