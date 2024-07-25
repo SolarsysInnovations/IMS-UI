@@ -45,7 +45,7 @@ const SettingRoleScreen = () => {
     <React.Fragment>
       <ToastUi autoClose={1000} />
       <Tabs value={currentTabIndex} variant="fullWidth" onChange={handleTabChange}>
-        <Tab label="Company Settings" />
+        <Tab label="Company Information" />
         <Tab label="About" />
       </Tabs>
 
