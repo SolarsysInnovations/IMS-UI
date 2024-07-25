@@ -84,7 +84,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
         content={<SettingsCompanyScreen />}
         handleClose={() => setIsOpenDialogBox(false)}
       />
-      <TableHeader headerName={"Company Information"} buttons={button} />
+      <TableHeader   buttons={button} />
       {companyDetails && (
         <Grid
           container

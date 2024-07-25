@@ -112,6 +112,7 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
             const confirmed = window.confirm("Are you sure you want to delete this role?");
             if (confirmed) {
                 deleteRole(id);
+                   refetch();
             }
         }
     };
