@@ -118,9 +118,9 @@ const theme = createTheme({
       hoverOpacity: 0.04,
       selected: "#FFFFFF",
       selectedOpacity: 0.08,
-      disabled: "#FFFFFF",
+      disabled: "#e0e0e0",
       disabledBackground: "#FFFFFF",
-      disabledOpacity: 0.38,
+      disabledOpacity: 0.10,
       focus: "#FFFFFF",
       focusOpacity: 0.12,
       activatedOpacity: 0.12,
@@ -329,122 +329,152 @@ const theme = createTheme({
         },
       },
     },
-    // MuiInputBase: {
-    //   styleOverrides: {
-    //     input: {
-    //       "&::placeholder": {
-    //         opacity: 1,
-    //       },
-    //     },
-    //   },
-    // },
-    // MuiInput: {
-    //   styleOverrides: {
-    //     input: {
-    //       fontSize: 14,
-    //       fontWeight: 500,
-    //       lineHeight: "24px",
-    //       "&::placeholder": {
-    //         color: palette.text.secondary,
-    //       },
-    //     },
-    //   },
-    // },
-    // MuiFilledInput: {
-    //   styleOverrides: {
-    //     root: {
-    //       backgroundColor: "transparent",
-    //       borderRadius: 8,
-    //       borderStyle: "solid",
-    //       borderWidth: 1,
-    //       overflow: "hidden",
-    // borderColor: palette.neutral[200],
-    //       transition: muiTheme.transitions.create(["border-color", "box-shadow"]),
-    //       "&:hover": {
-    //         backgroundColor: palette.action.hover,
-    //       },
-    //       "&:before": {
-    //         display: "none",
-    //       },
-    //       "&:after": {
-    //         display: "none",
-    //       },
-    //       [`&.${filledInputClasses.disabled}`]: {
-    //         backgroundColor: "transparent",
-    //       },
-    //       [`&.${filledInputClasses.focused}`]: {
-    //         backgroundColor: "transparent",
-    //         borderColor: palette.primary.main,
-    //         boxShadow: `${palette.primary.main} 0 0 0 2px`,
-    //       },
-    //       [`&.${filledInputClasses.error}`]: {
-    //         borderColor: palette.error.main,
-    //         boxShadow: `${palette.error.main} 0 0 0 2px`,
-    //       },
-    //     },
-    //     input: {
-    //       fontSize: 14,
-    //       fontWeight: 500,
-    //       lineHeight: "24px",
-    //     },
-    //   },
-    // },
-    // MuiOutlinedInput: {
-    //   styleOverrides: {
-    //     root: {
-    //       "&:hover": {
-    //         backgroundColor: palette.action.hover,
-    //         [`& .${outlinedInputClasses.notchedOutline}`]: {
-    //           borderColor: palette.neutral[200],
-    //         },
-    //       },
-    //       [`&.${outlinedInputClasses.focused}`]: {
-    //         backgroundColor: "transparent",
-    //         [`& .${outlinedInputClasses.notchedOutline}`]: {
-    //           borderColor: palette.primary.main,
-    //           boxShadow: `${palette.primary.main} 0 0 0 2px`,
-    //         },
-    //       },
-    //       [`&.${filledInputClasses.error}`]: {
-    //         [`& .${outlinedInputClasses.notchedOutline}`]: {
-    //           borderColor: palette.error.main,
-    //           boxShadow: `${palette.error.main} 0 0 0 2px`,
-    //         },
-    //       },
-    //     },
-    //     input: {
-    //       fontSize: 14,
-    //       fontWeight: 500,
-    //       lineHeight: "24px",
-    //     },
-    //     notchedOutline: {
-    //       borderColor: palette.neutral[200],
-    //       transition: muiTheme.transitions.create(["border-color", "box-shadow"]),
-    //     },
-    //   },
-    // },
-    // MuiFormLabel: {
-    //   styleOverrides: {
-    //     root: {
-    //       fontSize: 14,
-    //       fontWeight: 500,
-    //       [`&.${inputLabelClasses.filled}`]: {
-    //         transform: "translate(12px, 18px) scale(1)",
-    //       },
-    //       [`&.${inputLabelClasses.shrink}`]: {
-    //         [`&.${inputLabelClasses.standard}`]: {
-    //           transform: "translate(0, -1.5px) scale(0.85)",
-    //         },
-    //         [`&.${inputLabelClasses.filled}`]: {
-    //           transform: "translate(12px, 6px) scale(0.85)",
-    //         },
-    //         [`&.${inputLabelClasses.outlined}`]: {
-    //           transform: "translate(14px, -9px) scale(0.85)",
-    //         },
-    //       },
-    //     },
-    //   },
-    // },
+    // text field start
+    MuiInputBase: {
+      styleOverrides: {
+        input: {
+          fontSize: 12,
+          fontWeight: 500,
+          lineHeight: "24px",
+          "&::placeholder": {
+            color: palette.text.secondary,
+            opacity: 1,
+          },
+        },
+      },
+    },
+    MuiInput: {
+      styleOverrides: {
+        input: {
+          fontSize: 12,
+          fontWeight: 500,
+          lineHeight: "24px",
+          "&::placeholder": {
+            color: palette.text.secondary,
+          },
+        },
+      },
+    },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "transparent",
+          borderRadius: 8,
+          borderStyle: "solid",
+          borderWidth: 1,
+          overflow: "hidden",
+          borderColor: palette.neutral[200],
+          transition: muiTheme.transitions.create(["border-color", "box-shadow"]),
+          "&:hover": {
+            backgroundColor: palette.action.hover,
+          },
+          "&:before": {
+            display: "none",
+          },
+          "&:after": {
+            display: "none",
+          },
+          [`&.${filledInputClasses.disabled}`]: {
+            backgroundColor: "transparent",
+          },
+          [`&.${filledInputClasses.focused}`]: {
+            backgroundColor: "transparent",
+            borderColor: palette.primary.main,
+            boxShadow: `${palette.primary.main} 0 0 0 2px`,
+          },
+          [`&.${filledInputClasses.error}`]: {
+            borderColor: palette.error.main,
+            boxShadow: `${palette.error.main} 0 0 0 2px`,
+          },
+        },
+        input: {
+          fontSize: 12,
+          fontWeight: 500,
+          lineHeight: "24px",
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          "&:hover": {
+            backgroundColor: palette.action.hover,
+            [`& .${outlinedInputClasses.notchedOutline}`]: {
+              borderColor: palette.neutral[200],
+            },
+          },
+          [`&.${outlinedInputClasses.focused}`]: {
+            backgroundColor: "transparent",
+            [`& .${outlinedInputClasses.notchedOutline}`]: {
+              borderColor: palette.primary.main,
+              boxShadow: `${palette.primary.main} 0 0 0 2px`,
+            },
+          },
+          [`&.${outlinedInputClasses.error}`]: {
+            [`& .${outlinedInputClasses.notchedOutline}`]: {
+              borderColor: palette.error.main,
+              boxShadow: `${palette.error.main} 0 0 0 2px`,
+            },
+          },
+        },
+        input: {
+          fontSize: 12,
+          fontWeight: 500,
+          lineHeight: "24px",
+        },
+        notchedOutline: {
+          borderColor: palette.neutral[200],
+          transition: muiTheme.transitions.create(["border-color", "box-shadow"]),
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          fontSize: 12,
+          fontWeight: 500,
+          [`&.${inputLabelClasses.filled}`]: {
+            transform: "translate(12px, 18px) scale(1)",
+          },
+          [`&.${inputLabelClasses.shrink}`]: {
+            [`&.${inputLabelClasses.standard}`]: {
+              transform: "translate(0, -1.5px) scale(0.85)",
+            },
+            [`&.${inputLabelClasses.filled}`]: {
+              transform: "translate(12px, 6px) scale(0.85)",
+            },
+            [`&.${inputLabelClasses.outlined}`]: {
+              transform: "translate(14px, -9px) scale(0.85)",
+            },
+          },
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          fontSize: 12,
+          fontWeight: 500,
+          lineHeight: "24px",
+        },
+        select: {
+          fontSize: 12,
+          fontWeight: 500,
+          lineHeight: "24px",
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          fontSize: 12,
+          fontWeight: 500,
+          lineHeight: "24px",
+        },
+      },
+    },
+
+    // text field end ui
     MuiTab: {
       styleOverrides: {
         root: {
@@ -490,11 +520,11 @@ const theme = createTheme({
         },
       },
     },
-    MuiTextField: {
-      defaultProps: {
-        variant: "filled",
-      },
-    },
+    // MuiTextField: {
+    //   defaultProps: {
+    //     variant: "filled",
+    //   },
+    // },
   },
 });
 

@@ -15,7 +15,7 @@ interface RadioOptions {
 interface RadioFormProps {
     options?: RadioOptions[];
     groupName?: string;
-    errorMsg?: string | false | undefined;
+    errorMsg?: any;
     label?: string;
     size?: string;
     value?: string | number;
@@ -23,7 +23,7 @@ interface RadioFormProps {
     required?: boolean;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
-export default function RadioUi({ errorMsg, onChange, value, options, groupName, label, required, disabled}: RadioFormProps) {
+export default function RadioUi({ errorMsg, onChange, value, options, groupName, label, required, disabled }: RadioFormProps) {
     return (
         <>
             <FormControl sx={{ flexDirection: "row", justifyContent: "space-between" }} >
@@ -35,7 +35,7 @@ export default function RadioUi({ errorMsg, onChange, value, options, groupName,
                     }} id="demo-row-radio-buttons-group-label">{label}</FormLabel>
                 ) : ""}
                 <RadioGroup
-                    row 
+                    row
                     value={value}
                     onChange={onChange}
                     sx={{

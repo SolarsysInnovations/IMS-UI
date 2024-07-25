@@ -1,4 +1,4 @@
-import { InputAdornment, TextField, filledInputClasses, inputLabelClasses, outlinedInputClasses } from "@mui/material";
+import { InputAdornment, TextField } from "@mui/material";
 import React, { } from "react";
 
 interface TextFieldProps {
@@ -9,7 +9,7 @@ interface TextFieldProps {
     startAdornment?: React.ReactNode;
     endAdornment?: React.ReactNode;
     error?: boolean | undefined;
-    helperText?: string | undefined | boolean;
+    helperText?: any;
     name?: string;
     type: "text" | "password" | "number" | "email" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "color";
     fullWidth?: boolean;
@@ -61,7 +61,7 @@ const TextFieldUi = ({ width, required, label, value, onChange, disabled, endAdo
                 },
                 "& .css-1o5h54k-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
                     fontSize: "13px",
-                }
+                },
 
             }}
 

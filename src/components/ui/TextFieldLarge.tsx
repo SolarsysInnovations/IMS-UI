@@ -26,6 +26,7 @@ const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startA
       error={error}
       helperText={helperText}
       name={name}
+
       type={type}
       fullWidth={fullWidth}
       InputProps={{

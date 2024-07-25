@@ -19,10 +19,6 @@ import { setCountry, setData } from '../../redux-store/global/globalState';
 import { getStateByCodeAndCountry } from 'country-state-city/lib/state';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 
-
-
-const countryOptions = generateOptions(Country.getAllCountries(), "name", "isoCode");
-
 interface RenderCountrySelectFieldProps {
   field: any;
   meta: any;
@@ -31,33 +27,24 @@ interface RenderCountrySelectFieldProps {
   options: any;
 }
 
-const RenderCountrySelectField: React.FC<RenderCountrySelectFieldProps> = ({
-  field,
-  meta,
-  subField,
-  setFieldValue,
-  options
-}) => {
-
+// -------------------------country select filed--------------------------
+const RenderCountrySelectField: React.FC<RenderCountrySelectFieldProps> = ({ field, meta, subField, setFieldValue, options }) => {
   return (
     <Field name={subField.name} required={true} disabled={false}>
       {({ field: { value, onChange } }: any) => (
         <SelectDropdown
-          required={true}
-          disabled={false}
+          required={subField.required}
+          disabled={subField.disabled}
           labelText={subField.label}
           value={options.find((opt: { value: any; }) => opt.value === value)}
           onChange={(newValue) => {
             if (newValue) {
               onChange(newValue.value);
               setFieldValue(subField.name, newValue.value);
-              // dispatch(setCountry({ country: newValue.value })); // Dispatch setCountry action with an object
             } else {
               setFieldValue(subField.name, '');
               onChange("");
-              // dispatch(setCountry({ country: '' })); // Dispatch setCountry action with an empty string object
             }
-
           }}
           options={options}
           error={meta.touched && Boolean(meta.error)}
@@ -68,42 +55,7 @@ const RenderCountrySelectField: React.FC<RenderCountrySelectFieldProps> = ({
   );
 };
 
-
-
-const renderStateSelectField = (
-  field: any,
-  meta: any,
-  subField: SubField,
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void,
-  stateOptions: { value: any; label: any; }[]
-) => (
-  <Field name={subField.name} required={true} disabled={false}>
-    {({ field: { value, onChange } }: any) => (
-      <SelectDropdown
-        required={true}
-        disabled={false}
-        labelText={subField.label}
-        value={stateOptions.find((opt: { value: any; }) => opt.value === value)}
-        onChange={(newValue) => {
-          if (newValue) {
-            onChange(newValue.value);
-            setFieldValue(subField.name, newValue.value);
-          } else {
-            setFieldValue(subField.name, '');
-            onChange("");
-          }
-        }}
-        options={stateOptions}
-        error={meta.touched && Boolean(meta.error)}
-        helperText={meta.touched && meta.error}
-      />
-    )}
-  </Field>
-);
-
-
-
-
+// -----------------select dropdown field--------------------
 const renderSelectField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void,) => {
 
   const options = subField.options?.map((option: { value: any; label: any; }) => ({
@@ -115,8 +67,8 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
     <Field name={subField.name} required={true} disabled={false}>
       {({ field: { value, onChange } }: any) => (
         <SelectDropdown
-          required={true}
-          disabled={false}
+          required={subField.required}
+          disabled={subField.disabled}
           labelText={subField.label}
           value={options.find((opt: { value: any; }) => opt.value === value)}
           onChange={(newValue) => {
@@ -138,9 +90,9 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 
 };
 
-// input field renderer
+// --------------------input field renderer-------------------
 const renderTextField = (field: any, meta: any, subField: SubField) => {
-  console.log(subField);
+
   return (
     <TextFieldUi
       required={subField.required}
@@ -161,11 +113,12 @@ const renderTextField = (field: any, meta: any, subField: SubField) => {
   )
 }
 
+//------------------password input field--------------------
 const renderPasswordField = (field: any, meta: any, subField: SubField, passwordVisible: boolean, setPasswordVisible: { (value: React.SetStateAction<boolean>): void; (arg0: boolean): void; }) => (
   //return (
   <TextFieldUi
-    required={true}
-    disabled={false}
+    required={subField.required}
+    disabled={subField.disabled}
     {...field}
     endAdornment={passwordVisible ? <IconButton onClick={() => {
       setPasswordVisible(!passwordVisible)
@@ -189,10 +142,11 @@ const renderPasswordField = (field: any, meta: any, subField: SubField, password
   //)
 );
 
+// --------------------- text area filed--------------------
 const renderTextArea = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => (
   <TextAreaUi
-    required={true}
-    disabled={false}
+    required={subField.required}
+    disabled={subField.disabled}
     {...field}
     // variant="outlined"
     // margin="normal"
@@ -216,10 +170,11 @@ const renderTextArea = (field: any, meta: any, subField: SubField, setFieldValue
   />
 );
 
+//------------------date time picker--------------------
 const renderDatePickerField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => (
   <DatePickerUi
-    required={true}
-    disabled={false}
+    required={subField.required}
+    disabled={subField.disabled}
     {...field}
     label={subField.label}
     value={field.value}
@@ -235,6 +190,7 @@ const renderDatePickerField = (field: any, meta: any, subField: SubField, setFie
   />
 );
 
+//----------------------radio fields---------------------
 const renderRadioField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
   const options: any = subField.options?.map(option => ({
     value: option.value,
@@ -242,7 +198,7 @@ const renderRadioField = (field: any, meta: any, subField: SubField, setFieldVal
   })) || [];
 
   return (
-    <RadioUi errorMsg={meta.touched && meta.error} options={options} required={true} disabled={false} value={field.value} onChange={(newValue: any) => {
+    <RadioUi errorMsg={meta.touched && meta.error} options={options} value={field.value} onChange={(newValue: any) => {
       if (newValue) {
         setFieldValue(subField.name, newValue.target.value);
       } else {

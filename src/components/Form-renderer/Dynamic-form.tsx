@@ -20,7 +20,7 @@ export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error
     const navigate = useNavigate();
 
     const dispatch = useDispatch<AppDispatch>();
-    
+
     const handleClick = () => {
         dispatch(clearData());
         navigate(-1); // Navigate back to the previous page
@@ -37,8 +37,10 @@ export const DynamicFormCreate = ({ buttons, toastMessage, isSuccessToast, error
 
                     const defaultButtons = [
                         { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: handleClick },
-                        { label: 'Save', icon: Save, onClick: handleSubmit, disabled: !(isValid && dirty) } // Use handleSubmit here
+                        { label: 'Save', icon: Save, onClick: handleSubmit, } // Use handleSubmit here
                     ];
+                    // !------------------- add the below line in default button, if  you want to disable the button in form -----------------
+                    // disabled: !(isValid && dirty)
 
                     const resolvedButtons = buttons ? buttons.map((button: any) => ({
                         ...button,
