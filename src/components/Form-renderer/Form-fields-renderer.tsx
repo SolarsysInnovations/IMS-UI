@@ -4,19 +4,13 @@ import SelectDropdown from "../ui/SelectDropdown";
 import TextFieldUi from "../ui/TextField";
 import RadioUi from "../ui/RadioGroup";
 import { Box, Grid, IconButton, Typography } from "@mui/material";
-import ButtonSmallUi from "../ui/ButtonSmall";
 import { FieldProps, SubField } from "../../types/types";
 import DatePickerUi from "../ui/DatePicker";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import TextAreaUi from "../ui/TextArea";
-import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import { Country, State, City } from 'country-state-city';
 import { generateOptions } from '../../services/utils/dropdownOptions';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
-import { setCountry, setData } from '../../redux-store/global/globalState';
-import { getStateByCodeAndCountry } from 'country-state-city/lib/state';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 
 interface RenderCountrySelectFieldProps {
