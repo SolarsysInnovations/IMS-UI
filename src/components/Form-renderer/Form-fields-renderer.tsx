@@ -138,13 +138,13 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 
 };
 
+// input field renderer
 const renderTextField = (field: any, meta: any, subField: SubField) => {
-
-
+  console.log(subField);
   return (
     <TextFieldUi
-      required={true}
-      disabled={false}
+      required={subField.required}
+      disabled={subField.disabled}
       {...field}
       // variant="outlined"
       // margin="normal"
