@@ -15,8 +15,8 @@ const ServiceScreen = () => {
 
     return (
         <>
-                    <ServiceCreate onSuccess={handleModalClose} />
-                    {/* <ServicesList /> */}
+            <ServiceCreate onSuccess={handleModalClose} />
+            {/* <ServicesList /> */}
         </>
     )
 }

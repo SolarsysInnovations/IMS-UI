@@ -143,7 +143,6 @@ export const columns: GridColDef[] = [
     editable: false,
     renderCell: (params: any) => {
       const userId = params.row.id;
-      console.log("userId:", userId); // Log the userId
       return <MyCellRenderer id={userId} />;
     },
   },

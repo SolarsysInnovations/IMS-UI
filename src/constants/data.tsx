@@ -214,10 +214,10 @@ export const sidebarTwo = [
 export const invoiceStatusOptions = admins
   ? ["DRAFT", "PAID"]
   : approver
-  ? ["PENDING", "APPROVED", "DELETE", "RETURNED"]
-  :  
-  ["DRAFT", "PAID"]
- // : ["APPROVED", "DELETE", "RETURNED", "DRAFT", "PENDING", "PAID"];
- 
+    ? ["PENDING", "APPROVED", "DELETE", "RETURNED"]
+    :
+    ["DRAFT", "PAID"]
+// : ["APPROVED", "DELETE", "RETURNED", "DRAFT", "PENDING", "PAID"];
+
 
 

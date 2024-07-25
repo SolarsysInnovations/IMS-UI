@@ -29,7 +29,6 @@ const tableRow: TableRow[] = [
 ];
 
 export default function TableContent({ tableData }: TableContentUiProps) {
-    console.log(tableData);
 
     return (
         <div style={{ boxShadow: "none", backgroundColor: "transparent" }}>

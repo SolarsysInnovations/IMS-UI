@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
-import LoadingButton from '@mui/lab/LoadingButton';
+import LoadingButton from "@mui/lab/LoadingButton";
 
 // Define valid variant names as a union type
 type ButtonVariant = "text" | "outlined" | "contained";
@@ -22,9 +22,13 @@ interface ButtonProps {
   loading?: boolean;
   smallButtonCss?: boolean;
   gridButton?: boolean;
+  onMouseEnter?: (e: React.MouseEvent) => void; // Hover event
+  onMouseLeave?: (e: React.MouseEvent) => void; // Hover event
 }
 
 const ButtonUi: React.FC<ButtonProps> = ({
+  onMouseEnter,
+  onMouseLeave,
   label,
   variant = "contained", // Default variant
   color = "primary", // Default color
@@ -40,31 +44,33 @@ const ButtonUi: React.FC<ButtonProps> = ({
   hasBackground = true, // Default to true
   loading = false,
   smallButtonCss,
-  gridButton = true
+  gridButton = true,
 }) => {
-
-
-
   return (
     <LoadingButton
       sx={{
         "& .css-cstir9-MuiButton-startIcon>*:nth-of-type(1)": {
           fontSize: "15px",
         },
-        padding: "10px 16px", ...sx,
-        ...(gridButton ? {
-          // border: " 1px solid #6366F1 !important",
-        } : {}),
-        ...(smallButtonCss ? {
-          borderRadius: "5px",
-          marginTop: "0px",
-          marginBottom: "0px",
-          padding: "3px 10px",
-          display: "flex",
-          fontSize: "11px",
-          boxShadow: "none",
-          alignItems: "center",
-        } : {})
+        padding: "10px 16px",
+        ...sx,
+        ...(gridButton
+          ? {
+            // border: " 1px solid #6366F1 !important",
+          }
+          : {}),
+        ...(smallButtonCss
+          ? {
+            borderRadius: "5px",
+            marginTop: "0px",
+            marginBottom: "0px",
+            padding: "3px 10px",
+            display: "flex",
+            fontSize: "11px",
+            boxShadow: "none",
+            alignItems: "center",
+          }
+          : {}),
       }}
       onClick={onClick}
       fullWidth={fullWidth}
@@ -75,7 +81,9 @@ const ButtonUi: React.FC<ButtonProps> = ({
       startIcon={startIcon}
       endIcon={endIcon}
       loading={loading}
-      loadingIndicator="Loading…"
+      loadingIndicator='Loading…'
+      onMouseEnter={onMouseEnter} // Hover event handler
+      onMouseLeave={onMouseLeave} // Hover event handler
     >
       {label || "Continue"}
     </LoadingButton>

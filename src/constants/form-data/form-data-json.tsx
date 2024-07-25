@@ -18,7 +18,7 @@ export const customerFields: FieldProps[] = [
         subFields: [
             {
                 name: 'customerType', required: true, disabled: false, label: 'Customer Type', type: 'radio', gridSize: 3, options: [{ value: "Business", label: "Business" },
-                { value: "Individual", label: "Individual" }], validation: Yup.string().required('customerName is required',)
+                { value: "Individual", label: "Individual" }],
             },
         ]
     },
@@ -28,10 +28,10 @@ export const customerFields: FieldProps[] = [
         name: "info",
         label: 'Address Information',
         subFields: [
-            { name: 'customerName', required: true, disabled: false, label: 'Customer Name', type: 'text', gridSize: 3, validation: Yup.string().required('customerName is required',) },
-            { name: 'companyName', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 3, validation: Yup.string().required('companyName is required') },
-            { name: 'customerEmail', required: true, disabled: false, label: 'Customer Email', type: 'email', gridSize: 3, validation: Yup.string().required('customerEmail is required') },
-            { name: 'customerPhone', required: true, disabled: false, label: 'Customer Phone', type: 'number', gridSize: 3, validation: Yup.string().required('customerPhone is required') },
+            { name: 'customerName', required: true, disabled: false, label: 'Customer Name', type: 'text', gridSize: 3, },
+            { name: 'companyName', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 3, },
+            { name: 'customerEmail', required: true, disabled: false, label: 'Customer Email', type: 'email', gridSize: 3, },
+            { name: 'customerPhone', required: true, disabled: false, label: 'Customer Phone', type: 'number', gridSize: 3, },
         ]
     },
     {
@@ -47,7 +47,7 @@ export const customerFields: FieldProps[] = [
                 { value: "Due on receipt", label: "Due on receipt" },
                 { value: "Net 30", label: "Net 30" },
                 { value: "Net 45", label: "Net 45" },
-                ], validation: Yup.string().required('paymentTerms is required')
+                ],
             },
 
         ]
@@ -59,19 +59,19 @@ export const customerFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             {
-                name: 'country', required: true, disabled: false, label: 'country/region', type: 'selectCountry', gridSize: 3, validation: Yup.string().required('paymentTerms is required'),
+                name: 'country', required: true, disabled: false, label: 'country/region', type: 'selectCountry', gridSize: 3,
             },
             {
-                name: 'state', required: true, disabled: false, label: 'State', type: 'selectState', gridSize: 3, validation: Yup.string().required('companyName is required'),
+                name: 'state', required: true, disabled: false, label: 'State', type: 'selectState', gridSize: 3,
             },
             {
-                name: 'city', required: true, disabled: false, label: 'City', type: 'selectCity', gridSize: 3, validation: Yup.string().required('companyName is required'),
+                name: 'city', required: true, disabled: false, label: 'City', type: 'selectCity', gridSize: 3,
             },
             {
-                name: 'address', required: true, disabled: false, label: 'Address', type: 'text', gridSize: 3, validation: Yup.string().required('address is required')
+                name: 'address', required: true, disabled: false, label: 'Address', type: 'text', gridSize: 3,
             },
             {
-                name: 'pinCode', required: true, disabled: false, label: 'PinCode', type: 'number', gridSize: 3, validation: Yup.string().required('pinCode is required')
+                name: 'pinCode', required: true, disabled: false, label: 'PinCode', type: 'number', gridSize: 3,
             },
         ]
     },
@@ -81,9 +81,9 @@ export const customerFields: FieldProps[] = [
         type: 'array',
         titleGridSize: 12,
         subFields: [
-            { name: 'contactName', required: true, disabled: false, label: 'Contact Name', type: 'text', gridSize: 3, validation: Yup.string().required('contactName is required') },
-            { name: 'contactEmail', required: true, disabled: false, label: 'Contact Email', type: 'email', gridSize: 3, validation: Yup.string().required('contactEmail is required') },
-            { name: 'contactPhone', required: true, disabled: false, label: 'Contact Phone', type: 'number', gridSize: 3, validation: Yup.string().required('contactPhone is required') },
+            { name: 'contactName', required: true, disabled: false, label: 'Contact Name', type: 'text', gridSize: 3, },
+            { name: 'contactEmail', required: true, disabled: false, label: 'Contact Email', type: 'email', gridSize: 3, },
+            { name: 'contactPhone', required: true, disabled: false, label: 'Contact Phone', type: 'number', gridSize: 3, },
         ]
     },
 ];
@@ -101,7 +101,7 @@ export const serviceFields: FieldProps[] = [
         ]
     },
 ];
-export const CompanyDetailsFields: FieldProps[]=[
+export const CompanyDetailsFields: FieldProps[] = [
     {
         name: 'Company Information',
         label: 'Company Information :',
