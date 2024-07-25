@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton, Stack } from '@mui/material';
+import { IconButton, Stack,Box } from '@mui/material';
+import TableHeader from "../../components/layouts/TableHeader";
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import { useDeleteRoleMutation, useGetRoleByIdMutation, useGetRoleQuery, useUpdateRoleMutation, setRoleData } from '../../redux-store/role/roleApi';
 import usePathname from '../../hooks/usePathname';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { AppDispatch } from '../../redux-store/store';
 import { useDispatch } from 'react-redux';
+import { RemoveRedEyeOutlined } from "@mui/icons-material";
+import ModalUi from "../../components/ui/ModalUi";
+
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { RolesEditFields } from '../../constants/form-data/form-data-json';
+import CustomerDetails from '../customer/customerDetails';
 
 const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
@@ -90,6 +95,14 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
         setOpenModal(false);
         refetch();
     };
+const handleModalOpen = async () => {
+  setOpenModal(true);
+  try {
+    await getRole(id);
+   } catch (error) {
+    console.error("Error fetching customer data:", error);
+  }
+};
 
     const handleEditClick = async () => {
         try {
@@ -98,7 +111,7 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
             if ('data' in response) {
                 const roleData = response.data;
                 await dispatch(setRoleData(roleData));
-                setOpenModal(true);
+               // setOpenModal(true);
             } else {
                 console.error('Error response:', response.error);
             }
@@ -118,19 +131,61 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     };
 
     return (
-        <Stack direction="row" spacing={1}>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
-            {/* <DialogBoxUi
+      <Stack direction="row" spacing={1}>
+        <IconButton
+          sx={{ padding: "3px" }}
+          aria-label=""
+          onClick={handleEditClick}
+        >
+          <EditIcon
+            sx={{
+              color: `grey.500`,
+              fontSize: "15px",
+              "&:hover": { color: "blue" },
+            }}
+            fontSize="small"
+          />
+        </IconButton>
+        <IconButton
+          sx={{ padding: "3px" }}
+          aria-label=""
+          onClick={handleDeleteClick}
+        >
+          <GridDeleteIcon
+            sx={{
+              color: `grey.500`,
+              fontSize: "15px",
+              "&:hover": { color: "blue" },
+            }}
+            fontSize="small"
+          />
+        </IconButton>
+        {/* <DialogBoxUi
                 open={openModal}
                 content={<RoleForm onClose={handleModalClose} RolesEditInitialValues={roleData} HeaderName="Update Role" RolesFields={RolesEditFields}/>}
                 handleClose={handleModalClose}
             /> */}
-        </Stack>
+        <IconButton
+          sx={{ padding: "3px" }}
+          aria-label=""
+          onClick={handleModalOpen}
+        >
+          <RemoveRedEyeOutlined
+            sx={{
+              color: `grey.500`,
+              fontSize: "15px",
+              "&:hover": { color: "blue" },
+            }}
+            fontSize="small"
+          />
+        </IconButton>
+        <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
+          <TableHeader headerName="User Details" />
+          <Box sx={{ marginTop: "15px" }}>
+            <CustomerDetails details={roleData || []} />
+          </Box>
+        </ModalUi>{" "}
+      </Stack>
     );
 
 }
