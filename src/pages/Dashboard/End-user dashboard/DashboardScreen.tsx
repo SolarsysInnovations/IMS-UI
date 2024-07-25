@@ -17,7 +17,6 @@ export interface ApproverOverViewData {
   approvedInvoices: number;
 }
 
-
 const ApproverDashboardScreen = () => {
   const [getEndUserDashboard, { data, isLoading, isError, error }] =
     useGetEndUserDashboardMutation();
@@ -26,30 +25,30 @@ const ApproverDashboardScreen = () => {
 
   const [approverOverViewData, setApproverOverViewData] = useState<ApproverOverViewData | null>(null);
 
-  console.log("approverOverViewData",approverOverViewData);
-  
+  console.log("approverOverViewData", approverOverViewData);
+
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            console.log("selectedValue", selectedValue);
-            const response = await getEndUserDashboard({ filter: selectedValue }).unwrap();
-            const approverOverViewData = {
-              totalInvoices: response.totalInvoices,
-              pendingInvoices: response.pendingInvoices,
-              approvedInvoices: response.approvedInvoices,
-            }
-            setApproverOverViewData(approverOverViewData || {});
-            console.log(response);
-            
-        } catch (error) {
-            console.error('Failed to fetch data:', error);
+      try {
+        console.log("selectedValue", selectedValue);
+        const response = await getEndUserDashboard({ filter: selectedValue }).unwrap();
+        const approverOverViewData = {
+          totalInvoices: response.totalInvoices,
+          pendingInvoices: response.pendingInvoices,
+          approvedInvoices: response.approvedInvoices,
         }
+        setApproverOverViewData(approverOverViewData || {});
+        console.log(response);
+
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
     };
 
     if (selectedValue !== null) {
-        fetchData();
+      fetchData();
     }
-}, [selectedValue, getEndUserDashboard]);
+  }, [selectedValue, getEndUserDashboard]);
 
   const handleChange = (newValue: any) => {
     if (newValue) {
@@ -70,7 +69,7 @@ const ApproverDashboardScreen = () => {
         >
           <SelectDropdown
             applySmallSizeStyle={true}
-            value={selectedValue ? {label : selectedValue , value : selectedValue} : null}
+            value={selectedValue ? { label: selectedValue, value: selectedValue } : null}
             options={options}
             onChange={handleChange}
           />
@@ -81,7 +80,7 @@ const ApproverDashboardScreen = () => {
           <Typography variant="h6" gutterBottom>
             Overview
           </Typography>
-          <EndUserInvoiceOverView  approverOverViewData={approverOverViewData}/>
+          <EndUserInvoiceOverView approverOverViewData={approverOverViewData} />
         </Grid>{" "}
         <Grid sx={{ marginTop: "20px" }}>
           <Typography variant="h6" gutterBottom>

@@ -19,19 +19,9 @@ import { setCountry, setData } from '../../redux-store/global/globalState';
 import { getStateByCodeAndCountry } from 'country-state-city/lib/state';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 
-console.log("Hello world", Country.getAllCountries());
-
-const country = Country.getAllCountries();
-
-// iso code to get all states of countries ...
-console.log("country", country);
-
-console.log("Hello world", City.getCitiesOfState("IN", "TN"));
-console.log("Hello world", State.getStatesOfCountry("IN"));
 
 
 const countryOptions = generateOptions(Country.getAllCountries(), "name", "isoCode");
-console.log("countryOptions", countryOptions);
 
 interface RenderCountrySelectFieldProps {
   field: any;
@@ -48,7 +38,6 @@ const RenderCountrySelectField: React.FC<RenderCountrySelectFieldProps> = ({
   setFieldValue,
   options
 }) => {
-  console.log("options", options);
 
   return (
     <Field name={subField.name} required={true} disabled={false}>
@@ -149,26 +138,28 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 
 };
 
-const renderTextField = (field: any, meta: any, subField: SubField) => (
-  //return (
-  <TextFieldUi
-    required={true}
-    disabled={false}
-    {...field}
-    // variant="outlined"
-    // margin="normal"
-    value={field.value || ""}
-    startAdornment={subField.startAdornment ? <span>{subField.startAdornment}</span> : undefined}
-    endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
-    type={subField.type}
-    fullWidth
-    id={subField.name}
-    label={subField.label}
-    error={meta.touched && !!meta.error}
-    helperText={subField?.helperText}
-  />
-  //)
-);
+const renderTextField = (field: any, meta: any, subField: SubField) => {
+
+
+  return (
+    <TextFieldUi
+      required={true}
+      disabled={false}
+      {...field}
+      // variant="outlined"
+      // margin="normal"
+      value={field.value || ""}
+      startAdornment={subField.startAdornment ? <span>{subField.startAdornment}</span> : undefined}
+      endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
+      type={subField.type}
+      fullWidth
+      id={subField.name}
+      label={subField.label}
+      error={meta.touched && !!meta.error}
+      helperText={meta.touched && meta.error ? meta.error : subField.helperText}
+    />
+  )
+}
 
 const renderPasswordField = (field: any, meta: any, subField: SubField, passwordVisible: boolean, setPasswordVisible: { (value: React.SetStateAction<boolean>): void; (arg0: boolean): void; }) => (
   //return (
@@ -275,15 +266,11 @@ interface FieldRendererProps {
 
 export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, field, setFieldValue, setData }) => {
 
-  console.log("field", field.subFields);
 
   const filteredData = field.subFields?.filter((data) => data.type === "selectCountry" || data.type === "selectState" || data.type === "selectCity");
 
-  console.log("filteredData", filteredData);
 
   const { values } = useFormikContext<FormFieldProps>();
-
-  console.log("values", values);
 
   const countryOptionsGenerate = useMemo(
     () => generateOptions(Country.getAllCountries(), "name", "isoCode"),
@@ -294,12 +281,6 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
   const [stateOptions, setStateOptions] = useState<any[]>([]);
   const [cityOptions, setCityOptions] = useState<any[]>([]);
 
-  console.log("countryOptions", countryOptions);
-  console.log("stateOptions", stateOptions);
-  console.log("cityOptions", cityOptions);
-  // console.log("countryData", countryData);
-  const state = State.getAllStates();
-  console.log("state", state);
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 

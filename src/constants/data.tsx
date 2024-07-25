@@ -56,14 +56,8 @@ const getDashboardComponent = (role: any) => {
       return <EnduserDashboardScreen />;
   }
 };
-<<<<<<< HEAD
-
-const userRole = getUserRole();
-console.log("userRole", userRole);
-=======
 export const userRole = getUserRole();
 //console.log("userRole", userRole);
->>>>>>> b3e14c23e1a788871b04dd9f666bb67022f48c7d
 
 export const routesConfig = [
   // * -------- login ---------
@@ -220,10 +214,10 @@ export const sidebarTwo = [
 export const invoiceStatusOptions = admins
   ? ["DRAFT", "PAID"]
   : approver
-  ? ["PENDING", "APPROVED", "DELETE", "RETURNED"]
-  :  
-  ["DRAFT", "PAID"]
- // : ["APPROVED", "DELETE", "RETURNED", "DRAFT", "PENDING", "PAID"];
- 
+    ? ["PENDING", "APPROVED", "DELETE", "RETURNED"]
+    :
+    ["DRAFT", "PAID"]
+// : ["APPROVED", "DELETE", "RETURNED", "DRAFT", "PENDING", "PAID"];
+
 
 
