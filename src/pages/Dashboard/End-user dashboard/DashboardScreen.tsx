@@ -18,7 +18,7 @@ export interface ApproverOverViewData {
 }
 
 
-const ApproverDashboardScreen = () => {
+const EndUserDashboardScreen = () => {
   const [getEndUserDashboard, { data, isLoading, isError, error }] =
     useGetEndUserDashboardMutation();
 
@@ -94,4 +94,4 @@ const ApproverDashboardScreen = () => {
   );
 };
 
-export default ApproverDashboardScreen;
+export default EndUserDashboardScreen;
