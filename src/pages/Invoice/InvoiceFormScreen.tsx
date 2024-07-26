@@ -1,51 +1,39 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TableHeader from '../../components/layouts/TableHeader';
-import { Add, Approval, KeyboardBackspaceTwoTone, Save, Visibility } from '@mui/icons-material';
+import { Add, Approval, KeyboardBackspaceTwoTone, Save, } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, } from 'react-redux';
 import { Box, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
-import { AppDispatch, RootState } from '../../redux-store/store'
+import { AppDispatch, } from '../../redux-store/store'
 import RadioUi from '../../components/ui/RadioGroup';
 import { Formik, Form } from 'formik';
-import ToastUi from '../../components/ui/ToastifyUi';
-import SelectDropdown from '../../components/ui/SelectDropdown';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
 import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 import { InvoiceInitialValueProps } from '../../types/types';
-import { useGetServiceQuery, useUpdateServiceMutation } from '../../redux-store/service/serviceApi';
+import { useGetServiceQuery } from '../../redux-store/service/serviceApi';
 import DatePickerUi from '../../components/ui/DatePicker';
-import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
 import { generateOptions } from '../../services/utils/dropdownOptions';
 import { useAddInvoiceMutation, useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
-import { toast } from 'react-toastify';
-import { toastConfig } from '../../constants/forms/config/toastConfig';
 import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
-import DemoInvoice from './Demo-Invocie';
-import { gstType, invoiceType, paymentTerms, tdsOptions } from '../../constants/invoiceData';
+import { invoiceType, } from '../../constants/invoiceData';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { useGetGstTypeQuery } from '../../redux-store/invoice/gstTypeApi';
-import { useGetTdsTaxQuery } from '../../redux-store/invoice/tdsTaxApi';
 import TextAreaUi from '../../components/ui/TextArea';
 import GstTypeScreen from './GstType/GstTypeScreen';
 import TdsTaxScreen from './TdsTax/TdsTaxScreen';
 import { useGetPaymentTermsQuery } from '../../redux-store/invoice/paymentTerms';
 import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
-import { float } from 'html2canvas/dist/types/css/property-descriptors/float';
-import { formatDate } from '../../services/utils/dataFormatter';
 import { addDays, format } from 'date-fns';
-import ServiceCreate from '../service/service-create-screen';
-import DialogBoxUi from '../../components/ui/DialogBox';
-import { clearData, setData } from '../../redux-store/global/globalState';
-import SendEmail from './Send-email';
-import ServiceScreen from './service/ServiceScreen';
-import NestedModalUi from '../../components/ui/NestedModalui';
-import SnackBarUi from '../../components/ui/Snackbar';
-import { showSnackbar } from '../../redux-store/global/snackBarSlice';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { useGetTdsTaxQuery } from '../../redux-store/invoice/tdsTaxApi';
+import { clearData, setData } from '../../redux-store/global/globalState';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import ServiceScreen from './service/ServiceScreen';
+import SelectDropdown from '../../components/ui/SelectDropdown';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -65,7 +53,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const navigate = useNavigate();
     // popUps
     const [popUpComponent, setPopUpComponent] = useState("");
-    const [invoiceFinalData, setInvoiceFinalData] = useState();
     const { data: customers, error, isLoading, refetch: customerRefetch } = useGetCustomersQuery();
     const { data: invoiceList, refetch: invoiceRefetch } = useGetInvoiceQuery();
     const [addInvoice, { isSuccess: addInvoiceSuccess, isError: addInvoiceError, error: addInvoiceErrorObject }] = useAddInvoiceMutation();
@@ -78,13 +65,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const [selectedTds, setSelectedTdsAmount] = useState<number | null>(null);
     const [tdsAmount, setTdsAmount] = useState<number | null>(null);
     const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>();
-    const [showApproverButton, setShowApproverButton] = useState(false);
     // * * * * * * * grid table states * * * * * * * * *
     // const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
     const { data: serviceList } = useGetServiceQuery();
     const { data: paymentTerms } = useGetPaymentTermsQuery();
     const [modifiedServiceList, setModifiedServiceList] = React.useState<Service[]>([]);
-    const [rows, setRows] = React.useState<any[]>([]); // Initialize rows as an empty array
     const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
     const [invoiceValues, setInvoiceValues] = useState(invoiceValue || invoiceCreateInitialValue);
     const { data: gstTypesData = [] } = useGetGstTypeQuery();
@@ -171,9 +156,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         }
     }, [serviceList]);
 
-    console.log("modifiedServiceList", modifiedServiceList);
-
-
     // * this is for edit screen only
     React.useEffect(() => {
         if (invoiceValue) {
@@ -236,8 +218,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         }
     };
 
-
-
     return (
         <Formik
             initialValues={invoiceValues}
@@ -257,7 +237,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         await addInvoice(values);
                         resetForm();
                     }
-                    // alert(JSON.stringify(values));
                     resetForm();
                     setInvoiceValues({ ...invoiceValues })
                 } catch (error) {
@@ -285,9 +264,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
 
                                     setPreview(false);
                                     setIsModalOpen(true);
-                                    // setInvoicePopup(true)
-                                    // values.invoiceTotalAmount = invoiceTotalAmount
-
                                     dispatch(setData(updatedValue as any))
                                 },
                                 disabled: !(isValid && dirty),
@@ -303,13 +279,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 label: 'Save', icon: Save, onClick: async () => {
                                     handleSubmit()
                                 },
-                                disabled: !(isValid && dirty)
+                                // disabled: !(isValid && dirty)
                             },
                         ]} />
                         {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
                         <DialogBoxUi
-                            open={opendialogBox} // Set open to true to display the dialog initially
-                            // title="Custom Dialog Title"
+                            open={opendialogBox}
                             content={
                                 <>
                                     {
@@ -321,28 +296,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                     }
                                 </>
                             }
-                            // actions={
-                            //     <Button autoFocus onClick={handleClose}>
-                            //         Save changes
-                            //     </Button>
-                            // }
                             handleClose={() => {
                                 setIsOpenDialogBox(false)
                                 setPopUpComponent("")
 
                             }}
                         />
-                        {/* <ModalUi topHeight='90%' open={isModalOpen} onClose={() => {
-                                setIsModalOpen(false)
-                                setInvoicePopup(false)
-                            }} >
-                                <>
-                                    {invoicePopUp && (
-                                        <InvoiceUi discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} invoiceData={invoiceFinalData}  emailModalOpen={setisEmailModalOpen} emailPopup={setEmailPopUp} isModalOpen={setIsModalOpen} invoicePopup={setInvoicePopup} gstTypePopup={setGstTypePopup} tdsTaxPopup={setTdsTaxPopup} paymentTermsPopUp={setPaymentTermsPopUp}/>
-                                    )}
-                                </>
-                            </ModalUi> */}
-
                         <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
                             setPreview(false);
                             setIsModalOpen(false)
@@ -360,23 +319,15 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                                 setFieldValue('invoiceType', "")
                                             }
                                         }} groupName='type' options={invoiceType}
-                                        // label='Invoice type'
-                                        // errorMsg={touched.invoiceType && errors.invoiceType}
+                                            // label='Invoice type'
+                                            errorMsg={touched.invoiceType && errors.invoiceType}
                                         />
                                     </Box>
                                 </Grid>
-                                {/* <Grid item xs={6}>
-                                        <Box sx={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'flex-end',
-                                        }}>
-                                            <Typography variant="subtitle2" color="initial">Created at : {formatDate(values.invoiceDate)}</Typography>
-                                        </Box>
-                                    </Grid> */}
                                 <Grid item xs={3}>
                                     <Box>
                                         <TextFieldUi
+                                            disabled
                                             required={true}
                                             fullWidth={false}
                                             label='Invoice Number'
@@ -387,7 +338,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             })()}
                                             onChange={handleChange}
                                             error={touched.invoiceNumber && Boolean(errors.invoiceNumber)}
-                                        // helperText={touched.invoiceNumber && errors.invoiceNumber}
+                                            helperText={touched.invoiceNumber && errors.invoiceNumber}
                                         />
                                     </Box>
                                 </Grid>
@@ -409,7 +360,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             value={values.customerName ? { value: values.customerName, label: values.customerName } : null}
                                             labelText='Customer Name'
                                             error={touched.customerName && Boolean(errors.customerName)}
-                                        // helperText={touched.customerName && errors.customerName}
+                                            helperText={touched.customerName && errors.customerName}
                                         />
                                     </Box>
                                 </Grid>
@@ -442,13 +393,14 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             value={values.gstType ? { value: values.gstType, label: values.gstType } : null}
                                             labelText='Gst Type'
                                             error={touched.gstType && Boolean(errors.gstType)}
-                                        // helperText={touched.gstType && errors.gstType}
+                                            helperText={touched.gstType && errors.gstType}
                                         />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={2}>
                                     <Box>
                                         <TextFieldUi
+                                            disabled
                                             fullWidth={false}
                                             label='Gst Percentage'
                                             name='gstPercentage'
@@ -457,7 +409,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             value={values.gstPercentage || ""}
                                             onChange={handleChange}
                                             error={touched.gstPercentage && Boolean(errors.gstPercentage)}
-                                        // helperText={touched.gstPercentage && errors.gstPercentage}
+                                            helperText={touched.gstPercentage && errors.gstPercentage}
                                         />
                                     </Box>
                                 </Grid>
@@ -472,7 +424,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             value={values.gstInNumber}
                                             onChange={handleChange}
                                             error={touched.gstInNumber && Boolean(errors.gstInNumber)}
-                                        // helperText={touched.gstInNumber && errors.gstInNumber}
+                                            helperText={touched.gstInNumber && errors.gstInNumber}
                                         />
                                     </Box>
                                 </Grid>
@@ -509,7 +461,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             value={values.paymentTerms ? { value: values.paymentTerms, label: values.paymentTerms } : null}
                                             labelText='Payment Terms'
                                             error={touched.paymentTerms && Boolean(errors.paymentTerms)}
-                                        // helperText={touched.paymentTerms && errors.paymentTerms}
+                                            helperText={touched.paymentTerms && errors.paymentTerms}
                                         />
                                     </Box>
                                 </Grid>
@@ -517,6 +469,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 <Grid item xs={2}>
                                     <Box>
                                         <DatePickerUi
+                                            disabled
                                             required={true}
                                             label="Start Date"
                                             onChange={(date: Date) => {
@@ -529,6 +482,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 <Grid item xs={2}>
                                     <Box>
                                         <DatePickerUi
+                                            disabled
                                             required={true}
                                             label="Due Date"
                                             onChange={(date: Date) => {

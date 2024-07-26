@@ -16,7 +16,7 @@ interface SelectDropdownProps {
   value?: ValueProps | null; // Change the type of value prop
   onChange: (value: ValueProps | null) => void; // Add onChange event handler
   error?: boolean | undefined;
-  helperText?: string | undefined | boolean;
+  helperText?: any;
   width?: string;
   button?: boolean;
   onMouseDown?: () => void;
@@ -29,8 +29,18 @@ interface SelectDropdownProps {
 export default function SelectDropdown({ applySmallSizeStyle = false, defaultValue, disabled, onMouseDown, button, width, error, helperText, options, value, labelText, required, onChange }: SelectDropdownProps) {
   return (
     <Autocomplete
+      disabled={disabled}
+      defaultValue={defaultValue}
+      size='small'
+      disablePortal
+      // disablePortal={false}
+      id="combo-box-demo"
+      options={options}
+      value={value || null} // Update the type of value prop
+      onChange={(event, newValue) => {
+        onChange(newValue); // Pass the selected value to the parent component
+      }}
       sx={{
-
         ...(applySmallSizeStyle && {
           "& .MuiOutlinedInput-root.MuiInputBase-sizeSmall": {
             paddingTop: "0px",
@@ -39,7 +49,6 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
             width: "130px",
           },
         }),
-
         width: `${width}`,
         borderRadius: "8px !important",
         '& .MuiOutlinedInput-root': {
@@ -47,7 +56,7 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
           overflow: "hidden",
           borderColor: `action.active`,
           // transition: `border-color 0.2s, box-shadow 0.2s,`,
-           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
+          transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
           '&:hover': {
             backgroundColor: `action.hover`,
           },
@@ -61,22 +70,9 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
         '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
           fontSize: "12px"
         },
-
-      }}
-      disabled={disabled}
-      defaultValue={defaultValue}
-      size='small'
-      disablePortal
-      // disablePortal={false}
-      id="combo-box-demo"
-      options={options}
-      value={value || null} // Update the type of value prop
-      onChange={(event, newValue) => {
-        onChange(newValue); // Pass the selected value to the parent component
       }}
       isOptionEqualToValue={(option, value) => option.value === value.value}
       renderInput={(params) => <TextField error={error} helperText={helperText} required={required} sx={{ fontSize: "12px !important" }} variant='outlined' {...params} label={labelText} />}
-
       PaperComponent={({ children }) => {
         return (
           <Paper>
@@ -88,7 +84,7 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
                 sx={{ justifyContent: "flex-start", pl: 2 }}
                 onMouseDown={onMouseDown}
               >
-                {  (Roles.ENDUSER!==userRole )?"+ Add New":""}
+                {(Roles.ENDUSER !== userRole) ? "+ Add New" : ""}
               </Button>
             )}
           </Paper>

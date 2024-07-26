@@ -71,7 +71,7 @@ const DialogBoxUi = ({
                 >
                     <CloseIcon sx={{ width: '20px' }} />
                 </IconButton>
-                <DialogContent sx={{ ...maxwidth, minWidth: "200px", minHeight: "200px" }} >
+                <DialogContent sx={{ ...maxwidth, minWidth: "200px", minHeight: "200px", margin: "30px 20px 20px 20px" }} >
                     {content}
                 </DialogContent>
                 {actions && <DialogActions>{actions}</DialogActions>}

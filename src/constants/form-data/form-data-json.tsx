@@ -28,7 +28,7 @@ export const customerFields: FieldProps[] = [
         name: "info",
         label: 'Address Information',
         subFields: [
-            { name: 'customerName', required: false, disabled: true, label: 'Customer Name', type: 'text', gridSize: 3, },
+            { name: 'customerName', required: false, disabled: false, label: 'Customer Name', type: 'text', gridSize: 3, },
             { name: 'companyName', required: false, disabled: false, label: 'Company Name', type: 'text', gridSize: 3, },
             { name: 'customerEmail', required: true, disabled: false, label: 'Customer Email', type: 'email', gridSize: 3, },
             { name: 'customerPhone', required: true, disabled: false, label: 'Customer Phone', type: 'number', gridSize: 3, },
