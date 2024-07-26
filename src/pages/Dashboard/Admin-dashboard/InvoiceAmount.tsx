@@ -10,6 +10,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import DoneIcon from '@mui/icons-material/Done';
 import { useGetDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
 import { useState, useEffect } from 'react';
+import { roundUp } from '../../../services/utils/decimalconverter';
 
 interface ValueProps {
     label: string;
@@ -72,7 +73,7 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
                         label: "Total",
                         icon: CurrencyRupeeIcon,
                         iconBg: "#635bff",
-                        value: total.totalAmount.toFixed(2),
+                        value: roundUp(total.totalAmount),
                         childLabel: "Invoice child label",
                         months: value,
                         noOfInvoices: total.noOfInvoices,
@@ -81,7 +82,7 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
                         label: "Paid",
                         icon: DoneIcon,
                         iconBg: "#4E9F3D",
-                        value: paid.totalAmount.toFixed(2),
+                        value: roundUp(paid.totalAmount),
                         childLabel: "Invoice child label",
                         months: value,
                         noOfInvoices: paid.noOfInvoices,
@@ -90,7 +91,7 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
                         label: "Unpaid",
                         icon: ErrorIcon,
                         iconBg: "#FF204E",
-                        value: unPaid.totalAmount.toFixed(2),
+                        value: roundUp(unPaid.totalAmount),
                         childLabel: "Invoice child label",
                         months: value,
                         noOfInvoices: unPaid.noOfInvoices,

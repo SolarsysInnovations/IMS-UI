@@ -17,7 +17,8 @@ export interface ApproverOverViewData {
   approvedInvoices: number;
 }
 
-const ApproverDashboardScreen = () => {
+
+const EndUserDashboardScreen = () => {
   const [getEndUserDashboard, { data, isLoading, isError, error }] =
     useGetEndUserDashboardMutation();
 
@@ -93,4 +94,4 @@ const ApproverDashboardScreen = () => {
   );
 };
 
-export default ApproverDashboardScreen;
+export default EndUserDashboardScreen;
