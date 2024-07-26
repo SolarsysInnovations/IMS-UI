@@ -329,152 +329,159 @@ const theme = createTheme({
         },
       },
     },
-    // text field start
+    // ! -------------- text field start --------------
+    // Overrides for MuiInputBase component
     MuiInputBase: {
       styleOverrides: {
         input: {
-          fontSize: 12,
-          fontWeight: 500,
-          lineHeight: "24px",
+          fontSize: 12, // Setting font size for input text
+          fontWeight: 500, // Setting font weight for input text
+          lineHeight: "24px", // Setting line height for input text
           "&::placeholder": {
-            color: palette.text.secondary,
-            opacity: 1,
+            color: palette.text.secondary, // Placeholder text color
+            opacity: 1, // Full opacity for placeholder text
           },
         },
       },
     },
+    // Overrides for MuiInput component
     MuiInput: {
       styleOverrides: {
         input: {
-          fontSize: 12,
-          fontWeight: 500,
-          lineHeight: "24px",
+          fontSize: 12, // Setting font size for input text
+          fontWeight: 500, // Setting font weight for input text
+          lineHeight: "24px", // Setting line height for input text
           "&::placeholder": {
-            color: palette.text.secondary,
+            color: palette.text.secondary, // Placeholder text color
           },
         },
+
       },
     },
+    // Overrides for MuiFilledInput component
     MuiFilledInput: {
       styleOverrides: {
         root: {
-          backgroundColor: "transparent",
-          borderRadius: 8,
-          borderStyle: "solid",
-          borderWidth: 1,
-          overflow: "hidden",
-          borderColor: palette.neutral[200],
-          transition: muiTheme.transitions.create(["border-color", "box-shadow"]),
+          backgroundColor: "transparent", // Transparent background
+          borderRadius: 8, // Rounded corners
+          borderStyle: "solid", // Solid border style
+          borderWidth: 1, // Border width
+          overflow: "hidden", // Prevent overflow
+          borderColor: palette.neutral[200], // Border color
+          transition: muiTheme.transitions.create(["border-color", "box-shadow"]), // Transition for border-color and box-shadow
           "&:hover": {
-            backgroundColor: palette.action.hover,
+            backgroundColor: palette.action.hover, // Background color on hover
           },
           "&:before": {
-            display: "none",
+            display: "none", // Removing default underline
           },
           "&:after": {
-            display: "none",
+            display: "none", // Removing default underline
           },
           [`&.${filledInputClasses.disabled}`]: {
-            backgroundColor: "transparent",
+            backgroundColor: "transparent", // Transparent background when disabled
           },
           [`&.${filledInputClasses.focused}`]: {
-            backgroundColor: "transparent",
-            borderColor: palette.primary.main,
-            boxShadow: `${palette.primary.main} 0 0 0 2px`,
+            backgroundColor: "transparent", // Transparent background when focused
+            borderColor: palette.primary.main, // Border color when focused
+            boxShadow: `${palette.primary.main} 0 0 0 2px`, // Box-shadow when focused
           },
           [`&.${filledInputClasses.error}`]: {
-            borderColor: palette.error.main,
-            boxShadow: `${palette.error.main} 0 0 0 2px`,
+            borderColor: palette.error.main, // Border color when error
+            boxShadow: `${palette.error.main} 0 0 0 2px`, // Box-shadow when error
           },
         },
         input: {
-          fontSize: 12,
-          fontWeight: 500,
-          lineHeight: "24px",
+          fontSize: 12, // Setting font size for input text
+          fontWeight: 500, // Setting font weight for input text
+          lineHeight: "24px", // Setting line height for input text
         },
       },
     },
+    // Overrides for MuiOutlinedInput component
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
           "&:hover": {
-            backgroundColor: palette.action.hover,
+            backgroundColor: palette.action.hover, // Background color on hover
             [`& .${outlinedInputClasses.notchedOutline}`]: {
-              borderColor: palette.neutral[200],
+              borderColor: palette.neutral[500], // Border color on hover
             },
           },
           [`&.${outlinedInputClasses.focused}`]: {
-            backgroundColor: "transparent",
+            backgroundColor: "transparent", // Transparent background when focused
             [`& .${outlinedInputClasses.notchedOutline}`]: {
-              borderColor: palette.primary.main,
-              boxShadow: `${palette.primary.main} 0 0 0 2px`,
+              borderColor: palette.primary.main, // Border color when focused
+              boxShadow: `${palette.primary.main} 0 0 0 2px`, // Box-shadow when focused
             },
           },
           [`&.${outlinedInputClasses.error}`]: {
             [`& .${outlinedInputClasses.notchedOutline}`]: {
-              borderColor: palette.error.main,
-              boxShadow: `${palette.error.main} 0 0 0 2px`,
+              borderColor: palette.error.main, // Border color when error
+              boxShadow: `${palette.error.main} 0 0 0 2px`, // Box-shadow when error
             },
           },
         },
         input: {
-          fontSize: 12,
-          fontWeight: 500,
-          lineHeight: "24px",
+          fontSize: 12, // Setting font size for input text
+          fontWeight: 500, // Setting font weight for input text
+          lineHeight: "24px", // Setting line height for input text
         },
         notchedOutline: {
-          borderColor: palette.neutral[200],
-          transition: muiTheme.transitions.create(["border-color", "box-shadow"]),
+          borderColor: palette.neutral[200], // Default border color
+          transition: muiTheme.transitions.create(["border-color", "box-shadow"]), // Transition for border-color and box-shadow
         },
       },
     },
+    // Overrides for MuiFormLabel component
     MuiFormLabel: {
       styleOverrides: {
         root: {
-          fontSize: 12,
-          fontWeight: 500,
+          fontSize: 12, // Setting font size for label text
+          fontWeight: 500, // Setting font weight for label text
           [`&.${inputLabelClasses.filled}`]: {
-            transform: "translate(12px, 18px) scale(1)",
+            transform: "translate(12px, 18px) scale(1)", // Positioning label for filled input
           },
           [`&.${inputLabelClasses.shrink}`]: {
             [`&.${inputLabelClasses.standard}`]: {
-              transform: "translate(0, -1.5px) scale(0.85)",
+              transform: "translate(0, -1.5px) scale(0.85)", // Positioning label when input is standard and shrunk
             },
             [`&.${inputLabelClasses.filled}`]: {
-              transform: "translate(12px, 6px) scale(0.85)",
+              transform: "translate(12px, 6px) scale(0.85)", // Positioning label when input is filled and shrunk
             },
             [`&.${inputLabelClasses.outlined}`]: {
-              transform: "translate(14px, -9px) scale(0.85)",
+              transform: "translate(14px, -9px) scale(0.85)", // Positioning label when input is outlined and shrunk
             },
           },
         },
       },
     },
+    // Overrides for MuiSelect component
     MuiSelect: {
       styleOverrides: {
         root: {
-          fontSize: 12,
-          fontWeight: 500,
-          lineHeight: "24px",
+          fontSize: 12, // Setting font size for select text
+          fontWeight: 500, // Setting font weight for select text
+          lineHeight: "24px", // Setting line height for select text
         },
         select: {
-          fontSize: 12,
-          fontWeight: 500,
-          lineHeight: "24px",
+          fontSize: 12, // Setting font size for select text
+          fontWeight: 500, // Setting font weight for select text
+          lineHeight: "24px", // Setting line height for select text
         },
       },
     },
+    // Overrides for MuiTextField component
     MuiTextField: {
       styleOverrides: {
         root: {
-          fontSize: 12,
-          fontWeight: 500,
-          lineHeight: "24px",
+          fontSize: 12, // Setting font size for text field text
+          fontWeight: 500, // Setting font weight for text field text
+          lineHeight: "24px", // Setting line height for text field text
         },
       },
     },
-
-    // text field end ui
+    // ! ------------ text field end ui ---------------
     MuiTab: {
       styleOverrides: {
         root: {
