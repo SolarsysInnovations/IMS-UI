@@ -1,6 +1,4 @@
-// "http://localhost:4000";
-// export const BASE_URL_NODE = "https://node-js-invoice.onrender.com";
-// https://ims-backend-9ghn.onrender.com/login
+
 const JAVA_URL = "https://ims-backend-9ghn.onrender.com"; // ! java backend
 const LOCAL_URL = "http://localhost:4000";
 const NODE_URL = "https://node-js-invoice.onrender.com";  // ! nodejs backend
@@ -134,7 +132,7 @@ export const API_URLS: ApiUrls = {
     //Roles
     [ApiEndpoint.ROLES_GET]: `/role/get/`,
     [ApiEndpoint.ROLES_GETUSER]: `/role/findByEmail/`,
-    [ApiEndpoint.ROLES_LIST]: `/role/list`,
+    [ApiEndpoint.ROLES_LIST]: `/user/list`,
     [ApiEndpoint.ROLES_CREATE]: `/role/register`,
     [ApiEndpoint.ROLES_UPDATE]: `/role/update`,
     [ApiEndpoint.ROLES_DELETE]: `/role/delete`,

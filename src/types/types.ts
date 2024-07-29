@@ -7,10 +7,7 @@ export interface LoginProps {
     password: string;
 };
 
-interface ContactPersonProps {
-    contactName: string;
-    contactEmail: string;
-};
+
 export interface GstTypeProps {
     id?: string | undefined;
     gstName: string,
@@ -42,7 +39,11 @@ export interface PaymentTermsProps {
 export interface PaymentTermsFormProps {
     paymentTermsValue: PaymentTermsProps
 }
-
+interface ContactPersonProps {
+    contactName: string;
+    contactEmail: string;
+    contactPhone: number;
+};
 export interface DyCreateCustomerProps {
     id?: any;
     customerName: string;
@@ -82,7 +83,7 @@ export interface FormProps {
     toastMessage?: string;
     buttons?: any;
     rows?: number;
-  
+
 
 };
 export interface SubField {

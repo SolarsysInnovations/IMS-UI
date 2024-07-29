@@ -101,6 +101,7 @@ export const dyCustomerInitialValue: DyCreateCustomerProps = {
         {
             contactName: "wewe",
             contactEmail: "",
+            contactPhone: 0,
         }
     ],
 };

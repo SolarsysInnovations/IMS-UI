@@ -34,10 +34,10 @@ import EnduserDashboardScreen from "../pages/Dashboard/End-user dashboard/Dashbo
 import UserScreen from "../pages/company-users/UserScreen";
 import SettingRoleScreen from "../pages/settings/settings-role";
 
-export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.ENDUSER];
+export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER];
 export const admins = [Roles.ADMIN];
 export const superAdmin = [Roles.SUPERADMIN,];
-export const standardUser = [Roles.ENDUSER,];
+export const standardUser = [Roles.STANDARDUSER,];
 export const approver = [Roles.APPROVER,]
 
 const getUserRole = () => {
@@ -52,7 +52,7 @@ const getDashboardComponent = (role: any) => {
       return <SuperAdminDashboardScreen />;
     case Roles.APPROVER:
       return <ApproverDashboardScreen />;
-    case Roles.ENDUSER:
+    case Roles.STANDARDUSER:
       return <EnduserDashboardScreen />;
   }
 };
@@ -69,7 +69,7 @@ export const routesConfig = [
   { path: "/dashboard", element: getDashboardComponent(userRole), allowedRoles: [...allRoles] },
 
   // * ----------- customers ------------
-  { path: "/customer-list", element: <CustomerList />, allowedRoles: [...admins,...standardUser] },
+  { path: "/customer-list", element: <CustomerList />, allowedRoles: [...admins, ...standardUser] },
   { path: "/customer/create", element: <CustomerScreen />, allowedRoles: [...admins, ...standardUser] },
 
   // * -------- reports ---------
@@ -140,7 +140,7 @@ export const sidebarTwo = [
     // subItems: [
     //   { id: 1, title: "Create", path: "/invoice/create" },
     // ],
-    allowedRoles: [Roles.APPROVER, Roles.ENDUSER, Roles.ADMIN]
+    allowedRoles: [Roles.APPROVER, Roles.STANDARDUSER, Roles.ADMIN]
   },
   {
     id: 4,
@@ -159,7 +159,7 @@ export const sidebarTwo = [
     path: "/reports",
     icon: TaskIcon,
     isParent: false,
-    allowedRoles: [...admins,...standardUser]
+    allowedRoles: [...admins, ...standardUser]
   },
   {
     id: 6,
@@ -167,9 +167,9 @@ export const sidebarTwo = [
     path: "/user/list",
     icon: GroupsIcon,
     isParent: true,
-    allowedRoles: [  Roles.ADMIN],
+    allowedRoles: [Roles.ADMIN],
   },
-  
+
 
   {
     id: 7,
@@ -179,13 +179,13 @@ export const sidebarTwo = [
     isParent: true,
     allowedRoles: [...superAdmin]
   },
-{
+  {
     id: 8,
     title: "Settings",
     path:
       userRole === Roles.SUPERADMIN
         ? "/settings/Role"
-        : userRole === Roles.APPROVER || userRole === Roles.ENDUSER
+        : userRole === Roles.APPROVER || userRole === Roles.STANDARDUSER
           ? "/settings/Role"
           : "/settings",
     icon: SettingsIcon,
