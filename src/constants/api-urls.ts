@@ -4,7 +4,7 @@
 const JAVA_URL = "https://ims-backend-9ghn.onrender.com"; // ! java backend
 const LOCAL_URL = "http://localhost:4000";
 const NODE_URL = "https://node-js-invoice.onrender.com";  // ! nodejs backend
-export const BASE_LOCAL_URL = JAVA_URL;
+export const BASE_LOCAL_URL = NODE_URL;
 
 export enum ApiEndpoint {
     LOGIN = "login",
@@ -45,7 +45,6 @@ export enum ApiEndpoint {
     PAYMENT_TERMS_GET = "paymentTermsGet",
     PAYMENT_TERMS_UPDATE = "paymentTermsUpdate",
     REPORT_LIST = "reportList",
-    REPORT_GET = "reportGet",
     //send Email
     SEND_EMAIL = "sendEmail",
     //settings
@@ -105,8 +104,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.SERVICE_GET]: `/service/get`,
     [ApiEndpoint.SERVICE_UPDATE]: `/service/update`,
     //reports endpoints
-    [ApiEndpoint.REPORT_LIST]: `/invoice/arReport`,
-    [ApiEndpoint.REPORT_GET]: `/invoice/invoiceReport`,
+    [ApiEndpoint.REPORT_LIST]: `/invoice/reports`,
     // gstType endpoints 
     [ApiEndpoint.GST_TYPE_LIST]: '/gstType/list',
     [ApiEndpoint.GST_TYPE_CREATE]: '/gstType/create',
