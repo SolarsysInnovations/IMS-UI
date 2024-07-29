@@ -24,7 +24,7 @@ const menuItems = [
   { icon: <Logout sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Logout", action: "logout" },
 ];
 
-const exceptEndUser: any = !Roles.ENDUSER;
+const exceptEndUser: any = !Roles.STANDARDUSER;
 
 const addMenuItems = [
   { title: "CUSTOMERS", items: [exceptEndUser && { icon: <GroupIcon sx={{ color: "grey.500", marginRight: "10px" }} />, text: "Add User", route: "roles/list" }, exceptEndUser && { icon: <AddIcon sx={{ color: "grey.500" }} />, text: "Add Customer", route: "customer/create" }] },

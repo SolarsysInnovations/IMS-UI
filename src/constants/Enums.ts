@@ -18,5 +18,5 @@ export enum Roles {
     SUPERADMIN = "SUPERADMIN",
     ADMIN = "ADMIN",
     APPROVER = "APPROVER",
-    ENDUSER = "ENDUSER"
+    STANDARDUSER = "STANDARDUSER"
 }

@@ -162,15 +162,12 @@ const GridEmailButton = ({ params }: { params: GridRenderCellParams }) => {
 
 
 const InvoiceList = () => {
-
     const userRole = useSelector(selectUserRole);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const pathname = usePathname();
     const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceQuery();
     const invoiceListErrorMessage = useErrorHandler(errorInvoiceList);
-
-    console.log("invoiceList", invoiceList);
 
     const buttons = [
         {
