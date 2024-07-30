@@ -1,31 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { InvoiceInitialValueProps, SendEmailInitialValueProps } from '../../types/types';
-import { LocalStorageKeys } from '../../hooks/useLocalStorage';
-import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
+import { InvoiceInitialValueProps } from '../../types/types';
+import { API_URLS } from '../../constants/api-urls';
 import { apiSlice } from '../api/apiSlice';
-import { createSlice } from '@reduxjs/toolkit';
-
-
-const invoiceSlice = createSlice({
-    name: 'invoice',
-    initialState: {
-        data: null,
-        loading: false,
-        error: null,
-    },
-    reducers: {
-        setInvoiceData(state, action) {
-            state.data = action.payload;
-        },
-        setInvoiceLoading(state, action) {
-            state.loading = action.payload;
-        },
-        setInvoiceError(state, action) {
-            state.error = action.payload;
-        },
-    },
-});
-
 
 export const invoiceApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({

@@ -6,33 +6,25 @@ import ArAgingscreen from "../pages/reports/Reports-ar-aging";
 import Reportsinvoice from "../pages/reports/Reports-invoice";
 import SettingScreen from "../pages/settings/settings";
 import CustomerList from "../pages/customer/Customer-list-screen";
-import CustomerCreate from "../pages/customer/Customer-create-screen";
 import InvoiceList from "../pages/Invoice/Invoice-list-screen";
-import CreateInvoice from "../pages/Invoice/Invoice-create-screen";
 import ServicesList from "../pages/service/service-list-screen";
 import CreateServices from "../pages/service/create-service-screen";
 import ServiceEditScreen from "../pages/service/service-edit-screen";
 import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded, SettingsSuggestRounded } from "@mui/icons-material"
-import DemoScreen from "../pages/Demo-screen";
 import GroupIcon from '@mui/icons-material/Group';
 import ReceiptIcon from '@mui/icons-material/Receipt';
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import TaskIcon from '@mui/icons-material/Task';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Login from "../pages/Login-screen";
-import Dashboard from "../pages/Dashboard/Admin-dashboard/Dashboard-screen";
 import InvoiceCreateScreen from "../pages/Invoice/Invoice-create-screen";
 import CustomerScreen from "../pages/customer/Customer-screen";
 import CompanyList from "../pages/super-admin-company/companyListScreen";
-import CompanyCreate from "../pages/super-admin-company/companyCreate";
 import CompanyScreen from "../pages/super-admin-company/companyScreen";
-import SuperAdminDashboardScreen from "../pages/Dashboard/superAdmin-dashboard/DashboardScreen";
-import ApproverDashboardScreen from "../pages/Dashboard/approver-dashboard/DashboardScreen";
-import EnduserDashboardScreen from "../pages/Dashboard/End-user dashboard/DashboardScreen";
 import UserScreen from "../pages/company-users/UserScreen";
 import SettingRoleScreen from "../pages/settings/settings-role";
+import DashboardScreen from "../pages/Dashboard/Dashboard";
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER];
 export const admins = [Roles.ADMIN];
@@ -44,18 +36,6 @@ const getUserRole = () => {
   return localStorage.getItem('userRole');
 };
 
-const getDashboardComponent = (role: any) => {
-  switch (role) {
-    case Roles.ADMIN:
-      return <Dashboard />;
-    case Roles.SUPERADMIN:
-      return <SuperAdminDashboardScreen />;
-    case Roles.APPROVER:
-      return <ApproverDashboardScreen />;
-    case Roles.STANDARDUSER:
-      return <EnduserDashboardScreen />;
-  }
-};
 export const userRole = getUserRole();
 //console.log("userRole", userRole);
 
@@ -66,7 +46,7 @@ export const routesConfig = [
   { path: "/", element: <Navigate to="/dashboard" />, allowedRoles: [...allRoles] },
 
   // * -------- dashboard ---------
-  { path: "/dashboard", element: getDashboardComponent(userRole), allowedRoles: [...allRoles] },
+  { path: "/dashboard", element: <DashboardScreen />, allowedRoles: [...allRoles] },
 
   // * ----------- customers ------------
   { path: "/customer-list", element: <CustomerList />, allowedRoles: [...admins, ...standardUser] },
@@ -105,10 +85,10 @@ export const routesConfig = [
   // { path: "/super-admin/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
 
   // // * -------- approver ---------
-  { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...approver] },
+  // { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...approver] },
 
   // // * -------- enduser ---------
-  { path: "/standarduser", element: <EnduserDashboardScreen />, allowedRoles: [...standardUser] },
+  // { path: "/standarduser", element: <EnduserDashboardScreen />, allowedRoles: [...standardUser] },
 ];
 
 export const sidebarTwo = [

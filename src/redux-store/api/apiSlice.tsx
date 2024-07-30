@@ -3,10 +3,6 @@ import { BASE_LOCAL_URL } from '../../constants/api-urls';
 import { logOut, setCredentials } from '../auth/authSlice';
 
 
-interface Token {
-    user: any;
-    accessToken: string;
-}
 
 interface RootState {
     auth: {
@@ -47,7 +43,6 @@ const baseQueryWithReauth = async (
 
         // If refresh is successful, update the accessToken and retry the original query
         if (refreshResult?.data) {
-            console.log("data", refreshResult.data);
             const { user } = (api.getState() as RootState).auth;
             const refreshedUserRole = localStorage.getItem('userRole');
             const refreshedUserName = localStorage.getItem('userName');

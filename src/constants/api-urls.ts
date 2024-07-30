@@ -69,12 +69,7 @@ export enum ApiEndpoint {
     COMPANY_CREATE = "companyCreate",
     COMPANY_UPDATE = "companyUpdate",
     COMPANY_DELETE = "companyDelete",
-    // super admin
-    DASHBOARD_SUPER_ADMIN = "dashboardSuperAdmin",
-    //approver
-    DASHBOARD_APPROVER = "dashboardApprover",
-    //enduser
-    DASHBOARD_ENDUSER = "dashboardEndUser"
+
 }
 
 export type ApiUrls = {
@@ -144,12 +139,9 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.COMPANY_UPDATE]: `/company/update`,
     [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
     [ApiEndpoint.COMPANY_LIST]: `/company/list`,
+
     //dashboard endpoints
-    [ApiEndpoint.DASHBOARD_GET]: `/dashboard/admin`,
-    // dashboard super admin 
-    [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/dashboard/superAdmin`,
-    // dashboard super admin  
-    [ApiEndpoint.DASHBOARD_APPROVER]: `/dashboard/approver`,
-    [ApiEndpoint.DASHBOARD_ENDUSER]: `/dashboard/standarduser`
+    [ApiEndpoint.DASHBOARD_GET]: `/dashboard`,
+
 
 };

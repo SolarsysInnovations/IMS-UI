@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from "react";
-import {
-  useAddCompanySettingMutation,
-  useGetCompanySettingQuery,
-  useGetCompanySettingByIdMutation,
-} from "../../../redux-store/settings/companyDetailsApi";
+import { useGetCompanySettingQuery, useGetCompanySettingByIdMutation, } from "../../../redux-store/settings/companyDetailsApi";
 import { ToastContainer } from "react-toastify";
 import { Box, Grid } from "@mui/material";
 import TableHeader from "../../../components/layouts/TableHeader";
-import { Add, Edit } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import usePathname from "../../../hooks/usePathname";
-import { useNavigate } from "react-router-dom";
 import { setData } from "../../../redux-store/global/globalState";
 import DialogBoxUi from "../../../components/ui/DialogBox";
 import SettingsCompanyScreen from "./SettingsCompanyScreen";
-import { selectUserRole } from "../../../redux-store/auth/authSlice"; 
+import { selectUserRole } from "../../../redux-store/auth/authSlice";
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const pathname = usePathname();
-  const [addSetting, { isLoading, isSuccess, isError, error }] = useAddCompanySettingMutation();
   const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingQuery();
   const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCompanySettingByIdMutation();
 
@@ -68,12 +61,8 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
     }
   }, [pathname, refetchCompanyData]);
 
-  const handleModalClose = () => {
-    refetchCompanyData();
-    setOpenModal(false);
-  };
 
- 
+
   const button = userRole !== "APPROVER" && userRole !== "ENDUSER" ? [{ label: "Edit", icon: Edit, onClick: () => handleEditClick() }] : [];
 
   return (
@@ -84,7 +73,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
         content={<SettingsCompanyScreen />}
         handleClose={() => setIsOpenDialogBox(false)}
       />
-      <TableHeader   buttons={button} />
+      <TableHeader buttons={button} />
       {companyDetails && (
         <Grid
           container
@@ -180,7 +169,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                   <span>: {userDetails?.companyDetails.companyPhone}</span>
                 </p>
               </div>
-              
+
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
                   <span

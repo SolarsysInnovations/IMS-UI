@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Box } from "@mui/material";
 import { useGetCompanySettingQuery } from "../../../redux-store/settings/companyDetailsApi";
 import {
   useAddCompanySettingMutation,
@@ -14,13 +13,8 @@ import { clearData } from "../../../redux-store/global/globalState";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import { CompanyFormProps } from "../../../types/types";
-import { Save } from "@mui/icons-material";
-import {
-  CompanyEditFields,
-  CompanyDetailsFields,
-} from "../../../constants/form-data/form-data-json";
+import { CompanyDetailsFields, } from "../../../constants/form-data/form-data-json";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
-import { setCredentials } from "../../../redux-store/auth/authSlice";
 
 const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -60,9 +54,6 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
 
   const fields = CompanyDetailsFields;
 
-  console.log("mode", mode);
-  console.log("fields", fields);
-  console.log("companyValue", companyValue);
 
   useSnackbarNotifications({
     error: companyAddError,
@@ -95,7 +86,7 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
         // Update userDetails in localStorage
         const userDetailsFromStorage = localStorage.getItem('userDetails');
         if (!userDetailsFromStorage) {
-            throw new Error('User details not found in localStorage.');
+          throw new Error('User details not found in localStorage.');
         }
 
         // Parse userDetails from JSON string
@@ -103,8 +94,8 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
 
         // Update only companyDetails with new values
         userDetailsData.companyDetails = {
-            ...userDetailsData.companyDetails,  // Keep existing properties
-            ...values  // Update with new form values
+          ...userDetailsData.companyDetails,  // Keep existing properties
+          ...values  // Update with new form values
         };
 
         // Stringify updated userDetails back to JSON
@@ -113,7 +104,7 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
         // Store updated userDetails back in localStorage
         localStorage.setItem('userDetails', updatedUserDetails);
 
-        
+
 
 
         dispatch(clearData());

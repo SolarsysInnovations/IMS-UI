@@ -1,9 +1,8 @@
 // theme.ts
-import { alpha, colors } from "@mui/material";
-import createPalette from "@mui/material/styles/createPalette";
+import { alpha } from "@mui/material";
 import { createTheme, filledInputClasses, inputLabelClasses, outlinedInputClasses, paperClasses, tableCellClasses } from "@mui/material";
 import { common } from "@mui/material/colors";
-import { error, indigo, info, neutral, success, warning } from "./colors";
+import { error, info, neutral, success, warning } from "./colors";
 
 const palette = {
   action: {

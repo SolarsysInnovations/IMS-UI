@@ -39,7 +39,6 @@ export const companyApi = apiSlice.injectEndpoints({
             // Set caching for 5 minutes (adjust the duration as needed)
             keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
         }),
-
         addCompany: builder.mutation<any, Partial<any>>({
             query: (company) => ({
                 url: API_URLS.companyCreate,
