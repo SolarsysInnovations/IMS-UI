@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CompanyCreate from "./companyCreate";
-import { CompanyEditFields, CompanyFields } from "../../constants/form-data/form-data-json";
 
 const CompanyScreen: React.FC = () => {
 
@@ -14,8 +13,8 @@ const CompanyScreen: React.FC = () => {
     useEffect(() => {
         if (companyValue) {
             const mergedObject = {
-                ...companyValue.companyDetails,
-                ...companyValue.register
+                ...companyValue.company,
+                ...companyValue.admin
             };
             setMergedData(mergedObject);
         }
@@ -27,7 +26,11 @@ const CompanyScreen: React.FC = () => {
     }, [companyValue]);
 
     return (
-        <CompanyCreate key={key} companyEditInitialValues={mergedData} mode={mode} />
+        <>
+            {mergedData && (
+                <CompanyCreate key={key} companyEditInitialValues={mergedData} mode={mode} />
+            )}
+        </>
     );
 };
 
