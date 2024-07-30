@@ -14,12 +14,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    // newly added modules
-    "incremental": true,
-    "tsBuildInfoFile": "./build/cache/.tsbuildinfo"
+    "jsx": "react-jsx"
   },
-  "include": ["src"],
-  // newly added dependencies
-  "exclude": ["node_modules", "dist", "build"]
+  "include": ["src"]
 }
