@@ -25,6 +25,8 @@ const CompanyScreen: React.FC = () => {
         setKey(prev => prev + 1);
     }, [companyValue]);
 
+    console.log("mergedData", mergedData);
+
     return (
         <>
             {mergedData && (
