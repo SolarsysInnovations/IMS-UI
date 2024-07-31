@@ -2,8 +2,6 @@ import AdminDashboardInvoiceOverviewAmount from "./InvoiceAmount";
 import AdminDashboardInvoicePieChart from "./InvoiceStatusChart";
 
 const AdminDashboardScreen = ({ adminData }: any) => {
-  // Log the received data for debugging
-  console.log("adminData", adminData);
 
   // Check if adminData is undefined and provide default values if necessary
   if (!adminData) {

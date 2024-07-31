@@ -13,8 +13,8 @@ const CompanyScreen: React.FC = () => {
     useEffect(() => {
         if (companyValue) {
             const mergedObject = {
-                ...companyValue.company,
-                ...companyValue.admin
+                ...companyValue.companyDetails,
+                ...companyValue.adminDetails
             };
             setMergedData(mergedObject);
         }
@@ -25,7 +25,6 @@ const CompanyScreen: React.FC = () => {
         setKey(prev => prev + 1);
     }, [companyValue]);
 
-    console.log("mergedData", mergedData);
 
     return (
         <>

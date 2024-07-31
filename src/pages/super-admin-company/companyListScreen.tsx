@@ -13,7 +13,7 @@ import CompanyCreate from './companyCreate';
 import { columns } from '../../constants/grid-table-data/company-table-data';
 import { useGetCompanyQuery, useUpdateCompanyMutation } from '../../redux-store/company/companiesApi';
 
-interface Company {
+interface CompanyDetails {
     companyName: string;
     companyEmail: string;
     companyPhone: string;
@@ -26,7 +26,7 @@ interface Company {
     id: string;
 }
 
-interface Admin {
+interface AdminDetails {
     userEmail: string;
     userName: string;
     password: string;
@@ -38,8 +38,8 @@ interface Admin {
 }
 
 interface CompanyAdminData {
-    company: Company;
-    admin: Admin;
+    companyDetails: CompanyDetails;
+    adminDetails: AdminDetails;
 }
 
 const CompanyList = () => {
@@ -54,16 +54,16 @@ const CompanyList = () => {
         if (company && !isLoading && !error) {
             const mergedArray = company.map((item: CompanyAdminData) => ({
                 // Admin profile
-                id: item.company.id,
-                userName: item.admin.userName,
-                userEmail: item.admin.userEmail,
-                userRole: item.admin.userRole,
-                userMobile: item.admin.userMobile,
-                userAccess: item.admin.description,
+                id: item.companyDetails.id,
+                userName: item.adminDetails.userName,
+                userEmail: item.adminDetails.userEmail,
+                userRole: item.adminDetails.userRole,
+                userMobile: item.adminDetails.userMobile,
+                userAccess: item.adminDetails.description,
 
                 // Company Details
-                companyName: item.company.companyName,
-                companyPhone: item.company.companyPhone,
+                companyName: item.companyDetails.companyName,
+                companyPhone: item.companyDetails.companyPhone,
             }));
             setMergedData(mergedArray);
         }
