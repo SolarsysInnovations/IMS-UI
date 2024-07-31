@@ -1,5 +1,6 @@
-import AdminDashboardInvoiceOverviewAmount from "./InvoiceAmount";
-import AdminDashboardInvoicePieChart from "./InvoiceStatusChart";
+import { Grid } from "@mui/material";
+import AdminDashboardInvoiceOverviewAmount from "../Admin-dashboard/InvoiceAmount";
+import AdminDashboardInvoicePieChart from "../Admin-dashboard/InvoiceStatusChart";
 
 const AdminDashboardScreen = ({ adminData }: any) => {
   // Log the received data for debugging
@@ -17,12 +18,18 @@ const AdminDashboardScreen = ({ adminData }: any) => {
 
   return (
     <>
-      {invoiceOverviewAmountData && (
+       <Grid container spacing={2}>
+    {invoiceOverviewAmountData && (
+      <Grid item xs={8}>
         <AdminDashboardInvoiceOverviewAmount invoiceOverviewAmountData={invoiceOverviewAmountData} />
-      )}
-      {invoicePieChartData && (
+      </Grid>
+    )}
+    {invoicePieChartData && (
+      <Grid item xs={4}>
         <AdminDashboardInvoicePieChart invoicePieChartData={invoicePieChartData} />
-      )}
+      </Grid>
+    )}
+  </Grid>
     </>
   );
 };
