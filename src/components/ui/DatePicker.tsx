@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import { validateDate } from '@mui/x-date-pickers/internals';
 
 interface DatePickerProps {
     value?: any;
@@ -15,11 +13,13 @@ interface DatePickerProps {
 }
 
 export default function DatePickerUi({ label, value, disabled, required, onChange }: DatePickerProps) {
+
     const formatDate = (date: any) => {
-        return date.format('DD-MM-YYYY');
+        return date ? date.format('DD-MM-YYYY') : '';
     };
+
     const parseDate = (value: any) => {
-        return dayjs(value, 'DD-MM-YYYY');
+        return value ? dayjs(value) : null;
     };
 
     return (
@@ -27,15 +27,7 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
             <DatePicker
                 disabled={disabled}
                 value={value ? parseDate(value) : null}
-                onChange={(date) => onChange(formatDate(date))}
-                onError={(date) => {
-                    const currentDate = dayjs();
-                    const selectedDate = dayjs(date);
-                    if (selectedDate.isBefore(currentDate, 'day')) {
-                        return "Selected date cannot be before today";
-                    }
-                    return null;
-                }}
+                onChange={(date) => onChange(date ? formatDate(date) : '')}
                 format='DD-MM-YYYY'
                 views={['year', 'month', 'day']}
                 sx={{
@@ -50,12 +42,12 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
                             backgroundColor: `action.hover`,
                         },
                     },
-                    " & .MuiFormLabel-root": {
+                    "& .MuiFormLabel-root": {
                         fontSize: "12px"
                     },
-                    " & .MuiOutlinedInput-root": {
-                        fontSize: "12px"
-                    }
+                    // "& .MuiOutlinedInput-root": {
+                    //     fontSize: "12px"
+                    // }
                 }}
                 slotProps={{
                     textField: {
@@ -64,7 +56,6 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
                 }}
                 label={label}
             />
-
         </LocalizationProvider>
     );
 }

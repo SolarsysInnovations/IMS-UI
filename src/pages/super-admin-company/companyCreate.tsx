@@ -84,14 +84,12 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
 
             } else {
                 const transformedData = {
-
                     userName: values.userName,
                     userEmail: values.userEmail,
                     password: values.password,
                     userRole: values.userRole,
                     userMobile: values.userMobile,
                     description: values.description,
-
 
                     companyName: values.companyName,
                     companyAddress: values.companyAddress,
@@ -102,7 +100,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                     companyWebsite: values.companyWebsite,
                     companyTaxNumber: values.companyTaxNumber,
                     companyRegNumber: values.companyRegNumber
-
                 };
                 await addCompany(transformedData);
                 dispatch(clearData());
