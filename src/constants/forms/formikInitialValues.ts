@@ -101,6 +101,7 @@ export const dyCustomerInitialValue: DyCreateCustomerProps = {
         {
             contactName: "wewe",
             contactEmail: "",
+            contactPhone: 0,
         }
     ],
 };
@@ -167,34 +168,19 @@ export const invoiceEditInitialValue: InvoiceInitialValueProps = {
     servicesList: [],
 };
 export const invoicesInitialValue: InvoicesInitialValueProps = {
-    id: 0,
+   
     invoiceDate: "",
-    invoiceType: "",
-    invoiceNumber: "",
-    customerName: "",
-    gstType: "",
-    gstPercentage: null,
-    gstInNumber: "",
-    paymentTerms: "",
     startDate: '',
-    dueDate: '',
     endDate: '',
-    invoiceStatus: "Pending",
-    discountPercentage: null,
-    invoiceTotalAmount: null,
-    notes: "Thanks for your business transaction",
-    totalAmount: "",
-    termsAndConditions: "",
-    taxAmount: {
-        tds: ""
-    },
-    servicesList: [],
+    filter : "invoiceReport",
 };
 
 export const AragingInitialValue: ArAgingInitialValueProps = {
     invoiceDate: "",
     startDate: "",
     endDate: "",
+    filter : "agingReport",
+
 };
 
 export const SendEmailInitialValue: SendEmailInitialValueProps = {

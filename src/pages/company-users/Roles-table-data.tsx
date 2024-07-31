@@ -125,7 +125,7 @@ const handleModalOpen = async () => {
             const confirmed = window.confirm("Are you sure you want to delete this role?");
             if (confirmed) {
                 deleteRole(id);
-                   refetch();
+                refetch();
             }
         }
     };
@@ -205,23 +205,19 @@ export const columns: GridColDef[] = [
         field: 'userName',
         headerName: 'User Name',
         width: 150,
-        editable: true,
+        editable: false,
     },
     {
         field: 'userEmail',
         headerName: 'Email',
         width: 150,
-        editable: true,
+        editable: false,
     },
     {
         field: 'userRole',
         headerName: 'User Role',
         width: 120,
-        editable: true,
-        type: "singleSelect",
-        valueOptions: ["ADMIN", "APPROVER", "ENDUSER",],
-        renderCell: (params: GridRenderCellParams) => (
-            <RolesDropdown params={params} />
-        ),
+        editable: false,
+
     },
 ];

@@ -28,18 +28,17 @@ const companySlice = createSlice({
     },
 });
 
-
+// url: `${API_URLS.gstTypeDelete}/${id}`,
 export const companyApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getCompany: builder.query<any[], void>({
             query: () => ({
-                url: API_URLS.companyGet,
+                url: API_URLS.companyList,
                 method: 'POST',
             }),
             // Set caching for 5 minutes (adjust the duration as needed)
             keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
         }),
-
         addCompany: builder.mutation<any, Partial<any>>({
             query: (company) => ({
                 url: API_URLS.companyCreate,
@@ -49,29 +48,23 @@ export const companyApi = apiSlice.injectEndpoints({
         }),
         updateCompany: builder.mutation<any, { id: string | undefined; company: Partial<any> }>({
             query: ({ id, company }) => ({
-                url: `company/update/${id}`,
+                url: `${API_URLS.companyUpdate}/${id}`,
                 method: 'POST',
                 body: company,
             }),
         }),
         getCompanyDataById: builder.mutation<void, number>({
             query: (id) => ({
-                url: `company/get/${id}`,
+                url: `${API_URLS.companyGet}/${id}`,
                 method: 'POST',
             }),
         }),
         deleteCompany: builder.mutation<void, number>({
             query: (id) => ({
-                url: `company/delete/${id}`,
+                url: `${API_URLS.companyDelete}/${id}`,
                 method: 'POST',
             }),
         }),
-        // getCompanyByIdMutation: builder.mutation<void, number>({
-        //     query: (id) => ({
-        //          url: `setting/get/${id}`,
-        //         method: 'POST',
-        //     }),
-        // }),
     }),
 });
 export const { setCompanyData, setCompanyLoading, setCompanyError, clearCompanyData } = companySlice.actions;

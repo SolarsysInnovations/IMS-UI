@@ -36,14 +36,14 @@ export const reportApi = apiSlice.injectEndpoints({
         }),
         getReportById: builder.mutation<any, Partial<any>>({
             query: (reports) => ({
-                url: `invoice/arReport`,
+                url: API_URLS.reportList,
                 method: 'POST',
                 body: reports,
             }),
         }),
         getReportInvoiceById: builder.mutation<any, Partial<any>>({
             query: (reports) => ({
-                url: `invoice/invoiceReport`,
+                url: API_URLS.reportList,
                 method: 'POST',
                 body: reports,
             }),

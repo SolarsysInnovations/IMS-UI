@@ -1,5 +1,5 @@
-import GridDataUi from '../../../components/GridTable/GridData'; // Ensure correct path to GridDataUi component
-import { GridColDef } from '@mui/x-data-grid'; // Assuming you are using x-data-grid for GridColDef
+import GridDataUi from '../../../components/GridTable/GridData'
+import { GridColDef } from '@mui/x-data-grid';
 
 export const columns: GridColDef[] = [
     {
@@ -34,19 +34,12 @@ export const columns: GridColDef[] = [
     },
 ];
 
-
-const ApproverInvoiceList = ({ companyOverviewList }: any) => {
+const StandardUserInvoiceList = ({ invoiceListData }: any) => {
     return (
         <>
-            <GridDataUi
-                showToolbar={false}
-                columns={columns}
-                tableData={companyOverviewList || []}
-                checkboxSelection={false}
-            />
+            <GridDataUi showToolbar={false} columns={columns} tableData={invoiceListData || []} checkboxSelection={false} />
         </>
-    );
-};
+    )
+}
 
-
-export default ApproverInvoiceList;
+export default StandardUserInvoiceList;

@@ -8,14 +8,10 @@ import { Grid } from "@mui/material";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import ErrorIcon from "@mui/icons-material/Error";
 import DoneIcon from "@mui/icons-material/Done";
-import { useGetApproverDashboardMutation } from "../../../redux-store/dashboard/dashboardApi";
 import { useState, useEffect } from "react";
-import GridDataUi from "../../../components/GridTable/GridData";
-import { columns } from "../superAdmin-dashboard/CompanyOverView";
-import { ApproverOverViewData } from "./DashboardScreen";
 
 
-const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
+const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
 
   const [invoiceAmount, setInvoiceAmount] = useState([
     {
@@ -75,9 +71,6 @@ const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
     }
   }, [approverOverViewData]);
 
-
-  console.log(approverOverViewData);
-  
   return (
     <Grid container spacing={2}>
       {invoiceAmount.map((data, index) => (
@@ -107,7 +100,7 @@ const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
                   </Typography>
                 </Stack>
                 <Typography color="text.secondary" variant="caption">
-                  Since last 
+                  Since last
                 </Typography>
                 {/* {data.months} */}
               </Stack>
@@ -115,10 +108,10 @@ const EndUserInvoiceOverView = ({ approverOverViewData } : any) => {
           </Card>
         </Grid>
       ))}
-     <Grid item xs={12}>
-  </Grid>
+      <Grid item xs={12}>
+      </Grid>
     </Grid>
   );
 };
 
-export default EndUserInvoiceOverView;
+export default StandardUserDashboardOverview;

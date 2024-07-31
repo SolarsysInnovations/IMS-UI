@@ -15,9 +15,10 @@ interface TextFieldProps {
     fullWidth?: boolean;
     required?: boolean;
     width?: string;
+    sx?: any;
 }
 
-const TextFieldUi = ({ width, required, label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth }: TextFieldProps) => {
+const TextFieldUi = ({ sx, width, required, label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth }: TextFieldProps) => {
 
     return (
         <TextField
@@ -42,9 +43,11 @@ const TextFieldUi = ({ width, required, label, value, onChange, disabled, endAdo
                 ) : undefined,
             }}
             sx={{
+
                 width: `${width}`,
                 borderRadius: "8px !important",
                 '& .MuiOutlinedInput-root': {
+                    ...sx,
                     borderRadius: "8px !important",
                     overflow: "hidden",
                     borderColor: `action.active`,
@@ -62,7 +65,11 @@ const TextFieldUi = ({ width, required, label, value, onChange, disabled, endAdo
                 "& .css-1o5h54k-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
                     fontSize: "13px",
                 },
-
+                '& input:-webkit-autofill': {
+                    '-webkit-box-shadow': '0 0 0 1000px white inset !important',
+                    'box-shadow': '0 0 0 1000px white inset !important',
+                    '-webkit-text-fill-color': 'black !important',
+                },
             }}
 
 

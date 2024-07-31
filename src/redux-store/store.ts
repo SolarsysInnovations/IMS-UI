@@ -1,12 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { invoiceApi } from "./invoice/invcoiceApi";
-import { serviceApi, serviceSlice } from "./service/serviceApi";
+import { serviceSlice } from "./service/serviceApi";
 import { customerApi, customerSlice } from "./customer/customerApi";
 import authReducer from './auth/authSlice';
 import { apiSlice } from "./api/apiSlice";
 import { loginApi } from "./auth/loginApi";
 import { globalSlice } from "./global/globalState";
-import SnackBarUi from "../components/ui/Snackbar";
 import snackBarSlice from "./global/snackBarSlice";
 
 export const store = configureStore({

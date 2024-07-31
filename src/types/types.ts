@@ -7,10 +7,7 @@ export interface LoginProps {
     password: string;
 };
 
-interface ContactPersonProps {
-    contactName: string;
-    contactEmail: string;
-};
+
 export interface GstTypeProps {
     id?: string | undefined;
     gstName: string,
@@ -42,7 +39,11 @@ export interface PaymentTermsProps {
 export interface PaymentTermsFormProps {
     paymentTermsValue: PaymentTermsProps
 }
-
+interface ContactPersonProps {
+    contactName: string;
+    contactEmail: string;
+    contactPhone: number;
+};
 export interface DyCreateCustomerProps {
     id?: any;
     customerName: string;
@@ -82,7 +83,7 @@ export interface FormProps {
     toastMessage?: string;
     buttons?: any;
     rows?: number;
-  
+
 
 };
 export interface SubField {
@@ -154,26 +155,10 @@ export interface InvoiceInitialValueProps {
     servicesList: ServiceListProps[];
 
 }; export interface InvoicesInitialValueProps {
-    id: number;
     invoiceDate: string;
-    invoiceType: string;
-    invoiceNumber: string;
-    customerName: string;
-    gstType: string;
-    gstPercentage: number | null;
     startDate: string;
-    dueDate: string;
     endDate: string;
-    gstInNumber: string;
-    paymentTerms: string;
-    invoiceStatus: string;
-    totalAmount: string;
-    invoiceTotalAmount: number | null | undefined;
-    discountPercentage: number | null;
-    notes: string;
-    termsAndConditions: string;
-    taxAmount: TaxAmountProps;
-    servicesList: ServiceListProps[];
+    filter: string;
 };
 
 
@@ -181,7 +166,7 @@ export interface ArAgingInitialValueProps {
     invoiceDate: string;
     startDate: string;
     endDate: string;
-
+    filter: string;
 }
 
 

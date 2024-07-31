@@ -1,10 +1,8 @@
-// "http://localhost:4000";
-// export const BASE_URL_NODE = "https://node-js-invoice.onrender.com";
-// https://ims-backend-9ghn.onrender.com/login
+
 const JAVA_URL = "https://ims-backend-9ghn.onrender.com"; // ! java backend
 const LOCAL_URL = "http://localhost:4000";
 const NODE_URL = "https://node-js-invoice.onrender.com";  // ! nodejs backend
-export const BASE_LOCAL_URL = JAVA_URL;
+export const BASE_LOCAL_URL = LOCAL_URL;
 
 export enum ApiEndpoint {
     LOGIN = "login",
@@ -45,7 +43,6 @@ export enum ApiEndpoint {
     PAYMENT_TERMS_GET = "paymentTermsGet",
     PAYMENT_TERMS_UPDATE = "paymentTermsUpdate",
     REPORT_LIST = "reportList",
-    REPORT_GET = "reportGet",
     //send Email
     SEND_EMAIL = "sendEmail",
     //settings
@@ -72,13 +69,7 @@ export enum ApiEndpoint {
     COMPANY_CREATE = "companyCreate",
     COMPANY_UPDATE = "companyUpdate",
     COMPANY_DELETE = "companyDelete",
-    // super admin
-    DASHBOARD_SUPER_ADMIN = "dashboardSuperAdmin",
-    //approver
-    DASHBOARD_APPROVER = "dashboardApprover",
-    //enduser
-    DASHBOARD_ENDUSER = "dashboardEndUser"
-}
+};
 
 export type ApiUrls = {
     [key in ApiEndpoint]: string;
@@ -105,8 +96,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.SERVICE_GET]: `/service/get`,
     [ApiEndpoint.SERVICE_UPDATE]: `/service/update`,
     //reports endpoints
-    [ApiEndpoint.REPORT_LIST]: `/invoice/arReport`,
-    [ApiEndpoint.REPORT_GET]: `/invoice/invoiceReport`,
+    [ApiEndpoint.REPORT_LIST]: `/invoice/reports`,
     // gstType endpoints 
     [ApiEndpoint.GST_TYPE_LIST]: '/gstType/list',
     [ApiEndpoint.GST_TYPE_CREATE]: '/gstType/create',
@@ -136,24 +126,21 @@ export const API_URLS: ApiUrls = {
     //Roles
     [ApiEndpoint.ROLES_GET]: `/role/get/`,
     [ApiEndpoint.ROLES_GETUSER]: `/role/findByEmail/`,
-    [ApiEndpoint.ROLES_LIST]: `/role/list`,
+    [ApiEndpoint.ROLES_LIST]: `/user/list`,
     [ApiEndpoint.ROLES_CREATE]: `/role/register`,
     [ApiEndpoint.ROLES_UPDATE]: `/role/update`,
     [ApiEndpoint.ROLES_DELETE]: `/role/delete`,
     //Changepassword
     [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
     // company
-    [ApiEndpoint.COMPANY_GET]: `/company/list`,
-    [ApiEndpoint.COMPANY_CREATE]: `/company/create`,
+    [ApiEndpoint.COMPANY_GET]: `/company/get`,
+    [ApiEndpoint.COMPANY_CREATE]: `/user/register`,
     [ApiEndpoint.COMPANY_UPDATE]: `/company/update`,
     [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
     [ApiEndpoint.COMPANY_LIST]: `/company/list`,
+
     //dashboard endpoints
-    [ApiEndpoint.DASHBOARD_GET]: `/dashboard/admin`,
-    // dashboard super admin 
-    [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/dashboard/superAdmin`,
-    // dashboard super admin  
-    [ApiEndpoint.DASHBOARD_APPROVER]: `/dashboard/approver`,
-    [ApiEndpoint.DASHBOARD_ENDUSER]: `/dashboard/standarduser`
+    [ApiEndpoint.DASHBOARD_GET]: `/dashboard`,
+
 
 };

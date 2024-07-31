@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import ServiceCreate from '../../service/service-create-screen'
-import ServicesList from '../../service/service-list-screen'
 import { useGetServiceQuery } from '../../../redux-store/service/serviceApi';
 
 const ServiceScreen = () => {

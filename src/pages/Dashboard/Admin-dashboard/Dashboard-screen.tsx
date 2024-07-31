@@ -1,70 +1,27 @@
-import React, { useState } from "react";
-import { Grid, Typography, Box } from "@mui/material";
-import SelectDropdown from "../../../components/ui/SelectDropdown";
-import InvoiceAmount from "./InvoiceAmount";
-import InvoiceStatus from "./InvoiceStatusChart";
+import AdminDashboardInvoiceOverviewAmount from "./InvoiceAmount";
+import AdminDashboardInvoicePieChart from "./InvoiceStatusChart";
 
-interface ValueProps {
-  label: string;
-  value: string;
-}
+const AdminDashboardScreen = ({ adminData }: any) => {
 
-const options = [
-  { label: "monthly", value: "monthly" },
-  { label: "weekly", value: "weekly" },
-  { label: "yearly", value: "yearly" },
-  // { label: "halfyear", value: "halfyear" },
-  // { label: "overall", value: "overall" },
-];
+  // Check if adminData is undefined and provide default values if necessary
+  if (!adminData) {
+    return <div>No data available</div>;
+  }
 
-const Dashboard = () => {
-  const [selectedValue, setSelectedValue] = useState<ValueProps>({
-    label: "monthly",
-    value: "monthly",
-  });
-
-  const handleChange = (newValue: ValueProps | null) => {
-    if (newValue) {
-      setSelectedValue(newValue);
-    }
-  };
+  // Provide default values based on the actual structure of adminData
+  const invoiceOverviewAmountData = adminData.invoiceOverview || {};
+  const invoicePieChartData = adminData.invoiceStatus || {};
 
   return (
-    <Box px={2} py={2}>
-      <Grid container spacing={2} mb={2}>
-        <Grid item xs={6} display="flex" alignItems="center">
-        </Grid>
-        <Grid
-          item
-          xs={6}
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="center"
-        >
-          <SelectDropdown
-            applySmallSizeStyle={true}
-            value={selectedValue}
-            options={options}
-            onChange={handleChange}
-          />
-        </Grid>
-      </Grid>
-      <Grid container spacing={2}>
-        <Grid item xs={8}>
-          <Typography variant="h6" gutterBottom>
-            Overview
-          </Typography>
-          <InvoiceAmount selectedValue={selectedValue} />
-        </Grid>
-        <Grid item xs={4}>
-          <Typography variant="h6" gutterBottom>
-            Invoice Status
-          </Typography>
-          <InvoiceStatus selectedValue={selectedValue} />
-        </Grid>
-      </Grid>
-    </Box>
+    <>
+      {invoiceOverviewAmountData && (
+        <AdminDashboardInvoiceOverviewAmount invoiceOverviewAmountData={invoiceOverviewAmountData} />
+      )}
+      {invoicePieChartData && (
+        <AdminDashboardInvoicePieChart invoicePieChartData={invoicePieChartData} />
+      )}
+    </>
   );
 };
 
-export default Dashboard;
+export default AdminDashboardScreen;

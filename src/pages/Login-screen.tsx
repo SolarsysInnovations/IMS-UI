@@ -15,6 +15,7 @@ import { loginValidationSchema } from "../constants/forms/validations/validation
 import { loginInitialValue } from "../constants/forms/formikInitialValues";
 import { LoginProps } from "../types/types";
 import { setCredentials } from "../redux-store/auth/authSlice";
+import TextFieldUi from "../components/ui/TextField";
 
 interface LoginResponse {
   data?: {
@@ -24,7 +25,7 @@ interface LoginResponse {
     userRole: any;
     userName: any;
     userEmail: string | null;
-    userDetails : any;
+    userDetails: any;
   };
   error?: any;
 }
@@ -55,8 +56,8 @@ const Login = () => {
           if (loginResult.data && "accessToken" in loginResult.data) {
             // Check if the response contains a refresh token
             if (loginResult.data.accessToken) {
-              const { user, accessToken, refresh, userRole, userName, userEmail, userDetails} = loginResult.data;
-              dispatch(setCredentials({ user, accessToken, refresh, userRole, userName, userEmail,  userDetails }));
+              const { user, accessToken, refresh, userRole, userName, userEmail, userDetails } = loginResult.data;
+              dispatch(setCredentials({ user, accessToken, refresh, userRole, userName, userEmail, userDetails }));
             } else {
               const { user, accessToken } = loginResult.data;
               dispatch(setCredentials({ user, accessToken }));
@@ -109,7 +110,8 @@ const Login = () => {
               </Stack>
               <Form noValidate>
                 <Stack spacing={3}>
-                  <TextFieldLarge
+                  <TextFieldUi
+                    sx={{ padding: "8px 0" }}
                     fullWidth={false}
                     label='User Email '
                     name='userEmail'
@@ -119,7 +121,8 @@ const Login = () => {
                     error={touched.userEmail && Boolean(errors.userEmail)}
                     helperText={touched.userEmail && errors.userEmail}
                   />
-                  <TextFieldLarge
+                  <TextFieldUi
+                    sx={{ padding: "8px 0" }}
                     endAdornment={passwordVisible ? <IconButton onClick={() => {
                       setPasswordVisible(!passwordVisible)
                     }}>

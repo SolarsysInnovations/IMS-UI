@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useAddGstTypeMutation, useGetGstTypeQuery, useUpdateGstTypeMutation } from '../../../redux-store/invoice/gstTypeApi';
 import { GstTypeFields } from '../../../constants/form-data/form-data-json';
 import { gstTypeInitialValue } from '../../../constants/forms/formikInitialValues';
@@ -8,8 +8,7 @@ import { GstTypeFormProps, GstTypeProps } from '../../../types/types';
 import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
-import { Add, Save } from "@mui/icons-material";
-import { useNavigate } from 'react-router-dom';
+import { Save } from "@mui/icons-material";
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 
 // create and edit screen
@@ -20,7 +19,6 @@ const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
 
     const [updateGstType, { isLoading: gstTypeUpdateLoading, isSuccess: gstTypeUpdateSuccess, isError: gstTypeUpdateError, error: gstTypeUpdateErrorObject }] = useUpdateGstTypeMutation();
 
-    const navigate = useNavigate();
 
     const { data: getGstType, refetch } = useGetGstTypeQuery();
 

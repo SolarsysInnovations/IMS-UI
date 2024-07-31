@@ -1,94 +1,51 @@
-import React, { useEffect, useState } from "react";
-import { Grid, Typography, Box } from "@mui/material";
-import SelectDropdown from "../../../components/ui/SelectDropdown";
-import { useGetApproverDashboardMutation } from "../../../redux-store/dashboard/dashboardApi";
+import React from "react";
 import ApproverInvoiceList from "./ApproverInvoiceList";
 import ApproverInvoiceOverView from "./ApproverInvoiceOverView";
 
-const options = [
-  { label: "monthly", value: "monthly" },
-  { label: "weekly", value: "weekly" },
-  { label: "yearly", value: "yearly" },
-];
-export interface ApproverOverViewData {
+// Define the type for approverData
+interface ApproverData {
   totalInvoices: number;
   pendingInvoices: number;
   approvedInvoices: number;
+  pendingInvoicesList: any[]; // Adjust type according to your data structure
 }
 
-const ApproverDashboardScreen = () => {
-  const [getDashboard, { data, isLoading, isError, error }] =
-    useGetApproverDashboardMutation();
+// Define default props
+const defaultApproverData: ApproverData = {
+  totalInvoices: 0,
+  pendingInvoices: 0,
+  approvedInvoices: 0,
+  pendingInvoicesList: [],
+};
 
-  const [selectedValue, setSelectedValue] = useState('');
+interface ApproverDashboardScreenProps {
+  approverData: ApproverData;
+}
 
-  const [approverOverViewData, setApproverOverViewData] = useState<ApproverOverViewData | null>(null);
+const ApproverDashboardScreen: React.FC<ApproverDashboardScreenProps> = ({
+  approverData = defaultApproverData,
+}) => {
 
-  console.log("approverOverViewData",approverOverViewData);
-  
-  useEffect(() => {
-    const fetchData = async () => {
-        try {
-            console.log("selectedValue", selectedValue);
-            const response = await getDashboard({ filter: selectedValue }).unwrap();
-            const approverOverViewData = {
-              totalInvoices: response.totalInvoices,
-              pendingInvoices: response.pendingInvoices,
-              approvedInvoices: response.approvedInvoices,
-            }
-            setApproverOverViewData(approverOverViewData || {});
-            console.log(response);
-            
-        } catch (error) {
-            console.error('Failed to fetch data:', error);
-        }
-    };
-
-    if (selectedValue !== null) {
-        fetchData();
-    }
-}, [selectedValue, getDashboard]);
-
-  const handleChange = (newValue: any) => {
-    if (newValue) {
-      setSelectedValue(newValue.value);
-    }
+  if (!approverData) {
+    return <div>No data available</div>;
   };
 
+  const approverOverViewData = {
+    totalInvoices: approverData.totalInvoices || 0,
+    pendingInvoices: approverData.pendingInvoices || 0,
+    approvedInvoices: approverData.approvedInvoices || 0,
+  };
+  const companyOverviewList = approverData.pendingInvoicesList || [];
+
   return (
-    <Box px={2} py={2}>
-      <Grid container spacing={2} mb={2}>
-        <Grid item xs={6} display="flex" alignItems="center"></Grid>
-        <Grid
-          item
-          xs={6}
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="center"
-        >
-          <SelectDropdown
-            applySmallSizeStyle={true}
-            value={selectedValue ? {label : selectedValue , value : selectedValue} : null}
-            options={options}
-            onChange={handleChange}
-          />
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid item xs={8}>
-          <Typography variant="h6" gutterBottom>
-            Overview
-          </Typography>
-          <ApproverInvoiceOverView   approverOverViewData={approverOverViewData}/>
-        </Grid>{" "}
-        <Grid sx={{ marginTop: "20px" }}>
-          <Typography variant="h6" gutterBottom>
-            Recent Invoices
-          </Typography>
-          <ApproverInvoiceList selectedValue={selectedValue} />
-        </Grid>
-      </Grid>
-    </Box>
+    <>
+      {approverOverViewData && (
+        <ApproverInvoiceOverView approverOverViewData={approverOverViewData} />
+      )}
+      {companyOverviewList && (
+        <ApproverInvoiceList companyOverviewList={companyOverviewList} />
+      )}
+    </>
   );
 };
 

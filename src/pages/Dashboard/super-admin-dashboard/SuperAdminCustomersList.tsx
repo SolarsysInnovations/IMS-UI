@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from 'react'
 import GridDataUi from '../../../components/GridTable/GridData'
 import { GridColDef } from '@mui/x-data-grid';
-import { useGetSuperAdminDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
-import { Box } from '@mui/material';
 
 export const columns: GridColDef[] = [
     {
@@ -24,15 +21,13 @@ export const columns: GridColDef[] = [
         editable: true,
     },
 ];
-const CompanyOverView = ({ companyOverviewData }: any) => {
+const SuperAdminCustomersList = ({ superAdminCustomersListData }: any) => {
 
     return (
         <>
-            <Box mt={3} >
-                <GridDataUi showToolbar={false} columns={columns} tableData={companyOverviewData} checkboxSelection={false} />
-            </Box>
+            <GridDataUi showToolbar={false} columns={columns} tableData={superAdminCustomersListData || []} checkboxSelection={false} />
         </>
     )
 }
 
-export default CompanyOverView
+export default SuperAdminCustomersList

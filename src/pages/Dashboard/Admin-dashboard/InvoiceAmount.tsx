@@ -8,110 +8,53 @@ import { Grid } from '@mui/material';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ErrorIcon from '@mui/icons-material/Error';
 import DoneIcon from '@mui/icons-material/Done';
-import { useGetDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
-import { useState, useEffect } from 'react';
 
-interface ValueProps {
-    label: string;
-    value: string;
-}
 
-interface InvoiceAmountProps {
-    selectedValue: ValueProps;
-}
+const transformInvoiceData = (data: any) => {
+    // Fallback to empty object if data is undefined or null
+    const { total = {}, paid = {}, unPaid = {} } = data || {};
 
-const initialInvoiceAmountState = [
-    {
-        label: "Total",
-        icon: CurrencyRupeeIcon,
-        iconBg: "#635bff",
-        value: 0,
-        childLabel: "Invoice child label",
-        months: "months",
-        noOfInvoices: 0,
-    },
-    {
-        label: "Paid",
-        icon: DoneIcon,
-        iconBg: "#4E9F3D",
-        value: 0,
-        childLabel: "Invoice child label",
-        months: "months",
-        noOfInvoices: 0,
-    },
-    {
-        label: "Unpaid",
-        icon: ErrorIcon,
-        iconBg: "#FF204E",
-        value: 0,
-        childLabel: "Invoice child label",
-        months: "months",
-        noOfInvoices: 0,
-    },
-];
+    return [
+        {
+            label: "Total",
+            icon: CurrencyRupeeIcon,
+            iconBg: "#635bff",
+            value: total.totalAmount || 0,
+            childLabel: "Invoice child label",
+            months: "months",
+            noOfInvoices: total.noOfInvoices || 0,
+        },
+        {
+            label: "Paid",
+            icon: DoneIcon,
+            iconBg: "#4E9F3D",
+            value: paid.totalAmount || 0,
+            childLabel: "Invoice child label",
+            months: "months",
+            noOfInvoices: paid.noOfInvoices || 0,
+        },
+        {
+            label: "Unpaid",
+            icon: ErrorIcon,
+            iconBg: "#FF204E",
+            value: unPaid.totalAmount || 0,
+            childLabel: "Invoice child label",
+            months: "months",
+            noOfInvoices: unPaid.noOfInvoices || 0,
+        },
+    ];
+};
 
-const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
-    const [invoiceAmount, setInvoiceAmount] = useState(initialInvoiceAmountState);
-    const [isLoading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [selectedFilterValue, setSelectedFilterValue] = useState({ filter: selectedValue.value });
-    const [getDashboard] = useGetDashboardMutation();
 
-    useEffect(() => {
-        fetchDashboardData(selectedValue.value);
-    }, [selectedValue]);
+const AdminDashboardInvoiceOverviewAmount = ({ invoiceOverviewAmountData }: any) => {
+    // Use invoiceOverviewAmountData if provided, otherwise fallback to dummy data
+    const invoiceAmount = transformInvoiceData(invoiceOverviewAmountData);
 
-    const fetchDashboardData = async (value: string) => {
-        setLoading(true);
-        try {
-            const response = await getDashboard(selectedFilterValue).unwrap();
-            if (response && response.invoiceOverview) {
-                const { total, paid, unPaid } = response.invoiceOverview;
-                setInvoiceAmount([
-                    {
-                        label: "Total",
-                        icon: CurrencyRupeeIcon,
-                        iconBg: "#635bff",
-                        value: total.totalAmount.toFixed(2),
-                        childLabel: "Invoice child label",
-                        months: value,
-                        noOfInvoices: total.noOfInvoices,
-                    },
-                    {
-                        label: "Paid",
-                        icon: DoneIcon,
-                        iconBg: "#4E9F3D",
-                        value: paid.totalAmount.toFixed(2),
-                        childLabel: "Invoice child label",
-                        months: value,
-                        noOfInvoices: paid.noOfInvoices,
-                    },
-                    {
-                        label: "Unpaid",
-                        icon: ErrorIcon,
-                        iconBg: "#FF204E",
-                        value: unPaid.totalAmount.toFixed(2),
-                        childLabel: "Invoice child label",
-                        months: value,
-                        noOfInvoices: unPaid.noOfInvoices,
-                    },
-                ]);
-            }
-        } catch (error) {
-            console.error("Failed to fetch dashboard data: ", error);
-            setError("Failed to fetch data. Please try again later.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        setSelectedFilterValue({ filter: selectedValue.value });
-    }, [selectedValue]);
+    console.log("invoiceOverviewAmountData", invoiceOverviewAmountData);
 
     return (
         <Grid container spacing={2}>
-            {invoiceAmount.map((data, index) => (
+            {invoiceAmount?.map((data: any, index: any) => (
                 <Grid key={index} item xs={4}>
                     <Card sx={{ width: "180px", height: "140px", padding: "10px 15px" }}>
                         <Stack spacing={1}>
@@ -154,4 +97,6 @@ const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
     );
 };
 
-export default InvoiceAmount;
+export default AdminDashboardInvoiceOverviewAmount;
+
+

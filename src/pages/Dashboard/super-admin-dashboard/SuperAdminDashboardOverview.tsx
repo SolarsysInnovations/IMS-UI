@@ -1,19 +1,14 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material';
 import { Grid } from '@mui/material';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import ErrorIcon from '@mui/icons-material/Error';
 import DoneIcon from '@mui/icons-material/Done';
-import { useState, useEffect } from 'react';
-import { useGetDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
 
 
 
-const DashboardOverviewUi = ({ overviewData }: any) => {
+const SuperAdminDashboardOverview = ({ overviewData }: any) => {
 
     return (
         <Grid container spacing={2}>
@@ -55,4 +50,4 @@ const DashboardOverviewUi = ({ overviewData }: any) => {
     );
 };
 
-export default DashboardOverviewUi;
+export default SuperAdminDashboardOverview;
