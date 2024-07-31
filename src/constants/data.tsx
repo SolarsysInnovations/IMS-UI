@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, ReactElement } from 'react';
 import { Roles } from "./Enums";
 import Unauthorized from "../unauthorized";
 import { Navigate } from "react-router-dom";
@@ -30,7 +30,12 @@ const SettingRoleScreen = lazy(() => import("../pages/settings/settings-role"));
 const DashboardScreen = lazy(() => import("../pages/Dashboard/Dashboard"));
 
 // Profiler component
-const Profiler = ({ id, children }) => (
+interface ProfilerProps {
+  id: string;
+  children: React.ReactNode;
+}
+
+const Profiler: React.FC<ProfilerProps> = ({ id, children }) => (
   <React.Profiler id={id} onRender={(id, phase, actualDuration) => {
     console.log(`Component ${id} took ${actualDuration}ms to ${phase}`);
   }}>
@@ -38,19 +43,25 @@ const Profiler = ({ id, children }) => (
   </React.Profiler>
 );
 
-export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER];
-export const admins = [Roles.ADMIN];
-export const superAdmin = [Roles.SUPERADMIN,];
-export const standardUser = [Roles.STANDARDUSER,];
-export const approver = [Roles.APPROVER,]
+export const allRoles: Roles[] = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER];
+export const admins: Roles[] = [Roles.ADMIN];
+export const superAdmin: Roles[] = [Roles.SUPERADMIN];
+export const standardUser: Roles[] = [Roles.STANDARDUSER];
+export const approver: Roles[] = [Roles.APPROVER];
 
-const getUserRole = () => {
+const getUserRole = (): string | null => {
   return localStorage.getItem('userRole');
 };
 
-export const userRole = getUserRole();
+export const userRole: string | null = getUserRole();
 
-export const routesConfig = [
+interface RouteConfig {
+  path: string;
+  element: ReactElement;
+  allowedRoles: Roles[];
+}
+
+export const routesConfig: RouteConfig[] = [
   { path: "/login", element: <Suspense fallback={<div>Loading...</div>}><Profiler id="Login"><Login /></Profiler></Suspense>, allowedRoles: [] },
   { path: "/unauthorized", element: <Unauthorized />, allowedRoles: [] },
   { path: "/", element: <Navigate to="/dashboard" />, allowedRoles: [...allRoles] },
@@ -157,8 +168,8 @@ export const sidebarTwo = [
   },
 ];
 
-export const invoiceStatusOptions = admins
+export const invoiceStatusOptions: string[] = admins.includes(userRole as Roles)
   ? ["DRAFT", "PAID"]
-  : approver
+  : approver.includes(userRole as Roles)
     ? ["PENDING", "APPROVED", "DELETE", "RETURNED"]
     : ["DRAFT", "PAID"];
