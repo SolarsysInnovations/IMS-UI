@@ -1,38 +1,42 @@
 import { Roles } from "./Enums";
-import Unauthorized from "../unauthorized";
 import { Navigate } from "react-router-dom";
-import Reportscreen from "../pages/reports/Reportscreen";
-import ArAgingscreen from "../pages/reports/Reports-ar-aging";
-import Reportsinvoice from "../pages/reports/Reports-invoice";
-import SettingScreen from "../pages/settings/settings";
-import CustomerList from "../pages/customer/Customer-list-screen";
-import CustomerCreate from "../pages/customer/Customer-create-screen";
-import InvoiceList from "../pages/Invoice/Invoice-list-screen";
-import CreateInvoice from "../pages/Invoice/Invoice-create-screen";
-import ServicesList from "../pages/service/service-list-screen";
-import CreateServices from "../pages/service/create-service-screen";
-import ServiceEditScreen from "../pages/service/service-edit-screen";
 import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded, SettingsSuggestRounded } from "@mui/icons-material"
-import DemoScreen from "../pages/Demo-screen";
-import GroupIcon from '@mui/icons-material/Group';
+ import GroupIcon from '@mui/icons-material/Group';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import TaskIcon from '@mui/icons-material/Task';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
-import Login from "../pages/Login-screen";
-import Dashboard from "../pages/Dashboard/Admin-dashboard/Dashboard-screen";
-import InvoiceCreateScreen from "../pages/Invoice/Invoice-create-screen";
-import CustomerScreen from "../pages/customer/Customer-screen";
-import CompanyList from "../pages/super-admin-company/companyListScreen";
-import CompanyCreate from "../pages/super-admin-company/companyCreate";
-import CompanyScreen from "../pages/super-admin-company/companyScreen";
-import SuperAdminDashboardScreen from "../pages/Dashboard/superAdmin-dashboard/DashboardScreen";
-import ApproverDashboardScreen from "../pages/Dashboard/approver-dashboard/DashboardScreen";
-import EnduserDashboardScreen from "../pages/Dashboard/End-user dashboard/DashboardScreen";
-import UserScreen from "../pages/company-users/UserScreen";
-import SettingRoleScreen from "../pages/settings/settings-role";
+//import Login from "../pages/Login-screen";
+// Lazy load all components
+import { Suspense, lazy, Profiler, ProfilerOnRenderCallback, ReactNode } from "react";
+const Unauthorized = lazy(() => import("../unauthorized"));
+const Reportscreen = lazy(() => import("../pages/reports/Reportscreen"));
+const ArAgingscreen = lazy(() => import("../pages/reports/Reports-ar-aging"));
+const Reportsinvoice = lazy(() => import("../pages/reports/Reports-invoice"));
+const SettingScreen = lazy(() => import("../pages/settings/settings"));
+const CustomerList = lazy(() => import("../pages/customer/Customer-list-screen"));
+const InvoiceList = lazy(() => import("../pages/Invoice/Invoice-list-screen"));
+const ServicesList = lazy(() => import("../pages/service/service-list-screen"));
+const CreateServices = lazy(() => import("../pages/service/create-service-screen"));
+const ServiceEditScreen = lazy(() => import("../pages/service/service-edit-screen"));
+const Login = lazy(() => import("../pages/Login-screen"));
+const Dashboard = lazy(() => import("../pages/Dashboard/Admin-dashboard/Dashboard-screen"));
+const InvoiceCreateScreen = lazy(() => import("../pages/Invoice/Invoice-create-screen"));
+const CustomerScreen = lazy(() => import("../pages/customer/Customer-screen"));
+const CompanyList = lazy(() => import("../pages/super-admin-company/companyListScreen"));
+const CompanyScreen = lazy(() => import("../pages/super-admin-company/companyScreen"));
+const SuperAdminDashboardScreen = lazy(() => import("../pages/Dashboard/superAdmin-dashboard/DashboardScreen"));
+const ApproverDashboardScreen = lazy(() => import("../pages/Dashboard/approver-dashboard/DashboardScreen"));
+const EnduserDashboardScreen = lazy(() => import("../pages/Dashboard/End-user dashboard/DashboardScreen"));
+const UserScreen = lazy(() => import("../pages/company-users/UserScreen"));
+const SettingRoleScreen = lazy(() => import("../pages/settings/settings-role"));
+//const ForgetPassword = lazy(() => import("../pages/ForgetPassword-screen"));
+// const CustomerCreate = lazy(() => import("../pages/customer/Customer-create-screen"));
+// const CreateInvoice = lazy(() => import("../pages/Invoice/Invoice-create-screen"));
+// const DemoScreen = lazy(() => import("../pages/Demo-screen"));
+// const CompanyCreate = lazy(() => import("../pages/super-admin-company/companyCreate"));
 
 export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER];
 export const admins = [Roles.ADMIN];
@@ -58,58 +62,68 @@ const getDashboardComponent = (role: any) => {
 };
 export const userRole = getUserRole();
 //console.log("userRole", userRole);
+// Define props interface for LazyLoadWrapper
+const onRenderCallback: any = (
+  id: any,
+  phase: any,
+  actualDuration: any,
+  baseDuration: any,
+  startTime: any,
+  commitTime: any,
+  interactions: any
+) => {
+  try {
+    console.log(`Component ${id} rendered:`);
+    console.log(`Phase: ${phase}`);
+    console.log(`Actual duration: ${actualDuration}`);
+    console.log(`Base duration: ${baseDuration}`);
+    console.log(`Start time: ${startTime}`);
+    console.log(`Commit time: ${commitTime}`);
+    console.log('Interactions:', interactions);    
+    console.log('-------------------');
+  } catch (error) {
+    console.error('Error in Profiler callback:', error);
+  }
+};
 
+// Define props interface for LazyLoadWrapper
+interface LazyLoadWrapperProps {
+  children: ReactNode;
+  id: string;
+}
+
+
+const LazyLoadWrapper: React.FC<LazyLoadWrapperProps> = ({ children, id }) => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <Profiler id={id} onRender={onRenderCallback}>
+      {children}
+    </Profiler>
+  </Suspense>
+);
 export const routesConfig = [
-  // * -------- login ---------
-  { path: "/login", element: <Login />, allowedRoles: [] },
-  { path: "/unauthorized", element: <Unauthorized />, allowedRoles: [] },
+  { path: "/login", element: <LazyLoadWrapper id="Login"><Login /></LazyLoadWrapper>, allowedRoles: [] },
+  { path: "/unauthorized", element: <LazyLoadWrapper id="Unauthorized"><Unauthorized /></LazyLoadWrapper>, allowedRoles: [] },
   { path: "/", element: <Navigate to="/dashboard" />, allowedRoles: [...allRoles] },
-
-  // * -------- dashboard ---------
-  { path: "/dashboard", element: getDashboardComponent(userRole), allowedRoles: [...allRoles] },
-
-  // * ----------- customers ------------
-  { path: "/customer-list", element: <CustomerList />, allowedRoles: [...admins, ...standardUser] },
-  { path: "/customer/create", element: <CustomerScreen />, allowedRoles: [...admins, ...standardUser] },
-
-  // * -------- reports ---------
-  { path: "/reports", element: <Reportscreen />, allowedRoles: [...allRoles] },
-  { path: "/reports/araging", element: <ArAgingscreen />, allowedRoles: [...allRoles] },
-  { path: "/reports/invoice", element: <Reportsinvoice />, allowedRoles: [...allRoles] },
-
-  // * ---------- settings -----------
-  { path: "/settings", element: <SettingScreen />, allowedRoles: [...allRoles] },
-  { path: "/settings/Role", element: <SettingRoleScreen />, allowedRoles: [...superAdmin, ...approver, ...standardUser] },
-  // * ----------- invoice ------------
-  { path: "/invoice/list", element: <InvoiceList />, allowedRoles: [...allRoles] },
-  { path: "/invoice/create", element: <InvoiceCreateScreen />, allowedRoles: [...allRoles] },
-
-  // * --------- service -----------
-  { path: "/services/list", element: <ServicesList />, allowedRoles: [...admins] },
-  { path: "/service/create", element: <CreateServices />, allowedRoles: [...admins] },
-  {
-    path: "/service/edit/:id", element: <ServiceEditScreen onSuccess={function (): void {
-      throw new Error("Function not implemented.");
-    }} />, allowedRoles: [...admins]
-  },
-
-  // * -------- company users ---------
-  { path: "/user/list", element: <UserScreen />, allowedRoles: [...allRoles] },
-
-  // * -------- company ---------
-  { path: "/company", element: <CompanyList />, allowedRoles: [...superAdmin] },
-  { path: "/company/create", element: <CompanyScreen />, allowedRoles: [...superAdmin] },
-
-  // // * -------- super admin ---------
-  // { path: "/super-admin", element: <SuperAdminDashboardScreen />, allowedRoles: [...allRoles] },
-  // { path: "/super-admin/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
-
-  // // * -------- approver ---------
-  { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...approver] },
-
-  // // * -------- enduser ---------
-  { path: "/standarduser", element: <EnduserDashboardScreen />, allowedRoles: [...standardUser] },
+  { path: "/dashboard", element: <LazyLoadWrapper id="Dashboard">{getDashboardComponent(userRole)}</LazyLoadWrapper>, allowedRoles: [...allRoles] },
+  { path: "/customer-list", element: <LazyLoadWrapper id="CustomerList"><CustomerList /></LazyLoadWrapper>, allowedRoles: [...admins, ...standardUser] },
+  { path: "/customer/create", element: <LazyLoadWrapper id="CustomerScreen"><CustomerScreen /></LazyLoadWrapper>, allowedRoles: [...admins, ...standardUser] },
+  { path: "/reports", element: <LazyLoadWrapper id="Reportscreen"><Reportscreen /></LazyLoadWrapper>, allowedRoles: [...allRoles] },
+  { path: "/reports/araging", element: <LazyLoadWrapper id="ArAgingscreen"><ArAgingscreen /></LazyLoadWrapper>, allowedRoles: [...allRoles] },
+  { path: "/reports/invoice", element: <LazyLoadWrapper id="Reportsinvoice"><Reportsinvoice /></LazyLoadWrapper>, allowedRoles: [...allRoles] },
+  { path: "/settings", element: <LazyLoadWrapper id="SettingScreen"><SettingScreen /></LazyLoadWrapper>, allowedRoles: [...allRoles] },
+  { path: "/settings/Role", element: <LazyLoadWrapper id="SettingRoleScreen"><SettingRoleScreen /></LazyLoadWrapper>, allowedRoles: [...superAdmin, ...approver, ...standardUser] },
+  { path: "/invoice/list", element: <LazyLoadWrapper id="InvoiceList"><InvoiceList /></LazyLoadWrapper>, allowedRoles: [...allRoles] },
+  { path: "/invoice/create", element: <LazyLoadWrapper id="InvoiceCreateScreen"><InvoiceCreateScreen /></LazyLoadWrapper>, allowedRoles: [...allRoles] },
+  { path: "/services/list", element: <LazyLoadWrapper id="ServicesList"><ServicesList /></LazyLoadWrapper>, allowedRoles: [...admins] },
+  { path: "/service/create", element: <LazyLoadWrapper id="CreateServices"><CreateServices /></LazyLoadWrapper>, allowedRoles: [...admins] },
+  { path: "/service/edit/:id", element: <LazyLoadWrapper id="ServiceEditScreen"><ServiceEditScreen onSuccess={function (): void { throw new Error("Function not implemented."); }} /></LazyLoadWrapper>, allowedRoles: [...admins] },
+  { path: "/user/list", element: <LazyLoadWrapper id="UserScreen"><UserScreen /></LazyLoadWrapper>, allowedRoles: [...allRoles] },
+  { path: "/company", element: <LazyLoadWrapper id="CompanyList"><CompanyList /></LazyLoadWrapper>, allowedRoles: [...superAdmin] },
+  { path: "/company/create", element: <LazyLoadWrapper id="CompanyScreen"><CompanyScreen /></LazyLoadWrapper>, allowedRoles: [...superAdmin] },
+  { path: "/approver", element: <LazyLoadWrapper id="ApproverDashboardScreen"><ApproverDashboardScreen /></LazyLoadWrapper>, allowedRoles: [...approver] },
+  { path: "/standarduser", element: <LazyLoadWrapper id="EnduserDashboardScreen"><EnduserDashboardScreen /></LazyLoadWrapper>, allowedRoles: [...standardUser] },
 ];
+
 
 export const sidebarTwo = [
   {
@@ -217,6 +231,8 @@ export const invoiceStatusOptions = admins
     ? ["PENDING", "APPROVED", "DELETE", "RETURNED"]
     :
     ["DRAFT", "PAID"]
+
+ 
 // : ["APPROVED", "DELETE", "RETURNED", "DRAFT", "PENDING", "PAID"];
 
 
