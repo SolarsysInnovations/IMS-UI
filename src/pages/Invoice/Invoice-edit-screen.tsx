@@ -84,7 +84,7 @@ const InvoiceEdit = () => {
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
-    const [showSuccessToast, setShowSuccessToast] = useState(false); 
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
 
     console.log("details", invoiceStateDetails);
 
@@ -252,14 +252,14 @@ const InvoiceEdit = () => {
                                     disabled: !(isValid && dirty),
                                 },
                                 {
-                                    label: 'Sent to Approver',icon: Approval, disabled: !(isValid && dirty), onClick: () => {
+                                    label: 'Sent to Approver', icon: Approval, disabled: !(isValid && dirty), onClick: () => {
                                         values.invoiceStatus = "PENDING";
                                         handleSubmit()
                                     }
                                 },
-                                { label: 'Back',icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+                                { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
                                 {
-                                    label: 'Save',icon: Save, onClick: async () => {
+                                    label: 'Save', icon: Save, onClick: async () => {
                                         handleSubmit()
                                     },
                                     disabled: !(isValid && dirty)
@@ -473,7 +473,7 @@ const InvoiceEdit = () => {
                                         <Box>
                                             <DatePickerUi
                                                 label="Start Date"
-                                                onChange={(date: Date) => {
+                                                onChange={(date: string) => {
                                                     setFieldValue("startDate", date);
                                                 }}
                                                 value={values.startDate}
@@ -484,7 +484,7 @@ const InvoiceEdit = () => {
                                         <Box>
                                             <DatePickerUi
                                                 label="Due Date"
-                                                onChange={(date: Date) => {
+                                                onChange={(date: string) => {
                                                     setFieldValue("dueDate", date);
                                                 }}
                                                 value={values.dueDate}
