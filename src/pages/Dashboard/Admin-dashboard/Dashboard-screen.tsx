@@ -15,7 +15,6 @@ const AdminDashboardScreen = ({ adminData }: any) => {
   const invoiceOverviewAmountData = adminData.invoiceOverview || {};
   const invoicePieChartData = adminData.invoiceStatus || {};
 
-
   return (
     <>
        <Grid container spacing={2}>

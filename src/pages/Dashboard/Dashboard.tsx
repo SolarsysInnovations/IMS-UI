@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { Roles } from '../../constants/Enums';
 import EndUserDashboardScreen from './standard-user-dashboard/DashboardScreen';
 import SuperAdminDashboardScreen from './super-admin-dashboard/DashboardScreen';
-import AdminDashboardScreen from '../Dashboard/Admin-dashboard/Dashboard-screen';
+import AdminDashboardScreen from './Admin-dashboard/Dashboard-screen';
 // Option array for dropdown
 const options = [
     { label: "monthly", value: "monthly" },

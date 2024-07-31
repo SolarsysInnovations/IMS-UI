@@ -69,8 +69,7 @@ export enum ApiEndpoint {
     COMPANY_CREATE = "companyCreate",
     COMPANY_UPDATE = "companyUpdate",
     COMPANY_DELETE = "companyDelete",
-
-}
+};
 
 export type ApiUrls = {
     [key in ApiEndpoint]: string;
@@ -134,8 +133,8 @@ export const API_URLS: ApiUrls = {
     //Changepassword
     [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
     // company
-    [ApiEndpoint.COMPANY_GET]: `/company/list`,
-    [ApiEndpoint.COMPANY_CREATE]: `/company/create`,
+    [ApiEndpoint.COMPANY_GET]: `/company/get`,
+    [ApiEndpoint.COMPANY_CREATE]: `/user/register`,
     [ApiEndpoint.COMPANY_UPDATE]: `/company/update`,
     [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
     [ApiEndpoint.COMPANY_LIST]: `/company/list`,

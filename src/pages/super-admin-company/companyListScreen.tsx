@@ -13,36 +13,57 @@ import CompanyCreate from './companyCreate';
 import { columns } from '../../constants/grid-table-data/company-table-data';
 import { useGetCompanyQuery, useUpdateCompanyMutation } from '../../redux-store/company/companiesApi';
 
+interface Company {
+    companyName: string;
+    companyEmail: string;
+    companyPhone: string;
+    companyCountry: string;
+    companyState: string;
+    companyAddress: string;
+    companyWebsite: string;
+    companyTaxNumber: string;
+    companyRegNumber: string;
+    id: string;
+}
 
+interface Admin {
+    userEmail: string;
+    userName: string;
+    password: string;
+    userRole: string;
+    userMobile: string;
+    description: string;
+    companyId: string;
+    id: string;
+}
+
+interface CompanyAdminData {
+    company: Company;
+    admin: Admin;
+}
 
 const CompanyList = () => {
-
-    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-
-    const [updateCustomer, { isSuccess, isError }] = useUpdateCompanyMutation();
-
     const { data: company, error, isLoading, refetch } = useGetCompanyQuery();
-
     const [mergedData, setMergedData] = useState<any[]>([]);
-
     const pathname = usePathname();
+
+    console.log("company", company);
 
     useEffect(() => {
         if (company && !isLoading && !error) {
-            const mergedArray: any[] = company.map((item: any) => ({
-                // ...item.companyDetails,
-                // admin profile
-                id: item.register.id,
-                userName: item.register.userName,
-                userEmail: item.register.userEmail,
-                userRole: item.register.userRole,
-                userMobile: item.register.userMobile,
-                userAccess: item.register.userAccess,
+            const mergedArray = company.map((item: CompanyAdminData) => ({
+                // Admin profile
+                id: item.company.id,
+                userName: item.admin.userName,
+                userEmail: item.admin.userEmail,
+                userRole: item.admin.userRole,
+                userMobile: item.admin.userMobile,
+                userAccess: item.admin.description,
 
-                // company Details
-                companyName: item.companyDetails.companyName,
-                companyPhone: item.companyDetails.companyPhone
+                // Company Details
+                companyName: item.company.companyName,
+                companyPhone: item.company.companyPhone,
             }));
             setMergedData(mergedArray);
         }
@@ -55,7 +76,9 @@ const CompanyList = () => {
     return (
         <>
             <TableHeader headerName={pathname} buttons={buttons} />
-            <GridDataUi showToolbar={true} columns={columns} tableData={mergedData || []} checkboxSelection={false} />
+            {mergedData && (
+                <GridDataUi showToolbar={true} columns={columns} tableData={mergedData || []} checkboxSelection={false} />
+            )}
         </>
     );
 };
