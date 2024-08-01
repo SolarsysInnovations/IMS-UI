@@ -16,6 +16,7 @@ const About: React.FC = () => {
   return (
     <div>
        <TableHeader headerName={"About Us"} />
+       
           <Typography variant="body1">
             SSINTEK :
             <StyledLink
@@ -25,7 +26,9 @@ const About: React.FC = () => {
             >
               www.ssintek.in
             </StyledLink>
-          </Typography>
+            
+              </Typography>
+              {/* <img src="./1680074185936.jpeg" alt="Solarsys Logo" width="100px" height="100px"/> */}
     </div>
   );
 };
