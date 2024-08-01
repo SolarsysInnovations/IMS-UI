@@ -15,6 +15,8 @@ import ModalUi from "../../components/ui/ModalUi";
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { RolesEditFields } from '../../constants/form-data/form-data-json';
 import CustomerDetails from '../customer/customerDetails';
+import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from '../../redux-store/api/injectedApis';
+import UserForm from './UserForm';
 
 const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
@@ -70,14 +72,12 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     const [openModal, setOpenModal] = useState(false);
     const [roleId, setRoleId] = useState<string | null>(null);
     const [rolesData, setRolesData] = useState(null);
-    const { data: roleDetails, refetch } = useGetRoleQuery();
+    const { data: roleDetails, refetch } = useGetUsersListQuery();
     const pathname = usePathname();
 
-    const { data: roles, error, isLoading, refetch: fetchRolesList } = useGetRoleQuery();
+    const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetSingleUserMutation();
 
-    const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetRoleByIdMutation();
-
-    const [deleteRole, { isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteRoleMutation();
+    const [deleteRole, { isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteUserMutation();
 
     useEffect(() => {
         dispatch(setRoleData(roleData));
@@ -131,61 +131,19 @@ const handleModalOpen = async () => {
     };
 
     return (
-      <Stack direction="row" spacing={1}>
-        <IconButton
-          sx={{ padding: "3px" }}
-          aria-label=""
-          onClick={handleEditClick}
-        >
-          <EditIcon
-            sx={{
-              color: `grey.500`,
-              fontSize: "15px",
-              "&:hover": { color: "blue" },
-            }}
-            fontSize="small"
-          />
-        </IconButton>
-        <IconButton
-          sx={{ padding: "3px" }}
-          aria-label=""
-          onClick={handleDeleteClick}
-        >
-          <GridDeleteIcon
-            sx={{
-              color: `grey.500`,
-              fontSize: "15px",
-              "&:hover": { color: "blue" },
-            }}
-            fontSize="small"
-          />
-        </IconButton>
-        {/* <DialogBoxUi
+        <Stack direction="row" spacing={1}>
+            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
+                <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
+            </IconButton>
+            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
+                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
+            </IconButton>
+            <DialogBoxUi
                 open={openModal}
-                content={<RoleForm onClose={handleModalClose} RolesEditInitialValues={roleData} HeaderName="Update Role" RolesFields={RolesEditFields}/>}
+                content={<UserForm userEditValue={roleData} mode={roleData ? "edit" : "create"} />}
                 handleClose={handleModalClose}
-            /> */}
-        <IconButton
-          sx={{ padding: "3px" }}
-          aria-label=""
-          onClick={handleModalOpen}
-        >
-          <RemoveRedEyeOutlined
-            sx={{
-              color: `grey.500`,
-              fontSize: "15px",
-              "&:hover": { color: "blue" },
-            }}
-            fontSize="small"
-          />
-        </IconButton>
-        <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
-          <TableHeader headerName="User Details" />
-          <Box sx={{ marginTop: "15px" }}>
-            <CustomerDetails details={roleData || []} />
-          </Box>
-        </ModalUi>{" "}
-      </Stack>
+            />
+        </Stack>
     );
 
 }

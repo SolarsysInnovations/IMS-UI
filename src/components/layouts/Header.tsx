@@ -9,7 +9,6 @@ import DialogBoxUi from "../ui/DialogBox";
 import UserProfile from "../../pages/profile/UserProfile";
 import ChangePassword from "../../pages/profile/ChangePassword";
 import { useNavigate } from "react-router-dom";
-import ToastUi from "../../components/ui/ToastifyUi";
 import GroupIcon from "@mui/icons-material/Group";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { capitalize } from "../../services/utils/capitalization";
@@ -94,7 +93,6 @@ export default function Header() {
 
   return (
     <>
-      <ToastUi autoClose={1000} />
       <AppBar
         sx={{ width: "100%", boxShadow: "none", backgroundColor: "#fbfbff !important" }}
         position='sticky'

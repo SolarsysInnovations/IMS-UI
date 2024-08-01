@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import jsPdf from "jspdf";
 import html2canvas from "html2canvas";
-import { Box, Button, Card, Divider, Grid, Stack, Typography } from "@mui/material";
-import { Document, Page, pdfjs } from "react-pdf";
+import { Box, Card, Grid, } from "@mui/material";
+import { pdfjs } from "react-pdf";
 import TableContent from "./TableContent";
-import { formatDate } from "../../services/utils/dataFormatter";
-import ButtonSmallUi from "../ui/ButtonSmall";
 import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { addDays, format, parse } from "date-fns";
 import DialogBoxUi from "../ui/DialogBox";
@@ -18,12 +16,7 @@ import { userRole } from "../../constants/data";
 import { useUpdateInvoiceMutation, useInvoiceGetByIdMutation, useGetInvoiceQuery } from "../../redux-store/invoice/invcoiceApi";
 import { useDispatch, useSelector } from "react-redux";
 import { clearData, setData } from "../../redux-store/global/globalState";
-import TextFieldUi from "../ui/TextField";
 import ModalUi from "../ui/ModalUi";
-import TableHeader from "../layouts/TableHeader";
-import { Add, EmailOutlined } from "@mui/icons-material";
-import TextAreaUi from "../ui/TextArea";
-import * as Yup from "yup";
 import MailReason from "./MailReason";
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 import StageStepper from "../ui/StepperUi";
@@ -40,9 +33,6 @@ interface InvoiceUiProps {
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-const TrackerPosition: React.FC<{ show: boolean }> = ({ show }) => {
-  return <Box>Tracker Position</Box>;
-};
 
 function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) {
   const { data: customers, error: customerListError, isLoading: customerListLoading, refetch, isSuccess } = useGetCustomersQuery();
@@ -56,6 +46,8 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
   const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
   const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
   const invoiceData = useSelector((state: any) => state.globalState.data);
+
+  console.log("invoiceData", invoiceData);
 
   const [showTracker, setShowTracker] = useState(false);
   const dispatch = useDispatch();
@@ -105,19 +97,16 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
   }, [customers, invoiceData]);
 
   const handleOptionClick = async (option: any, index: any) => {
-    // setCommentPopup(true);
     if (invoiceData.invoiceStatus !== option) {
       try {
         const updatedInvoiceData = {
           ...invoiceData,
           invoiceStatus: option,
         };
-        console.log(updatedInvoiceData);
         setNestedOpen(true);
 
         dispatch(clearData());
         dispatch(setData(updatedInvoiceData));
-        // Optionally, update the state with the fetched data if needed
       } catch (error) {
         console.log("Error updating invoice data", error);
       }
@@ -207,320 +196,111 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
   const exceptApprover: any = Roles.APPROVER === userRole;
   return (
     <>
-      <div
-        className='App'
-        id='invoiceCapture'
-        style={{ padding: "50px 30px" }}
-      >
-        <Grid
-          container
-          sx={{ borderBottom: "1px solid #dadada", paddingBottom: "15px" }}
-        >
-          <Grid
-            sx={{
-              marginTop: "0px",
-              display: "flex",
-              alignContent: "flex-start",
-              alignItems: "flex-start",
-            }}
-            item
-            xs={6.5}
-          >
+      <div className='App' id='invoiceCapture' style={{ padding: "50px 30px" }} >
+        <Grid container sx={{ borderBottom: "1px solid #dadada", paddingBottom: "15px" }} >
+          <Grid sx={{ marginTop: "0px", display: "flex", alignContent: "flex-start", alignItems: "flex-start", }} item xs={6.5} >
             <Box>
               <h1 style={{ marginTop: "0px", textAlign: "left" }}>INVOICE</h1>
             </Box>
           </Grid>
-          <Grid
-            sx={{
-              marginTop: "0px",
-              paddingBottom: "10px",
-              display: "flex",
-              alignItems: "right",
-              justifyContent: "left",
-            }}
-            item
-            xs={5.5}
-          >
+          <Grid sx={{ marginTop: "0px", paddingBottom: "10px", display: "flex", alignItems: "right", justifyContent: "left", }} item xs={5.5} >
             <Box>
               <div>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "600",
-                    margin: "0 0 5px 0",
-                  }}
-                >
-                  <span style={{ fontWeight: "500" }}>SOLARSYS</span>
+                <p style={{ fontSize: "14px", fontWeight: "600", margin: "0 0 5px 0", }} > <span style={{ fontWeight: "500" }}>SOLARSYS</span> </p>
+              </div>
+              <div>
+                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}> {" "}
+                  <span style={{ fontWeight: "500", width: "60px", display: "inline-block", }} > Address : </span>{" "}
+                  <span>
+                    1/305, Thillai Nagar, Trichy 905 606 </span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                  {" "}
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "60px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Address :
-                  </span>{" "}
-                  <span>1/305, Thillai Nagar, Trichy 905 606 </span>
-                </p>
-              </div>
-              <div>
-                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "60px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Phone :
-                  </span>{" "}
-                  <span>983894833</span>
-                </p>
+                  <span style={{ fontWeight: "500", width: "60px", display: "inline-block", }} > Phone : </span>{" "} <span>983894833</span> </p>
               </div>
             </Box>
           </Grid>
         </Grid>
-        <Grid
-          container
-          sx={{
-            backgroundColor: "#f8f9f9",
-            marginTop: "30px",
-            padding: "20px 20px",
-          }}
-        >
-          <Grid
-            sx={{ marginTop: "0px" }}
-            item
-            xs={4}
-          >
+        <Grid container sx={{ backgroundColor: "#f8f9f9", marginTop: "30px", padding: "20px 20px", }} >
+          <Grid sx={{ marginTop: "0px" }} item xs={4} >
             <Box gap={3}>
               <div>
                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "60px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Billed To{" "}
-                  </span>{" "}
+                  <span style={{ fontWeight: "500", width: "60px", display: "inline-block", }} > Billed To{" "} </span>{" "}
                   <span>: {customerDetails?.customerName}</span>
-                </p>
-              </div>
+                </p> </div>
               <div>
                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "60px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Email{" "}
-                  </span>{" "}
-                  <span>: {customerDetails?.customerEmail}</span>
+                  <span style={{ fontWeight: "500", width: "60px", display: "inline-block", }} >
+                    Email{" "} </span>{" "} <span>: {customerDetails?.customerEmail}</span>
                 </p>
-              </div>
-              <div>
-                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "60px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Phone{" "}
-                  </span>{" "}
-                  <span>: {customerDetails?.customerPhone}</span>
-                </p>
+              </div> <div> <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
+                <span style={{ fontWeight: "500", width: "60px", display: "inline-block", }} > Phone{" "} </span>{" "}
+                <span>: {customerDetails?.customerPhone}</span> </p>
               </div>
             </Box>
           </Grid>
-          <Grid
-            sx={{ marginTop: "0px" }}
-            item
-            xs={4}
-          >
+          <Grid sx={{ marginTop: "0px" }} item xs={4} >
             <Box gap={3}>
               <div>
                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "100px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Invoice No{" "}
-                  </span>{" "}
+                  <span style={{ fontWeight: "500", width: "100px", display: "inline-block", }} > Invoice No{" "} </span>{" "}
                   <span>: {invoiceData?.invoiceNumber}</span>
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "100px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Payment Terms{" "}
-                  </span>{" "}
-                  <span>: {invoiceData?.paymentTerms}</span>
-                </p>
+                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}> <span style={{ fontWeight: "500", width: "100px", display: "inline-block", }} > Payment Terms{" "} </span>{" "} <span>: {invoiceData?.paymentTerms}</span> </p>
               </div>
               <div>
                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "100px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Due Date{" "}
-                  </span>{" "}
-                  <span>: {isValidDate ? format(addDays(parsedDueDate, 0), "dd-MM-yyyy") : "N/A"}</span>
+                  <span style={{ fontWeight: "500", width: "100px", display: "inline-block", }} > Due Date{" "} </span>{" "} <span>: {isValidDate ? format(addDays(parsedDueDate, 0), "dd-MM-yyyy") : "N/A"}</span>
                 </p>
               </div>
             </Box>
           </Grid>
         </Grid>
         <Grid container>
-          <Grid
-            sx={{ marginTop: "0px" }}
-            item
-            xs={12}
-          >
-            <Box sx={{ mt: 5 }}>
-              <TableContent tableData={invoiceData || []} />
-            </Box>
+          <Grid sx={{ marginTop: "0px" }} item xs={12} >
+            <Box sx={{ mt: 5 }}> <TableContent tableData={invoiceData || []} /> </Box>
           </Grid>
         </Grid>
         <Grid container>
-          <Grid
-            sx={{ marginTop: "0px" }}
-            item
-            xs={12}
-          >
+          <Grid sx={{ marginTop: "0px" }} item xs={12} >
             <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }}>
-              <div
-                style={{
-                  display: "flex",
-                  width: "250px",
-                  justifyContent: "space-between",
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: "13px",
-                    margin: "0 0 5px 0",
-                    fontWeight: "600",
-                  }}
-                >
-                  Sub total
-                </p>
+              <div style={{ display: "flex", width: "250px", justifyContent: "space-between", }} >
+                <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600", }} >
+                  Sub total </p>
                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>{subTotalAmount}</p>
               </div>
             </Box>
           </Grid>
-          <Grid
-            sx={{ marginTop: "0px" }}
-            item
-            xs={12}
-          >
+          <Grid sx={{ marginTop: "0px" }} item xs={12} >
             <Box sx={{ display: "flex", justifyContent: "right" }}>
-              <div
-                style={{
-                  display: "flex",
-                  width: "250px",
-                  justifyContent: "space-between",
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: "13px",
-                    margin: "0 0 5px 0",
-                    fontWeight: "600",
-                  }}
-                >
-                  Discount Amount
-                </p>
+              <div style={{ display: "flex", width: "250px", justifyContent: "space-between", }} > <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600", }} > Discount Amount </p>
                 <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>-{discountAmount}</p>
               </div>
             </Box>
           </Grid>
-          <Grid
-            sx={{ marginTop: "0px" }}
-            item
-            xs={12}
-          >
+          <Grid sx={{ marginTop: "0px" }} item xs={12} >
             <Box sx={{ display: "flex", justifyContent: "right" }}>
-              <div
-                style={{
-                  display: "flex",
-                  width: "250px",
-                  justifyContent: "space-between",
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: "13px",
-                    margin: "0 0 5px 0",
-                    fontWeight: "600",
-                  }}
-                >
-                  Tax Amount
-                </p>
-                <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>{invoiceData.totalAmount}</p>
+              <div style={{ display: "flex", width: "250px", justifyContent: "space-between", }} >
+                <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600", }} > Tax Amount </p> <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>{invoiceData.totalAmount}</p>
               </div>
             </Box>
           </Grid>
         </Grid>
         <Grid container>
-          <Grid
-            sx={{ marginTop: "20px" }}
-            item
-            xs={12}
-          >
+          <Grid sx={{ marginTop: "20px" }} item xs={12} >
             <Box>
               <div>
                 <p style={{ fontSize: "12px" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "130px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Notes{" "}
-                  </span>{" "}
-                  : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!
-                </p>
+                  <span style={{ fontWeight: "500", width: "130px", display: "inline-block", }} > Notes{" "} </span>{" "} : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus! </p>
               </div>
             </Box>
             <Box>
               <div>
-                <p style={{ fontSize: "12px" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "130px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Terms & Conditions{" "}
-                  </span>{" "}
-                  : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!
-                </p>
+                <p style={{ fontSize: "12px" }}> <span style={{ fontWeight: "500", width: "130px", display: "inline-block", }} > Terms & Conditions{" "} </span>{" "} : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus! </p>
               </div>
             </Box>
           </Grid>
@@ -529,26 +309,18 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
       {preview && (
         <Grid
           sx={{
-            "& .MuiGrid-item": {
-              paddingTop: "10px",
-            },
+            "& .MuiGrid-item": { paddingTop: "10px" },
           }}
           container
           spacing={5}
         >
-          <Grid
-            item
-            xs={12}
-          >
-            <Box
-              gap={2}
-              sx={{ display: "flex", justifyContent: "right" }}
-            >
+          <Grid item xs={12}>
+            <Box gap={2} sx={{ display: "flex", justifyContent: "right" }}>
               <ButtonUi
                 smallButtonCss={true}
-                label='Generate PDF'
-                variant='contained'
-                size='small'
+                label="Generate PDF"
+                variant="contained"
+                size="small"
                 onClick={printPDF}
               />
               {/* {invoiceData?.invoiceStatus === "APPROVED" ? ( */}
@@ -556,9 +328,9 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 <ButtonUi
                   disabled={invoiceData.invoiceStatus === "APPROVED" ? false : true}
                   smallButtonCss={true}
-                  label='Email to Customer'
-                  variant='contained'
-                  size='small'
+                  label="Email to Customer"
+                  variant="contained"
+                  size="small"
                   onClick={() => {
                     setIsOpenEmailDialogBox(true);
                     isModalOpen(false);
@@ -572,9 +344,9 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 <ButtonUi
                   disabled={invoiceData.invoiceStatus === "DRAFT" ? false : true}
                   smallButtonCss={true}
-                  label='Sent to Approver'
-                  variant='contained'
-                  size='small'
+                  label="Sent to Approver"
+                  variant="contained"
+                  size="small"
                   // async function inside synchronous
                   onClick={(e: any) => {
                     (async () => {
@@ -587,15 +359,16 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
               {/* ) : ""} */}
               <SplitButton
                 key={currentInvoiceStatus} // Ensure re-render
-                disabledOptions={[currentInvoiceStatus === -1 ? 0 : currentInvoiceStatus]}
+                disabledOptions={[
+                  currentInvoiceStatus === -1 ? 0 : currentInvoiceStatus,
+                ]}
                 options={invoiceStatusOptions}
                 defaultIndex={currentInvoiceStatus}
                 onOptionClick={handleOptionClick}
               />
-
               <Box sx={{ position: "relative" }}>
                 <ButtonUi
-                  label='View Tracker'
+                  label="View Tracker"
                   smallButtonCss
                   onMouseEnter={() => setShowTracker(true)}
                   onMouseLeave={() => setShowTracker(false)}
@@ -612,36 +385,18 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                     display: showTracker ? "block" : "none",
                   }}
                 >
-                  <StageStepper
-                    stages={{
-                      stage1: "DRAFT",
-                      stage2: "PENDING",
-                      stage3: "APPROVED",
-                      stage4: "null",
-                      stage5: "null",
-                      stage6: "DELETED",
-                    }}
-                  />
+                  <StageStepper stages={invoiceData.invoiceStages} />
                 </Card>
               </Box>
             </Box>
           </Grid>
-          <Grid
-            item
-            xs={12}
-          ></Grid>
-          <ModalUi
-            open={nestedOpen}
-            onClose={handleCloseNested}
-          >
-            <MailReason
-              invoiceData={invoiceData}
-              setNestedOpen={setNestedOpen}
-            />
-          </ModalUi>
+          <Grid item xs={12}></Grid>
+          {/* <ModalUi open={nestedOpen} onClose={handleCloseNested}>
+            <MailReason invoiceData={invoiceData} setNestedOpen={setNestedOpen} />
+          </ModalUi> */}
         </Grid>
       )}
-      <DialogBoxUi
+      {/* <DialogBoxUi
         open={openemaildialogBox} // Set open to true to display the dialog initially
         // title="Custom Dialog Title"
         content={
@@ -658,7 +413,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
         handleClose={() => {
           setIsOpenEmailDialogBox(false);
         }}
-      />
+      /> */}
     </>
   );
 }

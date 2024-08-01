@@ -9,8 +9,6 @@ import { useDeleteInvoiceMutation, useGetInvoiceQuery, useInvoiceGetByIdMutation
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../../components/ui/ModalUi";
 import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
-import { toastConfig } from "../../forms/config/toastConfig";
-import { toast } from "react-toastify";
 import { setCustomerData, useUpdateCustomerMutation } from "../../../redux-store/customer/customerApi";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
 import { clearData, setData } from "../../../redux-store/global/globalState";

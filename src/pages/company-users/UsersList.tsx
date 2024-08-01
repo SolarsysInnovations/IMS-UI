@@ -10,6 +10,7 @@ import { useGetRoleQuery } from '../../redux-store/role/roleApi'
 import { columns } from './Roles-table-data'
 import DialogBoxUi from '../../components/ui/DialogBox'
 import UserForm from './UserForm'
+import { useGetUsersListQuery } from '../../redux-store/api/injectedApis'
 
 
 
@@ -17,7 +18,7 @@ const UserList = () => {
     const dispatch = useDispatch<AppDispatch>();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
     const { data: serviceList, error, isLoading } = useGetServiceQuery();
-    const { data: userListData, refetch: userListRefetch } = useGetRoleQuery();
+    const { data: userListData, refetch: userListRefetch } = useGetUsersListQuery();
     // 
     const companyUserData = useSelector((state: any) => state.globalState.data);
 

@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Grid, } from '@mui/material';
 import { AppDispatch, RootState } from '../../redux-store/store'
 import { Formik, Form } from 'formik';
-import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import GridDataUi from '../../components/GridTable/GridData';
 import { useGetReportInvoiceByIdMutation, useGetReportQuery } from '../../redux-store/reports/reportApi';
@@ -65,7 +64,6 @@ const Reportsinvoice: React.FC = () => {
             >
                 {({ errors, touched, values, setFieldValue, handleSubmit }) => (
                     <div>
-                        <ToastUi autoClose={2000} />
                         <TableHeader headerName={pathname} buttons={[
                             { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) }
                         ]} />

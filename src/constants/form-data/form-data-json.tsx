@@ -322,11 +322,13 @@ export const RolesFields: FieldProps[] = [
                 name: 'userRole', required: true, disabled: false, label: 'user Role', type: 'select', gridSize: 6, options: [
                   //{ value: "ADMIN", label: "ADMIN" },
                     { value: "APPROVER", label: "APPROVER" },
-                    { value: "ENDUSER", label: "ENDUSER" },
+                    { value: "STANDARDUSER", label: "STANDARDUSER" },
                 ], validation: Yup.string().required('userRole is required')
             },
             { name: 'userEmail', required: true, disabled: false, label: 'user Email', type: 'email', gridSize: 6, validation: Yup.string().required('userEmail is required') },
             { name: 'password', required: true, disabled: false, label: 'Password', type: 'password', gridSize: 6, validation: Yup.string().required('password is required') },
+            { name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'number', gridSize: 6, validation: Yup.string().required('number is required') },
+            { name: 'description', required: true, disabled: false, label: 'Description', type: 'text', gridSize: 6, validation: Yup.string().required('description is required') },
         ]
     },
 ];
@@ -343,10 +345,12 @@ export const RolesEditFields: FieldProps[] = [
                 name: 'userRole', required: true, disabled: false, label: 'user Role', type: 'select', gridSize: 6, options: [
                   //{ value: "ADMIN", label: "ADMIN" },
                     { value: "APPROVER", label: "APPROVER" },
-                    { value: "ENDUSER", label: "ENDUSER" },
+                    { value: "STANDARDUSER", label: "STANDARDUSER" },
                 ], validation: Yup.string().required('userRole is required')
             },
             { name: 'userEmail', required: true, disabled: false, label: 'user Email', type: 'email', gridSize: 6, validation: Yup.string().required('userEmail is required') },
+            { name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'number', gridSize: 6, validation: Yup.string().required('number is required') },
+            { name: 'description', required: true, disabled: false, label: 'Description', type: 'text', gridSize: 6, validation: Yup.string().required('description is required') },
 
         ]
     },

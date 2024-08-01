@@ -6,14 +6,12 @@ import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux-store/store';
-import ToastUi from '../../components/ui/ToastifyUi';
 import { columns } from '../../constants/grid-table-data/service-table-data';
 import { useGetServiceQuery } from '../../redux-store/service/serviceApi';
 import ModalUi from '../../components/ui/ModalUi';
 import { Box } from '@mui/material';
 import ServiceCreate from './service-create-screen';
 import ServiceEditScreen from './service-edit-screen'; // Import the edit screen
-import { ToastContainer } from 'react-toastify';
 import SnackBarUi from '../../components/ui/Snackbar';
 
 const ServicesList = () => {
@@ -36,20 +34,20 @@ const ServicesList = () => {
         setOpenModal(false);
     };
 
-    const handleEditClick = (serviceId : any) => {
+    const handleEditClick = (serviceId: any) => {
         // Logic to fetch and set the service data to be edited
         setEditMode(true);
         setOpenModal(true);
     };
 
-  
+
 
     useEffect(() => {
         refetch();
-       
+
     }, []);
 
-    console.log("data",serviceList); 
+    console.log("data", serviceList);
 
 
     return (
