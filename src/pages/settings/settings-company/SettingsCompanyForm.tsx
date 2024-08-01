@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useGetCompanySettingQuery } from "../../../redux-store/settings/companyDetailsApi";
 import {
   useAddCompanySettingMutation,
@@ -115,7 +113,6 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
       handleClose();
     } catch (error) {
       console.error("An error occurred during form submission:", error);
-      toast.error("Error occurred while saving fields.");
     }
   };
 
@@ -135,7 +132,6 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
 
   return (
     <>
-      <ToastContainer />
       <DynamicFormCreate
         showTable={true}
         headerName="Update your Company Information"

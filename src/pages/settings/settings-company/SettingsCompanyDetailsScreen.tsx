@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useGetCompanySettingQuery, useGetCompanySettingByIdMutation, } from "../../../redux-store/settings/companyDetailsApi";
-import { ToastContainer } from "react-toastify";
 import { Box, Grid } from "@mui/material";
 import TableHeader from "../../../components/layouts/TableHeader";
 import { Edit } from "@mui/icons-material";
@@ -67,7 +66,6 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
 
   return (
     <>
-      <ToastContainer />
       <DialogBoxUi
         open={opendialogBox}
         content={<SettingsCompanyScreen />}

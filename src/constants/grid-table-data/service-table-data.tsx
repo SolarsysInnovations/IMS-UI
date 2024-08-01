@@ -5,14 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
 import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
 import ServiceDetails from "../../pages/service/serviceDetails";
 import TableHeader from "../../components/layouts/TableHeader";
 import usePathname from "../../hooks/usePathname";
 import { useDeleteServiceMutation, useGetServiceQuery, useGetServiceByIdMutation, useUpdateServiceMutation, setServiceData, clearServiceData } from "../../redux-store/service/serviceApi";
-import { toastConfig } from "../forms/config/toastConfig";
 import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
 import React from "react";
 import ServiceEditScreen from "../../pages/service/service-edit-screen";
@@ -77,17 +75,17 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     return (
         <Stack direction="row" spacing={1}>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
+                <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px",'&:hover': {color: 'blue'} }} fontSize='small' />
+                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
             {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton> */}
             <ModalUi open={openModal} onClose={handleModalClose}>
                 <Box sx={{ marginTop: "15px" }}>
-                <ServiceEditScreen onSuccess={handleModalClose} />
+                    <ServiceEditScreen onSuccess={handleModalClose} />
                 </Box>
             </ModalUi>
         </Stack>
@@ -102,7 +100,7 @@ export const columns: GridColDef[] = [
         headerName: 'Action',
         width: 140,
         editable: false,
-        renderCell: (params: any) => <MyCellRenderer id={params.row?.id}  />,
+        renderCell: (params: any) => <MyCellRenderer id={params.row?.id} />,
     },
     // {
     //     field: 'id',
