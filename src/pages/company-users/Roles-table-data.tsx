@@ -10,6 +10,8 @@ import { AppDispatch } from '../../redux-store/store';
 import { useDispatch } from 'react-redux';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { RolesEditFields } from '../../constants/form-data/form-data-json';
+import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from '../../redux-store/api/injectedApis';
+import UserForm from './UserForm';
 
 const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
@@ -65,14 +67,12 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     const [openModal, setOpenModal] = useState(false);
     const [roleId, setRoleId] = useState<string | null>(null);
     const [rolesData, setRolesData] = useState(null);
-    const { data: roleDetails, refetch } = useGetRoleQuery();
+    const { data: roleDetails, refetch } = useGetUsersListQuery();
     const pathname = usePathname();
 
-    const { data: roles, error, isLoading, refetch: fetchRolesList } = useGetRoleQuery();
+    const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetSingleUserMutation();
 
-    const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetRoleByIdMutation();
-
-    const [deleteRole, { isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteRoleMutation();
+    const [deleteRole, { isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteUserMutation();
 
     useEffect(() => {
         dispatch(setRoleData(roleData));
@@ -125,11 +125,11 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
-            {/* <DialogBoxUi
+            <DialogBoxUi
                 open={openModal}
-                content={<RoleForm onClose={handleModalClose} RolesEditInitialValues={roleData} HeaderName="Update Role" RolesFields={RolesEditFields}/>}
+                content={<UserForm userEditValue={roleData} mode={roleData ? "edit" : "create"} />}
                 handleClose={handleModalClose}
-            /> */}
+            />
         </Stack>
     );
 

@@ -25,7 +25,7 @@ export interface TdsTaxFormProps {
     tdsTaxValue: TdsTaxProps;
 }
 export interface CompanyFormProps {
-    companyValue: CompanyInitialValueProps;
+    companyValue: AdminCompanyUsersInitialValueProps;
     mode?: 'create' | 'edit';
 }
 export interface LinkFormProps {
@@ -177,7 +177,7 @@ export interface serviceCreationProps {
     amount: number;
 };
 //----------settings--------
-export interface CompanyInitialValueProps {
+export interface SuperAdminUsersInitialValueProps {
     id?: string;
     userName: string;
     userEmail: string;
@@ -197,6 +197,15 @@ export interface CompanyInitialValueProps {
     companyRegNumber: string;
 };
 
+export interface AdminCompanyUsersInitialValueProps {
+    id?: string;
+    userName: string;
+    userEmail: string;
+    password: string;
+    userRole: string;
+    userMobile: string;
+    description: string;
+}
 
 export interface linkCreationProps {
     id: string;
@@ -222,6 +231,8 @@ export interface RoleInitialValueProps {
     userRole: string,
     userEmail: string,
     userAccess: string,
+    userMobile?: string,
+    description?: string,
 }
 
 export interface ChangePasswordInitialValueProps {

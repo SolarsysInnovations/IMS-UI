@@ -8,13 +8,13 @@ import {
 } from "../../../redux-store/settings/companyDetailsApi";
 import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
 import { companyDetailsValidationSchema } from "../../../constants/forms/validations/validationSchema";
-import { companyInitialValues } from "../../../constants/forms/formikInitialValues";
 import { clearData } from "../../../redux-store/global/globalState";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import { CompanyFormProps } from "../../../types/types";
 import { CompanyDetailsFields, } from "../../../constants/form-data/form-data-json";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import { superAdminCompanyUsersInitialValues } from "../../../constants/forms/formikInitialValues";
 
 const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -50,7 +50,7 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
     : null;
   console.log("userDetails", userDetails.companyDetails);
 
-  const initialValue = companyValue || companyInitialValues;
+  const initialValue = companyValue || superAdminCompanyUsersInitialValues;
 
   const fields = CompanyDetailsFields;
 
