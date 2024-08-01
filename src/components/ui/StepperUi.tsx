@@ -99,16 +99,10 @@ const StageStepper: React.FC<StageStepperProps> = ({ stages }) => {
                 {stageLabels.map((label, index) => {
                     const status = Object.values(stages)[index];
                     const isFailed = status === "DELETED" || status === "RETURNED";
-
-                    const labelProps: {
-                        optional?: React.ReactNode;
-                        error?: boolean;
-                    } = {};
+                    const labelProps: { optional?: React.ReactNode; error?: boolean; } = {};
                     if (isStepFailed(index)) {
                         labelProps.optional = (
-                            <Typography sx={{ fontSize: '9px', whiteSpace: 'nowrap' }} variant="caption" color="error">
-                                Alert message
-                            </Typography>
+                            <Typography sx={{ fontSize: '9px', whiteSpace: 'nowrap' }} variant="caption" color="error"> Alert message</Typography>
                         );
                         labelProps.error = true;
                     }

@@ -191,13 +191,10 @@ export const sidebarTwo = [
 
 ];
 
-export const invoiceStatusOptions = admins
-  ? ["DRAFT", "PAID"]
-  : approver
-    ? ["PENDING", "APPROVED", "DELETE", "RETURNED"]
-    :
-    ["DRAFT", "PAID"]
-// : ["APPROVED", "DELETE", "RETURNED", "DRAFT", "PENDING", "PAID"];
+export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED", "PAID",];
 
 
 
+export const invoiceOptionsAccess = {
+
+}
