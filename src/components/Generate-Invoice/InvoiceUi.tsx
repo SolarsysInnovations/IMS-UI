@@ -182,7 +182,6 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
   if (!invoiceData) {
     return <div>No data available</div>;
   }
-
   const parsedDueDate = invoiceData?.dueDate ? parse(invoiceData.dueDate, "dd-MM-yyyy", new Date()) : null;
 
   // Check if the parsed date is valid
@@ -354,7 +353,6 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
                 />
               )}
 
-              {/* ) : ""} */}
               <SplitButton
                 key={currentInvoiceStatus} // Ensure re-render
                 disabledOptions={[
