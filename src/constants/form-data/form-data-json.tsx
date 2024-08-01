@@ -320,7 +320,7 @@ export const RolesFields: FieldProps[] = [
             { name: 'userName', required: true, disabled: false, label: 'user Name', type: 'text', gridSize: 6, validation: Yup.string().required('userName is required') },
             {
                 name: 'userRole', required: true, disabled: false, label: 'user Role', type: 'select', gridSize: 6, options: [
-                    { value: "ADMIN", label: "ADMIN" },
+                  //{ value: "ADMIN", label: "ADMIN" },
                     { value: "APPROVER", label: "APPROVER" },
                     { value: "ENDUSER", label: "ENDUSER" },
                 ], validation: Yup.string().required('userRole is required')
@@ -341,7 +341,7 @@ export const RolesEditFields: FieldProps[] = [
             { name: 'userName', required: true, disabled: false, label: 'user Name', type: 'text', gridSize: 6, validation: Yup.string().required('userName is required') },
             {
                 name: 'userRole', required: true, disabled: false, label: 'user Role', type: 'select', gridSize: 6, options: [
-                    { value: "ADMIN", label: "ADMIN" },
+                  //{ value: "ADMIN", label: "ADMIN" },
                     { value: "APPROVER", label: "APPROVER" },
                     { value: "ENDUSER", label: "ENDUSER" },
                 ], validation: Yup.string().required('userRole is required')

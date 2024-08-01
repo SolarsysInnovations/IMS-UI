@@ -108,9 +108,9 @@ export const sidebarTwo = [
     path: "/customer-list",
     icon: GroupIcon,
     isParent: true,
-    subItems: [
-      { id: 1, title: "Create Customer", path: "/customer/create" },
-    ],
+    // subItems: [
+    //   { id: 1, title: "Create Customer", path: "/customer/create" },
+    // ],
     allowedRoles: [...admins, ...standardUser]
   },
   {
