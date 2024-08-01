@@ -9,6 +9,7 @@ import { clearData } from '../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { CompanyInitialValueProps } from '../../types/types';
+import { useNavigate } from 'react-router-dom';
 
 interface CompanyValueProps {
     companyEditInitialValues: any;
@@ -24,8 +25,9 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
     const { data: company, error, isLoading, refetch } = useGetCompanyQuery();
 
     const dispatch = useDispatch<AppDispatch>();
-
+    const navigate = useNavigate();
     const initialValues = companyEditInitialValues || companyInitialValues;
+
     const fields = mode === 'create' ? CompanyFields : CompanyEditFields;
 
     useSnackbarNotifications({
@@ -45,31 +47,41 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
     });
 
     useEffect(() => {
+        if (companyUpdateSuccess) {
+            navigate(-1)
+        };
         refetch();
     }, [companyAddSuccess, companyUpdateSuccess, refetch]);
 
     const onSubmit = useMemo(() => async (values: CompanyInitialValueProps, actions: any) => {
         try {
-            const id = values.id;
             if (mode === 'edit' && companyEditInitialValues) {
                 const transformedData = {
-                    userName: values.userName,
-                    userEmail: values.userEmail,
-                    password: values.password,
-                    userRole: values.userRole,
-                    userMobile: values.userMobile,
-                    description: values.description,
-                    companyName: values.companyName,
-                    companyAddress: values.companyAddress,
-                    companyState: values.companyState,
-                    companyCountry: values.companyCountry,
-                    companyEmail: values.companyEmail,
-                    companyPhone: values.companyPhone,
-                    companyWebsite: values.companyWebsite,
-                    companyTaxNumber: values.companyTaxNumber,
-                    companyRegNumber: values.companyRegNumber
+                    adminDetails: {
+                        userName: values.userName,
+                        userEmail: values.userEmail,
+                        // password: values.password,
+                        userRole: values.userRole,
+                        userMobile: values.userMobile,
+                        description: values.description,
+                    },
+                    companyDetails: {
+                        companyName: values.companyName,
+                        companyAddress: values.companyAddress,
+                        companyState: values.companyState,
+                        companyCountry: values.companyCountry,
+                        companyEmail: values.companyEmail,
+                        companyPhone: values.companyPhone,
+                        companyWebsite: values.companyWebsite,
+                        companyTaxNumber: values.companyTaxNumber,
+                        companyRegNumber: values.companyRegNumber
+                    },
                 };
-                await updateCompany({ id, company: transformedData });
+                console.log("transformedData", transformedData);
+
+                await updateCompany({ id: companyEditInitialValues.companyId, company: transformedData });
+                dispatch(clearData());
+
             } else {
                 const transformedData = {
                     userName: values.userName,
@@ -78,6 +90,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                     userRole: values.userRole,
                     userMobile: values.userMobile,
                     description: values.description,
+
                     companyName: values.companyName,
                     companyAddress: values.companyAddress,
                     companyState: values.companyState,
@@ -89,6 +102,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                     companyRegNumber: values.companyRegNumber
                 };
                 await addCompany(transformedData);
+                dispatch(clearData());
             }
 
             dispatch(clearData());
