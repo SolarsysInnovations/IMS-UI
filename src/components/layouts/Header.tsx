@@ -110,12 +110,12 @@ export default function Header() {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-            <Typography
+            {/* <Typography
               variant='caption'
               color='initial'
             >
               {capitalize(userRole)}
-            </Typography>
+            </Typography> */}
             <Tooltip title='Add item'>
               <IconButton
                 sx={{ width: "30px" }}

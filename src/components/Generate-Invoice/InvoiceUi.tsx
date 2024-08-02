@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import jsPdf from "jspdf";
 import html2canvas from "html2canvas";
-import { Box, Card, Grid, } from "@mui/material";
+import { Box, Card, Grid } from "@mui/material";
 import { pdfjs } from "react-pdf";
 import TableContent from "./TableContent";
 import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
@@ -13,7 +13,11 @@ import ButtonUi from "../ui/Button";
 import { invoiceStatusOptions } from "../../constants/data";
 import { Roles } from "../../constants/Enums";
 import { userRole } from "../../constants/data";
-import { useUpdateInvoiceMutation, useInvoiceGetByIdMutation, useGetInvoiceQuery } from "../../redux-store/invoice/invcoiceApi";
+import {
+  useUpdateInvoiceMutation,
+  useInvoiceGetByIdMutation,
+  useGetInvoiceQuery,
+} from "../../redux-store/invoice/invcoiceApi";
 import { useDispatch, useSelector } from "react-redux";
 import { clearData, setData } from "../../redux-store/global/globalState";
 import ModalUi from "../ui/ModalUi";
@@ -35,17 +39,42 @@ interface InvoiceUiProps {
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-
-function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) {
-  const { data: customers, error: customerListError, isLoading: customerListLoading, refetch, isSuccess } = useGetCustomersQuery();
+function InvoiceUi({
+  preview,
+  downloadPdf,
+  subtotal,
+  discount,
+  tds,
+  isModalOpen,
+}: InvoiceUiProps) {
+  const {
+    data: customers,
+    error: customerListError,
+    isLoading: customerListLoading,
+    refetch,
+    isSuccess,
+  } = useGetCustomersQuery();
   const [subTotalAmount, setSubTotalAmount] = useState<number>(0);
   const [customerDetails, setCustomerDetails] = useState<any>();
   const [discountAmount, setDiscountAmount] = useState<number>(0);
   const [openemaildialogBox, setIsOpenEmailDialogBox] = useState(false);
   const [commentPopUp, setCommentPopup] = useState(false);
-  const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject, isLoading: invoiceUpdateLoading }] = useUpdateInvoiceMutation();
-  const [getInvoiceById, { }] = useInvoiceGetByIdMutation();
-  const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
+  const [
+    updateInvoice,
+    {
+      isSuccess: invoiceUpdateSuccess,
+      isError: invoiceUpdateError,
+      error: invoiceUpdateErrorObject,
+      isLoading: invoiceUpdateLoading,
+    },
+  ] = useUpdateInvoiceMutation();
+  const [getInvoiceById] = useInvoiceGetByIdMutation();
+  const {
+    data: invoiceList,
+    error: invoiceListError,
+    isLoading: invoiceListLoading,
+    refetch: getInvoiceList,
+  } = useGetInvoiceQuery();
   const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
   const invoiceData = useSelector((state: any) => state.globalState.data);
 
@@ -59,14 +88,17 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     errorObject: invoiceUpdateErrorObject,
     errorMessage: "Error when sending Invoice to approver",
     success: invoiceUpdateSuccess,
-    successMessage: "Invoice send to approver and updated successfully",
+    successMessage: "Invoice sent to approver and updated successfully",
   });
 
   useEffect(() => {
     if (invoiceData) {
-      const calculateTotal = invoiceData?.servicesList?.reduce((total: any, service: any) => {
-        return total + service.serviceAmount;
-      }, 0);
+      const calculateTotal = invoiceData?.servicesList?.reduce(
+        (total: any, service: any) => {
+          return total + service.serviceAmount;
+        },
+        0
+      );
       setSubTotalAmount(calculateTotal);
       const disAmount = (subTotalAmount * (invoiceData.discountPercentage ?? 0)) / 100;
       setDiscountAmount(disAmount);
@@ -89,7 +121,6 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
       setCustomerDetails(customerDetails);
     }
   }, [customers, invoiceData]);
-
 
   const handleSentToApprover = async (e: any) => {
     e.preventDefault();
@@ -119,21 +150,27 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
         updatedBy: invoiceData.updatedBy,
         companyName: invoiceData.companyName,
       };
-      await updateInvoice({ id: invoicePayload.id, invoiceData: invoicePayload });
-      getInvoiceList();
-      const fetchedInvoiceData = await getInvoiceById(invoicePayload.id).unwrap();
-      dispatch(setData(fetchedInvoiceData));
-      isModalOpen(false);
-      // Optionally, update the state with the fetched data if needed
+      
+      console.log("Updating invoice with payload:", invoicePayload);
+      const response = await updateInvoice({ id: invoicePayload.id, invoiceData: invoicePayload });
+      
+      if (response.error) {
+        console.error("Error response from updateInvoice:", response.error);
+      } else {
+        console.log("Invoice update successful:", response);
+        await getInvoiceList();
+        const fetchedInvoiceData = await getInvoiceById(invoicePayload.id).unwrap();
+        dispatch(setData(fetchedInvoiceData));
+        isModalOpen(false);
+      }
     } catch (error) {
-      console.log("Error updating invoice data", error);
+      console.error("Exception during invoice update:", error);
     }
   };
 
   if (!invoiceData) {
     return <div>No data available</div>;
   }
-
 
   return (
     <>
@@ -147,32 +184,18 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
           spacing={5}
         >
           <Grid item xs={12}>
-            <InvoiceRoleButtons discount={discount} downloadPdf={downloadPdf} invoiceData={invoiceData} isModalOpen={isModalOpen} preview={preview} subtotal={subtotal} tds={tds} />
+            <InvoiceRoleButtons
+              discount={discount}
+              downloadPdf={downloadPdf}
+              invoiceData={invoiceData}
+              isModalOpen={isModalOpen}
+              preview={preview}
+              subtotal={subtotal}
+              tds={tds}
+            />
           </Grid>
-          <Grid item xs={12}></Grid>
-          {/* <ModalUi open={nestedOpen} onClose={handleCloseNested}>
-            <MailReason invoiceData={invoiceData} setNestedOpen={setNestedOpen} />
-          </ModalUi> */}
         </Grid>
       )}
-      {/* <DialogBoxUi
-        open={openemaildialogBox} // Set open to true to display the dialog initially
-        // title="Custom Dialog Title"
-        content={
-          <SendEmail
-            onClose={function (): void {
-              if (isSuccess) {
-                setIsOpenEmailDialogBox(false);
-              } else {
-                setIsOpenEmailDialogBox(true);
-              }
-            }}
-          />
-        }
-        handleClose={() => {
-          setIsOpenEmailDialogBox(false);
-        }}
-      /> */}
     </>
   );
 }

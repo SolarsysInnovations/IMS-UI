@@ -124,6 +124,7 @@ const DashboardScreen = () => {
                         alignItems="center"
                     >
                         <SelectDropdown
+                            variant='standard'
                             applySmallSizeStyle={true}
                             value={options.find(option => option.value === selectedValue) || null}
                             options={options}
