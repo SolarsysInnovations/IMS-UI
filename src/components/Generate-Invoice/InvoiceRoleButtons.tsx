@@ -99,13 +99,13 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
             case Roles.STANDARDUSER:
                 if (invoiceData.invoiceStatus === InvoiceStatus.DRAFT || invoiceData.invoiceStatus === InvoiceStatus.RETURNED) {
                     allOptions.push(InvoiceOptions.SENT_TO_APPROVER);
+                } else if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
+                    allOptions.push(InvoiceOptions.PAID)
                 }
                 break;
             case Roles.APPROVER:
                 if (invoiceData.invoiceStatus === InvoiceStatus.PENDING) {
                     allOptions.push(InvoiceOptions.APPROVE, InvoiceOptions.RETURN);
-                } else if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
-                    allOptions.push(InvoiceOptions.PAID);
                 }
                 break;
             default:
@@ -143,9 +143,9 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
         });
     };
 
-    if (invoiceData.invoiceStatus === InvoiceStatus.PAID) {
-        return null; // Don't render anything if invoiceStatus is "PAID"
-    }
+    // if (invoiceData.invoiceStatus === InvoiceStatus.PAID) {
+    //     return null; // Don't render anything if invoiceStatus is "PAID"
+    // }
 
     return (
         <Box gap={2} sx={{ display: "flex", justifyContent: "right" }}>
