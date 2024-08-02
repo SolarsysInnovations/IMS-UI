@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
-import ToastUi from "../../components/ui/ToastifyUi";
 import Container from "@mui/material/Container";
 import About from "../about/About";
 import TaxConfig from "./TaxConfig";
@@ -47,7 +46,6 @@ const SettingScreen = () => {
 
   return (
     <React.Fragment>
-      <ToastUi autoClose={1000} />
       <Tabs value={currentTabIndex} variant="fullWidth" onChange={handleTabChange}>
         <Tab label="Company Settings" />
         <Tab label="Portals" />

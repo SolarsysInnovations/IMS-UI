@@ -1,4 +1,4 @@
-import {API_URLS } from '../../constants/api-urls';
+import { API_URLS } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
 
@@ -30,9 +30,7 @@ export const reportApi = apiSlice.injectEndpoints({
             query: () => ({
                 url: API_URLS.reportList,
                 method: 'POST',
-                
-
-            }), keepUnusedDataFor: 5 * 60 * 1000, 
+            }), keepUnusedDataFor: 5 * 60 * 1000,
         }),
         getReportById: builder.mutation<any, Partial<any>>({
             query: (reports) => ({
@@ -52,4 +50,4 @@ export const reportApi = apiSlice.injectEndpoints({
 });
 export const { setReportData, setReportLoading, setReportError } = reportSlice.actions;
 export { reportSlice };
-export const { useGetReportByIdMutation,useGetReportInvoiceByIdMutation, useGetReportQuery } = reportApi;
+export const { useGetReportByIdMutation, useGetReportInvoiceByIdMutation, useGetReportQuery } = reportApi;

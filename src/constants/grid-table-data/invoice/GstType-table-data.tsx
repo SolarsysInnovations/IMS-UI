@@ -5,7 +5,6 @@ import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch, useSelector } from "react-redux";
 import EditIcon from '@mui/icons-material/Edit';
 import { useDeleteGstTypeMutation, useGetGstTypeQuery, useGstTypeGetByIdMutation } from "../../../redux-store/invoice/gstTypeApi";
-import { ToastContainer, toast } from "react-toastify";
 import { setData, clearData } from "../../../redux-store/global/globalState";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
@@ -50,7 +49,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
         </Stack>
     );
 };
-export const gstTypeColumns : GridColDef[] = [
+export const gstTypeColumns: GridColDef[] = [
 
     {
         field: 'gstName',

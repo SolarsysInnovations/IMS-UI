@@ -472,7 +472,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             disabled
                                             required={true}
                                             label="Start Date"
-                                            onChange={(date: Date) => {
+                                            onChange={(date: string) => {
                                                 setFieldValue("startDate", date);
                                             }}
                                             value={values.startDate}
@@ -485,7 +485,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             disabled
                                             required={true}
                                             label="Due Date"
-                                            onChange={(date: Date) => {
+                                            onChange={(date: string) => {
                                                 setFieldValue("dueDate", date);
                                             }}
                                             value={values.dueDate}

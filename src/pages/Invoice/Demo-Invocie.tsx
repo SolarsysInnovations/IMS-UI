@@ -11,15 +11,6 @@ import SelectDropdown from '../../components/ui/SelectDropdown';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { useGetServiceQuery } from '../../redux-store/service/serviceApi';
 import { useAddCustomerMutation, useGetCustomersQuery } from '../../redux-store/customer/customerApi';
-import { toastConfig } from '../../constants/forms/config/toastConfig';
-import { ToastContainer, toast } from 'react-toastify';
-import { customerFields, invoiceFields } from '../../constants/form-data/form-data-json';
-import { customerInitialValues } from '../../constants/forms/formikInitialValues';
-import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
-import { customerValidationSchema, invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
-import useSuccessToast from '../../hooks/useToast';
-import { generateOptions } from '../../services/utils/dropdownOptions';
-import { updateFieldOptions } from '../../services/utils/formFieldoptions';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -27,8 +18,6 @@ interface Service {
     serviceDescription: string;
     serviceAmount: number;
 }
-
-
 
 export default function DemoInvoice() {
     const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();

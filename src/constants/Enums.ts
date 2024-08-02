@@ -20,3 +20,21 @@ export enum Roles {
     APPROVER = "APPROVER",
     STANDARDUSER = "STANDARDUSER"
 }
+
+
+// src/constants/invoiceEnums.ts
+
+export enum InvoiceStatus {
+    DRAFT = "DRAFT",
+    PENDING = "PENDING",
+    APPROVED = "APPROVED",
+    RETURNED = "RETURNED",
+    PAID = "PAID",
+}
+
+export enum InvoiceOptions {
+    APPROVE = "APPROVE",
+    RETURN = "RETURN",
+    PAID = "PAID",
+    SENT_TO_APPROVER = "Sent to Approver",
+}

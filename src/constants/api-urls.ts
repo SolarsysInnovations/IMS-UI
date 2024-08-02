@@ -6,6 +6,14 @@ export const BASE_LOCAL_URL = NODE_URL;
 
 export enum ApiEndpoint {
     LOGIN = "login",
+
+    // user
+    USER_LIST = "userList",
+    USER_CREATE = "userCreate",
+    USER_UPDATE = "userUpdate",
+    USER_DELETE = "userDelete",
+    USER_GET = "userGet",
+
     // customer
     CUSTOMER_LIST = "customerList",
     CUSTOMER_CREATE = "customerCreate",
@@ -69,8 +77,7 @@ export enum ApiEndpoint {
     COMPANY_CREATE = "companyCreate",
     COMPANY_UPDATE = "companyUpdate",
     COMPANY_DELETE = "companyDelete",
-
-}
+};
 
 export type ApiUrls = {
     [key in ApiEndpoint]: string;
@@ -78,6 +85,14 @@ export type ApiUrls = {
 
 export const API_URLS: ApiUrls = {
     [ApiEndpoint.LOGIN]: `/login`,
+
+    // user
+    [ApiEndpoint.USER_LIST]: `/user/list`,
+    [ApiEndpoint.USER_CREATE]: `/user/register`,
+    [ApiEndpoint.USER_UPDATE]: `/user/update`,
+    [ApiEndpoint.USER_DELETE]: `/user/delete`,
+    [ApiEndpoint.USER_GET]: `/user/get`,
+
     // customer endpoints
     [ApiEndpoint.CUSTOMER_LIST]: `/customer/list`,
     [ApiEndpoint.CUSTOMER_CREATE]: `/customer/create`,
@@ -134,8 +149,8 @@ export const API_URLS: ApiUrls = {
     //Changepassword
     [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
     // company
-    [ApiEndpoint.COMPANY_GET]: `/company/list`,
-    [ApiEndpoint.COMPANY_CREATE]: `/company/create`,
+    [ApiEndpoint.COMPANY_GET]: `/company/get`,
+    [ApiEndpoint.COMPANY_CREATE]: `/user/register`,
     [ApiEndpoint.COMPANY_UPDATE]: `/company/update`,
     [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
     [ApiEndpoint.COMPANY_LIST]: `/company/list`,

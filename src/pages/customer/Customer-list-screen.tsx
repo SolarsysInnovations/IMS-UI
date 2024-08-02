@@ -5,7 +5,6 @@ import usePathname from '../../hooks/usePathname'
 import { Add } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { columns } from '../../constants/grid-table-data/customer-table-data'
-import ToastUi from '../../components/ui/ToastifyUi'
 import { useGetCustomersQuery, useUpdateCustomerMutation } from '../../redux-store/customer/customerApi'
 import { Country, State } from 'country-state-city'
 

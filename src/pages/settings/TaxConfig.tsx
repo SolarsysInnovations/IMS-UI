@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Box, Grid, } from '@mui/material';
 import { Formik, Form } from 'formik';
-import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
 import { InvoiceInitialValueProps } from '../../types/types';
@@ -65,7 +64,6 @@ const TaxConfig = () => {
                     <div>
 
                         <TableHeader headerName='Tax Types' />
-                        <ToastUi autoClose={2000} />
 
                         {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
                         <DialogBoxUi
