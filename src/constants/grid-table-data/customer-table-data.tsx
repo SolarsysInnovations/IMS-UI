@@ -80,12 +80,12 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
     return (
         <Stack direction="row" spacing={1}>
-            {role !== "ENDUSER" && (
+            {role !== "STANDARDUSER" && (
                 <StyledIconButton aria-label="" onClick={handleEditClick}>
                     <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
                 </StyledIconButton>
             )}
-            {role !== "ENDUSER" && (
+            {role !== "STANDARDUSER" && (
                 <StyledIconButton aria-label="" onClick={handleDeleteClick}>
                     <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
                 </StyledIconButton>
