@@ -9,7 +9,7 @@ import SplitButton from '../ui/SplitButton';
 import StageStepper from '../ui/StepperUi';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import jsPdf from "jspdf";
 
 interface InvoiceUiProps {
     invoiceData?: any;
@@ -129,7 +129,7 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
             let heightLeft = imgHeight;
             let position = 0;
             heightLeft -= pageHeight;
-            const doc = new jsPDF("p", "mm");
+            const doc = new jsPdf("p", "mm");
             doc.addImage(canvas, "PNG", 0, position, imgWidth, imgHeight, "", "FAST");
             while (heightLeft >= 0) {
                 position = heightLeft - imgHeight;
