@@ -13,7 +13,6 @@ export enum ApiEndpoint {
     USER_UPDATE = "userUpdate",
     USER_DELETE = "userDelete",
     USER_GET = "userGet",
-
     // customer
     CUSTOMER_LIST = "customerList",
     CUSTOMER_CREATE = "customerCreate",
