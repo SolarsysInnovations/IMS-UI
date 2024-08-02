@@ -37,8 +37,8 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
             dataLabels: {
                 enabled: false,
             },
-            colors: ['#F97300', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E'],
-            labels: ["Returned", "Pending", "Approved", "Draft", "Deleted"],
+            colors: ['#F97300', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E', "#E2DFD0"],
+            labels: ["Returned", "Pending", "Approved", "Draft", "Deleted", "Paid"],
             responsive: [
                 {
                     breakpoint: 480,
@@ -66,7 +66,8 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
                     pending.noOfInvoices,
                     approved.noOfInvoices,
                     draft.noOfInvoices,
-                    deleted.noOfInvoices
+                    deleted.noOfInvoices,
+                    paid.noOfInvoices
                 ],
                 options: {
                     ...chartData.options,
@@ -75,7 +76,8 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
                         'Pending',
                         'Approved',
                         'Draft',
-                        'Deleted'
+                        'Deleted',
+                        'Paid',
                     ]
                 }
             });
