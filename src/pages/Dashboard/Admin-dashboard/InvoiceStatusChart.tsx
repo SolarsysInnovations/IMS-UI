@@ -37,7 +37,7 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
             dataLabels: {
                 enabled: false,
             },
-            colors: ['#F97300', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E', "#E2DFD0"],
+            colors: ['#F97300', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E', "#00224D"],
             labels: ["Returned", "Pending", "Approved", "Draft", "Deleted", "Paid"],
             responsive: [
                 {
