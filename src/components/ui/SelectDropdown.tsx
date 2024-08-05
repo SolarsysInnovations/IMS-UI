@@ -1,10 +1,7 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Button, Paper, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { userRole } from '../../constants/data';
-import { Roles } from '../../constants/Enums';
+import { Button, Paper } from '@mui/material';
 
 interface ValueProps {
   value: string;
@@ -42,11 +39,10 @@ export default function SelectDropdown({
   labelText,
   required,
   variant,
-  onChange
+  onChange,
 }: SelectDropdownProps) {
   return (
     <Autocomplete
-
       disabled={disabled}
       defaultValue={defaultValue}
       size='small'
@@ -91,7 +87,7 @@ export default function SelectDropdown({
       renderInput={(params) => <TextField error={error} helperText={helperText} required={required} sx={{ fontSize: "12px !important" }} variant='outlined' {...params} label={labelText} />}
       PaperComponent={({ children }) => {
         return (
-          <Paper>
+          <Paper sx={{ '& .MuiAutocomplete-listbox': { fontSize: '13px' } }}>
             {children}
             {button && (
               <Button
