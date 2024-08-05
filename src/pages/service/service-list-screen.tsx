@@ -3,16 +3,14 @@ import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux-store/store';
+import { AppDispatch, } from '../../redux-store/store';
 import { columns } from '../../constants/grid-table-data/service-table-data';
 import { useGetServiceQuery } from '../../redux-store/service/serviceApi';
 import ModalUi from '../../components/ui/ModalUi';
 import { Box } from '@mui/material';
 import ServiceCreate from './service-create-screen';
 import ServiceEditScreen from './service-edit-screen'; // Import the edit screen
-import SnackBarUi from '../../components/ui/Snackbar';
 
 const ServicesList = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -27,7 +25,6 @@ const ServicesList = () => {
         { label: 'Create Service List', icon: Add, onClick: () => { setOpenModal(true); setEditMode(false); } },
     ];
 
-
     const pathname = usePathname();
     const handleModalClose = () => {
         refetch();
@@ -40,15 +37,9 @@ const ServicesList = () => {
         setOpenModal(true);
     };
 
-
-
     useEffect(() => {
         refetch();
-
     }, []);
-
-    console.log("data", serviceList);
-
 
     return (
         <>

@@ -20,6 +20,8 @@ const CompanyScreen: React.FC = () => {
         }
     }, [companyValue]);
 
+    console.log("mergedData", mergedData);
+
     const mode = companyValue ? 'edit' : 'create';
     useEffect(() => {
         setKey(prev => prev + 1);

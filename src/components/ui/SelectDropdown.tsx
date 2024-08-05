@@ -88,47 +88,24 @@ export default function SelectDropdown({
         },
       }}
       isOptionEqualToValue={(option, value) => option.value === value.value}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          error={error}
-          helperText={helperText}
-          required={required}
-          variant='outlined'
-          sx={{ fontSize: "12px !important" }}
-          label={labelText}
-        />
-      )}
-      renderOption={(props, option) => (
-        <li {...props} style={{
-          backgroundColor: option.value === value?.value ? '#e3f2fd' : 'inherit',
-          fontWeight: option.value === value?.value ? 'bold' : 'normal',
-          padding: '8px', // Adjust padding to make sure text is visible
-        }}>
-          <Typography
-            sx={{
-              fontSize: "12px",
-            }}
-          >
-            {option.label}
-          </Typography>
-        </li>
-      )}
-      PaperComponent={({ children }) => (
-        <Paper>
-          {children}
-          {button && (
-            <Button
-              color="primary"
-              fullWidth
-              sx={{ justifyContent: "flex-start", pl: 2 }}
-              onMouseDown={onMouseDown}
-            >
-              {(Roles.STANDARDUSER !== userRole) ? "+ Add New" : ""}
-            </Button>
-          )}
-        </Paper>
-      )}
+      renderInput={(params) => <TextField error={error} helperText={helperText} required={required} sx={{ fontSize: "12px !important" }} variant='outlined' {...params} label={labelText} />}
+      PaperComponent={({ children }) => {
+        return (
+          <Paper>
+            {children}
+            {button && (
+              <Button
+                color="primary"
+                fullWidth
+                sx={{ justifyContent: "flex-start", pl: 2 }}
+                onMouseDown={onMouseDown}
+              >
+                Add New
+              </Button>
+            )}
+          </Paper>
+        );
+      }}
     />
   );
 }
