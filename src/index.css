@@ -13,7 +13,7 @@ code {
   height: 250px;
 }
 
-.custom-dropdown {
+/* .custom-dropdown {
   width: 100%;
   border-radius: 8px;
   padding: 8px;
@@ -28,7 +28,7 @@ code {
 .custom-dropdown:hover {
   background-color: "action.hover";
   border: 1px solid;
-}
+} */
 
 .custom-dropdown:focus {
   /* border-color: #0a2be5; */
