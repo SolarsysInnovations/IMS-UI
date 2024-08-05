@@ -10,6 +10,7 @@ import { AppDispatch } from '../../redux-store/store';
 import { SuperAdminUsersInitialValueProps } from '../../types/types';
 import { useNavigate } from 'react-router-dom';
 import { superAdminCompanyUsersInitialValues } from '../../constants/forms/formikInitialValues';
+import { useCreateUserMutation, useGetUsersListQuery, useUpdateUserMutation } from '../../redux-store/api/injectedApis';
 
 interface CompanyValueProps {
     companyEditInitialValues: any;
@@ -18,11 +19,11 @@ interface CompanyValueProps {
 
 const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) => {
 
-    const [addCompany, { isLoading: companyAddLoading, isSuccess: companyAddSuccess, isError: companyAddError, error: companyAddErrorObject }] = useAddCompanyMutation();
+    const [addCompany, { isLoading: companyAddLoading, isSuccess: companyAddSuccess, isError: companyAddError, error: companyAddErrorObject }] = useCreateUserMutation();
 
-    const [updateCompany, { isLoading: companyUpdateLoading, isSuccess: companyUpdateSuccess, isError: companyUpdateError, error: companyUpdateErrorObject }] = useUpdateCompanyMutation();
+    const [updateCompany, { isLoading: companyUpdateLoading, isSuccess: companyUpdateSuccess, isError: companyUpdateError, error: companyUpdateErrorObject }] = useUpdateUserMutation();
 
-    const { data: company, error, isLoading, refetch } = useGetCompanyQuery();
+    const { data: company, error, isLoading, refetch } = useGetUsersListQuery();
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
@@ -79,7 +80,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                 };
                 console.log("transformedData", transformedData);
 
-                await updateCompany({ id: companyEditInitialValues.companyId, company: transformedData });
+                await updateCompany({ id: companyEditInitialValues.companyId, data: transformedData });
                 dispatch(clearData());
 
             } else {

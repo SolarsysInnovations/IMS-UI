@@ -84,7 +84,7 @@ export default function SelectDropdown({ applySmallSizeStyle = false, defaultVal
                 sx={{ justifyContent: "flex-start", pl: 2 }}
                 onMouseDown={onMouseDown}
               >
-                {(Roles.STANDARDUSER !== userRole) ? "+ Add New" : ""}
+                Add New
               </Button>
             )}
           </Paper>

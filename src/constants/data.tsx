@@ -26,175 +26,231 @@ import UserScreen from "../pages/company-users/UserScreen";
 import SettingRoleScreen from "../pages/settings/settings-role";
 import DashboardScreen from "../pages/Dashboard/Dashboard";
 
-export const allRoles = [Roles.SUPERADMIN, Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER];
-export const admins = [Roles.ADMIN];
-export const superAdmin = [Roles.SUPERADMIN,];
-export const standardUser = [Roles.STANDARDUSER,];
-export const approver = [Roles.APPROVER,]
-
 const getUserRole = () => {
   return localStorage.getItem('userRole');
 };
-
 export const userRole = getUserRole();
-//console.log("userRole", userRole);
 
-export const routesConfig = [
-  // * -------- login ---------
-  { path: "/login", element: <Login />, allowedRoles: [] },
-  { path: "/unauthorized", element: <Unauthorized />, allowedRoles: [] },
-  { path: "/", element: <Navigate to="/dashboard" />, allowedRoles: [...allRoles] },
-
-  // * -------- dashboard ---------
-  { path: "/dashboard", element: <DashboardScreen />, allowedRoles: [...allRoles] },
-
-  // * ----------- customers ------------
-  { path: "/customer-list", element: <CustomerList />, allowedRoles: [...admins, ...standardUser] },
-  { path: "/customer/create", element: <CustomerScreen />, allowedRoles: [...admins, ...standardUser] },
-
-  // * -------- reports ---------
-  { path: "/reports", element: <Reportscreen />, allowedRoles: [...allRoles] },
-  { path: "/reports/araging", element: <ArAgingscreen />, allowedRoles: [...allRoles] },
-  { path: "/reports/invoice", element: <Reportsinvoice />, allowedRoles: [...allRoles] },
-
-  // * ---------- settings -----------
-  { path: "/settings", element: <SettingScreen />, allowedRoles: [...allRoles] },
-  { path: "/settings/Role", element: <SettingRoleScreen />, allowedRoles: [...superAdmin, ...approver, ...standardUser] },
-  // * ----------- invoice ------------
-  { path: "/invoice/list", element: <InvoiceList />, allowedRoles: [...allRoles] },
-  { path: "/invoice/create", element: <InvoiceCreateScreen />, allowedRoles: [...allRoles] },
-
-  // * --------- service -----------
-  { path: "/services/list", element: <ServicesList />, allowedRoles: [...admins] },
-  { path: "/service/create", element: <CreateServices />, allowedRoles: [...admins] },
-  {
-    path: "/service/edit/:id", element: <ServiceEditScreen onSuccess={function (): void {
-      throw new Error("Function not implemented.");
-    }} />, allowedRoles: [...admins]
-  },
-
-  // * -------- company users ---------
-  { path: "/user/list", element: <UserScreen />, allowedRoles: [...allRoles] },
-
-  // * -------- company ---------
-  { path: "/company", element: <CompanyList />, allowedRoles: [...superAdmin] },
-  { path: "/company/create", element: <CompanyScreen />, allowedRoles: [...superAdmin] },
-
-  // // * -------- super admin ---------
-  // { path: "/super-admin", element: <SuperAdminDashboardScreen />, allowedRoles: [...allRoles] },
-  // { path: "/super-admin/create", element: <CompanyScreen />, allowedRoles: [...allRoles] },
-
-  // // * -------- approver ---------
-  // { path: "/approver", element: <ApproverDashboardScreen />, allowedRoles: [...approver] },
-
-  // // * -------- enduser ---------
-  // { path: "/standarduser", element: <EnduserDashboardScreen />, allowedRoles: [...standardUser] },
-];
 
 export const sidebarTwo = [
   {
     id: 1,
     title: "Dashboard",
+    element: <DashboardScreen />,
     path: "/dashboard",
     icon: Home,
     isParent: false,
-    allowedRoles: [...allRoles]
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
   },
   {
     id: 2,
     title: "Customer",
     path: "/customer-list",
+    element: <CustomerList />,
     icon: GroupIcon,
     isParent: true,
     subItems: [
-      { id: 1, title: "Create Customer", path: "/customer/create" },
+      {
+        id: 1,
+        show: false,
+        title: "Create Customer",
+        path: "/customer/create",
+        element: <CustomerScreen />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      },
     ],
-    allowedRoles: [...admins, ...standardUser]
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
   },
   {
     id: 3,
     title: "Invoices",
     path: "/invoice/list",
+    element: <InvoiceList />,
     icon: ReceiptIcon,
     isParent: true,
-    // subItems: [
-    //   { id: 1, title: "Create", path: "/invoice/create" },
-    // ],
-    allowedRoles: [Roles.APPROVER, Roles.STANDARDUSER, Roles.ADMIN]
+    subItems: [
+      {
+        id: 1,
+        show: false,
+        title: "Create Invoice",
+        path: "/invoice/create",
+        element: <InvoiceCreateScreen />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      },
+    ],
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
   },
   {
     id: 4,
     title: "Services",
     path: "/services/list",
+    element: <ServicesList />,
     icon: MiscellaneousServicesIcon,
     isParent: true,
-    // subItems: [
-    //     { title: "Create Services", path: "/service/create" },
-    // ]
-    allowedRoles: [...admins]
+    subItems: [
+      {
+        id: 1,
+        show: false,
+        title: "Create Services",
+        path: "/service/create",
+        element: <CreateServices />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      },
+      {
+        id: 2,
+        show: false,
+        title: "Edit Service",
+        path: "/service/edit/:id",
+        element: <ServiceEditScreen onSuccess={function (): void { throw new Error("Function not implemented."); }} />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      },
+    ],
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
   },
   {
     id: 5,
     title: "Reports",
+    element: <Reportscreen />,
     path: "/reports",
+    isParent: true,
+    subItems: [
+      {
+        id: 1,
+        show: false,
+        title: "AR Aging Report",
+        path: "/reports/araging",
+        element: <ArAgingscreen />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      },
+      {
+        id: 2,
+        show: false,
+        title: "Invoice Report",
+        path: "/reports/invoice",
+        element: <Reportsinvoice />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      },
+    ],
     icon: TaskIcon,
-    isParent: false,
-    allowedRoles: [...admins, ...standardUser]
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
   },
   {
     id: 6,
     title: "Users",
     path: "/user/list",
+    element: <UserScreen />,
     icon: GroupsIcon,
-    isParent: true,
-    allowedRoles: [Roles.ADMIN],
+    isParent: false,
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
   },
-
-
   {
     id: 7,
     title: "Company",
     path: "/company",
+    element: <CompanyList />,
     icon: Home,
     isParent: true,
-    allowedRoles: [...superAdmin]
+    subItems: [
+      {
+        id: 1,
+        show: false,
+        title: "Create Company",
+        path: "/company/create",
+        element: <CompanyScreen />,
+        allowedRoles: [Roles.SUPERADMIN],
+      },
+    ],
+    allowedRoles: [Roles.SUPERADMIN],
   },
   {
     id: 8,
     title: "Settings",
-    path:
-      userRole === Roles.SUPERADMIN
-        ? "/settings/Role"
-        : userRole === Roles.APPROVER || userRole === Roles.STANDARDUSER
-          ? "/settings/Role"
-          : "/settings",
+    path: "/settings",
+    element: <SettingScreen />,
     icon: SettingsIcon,
-    isParent: false,
-    allowedRoles: [...allRoles],
+    isParent: true,
+    subItems: [
+      {
+        id: 1,
+        show: false,
+        title: "Role Settings",
+        path: "/settings/Role",
+        element: <SettingRoleScreen />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
+      },
+    ],
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
   },
-  // {
-  //   id: 9,
-  //   title: "Super Admin Dashboard",
-  //   path: "/super-admin",
-  //   icon: Home,
-  //   isParent: true,
-  //   allowedRoles: [...allRoles]
-  // },
-  // {
-  //   id: 10,
-  //   title: "Approver Dashboard",
-  //   path: "/approver",
-  //   icon: Home,
-  //   isParent: true,
-  //   allowedRoles: [...allRoles]
-  // },
-
 ];
 
 export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED", "PAID",];
 
+export const applicationUserAccess = {
+  [Roles.SUPERADMIN]: {
+    // customer access
+    canCreateCustomers: false,
+    canViewCustomers: false,
+    canEditCustomers: true,
+    canDeleteCustomers: true,
+    // invoice access
+    canCreateInvoices: true,
+    canViewInvoices: true,
+    canEditInvoices: true,
+    canDeleteInvoices: true,
+    // service access
+    canCreateServices: true,
+    canViewServices: true,
+    canEditServices: true,
+    canDeleteServices: true,
+    // user access
+    canCreateUsers: true,
+    canViewUsers: true,
+    canEditUsers: true,
+    canDeleteUsers: true,
+    // company access
+    canCreateCompanies: false,
+    canViewCompanies: false,
+    canEditCompanies: false,
+    canDeleteCompanies: false,
 
+    // settings access
+    canCreateSettings: true,
+    canViewSettings: true,
+    canEditSettings: true,
+  },
+  [Roles.ADMIN]: {
+    // customer access
+    canCreateCustomers: true,
+    canViewCustomers: true,
+    canEditCustomers: true,
+    canDeleteCustomers: true,
+    // invoice access
+    canCreateInvoices: true,
+    canViewInvoices: true,
+    canEditInvoices: true,
+    canDeleteInvoices: true,
+    // service access
+    canCreateServices: true,
+    canViewServices: true,
+    canEditServices: true,
+    canDeleteServices: true,
+    // user access
+    canCreateUsers: true,
+    canViewUsers: true,
+    canEditUsers: true,
+    canDeleteUsers: true,
+    // company access
+    canCreateCompanies: false,
+    canViewCompanies: false,
+    canEditCompanies: false,
+    canDeleteCompanies: false,
 
-export const invoiceOptionsAccess = {
+    // settings access
+    canCreateSettings: true,
+    canViewSettings: true,
+    canEditSettings: true,
+  },
 
-}
+};
+
+console.log(applicationUserAccess[Roles.ADMIN].canCreateCustomers);
