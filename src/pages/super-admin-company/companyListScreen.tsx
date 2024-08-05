@@ -42,8 +42,6 @@ const CompanyList = () => {
     const [mergedData, setMergedData] = useState<any[]>([]);
     const pathname = usePathname();
 
-    console.log("company", company);
-
     useEffect(() => {
         if (company && !isLoading && !error) {
             const mergedArray = company.map((item: CompanyAdminData) => ({

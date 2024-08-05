@@ -252,3 +252,5 @@ export const applicationUserAccess = {
   },
 
 };
+
+console.log(applicationUserAccess[Roles.ADMIN].canCreateCustomers);
