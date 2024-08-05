@@ -94,27 +94,13 @@ const DashboardScreen = () => {
     };
 
     // Determine the greeting message based on the user's role
-    const getGreetingMessage = () => {
-        switch (userRole) {
-            case Roles.APPROVER:
-                return 'Hello Approver';
-            case Roles.STANDARDUSER:
-                return 'Hello User';
-            case Roles.SUPERADMIN:
-                return 'Hello Super Admin';
-            case Roles.ADMIN:
-                return 'Hello Admin';
-            default:
-                return 'Hello Guest';
-        }
-    };
 
     return (
         <>
             <Box px={0} py={0}>
                 <Grid container spacing={2} mb={2}>
                     <Grid item xs={6} display="flex" alignItems="center">
-                        {getGreetingMessage()}
+                        Hello {userRole}
                     </Grid>
                     <Grid
                         item

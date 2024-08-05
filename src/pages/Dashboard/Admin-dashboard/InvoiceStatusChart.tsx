@@ -86,7 +86,7 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
 
     return (
         <Card sx={{ width: "300px", height: "160px" }}>
-            <div id="chart" style={{ padding: "0px", marginTop: "0px" }}>
+            <div id="chart" style={{ padding: "0px", marginTop: "px" }}>
                 <ReactApexChart options={chartData.options} series={chartData.series} type="donut" />
             </div>
         </Card>
