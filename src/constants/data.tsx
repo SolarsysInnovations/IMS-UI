@@ -8,7 +8,7 @@ import SettingScreen from "../pages/settings/settings";
 import CustomerList from "../pages/customer/Customer-list-screen";
 import InvoiceList from "../pages/Invoice/Invoice-list-screen";
 import ServicesList from "../pages/service/service-list-screen";
-import CreateServices from "../pages/service/create-service-screen";
+import ServiceCreate from "../pages/service/service-create-screen";
 import ServiceEditScreen from "../pages/service/service-edit-screen";
 import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded, SettingsSuggestRounded } from "@mui/icons-material"
 import GroupIcon from '@mui/icons-material/Group';
@@ -93,7 +93,9 @@ export const sidebarTwo = [
         show: false,
         title: "Create Services",
         path: "/service/create",
-        element: <CreateServices />,
+        element: <ServiceCreate onSuccess={function (): void {
+          throw new Error("Function not implemented.");
+        } } />,
         allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
       },
       {

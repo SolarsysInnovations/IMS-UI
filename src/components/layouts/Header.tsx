@@ -8,7 +8,7 @@ import { AppDispatch } from "../../redux-store/store";
 import DialogBoxUi from "../ui/DialogBox";
 import UserProfile from "../../pages/profile/UserProfile";
 import ChangePassword from "../../pages/profile/ChangePassword";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import GroupIcon from "@mui/icons-material/Group";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { capitalize } from "../../services/utils/capitalization";
@@ -65,6 +65,7 @@ export default function Header() {
   const [popUpComponent, setPopUpComponent] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
 
   const userName = useSelector(selectUserName);
   const userRole = useSelector(selectUserRole);
@@ -110,60 +111,56 @@ export default function Header() {
           }}
         >
           <Grid container alignItems="center" spacing={2}>
-            <Grid
-            item
-            xs={6}
-            display="flex"
-            alignItems="center"
-            sx={{ fontWeight: 500 }}
-          >
+            {location.pathname === "/dashboard" && (
+              <Grid item xs={6} display="flex" alignItems="center" sx={{ fontWeight: 500 }}>
                 Hello {userRole}!
-                </Grid>
-            </Grid>
-            <Grid item xs={6} display="flex">
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Tooltip title='Add item'>
-                  <IconButton
-                    sx={{ width: "30px" }}
-                    onClick={handleMenuOpen(setAddMenuAnchorEl)}
-                    size='small'
-                  >
-                    <AddIcon
-                      sx={{
-                        ":hover": {
-                          color: "primary.main",
-                        },
-                        color: "grey.500",
-                        width: "20px",
-                      }}
-                    />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title='Account settings'>
-                  <IconButton
-                    sx={{ width: "30px" }}
-                    onClick={handleMenuOpen(setAnchorEl)}
-                    size='small'
-                  >
-                    <Person
-                      sx={{
-                        ":hover": {
-                          color: "primary.main",
-                        },
-                        color: "grey.500",
-                        width: "20px",
-                      }}
-                    />
-                  </IconButton>
-                </Tooltip>
-                <Typography
-              variant='caption'
-              color='initial'
-            >
-              {capitalize(userName)}
-            </Typography>
-              </Box>
-            </Grid>
+              </Grid>
+            )}
+          </Grid>
+          <Grid item xs={6} display="flex">
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Tooltip title='Add item'>
+                <IconButton
+                  sx={{ width: "30px" }}
+                  onClick={handleMenuOpen(setAddMenuAnchorEl)}
+                  size='small'
+                >
+                  <AddIcon
+                    sx={{
+                      ":hover": {
+                        color: "primary.main",
+                      },
+                      color: "grey.500",
+                      width: "20px",
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title='Account settings'>
+                <IconButton
+                  sx={{ width: "30px" }}
+                  onClick={handleMenuOpen(setAnchorEl)}
+                  size='small'
+                >
+                  <Person
+                    sx={{
+                      ":hover": {
+                        color: "primary.main",
+                      },
+                      color: "grey.500",
+                      width: "20px",
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Typography
+                variant='caption'
+                color='initial'
+              >
+                {capitalize(userName)}
+              </Typography>
+            </Box>
+          </Grid>
         </Toolbar>
         <MenuComponent
           anchorEl={anchorEl}
