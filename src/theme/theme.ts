@@ -113,14 +113,14 @@ const theme = createTheme({
     },
     action: {
       active: "#bdbdbd",
-      hover: "#FFFFFF",
+      hover: "#F3F4F6",
       hoverOpacity: 0.04,
       selected: "#FFFFFF",
       selectedOpacity: 0.08,
       disabled: "#e0e0e0",
       disabledBackground: "#FFFFFF",
       disabledOpacity: 0.10,
-      focus: "#FFFFFF",
+      focus: "#F3F4F6",
       focusOpacity: 0.12,
       activatedOpacity: 0.12,
     }
@@ -369,7 +369,7 @@ const theme = createTheme({
           borderColor: palette.neutral[200], // Border color
           transition: muiTheme.transitions.create(["border-color", "box-shadow"]), // Transition for border-color and box-shadow
           "&:hover": {
-            backgroundColor: palette.action.hover, // Background color on hover
+            // backgroundColor: palette.action.hover, // Background color on hover
           },
           "&:before": {
             display: "none", // Removing default underline
@@ -402,7 +402,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "&:hover": {
-            backgroundColor: palette.action.hover, // Background color on hover
+            // backgroundColor: palette.action.hover, // Background color on hover
             [`& .${outlinedInputClasses.notchedOutline}`]: {
               borderColor: palette.neutral[500], // Border color on hover
             },
@@ -468,7 +468,7 @@ const theme = createTheme({
           fontWeight: 500, // Setting font weight for select text
           lineHeight: "24px", // Setting line height for select text
         },
-      },
+              },
     },
     // Overrides for MuiTextField component
     MuiTextField: {

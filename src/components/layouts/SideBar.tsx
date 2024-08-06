@@ -174,45 +174,51 @@ export default function MainLayout({ children }: MainLayoutProps) {
                           </Typography>
                         }
                       />
-                      {item.subItems && (openIndex === index ? <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} /> : <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} />)}
+                      {item.subItems && item.subItems.some((subItem: any) => subItem.show) && (
+                        openIndex === index ?
+                          <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} /> :
+                          <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} />
+                      )}
 
                     </ListItemButton>
                     {item.subItems && (
                       <Collapse in={openIndex === index} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                          {item.subItems.map((subItem: any, subIndex: number) => (
-                            <ListItemButton
-                              key={subIndex}
-                              sx={{
-                                width: "200px",
-                                "&:hover": {
-                                  backgroundColor: 'rgba(255, 255, 255, 0.067)'
-                                },
-                                backgroundColor: activeItem === subItem.path ? "rgba(255, 255, 255, 0.067) " : "",
-                                paddingTop: "2px",
-                                paddingBottom: "2px",
-                                marginTop: "10px",
-                                transition: "0.2s",
-                                marginLeft: open ? 2 : 2,
-                                borderRadius: "5px",
-                                minHeight: 10,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                              }}
-                              onClick={() => navigate(subItem.path)}
-                            >
-                              <ListItemIcon sx={{ width: 'fit-content', minWidth: '20px !important' }}>
-                                <FiberManualRecordIcon sx={{ width: '10px', color: activeItem === subItem.path ? `primary.main` : `primary.light` }} />
-                              </ListItemIcon>
-                              <ListItemText
-                                primary={
-                                  <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === subItem.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>
-                                    {capitalize(subItem.title)}
-                                  </Typography>
-                                }
-                              />
-                            </ListItemButton>
-                          ))}
+                          {item.subItems
+                            .filter((subItem: any) => subItem.show !== false)
+                            .map((subItem: any, subIndex: number) => (
+                              <ListItemButton
+                                key={subIndex}
+                                sx={{
+                                  width: "200px",
+                                  "&:hover": {
+                                    backgroundColor: 'rgba(255, 255, 255, 0.067)'
+                                  },
+                                  backgroundColor: activeItem === subItem.path ? "rgba(255, 255, 255, 0.067) " : "",
+                                  paddingTop: "2px",
+                                  paddingBottom: "2px",
+                                  marginTop: "10px",
+                                  transition: "0.2s",
+                                  marginLeft: open ? 2 : 2,
+                                  borderRadius: "5px",
+                                  minHeight: 10,
+                                  justifyContent: open ? 'initial' : 'center',
+                                  px: 2.5,
+                                }}
+                                onClick={() => navigate(subItem.path)}
+                              >
+                                <ListItemIcon sx={{ width: 'fit-content', minWidth: '20px !important' }}>
+                                  <FiberManualRecordIcon sx={{ width: '10px', color: activeItem === subItem.path ? `primary.main` : `primary.light` }} />
+                                </ListItemIcon>
+                                <ListItemText
+                                  primary={
+                                    <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === subItem.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>
+                                      {capitalize(subItem.title)}
+                                    </Typography>
+                                  }
+                                />
+                              </ListItemButton>
+                            ))}
                         </List>
                       </Collapse>
                     )}

@@ -18,18 +18,17 @@ import { setData } from "../../redux-store/global/globalState";
 import TableHeader from "../../components/layouts/TableHeader";
 import CompanyDetails from "../../pages/super-admin-company/companyDetailsScreen";
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
+import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from "../../redux-store/api/injectedApis";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
 
-  console.log("id", id);
-
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = React.useState(false);
-  const { data: services, refetch } = useGetCompanyQuery();
+  const { data: services, refetch } = useGetUsersListQuery();
 
-  const [deleteCompany, { isLoading: deleteCompanyLoading, error: deleteCompanyErrorObject, isSuccess: deleteCompanySuccess, isError: deleteCompanyError, data: deletedData, }] = useDeleteCompanyMutation();
+  const [deleteCompany, { isLoading: deleteCompanyLoading, error: deleteCompanyErrorObject, isSuccess: deleteCompanySuccess, isError: deleteCompanyError, data: deletedData, }] = useDeleteUserMutation();
 
-  const [getCompany, { data: companyData }] = useGetCompanyDataByIdMutation();
+  const [getCompany, { data: companyData }] = useGetSingleUserMutation();
   const navigate = useNavigate();
 
   // * --------- delete snackbar -----------

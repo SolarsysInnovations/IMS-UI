@@ -1,5 +1,6 @@
 import SuperAdminDashboardOverview from './SuperAdminDashboardOverview';
 import SuperAdminCustomersList from './SuperAdminCustomersList';
+import { Grid } from '@mui/material';
 
 
 const SuperAdminDashboardScreen = ({ superAdminData, isLoading }: any) => {
@@ -18,12 +19,23 @@ const SuperAdminDashboardScreen = ({ superAdminData, isLoading }: any) => {
 
     return (
         <>
-            {superAdminOverviewData && (
-                <SuperAdminDashboardOverview overviewData={superAdminOverviewData} />
-            )}
-            {companyOverviewData && (
-                <SuperAdminCustomersList superAdminCustomersListData={companyOverviewData} />
-            )}
+          <Grid container spacing={4} p={3}>
+        {superAdminOverviewData && (
+            <Grid item xs={12}>
+                <div style={{ padding: '16px', backgroundColor: '#fff' }}>
+                    <SuperAdminDashboardOverview overviewData={superAdminOverviewData} />
+                </div>
+            </Grid>
+        )}
+        {companyOverviewData && (
+            <Grid item xs={12}>
+                <div style={{ padding: '16px', backgroundColor: '#fff' }}>
+                    <SuperAdminCustomersList superAdminCustomersListData={companyOverviewData} />
+                </div>
+            </Grid>
+        )}
+    </Grid>
+
         </>
     );
 };

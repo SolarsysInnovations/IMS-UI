@@ -10,6 +10,7 @@ import { Roles } from '../../constants/Enums';
 import EndUserDashboardScreen from './standard-user-dashboard/DashboardScreen';
 import SuperAdminDashboardScreen from './super-admin-dashboard/DashboardScreen';
 import AdminDashboardScreen from './Admin-dashboard/Dashboard-screen';
+
 // Option array for dropdown
 const options = [
     { label: "monthly", value: "monthly" },
@@ -18,7 +19,6 @@ const options = [
     { label: "overall", value: "overall" },
 ];
 
- 
 // Utility function to get date range based on selection
 const getDatesForSelection = (selection: string) => {
     const today = dayjs();
@@ -93,11 +93,29 @@ const DashboardScreen = () => {
         }
     };
 
+    // Determine the greeting message based on the user's role
+    const getGreetingMessage = () => {
+        switch (userRole) {
+            case Roles.APPROVER:
+                return 'Hello Approver';
+            case Roles.STANDARDUSER:
+                return 'Hello User';
+            case Roles.SUPERADMIN:
+                return 'Hello Super Admin';
+            case Roles.ADMIN:
+                return 'Hello Admin';
+            default:
+                return 'Hello Guest';
+        }
+    };
+
     return (
         <>
             <Box px={0} py={0}>
                 <Grid container spacing={2} mb={2}>
-                    <Grid item xs={6} display="flex" alignItems="center">Hello Admin</Grid>
+                    <Grid item xs={6} display="flex" alignItems="center">
+                        {getGreetingMessage()}
+                    </Grid>
                     <Grid
                         item
                         xs={6}
@@ -106,6 +124,7 @@ const DashboardScreen = () => {
                         alignItems="center"
                     >
                         <SelectDropdown
+                            variant='standard'
                             applySmallSizeStyle={true}
                             value={options.find(option => option.value === selectedValue) || null}
                             options={options}
@@ -121,8 +140,8 @@ const DashboardScreen = () => {
                     ) : userRole === Roles.SUPERADMIN ? (
                         <SuperAdminDashboardScreen superAdminData={responseData}isLoading={isLoading}  />
                     ) : userRole === Roles.ADMIN ? (
-                        <AdminDashboardScreen isLoading={isLoading} adminData={responseData} />
-                    ) : (<p>something wrong on dashboard</p>)}
+                        <AdminDashboardScreen adminData={responseData} />
+                    ) : (<p>Something went wrong on the dashboard</p>)}
                 </Grid>
             </Box >
             {/* Render data, loading, or error states */}
