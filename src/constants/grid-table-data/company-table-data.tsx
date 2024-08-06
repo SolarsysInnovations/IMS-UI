@@ -7,12 +7,6 @@ import { useEffect } from "react";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
 import ServiceDetails from "../../pages/service/serviceDetails";
-import {
-  useDeleteCompanyMutation,
-  useGetCompanyQuery,
-  useGetCompanyDataByIdMutation,
-  setCompanyData,
-} from "../../redux-store/company/companiesApi";
 import React from "react";
 import { setData } from "../../redux-store/global/globalState";
 import TableHeader from "../../components/layouts/TableHeader";
@@ -42,7 +36,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
   useEffect(() => {
     if (companyData) {
-      dispatch(setCompanyData(companyData));
+      dispatch(setData(companyData));
     }
   }, [companyData, dispatch]);
 
