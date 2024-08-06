@@ -31,7 +31,7 @@ const addMenuItems = [
     title: "PURCHASES",
     items: [
       { icon: <ShoppingCartIcon sx={{ color: "grey.500", marginRight: "10px" }} />, text: "Add Invoice", route: "invoice/create" },
-      { icon: <AddIcon sx={{ color: "grey.500" }} />, text: "Add Report", route: "reports" },
+      { icon: <AddIcon sx={{ color: "grey.500" }} />, text: "Add Report", route: "reports/invoice" },
     ],
   },
 ];
