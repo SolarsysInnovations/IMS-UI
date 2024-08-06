@@ -3,30 +3,30 @@ import { tdsTaxInitialValue } from '../../../constants/forms/formikInitialValues
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { tdsTaxValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { TdsTaxFields } from '../../../constants/form-data/form-data-json';
-import { useAddTdsTaxMutation, useGetTdsTaxQuery, useUpdateTdsTaxMutation } from '../../../redux-store/invoice/tdsTaxApi';
 import { TdsTaxFormProps, TdsTaxProps } from '../../../types/types';
 import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import { Save } from '@mui/icons-material';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
+import { useCreateTdsTaxMutation, useGetTdsTaxListQuery, useUpdateTdsTaxMutation } from '../../../redux-store/api/injectedApis';
 
 
 const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
     const dispatch = useDispatch<AppDispatch>();
 
-    const [addTdsTax, { isLoading: tdsTaxAddLoading, isSuccess: tdsTaxAddSuccess, isError: tdsTaxAddError, error: tdsTaxAddErrorObject }] = useAddTdsTaxMutation();
+    const [addTdsTax, { isLoading: tdsTaxAddLoading, isSuccess: tdsTaxAddSuccess, isError: tdsTaxAddError, error: tdsTaxAddErrorObject }] = useCreateTdsTaxMutation();
 
     const [updateTdsTax, { isLoading: tdsTaxUpdateLoading, isSuccess: tdsTaxUpdateSuccess, isError: tdsTaxUpdateError, error: tdsTaxUpdateErrorObject }] = useUpdateTdsTaxMutation();
 
-    const { data: tdsTaxList, refetch } = useGetTdsTaxQuery();
+    const { data: tdsTaxList, refetch } = useGetTdsTaxListQuery();
 
     const initialValue = tdsTaxValue || tdsTaxInitialValue;
 
     const onSubmit = useMemo(() => async (values: TdsTaxProps, actions: any) => {
         try {
             if (tdsTaxValue) {
-                await updateTdsTax({ id: tdsTaxValue.id, tdsTaxData: values });
+                await updateTdsTax({ id: tdsTaxValue.id, data: values });
             } else {
                 await addTdsTax(values);
             }
@@ -71,7 +71,7 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
                 validationSchema={tdsTaxValidationSchema}
                 onSubmit={onSubmit}
                 buttons={[
-                   { label: 'Save',icon: Save, onClick: onSubmit }
+                    { label: 'Save', icon: Save, onClick: onSubmit }
                 ]}
             />
         </div>

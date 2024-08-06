@@ -1,22 +1,14 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
+import React from 'react'
 import GridDataUi from '../../../components/GridTable/GridData'
-import TableHeader from '../../../components/layouts/TableHeader'
-import usePathname from '../../../hooks/usePathname'
-import { Add } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../../redux-store/store'
-import { useGetServiceQuery } from '../../../redux-store/service/serviceApi'
-import { useGetGstTypeQuery } from '../../../redux-store/invoice/gstTypeApi'
+import { useDispatch, } from 'react-redux'
+import { AppDispatch, } from '../../../redux-store/store'
 import { tdsTaxColumns } from '../../../constants/grid-table-data/invoice/TdsTax-table-data'
-import { useGetTdsTaxQuery } from '../../../redux-store/invoice/tdsTaxApi'
-import SnackBarUi from '../../../components/ui/Snackbar'
-import { MyCellRenderer } from '../../../constants/grid-table-data/invoice/invoice-table-data'
+import { useGetTdsTaxListQuery } from '../../../redux-store/api/injectedApis'
 
 const TdsTaxList = () => {
     const dispatch = useDispatch<AppDispatch>();
 
-    const { data: getTdsTax, error, isLoading, refetch } = useGetTdsTaxQuery();
+    const { data: getTdsTax, error, isLoading, refetch } = useGetTdsTaxListQuery();
 
     return (
         <>

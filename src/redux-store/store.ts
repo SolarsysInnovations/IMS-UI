@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { serviceSlice } from "./service/serviceApi";
-import { customerApi, customerSlice } from "./customer/customerApi";
 import authReducer from './auth/authSlice';
 import { apiSlice } from "./api/apiSlice";
 import { loginApi } from "./auth/loginApi";
 import { globalSlice } from "./global/globalState";
 import snackBarSlice from "./global/snackBarSlice";
+import { customerSlice } from "./slices/slicesList";
 
 export const store = configureStore({
   reducer: {
@@ -20,7 +20,6 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
     apiSlice.middleware,
     loginApi.middleware, // Add loginApi middleware
-    customerApi.middleware,
   ),
 });
 

@@ -5,15 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import { useEffect, useState } from "react";
-import { useDeleteInvoiceMutation, useGetInvoiceQuery, useInvoiceGetByIdMutation } from "../../../redux-store/invoice/invcoiceApi";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../../components/ui/ModalUi";
 import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
-import { setCustomerData, useUpdateCustomerMutation } from "../../../redux-store/customer/customerApi";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
 import { clearData, setData } from "../../../redux-store/global/globalState";
-import SnackBarUi from "../../../components/ui/Snackbar";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import { useDeleteInvoiceMutation, useGetInvoiceListQuery, useGetSingleInvoiceMutation, useUpdateCustomerMutation } from "../../../redux-store/api/injectedApis";
 
 export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     const [downloadPdf, setDownloadPdf] = useState<boolean>(false);
@@ -22,10 +20,8 @@ export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     const [invoiceData, setInvoiceData] = useState<any>();
 
     const handleOpenModal = () => {
-
         setInvoiceData(row);
         setIsModalOpen(true);
-
     };
 
     const handleCloseModal = () => {
@@ -49,11 +45,11 @@ export const DownloadButtonRenderer = ({ row }: { row: any }) => {
 export const MyCellRenderer = ({ row }: { row: any }) => {
 
     const dispatch = useDispatch<AppDispatch>();
-    const { data: invoice, error, isLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
+    const { data: invoice, error, isLoading, refetch: getInvoiceList } = useGetInvoiceListQuery();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [invoiceData, setInvoiceData] = useState<any>();
     const [deleteInvoice, { isSuccess: invoiceDeleteSuccess, isError: invoiceDeleteError, error: invoiceDeleteErrorObject }] = useDeleteInvoiceMutation();
-    const [getInvoice, { data, isSuccess: getInvoiceSuccess, isError: getInvoiceError, error: getInvoiceErrorObject }] = useInvoiceGetByIdMutation();
+    const [getInvoice, { data, isSuccess: getInvoiceSuccess, isError: getInvoiceError, error: getInvoiceErrorObject }] = useGetSingleInvoiceMutation();
     const navigate = useNavigate();
     const [preview, setPreview] = useState(false);
     const [nestedOpen, setNestedOpen] = useState(false);

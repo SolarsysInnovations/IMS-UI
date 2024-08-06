@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useAddCustomerMutation, useGetCustomersQuery, useUpdateCustomerMutation } from '../../redux-store/customer/customerApi';
 import { customerFields } from '../../constants/form-data/form-data-json';
 import { customerInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
@@ -9,6 +8,7 @@ import { DyCreateCustomerProps } from '../../types/types';
 import { clearData } from '../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
+import { useCreateCustomerMutation, useGetCustomersListQuery, useUpdateCustomerMutation } from '../../redux-store/api/injectedApis';
 
 interface CustomerValueProps {
     customerEditInitialValues: any;
@@ -16,9 +16,9 @@ interface CustomerValueProps {
 
 const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
 
-    const [addCustomer, { isLoading: customerAddLoading, isSuccess: customerAddSuccess, isError: customerAddError, error: customerAddErrorObject }] = useAddCustomerMutation();
+    const [addCustomer, { isLoading: customerAddLoading, isSuccess: customerAddSuccess, isError: customerAddError, error: customerAddErrorObject }] = useCreateCustomerMutation();
     const [updateCustomer, { isLoading: customerUpdateLoading, isSuccess: customerUpdateSuccess, isError: customerUpdateError, error: customerUpdateErrorObject }] = useUpdateCustomerMutation();
-    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
+    const { data: customers, error, isLoading, refetch } = useGetCustomersListQuery();
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -50,7 +50,7 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
         try {
             if (customerEditInitialValues) {
                 const id: number = values?.id
-                await updateCustomer({ id: id, customer: values, });
+                await updateCustomer({ id: id, data: values, });
                 dispatch(clearData());
                 actions.resetForm();
             } else {

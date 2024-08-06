@@ -10,7 +10,7 @@ import TextFieldUi from '../../components/ui/TextField';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { useGetServiceQuery } from '../../redux-store/service/serviceApi';
-import { useAddCustomerMutation, useGetCustomersQuery } from '../../redux-store/customer/customerApi';
+import { useCreateCustomerMutation } from '../../redux-store/api/injectedApis';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -20,7 +20,7 @@ interface Service {
 }
 
 export default function DemoInvoice() {
-    const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
+    const [addCustomer, { isLoading, isSuccess, isError, error }] = useCreateCustomerMutation();
     const { data: serviceList } = useGetServiceQuery();
     const [modifiedServiceList, setModifiedServiceList] = React.useState<Service[]>([]);
     const [selectedAccountingCode, setSelectedAccountingCode] = React.useState<string | null>(null);

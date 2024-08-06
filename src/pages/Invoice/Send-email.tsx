@@ -5,7 +5,6 @@ import { Form, Formik } from "formik";
 import { Box, Grid, Button, Typography, IconButton } from "@mui/material";
 import TextFieldUi from "../../components/ui/TextField";
 import ButtonSmallUi from "../../components/ui/ButtonSmall";
-import { useSendEmailNotificationMutation } from "../../redux-store/invoice/invcoiceApi";
 import { SendEmailInitialValueProps } from "../../types/types";
 import { sendEmailValidationSchema } from "../../constants/forms/validations/validationSchema";
 import { SendEmailInitialValue } from '../../constants/forms/formikInitialValues';
@@ -25,8 +24,8 @@ interface SendEmailProps {
 }
 
 const SendEmail: React.FC<SendEmailProps> = ({ onClose }) => {
-  const [sendEmailNotifiction,{ isSuccess: sendEmailSuccess, isError: sendEmailError, error: sendEmailErrorObject }] =
-    useSendEmailNotificationMutation();
+  // const [sendEmailNotifiction, { isSuccess: sendEmailSuccess, isError: sendEmailError, error: sendEmailErrorObject }] =
+  //   useSendEmailNotificationMutation();
   const [emailValues, setemailValues] = useState(SendEmailInitialValue);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showfilename, setShowFileName] = useState<String[]>([]);
@@ -79,8 +78,8 @@ const SendEmail: React.FC<SendEmailProps> = ({ onClose }) => {
       uploadedFiles.forEach((file) => {
         formData.append("file", file);
       });
-      
-      await sendEmailNotifiction(formData);
+
+      // await sendEmailNotifiction(formData);
       resetForm();
       setUploadedFiles([]);
       setShowFileName([]);
@@ -93,13 +92,13 @@ const SendEmail: React.FC<SendEmailProps> = ({ onClose }) => {
     }
   };
 
-  useSnackbarNotifications({
-        success: sendEmailSuccess,
-        error: sendEmailError,
-        successMessage: "Email send successfully",
-        errorMessage: 'Error sending email',
-        errorObject: sendEmailErrorObject,
-    });
+  // useSnackbarNotifications({
+  //   success: sendEmailSuccess,
+  //   error: sendEmailError,
+  //   successMessage: "Email send successfully",
+  //   errorMessage: 'Error sending email',
+  //   errorObject: sendEmailErrorObject,
+  // });
 
   return (
     <>
@@ -201,24 +200,24 @@ const SendEmail: React.FC<SendEmailProps> = ({ onClose }) => {
                   {showfilename && showfilename.map((fileName, index) => (
                     <>
                       <Grid item xs={5}>
-                        <Box sx={{ mt: 1,mb:-1, display: "flex",position:"relative",left:"15px" }}>
+                        <Box sx={{ mt: 1, mb: -1, display: "flex", position: "relative", left: "15px" }}>
                           <Typography>{fileName}</Typography>
                         </Box>
                       </Grid>
                       <Grid item xs={7}>
                         <Box sx={{ mt: 1, display: "flex" }}>
                           <IconButton onClick={() => handleRemoveFile(index)}>
-                            <CancelIcon color="secondary" sx={{ position:"relative"  }}/>
+                            <CancelIcon color="secondary" sx={{ position: "relative" }} />
                           </IconButton>
-                          </Box>
+                        </Box>
                       </Grid>
                     </>
                   ))}
                 </Grid>
                 <Grid container spacing={2}>
                   <Grid item xs={9}>
-                    <Box sx={{ mt: 3, display: "flex",position:"relative",left:"15px" }}>
-                      <Button style={{ height: "26px",width: "fit-content", fontSize: "12px",borderRadius: "8px",boxShadow: "none" }}
+                    <Box sx={{ mt: 3, display: "flex", position: "relative", left: "15px" }}>
+                      <Button style={{ height: "26px", width: "fit-content", fontSize: "12px", borderRadius: "8px", boxShadow: "none" }}
                         component="label"
                         role={undefined}
                         variant="contained"
@@ -234,18 +233,18 @@ const SendEmail: React.FC<SendEmailProps> = ({ onClose }) => {
                             handleFileUpload(event);
                           }}
                         />
-                        
-                      </Button> 
+
+                      </Button>
                     </Box>
                   </Grid>
                   <Grid item xs={2}>
-                    <Box sx={{ mt: 3,gap: 1, display: "flex" }}>
-                      <ButtonSmallUi color="primary" label="Cancel" size="small" variant="contained" type="button" onClick={() => navigate(-1) } />
-                      <ButtonSmallUi color="primary" label="Send" size="small" variant="contained" type="submit"/>
+                    <Box sx={{ mt: 3, gap: 1, display: "flex" }}>
+                      <ButtonSmallUi color="primary" label="Cancel" size="small" variant="contained" type="button" onClick={() => navigate(-1)} />
+                      <ButtonSmallUi color="primary" label="Send" size="small" variant="contained" type="submit" />
                     </Box>
                   </Grid>
                 </Grid>
-              </Grid>  
+              </Grid>
             </Form>
           </div>
         )}
