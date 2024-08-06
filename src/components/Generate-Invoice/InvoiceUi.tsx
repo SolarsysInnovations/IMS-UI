@@ -88,7 +88,7 @@ function InvoiceUi({
     errorObject: invoiceUpdateErrorObject,
     errorMessage: "Error when sending Invoice to approver",
     success: invoiceUpdateSuccess,
-    successMessage: "Invoice sent to approver and updated successfully",
+    successMessage: "Invoice sent for approver and updated successfully",
   });
 
   useEffect(() => {

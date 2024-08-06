@@ -269,7 +269,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 disabled: !(isValid && dirty),
                             },
                             {
-                                label: 'Sent to Approver', icon: Approval, disabled: !(isValid && dirty), onClick: () => {
+                                label: 'Sent for Approver', icon: Approval, disabled: !(isValid && dirty), onClick: () => {
                                     values.invoiceStatus = "PENDING";
                                     handleSubmit()
                                 }
