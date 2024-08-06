@@ -39,4 +39,4 @@ const ServiceDetails = ({ details }: serviceDetailsProps) => {
     )
 }
 
-export default ServiceDetails
+export default ServiceDetails;

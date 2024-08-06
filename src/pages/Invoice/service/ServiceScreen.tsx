@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import ServiceCreate from '../../service/service-create-screen'
+import ServiceCreate from '../../service/ServiceCreate';
 import { useGetServiceQuery } from '../../../redux-store/service/serviceApi';
 
 const ServiceScreen = () => {
@@ -14,7 +14,7 @@ const ServiceScreen = () => {
 
     return (
         <>
-            <ServiceCreate onSuccess={handleModalClose} />
+            <ServiceCreate serviceValue={} />
             {/* <ServicesList /> */}
         </>
     )

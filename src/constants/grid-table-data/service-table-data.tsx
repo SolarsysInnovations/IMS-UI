@@ -4,7 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
 import ServiceDetails from "../../pages/service/serviceDetails";
@@ -13,7 +13,7 @@ import usePathname from "../../hooks/usePathname";
 import { useDeleteServiceMutation, useGetServiceQuery, useGetServiceByIdMutation, useUpdateServiceMutation, setServiceData, clearServiceData } from "../../redux-store/service/serviceApi";
 import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
 import React from "react";
-import ServiceEditScreen from "../../pages/service/service-edit-screen";
+import ServiceCreate from "../../pages/service/ServiceCreate";
 
 const id = 1
 
@@ -24,7 +24,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     const { data: services, error, isLoading, refetch } = useGetServiceQuery();
     const [deletedService, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteServiceMutation<{ deletedService: any, error: any, isLoading: any, isSuccess: any, data: any }>();
     const [getService, { data: serviceData, isSuccess: C_success, isError: C_error }] = useGetServiceByIdMutation<{ data: any, isSuccess: any, isError: any }>();
-
+    const [servicesData, setServicesData] = useState<any>();
     useEffect(() => {
         dispatch(setServiceData(serviceData));
     }, [serviceData, dispatch, C_success])
@@ -56,7 +56,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             const response = await getService(id);
             if ('data' in response) {
                 const serviceData = response.data;
-                await dispatch(setServiceData(serviceData));
+                await setServicesData(serviceData);
                 setOpenModal(true);
             } else {
                 console.error('Error response:', response.error);
@@ -85,7 +85,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             </IconButton> */}
             <ModalUi open={openModal} onClose={handleModalClose}>
                 <Box sx={{ marginTop: "15px" }}>
-                    <ServiceEditScreen onSuccess={handleModalClose} />
+                    <ServiceCreate serviceValue={servicesData || {}}  />
                 </Box>
             </ModalUi>
         </Stack>

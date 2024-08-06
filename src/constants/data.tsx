@@ -7,9 +7,8 @@ import Reportsinvoice from "../pages/reports/Reports-invoice";
 import SettingScreen from "../pages/settings/settings";
 import CustomerList from "../pages/customer/Customer-list-screen";
 import InvoiceList from "../pages/Invoice/Invoice-list-screen";
-import ServicesList from "../pages/service/service-list-screen";
-import ServiceCreate from "../pages/service/service-create-screen";
-import ServiceEditScreen from "../pages/service/service-edit-screen";
+import ServicesList from "../pages/service/ServiceList";
+import ServiceCreate from "../pages/service/ServiceCreate";
 import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded, SettingsSuggestRounded } from "@mui/icons-material"
 import GroupIcon from '@mui/icons-material/Group';
 import ReceiptIcon from '@mui/icons-material/Receipt';
@@ -88,24 +87,14 @@ export const sidebarTwo = [
     icon: MiscellaneousServicesIcon,
     isParent: true,
     subItems: [
-      {
-        id: 1,
-        show: false,
-        title: "Create Services",
-        path: "/service/create",
-        element: <ServiceCreate onSuccess={function (): void {
-          throw new Error("Function not implemented.");
-        } } />,
-        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-      },
-      {
-        id: 2,
-        show: false,
-        title: "Edit Service",
-        path: "/service/edit/:id",
-        element: <ServiceEditScreen onSuccess={function (): void { throw new Error("Function not implemented."); }} />,
-        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-      },
+      // {
+      //   id: 1,
+      //   show: false,
+      //   title: "Create/Edit Service",
+      //   path: "/service/:id?", // Optional parameter for edit mode
+      //   element: <ServiceCreate />,
+      //   allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      // },
     ],
     allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
   },
