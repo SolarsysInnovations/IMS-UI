@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton, Box, Menu, MenuItem, ListItemIcon, Divider, Tooltip, Typography } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Box, Menu, MenuItem, ListItemIcon, Tooltip, Typography, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { AccountCircle, Logout, PersonAdd, Settings, Person, Lock } from "@mui/icons-material";
@@ -45,17 +45,16 @@ const MenuComponent = ({ anchorEl, open, handleClose, menuItems, onMenuItemClick
     transformOrigin={{ horizontal: "right", vertical: "top" }}
     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
   >
-    {" "}
     {menuItems.map((item: any, index: any) => (
       <MenuItem
         key={index}
         onClick={() => onMenuItemClick(item)}
         sx={{ ":hover": { color: "primary.dark" }, fontSize: "13px" }}
       >
-        {" "}
-        <ListItemIcon sx={{ "& .css-c7koz-MuiSvgIcon-root": { width: "20px" }, ":hover": { color: "primary.dark" } }}> {item.icon} </ListItemIcon> {item.text}{" "}
+        <ListItemIcon sx={{ "& .css-c7koz-MuiSvgIcon-root": { width: "20px" }, ":hover": { color: "primary.dark" } }}>{item.icon}</ListItemIcon>
+        {item.text}
       </MenuItem>
-    ))}{" "}
+    ))}
   </Menu>
 );
 
@@ -106,83 +105,80 @@ export default function Header() {
               paddingLeft: "15px !important",
               paddingRight: "15px !important",
             },
-            justifyContent: "end",
+            justifyContent: "space-between",
             backgroundColor: "#ffffff",
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-            {/* <Typography
-              variant='caption'
-              color='initial'
-            >
-              {capitalize(userRole)}
-            </Typography> */}
-            <Tooltip title='Add item'>
-              <IconButton
-                sx={{ width: "30px" }}
-                onClick={handleMenuOpen(setAddMenuAnchorEl)}
-                size='small'
-              >
-                <AddIcon
-                  sx={{
-                    ":hover": {
-                      color: "primary.main",
-                    },
-                    color: "grey.500",
-                    width: "20px",
-                  }}
-                />
-              </IconButton>
-            </Tooltip>
-            {/* <Tooltip title="Settings"> */}
-            {/* <IconButton sx={{ width: "30px" }} onClick={() => navigate("/settings")}> */}
-            {/* <Settings sx={{
-                  ":hover": {
-                    color: "primary.main"
-                  },
-                  color: 'grey.500', width: "20px"
-                }} /> */}
-            {/* </IconButton> */}
-            {/* </Tooltip> */}
-            <Tooltip title='Account settings'>
-              <IconButton
-                sx={{ width: "30px" }}
-                onClick={handleMenuOpen(setAnchorEl)}
-                size='small'
-              >
-                <Person
-                  sx={{
-                    ":hover": {
-                      color: "primary.main",
-                    },
-                    color: "grey.500",
-                    width: "20px",
-                  }}
-                />
-              </IconButton>
-            </Tooltip>
-            <Typography
+          <Grid container alignItems="center" spacing={2}>
+            <Grid
+            item
+            xs={6}
+            display="flex"
+            alignItems="center"
+            sx={{ fontWeight: 500 }}
+          >
+                Hello {userRole}!
+                </Grid>
+            </Grid>
+            <Grid item xs={6} display="flex">
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Tooltip title='Add item'>
+                  <IconButton
+                    sx={{ width: "30px" }}
+                    onClick={handleMenuOpen(setAddMenuAnchorEl)}
+                    size='small'
+                  >
+                    <AddIcon
+                      sx={{
+                        ":hover": {
+                          color: "primary.main",
+                        },
+                        color: "grey.500",
+                        width: "20px",
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title='Account settings'>
+                  <IconButton
+                    sx={{ width: "30px" }}
+                    onClick={handleMenuOpen(setAnchorEl)}
+                    size='small'
+                  >
+                    <Person
+                      sx={{
+                        ":hover": {
+                          color: "primary.main",
+                        },
+                        color: "grey.500",
+                        width: "20px",
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Typography
               variant='caption'
               color='initial'
             >
               {capitalize(userName)}
             </Typography>
-          </Box>
-          <MenuComponent
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            handleClose={handleMenuClose(setAnchorEl)}
-            menuItems={menuItems}
-            onMenuItemClick={handleMenuItemClick}
-          />
-          <MenuComponent
-            anchorEl={addMenuAnchorEl}
-            open={Boolean(addMenuAnchorEl)}
-            handleClose={handleMenuClose(setAddMenuAnchorEl)}
-            menuItems={addMenuItems.flatMap((group) => group.items)}
-            onMenuItemClick={handleMenuItemClick}
-          />
+              </Box>
+            </Grid>
         </Toolbar>
+        <MenuComponent
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          handleClose={handleMenuClose(setAnchorEl)}
+          menuItems={menuItems}
+          onMenuItemClick={handleMenuItemClick}
+        />
+        <MenuComponent
+          anchorEl={addMenuAnchorEl}
+          open={Boolean(addMenuAnchorEl)}
+          handleClose={handleMenuClose(setAddMenuAnchorEl)}
+          menuItems={addMenuItems.flatMap((group) => group.items)}
+          onMenuItemClick={handleMenuItemClick}
+        />
         <DialogBoxUi
           open={opendialogBox}
           maxwidth={{

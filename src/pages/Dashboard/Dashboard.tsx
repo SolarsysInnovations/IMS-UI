@@ -102,8 +102,7 @@ const DashboardScreen = () => {
   return (
     <>
       <Box px={0} py={0}>
-        <Grid container spacing={2} mb={2}>
-          <Grid
+          {/* <Grid
             item
             xs={6}
             display="flex"
@@ -111,7 +110,7 @@ const DashboardScreen = () => {
             sx={{ fontWeight: 500 }}
           >
             Hello {userRole} !
-          </Grid>
+          </Grid> */}
 
           <Grid
             item
@@ -130,7 +129,6 @@ const DashboardScreen = () => {
               onChange={handleChange}
             />
           </Grid>
-        </Grid>
         <Grid pl={2} mt={3} container spacing={2} mb={2}>
           {userRole === Roles.APPROVER ? (
             <ApproverDashboardScreen approverData={responseData} />
