@@ -33,7 +33,7 @@ const UserForm = ({ userEditValue, mode }: UserValueProps) => {
         errorObject: userAddErrorObject,
         errorMessage: 'Error creating Company',
         success: userAddSuccess,
-        successMessage: 'Company created successfully',
+        successMessage: 'User created successfully',
     });
 
     useSnackbarNotifications({
@@ -41,7 +41,7 @@ const UserForm = ({ userEditValue, mode }: UserValueProps) => {
         errorObject: userUpdateErrorObject,
         errorMessage: 'Error updating Company',
         success: userUpdateSuccess,
-        successMessage: 'Company updated successfully',
+        successMessage: 'User updated successfully',
     });
 
     useEffect(() => {

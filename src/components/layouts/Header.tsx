@@ -26,12 +26,12 @@ const menuItems = [
 const exceptEndUser: any = !Roles.STANDARDUSER;
 
 const addMenuItems = [
-  { title: "CUSTOMERS", items: [exceptEndUser && { icon: <GroupIcon sx={{ color: "grey.500", marginRight: "10px" }} />, text: "Add User", route: "roles/list" }, exceptEndUser && { icon: <AddIcon sx={{ color: "grey.500" }} />, text: "Add Customer", route: "customer/create" }] },
+  // { title: "CUSTOMERS", items: [exceptEndUser && { icon: <GroupIcon sx={{ color: "grey.500", marginRight: "10px" }} />, text: "Add User", route: "roles/list" }, exceptEndUser && { icon: <AddIcon sx={{ color: "grey.500" }} />, text: "Add Customer", route: "customer/create" }] },
   {
     title: "PURCHASES",
     items: [
       { icon: <ShoppingCartIcon sx={{ color: "grey.500", marginRight: "10px" }} />, text: "Add Invoice", route: "invoice/create" },
-      { icon: <AddIcon sx={{ color: "grey.500" }} />, text: "Add Report", route: "reports/invoice" },
+      // { icon: <AddIcon sx={{ color: "grey.500" }} />, text: "Add Report", route: "reports/invoice" },
     ],
   },
 ];

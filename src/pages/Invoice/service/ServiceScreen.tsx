@@ -14,7 +14,7 @@ const ServiceScreen = () => {
 
     return (
         <>
-            <ServiceCreate serviceValue={} />
+            {/* <ServiceCreate serviceValue={} /> */}
             {/* <ServicesList /> */}
         </>
     )
