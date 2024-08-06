@@ -10,7 +10,6 @@ import ErrorIcon from "@mui/icons-material/Error";
 import DoneIcon from "@mui/icons-material/Done";
 import { useState, useEffect } from "react";
 
-
 const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
 
   const [invoiceAmount, setInvoiceAmount] = useState([
@@ -20,7 +19,6 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
       iconBg: "#635bff",
       value: approverOverViewData?.totalInvoices || 0,
       childLabel: "Invoice child label",
-      cardBg: "#e0e0ff",
     },
     {
       label: "Approved Invoices",
@@ -28,7 +26,6 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
       iconBg: "#4E9F3D",
       value: approverOverViewData?.approvedInvoices || 0,
       childLabel: "Invoice child label",
-      cardBg: "#e0ffe0",
     },
     {
       label: "Pending Invoices",
@@ -36,7 +33,6 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
       iconBg: "#FF204E",
       value: approverOverViewData?.pendingInvoices || 0,
       childLabel: "Invoice child label",
-      cardBg: "#ffe0e0",
     },
   ]);
 
@@ -49,7 +45,6 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
           iconBg: "#635bff",
           value: approverOverViewData.totalInvoices,
           childLabel: "Invoice child label",
-          cardBg: "#e0e0ff",
         },
         {
           label: "Approved Invoices",
@@ -57,7 +52,6 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
           iconBg: "#4E9F3D",
           value: approverOverViewData.approvedInvoices,
           childLabel: "Invoice child label",
-          cardBg: "#e0ffe0",
         },
         {
           label: "Pending Invoices",
@@ -65,7 +59,6 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
           iconBg: "#FF204E",
           value: approverOverViewData.pendingInvoices,
           childLabel: "Invoice child label",
-          cardBg: "#ffe0e0",
         },
       ]);
     }
@@ -75,7 +68,7 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
     <Grid container spacing={2}>
       {invoiceAmount.map((data, index) => (
         <Grid key={index} item xs={4}>
-          <Card sx={{ backgroundColor: data.cardBg, width: "180px", height: "80px", padding: "10px 15px" }}>
+          <Card sx={{ width: "180px", height: "80px", padding: "10px 15px" }}>
             <Stack spacing={1}>
               <Stack
                 direction="row"
@@ -88,7 +81,7 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
                   </Typography>
                   <Typography variant="h6">{data.value}</Typography>
                 </Stack>
-                <Avatar sx={{ backgroundColor: "#635bff", height: '30px', width: '30px' }}>
+                <Avatar sx={{ backgroundColor: data.iconBg, height: '30px', width: '30px' }}>
                   {React.createElement(data.icon, { width: 20, height: 20 })}
                 </Avatar>
               </Stack>
@@ -99,9 +92,9 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
                     diff%
                   </Typography>
                 </Stack>
-                <Typography color="text.secondary" variant="caption">
+                {/* <Typography color="text.secondary" variant="caption">
                   Since last
-                </Typography>
+                </Typography> */}
                 {/* {data.months} */}
               </Stack>
             </Stack>

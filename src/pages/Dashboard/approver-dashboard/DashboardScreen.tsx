@@ -1,6 +1,7 @@
 import React from "react";
 import ApproverInvoiceList from "./ApproverInvoiceList";
 import ApproverInvoiceOverView from "./ApproverInvoiceOverView";
+import { Grid } from "@mui/material";
 
 // Define the type for approverData
 interface ApproverData {
@@ -39,12 +40,17 @@ const ApproverDashboardScreen: React.FC<ApproverDashboardScreenProps> = ({
 
   return (
     <>
-      {approverOverViewData && (
-        <ApproverInvoiceOverView approverOverViewData={approverOverViewData} />
-      )}
-      {companyOverviewList && (
-        <ApproverInvoiceList companyOverviewList={companyOverviewList} />
-      )}
+   <Grid container spacing={2}>
+  {approverOverViewData && (
+    <Grid item xs={8}>
+      <ApproverInvoiceOverView approverOverViewData={approverOverViewData} />
+    </Grid>
+  )}
+  </Grid>
+  {companyOverviewList && (
+    
+      <ApproverInvoiceList companyOverviewList={companyOverviewList} />
+  )}
     </>
   );
 };

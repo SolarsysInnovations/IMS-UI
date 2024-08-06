@@ -1,6 +1,7 @@
 import React from "react";
 import StandardUserDashboardOverview from "./StandardUserDashboardOverview";
 import StandardUserInvoiceList from "./StandardUserInvoiceList";
+import { Grid } from "@mui/material";
 
 interface StandardUserData {
   totalInvoices: number;
@@ -37,10 +38,13 @@ const EndUserDashboardScreen: React.FC<EndUserDashboardScreenProps> = ({
   const invoiceListData = standardUserData.allInvoicesList;
 
   return (
-    <>
+    <> <Grid container spacing={2}>
       {approverOverViewData && (
+         <Grid item xs={8}>
         <StandardUserDashboardOverview approverOverViewData={approverOverViewData} />
+        </Grid>
       )}
+      </Grid>
       {invoiceListData && (
         <StandardUserInvoiceList invoiceListData={invoiceListData} />
       )}
