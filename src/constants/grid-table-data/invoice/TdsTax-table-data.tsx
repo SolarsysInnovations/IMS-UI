@@ -5,19 +5,19 @@ import ModalUi from "../../../components/ui/ModalUi";
 import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDeleteInvoiceMutation, useGetInvoiceQuery } from "../../../redux-store/invoice/invcoiceApi";
 import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch } from "react-redux";
 import EditIcon from '@mui/icons-material/Edit';
-import { useDeleteTdsTaxMutation, useGetTdsTaxQuery, useTdsTaxGetByIdMutation } from "../../../redux-store/invoice/tdsTaxApi";
 import { setData, clearData } from "../../../redux-store/global/globalState";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import { useDeleteTdsTaxMutation, useGetSingleTdsTaxMutation, useGetTdsTaxListQuery } from "../../../redux-store/api/injectedApis";
 
 
 const MyCellRenderer = ({ id }: { id: any, }) => {
+
     const dispatch = useDispatch<AppDispatch>();
-    const { data: getTdsTax, refetch } = useGetTdsTaxQuery();
-    const [getPaymentTerm, { }] = useTdsTaxGetByIdMutation();
+    const { data: getTdsTax, refetch } = useGetTdsTaxListQuery();
+    const [getPaymentTerm, { }] = useGetSingleTdsTaxMutation();
     const [deleteTdsTax, { isLoading: tdsTaxDeleteLoading, isSuccess: tdsTaxDeleteSuccess, isError: tdsTaxDeleteError, error: tdsTaxDeleteErrorObject }] = useDeleteTdsTaxMutation();
 
     const handleEditClick = async () => {

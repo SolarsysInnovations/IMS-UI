@@ -1,9 +1,9 @@
 import GridDataUi from '../../../components/GridTable/GridData'
-import { useGetPaymentTermsQuery } from '../../../redux-store/invoice/paymentTerms'
 import { paymentTermsColumns } from '../../../constants/grid-table-data/invoice/PaymentTerms-table-data'
+import { useGetPaymentTermsListQuery } from '../../../redux-store/api/injectedApis';
 
 const PaymentTermsList = () => {
-    const { data: paymentTermsList, error, isLoading, refetch } = useGetPaymentTermsQuery();
+    const { data: paymentTermsList, error, isLoading, refetch } = useGetPaymentTermsListQuery();
 
     return (
         <>

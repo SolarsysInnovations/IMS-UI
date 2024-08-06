@@ -5,24 +5,23 @@ import ModalUi from "../../../components/ui/ModalUi";
 import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDeleteInvoiceMutation, useGetInvoiceQuery } from "../../../redux-store/invoice/invcoiceApi";
 import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch } from "react-redux";
 import EditIcon from '@mui/icons-material/Edit';
-import { useDeletePaymentTermsMutation, useGetPaymentTermsQuery, usePaymentTermsGetByIdMutation } from "../../../redux-store/invoice/paymentTerms";
 import { setData, clearData } from "../../../redux-store/global/globalState";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import { useDeletePaymentTermsMutation, useGetPaymentTermsListQuery, useGetSinglePaymentTermsMutation } from "../../../redux-store/api/injectedApis";
 
 
 const MyCellRenderer = ({ id }: { id: any, }) => {
 
     const dispatch = useDispatch<AppDispatch>();
 
-    const [getPaymentTerm, { }] = usePaymentTermsGetByIdMutation();
+    const [getPaymentTerm, { }] = useGetSinglePaymentTermsMutation();
 
     const [deletePaymentTerms, { isLoading: paymentTermsDeleteLoading, isSuccess: paymentTermsSuccess, error: paymentTermsErrorObject, isError: paymentTermsError }] = useDeletePaymentTermsMutation();
 
-    const { data: getPaymentTermsList, refetch } = useGetPaymentTermsQuery();
+    const { data: getPaymentTermsList, refetch } = useGetPaymentTermsListQuery();
 
     const handleEditClick = async () => {
         try {
