@@ -7,21 +7,35 @@ import { useNavigate } from 'react-router-dom'
 import { columns } from '../../constants/grid-table-data/customer-table-data'
 import { useGetCustomersQuery, useUpdateCustomerMutation } from '../../redux-store/customer/customerApi'
 import { Country, State } from 'country-state-city'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../../redux-store/store'
+import { clearData } from '../../redux-store/global/globalState';
+
 
 const CustomerList = () => {
 
     console.log("Hello world", Country.getAllCountries());
     console.log("Hello world", State.getAllStates());
+    const dispatch = useDispatch<AppDispatch>();
 
     const [updateCustomer, { isSuccess, isError }] = useUpdateCustomerMutation();
     const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
 
     const role = localStorage.getItem("userRole");
-    const buttons = [];
+    // const buttons = [];
 
-    if (role != "APPROVER" && role != "STANDARDUSER") {
-        buttons.push({ label: 'Create Customer', icon: Add, onClick: () => navigate("/customer/create") })
-    }
+    const buttons = [
+        {
+            label: 'Create Customer', icon: Add, onClick: () => {
+                dispatch(clearData())
+                navigate("/customer/create")
+            }
+        },
+    ];
+
+    // if (role != "APPROVER" && role != "STANDARDUSER") {
+    //     buttons.push({ label: 'Create Customer', icon: Add, onClick: () => navigate("/customer/create") })
+    // }
 
     const navigate = useNavigate();
     const pathname = usePathname();
