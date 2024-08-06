@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import ButtonUi from '../ui/Button';
 import { InvoiceOptions, InvoiceStatus, Roles } from '../../constants/Enums';
 import { selectUserRole } from '../../redux-store/auth/authSlice';
-import { useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import SplitButton from '../ui/SplitButton';
 import StageStepper from '../ui/StepperUi';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import html2canvas from 'html2canvas';
-import jsPdf from "jspdf";
+import jsPDF from 'jspdf';
+import { useGetInvoiceListQuery, useUpdateInvoiceMutation } from '../../redux-store/api/injectedApis';
 
 interface InvoiceUiProps {
     invoiceData?: any;
@@ -27,7 +27,7 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
     const userRole = useSelector(selectUserRole);
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const [showTracker, setShowTracker] = useState(false);
-    const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceQuery();
+    const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceListQuery();
 
     useSnackbarNotifications({
         error: invoiceUpdateError,
@@ -36,6 +36,7 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
         success: invoiceUpdateSuccess,
         successMessage: 'Invoice updated successfully',
     });
+
     useEffect(() => {
         if (downloadPdf) {
             printPDF();
@@ -43,8 +44,8 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
     }, [downloadPdf]);
 
     useEffect(() => {
-        refetch()
-    }, [invoiceUpdateSuccess, refetch])
+        refetch();
+    }, [invoiceUpdateSuccess, refetch]);
 
     useEffect(() => {
         if (invoiceData) {
@@ -84,7 +85,7 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
                     console.log("updatedInvoiceData", updatedInvoiceData);
                 }
 
-                await updateInvoice({ id: invoiceData.id, invoiceData: updatedInvoiceData });
+                await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
                 console.log("Updated Invoice Data", updatedInvoiceData);
             } catch (error) {
                 console.log("Error updating invoice data", error);
@@ -100,7 +101,7 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
                 if (invoiceData.invoiceStatus === InvoiceStatus.DRAFT || invoiceData.invoiceStatus === InvoiceStatus.RETURNED) {
                     allOptions.push(InvoiceOptions.SENT_TO_APPROVER);
                 } else if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
-                    allOptions.push(InvoiceOptions.PAID)
+                    allOptions.push(InvoiceOptions.PAID);
                 }
                 break;
             case Roles.APPROVER:
@@ -122,15 +123,15 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
             console.error("Element with id 'invoiceCapture' not found");
             return;
         }
-        html2canvas(element as HTMLElement).then((canvas) => {
+        html2canvas(element as HTMLElement, { scale: 2 }).then((canvas) => {
             const imgWidth = 208;
             const pageHeight = 295;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
             let heightLeft = imgHeight;
             let position = 0;
-            heightLeft -= pageHeight;
-            const doc = new jsPdf("p", "mm");
+            const doc = new jsPDF("p", "mm");
             doc.addImage(canvas, "PNG", 0, position, imgWidth, imgHeight, "", "FAST");
+            heightLeft -= pageHeight;
             while (heightLeft >= 0) {
                 position = heightLeft - imgHeight;
                 doc.addPage();
@@ -142,10 +143,6 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
             doc.save("Downld.pdf");
         });
     };
-
-    // if (invoiceData.invoiceStatus === InvoiceStatus.PAID) {
-    //     return null; // Don't render anything if invoiceStatus is "PAID"
-    // }
 
     return (
         <Box gap={2} sx={{ display: "flex", justifyContent: "right" }}>
@@ -173,14 +170,22 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
                     onMouseLeave={() => setShowTracker(false)}
                 />
                 <Card
-                    sx={{ padding: "20px 25px", position: "absolute", top: -150, right: 0, zIndex: 1300, backgroundColor: "background.paper", borderRadius: "10px", display: showTracker ? "block" : "none", }}
+                    sx={{
+                        padding: "20px 25px",
+                        position: "absolute",
+                        top: -150,
+                        right: 0,
+                        zIndex: 1300,
+                        backgroundColor: "background.paper",
+                        borderRadius: "10px",
+                        display: showTracker ? "block" : "none",
+                    }}
                 >
                     <StageStepper stages={invoiceData.invoiceStages} />
                 </Card>
             </Box>
         </Box>
     );
-}
+};
 
 export default InvoiceRoleButtons;
-

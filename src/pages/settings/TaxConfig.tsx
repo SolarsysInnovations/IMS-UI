@@ -6,9 +6,6 @@ import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialVa
 import { InvoiceInitialValueProps } from '../../types/types';
 import { generateOptions } from '../../services/utils/dropdownOptions';
 import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
-import { useGetGstTypeQuery } from '../../redux-store/invoice/gstTypeApi';
-import { useGetTdsTaxQuery } from '../../redux-store/invoice/tdsTaxApi';
-import { useGetPaymentTermsQuery } from '../../redux-store/invoice/paymentTerms';
 import { addDays, format } from 'date-fns';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import GstTypeScreen from '../Invoice/GstType/GstTypeScreen';
@@ -16,16 +13,16 @@ import PaymentTermsScreen from '../Invoice/paymentTerms/PaymentTermsScreen';
 import TdsTaxScreen from '../Invoice/TdsTax/TdsTaxScreen';
 import ServiceScreen from '../Invoice/service/ServiceScreen';
 import TableHeader from '../../components/layouts/TableHeader';
-
+import { useGetGstTypeListQuery, useGetPaymentTermsListQuery, useGetTdsTaxListQuery } from '../../redux-store/api/injectedApis';
 
 const TaxConfig = () => {
     const [popUpComponent, setPopUpComponent] = useState("");
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
     // * * * * * * * grid table states * * * * * * * * *
-    const { data: paymentTerms } = useGetPaymentTermsQuery();
+    const { data: paymentTerms } = useGetPaymentTermsListQuery();
     const [invoiceValues, setInvoiceValues] = useState(invoiceCreateInitialValue);
-    const { data: gstTypesData = [] } = useGetGstTypeQuery();
-    const { data: tdsTaxData = [] } = useGetTdsTaxQuery();
+    const { data: gstTypesData = [] } = useGetGstTypeListQuery();
+    const { data: tdsTaxData = [] } = useGetTdsTaxListQuery();
 
     // * ----------- to generate the dropdown options -------------
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
@@ -98,7 +95,7 @@ const TaxConfig = () => {
                                             button={true}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    const selectedGstType = gstTypesData.find((item) => item.gstName === newValue.value)
+                                                    const selectedGstType = gstTypesData.find((item: any) => item.gstName === newValue.value)
                                                     if (selectedGstType) {
                                                         setFieldValue("gstPercentage", selectedGstType.gstPercentage)
                                                         setFieldValue("gstType", newValue.value)
@@ -169,7 +166,7 @@ const TaxConfig = () => {
                                             width='150px'
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    const selectedTdsTax = tdsTaxData.find((item) => item.taxName === newValue.value);
+                                                    const selectedTdsTax = tdsTaxData.find((item: any) => item.taxName === newValue.value);
                                                     if (selectedTdsTax) {
                                                         setFieldValue("taxAmount.tds", newValue.value)
                                                     } else {

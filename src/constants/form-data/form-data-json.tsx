@@ -1,14 +1,5 @@
-import { Add } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 import { FieldProps } from "../../types/types";
-import { useGetCustomersQuery } from "../../redux-store/customer/customerApi";
-import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
-import { useState } from "react";
-import { Country, State, City } from 'country-state-city';
-import { generateOptions } from '../../services/utils/dropdownOptions';
-
-
 
 export const customerFields: FieldProps[] = [
     {
