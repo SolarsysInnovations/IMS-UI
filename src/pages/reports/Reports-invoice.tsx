@@ -108,15 +108,15 @@ const Reportsinvoice: React.FC = () => {
                                                         setFieldValue('startDate', "")
                                                         setFieldValue("endDate", "")
                                                     }
-                                                    setFieldValue("invoiceDate", newValue.value)
+                                                   // setFieldValue("invoiceDate", newValue.value)
                                                 } else {
                                                     setFieldValue("invoiceDate", "")
                                                 }
                                             }}
                                             options={invoiceDate}
-                                            value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
+                                          //  value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                                             labelText='Select'
-                                            error={touched.invoiceDate && Boolean(errors.invoiceDate)}
+                                           // error={touched.invoiceDate && Boolean(errors.invoiceDate)}
                                         // helperText={touched.invoiceDate && errors.invoiceDate}
                                         />
                                     </Box>
@@ -135,7 +135,7 @@ const Reportsinvoice: React.FC = () => {
                                     <Box>
                                         <DatePickerUi
                                             label="End Date"
-                                            onChange={(date: any) => console.log(date)}
+                                            onChange={(date: any) => setFieldValue("endDate", date)}
                                             value={values.endDate}
                                         />
                                     </Box>

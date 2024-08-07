@@ -14,7 +14,7 @@ const CompanyScreen: React.FC = () => {
         if (companyValue) {
             const mergedObject = {
                 ...companyValue.companyDetails,
-                ...companyValue.adminDetails
+                ...companyValue.userDetails
             };
             setMergedData(mergedObject);
         }

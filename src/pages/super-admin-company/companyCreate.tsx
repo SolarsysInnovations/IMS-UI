@@ -57,7 +57,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
         try {
             if (mode === 'edit' && companyEditInitialValues) {
                 const transformedData = {
-                    adminDetails: {
+                    userDetails: {
                         userName: values.userName,
                         userEmail: values.userEmail,
                         // password: values.password,
@@ -84,22 +84,25 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
 
             } else {
                 const transformedData = {
-                    userName: values.userName,
-                    userEmail: values.userEmail,
-                    password: values.password,
-                    userRole: values.userRole,
-                    userMobile: values.userMobile,
-                    description: values.description,
-
-                    companyName: values.companyName,
-                    companyAddress: values.companyAddress,
-                    companyState: values.companyState,
-                    companyCountry: values.companyCountry,
-                    companyEmail: values.companyEmail,
-                    companyPhone: values.companyPhone,
-                    companyWebsite: values.companyWebsite,
-                    companyTaxNumber: values.companyTaxNumber,
-                    companyRegNumber: values.companyRegNumber
+                    userDetails: {
+                        userName: values.userName,
+                        userEmail: values.userEmail,
+                        password: values.password,
+                        userRole: values.userRole,
+                        userMobile: values.userMobile,
+                        description: values.description,
+                    },
+                    companyDetails: {
+                        companyName: values.companyName,
+                        companyAddress: values.companyAddress,
+                        companyState: values.companyState,
+                        companyCountry: values.companyCountry,
+                        companyEmail: values.companyEmail,
+                        companyPhone: values.companyPhone,
+                        companyWebsite: values.companyWebsite,
+                        companyTaxNumber: values.companyTaxNumber,
+                        companyRegNumber: values.companyRegNumber
+                    },
                 };
                 await addCompany(transformedData);
                 dispatch(clearData());

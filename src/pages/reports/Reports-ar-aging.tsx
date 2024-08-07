@@ -113,9 +113,9 @@ const ArAgingscreen: React.FC = () => {
                                                 }
                                             }}
                                             options={invoiceDate}
-                                            value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
+                                          //  value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                                             labelText='Select'
-                                            error={touched.invoiceDate && Boolean(errors.invoiceDate)}
+                                           // error={touched.invoiceDate && Boolean(errors.invoiceDate)}
                                         // helperText={touched.invoiceDate && errors.invoiceDate}
                                         />
                                     </Box>
@@ -134,7 +134,7 @@ const ArAgingscreen: React.FC = () => {
                                     <Box>
                                         <DatePickerUi
                                             label="End Date"
-                                            onChange={(date: any) => console.log(date)}
+                                            onChange={(date: any) => setFieldValue("endDate", date)}
                                             value={values.endDate}
                                         />
                                     </Box>
