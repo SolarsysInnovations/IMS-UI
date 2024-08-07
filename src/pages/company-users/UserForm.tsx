@@ -64,13 +64,15 @@ const UserForm = ({ userEditValue, mode }: UserValueProps) => {
                 await updateUser({ id: id, data: userPayload });
             } else {
                 const userPayload = {
-                    userName: values.userName,
-                    userEmail: values.userEmail,
-                    password: values.password,
-                    userRole: values.userRole,
-                    userMobile: values.userMobile,
-                    description: values.description,
-                }
+                    userDetails: {
+                        userName: values.userName,
+                        userEmail: values.userEmail,
+                        password: values.password,
+                        userRole: values.userRole,
+                        userMobile: values.userMobile,
+                        description: values.description,
+                    }
+                };
                 await addUser(userPayload);
             }
             dispatch(clearData());

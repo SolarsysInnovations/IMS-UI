@@ -75,6 +75,10 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     const [deleteRole, { isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteUserMutation();
 
     useEffect(() => {
+        refetch();
+    }, [roleDeleteSuccess]);
+
+    useEffect(() => {
         dispatch(setRoleData(roleData));
     }, [roleData, dispatch, C_success])
 
