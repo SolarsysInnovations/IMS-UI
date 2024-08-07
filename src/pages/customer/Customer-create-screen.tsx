@@ -37,7 +37,7 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
         errorObject: customerUpdateErrorObject,
         errorMessage: 'Error updating Customer',
         success: customerUpdateSuccess,
-        successMessage: 'Customer update successfully',
+        successMessage: 'Customer updated successfully',
     });
 
     useEffect(() => {
