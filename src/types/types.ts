@@ -172,9 +172,9 @@ export interface ArAgingInitialValueProps {
 
 // ---------- service  --------------------
 export interface serviceCreationProps {
-    serviceAccountingcode: string;
-    description: string;
-    amount: number;
+    serviceAccountingCode: string;
+    serviceDescription: string;
+    serviceAmount: number;
 };
 //----------settings--------
 export interface SuperAdminUsersInitialValueProps {

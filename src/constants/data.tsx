@@ -172,7 +172,7 @@ export const sidebarTwo = [
         show: false,
         title: "Edit Service",
         path: "/service/edit/:id",
-        element: <ServiceEditScreen onSuccess={function (): void { throw new Error("Function not implemented."); }} />,
+        element: <ServiceEditScreen />,
         allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
       },
     ],

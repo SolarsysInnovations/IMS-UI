@@ -5,27 +5,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import { useEffect, useState } from "react";
-import { useDeleteInvoiceMutation, useGetInvoiceQuery, useInvoiceGetByIdMutation } from "../../../redux-store/invoice/invcoiceApi";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../../components/ui/ModalUi";
 import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
-import { setCustomerData, useUpdateCustomerMutation } from "../../../redux-store/customer/customerApi";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
-import { clearData, setData } from "../../../redux-store/global/globalState";
-import SnackBarUi from "../../../components/ui/Snackbar";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import { useDeleteInvoiceMutation, useGetInvoiceListQuery, useGetSingleInvoiceMutation, useUpdateCustomerMutation } from "../../../redux-store/api/injectedApis";
+import { clearInvoiceData, setInvoiceData } from "../../../redux-store/slices/invoiceSlice";
 
 export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     const [downloadPdf, setDownloadPdf] = useState<boolean>(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [invoiceData, setInvoiceData] = useState<any>();
+    const [invoiceData, setInvoicesData] = useState<any>();
 
     const handleOpenModal = () => {
-
-        setInvoiceData(row);
+        setInvoicesData(row);
         setIsModalOpen(true);
-
     };
 
     const handleCloseModal = () => {
@@ -49,11 +45,11 @@ export const DownloadButtonRenderer = ({ row }: { row: any }) => {
 export const MyCellRenderer = ({ row }: { row: any }) => {
 
     const dispatch = useDispatch<AppDispatch>();
-    const { data: invoice, error, isLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
+    const { data: invoice, error, isLoading, refetch: getInvoiceList } = useGetInvoiceListQuery();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [invoiceData, setInvoiceData] = useState<any>();
+    const [invoiceData, setInvoicesData] = useState<any>();
     const [deleteInvoice, { isSuccess: invoiceDeleteSuccess, isError: invoiceDeleteError, error: invoiceDeleteErrorObject }] = useDeleteInvoiceMutation();
-    const [getInvoice, { data, isSuccess: getInvoiceSuccess, isError: getInvoiceError, error: getInvoiceErrorObject }] = useInvoiceGetByIdMutation();
+    const [getInvoice, { data, isSuccess: getInvoiceSuccess, isError: getInvoiceError, error: getInvoiceErrorObject }] = useGetSingleInvoiceMutation();
     const navigate = useNavigate();
     const [preview, setPreview] = useState(false);
     const [nestedOpen, setNestedOpen] = useState(false);
@@ -77,7 +73,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
             if ('data' in response) {
                 const invoiceData = response.data;
                 console.log("invoiceData", invoiceData);
-                await dispatch(setData(invoiceData));
+                await dispatch(setInvoiceData(invoiceData));
                 navigate("/invoice/create");
             } else {
                 console.error('Error response:', response.error);
@@ -93,8 +89,8 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
             if ('data' in response) {
                 const invoiceData = response.data;
                 console.log("invoiceData", invoiceData);
-                dispatch(clearData());
-                dispatch(setData(invoiceData));
+                dispatch(clearInvoiceData());
+                dispatch(setInvoiceData(invoiceData));
                 handleOpenModal();
             } else {
                 console.error('Error response:', response.error);
@@ -129,7 +125,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
                 </IconButton>
                 <IconButton sx={{ padding: "3px" }} aria-label="" onClick={() => {
                     handleDetails(row)
-                    setInvoiceData(row)
+                    setInvoicesData(row)
                 }}>
                     <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
                 </IconButton>

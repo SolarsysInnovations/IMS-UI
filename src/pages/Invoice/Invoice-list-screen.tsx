@@ -7,20 +7,12 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { MyCellRenderer } from '../../constants/grid-table-data/invoice/invoice-table-data';
-import { useGetInvoiceQuery } from '../../redux-store/invoice/invcoiceApi';
 import { GridColDef } from '@mui/x-data-grid';
-import { GridRenderCellParams } from '@mui/x-data-grid';
-import { useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { selectUserRole } from '../../redux-store/auth/authSlice';
-import ButtonUi from '../../components/ui/Button';
-import SendEmail from './Send-email';
-import DialogBoxUi from '../../components/ui/DialogBox';
-import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
-import { clearData } from '../../redux-store/global/globalState';
 import useErrorHandler from '../../hooks/useErrorHanlder';
 import { Typography } from '@mui/material';
-const invoiceOptions = ["DRAFT", "PENDING", "APPROVED", "PAID", "OVERDUE", "DELETE", "RETURNED",]
-
+import { useGetInvoiceListQuery } from '../../redux-store/api/injectedApis';
+import { clearInvoiceData } from '../../redux-store/slices/invoiceSlice';
 
 // ! ---------- important const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
 
@@ -147,7 +139,7 @@ const InvoiceList = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const pathname = usePathname();
-    const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceQuery();
+    const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceListQuery();
     const invoiceListErrorMessage = useErrorHandler(errorInvoiceList);
     const role = localStorage.getItem("userRole");
     const buttons = [];
@@ -162,7 +154,12 @@ const InvoiceList = () => {
     // ];
 
     if (role != "APPROVER") {
-        buttons.push({ label: 'Create Invoice', icon: Add, onClick: () => navigate("/invoice/create") })
+        buttons.push({
+            label: 'Create Invoice', icon: Add, onClick: () => {
+                navigate("/invoice/create");
+                dispatch(clearInvoiceData())
+            }
+        })
     }
 
     const columns: GridColDef[] = [

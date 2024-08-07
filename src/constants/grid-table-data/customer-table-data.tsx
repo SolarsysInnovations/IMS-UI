@@ -9,17 +9,17 @@ import { Add, Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
 import CustomerDetails from "../../pages/customer/customerDetails";
 import TableHeader from "../../components/layouts/TableHeader";
-import { setCustomerData, useDeleteCustomerMutation, useGetCustomerByIdMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { styled } from '@mui/system';
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
-import { setData } from "../../redux-store/global/globalState";
+import { useDeleteCustomerMutation, useGetCustomersListQuery, useGetSingleCustomerMutation } from "../../redux-store/api/injectedApis";
+import { setCustomerData } from "../../redux-store/slices/slicesList";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
-    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
+    const { data: customers, error, isLoading, refetch } = useGetCustomersListQuery();
     const [deleteCustomer, { isLoading: deleteCustomerLoading, error: deleteCustomerErrorObject, isSuccess: deleteCustomerSuccess, isError: deleteCustomerError, data: deletedData }] = useDeleteCustomerMutation();
-    const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error, isLoading: getCustomerLoading }] = useGetCustomerByIdMutation();
+    const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error, isLoading: getCustomerLoading }] = useGetSingleCustomerMutation();
     const navigate = useNavigate();
 
     const role = localStorage.getItem("userRole");
@@ -41,7 +41,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             const response = await getCustomer(id);
             if ('data' in response) {
                 const customerData = response.data;
-                await dispatch(setData(customerData));
+                dispatch(setCustomerData(customerData));
                 navigate('/customer/create');
             } else {
                 console.error('Error response:', response.error);

@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useUpdateServiceMutation, useGetServiceQuery } from '../../redux-store/service/serviceApi';
 import { serviceFields } from '../../constants/form-data/form-data-json';
 import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { useGetServiceListQuery, useUpdateServiceMutation } from '../../redux-store/api/injectedApis';
 
-interface ServiceEditScreenProps {
-    onSuccess: () => void;
-}
 
-const ServiceEditScreen: React.FC<ServiceEditScreenProps> = ({ onSuccess }) => {
+
+const ServiceEditScreen = () => {
     const [updateService, { isLoading: serviceUpdateLoading, isSuccess: serviceUpdateSuccess, isError: serviceUpdateError, error: serviceUpdateErrorObject }] = useUpdateServiceMutation();
-    const serviceStateDetails = useSelector((state: any) => state.serviceState.data);
+    const serviceStateDetails = useSelector((state: any) => state.globalState.data);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
-    const { data: service, error, isLoading, refetch } = useGetServiceQuery();
+    const { data: service, error, isLoading, refetch } = useGetServiceListQuery();
     const [isPopupOpen, setIsPopupOpen] = useState(true); // State to control popup visibility
     const handleBackClick = () => {
         navigate(0); // Navigate back
@@ -44,13 +42,6 @@ const ServiceEditScreen: React.FC<ServiceEditScreenProps> = ({ onSuccess }) => {
         successMessage: 'Service updated successfully',
     });
 
-    useEffect(() => {
-        refetch();
-        if (serviceUpdateSuccess) {
-            onSuccess();
-        }
-    }, [serviceUpdateSuccess, refetch, onSuccess]);
-
     const navigate = useNavigate();
     const onSubmit = async (values: any, actions: any) => {
         try {
@@ -59,7 +50,7 @@ const ServiceEditScreen: React.FC<ServiceEditScreenProps> = ({ onSuccess }) => {
             if (id !== undefined) {
                 await updateService({
                     id: id,
-                    service: values,
+                    data: values,
                 });
                 setShowSuccessToast(true);
                 setTimeout(() => {

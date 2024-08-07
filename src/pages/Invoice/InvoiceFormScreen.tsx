@@ -11,29 +11,24 @@ import RadioUi from '../../components/ui/RadioGroup';
 import { Formik, Form } from 'formik';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
-import { useGetCustomersQuery } from '../../redux-store/customer/customerApi';
 import { InvoiceInitialValueProps } from '../../types/types';
-import { useGetServiceQuery } from '../../redux-store/service/serviceApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import ModalUi from '../../components/ui/ModalUi';
 import { generateOptions } from '../../services/utils/dropdownOptions';
-import { useAddInvoiceMutation, useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
 import { invoiceType, } from '../../constants/invoiceData';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
-import { useGetGstTypeQuery } from '../../redux-store/invoice/gstTypeApi';
 import TextAreaUi from '../../components/ui/TextArea';
 import GstTypeScreen from './GstType/GstTypeScreen';
 import TdsTaxScreen from './TdsTax/TdsTaxScreen';
-import { useGetPaymentTermsQuery } from '../../redux-store/invoice/paymentTerms';
 import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
 import { addDays, format } from 'date-fns';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import { useGetTdsTaxQuery } from '../../redux-store/invoice/tdsTaxApi';
-import { clearData, setData } from '../../redux-store/global/globalState';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import ServiceScreen from './service/ServiceScreen';
 import SelectDropdown from '../../components/ui/SelectDropdown';
+import { useCreateInvoiceMutation, useGetCustomersListQuery, useGetGstTypeListQuery, useGetInvoiceListQuery, useGetPaymentTermsListQuery, useGetServiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from '../../redux-store/api/injectedApis';
+import { clearInvoiceData, setInvoiceData } from '../../redux-store/slices/invoiceSlice';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -53,9 +48,9 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const navigate = useNavigate();
     // popUps
     const [popUpComponent, setPopUpComponent] = useState("");
-    const { data: customers, error, isLoading, refetch: customerRefetch } = useGetCustomersQuery();
-    const { data: invoiceList, refetch: invoiceRefetch } = useGetInvoiceQuery();
-    const [addInvoice, { isSuccess: addInvoiceSuccess, isError: addInvoiceError, error: addInvoiceErrorObject }] = useAddInvoiceMutation();
+    const { data: customers, error, isLoading, refetch: customerRefetch } = useGetCustomersListQuery();
+    const { data: invoiceList, refetch: invoiceRefetch } = useGetInvoiceListQuery();
+    const [addInvoice, { isSuccess: addInvoiceSuccess, isError: addInvoiceError, error: addInvoiceErrorObject }] = useCreateInvoiceMutation();
     const [updateInvoice, { isSuccess: invoiceUpdatedSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,13 +62,13 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>();
     // * * * * * * * grid table states * * * * * * * * *
     // const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
-    const { data: serviceList } = useGetServiceQuery();
-    const { data: paymentTerms } = useGetPaymentTermsQuery();
+    const { data: serviceList } = useGetServiceListQuery();
+    const { data: paymentTerms } = useGetPaymentTermsListQuery();
     const [modifiedServiceList, setModifiedServiceList] = React.useState<Service[]>([]);
     const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
     const [invoiceValues, setInvoiceValues] = useState(invoiceValue || invoiceCreateInitialValue);
-    const { data: gstTypesData = [] } = useGetGstTypeQuery();
-    const { data: tdsTaxData = [] } = useGetTdsTaxQuery();
+    const { data: gstTypesData = [] } = useGetGstTypeListQuery();
+    const { data: tdsTaxData = [] } = useGetTdsTaxListQuery();
 
     // * ----------- to generate the dropdown options -------------
     const customerName = generateOptions(customers, 'customerName', 'customerName');
@@ -130,7 +125,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         let tdsTax = null;
         if (selectedTds) {
             let discountedAmount = (subTotalInvoiceAmount - disAmount) * (selectedTds) / 100;
-            console.log('discountedAmount', discountedAmount);
 
             setTdsAmount(discountedAmount);
             tdsTax = discountedAmount;
@@ -229,8 +223,8 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     values.servicesList = invoiceValues.servicesList
                     values.totalAmount = invoiceTotalAmount ?? null;
                     if (invoiceValue) {
-                        await updateInvoice({ id: invoiceValue.id, invoiceData: values });
-                        dispatch(clearData());
+                        await updateInvoice({ id: invoiceValue.id, data: values });
+                        dispatch(clearInvoiceData());
                         resetForm();
                         navigate(-1);
                     } else {
@@ -260,11 +254,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         totalAmount: invoiceTotalAmount ?? null,
                                     }
                                     console.log("updatedValue", updatedValue);
-                                    dispatch(setData(updatedValue as any))
+                                    dispatch(setInvoiceData(updatedValue as any))
 
                                     setPreview(false);
                                     setIsModalOpen(true);
-                                    dispatch(setData(updatedValue as any))
+                                    dispatch(setInvoiceData(updatedValue as any))
                                 },
                                 disabled: !(isValid && dirty),
                             },
@@ -375,7 +369,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             button={true}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
-                                                    const selectedGstType = gstTypesData.find((item) => item.gstName === newValue.value)
+                                                    const selectedGstType = gstTypesData.find((item: any) => item.gstName === newValue.value)
                                                     if (selectedGstType) {
                                                         setFieldValue("gstPercentage", selectedGstType.gstPercentage)
                                                         setFieldValue("gstType", newValue.value)

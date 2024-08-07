@@ -1,26 +1,25 @@
 import React, { useMemo } from 'react';
-import { useAddGstTypeMutation, useGetGstTypeQuery, useUpdateGstTypeMutation } from '../../../redux-store/invoice/gstTypeApi';
 import { GstTypeFields } from '../../../constants/form-data/form-data-json';
 import { gstTypeInitialValue } from '../../../constants/forms/formikInitialValues';
 import { gstTypeValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { GstTypeFormProps, GstTypeProps } from '../../../types/types';
-import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import { Save } from "@mui/icons-material";
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
+import { useCreateGstTypeMutation, useGetGstTypeListQuery, useUpdateGstTypeMutation } from '../../../redux-store/api/injectedApis';
+import { clearGstTypeData } from '../../../redux-store/slices/gstTypeSlice';
 
 // create and edit screen
 
 const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
 
-    const [addGstType, { isLoading: gstTypeAddLoading, isSuccess: gstTypeAddSuccess, isError: gstTypeAddError, error: gstTypeAddErrorObject }] = useAddGstTypeMutation();
+    const [addGstType, { isLoading: gstTypeAddLoading, isSuccess: gstTypeAddSuccess, isError: gstTypeAddError, error: gstTypeAddErrorObject }] = useCreateGstTypeMutation();
 
     const [updateGstType, { isLoading: gstTypeUpdateLoading, isSuccess: gstTypeUpdateSuccess, isError: gstTypeUpdateError, error: gstTypeUpdateErrorObject }] = useUpdateGstTypeMutation();
 
-
-    const { data: getGstType, refetch } = useGetGstTypeQuery();
+    const { data: getGstType, refetch } = useGetGstTypeListQuery();
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -29,14 +28,14 @@ const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
     const onSubmit = useMemo(() => async (values: GstTypeProps, actions: any) => {
         try {
             if (gstTypeValue) {
-                await updateGstType({ id: gstTypeValue.id, gstTypeData: values });
+                await updateGstType({ id: gstTypeValue.id, data: values });
             } else {
                 await addGstType(values);
             }
             actions.resetForm();
             refetch();
             if (gstTypeValue) {
-                setTimeout(() => dispatch(clearData()), 1000)
+                setTimeout(() => dispatch(clearGstTypeData()), 1000)
             };
         } catch (error) {
             console.error("An error occurred during form submission:", error);

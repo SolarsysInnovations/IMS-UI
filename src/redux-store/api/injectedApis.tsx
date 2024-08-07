@@ -108,7 +108,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         // ! ------------ customers end ---------------
 
         // ! ------------- invoice start --------------
-        getInvoice: builder.query<InvoiceInitialValueProps[], void>({
+        getInvoiceList: builder.query<InvoiceInitialValueProps[], void>({
             query: () => ({
                 url: API_URLS.invoiceList,
                 method: 'POST',
@@ -150,7 +150,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         // ! ------------- invoice end --------------
 
         // ! ------------- payment terms start --------------
-        getPaymentTerms: builder.query<any[], void>({
+        getPaymentTermsList: builder.query<any[], void>({
             query: () => ({
                 url: API_URLS.paymentTermsList,
                 method: 'POST',
@@ -185,7 +185,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         // ! ------------- payment terms end --------------
 
         // ! ------------- gst type start --------------
-        getGstType: builder.query<any[], void>({
+        getGstTypeList: builder.query<any[], void>({
             query: () => ({
                 url: API_URLS.gstTypeList,
                 method: 'POST',
@@ -211,7 +211,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
-        gstTypeGetById: builder.mutation<void, number>({
+        getSingleGstType: builder.mutation<void, number>({
             query: (id) => ({
                 url: `${API_URLS.gstTypeGet}/${id}`,
                 method: 'POST',
@@ -220,7 +220,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         // ! ------------- gst type end --------------
 
         // ! ------------- tdsTax start --------------
-        getTdsTax: builder.query<any[], void>({
+        getTdsTaxList: builder.query<any[], void>({
             query: () => ({
                 url: API_URLS.tdsTaxList,
                 method: 'POST',
@@ -255,7 +255,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         // ! ------------- tdsTax end --------------
 
         // ! ----------- reports start --------------
-        getReportInvoiceById: builder.mutation<any, Partial<any>>({
+        getReportInvoice: builder.mutation<any, Partial<any>>({
             query: (data) => ({
                 url: API_URLS.reportList,
                 method: 'POST',
@@ -264,11 +264,73 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         }),
         // ! ----------- reports end --------------
 
+        // ! ----------- service start --------------
 
+        getServiceList: builder.query<any[], void>({
+            query: () => ({
+                url: API_URLS.serviceList,
+                method: 'POST',
+
+            }),
+            // Set caching for 5 minutes (adjust the duration as needed)
+            keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
+        }),
+
+        createService: builder.mutation<any, Partial<any>>({
+            query: (data) => ({
+                url: API_URLS.serviceCreate,
+                method: 'POST',
+                body: data,
+            }),
+        }),
+        updateService: builder.mutation<any, { id: number; data: Partial<any> }>({
+            query: ({ id, data }) => ({
+                url: `${API_URLS.serviceUpdate}/${id}`,
+                method: 'POST',
+                body: data,
+            }),
+        }),
+        deleteService: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `${API_URLS.serviceDelete}/${id}`,
+                method: 'POST',
+            }),
+        }),
+
+        getSingleService: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `${API_URLS.serviceGet}/${id}`,
+                method: 'POST',
+            }),
+        }),
 
     }),
 });
 
 
-// user export 
+// user export
 export const { useGetUsersListQuery, useCreateUserMutation, useUpdateUserMutation, useDeleteUserMutation, useGetSingleUserMutation } = apiEndPointLists;
+
+// dashboard export 
+export const { useGetDashboardMutation } = apiEndPointLists;
+
+// customer export 
+export const { useGetCustomersListQuery, useCreateCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useGetSingleCustomerMutation } = apiEndPointLists;
+
+// payment terms export
+export const { useGetPaymentTermsListQuery, useCreatePaymentTermsMutation, useDeletePaymentTermsMutation, useUpdatePaymentTermsMutation, useGetSinglePaymentTermsMutation } = apiEndPointLists;
+
+// tdsTax export
+export const { useGetTdsTaxListQuery, useCreateTdsTaxMutation, useUpdateTdsTaxMutation, useDeleteTdsTaxMutation, useGetSingleTdsTaxMutation } = apiEndPointLists;
+
+// gstType export
+export const { useGetGstTypeListQuery, useCreateGstTypeMutation, useUpdateGstTypeMutation, useDeleteGstTypeMutation, useGetSingleGstTypeMutation } = apiEndPointLists;
+
+// invoice export 
+export const { useGetInvoiceListQuery, useCreateInvoiceMutation, useDeleteInvoiceMutation, useUpdateInvoiceMutation, useGetSingleInvoiceMutation } = apiEndPointLists;
+
+// invoice reports
+export const { useGetReportInvoiceMutation } = apiEndPointLists;
+
+// service export
+export const { useGetServiceListQuery, useCreateServiceMutation, useDeleteServiceMutation, useUpdateServiceMutation, useGetSingleServiceMutation } = apiEndPointLists;

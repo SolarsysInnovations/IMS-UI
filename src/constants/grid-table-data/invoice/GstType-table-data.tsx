@@ -4,24 +4,28 @@ import { useEffect, useState } from "react";
 import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch, useSelector } from "react-redux";
 import EditIcon from '@mui/icons-material/Edit';
-import { useDeleteGstTypeMutation, useGetGstTypeQuery, useGstTypeGetByIdMutation } from "../../../redux-store/invoice/gstTypeApi";
-import { setData, clearData } from "../../../redux-store/global/globalState";
+import { useDeleteGstTypeMutation, useGetGstTypeListQuery, useGetSingleGstTypeMutation } from "../../../redux-store/api/injectedApis";
+import { setGstTypeData } from "../../../redux-store/slices/gstTypeSlice";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const value = useSelector((state: any) => state.globalState.data)
+    const value = useSelector((state: any) => state.gstTypeState.data)
 
-    const { data: getGstType, error, isLoading, isSuccess: getSuccess, refetch } = useGetGstTypeQuery();
+    const { data: getGstType, error, isLoading, isSuccess: getSuccess, refetch } = useGetGstTypeListQuery();
     const [deleteGstType, { isLoading: D_Loading, isSuccess: deleteSuccess }] = useDeleteGstTypeMutation();
-    const [getGstTypeById, { }] = useGstTypeGetByIdMutation();
+    const [getGstTypeById, { }] = useGetSingleGstTypeMutation();
 
+    useEffect(() => {
+        refetch()
+    }, [deleteSuccess])
 
     const handleEditClick = async () => {
         try {
             const response = await getGstTypeById(id);
             if (response && 'data' in response) {
                 const gstTypeData = response.data;
-                dispatch(setData(gstTypeData));
+                console.log("gstTypeData", gstTypeData);
+                dispatch(setGstTypeData(gstTypeData));
             } else {
                 console.error('Invalid response format:', response);
             }

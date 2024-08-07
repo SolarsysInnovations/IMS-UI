@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { DataGrid,GridToolbar, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridColDef } from '@mui/x-data-grid';
 
 interface GridDataProps {
     columns: GridColDef[];
@@ -12,22 +12,10 @@ interface GridDataProps {
     onCellEditor?: any;
     onCellEditStop?: any;
     onEditStart?: any;
-    onDeleteSuccess?: any;
-    onEditClick?:any;
+    onEditClick?: any;
 }
-export default function GridDataUi({ onEditStart, onCellEditStop, onCellEditor, hideFooter, pagination, showToolbar, checkboxSelection, columns, tableData, onDeleteSuccess }: GridDataProps) {
-    const modifiedColumns = columns.map((column : GridColDef) => {
-        if (column.field === 'Action' && column.renderCell) {
-            return {
-                ...column,
-                renderCell: (params: any) => column.renderCell!({
-                    ...params,
-                    onDeleteSuccess,
-                }),
-            };
-        }
-        return column;
-    });
+export default function GridDataUi({ onEditStart, onCellEditStop, onCellEditor, hideFooter, pagination, showToolbar, checkboxSelection, columns, tableData }: GridDataProps) {
+
     return (
         <Box sx={{ height: "fit-content", width: '100%', }}>
             <DataGrid
@@ -85,7 +73,7 @@ export default function GridDataUi({ onEditStart, onCellEditStop, onCellEditor, 
 
                 }}
                 rows={tableData || []}
-                columns={modifiedColumns || []}
+                columns={columns || []}
                 initialState={{
                     // * below pagination for grid table
                     pagination: {

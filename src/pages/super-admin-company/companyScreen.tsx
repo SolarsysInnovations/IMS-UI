@@ -4,7 +4,7 @@ import CompanyCreate from "./companyCreate";
 
 const CompanyScreen: React.FC = () => {
 
-    const companyValue = useSelector((state: any) => state.globalState.data);
+    const companyValue = useSelector((state: any) => state.userState.data);
 
     const [mergedData, setMergedData] = useState<any>({});
 
@@ -20,7 +20,6 @@ const CompanyScreen: React.FC = () => {
         }
     }, [companyValue]);
 
-    console.log("mergedData", mergedData);
 
     const mode = companyValue ? 'edit' : 'create';
     useEffect(() => {

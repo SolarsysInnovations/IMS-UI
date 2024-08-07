@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { Add } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
-import { useAddGstTypeMutation, useGetGstTypeQuery, useUpdateGstTypeMutation } from '../../redux-store/invoice/gstTypeApi';
 import { GstTypeFormProps, GstTypeProps, InvoiceMailReasonProps } from '../../types/types';
 import { AppDispatch } from '../../redux-store/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,8 +9,8 @@ import { DynamicFormCreate } from '../Form-renderer/Dynamic-form';
 import { GstTypeFields, InvoiceMailReasonFields } from '../../constants/form-data/form-data-json';
 import { InvoiceEmailReasonValidationSchemas, gstTypeValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { invoiceMailReasonInitialValue } from '../../constants/forms/formikInitialValues';
-import { useGetInvoiceQuery, useUpdateInvoiceMutation } from '../../redux-store/invoice/invcoiceApi';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { useGetInvoiceListQuery, useUpdateInvoiceMutation } from '../../redux-store/api/injectedApis';
 
 // create and edit screen
 
@@ -21,7 +20,7 @@ const MailReason = ({ invoiceData, setNestedOpen }: any) => {
 
     const navigate = useNavigate();
 
-    const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceQuery();
+    const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceListQuery();
 
     // const invoiceData = useSelector((state: any) => state.globalState.data);
 
@@ -46,7 +45,7 @@ const MailReason = ({ invoiceData, setNestedOpen }: any) => {
                     // invoiceStatus: invoiceData.invoiceStatus
                 }
                 // console.log("updatedInvoice", updatedInvoice);
-                await updateInvoice({ id: invoiceData.id, invoiceData: updatedInvoice });
+                await updateInvoice({ id: invoiceData.id, data: updatedInvoice });
                 setNestedOpen(false);
                 dispatch(clearData());
                 getInvoiceList();
