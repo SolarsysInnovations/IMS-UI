@@ -1,157 +1,121 @@
-// invoice letter
-import { Grid } from '@mui/material'
-import { Box } from '@mui/system'
-import React, { useEffect, useRef, useState } from 'react'
-import TableContent from './TableContent'
-import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import React, { useRef, useState } from 'react';
 
-const InvoiceLetterUi = ({ invoiceData, }: any) => {
+const InvoiceContent = ({ invoiceData, customerDetails, subTotalAmount, discountAmount }: any) => (
+    <div>
+        <img
+            src="https://picsum.photos/200" // Random placeholder image
+            alt="Random"
+            style={{ width: "100px", height: "100px", marginBottom: '10px' }}
+        />
+        <div style={{ margin: 10, padding: 10 }}>
+            <h1 style={{ fontSize: 24 }}>INVOICE</h1>
+            <h2 style={{ fontSize: 18 }}>SOLARSYS</h2>
+            <p style={{ fontSize: 12 }}>Address: 1/305, Thillai Nagar, Trichy 905 606</p>
+            <p style={{ fontSize: 12 }}>Phone: 983894833</p>
+        </div>
+        <div style={{ margin: 10, padding: 10 }}>
+            <h2 style={{ fontSize: 18 }}>Billed To</h2>
+            <p style={{ fontSize: 12 }}>Name: {customerDetails?.customerName}</p>
+            <p style={{ fontSize: 12 }}>Email: {customerDetails?.customerEmail}</p>
+            <p style={{ fontSize: 12 }}>Phone: {customerDetails?.customerPhone}</p>
+        </div>
+        <div style={{ margin: 10, padding: 10 }}>
+            <h2 style={{ fontSize: 18 }}>Invoice Details</h2>
+            <p style={{ fontSize: 12 }}>Invoice No: {invoiceData?.invoiceNumber}</p>
+            <p style={{ fontSize: 12 }}>Payment Terms: {invoiceData?.paymentTerms}</p>
+            <p style={{ fontSize: 12 }}>Due Date: 12-23-2024</p>
+        </div>
+        <div style={{ margin: 10, padding: 10 }}>
+            <h2 style={{ fontSize: 18 }}>Items</h2>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                    <tr>
+                        <th style={{ border: '1px solid black', padding: '5px' }}>Description</th>
+                        <th style={{ border: '1px solid black', padding: '5px' }}>Quantity</th>
+                        <th style={{ border: '1px solid black', padding: '5px' }}>Unit Price</th>
+                        <th style={{ border: '1px solid black', padding: '5px' }}>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* {invoiceData?.items.map((item: any, index: any) => (
+                        <tr key={index}>
+                            <td style={{ border: '1px solid black', padding: '5px' }}>{item.description}</td>
+                            <td style={{ border: '1px solid black', padding: '5px' }}>{item.quantity}</td>
+                            <td style={{ border: '1px solid black', padding: '5px' }}>{item.unitPrice}</td>
+                            <td style={{ border: '1px solid black', padding: '5px' }}>{item.total}</td>
+                        </tr>
+                    ))} */}
+                </tbody>
+            </table>
+        </div>
+        <div style={{ margin: 10, padding: 10 }}>
+            <p style={{ fontSize: 12 }}>Sub total: {subTotalAmount}</p>
+            <p style={{ fontSize: 12 }}>Discount Amount: -{discountAmount}</p>
+            <p style={{ fontSize: 12 }}>Tax Amount: {/* Add tax amount here */}</p>
+        </div>
+        <div style={{ margin: 10, padding: 10 }}>
+            <p style={{ fontSize: 12 }}>Notes: Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</p>
+            <p style={{ fontSize: 12 }}>Terms & Conditions: Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</p>
+        </div>
+    </div>
+);
+
+
+
+
+const InvoiceLetterUi = ({ invoiceData }: any) => {
     const [subTotalAmount, setSubTotalAmount] = useState<number>(0);
     const [discountAmount, setDiscountAmount] = useState<number>(0);
     const [customerDetails, setCustomerDetails] = useState<any>();
+    const contentRef = useRef<HTMLDivElement>(null);
 
-    const invoiceRef = useRef(null);
+    const downloadPDF = () => {
+        const input = contentRef.current;
+        if (input) {
+            html2canvas(input, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
 
-    const downloadPdf = () => {
-        const input = invoiceRef.current;
-        if (!input) {
-            console.error("Element with ref 'invoiceRef' not found");
-            return;
-        }
-        html2canvas(input as HTMLElement, { scale: 2 }).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'px',
-                format: [canvas.width, canvas.height],
+                // Check if the canvas contains the image
+                const img = new Image();
+                img.src = imgData;
+                img.onload = () => {
+                    console.log('Image loaded');
+                };
+                img.onerror = () => {
+                    console.error('Error loading image');
+                };
+
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 190; // Adjust width to fit content
+                const pageHeight = 295; // A4 page height in mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                const heightLeft = imgHeight;
+                const position = 0;
+
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+
+                // Save the PDF
+                pdf.save('invoice.pdf');
             });
-            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-            pdf.save('invoice.pdf');
-        });
+        }
     };
+
 
     return (
         <>
-            <div ref={invoiceRef}>
-                <div className='App' id='invoiceCapture' style={{ padding: "50px 30px" }} >
-                    <Grid container sx={{ borderBottom: "1px solid #dadada", paddingBottom: "15px" }} >
-                        <Grid sx={{ marginTop: "0px", display: "flex", alignContent: "flex-start", alignItems: "flex-start", }} item xs={6.5} >
-                            <Box>
-                                <h1 style={{ marginTop: "0px", textAlign: "left" }}>INVOICE</h1>
-                            </Box>
-                        </Grid>
-                        <Grid sx={{ marginTop: "0px", paddingBottom: "10px", display: "flex", alignItems: "right", justifyContent: "left", }} item xs={5.5} >
-                            <Box>
-                                <div>
-                                    <p style={{ fontSize: "14px", fontWeight: "600", margin: "0 0 5px 0", }} > <span style={{ fontWeight: "500" }}>SOLARSYS</span> </p>
-                                </div>
-                                <div>
-                                    <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}> {" "}
-                                        <span style={{ fontWeight: "500", width: "60px", display: "inline-block", }} > Address : </span>{" "}
-                                        <span>
-                                            1/305, Thillai Nagar, Trichy 905 606 </span>
-                                    </p>
-                                </div>
-                                <div>
-                                    <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                                        <span style={{ fontWeight: "500", width: "60px", display: "inline-block", }} > Phone : </span>{" "} <span>983894833</span> </p>
-                                </div>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                    <Grid container sx={{ backgroundColor: "#f8f9f9", marginTop: "30px", padding: "20px 20px", }} >
-                        <Grid sx={{ marginTop: "0px" }} item xs={4} >
-                            <Box gap={3}>
-                                <div>
-                                    <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                                        <span style={{ fontWeight: "500", width: "60px", display: "inline-block", }} > Billed To{" "} </span>{" "}
-                                        <span>: {customerDetails?.customerName}</span>
-                                    </p> </div>
-                                <div>
-                                    <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                                        <span style={{ fontWeight: "500", width: "60px", display: "inline-block", }} >
-                                            Email{" "} </span>{" "} <span>: {customerDetails?.customerEmail}</span>
-                                    </p>
-                                </div> <div> <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                                    <span style={{ fontWeight: "500", width: "60px", display: "inline-block", }} > Phone{" "} </span>{" "}
-                                    <span>: {customerDetails?.customerPhone}</span> </p>
-                                </div>
-                            </Box>
-                        </Grid>
-                        <Grid sx={{ marginTop: "0px" }} item xs={4} >
-                            <Box gap={3}>
-                                <div>
-                                    <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                                        <span style={{ fontWeight: "500", width: "100px", display: "inline-block", }} > Invoice No{" "} </span>{" "}
-                                        <span>: {invoiceData?.invoiceNumber}</span>
-                                    </p>
-                                </div>
-                                <div>
-                                    <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}> <span style={{ fontWeight: "500", width: "100px", display: "inline-block", }} > Payment Terms{" "} </span>{" "} <span>: {invoiceData?.paymentTerms}</span> </p>
-                                </div>
-                                <div>
-                                    <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                                        <span style={{ fontWeight: "500", width: "100px", display: "inline-block", }} > Due Date{" "} </span>{" "} <span>: 12-23-2024</span>
-                                    </p>
-                                </div>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                    <Grid container>
-                        <Grid sx={{ marginTop: "0px" }} item xs={12} >
-                            <Box sx={{ mt: 5 }}> <TableContent tableData={invoiceData || []} /> </Box>
-                        </Grid>
-                    </Grid>
-                    <Grid container>
-                        <Grid sx={{ marginTop: "0px" }} item xs={12} >
-                            <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }}>
-                                <div style={{ display: "flex", width: "250px", justifyContent: "space-between", }} >
-                                    <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600", }} >
-                                        Sub total </p>
-                                    <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>{subTotalAmount}</p>
-                                </div>
-                            </Box>
-                        </Grid>
-                        <Grid sx={{ marginTop: "0px" }} item xs={12} >
-                            <Box sx={{ display: "flex", justifyContent: "right" }}>
-                                <div style={{ display: "flex", width: "250px", justifyContent: "space-between", }} > <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600", }} > Discount Amount </p>
-                                    <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>-{discountAmount}</p>
-                                </div>
-                            </Box>
-                        </Grid>
-                        <Grid sx={{ marginTop: "0px" }} item xs={12} >
-                            <Box sx={{ display: "flex", justifyContent: "right" }}>
-                                <div style={{ display: "flex", width: "250px", justifyContent: "space-between", }} >
-                                    <p style={{ fontSize: "13px", margin: "0 0 5px 0", fontWeight: "600", }} > Tax Amount </p> <p style={{ fontSize: "12px", margin: "0 0 5px 0" }}>
-                                        {/* {invoiceData.totalAmount} */}
-                                    </p>
-                                </div>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                    <Grid container>
-                        <Grid sx={{ marginTop: "20px" }} item xs={12} >
-                            <Box>
-                                <div>
-                                    <p style={{ fontSize: "12px" }}>
-                                        <span style={{ fontWeight: "500", width: "130px", display: "inline-block", }} > Notes{" "} </span>{" "} : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus! </p>
-                                </div>
-                            </Box>
-                            <Box>
-                                <div>
-                                    <p style={{ fontSize: "12px" }}> <span style={{ fontWeight: "500", width: "130px", display: "inline-block", }} > Terms & Conditions{" "} </span>{" "} : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus! </p>
-                                </div>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </div>
+            <div ref={contentRef}>
+                <InvoiceContent
+                    invoiceData={invoiceData}
+                    customerDetails={customerDetails}
+                    subTotalAmount={subTotalAmount}
+                    discountAmount={discountAmount}
+                />
             </div>
-            <button onClick={downloadPdf} >
-                Download PDF
-            </button>
+            <button onClick={downloadPDF}>Download PDF</button>
         </>
-    )
+    );
 }
 
-export default InvoiceLetterUi
+export default InvoiceLetterUi;

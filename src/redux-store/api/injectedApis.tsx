@@ -307,7 +307,6 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
     }),
 });
 
-
 // user export
 export const { useGetUsersListQuery, useCreateUserMutation, useUpdateUserMutation, useDeleteUserMutation, useGetSingleUserMutation } = apiEndPointLists;
 
