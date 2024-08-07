@@ -11,8 +11,8 @@ import CustomerDetails from "../../pages/customer/customerDetails";
 import TableHeader from "../../components/layouts/TableHeader";
 import { styled } from '@mui/system';
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
-import { setData } from "../../redux-store/global/globalState";
 import { useDeleteCustomerMutation, useGetCustomersListQuery, useGetSingleCustomerMutation } from "../../redux-store/api/injectedApis";
+import { setCustomerData } from "../../redux-store/slices/slicesList";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -41,7 +41,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             const response = await getCustomer(id);
             if ('data' in response) {
                 const customerData = response.data;
-                await dispatch(setData(customerData));
+                dispatch(setCustomerData(customerData));
                 navigate('/customer/create');
             } else {
                 console.error('Error response:', response.error);

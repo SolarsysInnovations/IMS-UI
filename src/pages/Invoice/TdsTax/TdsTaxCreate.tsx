@@ -4,12 +4,12 @@ import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-for
 import { tdsTaxValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { TdsTaxFields } from '../../../constants/form-data/form-data-json';
 import { TdsTaxFormProps, TdsTaxProps } from '../../../types/types';
-import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import { Save } from '@mui/icons-material';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useCreateTdsTaxMutation, useGetTdsTaxListQuery, useUpdateTdsTaxMutation } from '../../../redux-store/api/injectedApis';
+import { clearTdsTaxData } from '../../../redux-store/slices/tdsSlice';
 
 
 const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
@@ -23,6 +23,10 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
 
     const initialValue = tdsTaxValue || tdsTaxInitialValue;
 
+    useEffect(() => {
+        refetch()
+    }, [tdsTaxUpdateSuccess]);
+
     const onSubmit = useMemo(() => async (values: TdsTaxProps, actions: any) => {
         try {
             if (tdsTaxValue) {
@@ -32,9 +36,8 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
             }
             actions.resetForm();
             refetch();
-            if (tdsTaxAddSuccess) {
-                setTimeout(() => dispatch(clearData()), 1000)
-            };
+            dispatch(clearTdsTaxData())
+
         } catch (error) {
             console.error("An error occurred during form submission:", error);
         } finally {

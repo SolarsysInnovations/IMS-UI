@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch } from "react-redux";
 import EditIcon from '@mui/icons-material/Edit';
-import { setData, clearData } from "../../../redux-store/global/globalState";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 import { useDeleteTdsTaxMutation, useGetSingleTdsTaxMutation, useGetTdsTaxListQuery } from "../../../redux-store/api/injectedApis";
+import { setTdsTaxData } from "../../../redux-store/slices/tdsSlice";
 
 
 const MyCellRenderer = ({ id }: { id: any, }) => {
@@ -25,7 +25,7 @@ const MyCellRenderer = ({ id }: { id: any, }) => {
             const response = await getPaymentTerm(id);
             if (response && 'data' in response) {
                 const gstTypeData = response.data;
-                dispatch(setData(gstTypeData));
+                dispatch(setTdsTaxData(gstTypeData));
             } else {
                 console.error('Invalid response format:', response);
             }

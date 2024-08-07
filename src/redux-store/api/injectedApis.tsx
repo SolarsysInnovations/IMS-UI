@@ -264,8 +264,45 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         }),
         // ! ----------- reports end --------------
 
-        // 
+        // ! ----------- service start --------------
 
+        getServiceList: builder.query<any[], void>({
+            query: () => ({
+                url: API_URLS.serviceList,
+                method: 'POST',
+
+            }),
+            // Set caching for 5 minutes (adjust the duration as needed)
+            keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
+        }),
+
+        createService: builder.mutation<any, Partial<any>>({
+            query: (data) => ({
+                url: API_URLS.serviceCreate,
+                method: 'POST',
+                body: data,
+            }),
+        }),
+        updateService: builder.mutation<any, { id: number; data: Partial<any> }>({
+            query: ({ id, data }) => ({
+                url: `${API_URLS.serviceUpdate}/${id}`,
+                method: 'POST',
+                body: data,
+            }),
+        }),
+        deleteService: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `${API_URLS.serviceDelete}/${id}`,
+                method: 'POST',
+            }),
+        }),
+
+        getSingleService: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `${API_URLS.serviceGet}/${id}`,
+                method: 'POST',
+            }),
+        }),
 
     }),
 });
@@ -273,6 +310,9 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
 
 // user export
 export const { useGetUsersListQuery, useCreateUserMutation, useUpdateUserMutation, useDeleteUserMutation, useGetSingleUserMutation } = apiEndPointLists;
+
+// dashboard export 
+export const { useGetDashboardMutation } = apiEndPointLists;
 
 // customer export 
 export const { useGetCustomersListQuery, useCreateCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useGetSingleCustomerMutation } = apiEndPointLists;
@@ -287,4 +327,10 @@ export const { useGetTdsTaxListQuery, useCreateTdsTaxMutation, useUpdateTdsTaxMu
 export const { useGetGstTypeListQuery, useCreateGstTypeMutation, useUpdateGstTypeMutation, useDeleteGstTypeMutation, useGetSingleGstTypeMutation } = apiEndPointLists;
 
 // invoice export 
-export const { useGetInvoiceListQuery, useCreateInvoiceMutation, useDeleteInvoiceMutation, useUpdateInvoiceMutation, useGetSingleInvoiceMutation, useGetReportInvoiceMutation } = apiEndPointLists;
+export const { useGetInvoiceListQuery, useCreateInvoiceMutation, useDeleteInvoiceMutation, useUpdateInvoiceMutation, useGetSingleInvoiceMutation } = apiEndPointLists;
+
+// invoice reports
+export const { useGetReportInvoiceMutation } = apiEndPointLists;
+
+// service export
+export const { useGetServiceListQuery, useCreateServiceMutation, useDeleteServiceMutation, useUpdateServiceMutation, useGetSingleServiceMutation } = apiEndPointLists;

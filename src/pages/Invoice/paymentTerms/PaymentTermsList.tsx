@@ -3,6 +3,7 @@ import { paymentTermsColumns } from '../../../constants/grid-table-data/invoice/
 import { useGetPaymentTermsListQuery } from '../../../redux-store/api/injectedApis';
 
 const PaymentTermsList = () => {
+
     const { data: paymentTermsList, error, isLoading, refetch } = useGetPaymentTermsListQuery();
 
     return (
