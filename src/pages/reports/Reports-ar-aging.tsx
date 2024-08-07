@@ -79,7 +79,7 @@ const ArAgingscreen: React.FC = () => {
                                                         const currentDateNet1 = dayjs().format('DD-MM-YYYY');
                                                         const dueDateNet1 = dayjs().add(0, 'days').format('DD-MM-YYYY');
                                                         setFieldValue("startDate", currentDateNet1);
-                                                        setFieldValue("endDate", dueDateNet1);
+                                                        setFieldValue("endDate", dueDateNet1);                                                        
                                                     }
                                                     else if (newValue.value === "This Week") {
                                                         const currentDateNet1 = dayjs().format('DD-MM-YYYY');
@@ -93,8 +93,8 @@ const ArAgingscreen: React.FC = () => {
                                                         setFieldValue("endDate", dueDateNet2);
                                                     }
                                                     else if (newValue.value === "This Month") {
-                                                        const currentDateNet3 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet3 = dayjs().add(30, 'days').format('DD-MM-YYYY');
+                                                        const currentDateNet3 = dayjs().startOf('month').format('DD-MM-YYYY');
+                                                        const dueDateNet3 = dayjs().endOf('month').format('DD-MM-YYYY');
                                                         setFieldValue('startDate', currentDateNet3)
                                                         setFieldValue("endDate", dueDateNet3)
                                                     } else if (newValue.value === "Last 30 Days") {
