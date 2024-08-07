@@ -1,6 +1,5 @@
 import { number } from "yup";
 import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps, AdminCompanyUsersInitialValueProps, SuperAdminUsersInitialValueProps, } from "../../types/types";
-import ServicesList from "../../pages/service/ServiceList";
 import { format } from "path";
 
 export const loginInitialValue: LoginProps = {

@@ -7,8 +7,6 @@ import Reportsinvoice from "../pages/reports/Reports-invoice";
 import SettingScreen from "../pages/settings/settings";
 import CustomerList from "../pages/customer/Customer-list-screen";
 import InvoiceList from "../pages/Invoice/Invoice-list-screen";
-import ServicesList from "../pages/service/ServiceList";
-import ServiceCreate from "../pages/service/ServiceCreate";
 import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded, SettingsSuggestRounded } from "@mui/icons-material"
 import GroupIcon from '@mui/icons-material/Group';
 import ReceiptIcon from '@mui/icons-material/Receipt';
@@ -24,6 +22,7 @@ import CompanyScreen from "../pages/super-admin-company/companyScreen";
 import UserScreen from "../pages/company-users/UserScreen";
 import SettingRoleScreen from "../pages/settings/settings-role";
 import DashboardScreen from "../pages/Dashboard/Dashboard";
+import ServicesList from "../pages/service/service-list-screen";
 
 const getUserRole = () => {
   return localStorage.getItem('userRole');

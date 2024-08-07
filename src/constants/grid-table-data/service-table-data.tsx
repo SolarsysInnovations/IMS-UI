@@ -7,16 +7,14 @@ import { AppDispatch } from "../../redux-store/store";
 import { useEffect, useState } from "react";
 import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
-import ServiceDetails from "../../pages/service/serviceDetails";
 import TableHeader from "../../components/layouts/TableHeader";
 import usePathname from "../../hooks/usePathname";
 import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
 import React from "react";
-import ServiceEditScreen from "../../pages/service/service-edit-screen";
-import { useDeleteServiceMutation, useGetServiceListQuery, useGetSingleServiceMutation } from "../../redux-store/api/injectedApis";
 import DialogBoxUi from "../../components/ui/DialogBox";
-import ServiceCreate from "../../pages/service/service-create-screen";
+import { useDeleteServiceMutation, useGetServiceListQuery, useGetSingleServiceMutation } from "../../redux-store/api/injectedApis";
 import { setServiceData } from "../../redux-store/slices/serviceSlice";
+import ServiceCreate from "../../pages/service/service-create-screen";
 
 
 const MyCellRenderer = ({ id }: { id: any }) => {

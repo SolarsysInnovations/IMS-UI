@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import GridDataUi from '../../components/GridTable/GridData';
+import TableHeader from '../../components/layouts/TableHeader';
+import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, } from '../../redux-store/store';
+import { columns } from '../../constants/grid-table-data/service-table-data';
+import ModalUi from '../../components/ui/ModalUi';
 import { Box } from '@mui/material';
 import ServiceCreate from './service-create-screen';
 import ServiceEditScreen from './service-edit-screen'; // Import the edit screen
-import { AppDispatch } from '../../../redux-store/store';
-import { useGetServiceListQuery } from '../../../redux-store/api/injectedApis';
-import { clearServiceData } from '../../../redux-store/slices/serviceSlice';
-import usePathname from '../../../hooks/usePathname';
-import TableHeader from '../../../components/layouts/TableHeader';
-import GridDataUi from '../../../components/GridTable/GridData';
-import { columns } from '../../../constants/grid-table-data/service-table-data';
-import DialogBoxUi from '../../../components/ui/DialogBox';
+import { useGetServiceListQuery } from '../../redux-store/api/injectedApis';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import { clearServiceData } from '../../redux-store/slices/serviceSlice';
 
 const ServicesList = () => {
     const dispatch = useDispatch<AppDispatch>();

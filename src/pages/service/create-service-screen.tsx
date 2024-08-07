@@ -1,9 +1,9 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import TextFieldUi from '../../components/ui/TextField';
+import SelectDropdown from '../../components/ui/SelectDropdown';
 import { Box, Grid, Stack } from '@mui/material';
-import SelectDropdown from '../../../components/ui/SelectDropdown';
-import TextFieldUi from '../../../components/ui/TextField';
 
 interface InputObject {
     id?: number;

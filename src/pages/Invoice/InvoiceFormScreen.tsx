@@ -25,10 +25,10 @@ import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
 import { addDays, format } from 'date-fns';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import DialogBoxUi from '../../components/ui/DialogBox';
-import ServiceScreen from './service/ServiceScreen';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { useCreateInvoiceMutation, useGetCustomersListQuery, useGetGstTypeListQuery, useGetInvoiceListQuery, useGetPaymentTermsListQuery, useGetServiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from '../../redux-store/api/injectedApis';
 import { clearInvoiceData, setInvoiceData } from '../../redux-store/slices/invoiceSlice';
+import ServiceScreen from './service/ServiceScreen';
 
 interface Service {
     id: string; // Ensure id is mandatory

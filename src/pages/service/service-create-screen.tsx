@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
+import { serviceFields } from '../../constants/form-data/form-data-json';
+import { serviceInitialValues as defaultServiceInitialValues } from '../../constants/forms/formikInitialValues'; // Rename to avoid conflict
+import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
+import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
+import SnackBarUi from '../../components/ui/Snackbar';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { useCreateServiceMutation, useGetServiceListQuery, useUpdateServiceMutation } from '../../redux-store/api/injectedApis';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../../redux-store/store';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import { useGetServiceListQuery } from '../../../redux-store/api/injectedApis';
-import { serviceCreationProps } from '../../../types/types';
-import { clearServiceData } from '../../../redux-store/slices/serviceSlice';
-import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
-import { serviceFields } from '../../../constants/form-data/form-data-json';
-import { serviceValidationSchema } from '../../../constants/forms/validations/validationSchema';
-import { serviceInitialValues } from '../../../constants/forms/formikInitialValues';
+import { AppDispatch } from '../../redux-store/store';
+import { clearServiceData } from '../../redux-store/slices/serviceSlice';
+import { serviceCreationProps } from '../../types/types';
 
 const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
     const [addService, { isLoading: serviceAddLoading, isSuccess: serviceAddSuccess, isError: serviceAddError, error: serviceAddErrorObject }] = useCreateServiceMutation();
@@ -32,7 +33,7 @@ const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
         refetch();
     }, [serviceUpdateSuccess, serviceAddSuccess]);
 
-    const initialValues = serviceEditInitialValues || serviceInitialValues;
+    const initialValues = serviceEditInitialValues || defaultServiceInitialValues;
 
     const onSubmit = async (values: serviceCreationProps, actions: any) => {
         console.log("Submitting form with values:", values);
