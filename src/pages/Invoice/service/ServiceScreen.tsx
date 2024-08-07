@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import ServiceCreate from '../../service/service-create-screen'
 import { useGetServiceListQuery } from '../../../redux-store/api/injectedApis';
 
 const ServiceScreen = ({ setIsOpenDialogBox }: any) => {
