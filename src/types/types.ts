@@ -155,7 +155,7 @@ export interface InvoiceInitialValueProps {
     servicesList: ServiceListProps[];
 
 }; export interface InvoicesInitialValueProps {
-    invoiceDate: string;
+   // invoiceDate: string;
     startDate: string;
     endDate: string;
     filter: string;
@@ -163,7 +163,7 @@ export interface InvoiceInitialValueProps {
 
 
 export interface ArAgingInitialValueProps {
-    invoiceDate: string;
+   // invoiceDate: string;
     startDate: string;
     endDate: string;
     filter: string;

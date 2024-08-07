@@ -180,14 +180,14 @@ export const invoiceEditInitialValue: InvoiceInitialValueProps = {
 };
 export const invoicesInitialValue: InvoicesInitialValueProps = {
 
-    invoiceDate: "",
+   // invoiceDate: "",
     startDate: '',
     endDate: '',
     filter: "invoiceReport",
 };
 
 export const AragingInitialValue: ArAgingInitialValueProps = {
-    invoiceDate: "",
+   // invoiceDate: "",
     startDate: "",
     endDate: "",
     filter: "agingReport",
