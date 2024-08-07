@@ -6,13 +6,11 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
-import ServiceDetails from "../../pages/service/serviceDetails";
 import React from "react";
-import { setData } from "../../redux-store/global/globalState";
-import TableHeader from "../../components/layouts/TableHeader";
 import CompanyDetails from "../../pages/super-admin-company/companyDetailsScreen";
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from "../../redux-store/api/injectedApis";
+import { setUserData } from "../../redux-store/slices/userSlice";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
 
@@ -36,7 +34,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
   useEffect(() => {
     if (companyData) {
-      dispatch(setData(companyData));
+      dispatch(setUserData(companyData));
     }
   }, [companyData, dispatch]);
 
@@ -51,7 +49,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       if ("data" in response) {
         const companyData = response.data;
         console.log("edit company data", companyData);
-        dispatch(setData(companyData));
+        dispatch(setUserData(companyData));
         setOpenModal(true);
       }
     } catch (error) {
@@ -67,7 +65,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       if ("data" in response) {
         const companyData = response.data;
         console.log("edit company data", companyData);
-        dispatch(setData(companyData));
+        dispatch(setUserData(companyData));
         navigate("/company/create");
       } else {
         console.error("Error response:", response.error);

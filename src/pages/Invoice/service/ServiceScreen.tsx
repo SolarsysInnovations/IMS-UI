@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import ServiceCreate from '../../service/ServiceCreate';
-import { useGetServiceQuery } from '../../../redux-store/service/serviceApi';
+import ServiceCreate from '../../service/service-create-screen'
+import { useGetServiceListQuery } from '../../../redux-store/api/injectedApis';
 
-const ServiceScreen = () => {
+const ServiceScreen = ({ setIsOpenDialogBox }: any) => {
     const [openModal, setOpenModal] = useState(false);
-    const { data: serviceList, error, isLoading, refetch } = useGetServiceQuery();
+    const { data: serviceList, error, isLoading, refetch } = useGetServiceListQuery();
 
 
     const handleModalClose = () => {
@@ -14,7 +14,7 @@ const ServiceScreen = () => {
 
     return (
         <>
-            {/* <ServiceCreate serviceValue={} /> */}
+            <ServiceCreate setIsOpenDialogBox={setIsOpenDialogBox} />
             {/* <ServicesList /> */}
         </>
     )

@@ -12,7 +12,6 @@ import { Formik, Form } from 'formik';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
 import { InvoiceInitialValueProps } from '../../types/types';
-import { useGetServiceQuery } from '../../redux-store/service/serviceApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import ModalUi from '../../components/ui/ModalUi';
 import { generateOptions } from '../../services/utils/dropdownOptions';
@@ -25,11 +24,11 @@ import TdsTaxScreen from './TdsTax/TdsTaxScreen';
 import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
 import { addDays, format } from 'date-fns';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import { clearData, setData } from '../../redux-store/global/globalState';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import ServiceScreen from './service/ServiceScreen';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { useCreateInvoiceMutation, useGetCustomersListQuery, useGetGstTypeListQuery, useGetInvoiceListQuery, useGetPaymentTermsListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from '../../redux-store/api/injectedApis';
+import { useCreateInvoiceMutation, useGetCustomersListQuery, useGetGstTypeListQuery, useGetInvoiceListQuery, useGetPaymentTermsListQuery, useGetServiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from '../../redux-store/api/injectedApis';
+import { clearInvoiceData, setInvoiceData } from '../../redux-store/slices/invoiceSlice';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -63,7 +62,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>();
     // * * * * * * * grid table states * * * * * * * * *
     // const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
-    const { data: serviceList } = useGetServiceQuery();
+    const { data: serviceList } = useGetServiceListQuery();
     const { data: paymentTerms } = useGetPaymentTermsListQuery();
     const [modifiedServiceList, setModifiedServiceList] = React.useState<Service[]>([]);
     const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
@@ -126,7 +125,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         let tdsTax = null;
         if (selectedTds) {
             let discountedAmount = (subTotalInvoiceAmount - disAmount) * (selectedTds) / 100;
-            console.log('discountedAmount', discountedAmount);
 
             setTdsAmount(discountedAmount);
             tdsTax = discountedAmount;
@@ -226,7 +224,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     values.totalAmount = invoiceTotalAmount ?? null;
                     if (invoiceValue) {
                         await updateInvoice({ id: invoiceValue.id, data: values });
-                        dispatch(clearData());
+                        dispatch(clearInvoiceData());
                         resetForm();
                         navigate(-1);
                     } else {
@@ -256,11 +254,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         totalAmount: invoiceTotalAmount ?? null,
                                     }
                                     console.log("updatedValue", updatedValue);
-                                    dispatch(setData(updatedValue as any))
+                                    dispatch(setInvoiceData(updatedValue as any))
 
                                     setPreview(false);
                                     setIsModalOpen(true);
-                                    dispatch(setData(updatedValue as any))
+                                    dispatch(setInvoiceData(updatedValue as any))
                                 },
                                 disabled: !(isValid && dirty),
                             },

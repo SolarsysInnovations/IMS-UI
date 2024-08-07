@@ -6,7 +6,6 @@ export const BASE_LOCAL_URL = NODE_URL;
 
 export enum ApiEndpoint {
     LOGIN = "login",
-
     // user
     USER_LIST = "userList",
     USER_CREATE = "userCreate",

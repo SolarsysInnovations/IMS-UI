@@ -117,9 +117,9 @@ export const dyCustomerInitialValue: DyCreateCustomerProps = {
     ],
 };
 export const dyserviceInitialValues: serviceCreationProps = {
-    serviceAccountingcode: "",
-    description: "",
-    amount: 0,
+    serviceAccountingCode: "",
+    serviceDescription: "",
+    serviceAmount: 0,
 };
 
 //

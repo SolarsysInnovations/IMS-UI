@@ -5,10 +5,10 @@ import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { DyCreateCustomerProps } from '../../types/types';
-import { clearData } from '../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { useCreateCustomerMutation, useGetCustomersListQuery, useUpdateCustomerMutation } from '../../redux-store/api/injectedApis';
+import { clearCustomerData } from '../../redux-store/slices/customerSlice';
 
 interface CustomerValueProps {
     customerEditInitialValues: any;
@@ -51,13 +51,13 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
             if (customerEditInitialValues) {
                 const id: number = values?.id
                 await updateCustomer({ id: id, data: values, });
-                dispatch(clearData());
+                dispatch(clearCustomerData());
                 actions.resetForm();
             } else {
                 await addCustomer(values);
-                dispatch(clearData());
+                dispatch(clearCustomerData());
                 actions.resetForm();
-            }
+            };
         } catch (error) {
             console.error("An error occurred during form submission:", error);
         } finally {

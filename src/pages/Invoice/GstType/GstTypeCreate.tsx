@@ -4,12 +4,12 @@ import { gstTypeInitialValue } from '../../../constants/forms/formikInitialValue
 import { gstTypeValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { GstTypeFormProps, GstTypeProps } from '../../../types/types';
-import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import { Save } from "@mui/icons-material";
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useCreateGstTypeMutation, useGetGstTypeListQuery, useUpdateGstTypeMutation } from '../../../redux-store/api/injectedApis';
+import { clearGstTypeData } from '../../../redux-store/slices/gstTypeSlice';
 
 // create and edit screen
 
@@ -35,7 +35,7 @@ const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
             actions.resetForm();
             refetch();
             if (gstTypeValue) {
-                setTimeout(() => dispatch(clearData()), 1000)
+                setTimeout(() => dispatch(clearGstTypeData()), 1000)
             };
         } catch (error) {
             console.error("An error occurred during form submission:", error);

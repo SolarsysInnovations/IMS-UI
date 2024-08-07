@@ -6,37 +6,56 @@ import { Add } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { columns } from '../../constants/grid-table-data/service-table-data';
-import { useGetServiceQuery } from '../../redux-store/service/serviceApi';
 import ModalUi from '../../components/ui/ModalUi';
 import { Box } from '@mui/material';
-import ServiceCreate from './ServiceCreate';
+import ServiceCreate from './service-create-screen';
+import ServiceEditScreen from './service-edit-screen'; // Import the edit screen
+import { useGetServiceListQuery } from '../../redux-store/api/injectedApis';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import { clearServiceData } from '../../redux-store/slices/serviceSlice';
 
 const ServicesList = () => {
     const dispatch = useDispatch<AppDispatch>();
 
-    const { data: serviceList, error, isLoading, refetch } = useGetServiceQuery();
-    const serviceStateDetails = useSelector((state: any) => state.serviceState.data);
-
-    const [openModal, setOpenModal] = useState(false);
+    const { data: serviceList, error, isLoading, refetch } = useGetServiceListQuery();
+    const serviceStateDetails = useSelector((state: any) => state.globalState.data);
+    const [opendialogBox, setIsOpenDialogBox] = useState(false);
 
     const buttons = [
-        { label: 'Create Service', icon: Add, onClick: () => { setOpenModal(true); } },
+        {
+            label: 'Create Service List', icon: Add, onClick: () => {
+                dispatch(clearServiceData());
+                setIsOpenDialogBox(true);
+            }
+        },
     ];
 
     const pathname = usePathname();
-    const handleModalClose = () => {
-        refetch();
-        setOpenModal(false);
-    };
-
-    useEffect(() => {
-        refetch();
-    }, [refetch]);
 
     return (
         <>
             <TableHeader headerName={pathname} buttons={buttons} />
             <GridDataUi showToolbar={true} columns={columns || []} tableData={serviceList || []} checkboxSelection={false} />
+            {/* <ModalUi open={openModal} onClose={handleModalClose}>
+                <Box sx={{ marginTop: "15px" }}>
+                    {editMode ? (
+                        <ServiceEditScreen />
+                    ) : (
+                        <ServiceCreate />
+                    )}
+                </Box>
+            </ModalUi> */}
+            <DialogBoxUi
+                open={opendialogBox}
+                content={
+                    <>
+                        <ServiceCreate setIsOpenDialogBox={setIsOpenDialogBox} />
+                    </>
+                }
+                handleClose={() => {
+                    setIsOpenDialogBox(false)
+                }}
+            />
         </>
     );
 };

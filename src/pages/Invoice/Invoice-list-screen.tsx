@@ -8,17 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { MyCellRenderer } from '../../constants/grid-table-data/invoice/invoice-table-data';
 import { GridColDef } from '@mui/x-data-grid';
-import { GridRenderCellParams } from '@mui/x-data-grid';
 import { selectUserRole } from '../../redux-store/auth/authSlice';
-import ButtonUi from '../../components/ui/Button';
-import SendEmail from './Send-email';
-import DialogBoxUi from '../../components/ui/DialogBox';
-import { clearData } from '../../redux-store/global/globalState';
 import useErrorHandler from '../../hooks/useErrorHanlder';
 import { Typography } from '@mui/material';
-import { useGetCustomersListQuery, useGetInvoiceListQuery } from '../../redux-store/api/injectedApis';
-const invoiceOptions = ["DRAFT", "PENDING", "APPROVED", "PAID", "OVERDUE", "DELETE", "RETURNED",]
-
+import { useGetInvoiceListQuery } from '../../redux-store/api/injectedApis';
+import { clearInvoiceData } from '../../redux-store/slices/invoiceSlice';
 
 // ! ---------- important const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
 
@@ -153,15 +147,12 @@ const InvoiceList = () => {
     const buttons = [
         {
             label: 'Create Invoice', icon: Add, onClick: () => {
-                dispatch(clearData())
+                dispatch(clearInvoiceData())
                 navigate("/invoice/create")
             }
         },
     ];
 
-    // if (role != "APPROVER") {
-    //     buttons.push({ label: 'Create Invoice', icon: Add, onClick: () => navigate("/invoice/create") })
-    // }
 
     const columns: GridColDef[] = [
         {

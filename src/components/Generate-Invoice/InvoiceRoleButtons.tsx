@@ -23,7 +23,7 @@ interface InvoiceUiProps {
 
 const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) => {
     const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
-    const invoiceData = useSelector((state: any) => state.globalState.data);
+    const invoiceData = useSelector((state: any) => state.invoiceState.data);
     const userRole = useSelector(selectUserRole);
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const [showTracker, setShowTracker] = useState(false);

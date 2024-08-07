@@ -3,7 +3,6 @@ import { Box, Card, Grid, } from "@mui/material";
 import { pdfjs } from "react-pdf";
 import { invoiceStatusOptions } from "../../constants/data";
 import { useDispatch, useSelector } from "react-redux";
-import { clearData, setData } from "../../redux-store/global/globalState";
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 import InvoiceLetterUi from "./InvoiceLetterUi";
 import InvoiceRoleButtons from "./InvoiceRoleButtons";
@@ -33,7 +32,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
   const [getInvoiceById, { }] = useGetSingleInvoiceMutation();
   const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceListQuery();
   const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
-  const invoiceData = useSelector((state: any) => state.globalState.data);
+  const invoiceData = useSelector((state: any) => state.invoiceState.data);
 
   console.log("invoiceData", invoiceData);
 

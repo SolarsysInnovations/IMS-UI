@@ -9,7 +9,6 @@ import { AppDispatch, RootState } from '../../redux-store/store'
 import { Formik, Form } from 'formik';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import GridDataUi from '../../components/GridTable/GridData';
-import { useGetReportByIdMutation, useGetReportQuery } from '../../redux-store/reports/reportApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
@@ -18,6 +17,7 @@ import { columns } from '../../constants/grid-table-data/Reports-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { ArAgingInitialValueProps } from '../../types/types';
+import { useGetReportInvoiceMutation } from '../../redux-store/api/injectedApis';
 
 const ArAgingscreen: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -25,7 +25,7 @@ const ArAgingscreen: React.FC = () => {
     const navigate = useNavigate();
     // const { data: reportList } = useGetReportQuery(); 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [ArAging] = useGetReportByIdMutation();
+    const [ArAging] = useGetReportInvoiceMutation();
     const [tableData, setTableData] = useState<any>()
     const handleCloseModal = () => {
         setIsModalOpen(false);

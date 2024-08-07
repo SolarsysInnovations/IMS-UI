@@ -90,8 +90,8 @@ export const sidebarTwo = [
       // {
       //   id: 1,
       //   show: false,
-      //   title: "Create/Edit Service",
-      //   path: "/service/:id?", // Optional parameter for edit mode
+      //   title: "Create Services",
+      //   path: "/service/create",
       //   element: <ServiceCreate />,
       //   allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
       // },
