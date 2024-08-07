@@ -3,14 +3,11 @@ import SuperAdminCustomersList from './SuperAdminCustomersList';
 import { Grid } from '@mui/material';
 
 
-const SuperAdminDashboardScreen = ({ superAdminData, isLoading }: any) => {
+const SuperAdminDashboardScreen = ({ superAdminData }: any) => {
 
     if (!superAdminData) {
         return <div>No data available</div>;
     }
-    if(isLoading){
-        return <div>Loading...</div>;
-      }
     const superAdminOverviewData = {
         totalNoOfCompany: superAdminData.totalNoOfCompany || 0,
         totalNoOfInvoices: superAdminData.totalNoOfInvoices || 0,

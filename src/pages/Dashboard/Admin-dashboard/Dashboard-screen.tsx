@@ -2,15 +2,13 @@ import { Grid } from "@mui/material";
 import AdminDashboardInvoiceOverviewAmount from "../Admin-dashboard/InvoiceAmount";
 import AdminDashboardInvoicePieChart from "../Admin-dashboard/InvoiceStatusChart";
 
-const AdminDashboardScreen = ({ adminData,isLoading }: any) => {
+const AdminDashboardScreen = ({ adminData }: any) => {
 
   // Check if adminData is undefined and provide default values if necessary
   if (!adminData) {
     return <div>No data available</div>;
   }
-  if(isLoading){
-    return <div>Loading...</div>;
-  }
+
   // Provide default values based on the actual structure of adminData
   const invoiceOverviewAmountData = adminData.invoiceOverview || {};
   const invoicePieChartData = adminData.invoiceStatus || {};

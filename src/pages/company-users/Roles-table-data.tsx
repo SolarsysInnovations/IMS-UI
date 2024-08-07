@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton, Stack,Box } from '@mui/material';
-import TableHeader from "../../components/layouts/TableHeader";
+import { IconButton, Stack } from '@mui/material';
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import { useDeleteRoleMutation, useGetRoleByIdMutation, useGetRoleQuery, useUpdateRoleMutation, setRoleData } from '../../redux-store/role/roleApi';
 import usePathname from '../../hooks/usePathname';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { AppDispatch } from '../../redux-store/store';
 import { useDispatch } from 'react-redux';
-import { RemoveRedEyeOutlined } from "@mui/icons-material";
-import ModalUi from "../../components/ui/ModalUi";
-
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { RolesEditFields } from '../../constants/form-data/form-data-json';
-import CustomerDetails from '../customer/customerDetails';
 import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from '../../redux-store/api/injectedApis';
 import UserForm from './UserForm';
 
@@ -95,14 +90,6 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
         setOpenModal(false);
         refetch();
     };
-const handleModalOpen = async () => {
-  setOpenModal(true);
-  try {
-    await getRole(id);
-   } catch (error) {
-    console.error("Error fetching customer data:", error);
-  }
-};
 
     const handleEditClick = async () => {
         try {
@@ -111,7 +98,7 @@ const handleModalOpen = async () => {
             if ('data' in response) {
                 const roleData = response.data;
                 await dispatch(setRoleData(roleData));
-               // setOpenModal(true);
+                setOpenModal(true);
             } else {
                 console.error('Error response:', response.error);
             }

@@ -134,11 +134,11 @@ const DashboardScreen = () => {
                 </Grid>
                 <Grid pl={2} mt={3} container spacing={2} mb={2}>
                     {userRole === Roles.APPROVER ? (
-                        <ApproverDashboardScreen isLoading={isLoading} approverData={responseData} />
+                        <ApproverDashboardScreen approverData={responseData} />
                     ) : userRole === Roles.STANDARDUSER ? (
-                        <EndUserDashboardScreen isLoading={isLoading} standardUserData={responseData}  />
+                        <EndUserDashboardScreen standardUserData={responseData} />
                     ) : userRole === Roles.SUPERADMIN ? (
-                        <SuperAdminDashboardScreen superAdminData={responseData}isLoading={isLoading}  />
+                        <SuperAdminDashboardScreen superAdminData={responseData} />
                     ) : userRole === Roles.ADMIN ? (
                         <AdminDashboardScreen adminData={responseData} />
                     ) : (<p>Something went wrong on the dashboard</p>)}

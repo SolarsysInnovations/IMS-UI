@@ -20,20 +20,16 @@ const defaultApproverData: ApproverData = {
 
 interface ApproverDashboardScreenProps {
   approverData: ApproverData;
-  isLoading: boolean;
 }
 
 const ApproverDashboardScreen: React.FC<ApproverDashboardScreenProps> = ({
   approverData = defaultApproverData,
-  isLoading = false
 }) => {
 
   if (!approverData) {
     return <div>No data available</div>;
   };
-  if(isLoading){
-    return <div>Loading...</div>;
-  }
+
   const approverOverViewData = {
     totalInvoices: approverData.totalInvoices || 0,
     pendingInvoices: approverData.pendingInvoices || 0,

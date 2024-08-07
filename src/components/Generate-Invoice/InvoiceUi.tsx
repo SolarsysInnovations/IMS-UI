@@ -44,7 +44,7 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     errorObject: invoiceUpdateErrorObject,
     errorMessage: "Error when sending Invoice to approver",
     success: invoiceUpdateSuccess,
-    successMessage: "Invoice sent for approver and updated successfully",
+    successMessage: "Invoice sent to approver and updated successfully",
   });
 
   useEffect(() => {
@@ -82,10 +82,6 @@ function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen 
     return isModalOpen(false);
   }
 
-  const handleCloseNested = () => {
-    setNestedOpen(false);
-  };
-  const exceptApprover: any = Roles.APPROVER === userRole;
   return (
     <>
       <InvoiceLetterUi invoiceData={invoiceData} />
