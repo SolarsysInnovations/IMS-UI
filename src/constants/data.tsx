@@ -7,9 +7,6 @@ import Reportsinvoice from "../pages/reports/Reports-invoice";
 import SettingScreen from "../pages/settings/settings";
 import CustomerList from "../pages/customer/Customer-list-screen";
 import InvoiceList from "../pages/Invoice/Invoice-list-screen";
-import ServicesList from "../pages/service/service-list-screen";
-import CreateServices from "../pages/service/create-service-screen";
-import ServiceEditScreen from "../pages/service/service-edit-screen";
 import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded, SettingsSuggestRounded } from "@mui/icons-material"
 import GroupIcon from '@mui/icons-material/Group';
 import ReceiptIcon from '@mui/icons-material/Receipt';
@@ -25,6 +22,7 @@ import CompanyScreen from "../pages/super-admin-company/companyScreen";
 import UserScreen from "../pages/company-users/UserScreen";
 import SettingRoleScreen from "../pages/settings/settings-role";
 import DashboardScreen from "../pages/Dashboard/Dashboard";
+import ServicesList from "../pages/service/service-list-screen";
 
 const getUserRole = () => {
   return localStorage.getItem('userRole');
@@ -88,22 +86,14 @@ export const sidebarTwo = [
     icon: MiscellaneousServicesIcon,
     isParent: true,
     subItems: [
-      {
-        id: 1,
-        show: false,
-        title: "Create Services",
-        path: "/service/create",
-        element: <CreateServices />,
-        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-      },
-      {
-        id: 2,
-        show: false,
-        title: "Edit Service",
-        path: "/service/edit/:id",
-        element: <ServiceEditScreen />,
-        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-      },
+      // {
+      //   id: 1,
+      //   show: false,
+      //   title: "Create Services",
+      //   path: "/service/create",
+      //   element: <ServiceCreate />,
+      //   allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      // },
     ],
     allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
   },

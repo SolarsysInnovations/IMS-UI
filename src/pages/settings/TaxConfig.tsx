@@ -11,9 +11,9 @@ import DialogBoxUi from '../../components/ui/DialogBox';
 import GstTypeScreen from '../Invoice/GstType/GstTypeScreen';
 import PaymentTermsScreen from '../Invoice/paymentTerms/PaymentTermsScreen';
 import TdsTaxScreen from '../Invoice/TdsTax/TdsTaxScreen';
-import ServiceScreen from '../Invoice/service/ServiceScreen';
 import TableHeader from '../../components/layouts/TableHeader';
 import { useGetGstTypeListQuery, useGetPaymentTermsListQuery, useGetTdsTaxListQuery } from '../../redux-store/api/injectedApis';
+import ServiceEditScreen from '../service/service-edit-screen';
 
 const TaxConfig = () => {
     const [popUpComponent, setPopUpComponent] = useState("");
@@ -71,7 +71,7 @@ const TaxConfig = () => {
                                         popUpComponent === PopupComponents.GST_TYPE ? <GstTypeScreen /> :
                                             popUpComponent === PopupComponents.PAYMENT_TERMS ? <PaymentTermsScreen /> :
                                                 popUpComponent === PopupComponents.TDS_TAX ? <TdsTaxScreen /> :
-                                                    popUpComponent === PopupComponents.SERVICES ? <ServiceScreen /> :
+                                                    popUpComponent === PopupComponents.SERVICES ? <ServiceEditScreen /> :
                                                         popUpComponent === PopupComponents.INVOICE ? <InvoiceUi /> : null
                                     }
                                 </>

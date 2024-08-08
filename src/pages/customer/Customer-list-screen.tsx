@@ -5,10 +5,11 @@ import { Add } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { columns } from '../../constants/grid-table-data/customer-table-data'
 import { Country, State } from 'country-state-city'
-import { useGetCustomersListQuery, useUpdateCustomerMutation } from '../../redux-store/api/injectedApis'
-import { clearCustomerData } from '../../redux-store/slices/customerSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../redux-store/store'
+import { clearData } from '../../redux-store/global/globalState';
+import { useGetCustomersListQuery, useUpdateCustomerMutation } from '../../redux-store/api/injectedApis'
+import { clearCustomerData } from '../../redux-store/slices/customerSlice'
 
 const CustomerList = () => {
     const dispatch = useDispatch<AppDispatch>();

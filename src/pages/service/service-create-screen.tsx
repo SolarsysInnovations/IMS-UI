@@ -3,7 +3,6 @@ import { serviceFields } from '../../constants/form-data/form-data-json';
 import { serviceInitialValues as defaultServiceInitialValues } from '../../constants/forms/formikInitialValues'; // Rename to avoid conflict
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
-import SnackBarUi from '../../components/ui/Snackbar';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { useCreateServiceMutation, useGetServiceListQuery, useUpdateServiceMutation } from '../../redux-store/api/injectedApis';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,11 +21,11 @@ const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
     const serviceEditInitialValues = useSelector((state: any) => state.serviceState.data);
 
     useSnackbarNotifications({
-        error: serviceAddError,
-        errorObject: serviceAddErrorObject,
-        errorMessage: 'Error creating Service',
-        success: serviceAddSuccess,
-        successMessage: 'Service created successfully',
+        error: serviceAddError || serviceUpdateError,
+        errorObject: serviceAddErrorObject || serviceUpdateErrorObject,
+        errorMessage: 'Error creating or updating Service',
+        success: serviceAddSuccess || serviceUpdateSuccess,
+        successMessage: serviceAddSuccess ? 'Service created successfully' : 'Service updated successfully',
     });
 
     useEffect(() => {

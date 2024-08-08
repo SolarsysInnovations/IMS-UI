@@ -3,11 +3,11 @@ import { GridColDef, GridDeleteIcon, GridValueSetterParams } from "@mui/x-data-g
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
-import ServiceDetails from "../../pages/service/serviceDetails";
 import TableHeader from "../../components/layouts/TableHeader";
 import usePathname from "../../hooks/usePathname";
 import React from "react";
 import { useDeleteServiceMutation, useGetServiceListQuery, useGetSingleServiceMutation } from "../../redux-store/api/injectedApis";
+import ServiceDetails from "../../pages/service/serviceDetails";
 
 const id = 1
 

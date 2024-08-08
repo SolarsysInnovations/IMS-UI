@@ -6,6 +6,9 @@ import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { columns } from '../../constants/grid-table-data/company-table-data';
 import { useGetUsersListQuery } from '../../redux-store/api/injectedApis';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
+import { clearUserData } from '../../redux-store/slices/userSlice';
 
 interface CompanyDetails {
     companyName: string;
@@ -20,7 +23,7 @@ interface CompanyDetails {
     id: string;
 }
 
-interface AdminDetails {
+interface UserDetails {
     userEmail: string;
     userName: string;
     password: string;
@@ -31,27 +34,28 @@ interface AdminDetails {
     id: string;
 }
 
-interface CompanyAdminData {
+interface CompanyUserData {
     companyDetails: CompanyDetails;
-    adminDetails: AdminDetails;
+    userDetails: UserDetails;
 }
 
 const CompanyList = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
     const { data: company, error, isLoading, refetch } = useGetUsersListQuery();
     const [mergedData, setMergedData] = useState<any[]>([]);
     const pathname = usePathname();
 
     useEffect(() => {
         if (company && !isLoading && !error) {
-            const mergedArray = company.map((item: CompanyAdminData) => ({
+            const mergedArray = company.map((item: CompanyUserData) => ({
                 // Admin profile
-                id: item.adminDetails.id,
-                userName: item.adminDetails.userName,
-                userEmail: item.adminDetails.userEmail,
-                userRole: item.adminDetails.userRole,
-                userMobile: item.adminDetails.userMobile,
-                userAccess: item.adminDetails.description,
+                id: item.userDetails.id,
+                userName: item.userDetails.userName,
+                userEmail: item.userDetails.userEmail,
+                userRole: item.userDetails.userRole,
+                userMobile: item.userDetails.userMobile,
+                userAccess: item.userDetails.description,
 
                 // Company Details
                 companyName: item.companyDetails.companyName,
@@ -62,7 +66,12 @@ const CompanyList = () => {
     }, [company, isLoading, error]);
 
     const buttons = [
-        { label: 'Create Company', icon: Add, onClick: () => navigate("/company/create") },
+        {
+            label: 'Create Company', icon: Add, onClick: () => {
+                dispatch(clearUserData());
+                navigate("/company/create")
+            }
+        },
     ];
 
     return (

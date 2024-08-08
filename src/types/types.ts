@@ -24,6 +24,9 @@ export interface TdsTaxProps {
 export interface TdsTaxFormProps {
     tdsTaxValue: TdsTaxProps;
 }
+export interface ServiceFormProps {
+    serviceValue: ServiceListProps;
+}
 export interface CompanyFormProps {
     companyValue: AdminCompanyUsersInitialValueProps;
     mode?: 'create' | 'edit';
@@ -115,7 +118,7 @@ export interface FieldProps {
 
 // -------- invoice service ------------------------
 interface ServiceListProps {
-    id: string;
+    id: number;
     serviceAccountingCode: string;
     serviceAmount: number;
     serviceQty: number;

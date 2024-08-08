@@ -33,7 +33,7 @@ const UserForm = ({ userEditValue, mode }: UserValueProps) => {
         errorObject: userAddErrorObject,
         errorMessage: 'Error creating Company',
         success: userAddSuccess,
-        successMessage: 'Company created successfully',
+        successMessage: 'User created successfully',
     });
 
     useSnackbarNotifications({
@@ -41,7 +41,7 @@ const UserForm = ({ userEditValue, mode }: UserValueProps) => {
         errorObject: userUpdateErrorObject,
         errorMessage: 'Error updating Company',
         success: userUpdateSuccess,
-        successMessage: 'Company updated successfully',
+        successMessage: 'User updated successfully',
     });
 
     useEffect(() => {
@@ -64,13 +64,15 @@ const UserForm = ({ userEditValue, mode }: UserValueProps) => {
                 await updateUser({ id: id, data: userPayload });
             } else {
                 const userPayload = {
-                    userName: values.userName,
-                    userEmail: values.userEmail,
-                    password: values.password,
-                    userRole: values.userRole,
-                    userMobile: values.userMobile,
-                    description: values.description,
-                }
+                    userDetails: {
+                        userName: values.userName,
+                        userEmail: values.userEmail,
+                        password: values.password,
+                        userRole: values.userRole,
+                        userMobile: values.userMobile,
+                        description: values.description,
+                    }
+                };
                 await addUser(userPayload);
             }
             dispatch(clearData());

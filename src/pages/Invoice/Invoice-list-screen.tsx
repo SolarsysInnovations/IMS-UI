@@ -142,25 +142,17 @@ const InvoiceList = () => {
     const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceListQuery();
     const invoiceListErrorMessage = useErrorHandler(errorInvoiceList);
     const role = localStorage.getItem("userRole");
-    const buttons = [];
+    // const buttons = [];
 
-    // const buttons = [
-    //     {
-    //         label: 'Create Invoice', icon: Add, onClick: () => {
-    //             dispatch(clearData())
-    //             navigate("/invoice/create")
-    //         }
-    //     },
-    // ];
-
-    if (role != "APPROVER") {
-        buttons.push({
+    const buttons = [
+        {
             label: 'Create Invoice', icon: Add, onClick: () => {
-                navigate("/invoice/create");
                 dispatch(clearInvoiceData())
+                navigate("/invoice/create")
             }
-        })
-    }
+        },
+    ];
+
 
     const columns: GridColDef[] = [
         {

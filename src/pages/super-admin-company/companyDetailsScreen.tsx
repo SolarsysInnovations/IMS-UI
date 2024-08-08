@@ -12,16 +12,16 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = () => {
     const [mergedData, setMergedData] = useState<{ [key: string]: any }>({});
 
     useEffect(() => {
-        if (companyValue && companyValue.companyDetails && companyValue.register) {
+        if (companyValue && companyValue.companyDetails && companyValue.userDetails) {
             const mergedObject = {
                 ...companyValue.companyDetails,
-                ...companyValue.register
+                ...companyValue.userDetails
             };
             setMergedData(mergedObject);
         }
     }, [companyValue]);
 
-    if (!companyValue || !companyValue.companyDetails || !companyValue.register) {
+    if (!companyValue || !companyValue.companyDetails || !companyValue.userDetails) {
         return null; // Or display a loading indicator or placeholder
     }
 

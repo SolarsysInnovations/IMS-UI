@@ -7,26 +7,36 @@ import { AppDispatch } from "../../redux-store/store";
 import { useEffect, useState } from "react";
 import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
-import ServiceDetails from "../../pages/service/serviceDetails";
 import TableHeader from "../../components/layouts/TableHeader";
 import usePathname from "../../hooks/usePathname";
 import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
 import React from "react";
-import ServiceEditScreen from "../../pages/service/service-edit-screen";
-import { useDeleteServiceMutation, useGetServiceListQuery, useGetSingleServiceMutation } from "../../redux-store/api/injectedApis";
 import DialogBoxUi from "../../components/ui/DialogBox";
-import ServiceCreate from "../../pages/service/service-create-screen";
+import { useDeleteServiceMutation, useGetServiceListQuery, useGetSingleServiceMutation } from "../../redux-store/api/injectedApis";
 import { setServiceData } from "../../redux-store/slices/serviceSlice";
+import ServiceCreate from "../../pages/service/service-create-screen";
+import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 
 
 const MyCellRenderer = ({ id }: { id: any }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
     const { data: services, error, isLoading, refetch } = useGetServiceListQuery();
-    const [deletedService, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteServiceMutation<{ deletedService: any, error: any, isLoading: any, isSuccess: any, data: any }>();
+    const [deletedService, { isLoading: deleteServiceLoading, error: deleteServiceErrorObject, isSuccess: deleteServiceSuccess, isError: deleteServiceError, data: deletedData }] = useDeleteServiceMutation();
     const [getService, { data: serviceData, isSuccess: C_success, isError: C_error }] = useGetSingleServiceMutation<{ data: any, isSuccess: any, isError: any }>();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
 
+    useEffect(() => {
+        refetch();
+    }, [deleteServiceSuccess, refetch]);
+
+    useSnackbarNotifications({
+        error: deleteServiceError,
+        errorMessage: 'Error adding Service',
+        errorObject: deleteServiceErrorObject,
+        success: deleteServiceSuccess,
+        successMessage: 'Service deleted successfully',
+    });
 
     const handleEditClick = async () => {
         try {
