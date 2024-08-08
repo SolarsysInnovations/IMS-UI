@@ -16,9 +16,9 @@ const SuperAdminDashboardScreen = ({ superAdminData }: any) => {
 
     return (
         <>
-          <Grid container spacing={4} p={3}>
+      <Grid container spacing={-1}>
         {superAdminOverviewData && (
-            <Grid item xs={12}>
+              <Grid item xs={12}>
                 <div style={{ padding: '16px', backgroundColor: '#fff' }}>
                     <SuperAdminDashboardOverview overviewData={superAdminOverviewData} />
                 </div>

@@ -69,14 +69,13 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const [invoiceValues, setInvoiceValues] = useState(invoiceValue || invoiceCreateInitialValue);
     const { data: gstTypesData = [] } = useGetGstTypeListQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxListQuery();
-
     // * ----------- to generate the dropdown options -------------
     const customerName = generateOptions(customers, 'customerName', 'customerName');
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
     const [preview, setPreview] = useState(false);
-
+    const [responseMessage, setResponseMessage] = useState('');
     const PopupComponents = {
         GST_TYPE: 'gstType',
         PAYMENT_TERMS: 'paymentTerms',
@@ -104,11 +103,14 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     useSnackbarNotifications({
         success: invoiceUpdatedSuccess,
         error: invoiceUpdateError,
-        successMessage: 'Invoice updated successfully',
+        successMessage: responseMessage || 'Invoice updated successfully',
         errorMessage: 'Error updating invoice',
         errorObject: invoiceUpdateErrorObject,
     });
 
+ console.log("responseMessage",responseMessage);
+ 
+    
     React.useEffect(() => {
 
         if (invoiceValues) {
@@ -223,7 +225,8 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     values.servicesList = invoiceValues.servicesList
                     values.totalAmount = invoiceTotalAmount ?? null;
                     if (invoiceValue) {
-                        await updateInvoice({ id: invoiceValue.id, data: values });
+                        const response = await updateInvoice({ id: invoiceValue.id, data: values });
+                        setResponseMessage(response?.data?.message || "invoice updated")
                         dispatch(clearInvoiceData());
                         resetForm();
                         navigate(-1);
