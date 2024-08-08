@@ -94,8 +94,8 @@ const Reportsinvoice: React.FC = () => {
                                                         setFieldValue("endDate", dueDateNet2);
                                                     }
                                                     else if (newValue.value === "This Month") {
-                                                        const currentDateNet3 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet3 = dayjs().add(30, 'days').format('DD-MM-YYYY');
+                                                        const currentDateNet3 = dayjs().startOf('month').format('DD-MM-YYYY');
+                                                        const dueDateNet3 = dayjs().endOf('month').format('DD-MM-YYYY');
                                                         setFieldValue('startDate', currentDateNet3)
                                                         setFieldValue("endDate", dueDateNet3)
                                                     } else if (newValue.value === "Last 30 Days") {

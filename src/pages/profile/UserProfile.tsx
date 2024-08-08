@@ -5,9 +5,11 @@ import { useRolesGetUserMutation } from "../../redux-store/role/roleApi"
 import CustomerDetails from "../customer/customerDetails";
 
 const UserProfile = () => {
-
+    const userMobile = localStorage.getItem("userMobile");
     const userName = localStorage.getItem("userName");
     const userEmail = localStorage.getItem("userEmail");
+    const userRole = localStorage.getItem("userRole");
+    
     const [userData, setUserData] = useState<any | null>(null);
     const [rolesGetUser] = useRolesGetUserMutation();
    
@@ -29,22 +31,22 @@ const UserProfile = () => {
             <TableHeader headerName="User Details" />
             <MenuItem>
                 <Typography variant="body2" >
-                    <strong>UserName :</strong><span style={{ marginLeft: '13px' }}> {userData?.userName || ''}</span>
+                    <strong>UserName :</strong><span style={{ marginLeft: '13px' }}> {userName || ''}</span>
                 </Typography>
             </MenuItem>
             <MenuItem>
                 <Typography variant="body2">
-                    <strong>UserRole :</strong><span style={{ marginLeft: '18px' }}> {userData?.userRole || ''}</span>
+                    <strong>UserRole :</strong><span style={{ marginLeft: '18px' }}> {userRole || ''}</span>
                 </Typography>
             </MenuItem>
             <MenuItem>
                 <Typography variant="body2">
-                    <strong>Email :</strong><span style={{ marginLeft: '37px' }}> {userData?.userEmail || ''}</span>
+                    <strong>Email :</strong><span style={{ marginLeft: '37px' }}> {userEmail || ''}</span>
                 </Typography>
             </MenuItem>
             <MenuItem>
                 <Typography variant="body2">
-                    <strong>UserMobile :</strong> {userData?.userMobile || ''}
+                    <strong>UserMobile :</strong> <span style={{ marginLeft: '37px' }}>{userMobile || 'NA'}</span>
                 </Typography>
             </MenuItem>
         </>

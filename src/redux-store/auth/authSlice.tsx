@@ -8,7 +8,7 @@ interface AuthState {
     userRole: string | null;
     userName: string | null;
     userEmail: string | null;
-    userDetails? : any;
+    userDetails?: any;
 }
 
 // Define the type for your user object
@@ -32,7 +32,7 @@ const initialState: AuthState = {
     userRole: userRoleFromStorage || null,
     userName: userNameFromStorage || null,
     userEmail: userEmailFromStorage || null,
-    userDetails : userDetailsFromStorage || null,
+    userDetails: userDetailsFromStorage ? JSON.parse(userDetailsFromStorage) : null,
 };
 
 // Create the authentication slice
@@ -55,7 +55,7 @@ const authSlice = createSlice({
             localStorage.setItem('userRole', userRole || "");
             localStorage.setItem('userName', userName || "");
             localStorage.setItem('userEmail', userEmail || "");
-            localStorage.setItem('userDetails', JSON.stringify(userDetails));
+            localStorage.setItem('userDetails', JSON.stringify(userDetails) || "{}");
         },
         logOut: (state) => {
             state.user = null;
@@ -92,3 +92,4 @@ export const selectCurrentToken = (state: { auth: AuthState }) => state.auth.acc
 export const selectRefreshToken = (state: { auth: AuthState }) => state.auth.refresh;
 export const selectUserRole = (state: { auth: AuthState }): string | null => state.auth.userRole;
 export const selectUserName = (state: { auth: AuthState }): string | null => state.auth.userName;
+export const selectUserDetails = (state: { auth: AuthState }) => state.auth.userDetails;
