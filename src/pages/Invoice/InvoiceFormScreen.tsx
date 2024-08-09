@@ -15,7 +15,7 @@ import { InvoiceInitialValueProps } from '../../types/types';
 import DatePickerUi from '../../components/ui/DatePicker';
 import ModalUi from '../../components/ui/ModalUi';
 import { generateOptions } from '../../services/utils/dropdownOptions';
-import InvoiceUi from '../../components/Generate-Invoice/InvoiceUi';
+import InvoiceUi from './Generate-Invoice/InvoiceUi';
 import { invoiceType, } from '../../constants/invoiceData';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import TextAreaUi from '../../components/ui/TextArea';
@@ -75,7 +75,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
     const [preview, setPreview] = useState(false);
-    const [responseMessage, setResponseMessage] = useState('');
+    const [resMessage, setResMessage] = useState('');
     const PopupComponents = {
         GST_TYPE: 'gstType',
         PAYMENT_TERMS: 'paymentTerms',
@@ -103,14 +103,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     useSnackbarNotifications({
         success: invoiceUpdatedSuccess,
         error: invoiceUpdateError,
-        successMessage: responseMessage || 'Invoice updated successfully',
+        successMessage: resMessage,
         errorMessage: 'Error updating invoice',
         errorObject: invoiceUpdateErrorObject,
     });
 
- console.log("responseMessage",responseMessage);
- 
-    
     React.useEffect(() => {
 
         if (invoiceValues) {
@@ -225,8 +222,10 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     values.servicesList = invoiceValues.servicesList
                     values.totalAmount = invoiceTotalAmount ?? null;
                     if (invoiceValue) {
+                        console.log("hello world");
                         const response = await updateInvoice({ id: invoiceValue.id, data: values });
-                        setResponseMessage(response?.data?.message || "invoice updated")
+                        console.log("API Response:", response);
+                        setResMessage(response.data.message);
                         dispatch(clearInvoiceData());
                         resetForm();
                         navigate(-1);
@@ -256,7 +255,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         servicesList: invoiceValues.servicesList ?? null,
                                         totalAmount: invoiceTotalAmount ?? null,
                                     }
-                                    console.log("updatedValue", updatedValue);
                                     dispatch(setInvoiceData(updatedValue as any))
 
                                     setPreview(false);
@@ -289,7 +287,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                             popUpComponent === PopupComponents.PAYMENT_TERMS ? <PaymentTermsScreen /> :
                                                 popUpComponent === PopupComponents.TDS_TAX ? <TdsTaxScreen /> :
                                                     popUpComponent === PopupComponents.SERVICES ? <ServiceScreen /> :
-                                                        popUpComponent === PopupComponents.INVOICE ? <InvoiceUi /> : null
+                                                        popUpComponent === PopupComponents.INVOICE ? <InvoiceUi preview={preview} discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} isModalOpen={setIsModalOpen} /> : null
                                     }
                                 </>
                             }
@@ -299,12 +297,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
 
                             }}
                         />
-                        <ModalUi topHeight='60%' open={isModalOpen} onClose={() => {
-                            setPreview(false);
-                            setIsModalOpen(false)
-                        }} >
-                            <InvoiceUi preview={preview} discount={discountAmount} subtotal={subTotalInvoiceAmount} tds={tdsAmount} isModalOpen={setIsModalOpen} />
-                        </ModalUi>
                         <Form id="createClientForm" noValidate >
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>

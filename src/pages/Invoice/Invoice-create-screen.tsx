@@ -8,8 +8,6 @@ const InvoiceCreateScreen = () => {
     const invoiceValue = useSelector((state: any) => state.invoiceState.data);
     const [key, setKey] = useState<number>(0);
 
-    console.log("invoiceValue", invoiceValue);
-
     useEffect(() => {
         setKey((prev) => prev + 1)
     }, [invoiceValue]);

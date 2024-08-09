@@ -1,15 +1,15 @@
 import { Box, Card } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ButtonUi from '../ui/Button';
-import { InvoiceOptions, InvoiceStatus, Roles } from '../../constants/Enums';
-import { selectUserRole } from '../../redux-store/auth/authSlice';
-import SplitButton from '../ui/SplitButton';
-import StageStepper from '../ui/StepperUi';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import ButtonUi from '../../../components/ui/Button';
+import { InvoiceOptions, InvoiceStatus, Roles } from '../../../constants/Enums';
+import { selectUserRole } from '../../../redux-store/auth/authSlice';
+import SplitButton from '../../../components/ui/SplitButton';
+import StageStepper from '../../../components/ui/StepperUi';
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { useGetInvoiceListQuery, useUpdateInvoiceMutation } from '../../redux-store/api/injectedApis';
+import { useGetInvoiceListQuery, useUpdateInvoiceMutation } from '../../../redux-store/api/injectedApis';
 
 interface InvoiceUiProps {
     invoiceData?: any;
@@ -19,7 +19,7 @@ interface InvoiceUiProps {
     isModalOpen?: any;
     downloadPdf?: boolean;
     preview?: boolean;
-}
+};
 
 const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) => {
     const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
@@ -28,20 +28,15 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const [showTracker, setShowTracker] = useState(false);
     const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceListQuery();
+    const [resMessage, setResMessage] = useState('');
 
     useSnackbarNotifications({
         error: invoiceUpdateError,
         errorObject: invoiceUpdateErrorObject,
         errorMessage: 'Error While updating ',
         success: invoiceUpdateSuccess,
-        successMessage: 'Invoice updated successfully',
+        successMessage: resMessage,
     });
-
-    useEffect(() => {
-        if (downloadPdf) {
-            printPDF();
-        }
-    }, [downloadPdf]);
 
     useEffect(() => {
         refetch();
@@ -82,10 +77,10 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
 
                 if (newStatus) {
                     updatedInvoiceData = { ...invoiceData, invoiceStatus: newStatus };
-                    console.log("updatedInvoiceData", updatedInvoiceData);
                 }
 
-                await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
+                let response = await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
+                setResMessage(response.data.message);
                 console.log("Updated Invoice Data", updatedInvoiceData);
             } catch (error) {
                 console.log("Error updating invoice data", error);
@@ -117,41 +112,16 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
 
     const availableOptions = getAvailableOptions();
 
-    const printPDF = () => {
-        const element = document.querySelector("#invoiceCapture");
-        if (!element) {
-            console.error("Element with id 'invoiceCapture' not found");
-            return;
-        }
-        html2canvas(element as HTMLElement, { scale: 2 }).then((canvas) => {
-            const imgWidth = 208;
-            const pageHeight = 295;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
-            let position = 0;
-            const doc = new jsPDF("p", "mm");
-            doc.addImage(canvas, "PNG", 0, position, imgWidth, imgHeight, "", "FAST");
-            heightLeft -= pageHeight;
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                doc.addPage();
-                doc.addImage(canvas, "PNG", 0, position, imgWidth, imgHeight, "", "FAST");
-                heightLeft -= pageHeight;
-            }
-            const pdfData = doc.output("datauristring");
-            localStorage.setItem("invoicePDF", pdfData);
-            doc.save("Downld.pdf");
-        });
-    };
+
 
     return (
-        <Box gap={2} sx={{ display: "flex", justifyContent: "right" }}>
+        <Box gap={2} sx={{ display: "flex", justifyContent: "left", flexDirection: "row", gap: "20px", marginTop: "10px" }}>
             <ButtonUi
                 smallButtonCss={true}
                 label="Generate PDF"
                 variant="contained"
                 size="small"
-                onClick={printPDF}
+                onClick={() => { }}
             />
 
             <SplitButton

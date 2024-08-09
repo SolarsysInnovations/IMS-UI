@@ -7,11 +7,12 @@ import { AppDispatch } from "../../../redux-store/store";
 import { useEffect, useState } from "react";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../../components/ui/ModalUi";
-import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
+import InvoiceUi from "../../../pages/Invoice/Generate-Invoice/InvoiceUi";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 import { useDeleteInvoiceMutation, useGetInvoiceListQuery, useGetSingleInvoiceMutation, useUpdateCustomerMutation } from "../../../redux-store/api/injectedApis";
 import { clearInvoiceData, setInvoiceData } from "../../../redux-store/slices/invoiceSlice";
+import DialogBoxUi from "../../../components/ui/DialogBox";
 
 export const DownloadButtonRenderer = ({ row }: { row: any }) => {
     const [downloadPdf, setDownloadPdf] = useState<boolean>(false);
@@ -54,6 +55,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
     const [preview, setPreview] = useState(false);
     const [nestedOpen, setNestedOpen] = useState(false);
     const [updateInvoice] = useUpdateCustomerMutation();
+    const [opendialogBox, setIsOpenDialogBox] = useState(false);
 
     useEffect(() => {
         getInvoiceList()
@@ -92,6 +94,8 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
                 dispatch(clearInvoiceData());
                 dispatch(setInvoiceData(invoiceData));
                 handleOpenModal();
+                setIsOpenDialogBox(true);
+
             } else {
                 console.error('Error response:', response.error);
             }
@@ -129,9 +133,17 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
                 }}>
                     <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
                 </IconButton>
-                <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
-                    <InvoiceUi preview={preview} invoiceData={invoiceData} isModalOpen={setIsModalOpen} />
-                </ModalUi>
+                <DialogBoxUi
+                    open={opendialogBox}
+                    content={
+                        <>
+                            <InvoiceUi preview={preview} isModalOpen={setIsModalOpen} />
+                        </>
+                    }
+                    handleClose={() => {
+                        setIsOpenDialogBox(false)
+                    }}
+                />
             </Stack>
         </>
     );

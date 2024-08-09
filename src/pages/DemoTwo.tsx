@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import jsPdf from "jspdf";
 import html2canvas from "html2canvas";
 import { Box, Stack, Typography } from "@mui/material";
-import TableContent from "../components/Generate-Invoice/TableContent";
 import { Document, Page, pdfjs } from "react-pdf";
 interface InvoiceUiProps {
     invoiceData?: any;
@@ -66,7 +65,6 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
                         </Box>
                     </Stack>
                     <Box sx={{ mt: 6 }}>
-                        <TableContent tableData={invoiceData || []} />
                     </Box>
 
                     <Stack sx={{
