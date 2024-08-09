@@ -63,7 +63,7 @@ const ArAgingscreen: React.FC = () => {
             >
                 {({ errors, touched, values, setFieldValue, handleSubmit }) => (
                     <div>
-                        <TableHeader headerName="Report Ageing" buttons={[
+                        <TableHeader headerName="Ageing Report" buttons={[
                             { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) }
                         ]} />
                         <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
@@ -76,34 +76,42 @@ const ArAgingscreen: React.FC = () => {
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
                                                     if (newValue.value === "Today") {
-                                                        const currentDateNet1 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet1 = dayjs().add(0, 'days').format('DD-MM-YYYY');
+                                                        const currentDateNet1 = dayjs().format('MM-DD-YYYY');
+                                                        const dueDateNet1 = dayjs().add(0, 'days').format('MM-DD-YYYY');
                                                         setFieldValue("startDate", currentDateNet1);
                                                         setFieldValue("endDate", dueDateNet1);                                                        
                                                     }
                                                     else if (newValue.value === "This Week") {
-                                                        const currentDateNet1 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet1 = dayjs().add(7, 'days').format('DD-MM-YYYY');
+                                                        const today = dayjs();
+                                                        const lastSunday = today.day(0); 
+                                                        const nextSaturday = today.day(6);
+                                                    
+                                                        const currentDateNet1 = today.day() === 0 
+                                                            ? lastSunday.subtract(1, 'week').format('MM-DD-YYYY')
+                                                            : lastSunday.format('MM-DD-YYYY');
+                                                    
+                                                        const dueDateNet1 = nextSaturday.format('MM-DD-YYYY');
+                                                    
                                                         setFieldValue("startDate", currentDateNet1);
                                                         setFieldValue("endDate", dueDateNet1);
                                                     } else if (newValue.value === "Last 7 Days") {
-                                                        const currentDateNet2 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet2 = dayjs().add(-7, 'days').format('DD-MM-YYYY');
+                                                        const currentDateNet2 = dayjs().add(-7, 'days').format('MM-DD-YYYY');
+                                                        const dueDateNet2 = dayjs().format('MM-DD-YYYY');
                                                         setFieldValue("startDate", currentDateNet2);
                                                         setFieldValue("endDate", dueDateNet2);
                                                     }
                                                     else if (newValue.value === "This Month") {
-                                                        const currentDateNet3 = dayjs().startOf('month').format('DD-MM-YYYY');
-                                                        const dueDateNet3 = dayjs().endOf('month').format('DD-MM-YYYY');
+                                                        const currentDateNet3 = dayjs().startOf('month').format('MM-DD-YYYY');
+                                                        const dueDateNet3 = dayjs().endOf('month').format('MM-DD-YYYY');
                                                         setFieldValue('startDate', currentDateNet3)
                                                         setFieldValue("endDate", dueDateNet3)
                                                     } else if (newValue.value === "Last 30 Days") {
-                                                        const currentDateNet4 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet4 = dayjs().add(-30, 'days').format('DD-MM-YYYY');
+                                                        const currentDateNet4 = dayjs().add(-30, 'days').format('MM-DD-YYYY');
+                                                        const dueDateNet4 =  dayjs().format('MM-DD-YYYY');
                                                         setFieldValue('startDate', currentDateNet4)
                                                         setFieldValue("endDate", dueDateNet4)
                                                     } else if (newValue.value === "Custom") {
-                                                        const currentDate = dayjs().format('DD-MM-YYYY');
+                                                        const currentDate = dayjs().format('MM-DD-YYYY');
                                                         setFieldValue('startDate', "")
                                                         setFieldValue("endDate", "")
                                                     }

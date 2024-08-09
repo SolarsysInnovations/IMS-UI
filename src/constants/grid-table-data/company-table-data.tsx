@@ -3,27 +3,23 @@ import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
-import React from "react";
 import CompanyDetails from "../../pages/super-admin-company/companyDetailsScreen";
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from "../../redux-store/api/injectedApis";
 import { setUserData } from "../../redux-store/slices/userSlice";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
-
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = React.useState(false);
   const { data: services, refetch } = useGetUsersListQuery();
-
-  const [deleteCompany, { isLoading: deleteCompanyLoading, error: deleteCompanyErrorObject, isSuccess: deleteCompanySuccess, isError: deleteCompanyError, data: deletedData, }] = useDeleteUserMutation();
-
+  const [deleteCompany, { isLoading: deleteCompanyLoading, error: deleteCompanyErrorObject, isSuccess: deleteCompanySuccess, isError: deleteCompanyError }] = useDeleteUserMutation();
   const [getCompany, { data: companyData }] = useGetSingleUserMutation();
   const navigate = useNavigate();
-
-  // * --------- delete snackbar -----------
+console.log("companyData",companyData);
+  // Snackbar notifications
   useSnackbarNotifications({
     error: deleteCompanyError,
     errorMessage: 'Error deleting company',
@@ -43,21 +39,24 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   }, [deleteCompanySuccess, refetch]);
 
   const handleModalOpen = async () => {
-
     try {
       const response = await getCompany(id);
       if ("data" in response) {
         const companyData = response.data;
-        console.log("edit company data", companyData);
+        console.log("Fetched company data:", companyData); // Check the data in the console
         dispatch(setUserData(companyData));
+        console.log("companyData after", companyData)
         setOpenModal(true);
+      } else {
+        console.error("Error fetching company data:", response.error);
       }
     } catch (error) {
       console.error("Error fetching company data:", error);
     }
   };
-  const handleModalClose = () => setOpenModal(false);
+  
 
+  const handleModalClose = () => setOpenModal(false);
 
   const handleEditClick = async () => {
     try {
@@ -76,9 +75,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   };
 
   const handleDeleteClick = () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this company?"
-    );
+    const confirmed = window.confirm("Are you sure you want to delete this company?");
     if (confirmed) {
       deleteCompany(id);
     }
@@ -114,12 +111,19 @@ const MyCellRenderer = ({ id }: { id: any }) => {
           fontSize="small"
         />
       </IconButton>
-      <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
-        <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
+      <IconButton
+        sx={{ padding: "3px" }}
+        aria-label="view"
+        onClick={handleModalOpen}
+      >
+        <RemoveRedEyeOutlined
+          sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }}
+          fontSize='small'
+        />
       </IconButton>
       <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
         <Box sx={{ marginTop: "15px" }}>
-          <CompanyDetails />
+          <CompanyDetails  details={companyData || []} />
         </Box>
       </ModalUi>
     </Stack>
@@ -155,5 +159,4 @@ export const columns: GridColDef[] = [
     width: 150,
     editable: false,
   },
-
 ];
