@@ -31,7 +31,7 @@ export default function ModalUi({ topHeight, children, open, onClose }: ModalUiP
                     top: `${"10%"}`,
                     left: '25%',
 
-                    width: "50%",
+                    width: "30%",
                     bgcolor: 'background.paper',
                     borderRadius: "10px",
                     boxShadow: 24,

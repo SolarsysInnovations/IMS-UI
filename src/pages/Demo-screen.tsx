@@ -1,7 +1,6 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
 import React, { forwardRef, useRef } from 'react';
 import ReactToPrint from 'react-to-print';
-import TableContent from '../components/Generate-Invoice/TableContent';
 import { Page, Text, Image, Document, StyleSheet, View } from "@react-pdf/renderer";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 
@@ -44,9 +43,7 @@ const DemoScreen = forwardRef(() => {
                         <Typography variant="subtitle2" color="initial">Due Date : <span>19-may 2023</span></Typography>
                     </Box>
                 </Stack>
-                <Box sx={{ mt: 6 }}>
-                    <TableContent />
-                </Box>
+
             </Box>
         </div >
     );

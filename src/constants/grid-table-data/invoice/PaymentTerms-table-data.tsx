@@ -2,7 +2,7 @@ import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
 import { GridColDef, GridDeleteIcon, GridValueSetterParams } from "@mui/x-data-grid";
 import ModalUi from "../../../components/ui/ModalUi";
-import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
+import InvoiceUi from "../../../pages/Invoice/Generate-Invoice/InvoiceUi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../../redux-store/store";
