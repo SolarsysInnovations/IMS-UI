@@ -69,7 +69,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const [invoiceValues, setInvoiceValues] = useState(invoiceValue || invoiceCreateInitialValue);
     const { data: gstTypesData = [] } = useGetGstTypeListQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxListQuery();
-
     // * ----------- to generate the dropdown options -------------
     const customerName = generateOptions(customers, 'customerName', 'customerName');
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
@@ -108,7 +107,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         errorMessage: 'Error updating invoice',
         errorObject: invoiceUpdateErrorObject,
     });
-
 
     React.useEffect(() => {
 

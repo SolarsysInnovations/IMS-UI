@@ -53,7 +53,7 @@ const MyCellRenderer = ({ id }: { id: any, }) => {
         errorObject: paymentTermsErrorObject,
         errorMessage: 'Error updating Payment Terms',
         success: paymentTermsDeleteSuccess,
-        successMessage: 'Update Terms updated successfully',
+        successMessage: 'Payment terms deleted successfully',
     });
 
     return (

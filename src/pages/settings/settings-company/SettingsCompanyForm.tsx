@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useGetCompanySettingQuery } from "../../../redux-store/settings/companyDetailsApi";
 import {
   useAddCompanySettingMutation,
@@ -7,12 +7,13 @@ import {
 import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
 import { companyDetailsValidationSchema } from "../../../constants/forms/validations/validationSchema";
 import { clearData } from "../../../redux-store/global/globalState";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import { CompanyFormProps } from "../../../types/types";
-import { CompanyDetailsFields, } from "../../../constants/form-data/form-data-json";
+import { CompanyDetailsFields } from "../../../constants/form-data/form-data-json";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 import { superAdminCompanyUsersInitialValues } from "../../../constants/forms/formikInitialValues";
+import { selectUserDetails } from "../../../redux-store/auth/authSlice";
 
 const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,18 +41,14 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
 
   const { data: settingsList, refetch } = useGetCompanySettingQuery();
 
-  const userDetailsFromStorage = window.localStorage.getItem("userDetails");
+  const userDetailsFromStorage = useSelector(selectUserDetails);
 
   // Parse userDetails if it exists
-  let userDetails = userDetailsFromStorage
-    ? JSON.parse(userDetailsFromStorage)
-    : null;
-  console.log("userDetails", userDetails.companyDetails);
+  const userDetails = userDetailsFromStorage ? JSON.parse(userDetailsFromStorage) : null;
+  console.log("userDetails", userDetails?.companyDetails);
 
   const initialValue = companyValue || superAdminCompanyUsersInitialValues;
-
   const fields = CompanyDetailsFields;
-
 
   useSnackbarNotifications({
     error: companyAddError,
@@ -69,41 +66,41 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
     successMessage: "Company updated successfully",
   });
 
-  useEffect(() => {
+  // Memoize refetch function
+  const memoizedRefetch = useCallback(() => {
     refetch();
-  }, [companyAddSuccess, companyUpdateSuccess, refetch]);
+  }, [refetch]);
+
+  useEffect(() => {
+    if (companyAddSuccess || companyUpdateSuccess) {
+      memoizedRefetch();
+    }
+  }, [companyAddSuccess, companyUpdateSuccess, memoizedRefetch]);
 
   const onSubmit = async (values: CompanyFormProps, actions: any) => {
     try {
-      if (mode === "edit" && companyValue) {
+      if (mode === "edit" && userDetails?.companyDetails) {
         await updateCompany({
-          id: userDetails?.companyDetails.id,
+          id: userDetails.companyDetails.id,
           company: values,
         });
 
         // Update userDetails in localStorage
         const userDetailsFromStorage = localStorage.getItem('userDetails');
-        if (!userDetailsFromStorage) {
+        if (userDetailsFromStorage) {
+          const userDetailsData = JSON.parse(userDetailsFromStorage);
+
+          // Update only companyDetails with new values
+          userDetailsData.companyDetails = {
+            ...userDetailsData.companyDetails,
+            ...values,
+          };
+
+          // Store updated userDetails back in localStorage
+          localStorage.setItem('userDetails', JSON.stringify(userDetailsData));
+        } else {
           throw new Error('User details not found in localStorage.');
         }
-
-        // Parse userDetails from JSON string
-        const userDetailsData = JSON.parse(userDetailsFromStorage);
-
-        // Update only companyDetails with new values
-        userDetailsData.companyDetails = {
-          ...userDetailsData.companyDetails,  // Keep existing properties
-          ...values  // Update with new form values
-        };
-
-        // Stringify updated userDetails back to JSON
-        const updatedUserDetails = JSON.stringify(userDetailsData);
-
-        // Store updated userDetails back in localStorage
-        localStorage.setItem('userDetails', updatedUserDetails);
-
-
-
 
         dispatch(clearData());
       } else {
@@ -123,12 +120,6 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
   const handleClose = () => {
     setOpenModal(false);
   };
-
-  // useEffect(() => {
-  //     if (isAddSuccess || isUpdateSuccess) {
-  //         refetch(); // Refetch data after successful add or update
-  //     }
-  // }, [isAddSuccess, isUpdateSuccess, refetch]);
 
   return (
     <>

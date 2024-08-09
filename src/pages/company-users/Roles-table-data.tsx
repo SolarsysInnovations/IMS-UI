@@ -86,7 +86,7 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
         error: roleDeleteError,
         errorMessage: 'Error deleting role',
         success: roleDeleteSuccess,
-        successMessage: 'Role deleted successfully',
+        successMessage: 'User deleted successfully',
         errorObject: roleDeleteErrorObject,
     })
 
