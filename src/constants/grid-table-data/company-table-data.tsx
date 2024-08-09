@@ -3,16 +3,19 @@ import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
 import CompanyDetails from "../../pages/super-admin-company/companyDetailsScreen";
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from "../../redux-store/api/injectedApis";
 import { setUserData } from "../../redux-store/slices/userSlice";
+import TableHeader from "../../components/layouts/TableHeader";
+import DialogBoxUi from "../../components/ui/DialogBox";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
   const dispatch = useDispatch();
+  const [openDialogBox, setIsOpenDialogBox] = useState(false);
   const [openModal, setOpenModal] = React.useState(false);
   const { data: services, refetch } = useGetUsersListQuery();
   const [deleteCompany, { isLoading: deleteCompanyLoading, error: deleteCompanyErrorObject, isSuccess: deleteCompanySuccess, isError: deleteCompanyError }] = useDeleteUserMutation();
@@ -55,6 +58,18 @@ console.log("companyData",companyData);
     }
   };
   
+  const handleDialogOpen = async () => {
+    try {
+        const response = await getCompany(id);
+        if ('data' in response) {
+            setIsOpenDialogBox(true);
+        } else {
+            console.error('Error response:', response.error);
+        }
+    } catch (error) {
+        console.error('Error fetching customer data:', error);
+    }
+};
 
   const handleModalClose = () => setOpenModal(false);
 
@@ -114,18 +129,30 @@ console.log("companyData",companyData);
       <IconButton
         sx={{ padding: "3px" }}
         aria-label="view"
-        onClick={handleModalOpen}
+        onClick={handleDialogOpen}
       >
         <RemoveRedEyeOutlined
           sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }}
           fontSize='small'
         />
       </IconButton>
-      <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
-        <Box sx={{ marginTop: "15px" }}>
+      <DialogBoxUi
+            paperWidth="900px"
+            paperMaxWidth="900px"
+                open={openDialogBox}
+                
+                content={
+                    <>
+                      
+                       <TableHeader headerName="Company Details" />
+                       <Box sx={{ marginTop: "15px" }}>
           <CompanyDetails  details={companyData || []} />
         </Box>
-      </ModalUi>
+                      
+                    </>
+                }
+                handleClose={() => setIsOpenDialogBox(false)}
+            />
     </Stack>
   );
 };
