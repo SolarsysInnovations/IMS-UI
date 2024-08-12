@@ -17,15 +17,13 @@ interface InvoiceUiProps {
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) {
-  const invoiceData = useSelector((state: any) => state.invoiceState.data);
 
   return (
     <>
       <Grid container>
         <Grid item xs={12}>
-          <InvoiceLetterUi invoiceData={invoiceData} />
+          <InvoiceLetterUi />
         </Grid>
-
       </Grid>
     </>
   );

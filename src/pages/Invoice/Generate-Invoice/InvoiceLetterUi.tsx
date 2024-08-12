@@ -1,22 +1,33 @@
 import { useEffect, useState } from "react";
 import InvoiceDocument from "./InvoiceDocument";
-import InvoiceRoleButtons from "./InvoiceRoleButtons";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import { useGetCustomersListQuery, useGetSingleCustomerMutation, useGetTdsTaxListQuery } from "../../../redux-store/api/injectedApis";
-import CustomerDetails from "../../customer/customerDetails";
-import { selectUserDetails } from "../../../redux-store/auth/authSlice";
+import { useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
+import { selectUserDetails, selectUserRole } from "../../../redux-store/auth/authSlice";
 import { formatDate } from "../../../services/utils/dataFormatter";
+import StageStepper from "../../../components/ui/StepperUi";
+import ButtonUi from "../../../components/ui/Button";
+import SplitButton from "../../../components/ui/SplitButton";
+import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import { InvoiceOptions, InvoiceStatus, Roles } from "../../../constants/Enums";
+import { Card } from "@mui/material";
 
 // InvoiceLetterUi Component
-const InvoiceLetterUi = ({ invoiceData, preview, downloadPdf, subtotal, discount, tds, isModalOpen }: any) => {
+const InvoiceLetterUi = () => {
 
     const [data, setData] = useState();
     const invoiceDatas = useSelector((state: any) => state.invoiceState.data);
     const { data: customers } = useGetCustomersListQuery();
     const { data: tdsTaxList } = useGetTdsTaxListQuery();
     const companyDetails = useSelector(selectUserDetails);
+    const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
+    const invoiceData = useSelector((state: any) => state.invoiceState.data);
+    const userRole = useSelector(selectUserRole);
+    const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
+    const [showTracker, setShowTracker] = useState(false);
+    const { refetch } = useGetInvoiceListQuery();
+    const [resMessage, setResMessage] = useState('');
 
     useEffect(() => {
         if (invoiceDatas && customers && companyDetails && tdsTaxList) {
@@ -68,8 +79,6 @@ const InvoiceLetterUi = ({ invoiceData, preview, downloadPdf, subtotal, discount
                 gstPercentageValue: Math.round(gstPercentageValue),
                 totalValue: Math.round(finalTotalValue),
             };
-
-            console.log("mergedData", mergedData);
             setData(mergedData);
         }
     }, [invoiceDatas, customers, companyDetails, tdsTaxList]);
@@ -87,6 +96,88 @@ const InvoiceLetterUi = ({ invoiceData, preview, downloadPdf, subtotal, discount
         link.click();
     };
 
+    const getAvailableOptions = () => {
+        const allOptions = [];
+        switch (userRole) {
+            case Roles.ADMIN:
+            case Roles.STANDARDUSER:
+                if (invoiceData.invoiceStatus === InvoiceStatus.DRAFT || invoiceData.invoiceStatus === InvoiceStatus.RETURNED) {
+                    allOptions.push(InvoiceOptions.SENT_TO_APPROVER);
+                } else if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
+                    allOptions.push(InvoiceOptions.PAID);
+                }
+                break;
+            case Roles.APPROVER:
+                if (invoiceData.invoiceStatus === InvoiceStatus.PENDING) {
+                    allOptions.push(InvoiceOptions.APPROVE, InvoiceOptions.RETURN);
+                }
+                break;
+            default:
+                return [];
+        }
+        return allOptions.filter(option => option !== invoiceData.invoiceStatus);
+    };
+
+    const availableOptions = getAvailableOptions();
+
+
+    useSnackbarNotifications({
+        error: invoiceUpdateError,
+        errorObject: invoiceUpdateErrorObject,
+        errorMessage: 'Error While updating ',
+        success: invoiceUpdateSuccess,
+        successMessage: resMessage,
+    });
+
+    useEffect(() => {
+        refetch();
+    }, [invoiceUpdateSuccess, refetch]);
+
+    useEffect(() => {
+        if (invoiceData) {
+            const currentInvoiceStatus = Object.values(InvoiceStatus).indexOf(invoiceData.invoiceStatus);
+            if (currentInvoiceStatus !== -1) {
+                setCurrentInvoiceStatus(currentInvoiceStatus);
+            }
+        }
+    }, [invoiceData]);
+
+    const handleOptionClick = async (option: any) => {
+        if (invoiceData.invoiceStatus !== option) {
+            try {
+                let updatedInvoiceData = { ...invoiceData };
+                let newStatus;
+
+                switch (option) {
+                    case InvoiceOptions.APPROVE:
+                        newStatus = InvoiceStatus.APPROVED;
+                        break;
+                    case InvoiceOptions.RETURN:
+                        newStatus = InvoiceStatus.RETURNED;
+                        break;
+                    case InvoiceOptions.PAID:
+                        newStatus = InvoiceStatus.PAID;
+                        break;
+                    case InvoiceOptions.SENT_TO_APPROVER:
+                        newStatus = InvoiceStatus.PENDING;
+                        break;
+                    default:
+                        console.log("Unknown option");
+                        return;
+                }
+
+                if (newStatus) {
+                    updatedInvoiceData = { ...invoiceData, invoiceStatus: newStatus };
+                }
+
+                let response = await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
+                setResMessage(response.data.message);
+            } catch (error) {
+                console.log("Error updating invoice data", error);
+            }
+        }
+    };
+
     return (
         <>
             <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column", padding: "0px 30px 30px 30px" }}>
@@ -99,32 +190,41 @@ const InvoiceLetterUi = ({ invoiceData, preview, downloadPdf, subtotal, discount
                     </PDFViewer>
                 </div>
                 <div style={{ marginTop: '20px', textAlign: 'center' }}>
-                    <button
-                        onClick={handleDownload}
-                        style={{
-                            padding: '10px',
-                            color: '#fff',
-                            backgroundColor: '#007bff',
-                            border: 'none',
-                            borderRadius: '5px',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        Download Invoice
-                    </button>
-                    <InvoiceRoleButtons
-                        discount={discount}
-                        downloadPdf={downloadPdf}
-                        invoiceData={invoiceData}
-                        isModalOpen={isModalOpen}
-                        preview={preview}
-                        subtotal={subtotal}
-                        tds={tds}
-                    />
+                    <Box gap={2} sx={{ display: "flex", justifyContent: "right", flexDirection: "row", gap: "20px", marginTop: "10px" }}>
+                        <ButtonUi label='Download Pdf' smallButtonCss
+                            onClick={() => { handleDownload() }}
+                        />
+                        {availableOptions.length < 1 ? "" : (
+                            <SplitButton
+                                key={currentInvoiceStatus} // Ensure re-render
+                                disabledOptions={[availableOptions.indexOf(invoiceData.invoiceStatus)]}
+                                options={availableOptions}
+                                defaultIndex={0} // Always use the first available option as the default
+                                onOptionClick={handleOptionClick}
+                            />
+                        )}
+
+                        <Box sx={{ position: "relative" }}>
+                            <ButtonUi
+                                label="View Tracker"
+                                smallButtonCss
+                                onMouseEnter={() => setShowTracker(true)}
+                                onMouseLeave={() => setShowTracker(false)}
+                            />
+                            <Card
+                                sx={{
+                                    padding: "20px 25px", position: "absolute", top: -150, right: 0, zIndex: 1300,
+                                    backgroundColor: "background.paper", borderRadius: "10px", display: showTracker ? "block" : "none",
+                                }}    >
+                                <StageStepper stages={invoiceData.invoiceStages} />
+                            </Card>
+                        </Box>
+                    </Box>
                 </div>
             </Box>
         </>
     );
 };
+
 
 export default InvoiceLetterUi;
