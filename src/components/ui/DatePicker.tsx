@@ -16,14 +16,10 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
     const [dateValue, setDateValue] = useState<Dayjs | null>(null);
 
     useEffect(() => {
-        console.log("Value received in useEffect:", value);
-
         if (typeof value === 'string') {
-            // Handle ISO 8601 date string
             if (dayjs(value).isValid()) {
                 setDateValue(dayjs(value));
             } else {
-                // Handle custom format
                 const parsedDate = dayjs(value, 'DD-MM-YYYY');
                 if (parsedDate.isValid()) {
                     setDateValue(parsedDate);
@@ -32,10 +28,8 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
                 }
             }
         } else if (dayjs.isDayjs(value)) {
-            // If the value is a Dayjs object, use it directly
             setDateValue(value);
         } else {
-            // Handle invalid or null values
             setDateValue(null);
         }
     }, [value]);
@@ -50,14 +44,12 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
                 disabled={disabled}
                 value={dateValue}
                 onChange={(date) => {
-                    // Log the date object received from DatePicker
-                    console.log("Date from DatePicker:", date);
-                    // Format the date to string and send to onChange
                     const formattedDate = formatDate(date);
-                    console.log("Formatted Date:", formattedDate);
                     onChange(formattedDate);
                 }}
                 views={['year', 'month', 'day']}
+                label={label}
+                format="DD-MM-YYYY" // Set the desired date format here
                 sx={{
                     width: "100%",
                     '& .MuiOutlinedInput-root': {
@@ -79,7 +71,6 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
                         variant: "outlined", size: "small",
                     }
                 }}
-                label={label}
             />
         </LocalizationProvider>
     );
