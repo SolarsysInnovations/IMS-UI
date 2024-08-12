@@ -4,32 +4,79 @@ import InvoiceRoleButtons from "./InvoiceRoleButtons";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import { useGetCustomersListQuery, useGetSingleCustomerMutation } from "../../../redux-store/api/injectedApis";
+import { useGetCustomersListQuery, useGetSingleCustomerMutation, useGetTdsTaxListQuery } from "../../../redux-store/api/injectedApis";
 import CustomerDetails from "../../customer/customerDetails";
+import { selectUserDetails } from "../../../redux-store/auth/authSlice";
+import { formatDate } from "../../../services/utils/dataFormatter";
 
 // InvoiceLetterUi Component
 const InvoiceLetterUi = ({ invoiceData, preview, downloadPdf, subtotal, discount, tds, isModalOpen }: any) => {
 
     const [data, setData] = useState();
     const invoiceDatas = useSelector((state: any) => state.invoiceState.data);
-    const { data: customers, error, isLoading, refetch } = useGetCustomersListQuery();
+    const { data: customers } = useGetCustomersListQuery();
+    const { data: tdsTaxList } = useGetTdsTaxListQuery();
+    const companyDetails = useSelector(selectUserDetails);
 
     useEffect(() => {
-        if (customers && invoiceDatas) {
-            const filteredCustomer = customers.find((customer: any) => customer.customerName === invoiceDatas.customerName)
-            if (filteredCustomer) {
-                const mergedData = {
-                    ...invoiceDatas,
-                    customerDetails: filteredCustomer
-                }
-                setData(mergedData);
+        if (invoiceDatas && customers && companyDetails && tdsTaxList) {
+            // Find the relevant customer
+            const filteredCustomer = customers.find(
+                (customer: any) => customer.customerName === invoiceDatas.customerName
+            );
+
+            // Calculate the subtotal from servicesList
+            const subTotalValue = invoiceDatas.servicesList.reduce(
+                (acc: number, service: any) => acc + service.serviceTotalAmount,
+                0
+            );
+
+            // Calculate the discount amount
+            const discountPercentageValue = (subTotalValue * invoiceDatas.discountPercentage) / 100;
+
+            // Calculate the GST amount
+            const gstPercentageValue = ((subTotalValue - discountPercentageValue) * invoiceDatas.gstPercentage) / 100;
+
+            // Find the relevant TDS tax object
+            const filteredTdsTax = tdsTaxList.find(
+                (tdsTax: any) => invoiceDatas.taxAmount.tds === tdsTax.taxName
+            );
+
+            // Calculate the total value before TDS
+            const totalValueBeforeTds = subTotalValue - discountPercentageValue + gstPercentageValue;
+
+            // Calculate TDS amount if applicable
+            let tdsAmount = 0;
+            if (filteredTdsTax) {
+                tdsAmount = (totalValueBeforeTds * filteredTdsTax.taxPercentage) / 100;
             }
-        };
-    }, [invoiceDatas, customers]);
+
+            // Calculate the final total value after applying TDS
+            const finalTotalValue = totalValueBeforeTds - tdsAmount;
+
+            // Merge all data including calculated values
+            const mergedData = {
+                ...invoiceDatas,
+                companyDetails: { ...companyDetails.companyDetails },
+                customerDetails: filteredCustomer || invoiceDatas.customerDetails,
+                startDate: formatDate(invoiceDatas.startDate),
+                dueDate: formatDate(invoiceDatas.dueDate),
+                invoiceDate: formatDate(invoiceDatas.invoiceDate),
+                subTotal: Math.round(subTotalValue),
+                tdsAmountValue: Math.round(tdsAmount),
+                discountPercentageValue: Math.round(discountPercentageValue),
+                gstPercentageValue: Math.round(gstPercentageValue),
+                totalValue: Math.round(finalTotalValue),
+            };
+
+            console.log("mergedData", mergedData);
+            setData(mergedData);
+        }
+    }, [invoiceDatas, customers, companyDetails, tdsTaxList]);
 
     const handleDownload = async () => {
         const doc = (
-            <InvoiceDocument invoiceData={invoiceData} />
+            <InvoiceDocument invoiceData={data} />
         );
         const asPdf = pdf(doc); // Create a new instance of pdf with the document
         const blob = await asPdf.toBlob(); // Convert the PDF document to a Blob
@@ -42,7 +89,7 @@ const InvoiceLetterUi = ({ invoiceData, preview, downloadPdf, subtotal, discount
 
     return (
         <>
-            <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column", padding: "30px" }}>
+            <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column", padding: "0px 30px 30px 30px" }}>
                 <div style={{ width: '100%', height: '95vh', textAlign: "center", overflow: 'hidden', alignItems: "center" }}>
                     <PDFViewer
                         showToolbar={false}
