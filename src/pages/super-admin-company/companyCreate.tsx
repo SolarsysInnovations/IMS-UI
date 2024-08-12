@@ -118,7 +118,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
         }
     }, [updateCompany, dispatch, addCompany, companyEditInitialValues, mode]);
 
-
     return (
         <>
             <DynamicFormCreate
