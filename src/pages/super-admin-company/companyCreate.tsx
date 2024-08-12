@@ -26,11 +26,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-
-    const initialValues = {
-        ...superAdminCompanyUsersInitialValues,
-        userRole: companyEditInitialValues?.userRole || 'ADMIN',  // Set 'ADMIN' as default for creation mode
-    };
+    const initialValues = companyEditInitialValues || superAdminCompanyUsersInitialValues;
 
     const fields = mode === 'create' ? CompanyFields : CompanyEditFields;
 
@@ -64,6 +60,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                     userDetails: {
                         userName: values.userName,
                         userEmail: values.userEmail,
+                        // password: values.password,
                         userRole: values.userRole,
                         userMobile: values.userMobile,
                         description: values.description,
@@ -80,6 +77,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyRegNumber: values.companyRegNumber
                     },
                 };
+                console.log("transformedData", transformedData);
 
                 await updateCompany({ id: companyEditInitialValues.companyId, data: transformedData });
                 dispatch(clearData());
@@ -110,6 +108,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                 dispatch(clearData());
             }
 
+            dispatch(clearData());
             actions.resetForm();
 
         } catch (error) {
@@ -119,10 +118,12 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
         }
     }, [updateCompany, dispatch, addCompany, companyEditInitialValues, mode]);
 
+
     return (
         <>
             <DynamicFormCreate
                 showTable={true}
+                // fields={Object.keys(companyEditInitialValues).length === 0 ? CompanyFields : CompanyEditFields}
                 fields={fields}
                 initialValues={initialValues}
                 validationSchema={companyDetailsValidationSchema}
