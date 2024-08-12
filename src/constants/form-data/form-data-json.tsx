@@ -129,7 +129,7 @@ export const CompanyFields: FieldProps[] = [
                 name: 'password', required: true, disabled: false, label: 'Password', type: 'password', gridSize: 5,
             },
             {
-                name: 'userRole', required: true, disabled: false, label: 'userRole', type: 'select', gridSize: 5, options: [{ value: "ADMIN", label: "ADMIN" }],
+                name: 'userRole', required: true, disabled: false, label: 'User Role', type: 'text', gridSize: 5,
             },
             {
                 name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'text', gridSize: 5,
