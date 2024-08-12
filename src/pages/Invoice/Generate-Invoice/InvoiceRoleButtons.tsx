@@ -1,33 +1,21 @@
 import { Box, Card } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import ButtonUi from '../../../components/ui/Button';
 import { InvoiceOptions, InvoiceStatus, Roles } from '../../../constants/Enums';
 import { selectUserRole } from '../../../redux-store/auth/authSlice';
 import SplitButton from '../../../components/ui/SplitButton';
 import StageStepper from '../../../components/ui/StepperUi';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import { useGetInvoiceListQuery, useUpdateInvoiceMutation } from '../../../redux-store/api/injectedApis';
 
-interface InvoiceUiProps {
-    invoiceData?: any;
-    subtotal?: number | null;
-    discount?: number | null;
-    tds?: number | null;
-    isModalOpen?: any;
-    downloadPdf?: boolean;
-    preview?: boolean;
-};
-
-const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isModalOpen }: InvoiceUiProps) => {
+const InvoiceRoleButtons = () => {
     const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
     const invoiceData = useSelector((state: any) => state.invoiceState.data);
     const userRole = useSelector(selectUserRole);
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const [showTracker, setShowTracker] = useState(false);
-    const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceListQuery();
+    const { refetch } = useGetInvoiceListQuery();
     const [resMessage, setResMessage] = useState('');
 
     useSnackbarNotifications({
@@ -116,14 +104,6 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
 
     return (
         <Box gap={2} sx={{ display: "flex", justifyContent: "left", flexDirection: "row", gap: "20px", marginTop: "10px" }}>
-            <ButtonUi
-                smallButtonCss={true}
-                label="Generate PDF"
-                variant="contained"
-                size="small"
-                onClick={() => { }}
-            />
-
             <SplitButton
                 key={currentInvoiceStatus} // Ensure re-render
                 disabledOptions={[availableOptions.indexOf(invoiceData.invoiceStatus)]}
@@ -141,16 +121,9 @@ const InvoiceRoleButtons = ({ preview, downloadPdf, subtotal, discount, tds, isM
                 />
                 <Card
                     sx={{
-                        padding: "20px 25px",
-                        position: "absolute",
-                        top: -150,
-                        right: 0,
-                        zIndex: 1300,
-                        backgroundColor: "background.paper",
-                        borderRadius: "10px",
-                        display: showTracker ? "block" : "none",
-                    }}
-                >
+                        padding: "20px 25px", position: "absolute", top: -150, right: 0, zIndex: 1300,
+                        backgroundColor: "background.paper", borderRadius: "10px", display: showTracker ? "block" : "none",
+                    }}    >
                     <StageStepper stages={invoiceData.invoiceStages} />
                 </Card>
             </Box>
