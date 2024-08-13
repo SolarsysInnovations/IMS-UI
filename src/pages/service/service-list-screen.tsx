@@ -13,6 +13,7 @@ import ServiceEditScreen from './service-edit-screen'; // Import the edit screen
 import { useGetServiceListQuery } from '../../redux-store/api/injectedApis';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { clearServiceData } from '../../redux-store/slices/serviceSlice';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const ServicesList = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -21,6 +22,7 @@ const ServicesList = () => {
     const serviceStateDetails = useSelector((state: any) => state.globalState.data);
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
 
+    const { canCreateServices } = useRolePermissions();
     const buttons = [
         {
             label: 'Create Service List', icon: Add, onClick: () => {
@@ -30,11 +32,12 @@ const ServicesList = () => {
         },
     ];
 
+    const resolvedButtons = canCreateServices ? buttons : [];
     const pathname = usePathname();
 
     return (
         <>
-            <TableHeader headerName={pathname} buttons={buttons} />
+            <TableHeader headerName={pathname} buttons={resolvedButtons} />
             <GridDataUi showToolbar={true} columns={columns || []} tableData={serviceList || []} checkboxSelection={false} />
             <DialogBoxUi
                 open={opendialogBox}

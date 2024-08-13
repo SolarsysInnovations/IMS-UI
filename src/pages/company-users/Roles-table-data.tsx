@@ -12,6 +12,8 @@ import DialogBoxUi from '../../components/ui/DialogBox';
 import { RolesEditFields } from '../../constants/form-data/form-data-json';
 import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from '../../redux-store/api/injectedApis';
 import UserForm from './UserForm';
+import ActionButtons from '../../components/ui/ActionButtons';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
@@ -69,6 +71,7 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     const [rolesData, setRolesData] = useState(null);
     const { data: roleDetails, refetch } = useGetUsersListQuery();
     const pathname = usePathname();
+    const { canEditUsers, canDeleteUsers } = useRolePermissions();
 
     const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetSingleUserMutation();
 
@@ -77,7 +80,7 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     useEffect(() => {
         refetch();
     }, [roleDeleteSuccess, refetch]);
-    
+
     useEffect(() => {
         dispatch(setRoleData(roleData));
     }, [roleData, dispatch, C_success])
@@ -123,12 +126,14 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
 
     return (
         <Stack direction="row" spacing={1}>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
+            <ActionButtons
+                onDeleteClick={handleDeleteClick}
+                onEditClick={handleEditClick}
+                onViewClick={() => { }}
+                canDelete={canDeleteUsers}
+                canEdit={canEditUsers}
+            />
+
             <DialogBoxUi
                 open={openModal}
                 content={<UserForm userEditValue={roleData} mode={roleData ? "edit" : "create"} />}

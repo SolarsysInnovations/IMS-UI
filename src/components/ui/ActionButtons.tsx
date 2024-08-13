@@ -12,7 +12,7 @@ interface ActionButtonsProps {
     canView?: boolean;
     onEditClick: () => void;
     onDeleteClick: () => void;
-    onViewClick: () => void;
+    onViewClick?: () => void;
 }
 
 const ActionButtons: React.FC<ActionButtonsProps> = ({ canEdit, canView, id, canDelete, onEditClick, onDeleteClick, onViewClick }) => {
@@ -25,9 +25,11 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ canEdit, canView, id, can
             <StyledIconButton disabled={!canDelete} aria-label="delete" onClick={onDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </StyledIconButton>
-            <StyledIconButton disabled={!canView} aria-label="view" onClick={onViewClick}>
-                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </StyledIconButton>
+            {onViewClick && (
+                <StyledIconButton disabled={!canView} aria-label="view" onClick={onViewClick}>
+                    <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
+                </StyledIconButton>
+            )}
         </Stack>
     )
 };

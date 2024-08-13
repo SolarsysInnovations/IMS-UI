@@ -179,6 +179,7 @@ export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED",
 interface UserAccess {
   canCreateCustomers: boolean;
   canViewCustomers: boolean;
+  // canViewCustomerList: boolean;
   canEditCustomers: boolean;
   canDeleteCustomers: boolean;
   canCreateInvoices: boolean;
@@ -211,28 +212,28 @@ export const applicationUserAccess: ApplicationUserAccess = {
     // customer access
     canCreateCustomers: false,
     canViewCustomers: false,
-    canEditCustomers: true,
-    canDeleteCustomers: true,
+    canEditCustomers: false,
+    canDeleteCustomers: false,
     // invoice access
-    canCreateInvoices: true,
-    canViewInvoices: true,
-    canEditInvoices: true,
-    canDeleteInvoices: true,
+    canCreateInvoices: false,
+    canViewInvoices: false,
+    canEditInvoices: false,
+    canDeleteInvoices: false,
     // service access
-    canCreateServices: true,
-    canViewServices: true,
-    canEditServices: true,
-    canDeleteServices: true,
+    canCreateServices: false,
+    canViewServices: false,
+    canEditServices: false,
+    canDeleteServices: false,
     // user access
-    canCreateUsers: true,
-    canViewUsers: true,
-    canEditUsers: true,
-    canDeleteUsers: true,
+    canCreateUsers: false,
+    canViewUsers: false,
+    canEditUsers: false,
+    canDeleteUsers: false,
     // company access
-    canCreateCompanies: false,
-    canViewCompanies: false,
-    canEditCompanies: false,
-    canDeleteCompanies: false,
+    canCreateCompanies: true,
+    canViewCompanies: true,
+    canEditCompanies: true,
+    canDeleteCompanies: true,
     // settings access
     canCreateSettings: true,
     canViewSettings: true,
@@ -281,15 +282,15 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canEditInvoices: false,
     canDeleteInvoices: false,
     // service access
-    canCreateServices: true,
+    canCreateServices: false,
     canViewServices: true,
-    canEditServices: true,
-    canDeleteServices: true,
+    canEditServices: false,
+    canDeleteServices: false,
     // user access
-    canCreateUsers: true,
+    canCreateUsers: false,
     canViewUsers: true,
-    canEditUsers: true,
-    canDeleteUsers: true,
+    canEditUsers: false,
+    canDeleteUsers: false,
     // company access
     canCreateCompanies: false,
     canViewCompanies: false,
@@ -317,10 +318,10 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canEditServices: true,
     canDeleteServices: true,
     // user access
-    canCreateUsers: true,
+    canCreateUsers: false,
     canViewUsers: true,
-    canEditUsers: true,
-    canDeleteUsers: true,
+    canEditUsers: false,
+    canDeleteUsers: false,
     // company access
     canCreateCompanies: false,
     canViewCompanies: false,

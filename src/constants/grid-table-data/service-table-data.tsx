@@ -10,6 +10,8 @@ import { useDeleteServiceMutation, useGetServiceListQuery, useGetSingleServiceMu
 import { setServiceData } from "../../redux-store/slices/serviceSlice";
 import ServiceCreate from "../../pages/service/service-create-screen";
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
+import ActionButtons from "../../components/ui/ActionButtons";
+import { useRolePermissions } from "../../hooks/useRolePermission";
 
 
 const MyCellRenderer = ({ id }: { id: any }) => {
@@ -19,6 +21,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     const [deletedService, { error: deleteServiceErrorObject, isSuccess: deleteServiceSuccess, isError: deleteServiceError, }] = useDeleteServiceMutation();
     const [getService,] = useGetSingleServiceMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
+    const { canEditServices, canDeleteServices } = useRolePermissions();
 
     useEffect(() => {
         refetch();
@@ -57,12 +60,18 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     };
     return (
         <Stack direction="row" spacing={1}>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
+            <ActionButtons
+                onDeleteClick={handleDeleteClick}
+                onEditClick={handleEditClick}
+                canDelete={canDeleteServices}
+                canEdit={canEditServices}
+            />
+            {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
                 <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
+            </IconButton> */}
             {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton> */}

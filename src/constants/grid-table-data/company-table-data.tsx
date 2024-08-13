@@ -12,6 +12,8 @@ import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery }
 import { setUserData } from "../../redux-store/slices/userSlice";
 import TableHeader from "../../components/layouts/TableHeader";
 import DialogBoxUi from "../../components/ui/DialogBox";
+import ActionButtons from "../../components/ui/ActionButtons";
+import { useRolePermissions } from "../../hooks/useRolePermission";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
   const dispatch = useDispatch();
@@ -21,7 +23,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   const [deleteCompany, { isLoading: deleteCompanyLoading, error: deleteCompanyErrorObject, isSuccess: deleteCompanySuccess, isError: deleteCompanyError }] = useDeleteUserMutation();
   const [getCompany, { data: companyData }] = useGetSingleUserMutation();
   const navigate = useNavigate();
-  console.log("companyData", companyData);
+  const { canEditCompanies, canViewCompanies, canDeleteCompanies } = useRolePermissions();
   // Snackbar notifications
   useSnackbarNotifications({
     error: deleteCompanyError,
@@ -98,44 +100,15 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
   return (
     <Stack direction="row" spacing={1}>
-      <IconButton
-        sx={{ padding: "3px" }}
-        aria-label="edit"
-        onClick={handleEditClick}
-      >
-        <EditIcon
-          sx={{
-            color: `grey.500`,
-            fontSize: "15px",
-            "&:hover": { color: "blue" },
-          }}
-          fontSize="small"
-        />
-      </IconButton>
-      <IconButton
-        sx={{ padding: "3px" }}
-        aria-label="delete"
-        onClick={handleDeleteClick}
-      >
-        <GridDeleteIcon
-          sx={{
-            color: `grey.500`,
-            fontSize: "15px",
-            "&:hover": { color: "blue" },
-          }}
-          fontSize="small"
-        />
-      </IconButton>
-      <IconButton
-        sx={{ padding: "3px" }}
-        aria-label="view"
-        onClick={handleDialogOpen}
-      >
-        <RemoveRedEyeOutlined
-          sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }}
-          fontSize='small'
-        />
-      </IconButton>
+      <ActionButtons
+        onDeleteClick={handleDeleteClick}
+        onEditClick={handleEditClick}
+        onViewClick={handleDialogOpen}
+        canView={canViewCompanies}
+        canDelete={canDeleteCompanies}
+        canEdit={canEditCompanies}
+      />
+
       <DialogBoxUi
         paperWidth="900px"
         paperMaxWidth="900px"
