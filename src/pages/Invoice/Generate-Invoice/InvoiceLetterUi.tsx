@@ -1,180 +1,94 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { PDFViewer, Document, Page, Text, View, StyleSheet, Image, pdf } from '@react-pdf/renderer';
-import { Box } from '@mui/system';
-import InvoiceRoleButtons from './InvoiceRoleButtons';
-
-const randomImageUrl = 'https://picsum.photos/200';
-
-// Styles for PDF document
-const styles = StyleSheet.create({
-    page: {
-        flexDirection: 'column',
-        backgroundColor: '#fff',
-        padding: 30,
-    },
-    section: {
-        margin: 10,
-        padding: 10,
-        flexGrow: 1,
-    },
-    header: {
-        fontSize: 50,
-        fontWeight: 100,
-        marginBottom: 0,
-    },
-    subHeader: {
-        fontSize: 16,
-        marginBottom: 10,
-    },
-    text: {
-        fontSize: 12,
-        marginBottom: 5,
-    },
-    image: {
-        width: 70,
-        height: 70,
-        marginBottom: 10,
-        borderRadius: 10,
-    },
-    table: {
-        marginTop: 5,
-        marginBottom: 5,
-    },
-    tableRow: {
-        flexDirection: 'row',
-        marginTop: 5,
-        marginBottom: 5,
-    },
-    tableCell: {
-        padding: 8,
-        fontSize: 12,
-        flex: 1,
-        textAlign: 'center',
-    },
-    tableHeader: {
-        fontWeight: 'bold',
-    },
-    tableCellLast: {
-        borderRight: 'none',
-    }
-});
-
-// Invoice Document component for PDF
-const InvoiceDocument = ({ invoiceData, customerDetails, subTotalAmount, discountAmount }: any) => (
-    <Document>
-        <Page size="A4" style={styles.page}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: "30px" }}>
-                <View>
-                    <Image style={styles.image} src={randomImageUrl} />
-                </View>
-                <View>
-                    <Text style={styles.header}>SolarSys</Text>
-                </View>
-            </View>
-
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: "20px", marginTop: "20px" }}>
-                <View>
-                    <Text style={styles.subHeader}>To :</Text>
-                    <Text style={styles.text}>Name: {customerDetails?.customerName}</Text>
-                    <Text style={styles.text}>Email: {customerDetails?.customerEmail}</Text>
-                    <Text style={styles.text}>Phone: {customerDetails?.customerPhone}</Text>
-                </View>
-                <View style={styles.section}>
-                    <Text style={styles.subHeader}>From :</Text>
-                    <Text style={styles.text}>Invoice No: {invoiceData?.invoiceNumber}</Text>
-                    <Text style={styles.text}>Payment Terms: {invoiceData?.paymentTerms}</Text>
-                    <Text style={styles.text}>Due Date: 12-23-2024</Text>
-                </View>
-                <View style={styles.section}>
-                    <Text style={styles.subHeader}>Invoice :</Text>
-                    <Text style={styles.text}>Invoice No: {invoiceData?.invoiceNumber}</Text>
-                    <Text style={styles.text}>Payment Terms: {invoiceData?.paymentTerms}</Text>
-                    <Text style={styles.text}>Due Date: 12-23-2024</Text>
-                </View>
-            </View>
-
-            <View style={{ borderTop: "1px solid #000", marginTop: "20px" }}></View>
-            <View style={styles.table}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                    <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Item</Text>
-                    <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Quantity</Text>
-                    <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Unit Price</Text>
-                    <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Total</Text>
-                </View>
-                <View style={{ borderTop: "1px solid #000" }}></View>
-
-                {/* Example table rows */}
-                <View style={[styles.tableRow, { marginTop: "20px" }]} >
-                    <Text style={styles.tableCell}>item.name</Text>
-                    <Text style={styles.tableCell}>item.quantity</Text>
-                    <Text style={styles.tableCell}>item.unitPrice</Text>
-                    <Text style={[styles.tableCell, styles.tableCellLast]}>item.total</Text>
-                </View>
-                <View style={[styles.tableRow]} >
-                    <Text style={styles.tableCell}>item.name</Text>
-                    <Text style={styles.tableCell}>item.quantity</Text>
-                    <Text style={styles.tableCell}>item.unitPrice</Text>
-                    <Text style={[styles.tableCell, styles.tableCellLast]}>item.total</Text>
-                </View>
-
-                <View style={{ borderTop: "1px solid #000", marginTop: "30px" }}></View>
-            </View>
-            <View style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: "15px" }}>
-                <View>
-                    <Text style={styles.tableCell}>Payment Method :</Text>
-                </View>
-                <View>
-                    <View style={{ flexDirection: "row", gap: "30px", justifyContent: 'space-between' }}>
-                        <View> <Text style={styles.tableCell}>item.name</Text></View>
-                        <View> <Text style={styles.tableCell}>item.name</Text></View>
-                    </View>
-                    <View style={{ flexDirection: "row", gap: "30px", justifyContent: 'space-between', marginTop: "30px" }}>
-                        <View> <Text style={styles.tableCell}>item.name</Text></View>
-                        <View> <Text style={styles.tableCell}>item.name</Text></View>
-                    </View>
-                    <View style={{ flexDirection: "row", gap: "30px", justifyContent: 'space-between', marginTop: "30px" }}>
-                        <View> <Text style={styles.tableCell}>item.name</Text></View>
-                        <View> <Text style={styles.tableCell}>item.name</Text></View>
-                    </View>
-                </View>
-            </View>
-            <View style={{ borderTop: "1px solid #000", marginTop: "20px" }}></View>
-            <View style={[styles.subHeader, { marginTop: "20px" }]}>
-                <Text style={styles.text}>Terms & Conditions :</Text>
-            </View>
-            <View style={{ marginTop: "0px" }}>
-                <Text style={styles.text}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</Text>
-            </View>
-        </Page>
-    </Document>
-);
+import { useEffect, useState } from "react";
+import InvoiceDocument from "./InvoiceDocument";
+import { pdf, PDFViewer } from "@react-pdf/renderer";
+import { Box } from "@mui/system";
+import { useSelector } from "react-redux";
+import { useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
+import { selectUserDetails, selectUserRole } from "../../../redux-store/auth/authSlice";
+import { formatDate } from "../../../services/utils/dataFormatter";
+import StageStepper from "../../../components/ui/StepperUi";
+import ButtonUi from "../../../components/ui/Button";
+import SplitButton from "../../../components/ui/SplitButton";
+import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import { InvoiceOptions, InvoiceStatus, Roles } from "../../../constants/Enums";
+import { Card } from "@mui/material";
 
 // InvoiceLetterUi Component
-const InvoiceLetterUi = ({ invoiceData, preview, downloadPdf, subtotal, discount, tds, isModalOpen }: any) => {
-    const [subTotalAmount, setSubTotalAmount] = useState(0);
-    const [discountAmount, setDiscountAmount] = useState(0);
-    const [customerDetails, setCustomerDetails] = useState({});
+const InvoiceLetterUi = () => {
+
+    const [data, setData] = useState();
+    const invoiceDatas = useSelector((state: any) => state.invoiceState.data);
+    const { data: customers } = useGetCustomersListQuery();
+    const { data: tdsTaxList } = useGetTdsTaxListQuery();
+    const companyDetails = useSelector(selectUserDetails);
+    const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
+    const invoiceData = useSelector((state: any) => state.invoiceState.data);
+    const userRole = useSelector(selectUserRole);
+    const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
+    const [showTracker, setShowTracker] = useState(false);
+    const { refetch } = useGetInvoiceListQuery();
+    const [resMessage, setResMessage] = useState('');
 
     useEffect(() => {
-        // Fetch customer details if needed
-        setCustomerDetails({ customerName: 'John Doe', customerEmail: 'john@example.com', customerPhone: '123456789' });
-        setSubTotalAmount(1000); // Example value
-        setDiscountAmount(50); // Example value
-    }, []);
+        if (invoiceDatas && customers && companyDetails && tdsTaxList) {
+            // Find the relevant customer
+            const filteredCustomer = customers.find(
+                (customer: any) => customer.customerName === invoiceDatas.customerName
+            );
+
+            // Calculate the subtotal from servicesList
+            const subTotalValue = invoiceDatas.servicesList.reduce(
+                (acc: number, service: any) => acc + service.serviceTotalAmount,
+                0
+            );
+
+            // Calculate the discount amount
+            const discountPercentageValue = (subTotalValue * invoiceDatas.discountPercentage) / 100;
+
+            // Calculate the GST amount
+            const gstPercentageValue = ((subTotalValue - discountPercentageValue) * invoiceDatas.gstPercentage) / 100;
+
+            // Find the relevant TDS tax object
+            const filteredTdsTax = tdsTaxList.find(
+                (tdsTax: any) => invoiceDatas.taxAmount.tds === tdsTax.taxName
+            );
+
+            // Calculate the total value before TDS
+            const totalValueBeforeTds = subTotalValue - discountPercentageValue + gstPercentageValue;
+
+            // Calculate TDS amount if applicable
+            let tdsAmount = 0;
+            if (filteredTdsTax) {
+                tdsAmount = (totalValueBeforeTds * filteredTdsTax.taxPercentage) / 100;
+            }
+
+            // Calculate the final total value after applying TDS
+            const finalTotalValue = totalValueBeforeTds - tdsAmount;
+
+            // Merge all data including calculated values
+            const mergedData = {
+                ...invoiceDatas,
+                companyDetails: { ...companyDetails.companyDetails },
+                customerDetails: filteredCustomer || invoiceDatas.customerDetails,
+                startDate: formatDate(invoiceDatas.startDate),
+                dueDate: formatDate(invoiceDatas.dueDate),
+                invoiceDate: formatDate(invoiceDatas.invoiceDate),
+                subTotal: Math.round(subTotalValue),
+                tdsAmountValue: Math.round(tdsAmount),
+                discountPercentageValue: Math.round(discountPercentageValue),
+                gstPercentageValue: Math.round(gstPercentageValue),
+                totalValue: Math.round(finalTotalValue),
+            };
+            setData(mergedData);
+        }
+    }, [invoiceDatas, customers, companyDetails, tdsTaxList]);
 
     const handleDownload = async () => {
         const doc = (
-            <InvoiceDocument
-                invoiceData={invoiceData}
-                customerDetails={customerDetails}
-                subTotalAmount={subTotalAmount}
-                discountAmount={discountAmount}
-            />
+            <InvoiceDocument invoiceData={data} />
         );
-
         const asPdf = pdf(doc); // Create a new instance of pdf with the document
         const blob = await asPdf.toBlob(); // Convert the PDF document to a Blob
-
         // Create a download link and click it programmatically
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
@@ -182,49 +96,135 @@ const InvoiceLetterUi = ({ invoiceData, preview, downloadPdf, subtotal, discount
         link.click();
     };
 
+    const getAvailableOptions = () => {
+        const allOptions = [];
+        switch (userRole) {
+            case Roles.ADMIN:
+            case Roles.STANDARDUSER:
+                if (invoiceData.invoiceStatus === InvoiceStatus.DRAFT || invoiceData.invoiceStatus === InvoiceStatus.RETURNED) {
+                    allOptions.push(InvoiceOptions.SENT_TO_APPROVER);
+                } else if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
+                    allOptions.push(InvoiceOptions.PAID);
+                }
+                break;
+            case Roles.APPROVER:
+                if (invoiceData.invoiceStatus === InvoiceStatus.PENDING) {
+                    allOptions.push(InvoiceOptions.APPROVE, InvoiceOptions.RETURN);
+                }
+                break;
+            default:
+                return [];
+        }
+        return allOptions.filter(option => option !== invoiceData.invoiceStatus);
+    };
+
+    const availableOptions = getAvailableOptions();
+
+
+    useSnackbarNotifications({
+        error: invoiceUpdateError,
+        errorObject: invoiceUpdateErrorObject,
+        errorMessage: 'Error While updating ',
+        success: invoiceUpdateSuccess,
+        successMessage: resMessage,
+    });
+
+    useEffect(() => {
+        refetch();
+    }, [invoiceUpdateSuccess, refetch]);
+
+    useEffect(() => {
+        if (invoiceData) {
+            const currentInvoiceStatus = Object.values(InvoiceStatus).indexOf(invoiceData.invoiceStatus);
+            if (currentInvoiceStatus !== -1) {
+                setCurrentInvoiceStatus(currentInvoiceStatus);
+            }
+        }
+    }, [invoiceData]);
+
+    const handleOptionClick = async (option: any) => {
+        if (invoiceData.invoiceStatus !== option) {
+            try {
+                let updatedInvoiceData = { ...invoiceData };
+                let newStatus;
+
+                switch (option) {
+                    case InvoiceOptions.APPROVE:
+                        newStatus = InvoiceStatus.APPROVED;
+                        break;
+                    case InvoiceOptions.RETURN:
+                        newStatus = InvoiceStatus.RETURNED;
+                        break;
+                    case InvoiceOptions.PAID:
+                        newStatus = InvoiceStatus.PAID;
+                        break;
+                    case InvoiceOptions.SENT_TO_APPROVER:
+                        newStatus = InvoiceStatus.PENDING;
+                        break;
+                    default:
+                        console.log("Unknown option");
+                        return;
+                }
+
+                if (newStatus) {
+                    updatedInvoiceData = { ...invoiceData, invoiceStatus: newStatus };
+                }
+
+                let response = await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
+                setResMessage(response.data.message);
+            } catch (error) {
+                console.log("Error updating invoice data", error);
+            }
+        }
+    };
+
     return (
         <>
-            <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column" }}>
+            <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column", padding: "0px 30px 30px 30px" }}>
                 <div style={{ width: '100%', height: '95vh', textAlign: "center", overflow: 'hidden', alignItems: "center" }}>
                     <PDFViewer
                         showToolbar={false}
                         style={{ overflow: "hidden", width: '400px', height: '770px', border: 'none', backgroundColor: 'transparent' }}
                     >
-                        <InvoiceDocument
-                            invoiceData={invoiceData}
-                            customerDetails={customerDetails}
-                            subTotalAmount={subTotalAmount}
-                            discountAmount={discountAmount}
-                        />
+                        <InvoiceDocument invoiceData={data} />
                     </PDFViewer>
                 </div>
                 <div style={{ marginTop: '20px', textAlign: 'center' }}>
-                    <button
-                        onClick={handleDownload}
-                        style={{
-                            padding: '10px',
-                            color: '#fff',
-                            backgroundColor: '#007bff',
-                            border: 'none',
-                            borderRadius: '5px',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        Download Invoice
-                    </button>
-                    <InvoiceRoleButtons
-                        discount={discount}
-                        downloadPdf={downloadPdf}
-                        invoiceData={invoiceData}
-                        isModalOpen={isModalOpen}
-                        preview={preview}
-                        subtotal={subtotal}
-                        tds={tds}
-                    />
+                    <Box gap={2} sx={{ display: "flex", justifyContent: "right", flexDirection: "row", gap: "20px", marginTop: "10px" }}>
+                        <ButtonUi label='Download Pdf' smallButtonCss
+                            onClick={() => { handleDownload() }}
+                        />
+                        {availableOptions.length < 1 ? "" : (
+                            <SplitButton
+                                key={currentInvoiceStatus} // Ensure re-render
+                                disabledOptions={[availableOptions.indexOf(invoiceData.invoiceStatus)]}
+                                options={availableOptions}
+                                defaultIndex={0} // Always use the first available option as the default
+                                onOptionClick={handleOptionClick}
+                            />
+                        )}
+
+                        <Box sx={{ position: "relative" }}>
+                            <ButtonUi
+                                label="View Tracker"
+                                smallButtonCss
+                                onMouseEnter={() => setShowTracker(true)}
+                                onMouseLeave={() => setShowTracker(false)}
+                            />
+                            <Card
+                                sx={{
+                                    padding: "20px 25px", position: "absolute", top: -150, right: 0, zIndex: 1300,
+                                    backgroundColor: "background.paper", borderRadius: "10px", display: showTracker ? "block" : "none",
+                                }}    >
+                                <StageStepper stages={invoiceData.invoiceStages} />
+                            </Card>
+                        </Box>
+                    </Box>
                 </div>
             </Box>
         </>
     );
 };
+
 
 export default InvoiceLetterUi;

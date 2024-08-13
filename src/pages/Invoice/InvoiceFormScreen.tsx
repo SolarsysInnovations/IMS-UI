@@ -69,7 +69,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const [invoiceValues, setInvoiceValues] = useState(invoiceValue || invoiceCreateInitialValue);
     const { data: gstTypesData = [] } = useGetGstTypeListQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxListQuery();
-
     // * ----------- to generate the dropdown options -------------
     const customerName = generateOptions(customers, 'customerName', 'customerName');
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
@@ -96,7 +95,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     useSnackbarNotifications({
         success: addInvoiceSuccess,
         error: addInvoiceError,
-        successMessage: "Invoice added successfully",
+        successMessage: resMessage,
         errorMessage: 'Error adding invoice',
         errorObject: addInvoiceErrorObject,
     });
@@ -108,7 +107,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         errorMessage: 'Error updating invoice',
         errorObject: invoiceUpdateErrorObject,
     });
-
 
     React.useEffect(() => {
 
@@ -224,15 +222,16 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     values.servicesList = invoiceValues.servicesList
                     values.totalAmount = invoiceTotalAmount ?? null;
                     if (invoiceValue) {
-                        console.log("hello world");
                         const response = await updateInvoice({ id: invoiceValue.id, data: values });
                         console.log("API Response:", response);
                         setResMessage(response.data.message);
+                        console.log("sent to approver message",response.data.message)
                         dispatch(clearInvoiceData());
                         resetForm();
                         navigate(-1);
                     } else {
-                        await addInvoice(values);
+                        const response = await addInvoice(values);
+                        setResMessage(response.data.message);
                         resetForm();
                     }
                     resetForm();
