@@ -1,15 +1,9 @@
-import { Box, IconButton, Stack } from "@mui/material";
-import { GridColDef, GridDeleteIcon, GridValueSetterParams } from "@mui/x-data-grid";
+import { IconButton, Stack } from "@mui/material";
+import { GridColDef, GridDeleteIcon, } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
-import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import { useEffect, useState } from "react";
-import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
-import ModalUi from "../../components/ui/ModalUi";
-import TableHeader from "../../components/layouts/TableHeader";
-import usePathname from "../../hooks/usePathname";
-import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
 import React from "react";
 import DialogBoxUi from "../../components/ui/DialogBox";
 import { useDeleteServiceMutation, useGetServiceListQuery, useGetSingleServiceMutation } from "../../redux-store/api/injectedApis";
@@ -21,9 +15,9 @@ import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 const MyCellRenderer = ({ id }: { id: any }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
-    const { data: services, error, isLoading, refetch } = useGetServiceListQuery();
-    const [deletedService, { isLoading: deleteServiceLoading, error: deleteServiceErrorObject, isSuccess: deleteServiceSuccess, isError: deleteServiceError, data: deletedData }] = useDeleteServiceMutation();
-    const [getService, { data: serviceData, isSuccess: C_success, isError: C_error }] = useGetSingleServiceMutation<{ data: any, isSuccess: any, isError: any }>();
+    const { refetch } = useGetServiceListQuery();
+    const [deletedService, { error: deleteServiceErrorObject, isSuccess: deleteServiceSuccess, isError: deleteServiceError, }] = useDeleteServiceMutation();
+    const [getService,] = useGetSingleServiceMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
 
     useEffect(() => {

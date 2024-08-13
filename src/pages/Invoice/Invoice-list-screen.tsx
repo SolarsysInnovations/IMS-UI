@@ -13,6 +13,7 @@ import useErrorHandler from '../../hooks/useErrorHanlder';
 import { Typography } from '@mui/material';
 import { useGetInvoiceListQuery } from '../../redux-store/api/injectedApis';
 import { clearInvoiceData } from '../../redux-store/slices/invoiceSlice';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 // ! ---------- important const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
 
@@ -141,8 +142,9 @@ const InvoiceList = () => {
     const pathname = usePathname();
     const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceListQuery();
     const invoiceListErrorMessage = useErrorHandler(errorInvoiceList);
-    const role = localStorage.getItem("userRole");
     // const buttons = [];
+
+    const { canCreateInvoices } = useRolePermissions()
 
     const buttons = [
         {
@@ -153,7 +155,7 @@ const InvoiceList = () => {
         },
     ];
 
-
+    const resolvedButtons = canCreateInvoices ? buttons : []
     const columns: GridColDef[] = [
         {
             field: 'Action',
@@ -250,7 +252,7 @@ const InvoiceList = () => {
 
     return (
         <>
-            <TableHeader headerName={pathname} buttons={buttons} />
+            <TableHeader headerName={pathname} buttons={resolvedButtons} />
             {invoiceListErrorMessage ? <Typography variant="caption" color="initial">Error :{invoiceListErrorMessage}</Typography> :
                 <GridDataUi showToolbar={true} columns={columns || []} tableData={invoiceList || []} checkboxSelection={false} />
             }

@@ -36,15 +36,6 @@ const ServicesList = () => {
         <>
             <TableHeader headerName={pathname} buttons={buttons} />
             <GridDataUi showToolbar={true} columns={columns || []} tableData={serviceList || []} checkboxSelection={false} />
-            {/* <ModalUi open={openModal} onClose={handleModalClose}>
-                <Box sx={{ marginTop: "15px" }}>
-                    {editMode ? (
-                        <ServiceEditScreen />
-                    ) : (
-                        <ServiceCreate />
-                    )}
-                </Box>
-            </ModalUi> */}
             <DialogBoxUi
                 open={opendialogBox}
                 content={
