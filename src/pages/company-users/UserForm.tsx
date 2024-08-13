@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { useCreateUserMutation, useGetUsersListQuery, useUpdateUserMutation } from '../../redux-store/api/injectedApis';
 import { AdminCompanyUsersInitialValueProps } from '../../types/types';
-
+import {RoleValidationSchema} from "../../constants/forms/validations/validationSchema";
 interface UserValueProps {
     userEditValue: any;
     mode: 'create' | 'edit';
@@ -83,14 +83,6 @@ const UserForm = ({ userEditValue, mode }: UserValueProps) => {
             actions.setSubmitting(false);
         }
     }, [updateUser, dispatch, addUser, userEditValue, mode]);
-    const RoleValidationSchema = Yup.object().shape({
-        userName: Yup.string().required('Username is required'),
-        userEmail: Yup.string().email('Invalid email format').required('Email is required'),
-        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
-        userRole: Yup.string().required('User role is required'),
-        userMobile: Yup.string().required('Mobile number is required'),
-        description: Yup.string().required('Description is required'),
-    });
     return (
         <>
            <DynamicFormCreate

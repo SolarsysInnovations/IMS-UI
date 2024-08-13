@@ -43,10 +43,10 @@ const UserProfile = () => {
       <Grid mt={0.5}  container spacing={3}>
         <Grid item xs={12} sm={6}>
           <Typography variant="body2" color="textSecondary" gutterBottom>
-            First Name
+            Name
           </Typography>
           <Typography variant="subtitle2" color="textSecondary">
-            {userName}
+            {userName?.charAt(0).toUpperCase()}{userName?.slice(1)}
           </Typography>
         </Grid>
         <Grid item xs={12} sm={6}>

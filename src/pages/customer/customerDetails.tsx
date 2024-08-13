@@ -14,45 +14,32 @@ const CustomerDetails = ({ details }: CustomerDetailsProps) => {
     }
 
     return (
-        <Grid container spacing={4}>
-    {Object.entries(details).map(([key, value], index) => (
-        <Grid item xs={12} sm={6} key={index}>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Typography variant="body2">
-                        <strong>{key}:</strong>
-                    </Typography>
-                </Grid>
-                <Grid item xs={12} >
-                    {Array.isArray(value) ? (
-                        value.map((item, index) => (
-                            <Box key={index} mb={2}>
-                                {Object.entries(item).map(([subKey, subValue]) => (
-                                    <Grid container spacing={2} key={subKey}>
-                                        <Grid item xs={4}>
-                                            <Typography variant="body2">
-                                                <strong>{subKey}:</strong>
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={8}>
-                                            <Typography variant="body2">
-                                                {subValue as string}
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                ))}
-                            </Box>
-                        ))
-                    ) : (
-                        <Typography variant="body2">
-                            {value as string}
-                        </Typography>
-                    )}
-                </Grid>
+        <Box sx={{ bgcolor: 'background.paper', p: 3, borderRadius: 2 }}>
+       
+        <Grid container spacing={3}>
+          {Object.entries(details).map(([key, value], index) => (
+            <Grid item xs={12} sm={6} key={index}>
+              <Typography variant="body2" color="text.secondary">
+                {key}
+              </Typography>
+              <Typography variant="subtitle2"  color="textSecondary">
+                {Array.isArray(value) 
+                  ? value.map((item, i) => (
+                      <Box key={i} mb={2}>
+                        {Object.entries(item).map(([subKey, subValue]) => (
+                          <div key={subKey}>
+                            {subValue as string}
+                          </div>
+                        ))}
+                      </Box>
+                    ))
+                  : value as string
+                }
+              </Typography>
             </Grid>
+          ))}
         </Grid>
-    ))}
-</Grid>);
+      </Box>);
 
 }
 
