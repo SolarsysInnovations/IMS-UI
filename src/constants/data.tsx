@@ -175,7 +175,38 @@ export const sidebarTwo = [
 
 export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED", "PAID",];
 
-export const applicationUserAccess = {
+
+interface UserAccess {
+  canCreateCustomers: boolean;
+  canViewCustomers: boolean;
+  canEditCustomers: boolean;
+  canDeleteCustomers: boolean;
+  canCreateInvoices: boolean;
+  canViewInvoices: boolean;
+  canEditInvoices: boolean;
+  canDeleteInvoices: boolean;
+  canCreateServices: boolean;
+  canViewServices: boolean;
+  canEditServices: boolean;
+  canDeleteServices: boolean;
+  canCreateUsers: boolean;
+  canViewUsers: boolean;
+  canEditUsers: boolean;
+  canDeleteUsers: boolean;
+  canCreateCompanies: boolean;
+  canViewCompanies: boolean;
+  canEditCompanies: boolean;
+  canDeleteCompanies: boolean;
+  canCreateSettings: boolean;
+  canViewSettings: boolean;
+  canEditSettings: boolean;
+}
+
+type ApplicationUserAccess = {
+  [key in Roles]: UserAccess;
+};
+
+export const applicationUserAccess: ApplicationUserAccess = {
   [Roles.SUPERADMIN]: {
     // customer access
     canCreateCustomers: false,
@@ -202,7 +233,6 @@ export const applicationUserAccess = {
     canViewCompanies: false,
     canEditCompanies: false,
     canDeleteCompanies: false,
-
     // settings access
     canCreateSettings: true,
     canViewSettings: true,
@@ -234,13 +264,74 @@ export const applicationUserAccess = {
     canViewCompanies: false,
     canEditCompanies: false,
     canDeleteCompanies: false,
-
     // settings access
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
   },
-
+  [Roles.APPROVER]: {
+    // customer access
+    canCreateCustomers: false,
+    canViewCustomers: true,
+    canEditCustomers: false,
+    canDeleteCustomers: false,
+    // invoice access
+    canCreateInvoices: false,
+    canViewInvoices: true,
+    canEditInvoices: false,
+    canDeleteInvoices: false,
+    // service access
+    canCreateServices: true,
+    canViewServices: true,
+    canEditServices: true,
+    canDeleteServices: true,
+    // user access
+    canCreateUsers: true,
+    canViewUsers: true,
+    canEditUsers: true,
+    canDeleteUsers: true,
+    // company access
+    canCreateCompanies: false,
+    canViewCompanies: false,
+    canEditCompanies: false,
+    canDeleteCompanies: false,
+    // settings access
+    canCreateSettings: true,
+    canViewSettings: true,
+    canEditSettings: true,
+  },
+  [Roles.STANDARDUSER]: {
+    // customer access
+    canCreateCustomers: true,
+    canViewCustomers: true,
+    canEditCustomers: true,
+    canDeleteCustomers: true,
+    // invoice access
+    canCreateInvoices: true,
+    canViewInvoices: true,
+    canEditInvoices: true,
+    canDeleteInvoices: true,
+    // service access
+    canCreateServices: true,
+    canViewServices: true,
+    canEditServices: true,
+    canDeleteServices: true,
+    // user access
+    canCreateUsers: true,
+    canViewUsers: true,
+    canEditUsers: true,
+    canDeleteUsers: true,
+    // company access
+    canCreateCompanies: false,
+    canViewCompanies: false,
+    canEditCompanies: false,
+    canDeleteCompanies: false,
+    // settings access
+    canCreateSettings: true,
+    canViewSettings: true,
+    canEditSettings: true,
+  },
 };
+
 
 console.log(applicationUserAccess[Roles.ADMIN].canCreateCustomers);

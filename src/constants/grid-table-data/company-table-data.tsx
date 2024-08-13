@@ -21,7 +21,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   const [deleteCompany, { isLoading: deleteCompanyLoading, error: deleteCompanyErrorObject, isSuccess: deleteCompanySuccess, isError: deleteCompanyError }] = useDeleteUserMutation();
   const [getCompany, { data: companyData }] = useGetSingleUserMutation();
   const navigate = useNavigate();
-console.log("companyData",companyData);
+  console.log("companyData", companyData);
   // Snackbar notifications
   useSnackbarNotifications({
     error: deleteCompanyError,
@@ -57,19 +57,19 @@ console.log("companyData",companyData);
       console.error("Error fetching company data:", error);
     }
   };
-  
+
   const handleDialogOpen = async () => {
     try {
-        const response = await getCompany(id);
-        if ('data' in response) {
-            setIsOpenDialogBox(true);
-        } else {
-            console.error('Error response:', response.error);
-        }
+      const response = await getCompany(id);
+      if ('data' in response) {
+        setIsOpenDialogBox(true);
+      } else {
+        console.error('Error response:', response.error);
+      }
     } catch (error) {
-        console.error('Error fetching customer data:', error);
+      console.error('Error fetching customer data:', error);
     }
-};
+  };
 
   const handleModalClose = () => setOpenModal(false);
 
@@ -137,22 +137,22 @@ console.log("companyData",companyData);
         />
       </IconButton>
       <DialogBoxUi
-            paperWidth="900px"
-            paperMaxWidth="900px"
-                open={openDialogBox}
-                
-                content={
-                    <>
-                      
-                       <TableHeader headerName="Company Details" />
-                       <Box sx={{ marginTop: "15px" }}>
-          <CompanyDetails  details={companyData || []} />
-        </Box>
-                      
-                    </>
-                }
-                handleClose={() => setIsOpenDialogBox(false)}
-            />
+        paperWidth="900px"
+        paperMaxWidth="900px"
+        open={openDialogBox}
+
+        content={
+          <>
+
+            <TableHeader headerName="Company Details" />
+            <Box sx={{ marginTop: "15px" }}>
+              <CompanyDetails details={companyData || []} />
+            </Box>
+
+          </>
+        }
+        handleClose={() => setIsOpenDialogBox(false)}
+      />
     </Stack>
   );
 };

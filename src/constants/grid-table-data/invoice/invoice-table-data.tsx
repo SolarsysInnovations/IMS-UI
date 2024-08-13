@@ -1,7 +1,7 @@
-import { Button, IconButton, Stack } from "@mui/material";
-import { GridColDef, GridDeleteIcon, GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid";
+import { IconButton, Stack } from "@mui/material";
+import { GridDeleteIcon, } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import { useEffect, useState } from "react";
@@ -10,52 +10,53 @@ import ModalUi from "../../../components/ui/ModalUi";
 import InvoiceUi from "../../../pages/Invoice/Generate-Invoice/InvoiceUi";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
-import { useDeleteInvoiceMutation, useGetInvoiceListQuery, useGetSingleInvoiceMutation, useUpdateCustomerMutation } from "../../../redux-store/api/injectedApis";
+import { useDeleteInvoiceMutation, useGetInvoiceListQuery, useGetSingleInvoiceMutation, } from "../../../redux-store/api/injectedApis";
 import { clearInvoiceData, setInvoiceData } from "../../../redux-store/slices/invoiceSlice";
 import DialogBoxUi from "../../../components/ui/DialogBox";
+import ActionButtons from "../../../components/ui/ActionButtons";
+import { useRolePermissions } from "../../../hooks/useRolePermission";
 
-export const DownloadButtonRenderer = ({ row }: { row: any }) => {
-    const [downloadPdf, setDownloadPdf] = useState<boolean>(false);
+// export const DownloadButtonRenderer = ({ row }: { row: any }) => {
+//     const [downloadPdf, setDownloadPdf] = useState<boolean>(false);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [invoiceData, setInvoicesData] = useState<any>();
+//     const [isModalOpen, setIsModalOpen] = useState(false);
+//     const [invoiceData, setInvoicesData] = useState<any>();
 
-    const handleOpenModal = () => {
-        setInvoicesData(row);
-        setIsModalOpen(true);
-    };
+//     const handleOpenModal = () => {
+//         setInvoicesData(row);
+//         setIsModalOpen(true);
+//     };
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
+//     const handleCloseModal = () => {
+//         setIsModalOpen(false);
+//     };
 
-    return (
-        <>
-            <ButtonSmallUi
-                variant="outlined"
-                label="Download Pdf"
-                onClick={handleOpenModal}
-            />
-            <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
-                <InvoiceUi downloadPdf={downloadPdf} invoiceData={invoiceData} />
-            </ModalUi>
-        </>
-    );
-};
+//     return (
+//         <>
+//             <ButtonSmallUi
+//                 variant="outlined"
+//                 label="Download Pdf"
+//                 onClick={handleOpenModal}
+//             />
+//             <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
+//                 <InvoiceUi downloadPdf={downloadPdf} invoiceData={invoiceData} />
+//             </ModalUi>
+//         </>
+//     );
+// };
 
 export const MyCellRenderer = ({ row }: { row: any }) => {
 
     const dispatch = useDispatch<AppDispatch>();
-    const { data: invoice, error, isLoading, refetch: getInvoiceList } = useGetInvoiceListQuery();
+    const { refetch: getInvoiceList } = useGetInvoiceListQuery();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [invoiceData, setInvoicesData] = useState<any>();
     const [deleteInvoice, { isSuccess: invoiceDeleteSuccess, isError: invoiceDeleteError, error: invoiceDeleteErrorObject }] = useDeleteInvoiceMutation();
-    const [getInvoice, { data, isSuccess: getInvoiceSuccess, isError: getInvoiceError, error: getInvoiceErrorObject }] = useGetSingleInvoiceMutation();
+    const [getInvoice,] = useGetSingleInvoiceMutation();
     const navigate = useNavigate();
     const [preview, setPreview] = useState(false);
-    const [nestedOpen, setNestedOpen] = useState(false);
-    const [updateInvoice] = useUpdateCustomerMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
+
+    const { canEditInvoices, canViewInvoices, canDeleteInvoices } = useRolePermissions();
 
     useEffect(() => {
         getInvoiceList()
@@ -74,8 +75,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
             const response = await getInvoice(row.id);
             if ('data' in response) {
                 const invoiceData = response.data;
-                console.log("invoiceData", invoiceData);
-                await dispatch(setInvoiceData(invoiceData));
+                dispatch(setInvoiceData(invoiceData));
                 navigate("/invoice/create");
             } else {
                 console.error('Error response:', response.error);
@@ -85,17 +85,15 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
         }
     }
 
-    const handleDetails = async (row: any) => {
+    const handleDetails = async () => {
         try {
             const response = await getInvoice(row.id);
             if ('data' in response) {
                 const invoiceData = response.data;
-                console.log("invoiceData", invoiceData);
                 dispatch(clearInvoiceData());
                 dispatch(setInvoiceData(invoiceData));
                 handleOpenModal();
                 setIsOpenDialogBox(true);
-
             } else {
                 console.error('Error response:', response.error);
             }
@@ -112,27 +110,19 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
     };
     const handleOpenModal = () => {
         setPreview(true);
-        setIsModalOpen(true);
-    };
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
     };
 
     return (
         <>
             <Stack direction="row" spacing={1}>
-                <IconButton aria-label="" onClick={handleEditClick}>
-                    <EditIcon sx={{ color: `grey.500`, fontSize: "16px", '&:hover': { color: 'blue' } }} fontSize='small' />
-                </IconButton>
-                <IconButton aria-label="" onClick={handleDeleteClick}>
-                    <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "16px", '&:hover': { color: 'blue' } }} fontSize='small' />
-                </IconButton>
-                <IconButton sx={{ padding: "3px" }} aria-label="" onClick={() => {
-                    handleDetails(row)
-                    setInvoicesData(row)
-                }}>
-                    <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-                </IconButton>
+                <ActionButtons
+                    canView={canViewInvoices}
+                    canDelete={canDeleteInvoices}
+                    canEdit={canEditInvoices}
+                    onDeleteClick={handleDeleteClick}
+                    onEditClick={handleEditClick}
+                    onViewClick={handleDetails}
+                />
                 <DialogBoxUi
                     open={opendialogBox}
                     content={
