@@ -18,7 +18,7 @@ const PopupComponents = { USER_PROFILE: "userprofile", CHANGE_PASSWORD: "changep
 const menuItems = [
   { icon: <Person sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "User Profile", component: PopupComponents.USER_PROFILE },
   { icon: <Lock sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Change Password", component: PopupComponents.CHANGE_PASSWORD },
-  { icon: <PersonAdd sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Add another account" },
+ // { icon: <PersonAdd sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Add another account" },
   { icon: <Settings sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Settings", route: "/settings" },
   { icon: <Logout sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Logout", action: "logout" },
 ];
@@ -119,7 +119,7 @@ export default function Header() {
           </Grid>
           <Grid item xs={6} display="flex">
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Tooltip title='Add item'>
+              {/* <Tooltip title='Add item'>
                 <IconButton
                   sx={{ width: "30px" }}
                   onClick={handleMenuOpen(setAddMenuAnchorEl)}
@@ -135,7 +135,7 @@ export default function Header() {
                     }}
                   />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
               <Tooltip title='Account settings'>
                 <IconButton
                   sx={{ width: "30px" }}

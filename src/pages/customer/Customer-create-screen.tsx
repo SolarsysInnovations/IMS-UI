@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import * as Yup from 'yup';
 import { customerFields } from '../../constants/form-data/form-data-json';
 import { customerInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
-import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { DyCreateCustomerProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
@@ -64,7 +64,30 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
             actions.setSubmitting(false);
         }
     }, [addCustomer, updateCustomer, customerEditInitialValues, dispatch]);
-
+    const customerValidationSchema = Yup.object().shape({
+        customerName: Yup.string().required('Customer name is required'),
+        customerEmail: Yup.string().email('Invalid email format').required('Email is required'),
+        customerMobile: Yup.string()
+            .matches(/^[0-9]+$/, "Must be only digits")
+            .min(10, 'Must be exactly 10 digits')
+            .max(10, 'Must be exactly 10 digits')
+            .required('Mobile number is required'),
+        customerAddress: Yup.string().required('Address is required'),
+        customerCity: Yup.object().nullable().required('City is required'),
+        customerState: Yup.object().nullable().required('State is required'),
+        customerCountry: Yup.object().nullable().required('Country is required'),
+        customerZipCode: Yup.string()
+            .matches(/^[0-9]+$/, "Must be only digits")
+            .min(5, 'Must be at least 5 digits')
+            .required('Zip code is required'),
+        customerType: Yup.string().required('Customer type is required'),
+        customerStatus: Yup.string().required('Customer status is required'),
+  
+  
+    });
+    // const validationSchema = Yup.object().shape({
+    //     myField: Yup.object().nullable().required('This field is required'),
+    //   });
     return (
         <>
             <DynamicFormCreate
