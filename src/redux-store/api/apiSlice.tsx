@@ -47,10 +47,8 @@ const baseQueryWithReauth = async (
             // If refresh is successful, update the accessToken and retry the original query
             if (refreshResult?.data) {
                 const { accessToken, refresh } = refreshResult.data as { accessToken: string, refresh: string };
-
                 // Update only the accessToken and refreshToken in the store
-                api.dispatch(updateAccessToken({ accessToken }));
-                api.dispatch(setCredentials({ refresh }));
+                api.dispatch(updateAccessToken({ refresh, accessToken }));
 
                 // Retry the original query with the new access token
                 result = await baseQuery(args, api, extraOptions);
