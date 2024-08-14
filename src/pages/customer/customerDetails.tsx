@@ -56,9 +56,6 @@ const CustomerDetails = ({ details }: CustomerDetailsProps) => {
 
 }
 
-// Default props if details are not passed
-CustomerDetails.defaultProps = {
-    details: {},
-};
-
 export default CustomerDetails;
+
+
