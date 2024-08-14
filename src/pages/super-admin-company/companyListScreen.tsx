@@ -9,6 +9,7 @@ import { useGetUsersListQuery } from '../../redux-store/api/injectedApis';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { clearUserData } from '../../redux-store/slices/userSlice';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 interface CompanyDetails {
     companyName: string;
@@ -45,6 +46,8 @@ const CompanyList = () => {
     const { data: company, error, isLoading, refetch } = useGetUsersListQuery();
     const [mergedData, setMergedData] = useState<any[]>([]);
     const pathname = usePathname();
+    const { canCreateCompanies } = useRolePermissions();
+
 
     useEffect(() => {
         if (company && !isLoading && !error) {
@@ -74,9 +77,11 @@ const CompanyList = () => {
         },
     ];
 
+    const resolvedButtons = canCreateCompanies ? buttons : [];
+
     return (
         <>
-            <TableHeader headerName={pathname} buttons={buttons} />
+            <TableHeader headerName={pathname} buttons={resolvedButtons} />
             {mergedData && (
                 <GridDataUi showToolbar={true} columns={columns} tableData={mergedData || []} checkboxSelection={false} />
             )}

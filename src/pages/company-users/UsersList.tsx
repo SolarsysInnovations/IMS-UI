@@ -10,6 +10,7 @@ import { columns } from './Roles-table-data'
 import DialogBoxUi from '../../components/ui/DialogBox'
 import UserForm from './UserForm'
 import { useGetServiceListQuery, useGetUsersListQuery } from '../../redux-store/api/injectedApis'
+import { useRolePermissions } from '../../hooks/useRolePermission'
 
 
 
@@ -18,10 +19,12 @@ const UserList = () => {
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
     const { data: serviceList, error, isLoading } = useGetServiceListQuery();
     const { data: userListData, refetch: userListRefetch } = useGetUsersListQuery();
+    const pathname = usePathname();
     // 
     const companyUserData = useSelector((state: any) => state.globalState.data);
 
     const [key, setKey] = useState<number>(0);
+    const { canCreateUsers } = useRolePermissions();
 
     const mode = companyUserData ? 'edit' : 'create';
 
@@ -33,11 +36,11 @@ const UserList = () => {
         { label: 'Create New User', icon: Add, onClick: () => { setIsOpenDialogBox(true) } },
     ];
 
-    const pathname = usePathname();
+    const resolvedButtons = canCreateUsers ? buttons : [];
 
     return (
         <>
-            <TableHeader headerName={pathname} buttons={buttons} />
+            <TableHeader headerName={pathname} buttons={resolvedButtons} />
             <GridDataUi showToolbar={true} columns={columns || []} tableData={userListData || []} checkboxSelection={false} />
             {/* ----------------- form popup screen below ----------------- */}
             <DialogBoxUi open={opendialogBox} content={<UserForm key={key} mode={mode} userEditValue={companyUserData} />} handleClose={() => setIsOpenDialogBox(false)}
