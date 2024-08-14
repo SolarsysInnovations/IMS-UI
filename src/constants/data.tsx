@@ -303,20 +303,20 @@ export const applicationUserAccess: ApplicationUserAccess = {
   },
   [Roles.STANDARDUSER]: {
     // customer access
-    canCreateCustomers: true,
+    canCreateCustomers: false,
     canViewCustomers: true,
-    canEditCustomers: true,
-    canDeleteCustomers: true,
+    canEditCustomers: false,
+    canDeleteCustomers: false,
     // invoice access
     canCreateInvoices: true,
     canViewInvoices: true,
     canEditInvoices: true,
     canDeleteInvoices: true,
     // service access
-    canCreateServices: true,
+    canCreateServices: false,
     canViewServices: true,
-    canEditServices: true,
-    canDeleteServices: true,
+    canEditServices: false,
+    canDeleteServices: false,
     // user access
     canCreateUsers: false,
     canViewUsers: true,

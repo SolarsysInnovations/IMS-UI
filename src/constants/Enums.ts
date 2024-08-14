@@ -36,5 +36,5 @@ export enum InvoiceOptions {
     APPROVE = "APPROVE",
     RETURN = "RETURN",
     PAID = "PAID",
-    SENT_TO_APPROVER = "Sent to Approver",
+    SENT_TO_APPROVER = "Send for Approver",
 }
