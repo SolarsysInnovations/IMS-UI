@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
+import * as Yup from 'yup'; // Import Yup for validation
 import { CompanyEditFields, CompanyFields } from '../../constants/form-data/form-data-json';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
-import { companyDetailsValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { clearData } from '../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
@@ -26,11 +26,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-
-    const initialValues = {
-        ...superAdminCompanyUsersInitialValues,
-        userRole: companyEditInitialValues?.userRole || 'ADMIN',  // Set 'ADMIN' as default for creation mode
-    };
+    const initialValues = companyEditInitialValues || superAdminCompanyUsersInitialValues;
 
     const fields = mode === 'create' ? CompanyFields : CompanyEditFields;
 
@@ -64,6 +60,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                     userDetails: {
                         userName: values.userName,
                         userEmail: values.userEmail,
+                        // password: values.password,
                         userRole: values.userRole,
                         userMobile: values.userMobile,
                         description: values.description,
@@ -80,6 +77,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyRegNumber: values.companyRegNumber
                     },
                 };
+                console.log("transformedData", transformedData);
 
                 await updateCompany({ id: companyEditInitialValues.companyId, data: transformedData });
                 dispatch(clearData());
@@ -110,6 +108,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                 dispatch(clearData());
             }
 
+            dispatch(clearData());
             actions.resetForm();
 
         } catch (error) {
@@ -119,10 +118,35 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
         }
     }, [updateCompany, dispatch, addCompany, companyEditInitialValues, mode]);
 
+    const companyDetailsValidationSchema = Yup.object().shape({
+        userName: Yup.string().required('User name is required'),
+        userEmail: Yup.string().email('Invalid email format').required('User email is required'),
+        password: mode === 'create' ? Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required') : Yup.string(),
+        userRole: Yup.string().required('User role is required'),
+        userMobile: Yup.string()
+            .matches(/^[0-9]+$/, "Must be only digits")
+            .min(10, 'Must be at least 10 digits')
+            .required('User mobile is required'),
+        description: Yup.string().required('Description is required'),
+        companyName: Yup.string().required('Company name is required'),
+        companyAddress: Yup.string().required('Company address is required'),
+        companyState: Yup.string().required('Company state is required'),
+        companyCountry: Yup.string().required('Company country is required'),
+        companyEmail: Yup.string().email('Invalid email format').required('Company email is required'),
+        companyPhone: Yup.string()
+            .matches(/^[0-9]+$/, "Must be only digits")
+            .min(10, 'Must be at least 10 digits')
+            .required('Company phone is required'),
+        companyWebsite: Yup.string().url('Invalid URL format').required('Company website is required'),
+        companyTaxNumber: Yup.string().required('Company tax number is required'),
+        companyRegNumber: Yup.string().required('Company registration number is required'),
+    });
+
     return (
         <>
             <DynamicFormCreate
                 showTable={true}
+                // fields={Object.keys(companyEditInitialValues).length === 0 ? CompanyFields : CompanyEditFields}
                 fields={fields}
                 initialValues={initialValues}
                 validationSchema={companyDetailsValidationSchema}

@@ -74,10 +74,12 @@ const authSlice = createSlice({
             localStorage.removeItem('userDetails');
         },
         updateAccessToken: (state, action) => {
-            const { accessToken } = action.payload;
+            const { accessToken, refresh } = action.payload;
             state.accessToken = accessToken;
+            state.refresh = refresh;
             // Update token in local storage
             localStorage.setItem('accessToken', accessToken || "");
+            localStorage.setItem('refresh', refresh || "");
         }
     },
 });

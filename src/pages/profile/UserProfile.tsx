@@ -1,13 +1,16 @@
-import { MenuItem, Table, TableBody, TableCell, TableRow,Box, Card, CardContent, Grid, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react"
+import { MenuItem, Table, TableBody, TableCell, TableRow,Box, Card,
+     CardContent, Grid, Typography, IconButton } from "@mui/material";
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';import React, { useEffect, useState } from "react"
 import TableHeader from "../../components/layouts/TableHeader";
 import { useRolesGetUserMutation } from "../../redux-store/role/roleApi"
-import CustomerDetails from "../customer/customerDetails";
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import PersonIcon from '@mui/icons-material/Person';
-import KeyIcon from '@mui/icons-material/Key';
-import MailRoundedIcon from '@mui/icons-material/MailRounded';
-import { EmailRounded } from "@mui/icons-material";
+// import CustomerDetails from "../customer/customerDetails";
+// import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+// import PersonIcon from '@mui/icons-material/Person';
+// import KeyIcon from '@mui/icons-material/Key';
+// import MailRoundedIcon from '@mui/icons-material/MailRounded';
+// import { EmailRounded } from "@mui/icons-material";
+// import { Link } from "react-router-dom";
+// import DescriptionIcon from '@mui/icons-material/Description';
 const UserProfile = () => {
     const userMobile = localStorage.getItem("userMobile");
     const userName = localStorage.getItem("userName");
@@ -33,67 +36,53 @@ const UserProfile = () => {
 
     return (
         <>
- <Typography
-    style={{ color: "#6366F1", marginBottom: "8px" }}
-    variant="h6"
-    component="h2"
-  >
-    User Details
-  </Typography>            <MenuItem>
-                
-                <PersonIcon style={{
-              color: "white",
-              marginTop: "15px",
-              backgroundColor: "#6366F1",
-              padding: "5px",
-              height: "15%",
-              borderRadius: "25px",
-            }}/> <Typography style={{marginTop:"15px", marginLeft:"10px"}} variant="body1" >  <strong>UserName :</strong><span style={{ margin: '13px'}}> {userName || ''}</span>
-        </Typography>
-            </MenuItem>
-            <MenuItem>
-       
-                 <KeyIcon style={{
-              color: "white",
-              marginTop: "15px",
-              backgroundColor: "#6366F1",
-              padding: "5px",
-              height: "15%",
-              borderRadius: "25px",
-            }}/>   <Typography  style={{marginTop:"15px", marginLeft:"10px"}} variant="body1" > <strong>UserRole :</strong><span style={{ marginLeft: '18px',marginBottom:"18px" }}> {userRole || ''}</span>
-        </Typography>
-            </MenuItem>
-            <MenuItem>
-      
-                   <EmailRounded style={{
-              color: "white",
-              marginTop: "15px",
-              backgroundColor: "#6366F1",
-              padding: "5px",
-              height: "15%",
-              borderRadius: "25px",
-            }}/>   <Typography  style={{marginTop:"15px", marginLeft:"10px"}} variant="body1" ><strong>Email :</strong><span style={{ marginLeft: '37px' }}> {userEmail || ''}</span>
-        </Typography>
-            </MenuItem>
-            <MenuItem>
-       
-            <LocalPhoneIcon  style={{
-              color: "white",
-              marginTop: "15px",
-              backgroundColor: "#6366F1",
-              padding: "5px",
-              height: "15%",
-              borderRadius: "25px",
-            }}/>
-                    <Typography  style={{marginTop:"15px", marginLeft:"10px"}} variant="body1" > <strong>UserMobile :</strong> <span style={{ marginLeft: '37px' }}>{userMobile || 'NA'}</span>
-        </Typography>
-            </MenuItem>
-            <MenuItem>
-        <Typography variant="body1">
-
-                    <strong>Description :</strong> <span style={{ marginLeft: '37px' }}>{userDescription || 'NA'}</span>
-        </Typography>
-            </MenuItem>
+        <Box sx={{ border: '1px solid #e0e0e0', borderRadius: '8px', padding: '20px' }}>
+      <TableHeader
+      //  buttons={[{label : "Edit" , onClick : () => {} ,  }]}
+       headerName="Personal Details"/>
+      <Grid mt={0.5}  container spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+            Name
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            {userName?.charAt(0).toUpperCase()}{userName?.slice(1)}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+           Role
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            {userRole}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+            Email address
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            {userEmail || 'N/A'}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+            Phone
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            {userMobile || '7502447897'}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+           Description
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            {userDescription || 'profile'}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Box>
          </>
     );
     

@@ -13,16 +13,20 @@ import { useDeleteCustomerMutation, useGetCustomersListQuery, useGetSingleCustom
 import { setCustomerData } from "../../redux-store/slices/slicesList";
 import DialogBoxUi from "../../components/ui/DialogBox";
 import { AppDispatch } from "../../redux-store/store";
+import { useRolePermissions } from "../../hooks/useRolePermission";
+import ActionButtons from "../../components/ui/ActionButtons";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
+
     const dispatch = useDispatch<AppDispatch>();
     const [openDialogBox, setIsOpenDialogBox] = useState(false);
     const { refetch } = useGetCustomersListQuery();
     const [deleteCustomer, { isSuccess: deleteCustomerSuccess, isError: deleteCustomerError, error: deleteCustomerErrorObject }] = useDeleteCustomerMutation();
-    const [getCustomer, { data: customerData, isSuccess: C_success }] = useGetSingleCustomerMutation();
+    const [getCustomer, { data: customerData, }] = useGetSingleCustomerMutation();
     const navigate = useNavigate();
 
-    const role = localStorage.getItem("userRole");
+    const { canViewCustomers, canEditCustomers, canDeleteCustomers } = useRolePermissions();
+    console.log(canViewCustomers, canEditCustomers, canDeleteCustomers, "canViewCustomers,canEditCustomers,canDeleteCustomers");
 
     useEffect(() => {
         refetch();
@@ -70,44 +74,30 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             deleteCustomer(id);
         }
     };
-
-    const StyledIconButton = styled(IconButton)(({ theme }) => ({
-        padding: '3px',
-        '&.Mui-disabled': {
-            color: theme.palette.grey[500],
-            cursor: 'not-allowed',
-            pointerEvents: 'auto',
-        },
-    }));
-
     return (
         <Stack direction="row" spacing={1}>
-            {role !== "STANDARDUSER" && (
-                <StyledIconButton aria-label="" onClick={handleEditClick}>
-                    <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-                </StyledIconButton>
-            )}
-            {role !== "STANDARDUSER" && (
-                <StyledIconButton aria-label="" onClick={handleDeleteClick}>
-                    <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-                </StyledIconButton>
-            )}
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDialogOpen}>
-                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
+            <ActionButtons
+                id={id}
+                canEdit={canEditCustomers}
+                canView={canViewCustomers}
+                canDelete={canDeleteCustomers}
+                onEditClick={handleEditClick}
+                onDeleteClick={handleDeleteClick}
+                onViewClick={handleDialogOpen}
+            />
             <DialogBoxUi
-            paperWidth="900px"
-            paperMaxWidth="900px"
+                paperWidth="900px"
+                paperMaxWidth="900px"
                 open={openDialogBox}
-                
+
                 content={
                     <>
-                      
-                       <TableHeader headerName="Customer Details" />
+
+                        <TableHeader headerName="Customer Details" />
                         <Box sx={{ marginTop: "15px" }}>
                             <CustomerDetails details={customerData || {}} />
                         </Box>
-                      
+
                     </>
                 }
                 handleClose={() => setIsOpenDialogBox(false)}

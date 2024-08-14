@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import * as Yup from 'yup';
 import { customerFields } from '../../constants/form-data/form-data-json';
 import { customerInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
-import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { DyCreateCustomerProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { useCreateCustomerMutation, useGetCustomersListQuery, useUpdateCustomerMutation } from '../../redux-store/api/injectedApis';
 import { clearCustomerData } from '../../redux-store/slices/customerSlice';
+import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
 
 interface CustomerValueProps {
     customerEditInitialValues: any;
@@ -65,6 +66,9 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
         }
     }, [addCustomer, updateCustomer, customerEditInitialValues, dispatch]);
 
+    // const validationSchema = Yup.object().shape({
+    //     myField: Yup.object().nullable().required('This field is required'),
+    //   });
     return (
         <>
             <DynamicFormCreate

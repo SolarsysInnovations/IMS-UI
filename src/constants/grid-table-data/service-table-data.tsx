@@ -1,30 +1,27 @@
-import { Box, IconButton, Stack } from "@mui/material";
-import { GridColDef, GridDeleteIcon, GridValueSetterParams } from "@mui/x-data-grid";
+import { IconButton, Stack } from "@mui/material";
+import { GridColDef, GridDeleteIcon, } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
-import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import { useEffect, useState } from "react";
-import { Add, RemoveRedEyeOutlined } from "@mui/icons-material";
-import ModalUi from "../../components/ui/ModalUi";
-import TableHeader from "../../components/layouts/TableHeader";
-import usePathname from "../../hooks/usePathname";
-import { LocalStorageKeys, useLocalStorage } from "../../hooks/useLocalStorage";
 import React from "react";
 import DialogBoxUi from "../../components/ui/DialogBox";
 import { useDeleteServiceMutation, useGetServiceListQuery, useGetSingleServiceMutation } from "../../redux-store/api/injectedApis";
 import { setServiceData } from "../../redux-store/slices/serviceSlice";
 import ServiceCreate from "../../pages/service/service-create-screen";
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
+import ActionButtons from "../../components/ui/ActionButtons";
+import { useRolePermissions } from "../../hooks/useRolePermission";
 
 
 const MyCellRenderer = ({ id }: { id: any }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
-    const { data: services, error, isLoading, refetch } = useGetServiceListQuery();
-    const [deletedService, { isLoading: deleteServiceLoading, error: deleteServiceErrorObject, isSuccess: deleteServiceSuccess, isError: deleteServiceError, data: deletedData }] = useDeleteServiceMutation();
-    const [getService, { data: serviceData, isSuccess: C_success, isError: C_error }] = useGetSingleServiceMutation<{ data: any, isSuccess: any, isError: any }>();
+    const { refetch } = useGetServiceListQuery();
+    const [deletedService, { error: deleteServiceErrorObject, isSuccess: deleteServiceSuccess, isError: deleteServiceError, }] = useDeleteServiceMutation();
+    const [getService,] = useGetSingleServiceMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
+    const { canEditServices, canDeleteServices } = useRolePermissions();
 
     useEffect(() => {
         refetch();
@@ -63,12 +60,18 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     };
     return (
         <Stack direction="row" spacing={1}>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
+            <ActionButtons
+                onDeleteClick={handleDeleteClick}
+                onEditClick={handleEditClick}
+                canDelete={canDeleteServices}
+                canEdit={canEditServices}
+            />
+            {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
                 <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
             </IconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
                 <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
+            </IconButton> */}
             {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton> */}
