@@ -29,6 +29,7 @@ import SelectDropdown from '../../components/ui/SelectDropdown';
 import { useCreateInvoiceMutation, useGetCustomersListQuery, useGetGstTypeListQuery, useGetInvoiceListQuery, useGetPaymentTermsListQuery, useGetServiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from '../../redux-store/api/injectedApis';
 import { clearInvoiceData, setInvoiceData } from '../../redux-store/slices/invoiceSlice';
 import ServiceScreen from './service/ServiceScreen';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -76,6 +77,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
     const [preview, setPreview] = useState(false);
     const [resMessage, setResMessage] = useState('');
+    const { canCreateTds,canCreateGst, canCreatePayment ,canCreateService} = useRolePermissions();
     const PopupComponents = {
         GST_TYPE: 'gstType',
         PAYMENT_TERMS: 'paymentTerms',
@@ -362,7 +364,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                                 setPopUpComponent(PopupComponents.GST_TYPE)
                                                 // navigate("/customer/create")
                                             }}
-                                            button={true}
+                                            button={canCreateGst}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
                                                     const selectedGstType = gstTypesData.find((item: any) => item.gstName === newValue.value)
@@ -421,7 +423,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 <Grid item xs={3}>
                                     <Box>
                                         <SelectDropdown
-                                            button={true}
+                                            button={canCreatePayment}
                                             onMouseDown={() => {
                                                 setPopUpComponent(PopupComponents.PAYMENT_TERMS);
                                                 setIsOpenDialogBox(true)
@@ -503,7 +505,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                                                     setIsOpenDialogBox(true)
                                                                     setPopUpComponent(PopupComponents.SERVICES)
                                                                 }}
-                                                                button={true}
+                                                                button={canCreateService}
                                                                 options={modifiedServiceList.map((service) => ({
                                                                     label: service.serviceAccountingCode,
                                                                     value: service.serviceAccountingCode
@@ -629,7 +631,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                                     setPopUpComponent(PopupComponents.TDS_TAX)
                                                     // navigate("/customer/create")
                                                 }}
-                                                button={true}
+                                                button={canCreateTds}
                                                 width='150px'
                                                 onChange={(newValue: any) => {
                                                     if (newValue) {

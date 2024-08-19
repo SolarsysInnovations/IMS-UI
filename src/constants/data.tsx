@@ -201,6 +201,23 @@ interface UserAccess {
   canCreateSettings: boolean;
   canViewSettings: boolean;
   canEditSettings: boolean;
+  canCreateTds: boolean;
+  canViewTds: boolean
+  canEditTds: boolean;
+  canDeleteTds: boolean;
+  canCreatePayment: boolean;
+  canViewPayment: boolean;
+  canEditPayment: boolean;
+  canDeletePayment: boolean;
+  canCreateGst: boolean;
+  canViewGst: boolean;
+  canEditGst: boolean;
+  canDeleteGst: boolean;
+  canCreateService: boolean;
+  canViewService: boolean;
+  canEditService: boolean;
+  canDeleteService: boolean;
+
 }
 
 type ApplicationUserAccess = {
@@ -238,6 +255,27 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
+    //tds access
+   canCreateTds: true,
+   canViewTds: true,
+   canEditTds: true,
+   canDeleteTds: true,
+    //payment access
+    canCreatePayment: true,
+    canViewPayment: true,
+    canEditPayment: true,
+    canDeletePayment: true,
+    //gst access
+    canCreateGst: true,
+    canViewGst: true,
+    canEditGst: true,
+    canDeleteGst: true,
+    //service access
+   canCreateService: true,
+   canViewService: true,
+   canEditService: true,
+   canDeleteService: true,
+
   },
   [Roles.ADMIN]: {
     // customer access
@@ -269,6 +307,26 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
+     //tds access
+   canCreateTds: true,
+   canViewTds: true,
+   canEditTds: true,
+   canDeleteTds: true,
+    //payment access
+    canCreatePayment: true,
+    canViewPayment: true,
+    canEditPayment: true,
+    canDeletePayment: true,
+    //gst access
+    canCreateGst: true,
+    canViewGst: true,
+    canEditGst: true,
+    canDeleteGst: true,
+    //service access
+   canCreateService: true,
+   canViewService: true,
+   canEditService: true,
+   canDeleteService: true,
   },
   [Roles.APPROVER]: {
     // customer access
@@ -300,6 +358,26 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
+   //tds access
+   canCreateTds: true,
+   canViewTds: true,
+   canEditTds: true,
+   canDeleteTds: true,
+    //payment access
+    canCreatePayment: true,
+    canViewPayment: true,
+    canEditPayment: true,
+    canDeletePayment: true,
+    //gst access
+    canCreateGst: true,
+    canViewGst: true,
+    canEditGst: true,
+    canDeleteGst: true,
+    //service access
+   canCreateService: true,
+   canViewService: true,
+   canEditService: true,
+   canDeleteService: true,
   },
   [Roles.STANDARDUSER]: {
     // customer access
@@ -331,6 +409,26 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
+   //tds access
+   canCreateTds: false,
+   canViewTds: false,
+   canEditTds: true,
+   canDeleteTds: true,
+    //payment access
+    canCreatePayment: false,
+    canViewPayment: true,
+    canEditPayment: true,
+    canDeletePayment: true,
+    //gst access
+    canCreateGst: false,
+    canViewGst: true,
+    canEditGst: true,
+    canDeleteGst: true,
+    //service access
+   canCreateService: false,
+   canViewService: true,
+   canEditService: true,
+   canDeleteService: true,
   },
 };
 

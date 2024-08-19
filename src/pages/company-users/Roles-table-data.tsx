@@ -175,3 +175,5 @@ export const columns: GridColDef[] = [
 
     },
 ];
+
+export default RolesDropdown ;
