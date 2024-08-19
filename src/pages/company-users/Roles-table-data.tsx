@@ -157,7 +157,7 @@ export const columns: GridColDef[] = [
     },
     {
         field: 'userName',
-        headerName: 'User Name',
+        headerName: 'Name',
         width: 150,
         editable: false,
     },
@@ -169,7 +169,7 @@ export const columns: GridColDef[] = [
     },
     {
         field: 'userRole',
-        headerName: 'User Role',
+        headerName: 'Role',
         width: 120,
         editable: false,
 
