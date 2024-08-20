@@ -10,8 +10,9 @@ import EndUserDashboardScreen from './standard-user-dashboard/DashboardScreen';
 import SuperAdminDashboardScreen from './super-admin-dashboard/DashboardScreen';
 import AdminDashboardScreen from './Admin-dashboard/Dashboard-screen';
 import { useGetDashboardMutation } from '../../redux-store/api/injectedApis';
+import { Formik } from 'formik';
+import DatePickerUi from '../../components/ui/DatePicker';
 
-// Option array for dropdown
 const options = [
   { label: "monthly", value: "monthly" },
   { label: "weekly", value: "weekly" },
@@ -19,7 +20,6 @@ const options = [
   { label: "overall", value: "overall" },
 ];
 
-// Utility function to get date range based on selection
 const getDatesForSelection = (selection: string) => {
   const today = dayjs();
   let startDate: string, endDate: string;
@@ -38,7 +38,7 @@ const getDatesForSelection = (selection: string) => {
       endDate = today.endOf("year").format("YYYY-MM-DD");
       break;
     case "overall":
-      startDate = "2000-01-01"; // Example start date for overall view
+      startDate = "2000-01-01";
       endDate = today.format("YYYY-MM-DD");
       break;
     default:
@@ -50,7 +50,6 @@ const getDatesForSelection = (selection: string) => {
   return { startDate, endDate };
 };
 
-// Function to format date in 'DD-MM-YYYY' format
 const formatDate = (dateStr: string) => {
   return dayjs(dateStr).format("DD-MM-YYYY");
 };
@@ -77,13 +76,6 @@ const DashboardScreen = () => {
           setResponseData(response);
         } catch (error) {
           console.error("Error details:", error);
-          if (error instanceof Error) {
-            console.error("Error message:", error.message);
-          } else if (error && typeof error === "object") {
-            console.error("Error object:", JSON.stringify(error, null, 2));
-          } else {
-            console.error("Unexpected error:", error);
-          }
         }
       };
 
@@ -97,38 +89,52 @@ const DashboardScreen = () => {
     }
   };
 
-  // Determine the greeting message based on the user's role
-
   return (
     <>
-      <Box px={0} py={0}>
-          {/* <Grid
-            item
-            xs={6}
-            display="flex"
-            alignItems="center"
-            sx={{ fontWeight: 500 }}
-          >
-            Hello {userRole} !
-          </Grid> */}
-
-          <Grid
+      <Box px={0} py={2}>
+        <Formik
+          initialValues={{ startDate: undefined, endDate: undefined }}
+          onSubmit={(values) => {
+            // Handle form submission
+          }}
+        >
+          {({ errors, touched, values, setFieldValue, handleSubmit }) => (
+            <form onSubmit={handleSubmit}>
+ <Grid
             item
             xs={6}
             display="flex"
             justifyContent="flex-end"
             alignItems="center"
-          >
-            <SelectDropdown
-              variant="standard"
-              applySmallSizeStyle={true}
-              value={
-                options.find((option) => option.value === selectedValue) || null
-              }
-              options={options}
-              onChange={handleChange}
-            />
-          </Grid>
+          >           
+               {/* <Grid item xs={4}>
+                  <DatePickerUi
+                    label="Start Date"
+                    onChange={(date: any) => setFieldValue("startDate", date)}
+                    value={values.startDate}
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <DatePickerUi
+                    label="End Date"
+                    onChange={(date: any) => setFieldValue("endDate", date)}
+                    value={values.endDate}
+                  />
+                </Grid> */}
+                <Grid item xs={3}>
+                  <SelectDropdown
+                    variant="standard"
+                    applySmallSizeStyle={true}
+                    value={options.find((option) => option.value === selectedValue) || null}
+                    options={options}
+                    onChange={handleChange}
+                  />
+                </Grid>
+              </Grid>
+            </form>
+          )}
+        </Formik>
+
         <Grid pl={2} mt={3} container spacing={2} mb={2}>
           {userRole === Roles.APPROVER ? (
             <ApproverDashboardScreen approverData={responseData} />
@@ -143,7 +149,6 @@ const DashboardScreen = () => {
           )}
         </Grid>
       </Box>
-      {/* Render data, loading, or error states */}
     </>
   );
 };
