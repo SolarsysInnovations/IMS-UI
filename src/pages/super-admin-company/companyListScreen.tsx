@@ -48,7 +48,6 @@ const CompanyList = () => {
     const pathname = usePathname();
     const { canCreateCompanies } = useRolePermissions();
 
-
     useEffect(() => {
         if (company && !isLoading && !error) {
             const mergedArray = company.map((item: CompanyUserData) => ({

@@ -19,7 +19,7 @@ export enum Roles {
     ADMIN = "ADMIN",
     APPROVER = "APPROVER",
     STANDARDUSER = "STANDARDUSER"
-}
+};
 
 
 // src/constants/invoiceEnums.ts
@@ -30,11 +30,11 @@ export enum InvoiceStatus {
     APPROVED = "APPROVED",
     RETURNED = "RETURNED",
     PAID = "PAID",
-}
+};
 
 export enum InvoiceOptions {
     APPROVE = "APPROVE",
     RETURN = "RETURN",
     PAID = "PAID",
     SENT_TO_APPROVER = "Send for Approver",
-}
+};

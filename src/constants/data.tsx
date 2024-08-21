@@ -201,6 +201,8 @@ interface UserAccess {
   canCreateSettings: boolean;
   canViewSettings: boolean;
   canEditSettings: boolean;
+  // tds
+
 }
 
 type ApplicationUserAccess = {

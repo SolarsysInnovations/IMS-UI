@@ -78,7 +78,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyRegNumber: values.companyRegNumber
                     },
                 };
-                console.log("transformedData", transformedData);
 
                 await updateCompany({ id: companyEditInitialValues.companyId, data: transformedData });
                 dispatch(clearData());
@@ -118,8 +117,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
             actions.setSubmitting(false);
         }
     }, [updateCompany, dispatch, addCompany, companyEditInitialValues, mode]);
-
-
 
     return (
         <>
