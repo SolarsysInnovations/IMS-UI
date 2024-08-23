@@ -10,6 +10,7 @@ import { SuperAdminUsersInitialValueProps } from '../../types/types';
 import { useNavigate } from 'react-router-dom';
 import { superAdminCompanyUsersInitialValues } from '../../constants/forms/formikInitialValues';
 import { useCreateUserMutation, useGetUsersListQuery, useUpdateUserMutation } from '../../redux-store/api/injectedApis';
+import { companyDetailsValidationSchema } from '../../constants/forms/validations/validationSchema';
 
 interface CompanyValueProps {
     companyEditInitialValues: any;
@@ -77,7 +78,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyRegNumber: values.companyRegNumber
                     },
                 };
-                console.log("transformedData", transformedData);
 
                 await updateCompany({ id: companyEditInitialValues.companyId, data: transformedData });
                 dispatch(clearData());
@@ -117,30 +117,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
             actions.setSubmitting(false);
         }
     }, [updateCompany, dispatch, addCompany, companyEditInitialValues, mode]);
-
-    const companyDetailsValidationSchema = Yup.object().shape({
-        userName: Yup.string().required('User name is required'),
-        userEmail: Yup.string().email('Invalid email format').required('User email is required'),
-        password: mode === 'create' ? Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required') : Yup.string(),
-        userRole: Yup.string().required('User role is required'),
-        userMobile: Yup.string()
-            .matches(/^[0-9]+$/, "Must be only digits")
-            .min(10, 'Must be at least 10 digits')
-            .required('User mobile is required'),
-        description: Yup.string().required('Description is required'),
-        companyName: Yup.string().required('Company name is required'),
-        companyAddress: Yup.string().required('Company address is required'),
-        companyState: Yup.string().required('Company state is required'),
-        companyCountry: Yup.string().required('Company country is required'),
-        companyEmail: Yup.string().email('Invalid email format').required('Company email is required'),
-        companyPhone: Yup.string()
-            .matches(/^[0-9]+$/, "Must be only digits")
-            .min(10, 'Must be at least 10 digits')
-            .required('Company phone is required'),
-        companyWebsite: Yup.string().url('Invalid URL format').required('Company website is required'),
-        companyTaxNumber: Yup.string().required('Company tax number is required'),
-        companyRegNumber: Yup.string().required('Company registration number is required'),
-    });
 
     return (
         <>

@@ -23,6 +23,7 @@ import UserScreen from "../pages/company-users/UserScreen";
 import SettingRoleScreen from "../pages/settings/settings-role";
 import DashboardScreen from "../pages/Dashboard/Dashboard";
 import ServicesList from "../pages/service/service-list-screen";
+import SendEmail from "../pages/Invoice/Send-email";
 
 const getUserRole = () => {
   return localStorage.getItem('userRole');
@@ -167,11 +168,23 @@ export const sidebarTwo = [
         path: "/settings/Role",
         element: <SettingRoleScreen />,
         allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
-      },
+          },
     ],
     allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
   },
-];
+  {
+    path: '/settings',
+    element: <SettingScreen />,
+    allowedRoles: [],
+    subItems: [
+      {
+        path: '/send-email',
+        element: <SendEmail />,
+        allowedRoles: [],
+      },
+    ],
+  }
+ ];
 
 export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED", "PAID",];
 
@@ -381,20 +394,20 @@ export const applicationUserAccess: ApplicationUserAccess = {
   },
   [Roles.STANDARDUSER]: {
     // customer access
-    canCreateCustomers: true,
+    canCreateCustomers: false,
     canViewCustomers: true,
-    canEditCustomers: true,
-    canDeleteCustomers: true,
+    canEditCustomers: false,
+    canDeleteCustomers: false,
     // invoice access
     canCreateInvoices: true,
     canViewInvoices: true,
     canEditInvoices: true,
     canDeleteInvoices: true,
     // service access
-    canCreateServices: true,
+    canCreateServices: false,
     canViewServices: true,
-    canEditServices: true,
-    canDeleteServices: true,
+    canEditServices: false,
+    canDeleteServices: false,
     // user access
     canCreateUsers: false,
     canViewUsers: true,

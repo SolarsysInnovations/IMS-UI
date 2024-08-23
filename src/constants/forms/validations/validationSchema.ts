@@ -166,14 +166,14 @@ export const sendEmailValidationSchema = Yup.object().shape({
 });
 
 export const RoleValidationSchema = Yup.object().shape({
-    userName: Yup.string().required('Username is required'),
-    userEmail: Yup.string().email('Invalid email format').required('Email is required'),
-    password: Yup.string()
-    //.min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
-    userRole: Yup.string().required('User role is required'),
-    userMobile: Yup.string().required('Mobile number is required'),
-    description: Yup.string().required('Description is required'),
+    // userName: Yup.string().required('Username is required'),
+    // userEmail: Yup.string().email('Invalid email format').required('Email is required'),
+    // password: Yup.string()
+    // //.min(6, 'Password must be at least 6 characters')
+    // .required('Password is required'),
+    // userRole: Yup.string().required('User role is required'),
+    // userMobile: Yup.string().required('Mobile number is required'),
+    // description: Yup.string().required('Description is required'),
 });
 
 export const PasswordValidationSchema = Yup.object().shape({
