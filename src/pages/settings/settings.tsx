@@ -1,66 +1,41 @@
 import React, { useState, useEffect } from "react";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
 import About from "../about/About";
 import TaxConfig from "./TaxConfig";
 import LinkScreen from "./links/Portal-link-screen";
 import SettingsCompanyDetailsScreen from "./settings-company/SettingsCompanyDetailsScreen";
+import { selectUserRole } from "../../redux-store/auth/authSlice";
+import { useSelector } from "react-redux";
+import RoleBasedTabs from "../../components/ui/RoleBasedTabs";
+import { Typography } from "@mui/material";
 
 const SettingScreen = () => {
-  const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
   const [initialValuesLoaded, setInitialValuesLoaded] = useState<boolean>(false);
+  const userRole = useSelector(selectUserRole) || "user"; // Provide a default role if null
 
   useEffect(() => {
-    // Load initial values when the component mounts
     loadInitialValues();
   }, []);
 
   const loadInitialValues = () => {
-    // Your logic to load initial values goes here
-    // Example:
-    // fetchData().then((data) => {
-    //   // Set initial values based on the fetched data
-    //   setInitialValuesLoaded(true);
-    // });
-    setInitialValuesLoaded(true); // For demonstration, setting it to true immediately
+    setInitialValuesLoaded(true);
   };
 
-  const handleTabChange = (e: React.ChangeEvent<{}>, tabIndex: number) => {
-    setCurrentTabIndex(tabIndex);
-  };
-
-  const renderTabContent = () => {
-    switch (currentTabIndex) {
-      case 0:
-        return <SettingsCompanyDetailsScreen />;
-      case 1:
-        return <LinkScreen />;
-      case 2:
-        return <TaxConfig />;
-      case 3:
-        return <About />;
-      default:
-        return null;
-    }
-  };
+  const tabs = [
+    { label: "Company Settings", component: <SettingsCompanyDetailsScreen />, roles: ["ADMIN", "APPROVER", "STANDARDUSER","SUPERADMIN"] },
+    { label: "Portals", component: <LinkScreen />, roles: ["ADMIN"] },
+    { label: "Tax", component: <TaxConfig />, roles: ["ADMIN"] },
+    { label: "About", component: <About />, roles: ["ADMIN", "APPROVER", "STANDARDUSER","SUPERADMIN"] },
+  ];
 
   return (
     <React.Fragment>
-      <Tabs value={currentTabIndex} variant="fullWidth" onChange={handleTabChange}>
-        <Tab label="Company Settings" />
-        <Tab label="Portals" />
-        <Tab label="Tax" />
-        <Tab label="About" />
-      </Tabs>
-
       <Container fixed>
-        <Box>
-          {initialValuesLoaded ? (
-            renderTabContent()
-          ) : (
-            <Typography>Loading initial values...</Typography>
-          )}
-        </Box>
+        {initialValuesLoaded ? (
+          <RoleBasedTabs tabs={tabs} userRole={userRole} />
+        ) : (
+          <Typography>Loading initial values...</Typography>
+        )}
       </Container>
     </React.Fragment>
   );
