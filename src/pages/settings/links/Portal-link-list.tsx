@@ -3,7 +3,7 @@ import { Box, Typography, Card, CardContent, IconButton, CardHeader, Grid } from
 import LanguageIcon from "@mui/icons-material/Language";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useDeleteLinkMutation, useGetLinkByIdMutation, useGetLinkQuery } from "../../../redux-store/link/linkApi";
+import { useDeletePortalLinkMutation, useGetSinglePortalLinkMutation, useGetPortalLinkQuery } from "../../../redux-store/api/injectedApis";
 import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -13,9 +13,9 @@ import PortalLinkCreate from "./Portal-link-create";
 
 const PortalLinkList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data: linkCreation, error, isLoading, refetch } = useGetLinkQuery();
-  const [deletedLink, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData }] = useDeleteLinkMutation();
-  const [getLink, {  }] = useGetLinkByIdMutation();
+  const { data: linkCreation, error, isLoading, refetch } = useGetPortalLinkQuery();
+  const [deletedLink, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData }] = useDeletePortalLinkMutation();
+  const [getLink, {  }] = useGetSinglePortalLinkMutation();
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
   const linkValue = useSelector((state: any) => state.globalState.data);
   const [key, setKey] = useState<number>(0);

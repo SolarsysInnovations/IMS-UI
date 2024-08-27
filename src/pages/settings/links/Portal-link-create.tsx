@@ -3,7 +3,7 @@ import { linkFields } from "../../../constants/form-data/form-data-json";
 import { linkInitialValues } from "../../../constants/forms/formikInitialValues";
 import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
 import { linkValidationSchema } from "../../../constants/forms/validations/validationSchema";
-import { useAddLinkMutation, useGetLinkQuery, useUpdateLinkMutation } from "../../../redux-store/link/linkApi";
+import { useAddPortalLinkMutation, useGetPortalLinkQuery, useUpdatePortalLinkMutation }  from "../../../redux-store/api/injectedApis";
 import { LinkFormProps } from "../../../types/types";
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
@@ -14,9 +14,9 @@ const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
   const [openModal, setOpenModal] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [addLink, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddLinkMutation();
-  const [updateLink, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateLinkMutation();
-  const { data: linkList, refetch } = useGetLinkQuery();
+  const [addLink, { isLoading: isAdding, isSuccess: isAddSuccess, isError: isAddError }] = useAddPortalLinkMutation();
+  const [updateLink, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdatePortalLinkMutation();
+  const { data: linkList, refetch } = useGetPortalLinkQuery();
 
   const initialValue = linkValue || linkInitialValues;
   const handleClose = () => {
