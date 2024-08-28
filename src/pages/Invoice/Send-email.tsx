@@ -1,5 +1,5 @@
-import React, { useState,useCallback } from "react";
-import { Form, Formik,FormikHelpers } from "formik";
+import React, { useState, useCallback } from "react";
+import { Form, Formik, FormikHelpers } from "formik";
 import { Box, Grid, Button, Typography, IconButton } from "@mui/material";
 import TextFieldUi from "../../components/ui/TextField";
 import ButtonSmallUi from "../../components/ui/ButtonSmall";
@@ -21,19 +21,19 @@ const SendEmail: React.FC = () => {
   const pathname = 'Send Email'
   const navigate = useNavigate();
 
-const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-  console.log("File upload event:", event);
-  console.log("Files:", event.target.files);
-  const files = event.target.files;
-  if (files && files.length > 0) {
-    const fileList = Array.from(files);
-    const fileNames = fileList.map(file => file.name);
-    setUploadedFiles(prevFiles => [...prevFiles, ...fileList]);
-    setShowFileName(prevNames => [...prevNames, ...fileNames]);
-  } else {
-    console.log("No files selected");
-  }
-}, []);
+  const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("File upload event:", event);
+    console.log("Files:", event.target.files);
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const fileList = Array.from(files);
+      const fileNames = fileList.map(file => file.name);
+      setUploadedFiles(prevFiles => [...prevFiles, ...fileList]);
+      setShowFileName(prevNames => [...prevNames, ...fileNames]);
+    } else {
+      console.log("No files selected");
+    }
+  }, []);
 
   const handleRemoveFile = useCallback((index: number) => {
     setUploadedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
@@ -63,7 +63,7 @@ const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>
       formData.append("cc", values.cc || "");
       formData.append("subject", values.subject || "");
       //formData.append("body", values.body || "");
-      
+
       uploadedFiles.forEach((file) => {
         formData.append("files", file);
       });
@@ -148,8 +148,8 @@ const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>
             <Grid item xs={12}>
               <CKEditor
                 editor={ClassicEditor}
-               //  data={values.body}
-               onChange={(event, editor) => {
+                //  data={values.body}
+                onChange={(event, editor) => {
                   const data = editor.getData();
                   handleChange({ target: { name: 'body', value: data } });
                 }}
@@ -176,20 +176,20 @@ const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>
             <Grid container spacing={2}>
               <Grid item xs={9}>
                 <Box sx={{ mt: 3, display: "flex", position: "relative", left: "15px" }}>
-                <Button
-  component="label"
-  variant="contained"
-  startIcon={<CloudUploadIcon />}
-  style={{ height: "26px", width: "fit-content", fontSize: "12px", borderRadius: "8px", boxShadow: "none" }}
->
-  Upload file
-  <input
-    type="file"
-    hidden
-    multiple
-    onChange={handleFileUpload}
-  />
-</Button>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    startIcon={<CloudUploadIcon />}
+                    style={{ height: "26px", width: "fit-content", fontSize: "12px", borderRadius: "8px", boxShadow: "none" }}
+                  >
+                    Upload file
+                    <input
+                      type="file"
+                      hidden
+                      multiple
+                      onChange={handleFileUpload}
+                    />
+                  </Button>
                 </Box>
               </Grid>
               <Grid item xs={2}>

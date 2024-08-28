@@ -12,6 +12,7 @@ import SplitButton from "../../../components/ui/SplitButton";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 import { InvoiceOptions, InvoiceStatus, Roles } from "../../../constants/Enums";
 import { Card } from "@mui/material";
+import DialogBoxUi from "../../../components/ui/DialogBox";
 
 // InvoiceLetterUi Component
 const InvoiceLetterUi = () => {
@@ -28,7 +29,7 @@ const InvoiceLetterUi = () => {
     const [showTracker, setShowTracker] = useState(false);
     const { refetch } = useGetInvoiceListQuery();
     const [resMessage, setResMessage] = useState('');
-
+    const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
     useEffect(() => {
         if (invoiceDatas && customers && companyDetails && tdsTaxList) {
             // Find the relevant customer
@@ -104,6 +105,8 @@ const InvoiceLetterUi = () => {
                 if (invoiceData.invoiceStatus === InvoiceStatus.DRAFT || invoiceData.invoiceStatus === InvoiceStatus.RETURNED) {
                     allOptions.push(InvoiceOptions.SENT_TO_APPROVER);
                 } else if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
+                    allOptions.push(InvoiceOptions.MAILED)
+                } else if (invoiceData.invoiceStatus === InvoiceStatus.MAILED) {
                     allOptions.push(InvoiceOptions.PAID);
                 }
                 break;
@@ -143,6 +146,11 @@ const InvoiceLetterUi = () => {
     }, [invoiceData]);
 
     const handleOptionClick = async (option: any) => {
+
+        if (option === InvoiceOptions.MAILED) {
+            setIsOpenDialogBox(true);
+            return;
+        };
         if (invoiceData.invoiceStatus !== option) {
             try {
                 let updatedInvoiceData = { ...invoiceData };
@@ -165,7 +173,6 @@ const InvoiceLetterUi = () => {
                         console.log("Unknown option");
                         return;
                 }
-
                 if (newStatus) {
                     updatedInvoiceData = { ...invoiceData, invoiceStatus: newStatus };
                 }
@@ -222,6 +229,20 @@ const InvoiceLetterUi = () => {
                     </Box>
                 </div>
             </Box>
+
+            {/* INVOICE EMAIL DIALOG BOX */}
+            <DialogBoxUi
+                open={isOpenDialogBox}
+                content={
+                    <>
+                        <h1>hello</h1>
+                    </>
+                }
+                handleClose={() => {
+                    setIsOpenDialogBox(false)
+
+                }}
+            />
         </>
     );
 };

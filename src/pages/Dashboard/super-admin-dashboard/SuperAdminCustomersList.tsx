@@ -15,11 +15,18 @@ export const columns: GridColDef[] = [
         editable: true,
     },
     {
+        field: 'noOfUsers',
+        headerName: 'No of Users',
+        width: 150,
+        editable: true,
+    },
+    {
         field: 'noOfInvoice',
         headerName: 'No of Invoice',
         width: 150,
         editable: true,
     },
+
 ];
 const SuperAdminCustomersList = ({ superAdminCustomersListData }: any) => {
 
