@@ -3,7 +3,7 @@ import { Box, Typography, Card, CardContent, IconButton, CardHeader, Grid } from
 import LanguageIcon from "@mui/icons-material/Language";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useDeletePortalLinkMutation, useGetSinglePortalLinkMutation, useGetPortalLinkQuery } from "../../../redux-store/api/injectedApis";
+import { useDeletePortalLinkMutation, useGetSinglePortalLinkMutation, useGetPortalLinkQuery, useUpdatePortalLinkMutation } from "../../../redux-store/api/injectedApis";
 import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";

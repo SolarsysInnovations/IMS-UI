@@ -15,6 +15,7 @@ import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification
 import { superAdminCompanyUsersInitialValues } from "../../../constants/forms/formikInitialValues";
 import { selectUserDetails } from "../../../redux-store/auth/authSlice";
 
+
 const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [openModal, setOpenModal] = useState(false);
@@ -43,8 +44,10 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
 
   const userDetailsFromStorage = useSelector(selectUserDetails);
 
-  // Parse userDetails if it exists
-  const userDetails = userDetailsFromStorage ? JSON.parse(userDetailsFromStorage) : null;
+  // Check the content before parsing
+  console.log("userDetailsFromStorage", userDetailsFromStorage);
+
+  const userDetails = typeof userDetailsFromStorage === 'string' ? JSON.parse(userDetailsFromStorage) : userDetailsFromStorage;
   console.log("userDetails", userDetails?.companyDetails);
 
   const initialValue = companyValue || superAdminCompanyUsersInitialValues;
@@ -66,7 +69,6 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
     successMessage: "Company updated successfully",
   });
 
-  // Memoize refetch function
   const memoizedRefetch = useCallback(() => {
     refetch();
   }, [refetch]);
@@ -85,18 +87,15 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
           company: values,
         });
 
-        // Update userDetails in localStorage
         const userDetailsFromStorage = localStorage.getItem('userDetails');
         if (userDetailsFromStorage) {
           const userDetailsData = JSON.parse(userDetailsFromStorage);
 
-          // Update only companyDetails with new values
           userDetailsData.companyDetails = {
             ...userDetailsData.companyDetails,
             ...values,
           };
 
-          // Store updated userDetails back in localStorage
           localStorage.setItem('userDetails', JSON.stringify(userDetailsData));
         } else {
           throw new Error('User details not found in localStorage.');
@@ -113,9 +112,7 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
     }
   };
 
-  const updateFormValue = (setFieldValue: Function) => {
-    // Update form values
-  };
+  const updateFormValue = (setFieldValue: Function) => {};
 
   const handleClose = () => {
     setOpenModal(false);
