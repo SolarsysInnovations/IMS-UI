@@ -1,8 +1,7 @@
 import { Grid } from "@mui/material";
 import AdminDashboardInvoiceOverviewAmount from "../Admin-dashboard/InvoiceAmount";
 import AdminDashboardInvoicePieChart from "../Admin-dashboard/InvoiceStatusChart";
-import { useSelector } from "react-redux";
-import { selectUserDetails } from "../../../redux-store/auth/authSlice";
+
 const AdminDashboardScreen = ({ adminData }: any) => {
 
   // Check if adminData is undefined and provide default values if necessary

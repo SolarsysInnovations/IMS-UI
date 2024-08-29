@@ -3,6 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { Card } from '@mui/material';
 
 const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
+
     const [chartData, setChartData] = useState<{
         series: number[];
         options: any;
@@ -37,8 +38,8 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
             dataLabels: {
                 enabled: false,
             },
-            colors: ['#F97300', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E', "#00224D"],
-            labels: ["Returned", "Pending", "Approved", "Draft", "Deleted", "Paid"],
+            colors: ['#F97300', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E', '#FF204E', "#00224D"],
+            labels: ["Returned", "Pending", "Approved", "Draft", "Deleted", "MAILED", "Paid"],
             responsive: [
                 {
                     breakpoint: 480,
@@ -58,7 +59,7 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
 
     useEffect(() => {
         if (invoicePieChartData) {
-            const { pending, approved, returned, deleted, draft, paid } = invoicePieChartData;
+            const { pending, approved, returned, deleted, draft, mailed, paid } = invoicePieChartData;
 
             setChartData({
                 series: [
@@ -67,6 +68,7 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
                     approved.noOfInvoices,
                     draft.noOfInvoices,
                     deleted.noOfInvoices,
+                    mailed.noOfInvoices,
                     paid.noOfInvoices
                 ],
                 options: {
@@ -77,6 +79,7 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
                         'Approved',
                         'Draft',
                         'Deleted',
+                        'Mailed',
                         'Paid',
                     ]
                 }
