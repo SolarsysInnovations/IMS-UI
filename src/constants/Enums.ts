@@ -30,6 +30,7 @@ export enum InvoiceStatus {
     APPROVED = "APPROVED",
     RETURNED = "RETURNED",
     PAID = "PAID",
+    MAILED = "MAILED",
 };
 
 export enum InvoiceOptions {
@@ -37,4 +38,5 @@ export enum InvoiceOptions {
     RETURN = "RETURN",
     PAID = "PAID",
     SENT_TO_APPROVER = "Send for Approver",
+    MAILED = "Mail To Customer",
 };
