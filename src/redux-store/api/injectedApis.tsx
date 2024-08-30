@@ -333,7 +333,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
 
                 updateCompanySetting: builder.mutation<any, { id: string | undefined; company: Partial<any> }>({
                     query: ({ id, company }) => ({
-                        url: `${API_URLS.companyUpdate}/${id}`,
+                        url: `${API_URLS.settingsUpdate}/${id}`,
                         method: 'POST',
                         body: company,
                     }),
@@ -343,7 +343,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
 
                // ! ----------- settingsPortal start --------------
 
-             getPortalLink: builder.query<any[], void>({
+               getPortalLink: builder.query<any[], void>({
                 query: () => ({
                     url: API_URLS.linkList,
                     method: 'POST',
@@ -353,7 +353,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
             }),
             getSinglePortalLink: builder.mutation<void, string>({ // Changed to query
                 query: (id) => ({
-                    url: `${API_URLS.linkList}/${id}`,
+                    url: `${API_URLS.linkGet}/${id}`,
                     method: 'POST',
                 }),
             }),
@@ -378,7 +378,8 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
     
                 }),
     
-            })
+
+    }),
 
     }),
 });

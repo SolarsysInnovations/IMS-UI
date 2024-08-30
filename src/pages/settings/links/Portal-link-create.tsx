@@ -10,7 +10,7 @@ import { AppDispatch } from '../../../redux-store/store';
 import { clearData } from "../../../redux-store/global/globalState";
 import { useNavigate } from 'react-router-dom';
 
-const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
+const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
   const [openModal, setOpenModal] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -19,17 +19,14 @@ const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
   const { data: linkList, refetch } = useGetPortalLinkQuery();
 
   const initialValue = linkValue || linkInitialValues;
-  const handleClose = () => {
-    setOpenModal(false);
-  };
-  const updateFormValue = (setFieldValue: Function) => {
-    // Update form values
-  };
   const handleBackClick = () => {
     handleClose(); // Close modal
     navigate(0); // Navigate back
   };
-
+  const updateFormValue = (setFieldValue: Function) => {
+    // Update form values
+  };
+ 
   const onSubmit = async (values: LinkFormProps, actions: any) => {
     try {
       if (linkValue) {
@@ -47,9 +44,9 @@ const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
 
   useEffect(() => {
     if (isAddSuccess || isUpdateSuccess) {
-      refetch(); // Refetch data after successful add or update
+      handleClose(); // Close modal on successful add or update
     }
-  }, [isAddSuccess, isUpdateSuccess, refetch]);
+  }, [isAddSuccess, isUpdateSuccess]);
 
   return (
     <>

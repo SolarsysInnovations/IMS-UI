@@ -33,7 +33,8 @@ export interface CompanyFormProps {
 }
 export interface LinkFormProps {
     linkValue: linkCreationProps;
-}
+    handleClose: () => void; // Add this line
+  }
 export interface PaymentTermsProps {
     id?: string,
     termName: string,
@@ -198,6 +199,10 @@ export interface SuperAdminUsersInitialValueProps {
     companyWebsite: string;
     companyTaxNumber: string;
     companyRegNumber: string;
+    customerLimit:string,
+    invoiceLimit:string,
+    userLimit:string,
+    serviceLimit:string,
 };
 
 export interface AdminCompanyUsersInitialValueProps {

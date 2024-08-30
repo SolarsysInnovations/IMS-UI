@@ -44,7 +44,7 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
   const userDetailsFromStorage = useSelector(selectUserDetails);
 
   // Parse userDetails if it exists
-  const userDetails = userDetailsFromStorage ? JSON.parse(userDetailsFromStorage) : null;
+  const userDetails = typeof userDetailsFromStorage === 'string' ? JSON.parse(userDetailsFromStorage) : userDetailsFromStorage;
   console.log("userDetails", userDetails?.companyDetails);
 
   const initialValue = companyValue || superAdminCompanyUsersInitialValues;

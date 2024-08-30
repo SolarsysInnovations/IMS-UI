@@ -102,7 +102,6 @@ export const CompanyDetailsFields: FieldProps[] = [
             { name: 'companyName', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 5, validation: Yup.string().required('Company Name is required') },
             { name: 'companyEmail', required: true, disabled: false, label: 'Company Email', type: 'text', gridSize: 5, validation: Yup.string().email('Invalid email').required('Company Email is required') },
             { name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5, validation: Yup.string().typeError('Must be a number').required('Company Phone is required') },
-            { name: 'companyCell', required: true, disabled: false, label: 'Company Cell', type: 'number', gridSize: 5, validation: Yup.string().typeError('Must be a number').required('Company Cell is required') },
             { name: 'companyCountry', required: true, disabled: false, label: 'Company Country', type: 'selectCountry', gridSize: 5, validation: Yup.string().required('Company Country is required') },
             { name: 'companyState', required: true, disabled: false, label: 'Company State', type: 'selectState', gridSize: 5, validation: Yup.string().required('Company State is required') },
             { name: 'companyAddress', required: true, disabled: false, label: 'Company Address', type: 'text', gridSize: 5, validation: Yup.string().required('Company Address is required') },
@@ -145,6 +144,19 @@ export const CompanyFields: FieldProps[] = [
             { name: 'companyRegNumber', required: true, disabled: false, label: 'Company RegNumber', type: 'text', gridSize: 5, },
         ]
     },
+    {
+        name: 'Configuration',
+        label: 'Configuration :',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'customerLimit', required: true, disabled: false, label: 'Customer Limit', type: 'number', gridSize: 5, },
+            { name: 'invoiceLimit', required: true, disabled: false, label: 'Invoice Limit', type: 'number', gridSize: 5, },
+            { name: 'userLimit', required: true, disabled: false, label: 'User Limit', type: 'number', gridSize: 5, },
+            { name: 'serviceLimit', required: true, disabled: false, label: 'Service Limit', type: 'number', gridSize: 5, },
+        ]
+    },
+
 ];
 
 export const CompanyEditFields: FieldProps[] = [
@@ -188,6 +200,19 @@ export const CompanyEditFields: FieldProps[] = [
             { name: 'companyRegNumber', required: true, disabled: false, label: 'Company RegNumber', type: 'text', gridSize: 5, },
         ]
     },
+    {
+        name: 'Configuration',
+        label: 'Configuration :',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'customerLimit', required: true, disabled: false, label: 'Customer Limit', type: 'number', gridSize: 5, },
+            { name: 'invoiceLimit', required: true, disabled: false, label: 'Invoice Limit', type: 'number', gridSize: 5, },
+            { name: 'userLimit', required: true, disabled: false, label: 'User Limit', type: 'number', gridSize: 5, },
+            { name: 'serviceLimit', required: true, disabled: false, label: 'Service Limit', type: 'number', gridSize: 5, },
+        ]
+    },
+
 ];
 
 export const linkFields: FieldProps[] = [
