@@ -333,7 +333,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
 
                 updateCompanySetting: builder.mutation<any, { id: string | undefined; company: Partial<any> }>({
                     query: ({ id, company }) => ({
-                        url: `${API_URLS.settingsUpdate}/${id}`,
+                        url: `${API_URLS.companyUpdate}/${id}`,
                         method: 'POST',
                         body: company,
                     }),

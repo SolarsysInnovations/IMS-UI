@@ -198,10 +198,6 @@ export interface SuperAdminUsersInitialValueProps {
     companyWebsite: string;
     companyTaxNumber: string;
     companyRegNumber: string;
-    customerLimit:string,
-    invoiceLimit:string,
-    userLimit:string,
-    serviceLimit:string,
 };
 
 export interface AdminCompanyUsersInitialValueProps {
