@@ -183,7 +183,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
                 }
                 if (newStatus) {
                     updatedInvoiceData = { ...invoiceData, invoiceStatus: newStatus };
-                }
+                };
 
                 let response = await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
                 setResMessage(response.data.message);
