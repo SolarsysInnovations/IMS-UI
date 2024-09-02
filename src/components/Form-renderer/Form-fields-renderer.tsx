@@ -12,6 +12,7 @@ import TextAreaUi from "../ui/TextArea";
 import { Country, State, City } from 'country-state-city';
 import { generateOptions } from '../../services/utils/dropdownOptions';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
+import PhoneInputUi from '../ui/PhoneNumber';
 
 interface RenderCountrySelectFieldProps {
   field: any;
@@ -108,7 +109,25 @@ const renderTextField = (field: any, meta: any, subField: SubField) => {
     />
   )
 }
+// --------------------Phone field renderer-------------------
 
+const renderPhoneField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
+  console.log("meta, field, subField", meta, field, subField);
+
+  return (
+    <PhoneInputUi
+      value={field.value || ""}
+      onChange={field.onChange(field.name)}
+      required={subField.required}
+      disabled={subField.disabled}
+      label={subField.label}
+      error={meta.touched && !!meta.error}
+      helperText={meta.touched && meta.error ? meta.error : subField.helperText}
+      fullWidth
+      width={subField.width || '100%'}
+    />
+  );
+};
 //------------------password input field--------------------
 const renderPasswordField = (field: any, meta: any, subField: SubField, passwordVisible: boolean, setPasswordVisible: { (value: React.SetStateAction<boolean>): void; (arg0: boolean): void; }) => (
   //return (
@@ -292,6 +311,9 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                     return renderRadioField(field, meta, subField, setFieldValue);
                   } else if (subField.type === "textArea") {
                     return renderTextArea(field, meta, subField, setFieldValue);
+                  }
+                  else if (subField.type === "PhoneNumber") {
+                    return renderPhoneField(field, meta, subField, setFieldValue);
                   } else if (subField.type === "selectCountry" || subField.type === "selectState" || subField.type === "selectCity") {
                     let options = [];
                     if (subField.type === "selectCountry") {
