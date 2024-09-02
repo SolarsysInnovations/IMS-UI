@@ -24,6 +24,7 @@ export const superAdminCompanyUsersInitialValues: SuperAdminUsersInitialValuePro
     companyEmail: "",
     companyPhone: "",
     companyCountry: "",
+    companyCity: "",
     companyState: "",
     companyAddress: "",
     companyWebsite: "",

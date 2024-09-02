@@ -145,11 +145,7 @@ export const CompanyDetailsFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'PhoneNumber', gridSize: 5, validation: Yup.string().typeError('Must be a number').required('Company Phone is required'),
-                width: ''
-            },
-            {
-                name: 'companyCell', required: true, disabled: false, label: 'Company Cell', type: 'PhoneNumber', gridSize: 5, validation: Yup.string().typeError('Must be a number').required('Company Cell is required'),
+                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5, validation: Yup.string().typeError('Must be a number').required('Company Phone is required'),
                 width: ''
             },
             {
@@ -158,6 +154,10 @@ export const CompanyDetailsFields: FieldProps[] = [
             },
             {
                 name: 'companyState', required: true, disabled: false, label: 'Company State', type: 'selectState', gridSize: 5, validation: Yup.string().required('Company State is required'),
+                width: ''
+            },
+            {
+                name: 'companyCity', required: true, disabled: false, label: 'Company City', type: 'selectCity', gridSize: 5, validation: Yup.string().required('Company City is required'),
                 width: ''
             },
             {
@@ -228,7 +228,7 @@ export const CompanyFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'PhoneNumber', gridSize: 5,
+                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5,
                 width: ''
             },
             {
@@ -237,6 +237,10 @@ export const CompanyFields: FieldProps[] = [
             },
             {
                 name: 'companyState', required: true, disabled: false, label: 'Company State', type: 'selectState', gridSize: 5,
+                width: ''
+            },
+            {
+                name: 'companyCity', required: true, disabled: false, label: 'Company City', type: 'selectCity', gridSize: 5, validation: Yup.string().required('Company City is required'),
                 width: ''
             },
             {
