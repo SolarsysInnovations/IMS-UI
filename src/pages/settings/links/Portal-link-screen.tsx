@@ -9,15 +9,18 @@ import PortalLinkCreate from "./Portal-link-create";
 const LinkScreen = () => {
   const linkValue = useSelector((state: any) => state.globalState.data);
 
-  console.log("link value", linkValue);
-
   const [key, setKey] = useState<number>(0);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
-  const [popUpComponent, setPopUpComponent] = useState("");
 
   const handleModalOpen = () => {
     setIsOpenDialogBox(true);
   };
+
+  const handleModalClose = () => {
+    setIsOpenDialogBox(false);
+    setKey(prevKey => prevKey + 1); // Reset the key to force a re-render
+  };
+
   useEffect(() => {
     setKey((prev) => prev + 1);
   }, [linkValue]);
@@ -28,20 +31,20 @@ const LinkScreen = () => {
         headerName={"Links"}
         buttons={[{ label: "Add Link", icon: Add, onClick: handleModalOpen }]}
       />
+      <PortalLinkList />
+
       <DialogBoxUi
         open={opendialogBox}
         content={
-          <>
-            <PortalLinkCreate linkValue={linkValue} key={key} />
-          </>
+          <PortalLinkCreate 
+            key={key} 
+            linkValue={linkValue} 
+            handleClose={handleModalClose} // Ensure dialog can be closed
+          />
         }
-        handleClose={() => {
-          setIsOpenDialogBox(false);
-          setPopUpComponent("");
-        }}
+        handleClose={handleModalClose} // Ensure dialog can be closed
       />
-      <PortalLinkList />
     </>
   );
 };
-export default LinkScreen;
+export default LinkScreen ;

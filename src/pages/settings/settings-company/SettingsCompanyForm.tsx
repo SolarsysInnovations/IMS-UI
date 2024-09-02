@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useGetCompanySettingQuery } from "../../../redux-store/settings/companyDetailsApi";
 import {
+  useGetCompanySettingQuery,
   useAddCompanySettingMutation,
   useUpdateCompanySettingMutation,
-} from "../../../redux-store/settings/companyDetailsApi";
+} from "../../../redux-store/api/injectedApis";
 import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
 import { companyDetailsValidationSchema } from "../../../constants/forms/validations/validationSchema";
 import { clearData } from "../../../redux-store/global/globalState";
@@ -44,7 +44,7 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
   const userDetailsFromStorage = useSelector(selectUserDetails);
 
   // Parse userDetails if it exists
-  const userDetails = userDetailsFromStorage ? JSON.parse(userDetailsFromStorage) : null;
+  const userDetails = typeof userDetailsFromStorage === 'string' ? JSON.parse(userDetailsFromStorage) : userDetailsFromStorage;
   console.log("userDetails", userDetails?.companyDetails);
 
   const initialValue = companyValue || superAdminCompanyUsersInitialValues;

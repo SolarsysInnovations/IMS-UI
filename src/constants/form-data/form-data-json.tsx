@@ -257,6 +257,19 @@ export const CompanyFields: FieldProps[] = [
             },
         ]
     },
+    {
+        name: 'Configuration',
+        label: 'Configuration :',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'customerLimit', required: true, disabled: false, label: 'Customer Limit', type: 'number', gridSize: 5, },
+            { name: 'invoiceLimit', required: true, disabled: false, label: 'Invoice Limit', type: 'number', gridSize: 5, },
+            { name: 'userLimit', required: true, disabled: false, label: 'User Limit', type: 'number', gridSize: 5, },
+            { name: 'serviceLimit', required: true, disabled: false, label: 'Service Limit', type: 'number', gridSize: 5, },
+        ]
+    },
+
 ];
 
 export const CompanyEditFields: FieldProps[] = [
@@ -332,6 +345,19 @@ export const CompanyEditFields: FieldProps[] = [
             },
         ]
     },
+    {
+        name: 'Configuration',
+        label: 'Configuration :',
+        type: 'section',
+        titleGridSize: 12,
+        subFields: [
+            { name: 'customerLimit', required: true, disabled: false, label: 'Customer Limit', type: 'number', gridSize: 5, },
+            { name: 'invoiceLimit', required: true, disabled: false, label: 'Invoice Limit', type: 'number', gridSize: 5, },
+            { name: 'userLimit', required: true, disabled: false, label: 'User Limit', type: 'number', gridSize: 5, },
+            { name: 'serviceLimit', required: true, disabled: false, label: 'Service Limit', type: 'number', gridSize: 5, },
+        ]
+    },
+
 ];
 
 export const linkFields: FieldProps[] = [
@@ -483,15 +509,15 @@ export const RolesFields: FieldProps[] = [
         name: "info",
         subFields: [
             {
-                name: 'userName', required: true, disabled: false, label: 'user Name', type: 'text', gridSize: 6, validation: Yup.string().required('userName is required'),
+                name: 'userName', required: true, disabled: false, label: 'Name', type: 'text', gridSize: 6, validation: Yup.string().required('userName is required'),
                 width: ''
             },
             {
-                name: 'userRole', required: true, disabled: false, label: 'user Role', type: 'select', gridSize: 6, options: [{ value: "APPROVER", label: "APPROVER" }, { value: "STANDARDUSER", label: "STANDARDUSER" }], validation: Yup.string().required('userRole is required'),
+                name: 'userRole', required: true, disabled: false, label: 'Role', type: 'select', gridSize: 6, options: [{ value: "APPROVER", label: "APPROVER" }, { value: "STANDARDUSER", label: "STANDARDUSER" }], validation: Yup.string().required('userRole is required'),
                 width: ''
             },
             {
-                name: 'userEmail', required: true, disabled: false, label: 'user Email', type: 'email', gridSize: 6, validation: Yup.string().email('Invalid email').required('userEmail is required'),
+                name: 'userEmail', required: true, disabled: false, label: 'Email', type: 'email', gridSize: 6, validation: Yup.string().email('Invalid email').required('userEmail is required'),
                 width: ''
             },
             {
@@ -499,7 +525,7 @@ export const RolesFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'PhoneNumber', gridSize: 6, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('userMobile is required'),
+                name: 'userMobile', required: true, disabled: false, label: 'Mobile num', type: 'PhoneNumber', gridSize: 6, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('userMobile is required'),
                 width: ''
             },
             {
@@ -517,11 +543,11 @@ export const RolesEditFields: FieldProps[] = [
         name: "info",
         subFields: [
             {
-                name: 'userName', required: true, disabled: false, label: 'user Name', type: 'text', gridSize: 6, validation: Yup.string().required('userName is required'),
+                name: 'userName', required: true, disabled: false, label: 'Name', type: 'text', gridSize: 6, validation: Yup.string().required('userName is required'),
                 width: ''
             },
             {
-                name: 'userRole', required: true, disabled: false, label: 'user Role', type: 'select', gridSize: 6, options: [
+                name: 'userRole', required: true, disabled: false, label: 'Role', type: 'select', gridSize: 6, options: [
                     { value: "ADMIN", label: "ADMIN" },
                     { value: "APPROVER", label: "APPROVER" },
                     { value: "STANDARDUSER", label: "STANDARDUSER" },
@@ -529,11 +555,11 @@ export const RolesEditFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'userEmail', required: true, disabled: false, label: 'user Email', type: 'email', gridSize: 6, validation: Yup.string().required('userEmail is required'),
+                name: 'userEmail', required: true, disabled: false, label: 'Email', type: 'email', gridSize: 6, validation: Yup.string().required('userEmail is required'),
                 width: ''
             },
             {
-                name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'PhoneNumber', gridSize: 6, validation: Yup.string().required('number is required'),
+                name: 'userMobile', required: true, disabled: false, label: 'Mobile num', type: 'PhoneNumber', gridSize: 6, validation: Yup.string().required('number is required'),
                 width: ''
             },
             {

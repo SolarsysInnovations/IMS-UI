@@ -75,7 +75,11 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyPhone: values.companyPhone,
                         companyWebsite: values.companyWebsite,
                         companyTaxNumber: values.companyTaxNumber,
-                        companyRegNumber: values.companyRegNumber
+                        companyRegNumber: values.companyRegNumber,
+                        customerLimit: values.customerLimit,
+                        invoiceLimit: values.invoiceLimit,
+                        userLimit: values.userLimit,
+                        serviceLimit: values.serviceLimit,
                     },
                 };
 
@@ -101,7 +105,11 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyPhone: values.companyPhone,
                         companyWebsite: values.companyWebsite,
                         companyTaxNumber: values.companyTaxNumber,
-                        companyRegNumber: values.companyRegNumber
+                        companyRegNumber: values.companyRegNumber,
+                        customerLimit: values.customerLimit,
+                        invoiceLimit: values.invoiceLimit,
+                        userLimit: values.userLimit,
+                        serviceLimit: values.serviceLimit,
                     },
                 };
                 await addCompany(transformedData);
