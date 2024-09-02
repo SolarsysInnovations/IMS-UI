@@ -9,19 +9,48 @@ import { useDispatch, useSelector } from "react-redux";
 import { setData } from "../../../redux-store/global/globalState";
 import DialogBoxUi from "../../../components/ui/DialogBox";
 import PortalLinkCreate from "./Portal-link-create";
+import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 
 const PortalLinkList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { data: linkCreation, error, isLoading, refetch } = useGetPortalLinkQuery();
-  const [deleteLink] = useDeletePortalLinkMutation();
+  const [deleteLink, { isSuccess: deleteLinkSuccess, isError: deleteLinkError, error: deleteLinkErrorObject }] = useDeletePortalLinkMutation();
   const [getLink] = useGetSinglePortalLinkMutation();
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
   const linkValue = useSelector((state: any) => state.globalState.data);
   const [key, setKey] = useState<number>(0);
 
+  // Local state for managing notification messages
+  const [notification, setNotification] = useState({
+    success: false,
+    error: false,
+    errorMessage: '',
+  });
+
   useEffect(() => {
     refetch();
   }, [linkCreation]); // Refetch data after creation or deletion
+
+  useEffect(() => {
+    if (deleteLinkSuccess) {
+      setNotification({ success: true, error: false, errorMessage: '' });
+      refetch(); // Refetch data after successful deletion
+    } else if (deleteLinkError) {
+      setNotification({
+        success: false,
+        error: true,
+        errorMessage: 'Error deleting Link',
+      });
+    }
+  }, [deleteLinkSuccess, deleteLinkError]);
+
+  // Call the snackbar notification hook at the top level
+  useSnackbarNotifications({
+    success: notification.success,
+    error: notification.error,
+    errorMessage: notification.errorMessage,
+    successMessage: 'Link deleted successfully',
+  });
 
   const handleEditClick = async (id: string) => {
     try {
@@ -42,7 +71,6 @@ const PortalLinkList: React.FC = () => {
     if (confirmed) {
       try {
         await deleteLink(id);
-        refetch();
       } catch (error) {
         console.error('Error deleting link:', error);
       }
@@ -123,6 +151,5 @@ const PortalLinkList: React.FC = () => {
     </Box>
   );
 };
-
 
 export default PortalLinkList;
