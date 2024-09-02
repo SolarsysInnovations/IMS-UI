@@ -63,7 +63,9 @@ export const linkApi = apiSlice.injectEndpoints({
             query: (id) => ({
                 url: `/link/delete/${id}`,
                 method: 'POST',
+
             }),
+
         })
     }),
 });

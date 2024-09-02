@@ -4,7 +4,7 @@ import { showSnackbar } from "../redux-store/global/snackBarSlice";
 import { AppDispatch } from "../redux-store/store";
 
 interface SnackbarNotificationProps {
-    success: boolean;
+    success: any;
     error: boolean;
     successMessage: string;
     errorMessage: string;

@@ -2,10 +2,16 @@
 const JAVA_URL = "https://ims-backend-9ghn.onrender.com"; // ! java backend
 const LOCAL_URL = "http://localhost:4000";
 const NODE_URL = "https://node-js-invoice.onrender.com";  // ! nodejs backend
-export const BASE_LOCAL_URL = NODE_URL;
+export const BASE_LOCAL_URL = JAVA_URL;
 
 export enum ApiEndpoint {
     LOGIN = "login",
+    // user
+    USER_LIST = "userList",
+    USER_CREATE = "userCreate",
+    USER_UPDATE = "userUpdate",
+    USER_DELETE = "userDelete",
+    USER_GET = "userGet",
     // customer
     CUSTOMER_LIST = "customerList",
     CUSTOMER_CREATE = "customerCreate",
@@ -69,13 +75,7 @@ export enum ApiEndpoint {
     COMPANY_CREATE = "companyCreate",
     COMPANY_UPDATE = "companyUpdate",
     COMPANY_DELETE = "companyDelete",
-    // super admin
-    DASHBOARD_SUPER_ADMIN = "dashboardSuperAdmin",
-    //approver
-    DASHBOARD_APPROVER = "dashboardApprover",
-    //enduser
-    DASHBOARD_ENDUSER = "dashboardEndUser"
-}
+};
 
 export type ApiUrls = {
     [key in ApiEndpoint]: string;
@@ -83,6 +83,14 @@ export type ApiUrls = {
 
 export const API_URLS: ApiUrls = {
     [ApiEndpoint.LOGIN]: `/login`,
+
+    // user
+    [ApiEndpoint.USER_LIST]: `/user/list`,
+    [ApiEndpoint.USER_CREATE]: `/user/register`,
+    [ApiEndpoint.USER_UPDATE]: `/user/update`,
+    [ApiEndpoint.USER_DELETE]: `/user/delete`,
+    [ApiEndpoint.USER_GET]: `/user/get`,
+
     // customer endpoints
     [ApiEndpoint.CUSTOMER_LIST]: `/customer/list`,
     [ApiEndpoint.CUSTOMER_CREATE]: `/customer/create`,
@@ -139,17 +147,14 @@ export const API_URLS: ApiUrls = {
     //Changepassword
     [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
     // company
-    [ApiEndpoint.COMPANY_GET]: `/company/list`,
-    [ApiEndpoint.COMPANY_CREATE]: `/company/create`,
+    [ApiEndpoint.COMPANY_GET]: `/company/get`,
+    [ApiEndpoint.COMPANY_CREATE]: `/user/register`,
     [ApiEndpoint.COMPANY_UPDATE]: `/company/update`,
     [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
     [ApiEndpoint.COMPANY_LIST]: `/company/list`,
+
     //dashboard endpoints
-    [ApiEndpoint.DASHBOARD_GET]: `/dashboard/admin`,
-    // dashboard super admin 
-    [ApiEndpoint.DASHBOARD_SUPER_ADMIN]: `/dashboard/superAdmin`,
-    // dashboard super admin  
-    [ApiEndpoint.DASHBOARD_APPROVER]: `/dashboard/approver`,
-    [ApiEndpoint.DASHBOARD_ENDUSER]: `/dashboard/standarduser`
+    [ApiEndpoint.DASHBOARD_GET]: `/dashboard`,
+
 
 };

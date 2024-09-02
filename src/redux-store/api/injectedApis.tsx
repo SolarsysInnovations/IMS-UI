@@ -4,106 +4,128 @@ import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
 import { InvoiceInitialValueProps, RoleInitialValueProps } from '../../types/types';
+import { get } from 'http';
 
+interface DashboardRequestProps {
+    startDate?: string;
+    endDate?: string;
+};
 
-export const customerApi = apiSlice.injectEndpoints({
+export const apiEndPointLists = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        // ---------- customer Api starts ------------
-        getCustomers: builder.query<any[], void>({
-            query: () => ({
-                url: API_URLS.customerList,
-                method: 'POST',
 
+        // ! -------------- users start ----------------
+        getUsersList: builder.query<any[], void>({
+            query: () => ({
+                url: API_URLS.userList,
+                method: 'POST',
             }),
             // Set caching for 5 minutes (adjust the duration as needed)
             keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
         }),
-
-        addCustomer: builder.mutation<any, Partial<any>>({
-            query: (customer) => ({
-                url: API_URLS.customerCreate,
+        createUser: builder.mutation<any, Partial<any>>({
+            query: (data) => ({
+                url: API_URLS.userCreate,
                 method: 'POST',
-                body: customer,
+                body: data,
             }),
         }),
-        updateCustomer: builder.mutation<any, { id: number; customer: Partial<any> }>({
-            query: ({ id, customer }) => ({
-                url: `/customer/update/${id}`,
+
+        updateUser: builder.mutation<any, { id: string | undefined; data: Partial<any> }>({
+            query: ({ id, data }) => ({
+                url: `${API_URLS.userUpdate}/${id}`,
                 method: 'POST',
-                body: customer,
+                body: data,
+            }),
+        }),
+
+        getSingleUser: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `${API_URLS.userGet}/${id}`,
+                method: 'POST',
+            }),
+        }),
+
+        deleteUser: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `${API_URLS.userDelete}/${id}`,
+                method: 'POST',
+            }),
+        }),
+
+        // ! -------------- users start end ----------------
+
+
+
+        // ! ------------- dashboard start --------------
+        getDashboard: builder.mutation<any, DashboardRequestProps>({
+            query: (data) => ({
+                url: API_URLS.dashboardGet,
+                method: 'POST',
+                body: data,
+            }),
+        }),
+        // ! ------------- dashboard end --------------
+
+        // ! ------------ customers start ---------------
+
+        getCustomersList: builder.query<any[], void>({
+            query: () => ({
+                url: API_URLS.customerList,
+                method: 'POST',
+            }),
+            keepUnusedDataFor: 5 * 60 * 1000,
+        }),
+
+        createCustomer: builder.mutation<any, Partial<any>>({
+            query: (data) => ({
+                url: API_URLS.customerCreate,
+                method: 'POST',
+                body: data,
+            }),
+        }),
+        updateCustomer: builder.mutation<any, { id: number; data: Partial<any> }>({
+            query: ({ id, data }) => ({
+                url: `${API_URLS.customerUpdate}/${id}`,
+                method: 'POST',
+                body: data,
             }),
         }),
         deleteCustomer: builder.mutation<void, number>({
             query: (id) => ({
-                url: `/customer/delete/${id}`,
+                url: `${API_URLS.customerDelete}/${id}`,
                 method: 'POST',
             }),
         }),
 
-        getCustomerById: builder.mutation<void, number>({
+        getSingleCustomer: builder.mutation<void, number>({
             query: (id) => ({
-                url: `/customer/get/${id}`,
+                url: `${API_URLS.customerGet}/${id}`,
                 method: 'POST',
             }),
         }),
 
-        // ---------- customer Api ends ------------
+        // ! ------------ customers end ---------------
 
-        // ---------- gst type endpoints start -------------
-
-        getGstType: builder.query<any[], void>({
-            query: () => ({
-                url: API_URLS.gstTypeList,
-                method: 'POST',
-            }),
-        }),
-        addGstType: builder.mutation<any, Partial<any>>({
-            query: (gstTypeData) => ({
-                url: API_URLS.gstTypeCreate,
-                method: 'POST',
-                body: gstTypeData,
-            }),
-        }),
-        updateGstType: builder.mutation<any, { id: string | undefined; gstTypeData: Partial<any> }>({
-            query: ({ id, gstTypeData }) => ({
-                url: `${API_URLS.gstTypeUpdate}/${id}`,
-                method: 'POST',
-                body: gstTypeData,
-            }),
-        }),
-        deleteGstType: builder.mutation<void, number>({
-            query: (id) => ({
-                url: `${API_URLS.gstTypeDelete}/${id}`,
-                method: 'POST',
-            }),
-        }),
-        gstTypeGetById: builder.mutation<void, number>({
-            query: (id) => ({
-                url: `${API_URLS.gstTypeGet}/${id}`,
-                method: 'POST',
-            }),
-        }),
-
-        // ---------- gst type endpoints end -------------
-        // ---------- invoice Api starts ------------
-        getInvoice: builder.query<InvoiceInitialValueProps[], void>({
+        // ! ------------- invoice start --------------
+        getInvoiceList: builder.query<InvoiceInitialValueProps[], void>({
             query: () => ({
                 url: API_URLS.invoiceList,
                 method: 'POST',
             }),
         }),
-        addInvoice: builder.mutation<any, Partial<InvoiceInitialValueProps>>({
-            query: (invoiceData) => ({
+        createInvoice: builder.mutation<any, Partial<InvoiceInitialValueProps>>({
+            query: (data) => ({
                 url: API_URLS.invoiceCreate,
                 method: 'POST',
-                body: invoiceData,
+                body: data,
             }),
         }),
-        updateInvoice: builder.mutation<any, { id: string; invoiceData: Partial<InvoiceInitialValueProps> }>({
-            query: ({ id, invoiceData }) => ({
+        updateInvoice: builder.mutation<any, { id: string; data: Partial<InvoiceInitialValueProps> }>({
+            query: ({ id, data }) => ({
                 url: `${API_URLS.invoiceUpdate}/${id}`,
                 method: 'POST',
-                body: invoiceData,
+                body: data,
             }),
         }),
         deleteInvoice: builder.mutation<void, number>({
@@ -112,40 +134,40 @@ export const customerApi = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
-        invoiceGetById: builder.mutation<void, number>({
+        getSingleInvoice: builder.mutation<void, number>({
             query: (id) => ({
                 url: `${API_URLS.invoiceGet}/${id}`,
                 method: 'POST',
             }),
         }),
-        sendEmailNotifiction: builder.mutation<any, Partial<FormData>>({
-            query: (emailData) => ({
+        sendEmailNotification: builder.mutation<any, Partial<FormData>>({
+            query: (data) => ({
                 url: "https://ims-backend-9ghn.onrender.com/sendPDFByEmail", //API_URLS.sendEmail,
                 method: "POST",
-                body: emailData
+                body: data
             }),
         }),
-        // ---------- invoice Api ends ------------
+        // ! ------------- invoice end --------------
 
-        // ---------- payment Terms Api starts ------------
-        getPaymentTerms: builder.query<any[], void>({
+        // ! ------------- payment terms start --------------
+        getPaymentTermsList: builder.query<any[], void>({
             query: () => ({
                 url: API_URLS.paymentTermsList,
                 method: 'POST',
             }),
         }),
-        addPaymentTerms: builder.mutation<any, Partial<any>>({
-            query: (paymentTermsData) => ({
+        createPaymentTerms: builder.mutation<any, Partial<any>>({
+            query: (data) => ({
                 url: API_URLS.paymentTermsCreate,
                 method: 'POST',
-                body: paymentTermsData,
+                body: data,
             }),
         }),
-        updatePaymentTerms: builder.mutation<any, { id: string | undefined; paymentTermsData: Partial<any> }>({
-            query: ({ id, paymentTermsData }) => ({
+        updatePaymentTerms: builder.mutation<any, { id: string | undefined; data: Partial<any> }>({
+            query: ({ id, data }) => ({
                 url: `${API_URLS.paymentTermsUpdate}/${id}`,
                 method: 'POST',
-                body: paymentTermsData,
+                body: data,
             }),
         }),
         deletePaymentTerms: builder.mutation<void, number>({
@@ -154,35 +176,68 @@ export const customerApi = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
-        paymentTermsGetById: builder.mutation<void, number>({
+        getSinglePaymentTerms: builder.mutation<void, number>({
             query: (id) => ({
                 url: `${API_URLS.paymentTermsGet}/${id}`,
                 method: 'POST',
             }),
         }),
+        // ! ------------- payment terms end --------------
 
-        // ---------- payment Terms Api ends ------------
+        // ! ------------- gst type start --------------
+        getGstTypeList: builder.query<any[], void>({
+            query: () => ({
+                url: API_URLS.gstTypeList,
+                method: 'POST',
+            }),
+        }),
+        createGstType: builder.mutation<any, Partial<any>>({
+            query: (data) => ({
+                url: API_URLS.gstTypeCreate,
+                method: 'POST',
+                body: data,
+            }),
+        }),
+        updateGstType: builder.mutation<any, { id: string | undefined; data: Partial<any> }>({
+            query: ({ id, data }) => ({
+                url: `${API_URLS.gstTypeUpdate}/${id}`,
+                method: 'POST',
+                body: data,
+            }),
+        }),
+        deleteGstType: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `${API_URLS.gstTypeDelete}/${id}`,
+                method: 'POST',
+            }),
+        }),
+        getSingleGstType: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `${API_URLS.gstTypeGet}/${id}`,
+                method: 'POST',
+            }),
+        }),
+        // ! ------------- gst type end --------------
 
-        // ---------- tds tax Api starts ------------
-
-        getTdsTax: builder.query<any[], void>({
+        // ! ------------- tdsTax start --------------
+        getTdsTaxList: builder.query<any[], void>({
             query: () => ({
                 url: API_URLS.tdsTaxList,
                 method: 'POST',
             }),
         }),
-        addTdsTax: builder.mutation<any, Partial<any>>({
-            query: (tdsTaxData) => ({
+        createTdsTax: builder.mutation<any, Partial<any>>({
+            query: (data) => ({
                 url: API_URLS.tdsTaxCreate,
                 method: 'POST',
-                body: tdsTaxData,
+                body: data,
             }),
         }),
-        updateTdsTax: builder.mutation<any, { id: string | undefined; tdsTaxData: Partial<any> }>({
-            query: ({ id, tdsTaxData }) => ({
+        updateTdsTax: builder.mutation<any, { id: string | undefined; data: Partial<any> }>({
+            query: ({ id, data }) => ({
                 url: `${API_URLS.tdsTaxUpdate}/${id}`,
                 method: 'POST',
-                body: tdsTaxData,
+                body: data,
             }),
         }),
         deleteTdsTax: builder.mutation<void, number>({
@@ -191,135 +246,27 @@ export const customerApi = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
-        tdsTaxGetById: builder.mutation<void, number>({
+        getSingleTdsTax: builder.mutation<void, number>({
             query: (id) => ({
                 url: `${API_URLS.tdsTaxGet}/${id}`,
                 method: 'POST',
             }),
         }),
-        // ---------- tds tax Api starts ------------
+        // ! ------------- tdsTax end --------------
 
-        // ---------- setting portal links Api starts ------------
-        getLink: builder.query<any[], void>({
-            query: () => ({
-                url: API_URLS.linkList,
-                method: 'POST',
-            }),
-            // Set caching for 5 minutes (adjust the duration as needed)
-            keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
-        }),
-        getLinkById: builder.mutation<void, string>({ // Changed to query
-            query: (id) => ({
-                url: `/link/list`,
-                method: 'POST',
-            }),
-        }),
-        addLink: builder.mutation<any, Partial<any>>({
-            query: (link) => ({
-                url: `link/create`,
-                method: 'POST',
-                body: link,
-            }),
-        }),
-        updateLink: builder.mutation<any, { id: number; link: Partial<any> }>({
-            query: ({ id, link }) => ({
-                url: `/link/update/${id}`,
-                method: 'POST',
-                body: link,
-            }),
-        }),
-        deleteLink: builder.mutation<void, number>({
-            query: (id) => ({
-                url: `/link/delete/${id}`,
-                method: 'POST',
-            }),
-        }),
-
-        // ---------- setting portal links Api ends ------------
-
-        // ---------- reports Api starts ------------
-
-        getReport: builder.query<any[], void>({
-            query: () => ({
+        // ! ----------- reports start --------------
+        getReportInvoice: builder.mutation<any, Partial<any>>({
+            query: (data) => ({
                 url: API_URLS.reportList,
                 method: 'POST',
+                body: data,
+            }),
+        }),
+        // ! ----------- reports end --------------
 
+        // ! ----------- service start --------------
 
-            }), keepUnusedDataFor: 5 * 60 * 1000,
-        }),
-        getReportById: builder.mutation<any, Partial<any>>({
-            query: (reports) => ({
-                url: `invoice/arReport`,
-                method: 'POST',
-                body: reports,
-            }),
-        }),
-        getReportInvoiceById: builder.mutation<any, Partial<any>>({
-            query: (reports) => ({
-                url: `invoice/invoiceReport`,
-                method: 'POST',
-                body: reports,
-            }),
-        }),
-
-        // ---------- reports Api ends ------------
-
-        // ---------- roles Api starts ------------
-
-        getRole: builder.query<RoleInitialValueProps[], void>({
-            query: () => ({
-                url: API_URLS.rolesList,
-                method: 'POST',
-            }),
-            // Set caching for 5 minutes (adjust the duration as needed)
-            keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
-        }),
-        addRole: builder.mutation<any, Partial<any>>({
-            query: (role) => ({
-                url: API_URLS.rolesCreate,
-                method: 'POST',
-                body: role,
-            }),
-        }),
-        deleteRole: builder.mutation<void, string>({
-            query: (id) => ({
-                url: API_URLS.rolesDelete + `${id}`,
-                method: 'POST',
-            }),
-        }),
-        getRoleById: builder.mutation<void, string>({
-            query: (id) => ({
-                url: API_URLS.rolesGet + `${id}`,
-                method: 'POST',
-            }),
-        }),
-        updateRole: builder.mutation<any, { id: string; roles: Partial<any> }>({
-            query: ({ id, roles }) => ({
-                url: `role/update/${id}`,
-                method: 'POST',
-                body: roles,
-            }),
-        }),
-        rolesGetUser: builder.mutation<void, string>({
-            query: (userName) => ({
-                url: API_URLS.rolesGetUser + `${userName}`,
-                method: 'POST',
-                body: userName,
-            }),
-        }),
-        changePassword: builder.mutation<any, { userName: string; values: Partial<any> }>({
-            query: ({ userName, values }) => ({
-                url: API_URLS.changePassword + `${userName}`,
-                method: 'POST',
-                body: values,
-            }),
-        }),
-
-        // ---------- roles Api ends ------------
-
-        // ---------- service Api starts ------------
-
-        getService: builder.query<any[], void>({
+        getServiceList: builder.query<any[], void>({
             query: () => ({
                 url: API_URLS.serviceList,
                 method: 'POST',
@@ -329,79 +276,60 @@ export const customerApi = apiSlice.injectEndpoints({
             keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
         }),
 
-        addService: builder.mutation<any, Partial<any>>({
-            query: (service) => ({
+        createService: builder.mutation<any, Partial<any>>({
+            query: (data) => ({
                 url: API_URLS.serviceCreate,
                 method: 'POST',
-                body: service,
+                body: data,
             }),
         }),
-        updateService: builder.mutation<any, { id: number; service: Partial<any> }>({
-            query: ({ id, service }) => ({
-                url: `/service/update/${id}`,
+        updateService: builder.mutation<any, { id: number; data: Partial<any> }>({
+            query: ({ id, data }) => ({
+                url: `${API_URLS.serviceUpdate}/${id}`,
                 method: 'POST',
-                body: service,
+                body: data,
             }),
         }),
         deleteService: builder.mutation<void, number>({
             query: (id) => ({
-                url: `/service/delete/${id}`,
+                url: `${API_URLS.serviceDelete}/${id}`,
                 method: 'POST',
             }),
         }),
 
-        getServiceById: builder.mutation<void, number>({
+        getSingleService: builder.mutation<void, number>({
             query: (id) => ({
-                url: `service/get/${id}`,
+                url: `${API_URLS.serviceGet}/${id}`,
                 method: 'POST',
             }),
         }),
-
-        // ---------- service Api ends ------------
-
-        // ---------- settings Api starts ------------
-
-        getSetting: builder.query<any[], void>({
-            query: () => ({
-                url: API_URLS.settingsList,
-                method: 'POST',
-
-            }),
-            // Set caching for 5 minutes (adjust the duration as needed)
-            keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
-        }),
-
-        addSetting: builder.mutation<any, Partial<any>>({
-            query: (settings) => ({
-                url: `/setting/create`,
-                method: 'POST',
-                body: settings,
-            }),
-        }),
-
-        updateSetting: builder.mutation<any, { id: number; settings: Partial<any> }>({
-            query: ({ id, settings }) => ({
-                url: `/setting/update/${id}`,
-                method: 'POST',
-                body: settings,
-            }),
-        }),
-        getSettingById: builder.mutation<void, number>({
-            query: (id) => ({
-                url: `setting/get`,
-                method: 'POST',
-            }),
-        }),
-        getSettingByIdMutation: builder.mutation<void, number>({
-            query: (id) => ({
-                url: `setting/get/${id}`,
-                method: 'POST',
-            }),
-        }),
-
-        // ---------- settings Api ends ------------
 
     }),
 });
 
-export const { useGetCustomersQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useGetCustomerByIdMutation } = customerApi;
+// user export
+export const { useGetUsersListQuery, useCreateUserMutation, useUpdateUserMutation, useDeleteUserMutation, useGetSingleUserMutation } = apiEndPointLists;
+
+// dashboard export 
+export const { useGetDashboardMutation } = apiEndPointLists;
+
+// customer export 
+export const { useGetCustomersListQuery, useCreateCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation, useGetSingleCustomerMutation } = apiEndPointLists;
+
+// payment terms export
+export const { useGetPaymentTermsListQuery, useCreatePaymentTermsMutation, useDeletePaymentTermsMutation, useUpdatePaymentTermsMutation, useGetSinglePaymentTermsMutation } = apiEndPointLists;
+
+// tdsTax export
+export const { useGetTdsTaxListQuery, useCreateTdsTaxMutation, useUpdateTdsTaxMutation, useDeleteTdsTaxMutation, useGetSingleTdsTaxMutation } = apiEndPointLists;
+
+// gstType export
+export const { useGetGstTypeListQuery, useCreateGstTypeMutation, useUpdateGstTypeMutation, useDeleteGstTypeMutation, useGetSingleGstTypeMutation } = apiEndPointLists;
+
+// invoice export 
+export const { useGetInvoiceListQuery, useCreateInvoiceMutation, useDeleteInvoiceMutation, useUpdateInvoiceMutation, useGetSingleInvoiceMutation } = apiEndPointLists;
+
+// invoice reports
+export const { useGetReportInvoiceMutation } = apiEndPointLists;
+
+// service export
+export const { useGetServiceListQuery, useCreateServiceMutation, useDeleteServiceMutation, useUpdateServiceMutation, useGetSingleServiceMutation } = apiEndPointLists;

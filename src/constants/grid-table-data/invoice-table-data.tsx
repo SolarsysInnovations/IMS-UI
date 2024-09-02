@@ -1,13 +1,13 @@
-import { Box,IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack } from "@mui/material";
 import { GridColDef, GridDeleteIcon, GridValueSetterParams } from "@mui/x-data-grid";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
-import ServiceDetails from "../../pages/service/serviceDetails";
 import TableHeader from "../../components/layouts/TableHeader";
 import usePathname from "../../hooks/usePathname";
-import { useDeleteServiceMutation, useGetServiceQuery, useGetServiceByIdMutation,useUpdateServiceMutation, setServiceData } from "../../redux-store/service/serviceApi";
 import React from "react";
+import { useDeleteServiceMutation, useGetServiceListQuery, useGetSingleServiceMutation } from "../../redux-store/api/injectedApis";
+import ServiceDetails from "../../pages/service/serviceDetails";
 
 const id = 1
 
@@ -15,9 +15,9 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
     // const [serviceDetails, setServiceDetails] = useLocalStorage(LocalStorageKeys.SERVICE_EDIT, null);
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = React.useState(false);
-    const { data: services, error, isLoading, refetch } = useGetServiceQuery();
+    const { data: services, error, isLoading, refetch } = useGetServiceListQuery();
     const [deletedService, { isLoading: deleteLoading, error: deleteError, isSuccess, data: deletedData, }] = useDeleteServiceMutation<{ deletedService: any, error: any, isLoading: any, isSuccess: any, data: any }>();
-    const [getService, { data: serviceData, isSuccess: C_success, isError: C_error }] = useGetServiceByIdMutation<{ data: any, isSuccess: any, isError: any }>();
+    const [getService, { data: serviceData, isSuccess: C_success, isError: C_error }] = useGetSingleServiceMutation<{ data: any, isSuccess: any, isError: any }>();
     // const [deleteService, { isLoading: D_Loading, isSuccess: D_Success }] = useDeleteServiceMutation();
 
     // useEffect(() => {
@@ -31,7 +31,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
     return (
         <Stack direction="row" spacing={1}>
-                {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
+            {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
                     <EditIcon sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
                 </IconButton>
             <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
@@ -40,17 +40,17 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
              <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>  */}
-                <Box sx={{ marginTop: "15px" }}>
-                    <ServiceDetails details={id} />
-                </Box>
-           
+            <Box sx={{ marginTop: "15px" }}>
+                <ServiceDetails details={id} />
+            </Box>
+
         </Stack>
     );
 };
 
 
 export const columns: GridColDef[] = [
-    
+
     {
         field: 'invoiceType',
         headerName: 'Invoice Type',
@@ -86,11 +86,11 @@ export const columns: GridColDef[] = [
         headerName: 'Invoice Status',
         width: 150,
         editable: false,
-    },   
+    },
     {
-         field: 'totalAmount',
-         headerName: 'Total',
-         width: 150,
-         editable: false,
-     }
+        field: 'totalAmount',
+        headerName: 'Total',
+        width: 150,
+        editable: false,
+    }
 ];

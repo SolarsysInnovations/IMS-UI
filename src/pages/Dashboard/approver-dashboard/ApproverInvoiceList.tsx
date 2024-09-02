@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import GridDataUi from '../../../components/GridTable/GridData'; // Ensure correct path to GridDataUi component
 import { GridColDef } from '@mui/x-data-grid'; // Assuming you are using x-data-grid for GridColDef
-import { useGetApproverDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
 
 export const columns: GridColDef[] = [
     {
@@ -36,36 +34,14 @@ export const columns: GridColDef[] = [
     },
 ];
 
-export interface ApproverInvoiceListProps {
-    selectedValue: string | null;
-  }
 
-  const ApproverInvoiceList: React.FC<ApproverInvoiceListProps> = ({ selectedValue }) => {
-    const [getDashboard, { data, isLoading, isError, error }] = useGetApproverDashboardMutation();
-    const [companyOverviewList, setCompanyOverviewList] = useState<any[]>([]);
-
-        useEffect(() => {
-            const fetchData = async () => {
-                try {
-                    const response = await getDashboard({ filter: selectedValue }).unwrap();
-                    console.log(response);
-                    setCompanyOverviewList(response.pendingInvoicesList || []);
-                } catch (error) {
-                    console.error('Failed to fetch data:', error);
-                }
-            };
-    
-            fetchData();
-        }, [getDashboard]);
-        console.log("companyOverviewList", companyOverviewList); // Log the actual state, not the setter function
-            
-
+const ApproverInvoiceList = ({ companyOverviewList }: any) => {
     return (
         <>
             <GridDataUi
                 showToolbar={false}
                 columns={columns}
-                tableData={companyOverviewList}
+                tableData={companyOverviewList || []}
                 checkboxSelection={false}
             />
         </>

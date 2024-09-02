@@ -1,38 +1,41 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
-import GridDataUi from '../../components/GridTable/GridData'
-import TableHeader from '../../components/layouts/TableHeader'
-import usePathname from '../../hooks/usePathname'
-import { Add } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
-import { columns } from '../../constants/grid-table-data/customer-table-data'
-import ToastUi from '../../components/ui/ToastifyUi'
-import { useGetCustomersQuery, useUpdateCustomerMutation } from '../../redux-store/customer/customerApi'
-import { Country, State } from 'country-state-city'
+import GridDataUi from '../../components/GridTable/GridData';
+import TableHeader from '../../components/layouts/TableHeader';
+import usePathname from '../../hooks/usePathname';
+import { Add } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { columns } from '../../constants/grid-table-data/customer-table-data';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
+import { useGetCustomersListQuery, useUpdateCustomerMutation } from '../../redux-store/api/injectedApis';
+import { clearCustomerData } from '../../redux-store/slices/customerSlice';
+import { selectUserRole } from '../../redux-store/auth/authSlice';
+import { applicationUserAccess } from '../../constants/data';
+import { Roles } from '../../constants/Enums';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const CustomerList = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const { data: customers, } = useGetCustomersListQuery();
+    const { canCreateCustomers } = useRolePermissions()
 
-    console.log("Hello world", Country.getAllCountries());
-    console.log("Hello world", State.getAllStates());
+    const buttons = [{
+        label: 'Create Customer', icon: Add, onClick: () => {
+            navigate("/customer/create");
+            dispatch(clearCustomerData());
+        }
+    }];
 
-    const [updateCustomer, { isSuccess, isError }] = useUpdateCustomerMutation();
-    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
-
-    const role = localStorage.getItem("userRole");
-    const buttons = [];
-
-    if (role != "APPROVER" && role != "ENDUSER") {
-        buttons.push({ label: 'Create Customer', icon: Add, onClick: () => navigate("/customer/create") })
-    }
+    const resolvedButtons = canCreateCustomers ? buttons : [];
 
     const navigate = useNavigate();
     const pathname = usePathname();
 
     return (
         <>
-            <TableHeader headerName={pathname} buttons={buttons} />
+            <TableHeader headerName={pathname} buttons={resolvedButtons} />
             <GridDataUi showToolbar={true} columns={columns} tableData={customers || []} checkboxSelection={false} />
         </>
-    )
+    );
 }
 
-export default CustomerList
+export default CustomerList;

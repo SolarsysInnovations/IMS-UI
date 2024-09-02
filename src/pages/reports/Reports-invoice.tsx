@@ -7,10 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Grid, } from '@mui/material';
 import { AppDispatch, RootState } from '../../redux-store/store'
 import { Formik, Form } from 'formik';
-import ToastUi from '../../components/ui/ToastifyUi';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import GridDataUi from '../../components/GridTable/GridData';
-import { useGetReportInvoiceByIdMutation, useGetReportQuery } from '../../redux-store/reports/reportApi';
 import DatePickerUi from '../../components/ui/DatePicker';
 import dayjs from 'dayjs';
 import ModalUi from '../../components/ui/ModalUi';
@@ -19,6 +17,7 @@ import { columns } from '../../constants/grid-table-data/invoice-table-data';
 import { invoicesInitialValue } from '../../constants/forms/formikInitialValues';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { InvoicesInitialValueProps } from '../../types/types';
+import { useGetReportInvoiceMutation } from '../../redux-store/api/injectedApis';
 
 const Reportsinvoice: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -26,7 +25,7 @@ const Reportsinvoice: React.FC = () => {
     const navigate = useNavigate();
     // const { data: reportList } = useGetReportQuery(); 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [ArAging] = useGetReportInvoiceByIdMutation();
+    const [ArAging] = useGetReportInvoiceMutation();
     const [tableData, setTableData] = useState<any>()
     const handleCloseModal = () => {
         setIsModalOpen(false);
@@ -65,7 +64,6 @@ const Reportsinvoice: React.FC = () => {
             >
                 {({ errors, touched, values, setFieldValue, handleSubmit }) => (
                     <div>
-                        <ToastUi autoClose={2000} />
                         <TableHeader headerName={pathname} buttons={[
                             { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) }
                         ]} />
@@ -76,37 +74,45 @@ const Reportsinvoice: React.FC = () => {
                                 <Grid item xs={3}>
                                     <Box>
                                         <SelectDropdown
-                                            onChange={(newValue: any) => {
+                                             onChange={(newValue: any) => {
                                                 if (newValue) {
                                                     if (newValue.value === "Today") {
-                                                        const currentDateNet = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet = dayjs().add(0, 'days').format('DD-MM-YYYY');
-                                                        setFieldValue("startDate", currentDateNet);
-                                                        setFieldValue("endDate", dueDateNet);
+                                                        const currentDateNet1 = dayjs().format('MM-DD-YYYY');
+                                                        const dueDateNet1 = dayjs().add(0, 'days').format('MM-DD-YYYY');
+                                                        setFieldValue("startDate", currentDateNet1);
+                                                        setFieldValue("endDate", dueDateNet1);                                                        
                                                     }
                                                     else if (newValue.value === "This Week") {
-                                                        const currentDateNet1 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet1 = dayjs().add(7, 'days').format('DD-MM-YYYY');
+                                                        const today = dayjs();
+                                                        const lastSunday = today.day(0); 
+                                                        const nextSaturday = today.day(6);
+                                                    
+                                                        const currentDateNet1 = today.day() === 0 
+                                                            ? lastSunday.subtract(1, 'week').format('MM-DD-YYYY')
+                                                            : lastSunday.format('MM-DD-YYYY');
+                                                    
+                                                        const dueDateNet1 = nextSaturday.format('MM-DD-YYYY');
+                                                    
                                                         setFieldValue("startDate", currentDateNet1);
                                                         setFieldValue("endDate", dueDateNet1);
                                                     } else if (newValue.value === "Last 7 Days") {
-                                                        const currentDateNet2 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet2 = dayjs().add(-7, 'days').format('DD-MM-YYYY');
+                                                        const currentDateNet2 = dayjs().add(-7, 'days').format('MM-DD-YYYY');
+                                                        const dueDateNet2 = dayjs().format('MM-DD-YYYY');
                                                         setFieldValue("startDate", currentDateNet2);
                                                         setFieldValue("endDate", dueDateNet2);
                                                     }
                                                     else if (newValue.value === "This Month") {
-                                                        const currentDateNet3 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet3 = dayjs().add(30, 'days').format('DD-MM-YYYY');
+                                                        const currentDateNet3 = dayjs().startOf('month').format('MM-DD-YYYY');
+                                                        const dueDateNet3 = dayjs().endOf('month').format('MM-DD-YYYY');
                                                         setFieldValue('startDate', currentDateNet3)
                                                         setFieldValue("endDate", dueDateNet3)
                                                     } else if (newValue.value === "Last 30 Days") {
-                                                        const currentDateNet4 = dayjs().format('DD-MM-YYYY');
-                                                        const dueDateNet4 = dayjs().add(-30, 'days').format('DD-MM-YYYY');
+                                                        const currentDateNet4 = dayjs().add(-30, 'days').format('MM-DD-YYYY');
+                                                        const dueDateNet4 =  dayjs().format('MM-DD-YYYY');
                                                         setFieldValue('startDate', currentDateNet4)
                                                         setFieldValue("endDate", dueDateNet4)
                                                     } else if (newValue.value === "Custom") {
-                                                        const currentDate = dayjs().format('DD-MM-YYYY');
+                                                        const currentDate = dayjs().format('MM-DD-YYYY');
                                                         setFieldValue('startDate', "")
                                                         setFieldValue("endDate", "")
                                                     }
@@ -116,9 +122,9 @@ const Reportsinvoice: React.FC = () => {
                                                 }
                                             }}
                                             options={invoiceDate}
-                                            value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
+                                          //  value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                                             labelText='Select'
-                                            error={touched.invoiceDate && Boolean(errors.invoiceDate)}
+                                           // error={touched.invoiceDate && Boolean(errors.invoiceDate)}
                                         // helperText={touched.invoiceDate && errors.invoiceDate}
                                         />
                                     </Box>
@@ -137,7 +143,7 @@ const Reportsinvoice: React.FC = () => {
                                     <Box>
                                         <DatePickerUi
                                             label="End Date"
-                                            onChange={(date: any) => console.log(date)}
+                                            onChange={(date: any) => setFieldValue("endDate", date)}
                                             value={values.endDate}
                                         />
                                     </Box>

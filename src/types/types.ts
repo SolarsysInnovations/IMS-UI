@@ -24,8 +24,11 @@ export interface TdsTaxProps {
 export interface TdsTaxFormProps {
     tdsTaxValue: TdsTaxProps;
 }
+export interface ServiceFormProps {
+    serviceValue: ServiceListProps;
+}
 export interface CompanyFormProps {
-    companyValue: CompanyInitialValueProps;
+    companyValue: AdminCompanyUsersInitialValueProps;
     mode?: 'create' | 'edit';
 }
 export interface LinkFormProps {
@@ -115,7 +118,7 @@ export interface FieldProps {
 
 // -------- invoice service ------------------------
 interface ServiceListProps {
-    id: string;
+    id: number;
     serviceAccountingCode: string;
     serviceAmount: number;
     serviceQty: number;
@@ -155,7 +158,7 @@ export interface InvoiceInitialValueProps {
     servicesList: ServiceListProps[];
 
 }; export interface InvoicesInitialValueProps {
-    invoiceDate: string;
+   // invoiceDate: string;
     startDate: string;
     endDate: string;
     filter: string;
@@ -163,7 +166,7 @@ export interface InvoiceInitialValueProps {
 
 
 export interface ArAgingInitialValueProps {
-    invoiceDate: string;
+   // invoiceDate: string;
     startDate: string;
     endDate: string;
     filter: string;
@@ -172,12 +175,12 @@ export interface ArAgingInitialValueProps {
 
 // ---------- service  --------------------
 export interface serviceCreationProps {
-    serviceAccountingcode: string;
-    description: string;
-    amount: number;
+    serviceAccountingCode: string;
+    serviceDescription: string;
+    serviceAmount: number;
 };
 //----------settings--------
-export interface CompanyInitialValueProps {
+export interface SuperAdminUsersInitialValueProps {
     id?: string;
     userName: string;
     userEmail: string;
@@ -197,6 +200,15 @@ export interface CompanyInitialValueProps {
     companyRegNumber: string;
 };
 
+export interface AdminCompanyUsersInitialValueProps {
+    id?: string;
+    userName: string;
+    userEmail: string;
+    password: string;
+    userRole: string;
+    userMobile: string;
+    description: string;
+}
 
 export interface linkCreationProps {
     id: string;
@@ -222,6 +234,8 @@ export interface RoleInitialValueProps {
     userRole: string,
     userEmail: string,
     userAccess: string,
+    userMobile?: string,
+    description?: string,
 }
 
 export interface ChangePasswordInitialValueProps {

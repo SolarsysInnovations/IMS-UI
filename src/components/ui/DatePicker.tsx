@@ -1,43 +1,55 @@
-import * as React from 'react';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs';
-import { validateDate } from '@mui/x-date-pickers/internals';
+import dayjs, { Dayjs } from 'dayjs';
+import { useEffect, useState } from 'react';
 
 interface DatePickerProps {
-    value?: any;
-    onChange: (value: any) => void;
+    value?: string | Dayjs;
+    onChange: (value: string) => void;
     label?: string;
     required?: boolean;
     disabled?: boolean;
 }
 
 export default function DatePickerUi({ label, value, disabled, required, onChange }: DatePickerProps) {
-    const formatDate = (date: any) => {
-        return date.format('DD-MM-YYYY');
-    };
-    const parseDate = (value: any) => {
-        return dayjs(value, 'DD-MM-YYYY');
+    const [dateValue, setDateValue] = useState<Dayjs | null>(null);
+
+    useEffect(() => {
+        if (typeof value === 'string') {
+            if (dayjs(value).isValid()) {
+                setDateValue(dayjs(value));
+            } else {
+                const parsedDate = dayjs(value, 'DD-MM-YYYY');
+                if (parsedDate.isValid()) {
+                    setDateValue(parsedDate);
+                } else {
+                    setDateValue(null);
+                }
+            }
+        } else if (dayjs.isDayjs(value)) {
+            setDateValue(value);
+        } else {
+            setDateValue(null);
+        }
+    }, [value]);
+
+    const formatDate = (date: Dayjs | null): string => {
+        return date ? date.format('DD-MM-YYYY') : '';
     };
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
                 disabled={disabled}
-                value={value ? parseDate(value) : null}
-                onChange={(date) => onChange(formatDate(date))}
-                onError={(date) => {
-                    const currentDate = dayjs();
-                    const selectedDate = dayjs(date);
-                    if (selectedDate.isBefore(currentDate, 'day')) {
-                        return "Selected date cannot be before today";
-                    }
-                    return null;
+                value={dateValue}
+                onChange={(date) => {
+                    const formattedDate = formatDate(date);
+                    onChange(formattedDate);
                 }}
-                format='DD-MM-YYYY'
                 views={['year', 'month', 'day']}
+                label={label}
+                format="DD-MM-YYYY" // Set the desired date format here
                 sx={{
                     width: "100%",
                     '& .MuiOutlinedInput-root': {
@@ -50,21 +62,16 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
                             backgroundColor: `action.hover`,
                         },
                     },
-                    " & .MuiFormLabel-root": {
+                    "& .MuiFormLabel-root": {
                         fontSize: "12px"
                     },
-                    " & .MuiOutlinedInput-root": {
-                        fontSize: "12px"
-                    }
                 }}
                 slotProps={{
                     textField: {
                         variant: "outlined", size: "small",
                     }
                 }}
-                label={label}
             />
-
         </LocalizationProvider>
     );
 }

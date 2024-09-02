@@ -114,17 +114,17 @@ export const companyValidationSchema = Yup.object().shape({
 });
 
 export const companyDetailsValidationSchema = Yup.object().shape({
-    companyName: Yup.string().required('Company Name is required'),
-    companyAddress: Yup.string().required('Company Address is required'),
-    companyState: Yup.string().required('Company State is required'),
-    companyCountry: Yup.string().required('Company Country is required'),
-    companyEmail: Yup.string().required('Company Email is required'),
-    companyPhone: Yup.string().required('Company Phone is required'),
-    companyCell: Yup.string().required('Company Cell is required'),
-    companyWebsite: Yup.string().required('Company Website is required'),
-    companyTaxNumber: Yup.string().required('Company Tax Number is required'),
-    companyRegNumber: Yup.string().required('Company Reg Number is required'),
-    
+    // companyName: Yup.string().required('Company Name is required'),
+    // companyAddress: Yup.string().required('Company Address is required'),
+    // companyState: Yup.string().required('Company State is required'),
+    // companyCountry: Yup.string().required('Company Country is required'),
+    // companyEmail: Yup.string().required('Company Email is required'),
+    // companyPhone: Yup.string().required('Company Phone is required'),
+    // companyCell: Yup.string().required('Company Cell is required'),
+    // companyWebsite: Yup.string().required('Company Website is required'),
+    // companyTaxNumber: Yup.string().required('Company Tax Number is required'),
+    // companyRegNumber: Yup.string().required('Company Reg Number is required'),
+
 });
 export const gstTypeValidationSchema = Yup.object().shape({
     gstName: Yup.string().required('gstName is required'),
@@ -166,14 +166,14 @@ export const sendEmailValidationSchema = Yup.object().shape({
 });
 
 export const RoleValidationSchema = Yup.object().shape({
-    userName: Yup.string()
-        .required('Username is required'),
-    userEmail: Yup.string()
-        .email('Invalid email address')
-        .required('Email is required'),
-    password: Yup.string()
-        .max(255)
-        .required('Password is required'),
+    // userName: Yup.string().required('Username is required'),
+    // userEmail: Yup.string().email('Invalid email format').required('Email is required'),
+    // password: Yup.string()
+    // //.min(6, 'Password must be at least 6 characters')
+    // .required('Password is required'),
+    // userRole: Yup.string().required('User role is required'),
+    // userMobile: Yup.string().required('Mobile number is required'),
+    // description: Yup.string().required('Description is required'),
 });
 
 export const PasswordValidationSchema = Yup.object().shape({

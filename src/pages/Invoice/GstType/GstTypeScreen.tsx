@@ -4,7 +4,7 @@ import GstTypeForm from "./GstTypeCreate";
 import { useEffect, useState } from "react";
 
 const GstTypeScreen: React.FC = () => {
-    const gstValue = useSelector((state: any) => state.globalState.data);
+    const gstValue = useSelector((state: any) => state.gstTypeState.data);
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {

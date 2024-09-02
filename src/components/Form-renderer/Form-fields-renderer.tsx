@@ -87,6 +87,8 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 // --------------------input field renderer-------------------
 const renderTextField = (field: any, meta: any, subField: SubField) => {
 
+  console.log("meta, field, subField", meta, field, subField);
+
   return (
     <TextFieldUi
       required={subField.required}

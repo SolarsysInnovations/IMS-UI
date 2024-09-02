@@ -8,151 +8,96 @@ import { Grid } from '@mui/material';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ErrorIcon from '@mui/icons-material/Error';
 import DoneIcon from '@mui/icons-material/Done';
-import { useGetDashboardMutation } from '../../../redux-store/dashboard/dashboardApi';
-import { useState, useEffect } from 'react';
 import { roundUp } from '../../../services/utils/decimalconverter';
 
-interface ValueProps {
-    label: string;
-    value: string;
-}
 
-interface InvoiceAmountProps {
-    selectedValue: ValueProps;
-}
+const transformInvoiceData = (data: any) => {
+    // Fallback to empty object if data is undefined or null
+    const { total = {}, paid = {}, unPaid = {} } = data || {};
 
-const initialInvoiceAmountState = [
-    {
-        label: "Total",
-        icon: CurrencyRupeeIcon,
-        iconBg: "#635bff",
-        value: 0,
-        childLabel: "Invoice child label",
-        months: "months",
-        noOfInvoices: 0,
-    },
-    {
-        label: "Paid",
-        icon: DoneIcon,
-        iconBg: "#4E9F3D",
-        value: 0,
-        childLabel: "Invoice child label",
-        months: "months",
-        noOfInvoices: 0,
-    },
-    {
-        label: "Unpaid",
-        icon: ErrorIcon,
-        iconBg: "#FF204E",
-        value: 0,
-        childLabel: "Invoice child label",
-        months: "months",
-        noOfInvoices: 0,
-    },
-];
+    return [
+        {
+            label: "Total",
+            icon: CurrencyRupeeIcon,
+            iconBg: "#635bff",
+            value: roundUp(total.totalAmount) || 0, 
+            childLabel: "Invoice child label",
+            months: "months",
+            noOfInvoices: roundUp(total.noOfInvoices) || 0,
+        },
+        {
+            label: "Paid",
+            icon: DoneIcon,
+            iconBg: "#4E9F3D",
+            value: roundUp(paid.totalAmount) || 0, 
+            childLabel: "Invoice child label",
+            months: "months",
+            noOfInvoices: roundUp(paid.noOfInvoices) || 0,
+        },
+        {
+            label: "Unpaid",
+            icon: ErrorIcon,
+            iconBg: "#FF204E",
+           value: roundUp(unPaid.totalAmount) || 0,
+            childLabel: "Invoice child label",
+            months: "months",
+            noOfInvoices: roundUp(unPaid.noOfInvoices) || 0,
+        },
+    ];
+};
 
-const InvoiceAmount: React.FC<InvoiceAmountProps> = ({ selectedValue }) => {
-    const [invoiceAmount, setInvoiceAmount] = useState(initialInvoiceAmountState);
-    const [isLoading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [selectedFilterValue, setSelectedFilterValue] = useState({ filter: selectedValue.value });
-    const [getDashboard] = useGetDashboardMutation();
 
-    useEffect(() => {
-        fetchDashboardData(selectedValue.value);
-    }, [selectedValue]);
+const AdminDashboardInvoiceOverviewAmount = ({ invoiceOverviewAmountData }: any) => {
+    // Use invoiceOverviewAmountData if provided, otherwise fallback to dummy data
+    const invoiceAmount = transformInvoiceData(invoiceOverviewAmountData);
 
-    const fetchDashboardData = async (value: string) => {
-        setLoading(true);
-        try {
-            const response = await getDashboard(selectedFilterValue).unwrap();
-            if (response && response.invoiceOverview) {
-                const { total, paid, unPaid } = response.invoiceOverview;
-                setInvoiceAmount([
-                    {
-                        label: "Total",
-                        icon: CurrencyRupeeIcon,
-                        iconBg: "#635bff",
-                        value: roundUp(total.totalAmount),
-                        childLabel: "Invoice child label",
-                        months: value,
-                        noOfInvoices: total.noOfInvoices,
-                    },
-                    {
-                        label: "Paid",
-                        icon: DoneIcon,
-                        iconBg: "#4E9F3D",
-                        value: roundUp(paid.totalAmount),
-                        childLabel: "Invoice child label",
-                        months: value,
-                        noOfInvoices: paid.noOfInvoices,
-                    },
-                    {
-                        label: "Unpaid",
-                        icon: ErrorIcon,
-                        iconBg: "#FF204E",
-                        value: roundUp(unPaid.totalAmount),
-                        childLabel: "Invoice child label",
-                        months: value,
-                        noOfInvoices: unPaid.noOfInvoices,
-                    },
-                ]);
-            }
-        } catch (error) {
-            console.error("Failed to fetch dashboard data: ", error);
-            setError("Failed to fetch data. Please try again later.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        setSelectedFilterValue({ filter: selectedValue.value });
-    }, [selectedValue]);
+    console.log("invoiceOverviewAmountData", invoiceOverviewAmountData);
 
     return (
         <Grid container spacing={2}>
-            {invoiceAmount.map((data, index) => (
-                <Grid key={index} item xs={4}>
-                    <Card sx={{ width: "180px", height: "140px", padding: "10px 15px" }}>
-                        <Stack spacing={1}>
-                            <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={1}>
-                                <Stack spacing={0}>
-                                    <Typography color="text.secondary" variant="overline">
-                                        {data.label}
-                                    </Typography>
-                                    <Typography variant="h6">{data.value}</Typography>
-                                </Stack>
-                                <Avatar sx={{ backgroundColor: `${data.iconBg}`, height: '30px', width: '30px' }}>
-                                    {React.createElement(data.icon, { width: 20, height: 20 })}
-                                </Avatar>
-                            </Stack>
-
-                            <Stack sx={{ alignItems: 'center' }} direction="row" spacing={1}>
-                                <Typography color="text.secondary" variant="caption">
-                                    No of Invoices:
+        {invoiceAmount?.map((data, index) => (
+            <Grid item key={data.label || index} xs={4}>
+                <Card sx={{ width: "180px", height: "140px", padding: "10px 15px" }}>
+                    <Stack spacing={1}>
+                        <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={1}>
+                            <Stack spacing={0}>
+                                <Typography color="text.secondary" variant="overline">
+                                    {data.label}
                                 </Typography>
-                                <Typography ml={1} color="text.secondary" variant="caption">
-                                    {data.noOfInvoices}
-                                </Typography>
+                                <Typography variant="h6">{data.value}</Typography>
                             </Stack>
-                            <Stack sx={{ alignItems: 'center' }} direction="row" spacing={1}>
-                                <Stack sx={{ alignItems: 'center' }} direction="row" spacing={0.5}>
-                                    <ArrowDropDownIcon color="secondary" />
-                                    <Typography color="secondary" variant="body2">
-                                        diff%
-                                    </Typography>
-                                </Stack>
-                                <Typography color="text.secondary" variant="caption">
-                                    Since last {data.months}
-                                </Typography>
-                            </Stack>
+                            <Avatar sx={{ backgroundColor: data.iconBg, height: '30px', width: '30px' }}>
+                                {React.createElement(data.icon, { width: 20, height: 20 })}
+                            </Avatar>
                         </Stack>
-                    </Card>
-                </Grid>
-            ))}
-        </Grid>
+
+                        <Stack sx={{ alignItems: 'center' }} direction="row" spacing={1}>
+                            <Typography color="text.secondary" variant="caption">
+                                No of Invoices:
+                            </Typography>
+                            <Typography ml={1} color="text.secondary" variant="caption">
+                                {data.noOfInvoices}
+                            </Typography>
+                        </Stack>
+                        <Stack sx={{ alignItems: 'center' }} direction="row" spacing={1}>
+                            <Stack sx={{ alignItems: 'center' }} direction="row" spacing={0.5}>
+                                <ArrowDropDownIcon color="secondary" />
+                                <Typography color="secondary" variant="body2">
+                                    diff%
+                                </Typography>
+                            </Stack>
+                            <Typography color="text.secondary" variant="caption">
+                                Since last {data.months}
+                            </Typography>
+                        </Stack>
+                    </Stack>
+                </Card>
+            </Grid>
+        ))}
+    </Grid>
     );
 };
 
-export default InvoiceAmount;
+export default AdminDashboardInvoiceOverviewAmount;
+
+

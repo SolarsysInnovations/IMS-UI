@@ -5,10 +5,8 @@ import { useSelector } from 'react-redux';
 
 const InvoiceCreateScreen = () => {
 
-    const invoiceValue = useSelector((state: any) => state.globalState.data);
+    const invoiceValue = useSelector((state: any) => state.invoiceState.data);
     const [key, setKey] = useState<number>(0);
-
-    console.log("invoiceValue", invoiceValue);
 
     useEffect(() => {
         setKey((prev) => prev + 1)

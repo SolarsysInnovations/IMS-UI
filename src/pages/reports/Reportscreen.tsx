@@ -10,58 +10,49 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import { Typography, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
+import DetailsCard from '../../components/layouts/DetailsCard';
 
 const Reportscreen: React.FC = () => {
     const pathname = usePathname();
     const navigate = useNavigate();
     const handleClick = async () => {
-    
-                navigate(`/reports/araging`);
+
+        navigate(`/reports/araging`);
     }
     const handleClick1 = async () => {
-    
+
         navigate(`/reports/invoice`);
-}
+    }
     return (
         <div>
-              <TableHeader headerName={pathname} buttons={[
-                            { label: 'Back',  icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
-                        ]} />
-                        {/* <Grid container marginTop={3}>
-                        <RequestQuoteIcon /> Receivables
-                     </Grid> */}
+            <TableHeader headerName={pathname} buttons={[
+                { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => navigate(-1) },
+            ]} />
 
-        {/* <div style={{display:"flex", marginTop:10}}>
-            <div style={{fontWeight:'lighter', marginLeft:10}}>
-        <RequestQuoteIcon />
-        </div>
-      <Typography variant="body1" marginLeft={1} style={{ fontWeight: 'bold' }}>Receivables</Typography>
-    </div> */}
-
-                        
-         <Grid container spacing={2} marginTop={-1} marginLeft={-2}>
-            <Grid item xs="auto">
-                 <Button
-                    variant="text"
-                    color="primary"
-                    startIcon={<InfoIcon/>}
-                    onClick={handleClick}
-                >
-                    AR Aging Summary
-                </Button>
+            <Grid container spacing={2} marginTop={-1} marginLeft={-2}>
+                <Grid item xs="auto">
+                    <Button
+                        variant="text"
+                        color="primary"
+                        startIcon={<InfoIcon />}
+                        onClick={handleClick}
+                    >
+                        AR Aging Summary
+                    </Button>
                 </Grid>
-        </Grid> 
-        <Grid item xs="auto">
+            </Grid>
+            <Grid item xs="auto">
                 <Button
                     variant="text"
                     color="primary"
-                    startIcon={<DescriptionIcon/>}
+                    startIcon={<DescriptionIcon />}
                     onClick={handleClick1}
                 >
-                   Invoice Detail Summary
+                    Invoice Detail Summary
                 </Button>
             </Grid>
-    
+            <DetailsCard />
+
         </div>
     );
 };

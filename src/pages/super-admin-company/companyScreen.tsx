@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CompanyCreate from "./companyCreate";
-import { CompanyEditFields, CompanyFields } from "../../constants/form-data/form-data-json";
 
 const CompanyScreen: React.FC = () => {
 
-    const companyValue = useSelector((state: any) => state.globalState.data);
+    const companyValue = useSelector((state: any) => state.userState.data);
 
     const [mergedData, setMergedData] = useState<any>({});
 
@@ -15,19 +14,25 @@ const CompanyScreen: React.FC = () => {
         if (companyValue) {
             const mergedObject = {
                 ...companyValue.companyDetails,
-                ...companyValue.register
+                ...companyValue.userDetails
             };
             setMergedData(mergedObject);
         }
     }, [companyValue]);
+
 
     const mode = companyValue ? 'edit' : 'create';
     useEffect(() => {
         setKey(prev => prev + 1);
     }, [companyValue]);
 
+
     return (
-        <CompanyCreate key={key} companyEditInitialValues={mergedData} mode={mode} />
+        <>
+            {mergedData && (
+                <CompanyCreate key={key} companyEditInitialValues={mergedData} mode={mode} />
+            )}
+        </>
     );
 };
 

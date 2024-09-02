@@ -2,28 +2,31 @@ import { Box, IconButton, Stack } from "@mui/material";
 import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
 import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../redux-store/store";
-import React, { useEffect } from "react";
-import { toast } from "react-toastify";
-import { Add, Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
-import ModalUi from "../../components/ui/ModalUi";
+import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import CustomerDetails from "../../pages/customer/customerDetails";
 import TableHeader from "../../components/layouts/TableHeader";
-import { setCustomerData, useDeleteCustomerMutation, useGetCustomerByIdMutation, useGetCustomersQuery } from "../../redux-store/customer/customerApi";
 import { styled } from '@mui/system';
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
-import { setData } from "../../redux-store/global/globalState";
+import { useDeleteCustomerMutation, useGetCustomersListQuery, useGetSingleCustomerMutation } from "../../redux-store/api/injectedApis";
+import { setCustomerData } from "../../redux-store/slices/slicesList";
+import DialogBoxUi from "../../components/ui/DialogBox";
+import { AppDispatch } from "../../redux-store/store";
+import { useRolePermissions } from "../../hooks/useRolePermission";
+import ActionButtons from "../../components/ui/ActionButtons";
 
 const MyCellRenderer = ({ id }: { id: any }) => {
+
     const dispatch = useDispatch<AppDispatch>();
-    const [openModal, setOpenModal] = React.useState(false);
-    const { data: customers, error, isLoading, refetch } = useGetCustomersQuery();
-    const [deleteCustomer, { isLoading: deleteCustomerLoading, error: deleteCustomerErrorObject, isSuccess: deleteCustomerSuccess, isError: deleteCustomerError, data: deletedData }] = useDeleteCustomerMutation();
-    const [getCustomer, { data: customerData, isSuccess: C_success, isError: C_error, isLoading: getCustomerLoading }] = useGetCustomerByIdMutation();
+    const [openDialogBox, setIsOpenDialogBox] = useState(false);
+    const { refetch } = useGetCustomersListQuery();
+    const [deleteCustomer, { isSuccess: deleteCustomerSuccess, isError: deleteCustomerError, error: deleteCustomerErrorObject }] = useDeleteCustomerMutation();
+    const [getCustomer, { data: customerData, }] = useGetSingleCustomerMutation();
     const navigate = useNavigate();
 
-    const role = localStorage.getItem("userRole");
+    const { canViewCustomers, canEditCustomers, canDeleteCustomers } = useRolePermissions();
+    console.log(canViewCustomers, canEditCustomers, canDeleteCustomers, "canViewCustomers,canEditCustomers,canDeleteCustomers");
 
     useEffect(() => {
         refetch();
@@ -31,7 +34,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
     useSnackbarNotifications({
         error: deleteCustomerError,
-        errorMessage: 'Error adding Customer',
+        errorMessage: 'Error deleting Customer',
         errorObject: deleteCustomerErrorObject,
         success: deleteCustomerSuccess,
         successMessage: 'Customer deleted successfully',
@@ -42,7 +45,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             const response = await getCustomer(id);
             if ('data' in response) {
                 const customerData = response.data;
-                await dispatch(setData(customerData));
+                dispatch(setCustomerData(customerData));
                 navigate('/customer/create');
             } else {
                 console.error('Error response:', response.error);
@@ -52,16 +55,18 @@ const MyCellRenderer = ({ id }: { id: any }) => {
         }
     };
 
-    const handleModalOpen = async () => {
-        setOpenModal(true);
+    const handleDialogOpen = async () => {
         try {
-            await getCustomer(id);
+            const response = await getCustomer(id);
+            if ('data' in response) {
+                setIsOpenDialogBox(true);
+            } else {
+                console.error('Error response:', response.error);
+            }
         } catch (error) {
             console.error('Error fetching customer data:', error);
         }
     };
-
-    const handleModalClose = () => setOpenModal(false);
 
     const handleDeleteClick = () => {
         const confirmed = window.confirm("Are you sure you want to delete this customer?");
@@ -69,37 +74,34 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             deleteCustomer(id);
         }
     };
-
-    const StyledIconButton = styled(IconButton)(({ theme }) => ({
-        padding: '3px',
-        '&.Mui-disabled': {
-            color: theme.palette.grey[500],
-            cursor: 'not-allowed',
-            pointerEvents: 'auto',
-        },
-    }));
-
     return (
         <Stack direction="row" spacing={1}>
-            {role !== "ENDUSER" && (
-                <StyledIconButton aria-label="" onClick={handleEditClick}>
-                    <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-                </StyledIconButton>
-            )}
-            {role !== "ENDUSER" && (
-                <StyledIconButton aria-label="" onClick={handleDeleteClick}>
-                    <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-                </StyledIconButton>
-            )}
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
-                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
-            <ModalUi topHeight="90%" open={openModal} onClose={handleModalClose}>
-                <TableHeader headerName="Customer Details" />
-                <Box sx={{ marginTop: "15px" }}>
-                    <CustomerDetails details={customerData || []} />
-                </Box>
-            </ModalUi>
+            <ActionButtons
+                id={id}
+                canEdit={canEditCustomers}
+                canView={canViewCustomers}
+                canDelete={canDeleteCustomers}
+                onEditClick={handleEditClick}
+                onDeleteClick={handleDeleteClick}
+                onViewClick={handleDialogOpen}
+            />
+            <DialogBoxUi
+                paperWidth="900px"
+                paperMaxWidth="900px"
+                open={openDialogBox}
+
+                content={
+                    <>
+
+                        <TableHeader headerName="Customer Details" />
+                        <Box sx={{ marginTop: "15px" }}>
+                            <CustomerDetails details={customerData || {}} />
+                        </Box>
+
+                    </>
+                }
+                handleClose={() => setIsOpenDialogBox(false)}
+            />
         </Stack>
     );
 };
@@ -142,7 +144,6 @@ export const columns: GridColDef[] = [
         width: 150,
         editable: false,
     },
-
     // {
     //     field: "country",
     //     editable: true,

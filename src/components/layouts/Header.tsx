@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton, Box, Menu, MenuItem, ListItemIcon, Divider, Tooltip, Typography } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Box, Menu, MenuItem, ListItemIcon, Tooltip, Typography, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { AccountCircle, Logout, PersonAdd, Settings, Person, Lock } from "@mui/icons-material";
@@ -8,8 +8,7 @@ import { AppDispatch } from "../../redux-store/store";
 import DialogBoxUi from "../ui/DialogBox";
 import UserProfile from "../../pages/profile/UserProfile";
 import ChangePassword from "../../pages/profile/ChangePassword";
-import { useNavigate } from "react-router-dom";
-import ToastUi from "../../components/ui/ToastifyUi";
+import { useNavigate, useLocation } from "react-router-dom";
 import GroupIcon from "@mui/icons-material/Group";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { capitalize } from "../../services/utils/capitalization";
@@ -19,7 +18,7 @@ const PopupComponents = { USER_PROFILE: "userprofile", CHANGE_PASSWORD: "changep
 const menuItems = [
   { icon: <Person sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "User Profile", component: PopupComponents.USER_PROFILE },
   { icon: <Lock sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Change Password", component: PopupComponents.CHANGE_PASSWORD },
-  { icon: <PersonAdd sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Add another account" },
+ // { icon: <PersonAdd sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Add another account" },
   { icon: <Settings sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Settings", route: "/settings" },
   { icon: <Logout sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Logout", action: "logout" },
 ];
@@ -27,12 +26,10 @@ const menuItems = [
 const exceptEndUser: any = !Roles.STANDARDUSER;
 
 const addMenuItems = [
-  { title: "CUSTOMERS", items: [exceptEndUser && { icon: <GroupIcon sx={{ color: "grey.500", marginRight: "10px" }} />, text: "Add User", route: "roles/list" }, exceptEndUser && { icon: <AddIcon sx={{ color: "grey.500" }} />, text: "Add Customer", route: "customer/create" }] },
   {
     title: "PURCHASES",
     items: [
       { icon: <ShoppingCartIcon sx={{ color: "grey.500", marginRight: "10px" }} />, text: "Add Invoice", route: "invoice/create" },
-      { icon: <AddIcon sx={{ color: "grey.500" }} />, text: "Add Report", route: "reports" },
     ],
   },
 ];
@@ -46,17 +43,16 @@ const MenuComponent = ({ anchorEl, open, handleClose, menuItems, onMenuItemClick
     transformOrigin={{ horizontal: "right", vertical: "top" }}
     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
   >
-    {" "}
     {menuItems.map((item: any, index: any) => (
       <MenuItem
         key={index}
         onClick={() => onMenuItemClick(item)}
         sx={{ ":hover": { color: "primary.dark" }, fontSize: "13px" }}
       >
-        {" "}
-        <ListItemIcon sx={{ "& .css-c7koz-MuiSvgIcon-root": { width: "20px" }, ":hover": { color: "primary.dark" } }}> {item.icon} </ListItemIcon> {item.text}{" "}
+        <ListItemIcon sx={{ "& .css-c7koz-MuiSvgIcon-root": { width: "20px" }, ":hover": { color: "primary.dark" } }}>{item.icon}</ListItemIcon>
+        {item.text}
       </MenuItem>
-    ))}{" "}
+    ))}
   </Menu>
 );
 
@@ -67,6 +63,7 @@ export default function Header() {
   const [popUpComponent, setPopUpComponent] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
 
   const userName = useSelector(selectUserName);
   const userRole = useSelector(selectUserRole);
@@ -86,6 +83,7 @@ export default function Header() {
     } else if (item.route) {
       navigate(item.route);
     } else if (item.action === "logout") {
+      window.location.reload();
       dispatch(logOut());
     }
     setAnchorEl(null);
@@ -94,7 +92,6 @@ export default function Header() {
 
   return (
     <>
-      <ToastUi autoClose={1000} />
       <AppBar
         sx={{ width: "100%", boxShadow: "none", backgroundColor: "#fbfbff !important" }}
         position='sticky'
@@ -107,93 +104,78 @@ export default function Header() {
               paddingLeft: "15px !important",
               paddingRight: "15px !important",
             },
-            justifyContent: "end",
+            justifyContent: "space-between",
             backgroundColor: "#ffffff",
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-            <Typography
-              variant='caption'
-              color='initial'
-            >
-              {capitalize(userRole)}
-            </Typography>
-            <Tooltip title='Add item'>
-              <IconButton
-                sx={{ width: "30px" }}
-                onClick={handleMenuOpen(setAddMenuAnchorEl)}
-                size='small'
+          <Grid container alignItems="center" spacing={2}>
+            {location.pathname === "/dashboard" && (
+              <Grid item xs={6} display="flex" alignItems="center" sx={{ fontWeight: 500 }}>
+                Hello {userRole}!
+              </Grid>
+            )}
+          </Grid>
+          <Grid item xs={6} display="flex">
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {/* <Tooltip title='Add item'>
+                <IconButton
+                  sx={{ width: "30px" }}
+                  onClick={handleMenuOpen(setAddMenuAnchorEl)}
+                  size='small'
+                >
+                  <AddIcon
+                    sx={{
+                      ":hover": {
+                        color: "primary.main",
+                      },
+                      color: "grey.500",
+                      width: "20px",
+                    }}
+                  />
+                </IconButton>
+              </Tooltip> */}
+              <Tooltip title='Account settings'>
+                <IconButton
+                  sx={{ width: "30px" }}
+                  onClick={handleMenuOpen(setAnchorEl)}
+                  size='small'
+                >
+                  <Person
+                    sx={{
+                      ":hover": {
+                        color: "primary.main",
+                      },
+                      color: "grey.500",
+                      width: "20px",
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Typography
+                variant='caption'
+                color='initial'
               >
-                <AddIcon
-                  sx={{
-                    ":hover": {
-                      color: "primary.main",
-                    },
-                    color: "grey.500",
-                    width: "20px",
-                  }}
-                />
-              </IconButton>
-            </Tooltip>
-            {/* <Tooltip title="Settings"> */}
-            {/* <IconButton sx={{ width: "30px" }} onClick={() => navigate("/settings")}> */}
-            {/* <Settings sx={{
-                  ":hover": {
-                    color: "primary.main"
-                  },
-                  color: 'grey.500', width: "20px"
-                }} /> */}
-            {/* </IconButton> */}
-            {/* </Tooltip> */}
-            <Tooltip title='Account settings'>
-              <IconButton
-                sx={{ width: "30px" }}
-                onClick={handleMenuOpen(setAnchorEl)}
-                size='small'
-              >
-                <Person
-                  sx={{
-                    ":hover": {
-                      color: "primary.main",
-                    },
-                    color: "grey.500",
-                    width: "20px",
-                  }}
-                />
-              </IconButton>
-            </Tooltip>
-            <Typography
-              variant='caption'
-              color='initial'
-            >
-              {capitalize(userName)}
-            </Typography>
-          </Box>
-          <MenuComponent
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            handleClose={handleMenuClose(setAnchorEl)}
-            menuItems={menuItems}
-            onMenuItemClick={handleMenuItemClick}
-          />
-          <MenuComponent
-            anchorEl={addMenuAnchorEl}
-            open={Boolean(addMenuAnchorEl)}
-            handleClose={handleMenuClose(setAddMenuAnchorEl)}
-            menuItems={addMenuItems.flatMap((group) => group.items)}
-            onMenuItemClick={handleMenuItemClick}
-          />
+                {capitalize(userName)}
+              </Typography>
+            </Box>
+          </Grid>
         </Toolbar>
+        <MenuComponent
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          handleClose={handleMenuClose(setAnchorEl)}
+          menuItems={menuItems}
+          onMenuItemClick={handleMenuItemClick}
+        />
+        <MenuComponent
+          anchorEl={addMenuAnchorEl}
+          open={Boolean(addMenuAnchorEl)}
+          handleClose={handleMenuClose(setAddMenuAnchorEl)}
+          menuItems={addMenuItems.flatMap((group) => group.items)}
+          onMenuItemClick={handleMenuItemClick}
+        />
         <DialogBoxUi
           open={opendialogBox}
-          maxwidth={{
-            "& .MuiDialog-container": {
-              "& .MuiPaper-root": {
-                width: "60%",
-                maxWidth: "350px",
-              },
-            },
-          }}
           content={
             popUpComponent === PopupComponents.USER_PROFILE ? (
               <UserProfile />

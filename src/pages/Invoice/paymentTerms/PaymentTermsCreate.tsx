@@ -4,39 +4,37 @@ import { gstTypeInitialValue, paymentTermsInitialValue } from '../../../constant
 import { gstTypeValidationSchema, paymentTermsValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { GstTypeProps, PaymentTermsFormProps, PaymentTermsProps } from '../../../types/types';
-import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
-import { useAddPaymentTermsMutation, useGetPaymentTermsQuery, useUpdatePaymentTermsMutation } from '../../../redux-store/invoice/paymentTerms';
 import { Save } from '@mui/icons-material';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-
+import { useCreatePaymentTermsMutation, useGetPaymentTermsListQuery, useUpdatePaymentTermsMutation } from '../../../redux-store/api/injectedApis';
+import { clearPaymentTermsData } from '../../../redux-store/slices/paymentTermsSlice';
 
 // create and edit
-
 const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
 
-    const [addPaymentTerms, { isLoading: paymentTermsAddLoading, isSuccess: paymentTermsAddSuccess, isError: paymentTermsAddError, error: paymentTermsErrorObject }] = useAddPaymentTermsMutation();
+    const [addPaymentTerms, { isLoading: paymentTermsAddLoading, isSuccess: paymentTermsAddSuccess, isError: paymentTermsAddError, error: paymentTermsErrorObject }] = useCreatePaymentTermsMutation();
 
     const [updatePaymentTerms, { isLoading: paymentTermsLoading, isSuccess: paymentTermsUpdateSuccess, isError: paymentTermsUpdateError, error: paymentTermsUpdateErrorObject, }] = useUpdatePaymentTermsMutation();
 
     const dispatch = useDispatch<AppDispatch>();
 
-    const { data: getPaymentTerms, refetch } = useGetPaymentTermsQuery();
+    const { data: getPaymentTerms, refetch } = useGetPaymentTermsListQuery();
 
     const initialValues = paymentTermsValue || paymentTermsInitialValue;
 
     const onSubmit = useMemo(() => async (values: PaymentTermsProps, actions: any) => {
         try {
             if (paymentTermsValue) {
-                await updatePaymentTerms({ id: paymentTermsValue.id, paymentTermsData: values });
+                await updatePaymentTerms({ id: paymentTermsValue.id, data: values });
             } else {
                 await addPaymentTerms(values);
             }
             actions.resetForm();
             refetch();
             if (paymentTermsValue) {
-                setTimeout(() => dispatch(clearData()), 1000)
+                setTimeout(() => dispatch(clearPaymentTermsData()), 1000)
             }
         } catch (error) {
             console.error("An error occurred during form submission:", error);
@@ -75,7 +73,7 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
                 validationSchema={paymentTermsValidationSchema}
                 onSubmit={onSubmit}
                 buttons={[
-                    { label: 'Save',icon: Save, onClick: onSubmit }
+                    { label: 'Save', icon: Save, onClick: onSubmit }
                 ]}
             />
         </div>

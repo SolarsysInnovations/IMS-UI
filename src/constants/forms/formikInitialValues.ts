@@ -1,6 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps, CompanyInitialValueProps } from "../../types/types";
-import ServicesList from "../../pages/service/service-list-screen";
+import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps, AdminCompanyUsersInitialValueProps, SuperAdminUsersInitialValueProps, } from "../../types/types";
 import { format } from "path";
 
 export const loginInitialValue: LoginProps = {
@@ -9,7 +8,8 @@ export const loginInitialValue: LoginProps = {
     password: "",
 }
 
-export const companyInitialValues: CompanyInitialValueProps = {
+// 
+export const superAdminCompanyUsersInitialValues: SuperAdminUsersInitialValueProps = {
     // * ---------- user registration ----------
     id: "",
     userName: "",
@@ -29,6 +29,16 @@ export const companyInitialValues: CompanyInitialValueProps = {
     companyWebsite: "",
     companyTaxNumber: "",
     companyRegNumber: ""
+};
+export const adminCompanyUsersInitialValues: AdminCompanyUsersInitialValueProps = {
+    // * ---------- user registration ----------
+    id: "",
+    userName: "",
+    userEmail: "",
+    password: "",
+    userRole: "",
+    userMobile: "",
+    description: "",
 };
 
 export const customerInitialValues = {
@@ -106,9 +116,9 @@ export const dyCustomerInitialValue: DyCreateCustomerProps = {
     ],
 };
 export const dyserviceInitialValues: serviceCreationProps = {
-    serviceAccountingcode: "",
-    description: "",
-    amount: 0,
+    serviceAccountingCode: "",
+    serviceDescription: "",
+    serviceAmount: 0,
 };
 
 //
@@ -168,18 +178,18 @@ export const invoiceEditInitialValue: InvoiceInitialValueProps = {
     servicesList: [],
 };
 export const invoicesInitialValue: InvoicesInitialValueProps = {
-   
-    invoiceDate: "",
+
+   // invoiceDate: "",
     startDate: '',
     endDate: '',
-    filter : "invoiceReport",
+    filter: "invoiceReport",
 };
 
 export const AragingInitialValue: ArAgingInitialValueProps = {
-    invoiceDate: "",
+   // invoiceDate: "",
     startDate: "",
     endDate: "",
-    filter : "agingReport",
+    filter: "agingReport",
 
 };
 
@@ -198,6 +208,8 @@ export const RoleInitialValue: RoleInitialValueProps = {
     userEmail: "",
     userAccess: "",
     password: "",
+    userMobile: "",
+    description: "",
 }
 
 export const ChangePasswordInitialValue: ChangePasswordInitialValueProps = {

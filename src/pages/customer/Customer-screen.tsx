@@ -4,10 +4,8 @@ import CustomerCreate from './Customer-create-screen';
 
 const CustomerScreen = () => {
 
-    const customerInitialValues = useSelector((state: any) => state.globalState.data);
+    const customerInitialValues = useSelector((state: any) => state.customerState.data);
     const [key, setKey] = useState<number>(0);
-
-    console.log("invoiceValue", customerInitialValues);
 
     useEffect(() => {
         setKey((prev) => prev + 1)

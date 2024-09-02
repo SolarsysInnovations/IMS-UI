@@ -1,53 +1,68 @@
-import React, { useEffect, useState } from 'react';
-import { useAddServiceMutation, useGetServiceQuery } from '../../redux-store/service/serviceApi';
-import { toastConfig } from '../../constants/forms/config/toastConfig';
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useEffect } from 'react';
 import { serviceFields } from '../../constants/form-data/form-data-json';
-import { serviceInitialValues } from '../../constants/forms/formikInitialValues';
+import { serviceInitialValues as defaultServiceInitialValues } from '../../constants/forms/formikInitialValues'; // Rename to avoid conflict
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
-import useSuccessToast from '../../hooks/useToast';
-import SnackBarUi from '../../components/ui/Snackbar';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { useCreateServiceMutation, useGetServiceListQuery, useUpdateServiceMutation } from '../../redux-store/api/injectedApis';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
+import { clearServiceData } from '../../redux-store/slices/serviceSlice';
+import { serviceCreationProps } from '../../types/types';
 
-interface ServiceCreateProps {
-    onSuccess: () => void;
-}
+const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
+    const [addService, { isLoading: serviceAddLoading, isSuccess: serviceAddSuccess, isError: serviceAddError, error: serviceAddErrorObject }] = useCreateServiceMutation();
+    const [updateService, { isLoading: serviceUpdateLoading, isSuccess: serviceUpdateSuccess, isError: serviceUpdateError, error: serviceUpdateErrorObject }] = useUpdateServiceMutation();
 
-const ServiceCreate: React.FC<ServiceCreateProps> = ({ onSuccess }) => {
+    const dispatch = useDispatch<AppDispatch>();
 
-    const [addService, { isLoading: serviceAddLoading, isSuccess: serviceAddSuccess, isError: serviceAddError, error: serviceAddErrorObject }] = useAddServiceMutation();
-    const { data: serviceList, refetch } = useGetServiceQuery();
-    const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const { data: serviceList, refetch } = useGetServiceListQuery();
+
+    const serviceEditInitialValues = useSelector((state: any) => state.serviceState.data);
 
     useSnackbarNotifications({
-        error: serviceAddError,
-        errorObject: serviceAddErrorObject,
-        errorMessage: 'Error creating Service',
-        success: serviceAddSuccess,
-        successMessage: 'Service created successfully',
+        error: serviceAddError || serviceUpdateError,
+        errorObject: serviceAddErrorObject || serviceUpdateErrorObject,
+        errorMessage: 'Error creating or updating Service',
+        success: serviceAddSuccess || serviceUpdateSuccess,
+        successMessage: serviceAddSuccess ? 'Service created successfully' : 'Service updated successfully',
     });
 
     useEffect(() => {
         refetch();
-    }, [serviceAddSuccess, refetch]);
-    
-    useEffect(() => {
-        if (serviceAddSuccess) {
-            onSuccess();
-        }
-    }, [serviceAddSuccess, onSuccess]);
+    }, [serviceUpdateSuccess, serviceAddSuccess]);
 
-    const onSubmit = async (values: any, actions: any) => {
+    const initialValues = serviceEditInitialValues || defaultServiceInitialValues;
+
+    const onSubmit = async (values: serviceCreationProps, actions: any) => {
+        console.log("Submitting form with values:", values);
         try {
-            actions.resetForm();
-            await addService(values);
-            setShowSuccessToast(true);
-            setTimeout(() => {
-                setShowSuccessToast(false);
-            }, 2000);
-        } catch (error) {
-            console.log(error);
+            if (serviceEditInitialValues) {
+                const id = serviceEditInitialValues.id;
+                if (!id) {
+                    alert("id not specified");
+                    return;
+                }
+                await updateService({ id, data: values }).unwrap();
+                dispatch(clearServiceData());
+                setIsOpenDialogBox(false);
+                actions.resetForm();
+            } else {
+                await addService(values).unwrap();
+                setIsOpenDialogBox(false);
+                actions.resetForm();
+            }
+        } catch (error: any) {
+            console.error("An error occurred during form submission:", error);
+            if (error.data && error.data.message) {
+                alert(`Error: ${error.data.message}`);
+            } else if (error.message) {
+                alert(`Error: ${error.message}`);
+            } else {
+                alert('An unknown error occurred');
+            }
+        } finally {
+            actions.setSubmitting(false);
         }
     };
 
@@ -57,7 +72,7 @@ const ServiceCreate: React.FC<ServiceCreateProps> = ({ onSuccess }) => {
                 headerName='Create Service'
                 showTable={true}
                 fields={serviceFields}
-                initialValues={serviceInitialValues}
+                initialValues={initialValues}
                 validationSchema={serviceValidationSchema}
                 onSubmit={onSubmit}
             />

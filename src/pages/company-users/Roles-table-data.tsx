@@ -10,6 +10,10 @@ import { AppDispatch } from '../../redux-store/store';
 import { useDispatch } from 'react-redux';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { RolesEditFields } from '../../constants/form-data/form-data-json';
+import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from '../../redux-store/api/injectedApis';
+import UserForm from './UserForm';
+import ActionButtons from '../../components/ui/ActionButtons';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
@@ -65,14 +69,17 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     const [openModal, setOpenModal] = useState(false);
     const [roleId, setRoleId] = useState<string | null>(null);
     const [rolesData, setRolesData] = useState(null);
-    const { data: roleDetails, refetch } = useGetRoleQuery();
+    const { data: roleDetails, refetch } = useGetUsersListQuery();
     const pathname = usePathname();
+    const { canEditUsers, canDeleteUsers } = useRolePermissions();
 
-    const { data: roles, error, isLoading, refetch: fetchRolesList } = useGetRoleQuery();
+    const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetSingleUserMutation();
 
-    const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetRoleByIdMutation();
+    const [deleteRole, { isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteUserMutation();
 
-    const [deleteRole, { isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteRoleMutation();
+    useEffect(() => {
+        refetch();
+    }, [roleDeleteSuccess, refetch]);
 
     useEffect(() => {
         dispatch(setRoleData(roleData));
@@ -82,7 +89,7 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
         error: roleDeleteError,
         errorMessage: 'Error deleting role',
         success: roleDeleteSuccess,
-        successMessage: 'Role deleted successfully',
+        successMessage: 'User deleted successfully',
         errorObject: roleDeleteErrorObject,
     })
 
@@ -119,17 +126,19 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
 
     return (
         <Stack direction="row" spacing={1}>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
-            {/* <DialogBoxUi
+            <ActionButtons
+                onDeleteClick={handleDeleteClick}
+                onEditClick={handleEditClick}
+                onViewClick={() => { }}
+                canDelete={canDeleteUsers}
+                canEdit={canEditUsers}
+            />
+
+            <DialogBoxUi
                 open={openModal}
-                content={<RoleForm onClose={handleModalClose} RolesEditInitialValues={roleData} HeaderName="Update Role" RolesFields={RolesEditFields}/>}
+                content={<UserForm userEditValue={roleData} mode={roleData ? "edit" : "create"} />}
                 handleClose={handleModalClose}
-            /> */}
+            />
         </Stack>
     );
 

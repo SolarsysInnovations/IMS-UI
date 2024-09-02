@@ -1,14 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useGetCompanyQuery, useAddCompanyMutation, useUpdateCompanyMutation } from '../../redux-store/company/companiesApi';
+import React, { useEffect, useMemo } from 'react';
+import * as Yup from 'yup'; // Import Yup for validation
 import { CompanyEditFields, CompanyFields } from '../../constants/form-data/form-data-json';
-import { companyInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
-import { companyDetailsValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { clearData } from '../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
-import { CompanyInitialValueProps } from '../../types/types';
+import { SuperAdminUsersInitialValueProps } from '../../types/types';
+import { useNavigate } from 'react-router-dom';
+import { superAdminCompanyUsersInitialValues } from '../../constants/forms/formikInitialValues';
+import { useCreateUserMutation, useGetUsersListQuery, useUpdateUserMutation } from '../../redux-store/api/injectedApis';
+import { companyDetailsValidationSchema } from '../../constants/forms/validations/validationSchema';
 
 interface CompanyValueProps {
     companyEditInitialValues: any;
@@ -17,15 +19,16 @@ interface CompanyValueProps {
 
 const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) => {
 
-    const [addCompany, { isLoading: companyAddLoading, isSuccess: companyAddSuccess, isError: companyAddError, error: companyAddErrorObject }] = useAddCompanyMutation();
+    const [addCompany, { isLoading: companyAddLoading, isSuccess: companyAddSuccess, isError: companyAddError, error: companyAddErrorObject }] = useCreateUserMutation();
 
-    const [updateCompany, { isLoading: companyUpdateLoading, isSuccess: companyUpdateSuccess, isError: companyUpdateError, error: companyUpdateErrorObject }] = useUpdateCompanyMutation();
+    const [updateCompany, { isLoading: companyUpdateLoading, isSuccess: companyUpdateSuccess, isError: companyUpdateError, error: companyUpdateErrorObject }] = useUpdateUserMutation();
 
-    const { data: company, error, isLoading, refetch } = useGetCompanyQuery();
+    const { data: company, error, isLoading, refetch } = useGetUsersListQuery();
 
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+    const initialValues = companyEditInitialValues || superAdminCompanyUsersInitialValues;
 
-    const initialValues = companyEditInitialValues || companyInitialValues;
     const fields = mode === 'create' ? CompanyFields : CompanyEditFields;
 
     useSnackbarNotifications({
@@ -45,15 +48,17 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
     });
 
     useEffect(() => {
+        if (companyUpdateSuccess) {
+            navigate(-1)
+        };
         refetch();
     }, [companyAddSuccess, companyUpdateSuccess, refetch]);
 
-    const onSubmit = useMemo(() => async (values: CompanyInitialValueProps, actions: any) => {
+    const onSubmit = useMemo(() => async (values: SuperAdminUsersInitialValueProps, actions: any) => {
         try {
-            const id = values.id;
             if (mode === 'edit' && companyEditInitialValues) {
                 const transformedData = {
-                    register: {
+                    userDetails: {
                         userName: values.userName,
                         userEmail: values.userEmail,
                         // password: values.password,
@@ -71,12 +76,15 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyWebsite: values.companyWebsite,
                         companyTaxNumber: values.companyTaxNumber,
                         companyRegNumber: values.companyRegNumber
-                    }
+                    },
                 };
-                await updateCompany({ id, company: transformedData });
+
+                await updateCompany({ id: companyEditInitialValues.companyId, data: transformedData });
+                dispatch(clearData());
+
             } else {
                 const transformedData = {
-                    register: {
+                    userDetails: {
                         userName: values.userName,
                         userEmail: values.userEmail,
                         password: values.password,
@@ -94,9 +102,10 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyWebsite: values.companyWebsite,
                         companyTaxNumber: values.companyTaxNumber,
                         companyRegNumber: values.companyRegNumber
-                    }
+                    },
                 };
                 await addCompany(transformedData);
+                dispatch(clearData());
             }
 
             dispatch(clearData());
@@ -108,7 +117,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
             actions.setSubmitting(false);
         }
     }, [updateCompany, dispatch, addCompany, companyEditInitialValues, mode]);
-
 
     return (
         <>

@@ -2,37 +2,37 @@ import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
 import { GridColDef, GridDeleteIcon, GridValueSetterParams } from "@mui/x-data-grid";
 import ModalUi from "../../../components/ui/ModalUi";
-import InvoiceUi from "../../../components/Generate-Invoice/InvoiceUi";
-import { toast } from "react-toastify";
-import { toastConfig } from "../../forms/config/toastConfig";
+import InvoiceUi from "../../../pages/Invoice/Generate-Invoice/InvoiceUi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDeleteInvoiceMutation, useGetInvoiceQuery } from "../../../redux-store/invoice/invcoiceApi";
 import { AppDispatch } from "../../../redux-store/store";
 import { useDispatch } from "react-redux";
 import EditIcon from '@mui/icons-material/Edit';
-import { useDeletePaymentTermsMutation, useGetPaymentTermsQuery, usePaymentTermsGetByIdMutation } from "../../../redux-store/invoice/paymentTerms";
-import { setData, clearData } from "../../../redux-store/global/globalState";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import { useDeletePaymentTermsMutation, useGetPaymentTermsListQuery, useGetSinglePaymentTermsMutation } from "../../../redux-store/api/injectedApis";
+import { setPaymentTermsData } from "../../../redux-store/slices/paymentTermsSlice";
 
 
 const MyCellRenderer = ({ id }: { id: any, }) => {
 
     const dispatch = useDispatch<AppDispatch>();
 
-    const [getPaymentTerm, { }] = usePaymentTermsGetByIdMutation();
+    const [getPaymentTerm, { }] = useGetSinglePaymentTermsMutation();
 
-    const [deletePaymentTerms, { isLoading: paymentTermsDeleteLoading, isSuccess: paymentTermsSuccess, error: paymentTermsErrorObject, isError: paymentTermsError }] = useDeletePaymentTermsMutation();
+    const [deletePaymentTerms, { isLoading: paymentTermsDeleteLoading, isSuccess: paymentTermsDeleteSuccess, error: paymentTermsErrorObject, isError: paymentTermsError }] = useDeletePaymentTermsMutation();
 
-    const { data: getPaymentTermsList, refetch } = useGetPaymentTermsQuery();
+    const { data: getPaymentTermsList, refetch } = useGetPaymentTermsListQuery();
+
+    useEffect(() => {
+        refetch();
+    }, [paymentTermsDeleteSuccess]);
 
     const handleEditClick = async () => {
         try {
             const response = await getPaymentTerm(id);
             if (response && 'data' in response) {
                 const gstTypeData = response.data;
-                console.log(gstTypeData);
-                dispatch(setData(gstTypeData));
+                dispatch(setPaymentTermsData(gstTypeData));
             } else {
                 console.error('Invalid response format:', response);
             }
@@ -52,8 +52,8 @@ const MyCellRenderer = ({ id }: { id: any, }) => {
         error: paymentTermsError,
         errorObject: paymentTermsErrorObject,
         errorMessage: 'Error updating Payment Terms',
-        success: paymentTermsSuccess,
-        successMessage: 'Update Terms updated successfully',
+        success: paymentTermsDeleteSuccess,
+        successMessage: 'Payment terms deleted successfully',
     });
 
     return (

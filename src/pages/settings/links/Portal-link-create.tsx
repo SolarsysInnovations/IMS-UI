@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
 import { linkFields } from "../../../constants/form-data/form-data-json";
 import { linkInitialValues } from "../../../constants/forms/formikInitialValues";
 import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
@@ -20,7 +19,6 @@ const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
   const { data: linkList, refetch } = useGetLinkQuery();
 
   const initialValue = linkValue || linkInitialValues;
-  console.log("values", initialValue);
   const handleClose = () => {
     setOpenModal(false);
   };
@@ -41,11 +39,9 @@ const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
         await addLink(values);
       }
       actions.resetForm();
-      toast.success("Updated successfully!"); // Show toast after updating fields
       handleClose(); // Close modal after saving
     } catch (error) {
       console.error("An error occurred during form submission:", error);
-      toast.error("Error occurred while saving fields."); // Show error toast if submission fails
     }
   };
 
@@ -57,7 +53,6 @@ const PortalLinkCreate = ({ linkValue }: LinkFormProps) => {
 
   return (
     <>
-      <ToastContainer />
       <DynamicFormCreate
         headerName="New Link"
         updateFormValue={updateFormValue}
