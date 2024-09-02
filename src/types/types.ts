@@ -194,6 +194,7 @@ export interface SuperAdminUsersInitialValueProps {
     companyAddress: string;
     companyState: string;
     companyCountry: string;
+    companyCity: string;
     companyEmail: string;
     companyPhone: string;
     companyWebsite: string;
