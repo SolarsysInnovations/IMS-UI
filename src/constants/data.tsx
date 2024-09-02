@@ -171,18 +171,18 @@ export const sidebarTwo = [
     ],
     allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
   },
-  {
-    path: '/settings',
-    element: <SettingScreen />,
-    allowedRoles: [],
-    subItems: [
-      {
-        path: '/send-email',
-        element: <SendEmail />,
-        allowedRoles: [],
-      },
-    ],
-  }
+  // {
+  //   path: '/settings',
+  //   element: <SettingScreen />,
+  //   allowedRoles: [],
+  //   subItems: [
+  //     {
+  //       path: '/send-email',
+  //       element: <SendEmail />,
+  //       allowedRoles: [],
+  //     },
+  //   ],
+  // }
  ];
 
 export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED", "PAID",];

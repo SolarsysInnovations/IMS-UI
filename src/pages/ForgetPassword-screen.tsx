@@ -110,7 +110,6 @@
 // export default ForgetPassword;
 
 
- import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -122,8 +121,7 @@ import {
     Card,
     CardContent
 } from "@mui/material";
-import { toast } from "react-toastify";
-
+ 
 const ForgotPassword = () => {
     // const handleSubmit = async (e) => {
     //     e.preventDefault();

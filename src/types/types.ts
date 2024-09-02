@@ -90,6 +90,7 @@ export interface FormProps {
 
 };
 export interface SubField {
+    width: string;
     name: string;
     label: string;
     type: string;

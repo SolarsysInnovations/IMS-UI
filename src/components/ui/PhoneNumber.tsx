@@ -3,6 +3,7 @@ import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { styled } from '@mui/material/styles';
 import { Box, InputLabel, FormControl, FormHelperText } from '@mui/material';
+import { border } from '@mui/system';
 
 interface PhoneInputUiProps {
   value: string | undefined;
@@ -16,15 +17,14 @@ interface PhoneInputUiProps {
   width?: string;
 }
 
-const CustomPhoneInput = styled(PhoneInput)(({ theme }) => ({
-  width: '100%',
+const PhoneNumber = styled(PhoneInput)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  padding: '10px',
+  padding: '8px',
   borderRadius: '8px',
   border: '1px solid #d1d1d1', // Border color
   '& .PhoneInputInput': {
-    width: '100%',
+    width: '80%',
     border: 'none',
     outline: 'none',
     fontSize: '12px',
@@ -36,19 +36,15 @@ const CustomPhoneInput = styled(PhoneInput)(({ theme }) => ({
     backgroundColor: 'transparent',
   },
   '& .PhoneInputCountrySelectArrow': {
-    color: '#d1d1d1',
+    color: theme.palette.primary.main ,
   },
   '&:hover': {
-    borderColor: theme.palette.primary.main,
+    borderColor: '#000000',
   },
   '&:focus-within': {
-    borderColor: theme.palette.primary.main,
+    //borderColor: ,
+    border:`2px solid ${theme.palette.primary.main }`
   },
-  //  '--PhoneInputCountryFlag-height': '15px',
-  // '--PhoneInputCountryFlag-borderColor': '#4CAF50',
-  // '--PhoneInputCountrySelectArrow-color': '#FF5722',
-  // '--PhoneInputCountrySelectArrow-opacity': '0.8',
-  // '--PhoneInput-color--focus': '#FFC107',
 }));
 
 const PhoneInputUi: React.FC<PhoneInputUiProps> = ({
@@ -61,16 +57,21 @@ const PhoneInputUi: React.FC<PhoneInputUiProps> = ({
   error,
   width,
 }) => {
+  // Handle phone number changes with fallback to empty string
+  const handlePhoneChange = (newValue: string | undefined) => {
+    onChange(newValue || "");
+  };
+
   return (
-    <FormControl fullWidth={fullWidth || true} error={error} style={{ margin: '8px 0', width }}>
-       {/* {label && <InputLabel shrink>{label}</InputLabel>}   */}
-      <CustomPhoneInput
-      label={label}
+    <FormControl fullWidth={fullWidth || false} error={error} style={{ margin: '0', width }}>
+      {/* {label && <InputLabel shrink>{label}</InputLabel>} */}
+      <PhoneNumber
+        label={label}
         international
         countryCallingCodeEditable={false}
         defaultCountry="IN"
-        value={value}
-        onChange={onChange}
+        value={value || ""}
+        onChange={handlePhoneChange}
         placeholder="Enter phone number"
         disabled={disabled}
       />
