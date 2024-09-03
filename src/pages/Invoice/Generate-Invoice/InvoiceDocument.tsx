@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
 
 // Invoice Document component for PDF
 const InvoiceDocument = ({ invoiceData }: any) => {
+    console.log("invoiceData :", invoiceData);
     // if (invoiceData) {
     //     console.log("invoicesddsfds Data", invoiceData);
 
@@ -72,38 +73,34 @@ const InvoiceDocument = ({ invoiceData }: any) => {
     // totalValue: 126503
     return invoiceData ? (
         <Document>
-            <Page
-                size='A4'
-                style={styles.page}
-            >
+            <Page size='A4' style={styles.page} >
                 <View style={{ flexDirection: "row", alignItems: "center", gap: "30px" }}>
                     <View>
-                        <Image
-                            style={styles.image}
-                            src={randomImageUrl}
-                        />
+                        <Image style={styles.image} src={randomImageUrl} />
                     </View>
                     <View>
                         <Text style={styles.header}>{invoiceData?.companyDetails?.companyName}</Text>
                     </View>
                 </View>
 
-                <View style={{ flexDirection: "row", alignItems: "center", gap: "20px", marginTop: "20px" }}>
+                <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'space-between', marginTop: "20px" }}>
                     <View>
-                        <Text style={styles.subHeader}>To :</Text>
-                        <Text style={styles.text}>Name: {invoiceData?.customerDetails?.customerName} </Text>
-                        <Text style={styles.text}>Email: {invoiceData?.customerDetails?.customerEmail}</Text>
-                        <Text style={styles.text}>Phone: {invoiceData?.customerDetails?.customerPhone}</Text>
+                        {/* <Text style={styles.subHeader}>To :</Text> */}
+                        <Text style={{ fontSize: '16px', marginBottom: "10px" }}>Invoice To:</Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.companyName} </Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.customerName} </Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.customerEmail}</Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.customerPhone}</Text>
                     </View>
-                    <View style={styles.section}>
+                    {/* <View style={styles.section}>
                         <Text style={styles.subHeader}>From :</Text>
                         <Text style={styles.text}>Company Name: {invoiceData?.companyDetails?.companyName}</Text>
-                    </View>
-                    <View style={styles.section}>
-                        <Text style={styles.subHeader}>Invoice :</Text>
-                        <Text style={styles.text}>Invoice No: {invoiceData?.invoiceNumber}</Text>
-                        <Text style={styles.text}>Payment Terms: {invoiceData?.paymentTerms} </Text>
-                        <Text style={styles.text}>Due Date: {invoiceData?.dueDate}</Text>
+                    </View> */}
+                    <View >
+                        {/* <Text style={styles.subHeader}>Invoice :</Text> */}
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Invoice No: {invoiceData?.invoiceNumber}</Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Payment Terms: {invoiceData?.paymentTerms} </Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Due Date: {invoiceData?.dueDate}</Text>
                     </View>
                 </View>
 

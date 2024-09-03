@@ -79,19 +79,19 @@ const ArAgingscreen: React.FC = () => {
                                                         const currentDateNet1 = dayjs().format('MM-DD-YYYY');
                                                         const dueDateNet1 = dayjs().add(0, 'days').format('MM-DD-YYYY');
                                                         setFieldValue("startDate", currentDateNet1);
-                                                        setFieldValue("endDate", dueDateNet1);                                                        
+                                                        setFieldValue("endDate", dueDateNet1);
                                                     }
                                                     else if (newValue.value === "This Week") {
                                                         const today = dayjs();
-                                                        const lastSunday = today.day(0); 
+                                                        const lastSunday = today.day(0);
                                                         const nextSaturday = today.day(6);
-                                                    
-                                                        const currentDateNet1 = today.day() === 0 
+
+                                                        const currentDateNet1 = today.day() === 0
                                                             ? lastSunday.subtract(1, 'week').format('MM-DD-YYYY')
                                                             : lastSunday.format('MM-DD-YYYY');
-                                                    
+
                                                         const dueDateNet1 = nextSaturday.format('MM-DD-YYYY');
-                                                    
+
                                                         setFieldValue("startDate", currentDateNet1);
                                                         setFieldValue("endDate", dueDateNet1);
                                                     } else if (newValue.value === "Last 7 Days") {
@@ -107,7 +107,7 @@ const ArAgingscreen: React.FC = () => {
                                                         setFieldValue("endDate", dueDateNet3)
                                                     } else if (newValue.value === "Last 30 Days") {
                                                         const currentDateNet4 = dayjs().add(-30, 'days').format('MM-DD-YYYY');
-                                                        const dueDateNet4 =  dayjs().format('MM-DD-YYYY');
+                                                        const dueDateNet4 = dayjs().format('MM-DD-YYYY');
                                                         setFieldValue('startDate', currentDateNet4)
                                                         setFieldValue("endDate", dueDateNet4)
                                                     } else if (newValue.value === "Custom") {
@@ -121,9 +121,9 @@ const ArAgingscreen: React.FC = () => {
                                                 }
                                             }}
                                             options={invoiceDate}
-                                          //  value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
+                                            //  value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                                             labelText='Select'
-                                           // error={touched.invoiceDate && Boolean(errors.invoiceDate)}
+                                        // error={touched.invoiceDate && Boolean(errors.invoiceDate)}
                                         // helperText={touched.invoiceDate && errors.invoiceDate}
                                         />
                                     </Box>

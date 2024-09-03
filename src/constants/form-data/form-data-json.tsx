@@ -123,7 +123,7 @@ export const serviceFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'serviceAmount', required: true, disabled: false, label: 'Service Amount', type: 'PhoneNumber', gridSize: 5, validation: Yup.string().typeError('Must be a number').required('Amount is required'),
+                name: 'serviceAmount', required: true, disabled: false, label: 'Service Amount', type: 'number', gridSize: 5, validation: Yup.string().typeError('Must be a number').required('Amount is required'),
                 width: ''
             },
         ]
@@ -209,6 +209,10 @@ export const CompanyFields: FieldProps[] = [
             },
             {
                 name: 'description', required: true, disabled: false, label: 'Description', type: 'textArea', gridSize: 5, validation: Yup.string().required('Description is required'),
+                width: ''
+            },
+            {
+                name: 'Upload', required: true, disabled: false, label: 'Profile', type: 'upload', gridSize: 5, validation: Yup.string().required('Image is required'),
                 width: ''
             },
         ]
@@ -424,7 +428,7 @@ export const GstTypeFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'gstPercentage', required: true, disabled: false, label: 'Gst', type: 'PhoneNumber', gridSize: 2, validation: Yup.string().required('gstPercentage is required'), endAdornment: "%",
+                name: 'gstPercentage', required: true, disabled: false, label: 'Gst', type: 'number', gridSize: 2, validation: Yup.string().required('gstPercentage is required'), endAdornment: "%",
                 width: ''
             },
         ]

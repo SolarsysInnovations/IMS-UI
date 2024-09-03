@@ -4,6 +4,7 @@ import PhoneInput from 'react-phone-number-input';
 import { styled } from '@mui/material/styles';
 import { Box, InputLabel, FormControl, FormHelperText } from '@mui/material';
 import { border } from '@mui/system';
+import { Outline } from 'react-pdf';
 
 interface PhoneInputUiProps {
   value: string | undefined;
@@ -36,14 +37,14 @@ const PhoneNumber = styled(PhoneInput)(({ theme }) => ({
     backgroundColor: 'transparent',
   },
   '& .PhoneInputCountrySelectArrow': {
-    color: theme.palette.primary.main ,
+    color: theme.palette.primary.main,
   },
   '&:hover': {
     borderColor: '#000000',
   },
   '&:focus-within': {
     //borderColor: ,
-    border:`2px solid ${theme.palette.primary.main }`
+    Outline: `2px solid ${theme.palette.primary.main}`
   },
 }));
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import InvoiceDocument from "./InvoiceDocument";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
@@ -16,7 +16,10 @@ import DialogBoxUi from "../../../components/ui/DialogBox";
 import SendEmail from "../Send-email";
 
 // InvoiceLetterUi Component
-const InvoiceLetterUi = () => {
+interface InvoiceLetterUiProps {
+    setIsModalOpen?: Dispatch<SetStateAction<boolean | undefined>>;
+}
+const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
 
     const [data, setData] = useState();
     const invoiceDatas = useSelector((state: any) => state.invoiceState.data);
@@ -31,6 +34,7 @@ const InvoiceLetterUi = () => {
     const { refetch } = useGetInvoiceListQuery();
     const [resMessage, setResMessage] = useState('');
     const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
+
     useEffect(() => {
         if (invoiceDatas && customers && companyDetails && tdsTaxList) {
             // Find the relevant customer
@@ -135,6 +139,10 @@ const InvoiceLetterUi = () => {
 
     useEffect(() => {
         refetch();
+        console.log('hello world');
+        if (invoiceUpdateSuccess) {
+            setIsModalOpen?.(false)
+        };
     }, [invoiceUpdateSuccess, refetch]);
 
     useEffect(() => {
@@ -176,7 +184,7 @@ const InvoiceLetterUi = () => {
                 }
                 if (newStatus) {
                     updatedInvoiceData = { ...invoiceData, invoiceStatus: newStatus };
-                }
+                };
 
                 let response = await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
                 setResMessage(response.data.message);
@@ -184,6 +192,9 @@ const InvoiceLetterUi = () => {
                 console.log("Error updating invoice data", error);
             }
         }
+    };
+    const handleDialogBoxClose = () => {
+        setIsOpenDialogBox(false)
     };
 
     return (
@@ -239,10 +250,7 @@ const InvoiceLetterUi = () => {
                         <SendEmail/>
                     </>
                 }
-                handleClose={() => {
-                    setIsOpenDialogBox(false)
-
-                }}
+                handleClose={handleDialogBoxClose}
             />
         </>
     );
