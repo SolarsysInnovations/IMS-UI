@@ -133,7 +133,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.PAYMENT_TERMS_DELETE]: '/paymentTerms/delete',
     [ApiEndpoint.PAYMENT_TERMS_GET]: '/paymentTerms/get',
     [ApiEndpoint.PAYMENT_TERMS_UPDATE]: '/paymentTerms/update',
-    [ApiEndpoint.SEND_EMAIL]: "/sendPDFByEmail",
+    [ApiEndpoint.SEND_EMAIL]: "/sendEmail",
     //settings endpoints
     [ApiEndpoint.SETTINGS_CREATE]: `/settings/create`,
     [ApiEndpoint.SETTINGS_LIST]: `/settings/list`,

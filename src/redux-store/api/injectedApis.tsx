@@ -3,7 +3,7 @@ import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
-import { InvoiceInitialValueProps, RoleInitialValueProps } from '../../types/types';
+import { InvoiceInitialValueProps, RoleInitialValueProps, SendEmailInitialValueProps } from '../../types/types';
 import { get } from 'http';
 
 interface DashboardRequestProps {
@@ -142,7 +142,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         }),
         sendEmailNotification: builder.mutation<any, Partial<FormData>>({
             query: (data) => ({
-                url: "https://ims-backend-9ghn.onrender.com/sendPDFByEmail", //API_URLS.sendEmail,
+                url: `${API_URLS.sendEmail}`, //API_URLS.sendEmail,
                 method: "POST",
                 body: data
             }),
@@ -410,6 +410,9 @@ export const { useGetReportInvoiceMutation } = apiEndPointLists;
 
 // service export
 export const { useGetServiceListQuery, useCreateServiceMutation, useDeleteServiceMutation, useUpdateServiceMutation, useGetSingleServiceMutation } = apiEndPointLists;
+//email to customer 
+export const { useSendEmailNotificationMutation } = apiEndPointLists;
+
 
 //company Details export
 export const { useGetCompanySettingQuery, useAddCompanySettingMutation, useGetSingleCompanySettingMutation, useUpdateCompanySettingMutation } = apiEndPointLists;

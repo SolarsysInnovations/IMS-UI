@@ -1,5 +1,4 @@
 import { Roles } from "./Enums";
-import Unauthorized from "../unauthorized";
 import { Navigate } from "react-router-dom";
 import Reportscreen from "../pages/reports/Reportscreen";
 import ArAgingscreen from "../pages/reports/Reports-ar-aging";
@@ -172,18 +171,18 @@ export const sidebarTwo = [
     ],
     allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
   },
-  {
-    path: '/settings',
-    element: <SettingScreen />,
-    allowedRoles: [],
-    subItems: [
-      {
-        path: '/send-email',
-        element: <SendEmail />,
-        allowedRoles: [],
-      },
-    ],
-  }
+  // {
+  //   path: '/settings',
+  //   element: <SettingScreen />,
+  //   allowedRoles: [],
+  //   subItems: [
+  //     {
+  //       path: '/send-email',
+  //       element: <SendEmail />,
+  //       allowedRoles: [],
+  //     },
+  //   ],
+  // }
  ];
 
 export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED", "PAID",];
