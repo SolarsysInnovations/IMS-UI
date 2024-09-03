@@ -51,7 +51,7 @@ const Reportscreen: React.FC = () => {
                     Invoice Detail Summary
                 </Button>
             </Grid>
-            <DetailsCard />
+            {/* <DetailsCard /> */}
 
         </div>
     );

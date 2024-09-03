@@ -49,12 +49,11 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
 
     const dispatch = useDispatch<AppDispatch>();
     const { refetch: getInvoiceList } = useGetInvoiceListQuery();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState<boolean | undefined>(false);
     const [deleteInvoice, { isSuccess: invoiceDeleteSuccess, isError: invoiceDeleteError, error: invoiceDeleteErrorObject }] = useDeleteInvoiceMutation();
     const [getInvoice,] = useGetSingleInvoiceMutation();
     const navigate = useNavigate();
     const [preview, setPreview] = useState(false);
-    const [opendialogBox, setIsOpenDialogBox] = useState(false);
 
     const { canEditInvoices, canViewInvoices, canDeleteInvoices } = useRolePermissions();
 
@@ -93,7 +92,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
                 dispatch(clearInvoiceData());
                 dispatch(setInvoiceData(invoiceData));
                 handleOpenModal();
-                setIsOpenDialogBox(true);
+                setIsModalOpen(true);
             } else {
                 console.error('Error response:', response.error);
             }
@@ -124,14 +123,14 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
                     onViewClick={handleDetails}
                 />
                 <DialogBoxUi
-                    open={opendialogBox}
+                    open={isModalOpen}
                     content={
                         <>
-                            <InvoiceUi preview={preview} isModalOpen={setIsModalOpen} />
+                            <InvoiceUi preview={preview} setIsModalOpen={setIsModalOpen} />
                         </>
                     }
                     handleClose={() => {
-                        setIsOpenDialogBox(false)
+                        setIsModalOpen(false)
                     }}
                 />
             </Stack>
