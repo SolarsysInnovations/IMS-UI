@@ -1,5 +1,4 @@
 import { Roles } from "./Enums";
-import Unauthorized from "../unauthorized";
 import { Navigate } from "react-router-dom";
 import Reportscreen from "../pages/reports/Reportscreen";
 import ArAgingscreen from "../pages/reports/Reports-ar-aging";
@@ -172,18 +171,18 @@ export const sidebarTwo = [
     ],
     allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
   },
-  {
-    path: '/settings',
-    element: <SettingScreen />,
-    allowedRoles: [],
-    subItems: [
-      {
-        path: '/send-email',
-        element: <SendEmail />,
-        allowedRoles: [],
-      },
-    ],
-  }
+  // {
+  //   path: '/settings',
+  //   element: <SettingScreen />,
+  //   allowedRoles: [],
+  //   subItems: [
+  //     {
+  //       path: '/send-email',
+  //       element: <SendEmail />,
+  //       allowedRoles: [],
+  //     },
+  //   ],
+  // }
  ];
 
 export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED", "PAID",];
@@ -214,7 +213,22 @@ interface UserAccess {
   canCreateSettings: boolean;
   canViewSettings: boolean;
   canEditSettings: boolean;
-  // tds
+  canCreateTds: boolean;
+  canViewTds: boolean
+  canEditTds: boolean;
+  canDeleteTds: boolean;
+  canCreatePayment: boolean;
+  canViewPayment: boolean;
+  canEditPayment: boolean;
+  canDeletePayment: boolean;
+  canCreateGst: boolean;
+  canViewGst: boolean;
+  canEditGst: boolean;
+  canDeleteGst: boolean;
+  canCreateService: boolean;
+  canViewService: boolean;
+  canEditService: boolean;
+  canDeleteService: boolean;
 
 }
 
@@ -253,6 +267,27 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
+    //tds access
+   canCreateTds: true,
+   canViewTds: true,
+   canEditTds: true,
+   canDeleteTds: true,
+    //payment access
+    canCreatePayment: true,
+    canViewPayment: true,
+    canEditPayment: true,
+    canDeletePayment: true,
+    //gst access
+    canCreateGst: true,
+    canViewGst: true,
+    canEditGst: true,
+    canDeleteGst: true,
+    //service access
+   canCreateService: true,
+   canViewService: true,
+   canEditService: true,
+   canDeleteService: true,
+
   },
   [Roles.ADMIN]: {
     // customer access
@@ -284,6 +319,26 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
+     //tds access
+   canCreateTds: true,
+   canViewTds: true,
+   canEditTds: true,
+   canDeleteTds: true,
+    //payment access
+    canCreatePayment: true,
+    canViewPayment: true,
+    canEditPayment: true,
+    canDeletePayment: true,
+    //gst access
+    canCreateGst: true,
+    canViewGst: true,
+    canEditGst: true,
+    canDeleteGst: true,
+    //service access
+   canCreateService: true,
+   canViewService: true,
+   canEditService: true,
+   canDeleteService: true,
   },
   [Roles.APPROVER]: {
     // customer access
@@ -315,6 +370,26 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
+   //tds access
+   canCreateTds: true,
+   canViewTds: true,
+   canEditTds: true,
+   canDeleteTds: true,
+    //payment access
+    canCreatePayment: true,
+    canViewPayment: true,
+    canEditPayment: true,
+    canDeletePayment: true,
+    //gst access
+    canCreateGst: true,
+    canViewGst: true,
+    canEditGst: true,
+    canDeleteGst: true,
+    //service access
+   canCreateService: true,
+   canViewService: true,
+   canEditService: true,
+   canDeleteService: true,
   },
   [Roles.STANDARDUSER]: {
     // customer access
@@ -346,6 +421,26 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
+   //tds access
+   canCreateTds: false,
+   canViewTds: false,
+   canEditTds: true,
+   canDeleteTds: true,
+    //payment access
+    canCreatePayment: false,
+    canViewPayment: true,
+    canEditPayment: true,
+    canDeletePayment: true,
+    //gst access
+    canCreateGst: false,
+    canViewGst: true,
+    canEditGst: true,
+    canDeleteGst: true,
+    //service access
+   canCreateService: false,
+   canViewService: true,
+   canEditService: true,
+   canDeleteService: true,
   },
 };
 

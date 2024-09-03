@@ -70,12 +70,17 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyName: values.companyName,
                         companyAddress: values.companyAddress,
                         companyState: values.companyState,
+                        companyCity: values.companyCity,
                         companyCountry: values.companyCountry,
                         companyEmail: values.companyEmail,
                         companyPhone: values.companyPhone,
                         companyWebsite: values.companyWebsite,
                         companyTaxNumber: values.companyTaxNumber,
-                        companyRegNumber: values.companyRegNumber
+                        companyRegNumber: values.companyRegNumber,
+                        customerLimit: values.customerLimit,
+                        invoiceLimit: values.invoiceLimit,
+                        userLimit: values.userLimit,
+                        serviceLimit: values.serviceLimit,
                     },
                 };
 
@@ -96,12 +101,17 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                         companyName: values.companyName,
                         companyAddress: values.companyAddress,
                         companyState: values.companyState,
+                        companyCity: values.companyCity,
                         companyCountry: values.companyCountry,
                         companyEmail: values.companyEmail,
                         companyPhone: values.companyPhone,
                         companyWebsite: values.companyWebsite,
                         companyTaxNumber: values.companyTaxNumber,
-                        companyRegNumber: values.companyRegNumber
+                        companyRegNumber: values.companyRegNumber,
+                        customerLimit: values.customerLimit,
+                        invoiceLimit: values.invoiceLimit,
+                        userLimit: values.userLimit,
+                        serviceLimit: values.serviceLimit,
                     },
                 };
                 await addCompany(transformedData);

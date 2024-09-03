@@ -55,9 +55,13 @@ export enum ApiEndpoint {
     SETTINGS_GET = "settingsGet",
     SETTINGS_CREATE = "settingsCreate",
     SETTINGS_LIST = "settingsList",
+    SETTINGS_UPDATE = "settingsUpdate",
     //Link
     LINK_CREATE = "linkCreate",
+    LINK_GET = "linkGet",
     LINK_LIST = "linkList",
+    LINK_UPDATE = "linkUpdate",
+    LINK_DELETE = "linkDelete",
     //Roles
     ROLES_GET = "rolesGet",
     ROLES_GETUSER = "rolesGetUser",
@@ -129,14 +133,19 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.PAYMENT_TERMS_DELETE]: '/paymentTerms/delete',
     [ApiEndpoint.PAYMENT_TERMS_GET]: '/paymentTerms/get',
     [ApiEndpoint.PAYMENT_TERMS_UPDATE]: '/paymentTerms/update',
-    [ApiEndpoint.SEND_EMAIL]: "/sendPDFByEmail",
+    [ApiEndpoint.SEND_EMAIL]: "/sendEmail",
     //settings endpoints
     [ApiEndpoint.SETTINGS_CREATE]: `/settings/create`,
     [ApiEndpoint.SETTINGS_LIST]: `/settings/list`,
     [ApiEndpoint.SETTINGS_GET]: `settings/get`,
+    [ApiEndpoint.SETTINGS_UPDATE]: `settings/update`,
     //link endpoints
-    [ApiEndpoint.LINK_CREATE]: `/link/create`,
-    [ApiEndpoint.LINK_LIST]: `/link/list`,
+    [ApiEndpoint.LINK_CREATE]: `/portal/create`,
+    [ApiEndpoint.LINK_GET]: `/portal/get`,
+    [ApiEndpoint.LINK_LIST]: `/portal/list`,
+    [ApiEndpoint.LINK_UPDATE]: `/portal/update`,
+    [ApiEndpoint.LINK_DELETE]: `/portal/delete`,
+
     //Roles
     [ApiEndpoint.ROLES_GET]: `/role/get/`,
     [ApiEndpoint.ROLES_GETUSER]: `/role/findByEmail/`,

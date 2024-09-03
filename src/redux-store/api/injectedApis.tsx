@@ -3,7 +3,7 @@ import { LocalStorageKeys } from '../../hooks/useLocalStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
-import { InvoiceInitialValueProps, RoleInitialValueProps } from '../../types/types';
+import { InvoiceInitialValueProps, RoleInitialValueProps, SendEmailInitialValueProps } from '../../types/types';
 import { get } from 'http';
 
 interface DashboardRequestProps {
@@ -142,7 +142,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         }),
         sendEmailNotification: builder.mutation<any, Partial<FormData>>({
             query: (data) => ({
-                url: "https://ims-backend-9ghn.onrender.com/sendPDFByEmail", //API_URLS.sendEmail,
+                url: `${API_URLS.sendEmail}`, //API_URLS.sendEmail,
                 method: "POST",
                 body: data
             }),
@@ -304,6 +304,83 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
             }),
         }),
 
+                // ! ----------- companyDetails start --------------
+
+            getSingleCompanySetting: builder.mutation<void, number>({
+                    query: (id) => ({
+                        url: `${API_URLS.settingsGet}/${id}`,
+                        method: 'POST',
+                    }),
+                }),
+
+                getCompanySetting: builder.query<any[], void>({
+                    query: () => ({
+                        url: API_URLS.settingsGet,
+                        method: 'POST',
+        
+                    }),
+                    // Set caching for 5 minutes (adjust the duration as needed)
+                    keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
+                }),
+
+                addCompanySetting: builder.mutation<any, Partial<any>>({
+                    query: (company) => ({
+                        url: API_URLS.settingsCreate,
+                        method: 'POST',
+                        body: company,
+                    }),
+                }),
+
+                updateCompanySetting: builder.mutation<any, { id: string | undefined; company: Partial<any> }>({
+                    query: ({ id, company }) => ({
+                        url: `${API_URLS.settingsUpdate}/${id}`,
+                        method: 'POST',
+                        body: company,
+                    }),
+                }),
+
+               // ! ----------- companyDetails end --------------
+
+               // ! ----------- settingsPortal start --------------
+
+               getPortalLink: builder.query<any[], void>({
+                query: () => ({
+                    url: API_URLS.linkList,
+                    method: 'POST',
+                }),
+                // Set caching for 5 minutes (adjust the duration as needed)
+                keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
+            }),
+            getSinglePortalLink: builder.mutation<void, string>({ // Changed to query
+                query: (id) => ({
+                    url: `${API_URLS.linkGet}/${id}`,
+                    method: 'POST',
+                }),
+            }),
+            addPortalLink: builder.mutation<any, Partial<any>>({
+                query: (link) => ({
+                    url: API_URLS.linkCreate,
+                    method: 'POST',
+                    body: link,
+                }),
+            }),
+            updatePortalLink: builder.mutation<any, { id: any; link: Partial<any> }>({
+                query: ({ id, link }) => ({
+                    url: `${API_URLS.linkUpdate}/${id}`,
+                    method: 'POST',
+                    body: link,
+                }),
+            }),
+            deletePortalLink: builder.mutation<void, number>({
+                query: (id) => ({
+                    url: `${API_URLS.linkDelete}/${id}`,
+                    method: 'POST',
+    
+                }),
+    
+
+    }),
+
     }),
 });
 
@@ -333,3 +410,12 @@ export const { useGetReportInvoiceMutation } = apiEndPointLists;
 
 // service export
 export const { useGetServiceListQuery, useCreateServiceMutation, useDeleteServiceMutation, useUpdateServiceMutation, useGetSingleServiceMutation } = apiEndPointLists;
+//email to customer 
+export const { useSendEmailNotificationMutation } = apiEndPointLists;
+
+
+//company Details export
+export const { useGetCompanySettingQuery, useAddCompanySettingMutation, useGetSingleCompanySettingMutation, useUpdateCompanySettingMutation } = apiEndPointLists;
+
+//portal Link export
+export const { useGetPortalLinkQuery, useGetSinglePortalLinkMutation, useAddPortalLinkMutation, useUpdatePortalLinkMutation, useDeletePortalLinkMutation } = apiEndPointLists;

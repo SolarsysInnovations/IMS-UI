@@ -14,6 +14,7 @@ import TdsTaxScreen from '../Invoice/TdsTax/TdsTaxScreen';
 import TableHeader from '../../components/layouts/TableHeader';
 import { useGetGstTypeListQuery, useGetPaymentTermsListQuery, useGetTdsTaxListQuery } from '../../redux-store/api/injectedApis';
 import ServiceEditScreen from '../service/service-edit-screen';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const TaxConfig = () => {
     const [popUpComponent, setPopUpComponent] = useState("");
@@ -28,6 +29,7 @@ const TaxConfig = () => {
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
     const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
     const paymentTermsOptions = generateOptions(paymentTerms, "termName", "termName");
+    const { canCreateTds,canCreateGst, canCreatePayment ,canCreateService} = useRolePermissions();
 
     const PopupComponents = {
         GST_TYPE: 'gstType',
@@ -92,7 +94,7 @@ const TaxConfig = () => {
                                                 setIsOpenDialogBox(true)
                                                 setPopUpComponent(PopupComponents.GST_TYPE)
                                             }}
-                                            button={true}
+                                            button={canCreateGst}
                                             onChange={(newValue: any) => {
                                                 if (newValue) {
                                                     const selectedGstType = gstTypesData.find((item: any) => item.gstName === newValue.value)
@@ -121,7 +123,7 @@ const TaxConfig = () => {
                                 <Grid item xs={3}>
                                     <Box>
                                         <SelectDropdown
-                                            button={true}
+                                            button={canCreatePayment}
                                             onMouseDown={() => {
                                                 setPopUpComponent(PopupComponents.PAYMENT_TERMS);
                                                 setIsOpenDialogBox(true)
@@ -162,7 +164,7 @@ const TaxConfig = () => {
                                                 setPopUpComponent(PopupComponents.TDS_TAX)
                                                 // navigate("/customer/create")
                                             }}
-                                            button={true}
+                                            button={canCreateTds}
                                             width='150px'
                                             onChange={(newValue: any) => {
                                                 if (newValue) {

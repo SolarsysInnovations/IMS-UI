@@ -78,7 +78,6 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
                         'Pending',
                         'Approved',
                         'Draft',
-                        'Deleted',
                         'Mailed',
                         'Paid',
                     ]

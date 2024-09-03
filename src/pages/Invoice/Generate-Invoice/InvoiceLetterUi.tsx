@@ -13,6 +13,7 @@ import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification
 import { InvoiceOptions, InvoiceStatus, Roles } from "../../../constants/Enums";
 import { Card } from "@mui/material";
 import DialogBoxUi from "../../../components/ui/DialogBox";
+import SendEmail from "../Send-email";
 
 // InvoiceLetterUi Component
 interface InvoiceLetterUiProps {
@@ -246,7 +247,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
                 open={isOpenDialogBox}
                 content={
                     <>
-                        <h1>hello</h1>
+                        <SendEmail/>
                     </>
                 }
                 handleClose={handleDialogBoxClose}
