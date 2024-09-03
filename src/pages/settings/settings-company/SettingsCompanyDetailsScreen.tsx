@@ -73,6 +73,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
+              <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
+                    Company City
+                  </span>
+                  <span>: {companyInfo?.companyDetails.companyCity}</span>
+                </p>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
                   <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
                     Company State
