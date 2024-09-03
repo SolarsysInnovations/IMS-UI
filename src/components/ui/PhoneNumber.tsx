@@ -37,7 +37,7 @@ const PhoneNumber = styled(PhoneInput)(({ theme }) => ({
     backgroundColor: 'transparent',
   },
   '& .PhoneInputCountrySelectArrow': {
-    color: '#d1d1d1',
+    color: theme.palette.primary.main,
   },
   '&:hover': {
     borderColor: '#000000',
@@ -64,7 +64,7 @@ const PhoneInputUi: React.FC<PhoneInputUiProps> = ({
   };
 
   return (
-    <FormControl fullWidth={fullWidth || false} error={error} style={{ margin: '0px 0', width }}>
+    <FormControl fullWidth={fullWidth || false} error={error} style={{ margin: '0', width }}>
       {/* {label && <InputLabel shrink>{label}</InputLabel>} */}
       <PhoneNumber
         label={label}

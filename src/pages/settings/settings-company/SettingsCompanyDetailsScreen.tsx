@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useGetCompanySettingQuery, useGetCompanySettingByIdMutation } from "../../../redux-store/settings/companyDetailsApi";
+import { useGetCompanySettingQuery, useGetSingleCompanySettingMutation } from "../../../redux-store/api/injectedApis";
 import { Box, Grid } from "@mui/material";
 import TableHeader from "../../../components/layouts/TableHeader";
 import { Edit } from "@mui/icons-material";
@@ -15,7 +15,7 @@ import { selectUserRole } from "../../../redux-store/auth/authSlice";
 const SettingsCompanyDetailsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
-  const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetCompanySettingByIdMutation();
+  const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetSingleCompanySettingMutation();
 
   // Directly use the user details from the Redux store
   const companyInfo = useSelector(selectUserDetails);
