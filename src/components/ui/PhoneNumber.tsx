@@ -2,9 +2,7 @@ import React from 'react';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { styled } from '@mui/material/styles';
-import { Box, InputLabel, FormControl, FormHelperText } from '@mui/material';
-import { border } from '@mui/system';
-import { Outline } from 'react-pdf';
+import { InputLabel, FormControl, FormHelperText } from '@mui/material';
 
 interface PhoneInputUiProps {
   value: string | undefined;
@@ -43,8 +41,7 @@ const PhoneNumber = styled(PhoneInput)(({ theme }) => ({
     borderColor: '#000000',
   },
   '&:focus-within': {
-    //borderColor: ,
-    Outline: `2px solid ${theme.palette.primary.main}`
+    outline: `2px solid ${theme.palette.primary.main}`,
   },
 }));
 
@@ -58,25 +55,27 @@ const PhoneInputUi: React.FC<PhoneInputUiProps> = ({
   error,
   width,
 }) => {
-  // Handle phone number changes with fallback to empty string
+  // Ensure value is a string or an empty string
+  const safeValue = typeof value === 'string' ? value : '';
+
+  // Handle phone number changes
   const handlePhoneChange = (newValue: string | undefined) => {
     onChange(newValue || "");
   };
 
   return (
     <FormControl fullWidth={fullWidth || false} error={error} style={{ margin: '0', width }}>
-      {/* {label && <InputLabel shrink>{label}</InputLabel>} */}
+      {label && <InputLabel shrink>{label}</InputLabel>}
       <PhoneNumber
-        label={label}
         international
         countryCallingCodeEditable={false}
         defaultCountry="IN"
-        value={value || ""}
+        value={safeValue}
         onChange={handlePhoneChange}
         placeholder="Enter phone number"
         disabled={disabled}
       />
-      {/* {helperText && <FormHelperText>{helperText}</FormHelperText>} */}
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
 };
