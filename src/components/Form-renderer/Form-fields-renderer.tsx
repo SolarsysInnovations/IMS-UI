@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Field, FieldArray, useFormikContext } from "formik";
+import { Field, FieldArray, FieldMetaProps, useFormikContext } from "formik";
 import SelectDropdown from "../ui/SelectDropdown";
 import TextFieldUi from "../ui/TextField";
 import RadioUi from "../ui/RadioGroup";
@@ -13,6 +13,7 @@ import { Country, State, City } from 'country-state-city';
 import { generateOptions } from '../../services/utils/dropdownOptions';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 import PhoneInputUi from '../ui/PhoneNumber';
+import Upload from '../ui/Upload';
 
 interface RenderCountrySelectFieldProps {
   field: any;
@@ -128,6 +129,33 @@ const renderPhoneField = (field: any, meta: any, subField: SubField, setFieldVal
     />
   );
 };
+//------------------Upload input field--------------------
+const renderUploadField = (
+  field: FieldProps,
+  meta: FieldMetaProps<any>,
+  subField: SubField,
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+) => {
+  console.log('meta, field, subField', meta, field, subField);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFieldValue(field.name, file); // Update Formik state with the selected file
+    }
+  };
+
+  return (
+    <Upload
+      label={subField.label}
+      disabled={subField.disabled}
+      helperText={meta.touched && meta.error ? meta.error : subField.helperText}
+      onChange={handleFileChange} // Use custom onChange handler
+    />
+  );
+};
+
+
 //------------------password input field--------------------
 const renderPasswordField = (field: any, meta: any, subField: SubField, passwordVisible: boolean, setPasswordVisible: { (value: React.SetStateAction<boolean>): void; (arg0: boolean): void; }) => (
   //return (
@@ -311,6 +339,8 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ updateFormValue, f
                     return renderRadioField(field, meta, subField, setFieldValue);
                   } else if (subField.type === "textArea") {
                     return renderTextArea(field, meta, subField, setFieldValue);
+                  }else if (subField.type === "upload") {
+                    return renderUploadField(field, meta, subField, setFieldValue);
                   }
                   else if (subField.type === "PhoneNumber") {
                     return renderPhoneField(field, meta, subField, setFieldValue);
