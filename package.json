@@ -33,6 +33,7 @@
     "formik": "^2.4.5",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
+    "mui-phone-number": "^3.0.3",
     "pdf-lib": "^1.17.1",
     "pdfmake": "^0.2.10",
     "puppeteer": "^23.0.1",
