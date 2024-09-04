@@ -204,7 +204,7 @@ export const SendEmailInitialValue: SendEmailInitialValueProps = {
     recipientEmail: "",
     fromemail: "",
     file: null,
-    cc: "",
+   // cc: "",
     subject: "",
     body:"",
 }

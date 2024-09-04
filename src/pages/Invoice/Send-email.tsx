@@ -10,6 +10,8 @@ import { sendEmailValidationSchema } from "../../constants/forms/validations/val
 import { SendEmailInitialValue } from '../../constants/forms/formikInitialValues';
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useNavigate } from "react-router-dom";
+import CancelIcon from '@mui/icons-material/Close';
+
 interface SendEmailProps {
   onSuccess: () => void;  // Add this line to define the prop type
 }
@@ -41,7 +43,7 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
     try {
       const formData = new FormData();
       formData.append("recipientEmail", values.recipientEmail || "");
-      formData.append("cc", values.cc || "");
+     // formData.append("cc", values.cc || "");
       formData.append("subject", values.subject || "");
       formData.append("body", values.body || "");
 
@@ -52,7 +54,7 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
       await sendEmail(formData);
 
       if (sendEmailSuccess) {
-        onSuccess(); // Call the onSuccess callback if the email is sent successfully
+        onSuccess();  
         resetForm();
         setUploadedFiles([]);
       }
@@ -94,7 +96,7 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
                 helperText={touched.recipientEmail && errors.recipientEmail}
               />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <TextFieldUi
                 fullWidth
                 label="CC"
@@ -105,7 +107,7 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
                 error={touched.cc && Boolean(errors.cc)}
                 helperText={touched.cc && errors.cc}
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
               <TextFieldUi
                 fullWidth
@@ -116,13 +118,31 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
                 onChange={handleChange}
               />
             </Grid>
+            <Grid container spacing={1}>
+              {showFilename.map((fileName, index) => (
+                <React.Fragment key={index}>
+                  <Grid item xs={5}>
+                    <Box sx={{ mt: 1, mb: -1, display: "flex", position: "relative", left: "15px" }}>
+                      <Typography>{fileName}</Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={7}>
+                    <Box sx={{ mt: 1, display: "flex" }}>
+                      <IconButton onClick={() => handleRemoveFile(index)}>
+                        <CancelIcon color="secondary" sx={{ position: "relative" }} />
+                      </IconButton>
+                    </Box>
+                  </Grid>
+                </React.Fragment>
+              ))}
+            </Grid>
             <Grid item xs={12}>
               <Button
                 variant="contained"
                 color="primary"
                 component="label"
                 startIcon={<CloudUploadIcon />}
-                sx={{ height: "40px", width: "150px", mt: 2, mb: 2 }}
+                sx={{ height: "30px", width: "100px", mt: 2, mb: 2 }}
               >
                 Upload file
                 <input

@@ -232,7 +232,7 @@ export interface SendEmailInitialValueProps {
     recipientEmail: string;
     //description: string;
     file: File | null;
-    cc: string;
+   // cc: string;
     subject: string;
 }
 

@@ -39,7 +39,7 @@ const getDatesForSelection = (selection: string) => {
       break;
     case "overall":
       startDate = "2000-01-01";
-      endDate = today.format("YYYY-MM-DD");
+      endDate = today.add(1, 'days').format("YYYY-MM-DD");
       break;
     default:
       startDate = "";
