@@ -250,7 +250,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
                             />
                             <Card
                                 sx={{
-                                    padding: "20px 25px", position: "absolute", top: -150, right: 0, zIndex: 1300,
+                                    padding: "10px 25px", position: "absolute", top: -120, right: 5, zIndex: 1300,
                                     backgroundColor: "background.paper", borderRadius: "10px", display: showTracker ? "block" : "none",
                                 }}    >
                                 <StageStepper stages={invoiceData.invoiceStages} />

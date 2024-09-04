@@ -14,7 +14,7 @@ const CustomStepIcon: React.FC<StepIconProps & { status?: string }> = (props) =>
 
     // Determine background color based on status
     let backgroundColor = '#fff';
-    if (status === 'DELETED' || status === 'RETURNED') {
+    if (status === 'MAILED' || status === 'RETURNED') {
         backgroundColor = '#ff4545';
     } else if (active) {
         backgroundColor = '#3f51b5';
@@ -73,9 +73,9 @@ interface StageStepperProps {
 
 const StageStepper: React.FC<StageStepperProps> = ({ stages }) => {
     const isStepFailed = (step: number) => {
-        // Check if the step status is "DELETED" or "RETURNED"
+        // Check if the step status is "MAILED" or "RETURNED"
         const status = Object.values(stages)[step];
-        return status === "DELETED" || status === "RETURNED";
+        return status === "MAILED" || status === "RETURNED";
     };
 
     const getActiveStep = () => {
@@ -90,7 +90,7 @@ const StageStepper: React.FC<StageStepperProps> = ({ stages }) => {
     };
 
     const activeStep = getActiveStep();
-    const defaultStageNames = ["DRAFT", "PENDING", "APPROVED", "PAID", "RETURNED", "DELETED"];
+    const defaultStageNames = ["DRAFT", "PENDING", "APPROVED","MAILED", "PAID", "RETURNED"];
     const stageLabels = Object.keys(stages).map((key, index) => stages[key as keyof StagesType] !== "null" ? stages[key as keyof StagesType] : defaultStageNames[index]);
 
     return (
@@ -98,7 +98,7 @@ const StageStepper: React.FC<StageStepperProps> = ({ stages }) => {
             <Stepper activeStep={activeStep} connector={<QontoConnector />} alternativeLabel>
                 {stageLabels.map((label, index) => {
                     const status = Object.values(stages)[index];
-                    const isFailed = status === "DELETED" || status === "RETURNED";
+                    const isFailed = status === "MAILED" || status === "RETURNED";
                     const labelProps: { optional?: React.ReactNode; error?: boolean; } = {};
                     if (isStepFailed(index)) {
                         labelProps.optional = (
@@ -108,7 +108,7 @@ const StageStepper: React.FC<StageStepperProps> = ({ stages }) => {
                     }
 
                     return (
-                        <Step sx={{ margin: "0 10px", width: "50px" }} key={index} active={stages[`stage${index + 1}` as keyof StagesType] !== "null"}>
+                        <Step sx={{ margin: "0 5px", width: "30px" }} key={index} active={stages[`stage${index + 1}` as keyof StagesType] !== "null"}>
                             <StepLabel StepIconComponent={(props) => <CustomStepIcon {...props} status={status} />} {...labelProps}>
                                 <Typography variant="body2" sx={{ fontSize: '10px' }}>
                                     {label}
