@@ -46,7 +46,6 @@ import { useRolePermissions } from "../../../hooks/useRolePermission";
 // };
 
 export const MyCellRenderer = ({ row }: { row: any }) => {
-
     const dispatch = useDispatch<AppDispatch>();
     const { refetch: getInvoiceList } = useGetInvoiceListQuery();
     const [isModalOpen, setIsModalOpen] = useState<boolean | undefined>(false);
@@ -58,18 +57,23 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
     const { canEditInvoices, canViewInvoices, canDeleteInvoices } = useRolePermissions();
 
     useEffect(() => {
-        getInvoiceList()
+        getInvoiceList();
     }, [invoiceDeleteSuccess]);
 
     useSnackbarNotifications({
         error: invoiceDeleteError,
-        errorMessage: 'Error adding invoice',
+        errorMessage: 'Error deleting invoice',
         success: invoiceDeleteSuccess,
         successMessage: 'Invoice deleted successfully',
         errorObject: invoiceDeleteErrorObject,
     });
 
     const handleEditClick = async () => {
+        if (row.invoiceStatus === "PENDING") {
+            alert("Editing is not allowed when the invoice status is PENDING.");
+            return;
+        }
+
         try {
             const response = await getInvoice(row.id);
             if ('data' in response) {
@@ -82,7 +86,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
         } catch (error) {
             console.error('Error handling edit click:', error);
         }
-    }
+    };
 
     const handleDetails = async () => {
         try {
@@ -104,9 +108,10 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
     const handleDeleteClick = () => {
         const confirmed = window.confirm("Are you sure you want to delete this invoice?");
         if (confirmed) {
-            deleteInvoice(row.id)
+            deleteInvoice(row.id);
         }
     };
+
     const handleOpenModal = () => {
         setPreview(true);
     };
@@ -117,7 +122,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
                 <ActionButtons
                     canView={canViewInvoices}
                     canDelete={canDeleteInvoices}
-                    canEdit={canEditInvoices}
+                    canEdit={canEditInvoices && row.invoiceStatus !== "PENDING"}
                     onDeleteClick={handleDeleteClick}
                     onEditClick={handleEditClick}
                     onViewClick={handleDetails}
@@ -130,7 +135,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
                         </>
                     }
                     handleClose={() => {
-                        setIsModalOpen(false)
+                        setIsModalOpen(false);
                     }}
                 />
             </Stack>
