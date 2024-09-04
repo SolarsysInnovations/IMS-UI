@@ -142,7 +142,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         }),
         sendEmailNotification: builder.mutation<any, Partial<FormData>>({
             query: (data) => ({
-                url: `${API_URLS.sendEmail}`, //API_URLS.sendEmail,
+                url: `${API_URLS.sendMail}`, //API_URLS.sendEmail,
                 method: "POST",
                 body: data
             }),

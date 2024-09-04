@@ -160,6 +160,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
             setIsOpenDialogBox(true);
             return;
         };
+        
         if (invoiceData.invoiceStatus !== option) {
             try {
                 let updatedInvoiceData = { ...invoiceData };
@@ -171,6 +172,9 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
                         break;
                     case InvoiceOptions.RETURN:
                         newStatus = InvoiceStatus.RETURNED;
+                        break;
+                        case InvoiceOptions.MAILED:
+                        newStatus = InvoiceStatus.MAILED;
                         break;
                     case InvoiceOptions.PAID:
                         newStatus = InvoiceStatus.PAID;
@@ -193,10 +197,24 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
             }
         }
     };
-    const handleDialogBoxClose = () => {
-        setIsOpenDialogBox(false)
-    };
-
+    useEffect(() => {
+        if (invoiceUpdateSuccess) {
+          setIsModalOpen?.(false);
+        }
+        refetch();
+      }, [invoiceUpdateSuccess, refetch, setIsModalOpen]);
+    
+      const handleDialogBoxClose = () => {
+        setIsOpenDialogBox(false);
+      };
+     const handleEmailSuccess = async () => {
+        handleDialogBoxClose();
+    
+        if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
+          const updatedInvoiceData = { ...invoiceData, invoiceStatus: InvoiceStatus.MAILED };
+          await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
+        }
+      };
     return (
         <>
             <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column", padding: "0px 30px 30px 30px" }}>
@@ -244,14 +262,12 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
 
             {/* INVOICE EMAIL DIALOG BOX */}
             <DialogBoxUi
-                open={isOpenDialogBox}
-                content={
-                    <>
-                        <SendEmail/>
-                    </>
-                }
-                handleClose={handleDialogBoxClose}
-            />
+          open={isOpenDialogBox}
+          content={
+            <SendEmail onSuccess={handleEmailSuccess} /> // Pass the onSuccess prop
+          }
+          handleClose={handleDialogBoxClose}
+        />
         </>
     );
 };

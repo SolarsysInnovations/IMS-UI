@@ -50,7 +50,7 @@ export enum ApiEndpoint {
     PAYMENT_TERMS_UPDATE = "paymentTermsUpdate",
     REPORT_LIST = "reportList",
     //send Email
-    SEND_EMAIL = "sendEmail",
+    SEND_EMAIL = "sendMail",
     //settings
     SETTINGS_GET = "settingsGet",
     SETTINGS_CREATE = "settingsCreate",
@@ -133,7 +133,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.PAYMENT_TERMS_DELETE]: '/paymentTerms/delete',
     [ApiEndpoint.PAYMENT_TERMS_GET]: '/paymentTerms/get',
     [ApiEndpoint.PAYMENT_TERMS_UPDATE]: '/paymentTerms/update',
-    [ApiEndpoint.SEND_EMAIL]: "/sendEmail",
+    [ApiEndpoint.SEND_EMAIL]: "/sendMail",
     //settings endpoints
     [ApiEndpoint.SETTINGS_CREATE]: `/settings/create`,
     [ApiEndpoint.SETTINGS_LIST]: `/settings/list`,
