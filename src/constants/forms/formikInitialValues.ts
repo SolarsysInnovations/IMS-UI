@@ -12,6 +12,7 @@ export const loginInitialValue: LoginProps = {
 export const superAdminCompanyUsersInitialValues: SuperAdminUsersInitialValueProps = {
     // * ---------- user registration ----------
     id: "",
+    file: null,
     userName: "",
     userEmail: "",
     password: "",
@@ -205,6 +206,7 @@ export const SendEmailInitialValue: SendEmailInitialValueProps = {
     file: null,
     cc: "",
     subject: "",
+    body:"",
 }
 
 export const RoleInitialValue: RoleInitialValueProps = {

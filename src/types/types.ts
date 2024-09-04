@@ -184,6 +184,7 @@ export interface serviceCreationProps {
 //----------settings--------
 export interface SuperAdminUsersInitialValueProps {
     id?: string;
+    file: any,
     userName: string;
     userEmail: string;
     password: string;
@@ -226,6 +227,7 @@ export interface linkCreationProps {
 // ---------user login --------------------
 
 export interface SendEmailInitialValueProps {
+    body: string;
     fromemail: string;
     recipientEmail: string;
     //description: string;
