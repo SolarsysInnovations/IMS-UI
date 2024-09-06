@@ -33,7 +33,7 @@ export const customerFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'customerPhone', required: true, disabled: false, label: 'Customer Phone', type: 'PhoneNumber', gridSize: 3,
+                name: 'customerPhone', required: true, disabled: false, label: 'Customer Phone', type: 'number', gridSize: 3,
                 width: ''
             },
         ]
@@ -100,7 +100,7 @@ export const customerFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'contactPhone', required: true, disabled: false, label: 'Contact Phone', type: 'PhoneNumber', gridSize: 3,
+                name: 'contactPhone', required: true, disabled: false, label: 'Contact Phone', type: 'number', gridSize: 3,
                 width: ''
             },
         ]
@@ -204,17 +204,17 @@ export const CompanyFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'PhoneNumber', gridSize: 5, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('User Mobile is required'),
+                name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'number', gridSize: 5, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('User Mobile is required'),
                 width: ''
             },
             {
                 name: 'description', required: true, disabled: false, label: 'Description', type: 'textArea', gridSize: 5, validation: Yup.string().required('Description is required'),
                 width: ''
             },
-            {
-                name: 'Upload', required: true, disabled: false, label: 'Profile', type: 'upload', gridSize: 5, validation: Yup.string().required('Image is required'),
-                width: ''
-            },
+            // {
+            //     name: 'Upload', required: true, disabled: false, label: 'Profile', type: 'upload', gridSize: 5, validation: Yup.string().required('Image is required'),
+            //     width: ''
+            // },
         ]
     },
     {
@@ -232,7 +232,7 @@ export const CompanyFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'PhoneNumber', gridSize: 5,
+                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5,
                 width: ''
             },
             {
@@ -312,7 +312,7 @@ export const CompanyEditFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'PhoneNumber', gridSize: 5,
+                name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'number', gridSize: 5,
                 width: ''
             },
             {
@@ -336,7 +336,7 @@ export const CompanyEditFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'PhoneNumber', gridSize: 5,
+                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5,
                 width: ''
             },
             {
@@ -557,7 +557,7 @@ export const RolesFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'userMobile', required: true, disabled: false, label: 'Phone Number', type: 'PhoneNumber', gridSize: 6, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('userMobile is required'),
+                name: 'userMobile', required: true, disabled: false, label: 'Phone Number', type: 'number', gridSize: 6, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('userMobile is required'),
                 width: ''
             },
             {
@@ -591,7 +591,7 @@ export const RolesEditFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'userMobile', required: true, disabled: false, label: 'Phone Number', type: 'PhoneNumber', gridSize: 6, validation: Yup.string().required('number is required'),
+                name: 'userMobile', required: true, disabled: false, label: 'Phone Number', type: 'number', gridSize: 6, validation: Yup.string().required('number is required'),
                 width: ''
             },
             {
