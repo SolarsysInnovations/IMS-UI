@@ -1,6 +1,7 @@
 import { number } from "yup";
 import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps, AdminCompanyUsersInitialValueProps, SuperAdminUsersInitialValueProps, } from "../../types/types";
 import { format } from "path";
+import { companyDetailsValidationSchema } from './validations/validationSchema';
 
 export const loginInitialValue: LoginProps = {
     userEmail: "",
@@ -223,4 +224,8 @@ export const ChangePasswordInitialValue: ChangePasswordInitialValueProps = {
     newPassword: "",
     confirmPassword: "",
     userName: "",
+}
+export const companyLogoInitialProps = {
+    companyId: "",
+    file: null,
 }

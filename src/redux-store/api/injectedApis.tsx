@@ -338,7 +338,13 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
                         body: company,
                     }),
                 }),
-
+                addCompanyLogo: builder.mutation<any, Partial<any>>({
+                    query: ({logo}) => ({
+                        url: API_URLS.companyLogo,
+                        method: 'POST',
+                        body: logo,
+                    }),
+                }),
                // ! ----------- companyDetails end --------------
 
                // ! ----------- settingsPortal start --------------
@@ -419,3 +425,4 @@ export const { useGetCompanySettingQuery, useAddCompanySettingMutation, useGetSi
 
 //portal Link export
 export const { useGetPortalLinkQuery, useGetSinglePortalLinkMutation, useAddPortalLinkMutation, useUpdatePortalLinkMutation, useDeletePortalLinkMutation } = apiEndPointLists;
+export const { useAddCompanyLogoMutation } = apiEndPointLists;
