@@ -64,7 +64,7 @@ export enum ApiEndpoint {
     LINK_DELETE = "linkDelete",
     //Roles
     ROLES_GET = "rolesGet",
-    ROLES_GETUSER = "rolesGetUser",
+    ROLES_GET_USER = "rolesGetUser",
     ROLES_LIST = "rolesList",
     ROLES_CREATE = "rolesCreate",
     ROLES_UPDATE = "rolesUpdate",
@@ -147,14 +147,14 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.LINK_DELETE]: `/portal/delete`,
 
     //Roles
-    [ApiEndpoint.ROLES_GET]: `/role/get/`,
-    [ApiEndpoint.ROLES_GETUSER]: `/role/findByEmail/`,
+    [ApiEndpoint.ROLES_GET]: `/user/get/`,
+    [ApiEndpoint.ROLES_GET_USER]: `/user/findByEmail/`,
     [ApiEndpoint.ROLES_LIST]: `/user/list`,
     [ApiEndpoint.ROLES_CREATE]: `/role/register`,
     [ApiEndpoint.ROLES_UPDATE]: `/role/update`,
     [ApiEndpoint.ROLES_DELETE]: `/role/delete`,
     //Changepassword
-    [ApiEndpoint.CHANGE_PASSWORD]: `/changePassword/`,
+    [ApiEndpoint.CHANGE_PASSWORD]: `/user/changePassword`,
     // company
     [ApiEndpoint.COMPANY_GET]: `/company/get`,
     [ApiEndpoint.COMPANY_CREATE]: `/user/register`,

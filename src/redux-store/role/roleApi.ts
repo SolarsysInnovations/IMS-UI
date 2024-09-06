@@ -68,8 +68,8 @@ export const roleApi = apiSlice.injectEndpoints({
             }),
         }),
         changePassword: builder.mutation<any, { userName: string; values: Partial<any> }>({
-            query: ({ userName, values }) => ({
-                url: API_URLS.changePassword + `${userName}`,
+            query: ({ values }) => ({
+                url: API_URLS.changePassword,
                 method: 'POST',
                 body: values,
             }),

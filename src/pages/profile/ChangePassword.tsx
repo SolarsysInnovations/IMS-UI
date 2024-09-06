@@ -38,25 +38,19 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
         errorObject: changePasswordErrorObject,
     });
 
-    useEffect(() => {
-        if (userEmail) {
-            rolesGetUser(userEmail).then(response => {
-                if (response && response.data) {
-                    let pwd = (response[`data`] && response[`data`][`password`]) ? response[`data`][`password`] : '';
-                    console.log("pwd", pwd)
-                }
-            })
-        }
-    }, [userEmail, rolesGetUser]);
+    // useEffect(() => {
+    //     if (userEmail) {
+    //         rolesGetUser(userEmail).then(response => {
+    //             if (response && response.data) {
+    //                 let pwd = (response[`data`] && response[`data`][`password`]) ? response[`data`][`password`] : '';
+    //                 console.log("pwd", pwd)
+    //             }
+    //         })
+    //     }
+    // }, [userEmail, rolesGetUser]);
 
     const handleSubmit = async (values: ChangePasswordInitialValueProps, { setSubmitting, resetForm, setFieldError }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void; setFieldError: (field: string, message: string) => void }) => {
         try {
-            if (values.currentPassword !== userPassword) {
-                console.log("currentpwd", values)
-                setFieldError('currentPassword', 'Current password is incorrect');
-                setSubmitting(false);
-                return;
-            }
             await changePassword({
                 userName: userName ? userName : '',
                 values: values
