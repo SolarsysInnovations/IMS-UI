@@ -47,6 +47,8 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
         successMessage: 'Company updated successfully',
     });
 
+    console.log("companyEditInitialValues", companyEditInitialValues)
+
     useEffect(() => {
         if (companyUpdateSuccess) {
             navigate(-1)
@@ -84,7 +86,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                     },
                 };
 
-                await updateCompany({ id: companyEditInitialValues.companyId, data: transformedData });
+                await updateCompany({ id: companyEditInitialValues.id, data: transformedData });
                 dispatch(clearData());
 
             } else {
