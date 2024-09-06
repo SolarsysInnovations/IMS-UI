@@ -189,7 +189,7 @@ const InvoiceDocument = ({ invoiceData }: any) => {
                     <Text style={styles.text}>Terms & Conditions :</Text>
                 </View>
                 <View style={{ marginTop: "0px" }}>
-                    <Text style={styles.text}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, doloribus!</Text>
+                    <Text style={styles.text}>Payment is to be made upon receipt.</Text>
                 </View>
             </Page>
         </Document>

@@ -264,7 +264,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
             <DialogBoxUi
           open={isOpenDialogBox}
           content={
-            <SendEmail onSuccess={handleEmailSuccess} /> // Pass the onSuccess prop
+            <SendEmail onSuccess={handleEmailSuccess} />  
           }
           handleClose={handleDialogBoxClose}
         />
