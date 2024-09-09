@@ -11,6 +11,7 @@ import DialogBoxUi from "../../../components/ui/DialogBox";
 import SettingsCompanyScreen from "./SettingsCompanyScreen";
 import { selectUserDetails } from "../../../redux-store/auth/authSlice";
 import { selectUserRole } from "../../../redux-store/auth/authSlice";
+import CompanyLogo from "./company-logo";
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -51,10 +52,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
         content={<SettingsCompanyScreen />}
         handleClose={() => setIsOpenDialogBox(false)}
       />
-      <TableHeader buttons={button} />
+      <TableHeader buttons={button} />        <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>  <CompanyLogo/></Grid>
+
       {companyInfo && (
         <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>
-          <Grid sx={{ marginTop: "0px" }} item xs={7}>
+        
+         <Grid sx={{ marginTop: "0px" }} item xs={7}>
             <Box gap={3}>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
@@ -135,7 +138,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
               </div>
             </Box>
           </Grid>
-        </Grid>
+         </Grid>
       )}
     </>
   );
