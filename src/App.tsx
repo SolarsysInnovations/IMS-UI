@@ -8,6 +8,7 @@ import { selectCurrentToken } from "./redux-store/auth/authSlice";
 import { sidebarTwo } from "./constants/data";
 import Login from "./pages/Login-screen";
 import Unauthorized from "./unauthorized";
+import ForgotPassword from "./pages/ForgetPassword-screen";
 
 function App() {
   const token = useSelector(selectCurrentToken);
@@ -40,6 +41,7 @@ function App() {
           <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<Navigate to={token ? "/dashboard" : "/login"} />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

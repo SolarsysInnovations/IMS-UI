@@ -3,10 +3,14 @@ import AdminDashboardInvoiceOverviewAmount from "../Admin-dashboard/InvoiceAmoun
 import AdminDashboardInvoicePieChart from "../Admin-dashboard/InvoiceStatusChart";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux-store/auth/authSlice";
+import GridDataUi from '../../../components/GridTable/GridData';
 
 
 //import MuiPhoneNumber from "mui-phone-number";
 import { ChangeEvent } from "react";
+import { GridColDef } from "@mui/x-data-grid";
+import { MyCellRenderer } from "../../../constants/grid-table-data/invoice/invoice-table-data";
+import { useGetInvoiceListQuery } from "../../../redux-store/api/injectedApis";
 
 // interface Country {
 //   name: string;
@@ -60,7 +64,52 @@ import { ChangeEvent } from "react";
 
 
 const AdminDashboardScreen = ({ adminData }: any) => {
-
+  const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceListQuery();
+  const columns: GridColDef[] = [
+    // {
+    //     field: 'Action',
+    //     headerName: 'Action',
+    //     width: 140,
+    //     editable: false,
+    //     renderCell: (params: any) => <MyCellRenderer row={params.row} />,
+    // },
+    {
+        field: 'invoiceType',
+        headerName: 'Invoice Type',
+        width: 140,
+        editable: true,
+    },
+    {
+        field: 'invoiceNumber',
+        headerName: 'Invoice Number',
+        width: 150,
+        editable: true,
+    },
+    {
+        field: 'customerName',
+        headerName: 'Customer Name',
+        width: 150,
+        editable: false,
+    },
+    // {
+    //     field: 'dueDate',
+    //     headerName: 'Due Date',
+    //     width: 140,
+    //     editable: false,
+    // },
+    {
+        field: 'invoiceStatus',
+        headerName: 'Invoice Status',
+        width: 150,
+        editable: false,
+    },
+    {
+      field: 'createdBy',
+      headerName: 'Created by',
+      width: 150,
+      editable: false,
+  },
+  ];
   // Check if adminData is undefined and provide default values if necessary
   if (!adminData) {
     return <div>No data available</div>;
@@ -73,17 +122,29 @@ const AdminDashboardScreen = ({ adminData }: any) => {
     <>
       {/* <MyComponent /> */}
       <Grid container spacing={2}>
-        {invoiceOverviewAmountData && (
-          <Grid item xs={8}>
-            <AdminDashboardInvoiceOverviewAmount invoiceOverviewAmountData={invoiceOverviewAmountData} />
-          </Grid>
-        )}
-        {invoicePieChartData && (
-          <Grid item xs={4}>
-            <AdminDashboardInvoicePieChart invoicePieChartData={invoicePieChartData} />
-          </Grid>
-        )}
+      {invoiceOverviewAmountData && (
+        <Grid item xs={8}>
+          <AdminDashboardInvoiceOverviewAmount invoiceOverviewAmountData={invoiceOverviewAmountData} />
+        </Grid>
+      )}
+      {invoicePieChartData && (
+        <Grid item xs={4}>
+          <AdminDashboardInvoicePieChart invoicePieChartData={invoicePieChartData} />
+        </Grid>
+      )}
+    </Grid>
+    
+    {/* Add spacing between the grid and chart */}
+    <Grid container spacing={2} style={{ marginTop: '16px' }}>
+      <Grid item xs={12}>
+        <GridDataUi
+          showToolbar={true}
+          columns={columns || []}
+          tableData={invoiceList || []}
+          checkboxSelection={false}
+        />
       </Grid>
+    </Grid>
     </>
   );
 };
