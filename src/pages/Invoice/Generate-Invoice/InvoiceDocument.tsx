@@ -1,5 +1,6 @@
 import React from "react";
 import { Document, Page, Text, View, StyleSheet, Image, pdf } from "@react-pdf/renderer";
+import { useGetCompanyLogoQuery } from "../../../redux-store/api/injectedApis";
 
 const randomImageUrl = "https://picsum.photos/200";
 
@@ -59,8 +60,12 @@ const styles = StyleSheet.create({
 });
 
 // Invoice Document component for PDF
-const InvoiceDocument = ({ invoiceData }: any) => {
-    console.log("invoiceData :", invoiceData);
+const InvoiceDocument = ({ invoiceData, company }: any) => {
+   // const   { data: companyData, refetch } = useGetCompanyLogoQuery();
+
+    console.log(company,"invoiceData :", invoiceData);
+    //console.log(companyData, "company");
+    
     // if (invoiceData) {
     //     console.log("invoicesddsfds Data", invoiceData);
 
@@ -77,6 +82,7 @@ const InvoiceDocument = ({ invoiceData }: any) => {
                 <View style={{ flexDirection: "row", alignItems: "center", gap: "30px" }}>
                     <View>
                         <Image style={styles.image} src={randomImageUrl} />
+                        {/* <p>{companyData}</p> */}
                     </View>
                     <View>
                         <Text style={styles.header}>{invoiceData?.companyDetails?.companyName}</Text>
