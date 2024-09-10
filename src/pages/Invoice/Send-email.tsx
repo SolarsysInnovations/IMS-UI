@@ -53,11 +53,13 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
 
       await sendEmail(formData);
 
-      if (sendEmailSuccess) {
-        onSuccess();  
+     // if (sendEmailSuccess) {
+         onSuccess();  
         resetForm();
         setUploadedFiles([]);
-      }
+
+        
+   //   }
     } catch (error) {
       console.error("An error occurred during send email:", error);
       alert("Failed to send email. Please try again later.");
