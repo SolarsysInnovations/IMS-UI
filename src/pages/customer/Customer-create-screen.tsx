@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';  // Import useNavigate
 import { customerFields } from '../../constants/form-data/form-data-json';
 import { customerInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
@@ -16,11 +17,10 @@ interface CustomerValueProps {
 };
 
 const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
-
+    const navigate = useNavigate();  // Initialize useNavigate
     const [addCustomer, { isLoading: customerAddLoading, isSuccess: customerAddSuccess, isError: customerAddError, error: customerAddErrorObject }] = useCreateCustomerMutation();
     const [updateCustomer, { isLoading: customerUpdateLoading, isSuccess: customerUpdateSuccess, isError: customerUpdateError, error: customerUpdateErrorObject }] = useUpdateCustomerMutation();
-    const { data: customers, error, isLoading, refetch } = useGetCustomersListQuery();
-
+    const { refetch } = useGetCustomersListQuery();
     const dispatch = useDispatch<AppDispatch>();
 
     const [data, setData] = useState<any>();
@@ -42,23 +42,25 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
     });
 
     useEffect(() => {
-        refetch();
-    }, [customerAddSuccess, customerUpdateSuccess, refetch]);
+        if (customerAddSuccess || customerUpdateSuccess) {
+            refetch();
+            navigate(-1);  // Navigate back to the previous page
+        }
+    }, [customerAddSuccess, customerUpdateSuccess, refetch, navigate]);
 
     const initialValues = customerEditInitialValues || customerInitialValues;
 
     const onSubmit = useMemo(() => async (values: DyCreateCustomerProps, actions: any) => {
         try {
             if (customerEditInitialValues) {
-                const id: number = values?.id
-                await updateCustomer({ id: id, data: values, });
+                const id: number = values?.id;
+                await updateCustomer({ id: id, data: values });
                 dispatch(clearCustomerData());
-                actions.resetForm();
             } else {
                 await addCustomer(values);
                 dispatch(clearCustomerData());
-                actions.resetForm();
-            };
+            }
+            actions.resetForm();
         } catch (error) {
             console.error("An error occurred during form submission:", error);
         } finally {
@@ -66,14 +68,10 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
         }
     }, [addCustomer, updateCustomer, customerEditInitialValues, dispatch]);
 
-    // const validationSchema = Yup.object().shape({
-    //     myField: Yup.object().nullable().required('This field is required'),
-    //   });
     return (
         <>
             <DynamicFormCreate
                 setData={setData}
-                // updateFormValue={updateFormValue}
                 showTable={true}
                 fields={customerFields}
                 initialValues={initialValues}

@@ -70,6 +70,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const [invoiceValues, setInvoiceValues] = useState(invoiceValue || invoiceCreateInitialValue);
     const { data: gstTypesData = [] } = useGetGstTypeListQuery();
     const { data: tdsTaxData = [] } = useGetTdsTaxListQuery();
+    const [redirect, setRedirect] = useState(false);
     // * ----------- to generate the dropdown options -------------
     const customerName = generateOptions(customers, 'customerName', 'customerName');
     const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
@@ -85,6 +86,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         SERVICES: 'services',
         INVOICE: 'invoice'
     }
+   
 
     useEffect(() => {
         customerRefetch()
@@ -110,6 +112,17 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         errorObject: invoiceUpdateErrorObject,
     });
 
+    useEffect(() => {
+      if (addInvoiceSuccess || invoiceUpdatedSuccess) {
+          setRedirect(true);
+      }
+  }, [addInvoiceSuccess, invoiceUpdatedSuccess]);
+  
+  useEffect(() => {
+    if (redirect) {
+      navigate(-1); // Redirect to the previous page
+    }
+  }, [redirect, navigate]);
     React.useEffect(() => {
 
         if (invoiceValues) {
@@ -305,16 +318,21 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <Box>
-                                        <RadioUi value={values.invoiceType} required={true} disabled={false} onChange={(newValue: any) => {
-                                            if (newValue) {
-                                                setFieldValue('invoiceType', newValue.target.value);
-                                            } else {
-                                                setFieldValue('invoiceType', "")
-                                            }
-                                        }} groupName='type' options={invoiceType}
-                                            // label='Invoice type'
-                                            errorMsg={touched.invoiceType && errors.invoiceType}
-                                        />
+                                         <RadioUi 
+                    value={values.invoiceType} 
+                    required={true} 
+                    disabled={false} 
+                    onChange={(newValue: any) => {
+                        if (newValue) {
+                            setFieldValue('invoiceType', newValue.target.value);
+                        } else {
+                            setFieldValue('invoiceType', "")
+                        }
+                    }} 
+                    groupName='type' 
+                    options={invoiceType}
+                    errorMsg={touched.invoiceType && errors.invoiceType}
+                />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={3}>
@@ -485,6 +503,22 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         />
                                     </Box>
                                 </Grid>
+                                {values.invoiceType === "Retainer" && (
+            <Grid item xs={3}>
+                <Box>
+                    <TextFieldUi
+                        required={true}
+                        fullWidth={false}
+                        label='Retainer Fee'
+                        name='retainerFee'
+                        type="text"
+                        value={values.retainerFee}
+                        onChange={handleChange}
+                        error={touched.retainerFee && Boolean(errors.retainerFee)}
+                        helperText={touched.retainerFee && errors.retainerFee}
+                    />
+                </Box>
+            </Grid>)}
                                 <Grid item xs={12}>
                                     <TableContainer component={Paper}>
                                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
