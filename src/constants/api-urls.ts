@@ -163,7 +163,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.COMPANY_UPDATE]: `/company/update`,
     [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
     [ApiEndpoint.COMPANY_LIST]: `/company/list`,
-    [ApiEndpoint.COMPANY_LOGO]: `/image/upload`,
+    [ApiEndpoint.COMPANY_LOGO]: `/settings/upload`,
 
     //dashboard endpoints
     [ApiEndpoint.DASHBOARD_GET]: `/dashboard`,

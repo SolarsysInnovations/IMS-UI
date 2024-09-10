@@ -41,7 +41,7 @@ const CompanyLogo: React.FC = () => {
       const formData = new FormData();
 
       uploadedFiles.forEach((file) => {
-        formData.append("files", file);
+        formData.append("companyLogo", file);
       });
       
       // Simulate an API call here

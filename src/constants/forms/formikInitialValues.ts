@@ -226,6 +226,5 @@ export const ChangePasswordInitialValue: ChangePasswordInitialValueProps = {
     userName: "",
 }
 export const companyLogoInitialProps = {
-    companyId: "",
-    file: null,
-}
+    companyLogo: null,
+ }

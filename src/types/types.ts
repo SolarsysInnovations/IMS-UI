@@ -260,7 +260,6 @@ export interface InvoiceMailReasonProps {
     reason: string;
 }
 export interface CompanyLogoProps {
-    companyId: string;
-    file: any;
+    companyLogo: any;
     
 }
