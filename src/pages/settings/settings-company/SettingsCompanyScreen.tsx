@@ -9,14 +9,25 @@ const SettingsCompanyScreen = () => {
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
-        setKey((prev) => prev + 1)
+        setKey((prev) => prev + 1);
     }, [companyValue]);
 
+    const handleCloseDialog = () => {
+      
+    };
+
     const mode = companyValue ? 'edit' : 'create';
+
     return (
         <>
-            <SettingsCompanyForm companyValue={companyValue} key={key} mode={mode} />
+            <SettingsCompanyForm
+                companyValue={companyValue}
+                key={key}
+                mode={mode}
+                handleCloseDialog={handleCloseDialog} // Pass the handleCloseDialog function
+            />
         </>
     );
 };
+
 export default SettingsCompanyScreen;
