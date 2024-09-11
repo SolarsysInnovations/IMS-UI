@@ -315,7 +315,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
 
                 getCompanySetting: builder.query<any[], void>({
                     query: () => ({
-                        url: API_URLS.settingsGet,
+                        url: API_URLS.settingsList,
                         method: 'POST',
         
                     }),

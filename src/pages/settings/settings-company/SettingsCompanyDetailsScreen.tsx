@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useGetCompanySettingQuery, useGetSingleCompanySettingMutation } from "../../../redux-store/api/injectedApis";
+import { useGetSingleCompanySettingMutation } from "../../../redux-store/api/injectedApis";
 import { Box, Grid } from "@mui/material";
 import TableHeader from "../../../components/layouts/TableHeader";
 import { Edit } from "@mui/icons-material";
@@ -8,24 +8,20 @@ import { AppDispatch } from "../../../redux-store/store";
 import usePathname from "../../../hooks/usePathname";
 import { setData } from "../../../redux-store/global/globalState";
 import DialogBoxUi from "../../../components/ui/DialogBox";
-import SettingsCompanyScreen from "./SettingsCompanyScreen";
-import { selectUserDetails } from "../../../redux-store/auth/authSlice";
-import { selectUserRole } from "../../../redux-store/auth/authSlice";
+import SettingsCompanyForm from "./SettingsCompanyForm";
+import { selectUserDetails, selectUserRole } from "../../../redux-store/auth/authSlice";
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
   const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetSingleCompanySettingMutation();
 
-  // Directly use the user details from the Redux store
   const companyInfo = useSelector(selectUserDetails);
   console.log("companyInfo", companyInfo);
 
   const [openModal, setOpenModal] = useState(false);
-  const [companyDetails, setCompanyDetails] = useState<any>(null);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
   const userRole = useSelector(selectUserRole);
-
 
   const handleEditClick = async () => {
     try {
@@ -43,13 +39,18 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
     }
   };
 
+  const handleCloseDialog = () => {
+    setIsOpenDialogBox(false); // Close the dialog box
+  };
+
   const button = userRole !== "APPROVER" && userRole !== "ENDUSER" ? [{ label: "Edit", icon: Edit, onClick: () => handleEditClick() }] : [];
+  
   return (
     <>
       <DialogBoxUi
         open={opendialogBox}
-        content={<SettingsCompanyScreen />}
-        handleClose={() => setIsOpenDialogBox(false)}
+        content={<SettingsCompanyForm companyValue={companyInfo?.companyDetails} mode="edit" handleCloseDialog={handleCloseDialog} />}
+        handleClose={handleCloseDialog}
       />
       <TableHeader buttons={button} />
       {companyInfo && (

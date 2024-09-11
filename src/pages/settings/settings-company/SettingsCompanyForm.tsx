@@ -15,7 +15,11 @@ import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification
 import { superAdminCompanyUsersInitialValues } from "../../../constants/forms/formikInitialValues";
 import { selectUserDetails } from "../../../redux-store/auth/authSlice";
 
-const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
+interface SettingsCompanyFormProps extends CompanyFormProps {
+  handleCloseDialog: () => void; // New prop for closing the dialog
+}
+
+const SettingsCompanyForm = ({ companyValue, mode, handleCloseDialog }: SettingsCompanyFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [openModal, setOpenModal] = useState(false);
 
@@ -43,7 +47,6 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
 
   const userDetailsFromStorage = useSelector(selectUserDetails);
 
-  // Parse userDetails if it exists
   const userDetails = typeof userDetailsFromStorage === 'string' ? JSON.parse(userDetailsFromStorage) : userDetailsFromStorage;
   console.log("userDetails", userDetails?.companyDetails);
 
@@ -66,17 +69,16 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
     successMessage: "Company updated successfully",
   });
 
-  // Memoize refetch function
   const memoizedRefetch = useCallback(() => {
     refetch();
   }, [refetch]);
 
   useEffect(() => {
     if (companyAddSuccess || companyUpdateSuccess) {
-      memoizedRefetch();
+      // Close the dialog when successful
+      handleCloseDialog();
     }
-  }, [companyAddSuccess, companyUpdateSuccess, memoizedRefetch]);
-
+  }, [companyAddSuccess, companyUpdateSuccess, handleCloseDialog]);
   const onSubmit = async (values: CompanyFormProps, actions: any) => {
     try {
       if (mode === "edit" && userDetails?.companyDetails) {
@@ -107,7 +109,7 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
         await addCompany(values);
       }
       actions.resetForm();
-      handleClose();
+      handleCloseDialog();
     } catch (error) {
       console.error("An error occurred during form submission:", error);
     }
@@ -115,10 +117,6 @@ const SettingsCompanyForm = ({ companyValue, mode }: CompanyFormProps) => {
 
   const updateFormValue = (setFieldValue: Function) => {
     // Update form values
-  };
-
-  const handleClose = () => {
-    setOpenModal(false);
   };
 
   return (
