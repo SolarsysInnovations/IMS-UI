@@ -16,7 +16,7 @@ import { superAdminCompanyUsersInitialValues } from "../../../constants/forms/fo
 import { selectUserDetails } from "../../../redux-store/auth/authSlice";
 
 interface SettingsCompanyFormProps extends CompanyFormProps {
-  handleCloseDialog: () => void; // New prop for closing the dialog
+  handleCloseDialog: () => void;
 }
 
 const SettingsCompanyForm = ({ companyValue, mode, handleCloseDialog }: SettingsCompanyFormProps) => {
@@ -46,7 +46,6 @@ const SettingsCompanyForm = ({ companyValue, mode, handleCloseDialog }: Settings
   const { data: settingsList, refetch } = useGetCompanySettingQuery();
 
   const userDetailsFromStorage = useSelector(selectUserDetails);
-
   const userDetails = typeof userDetailsFromStorage === 'string' ? JSON.parse(userDetailsFromStorage) : userDetailsFromStorage;
   console.log("userDetails", userDetails?.companyDetails);
 
@@ -69,16 +68,12 @@ const SettingsCompanyForm = ({ companyValue, mode, handleCloseDialog }: Settings
     successMessage: "Company updated successfully",
   });
 
-  const memoizedRefetch = useCallback(() => {
-    refetch();
-  }, [refetch]);
-
   useEffect(() => {
     if (companyAddSuccess || companyUpdateSuccess) {
-      // Close the dialog when successful
-      handleCloseDialog();
+      window.location.reload();
     }
-  }, [companyAddSuccess, companyUpdateSuccess, handleCloseDialog]);
+  }, [companyAddSuccess, companyUpdateSuccess]);
+
   const onSubmit = async (values: CompanyFormProps, actions: any) => {
     try {
       if (mode === "edit" && userDetails?.companyDetails) {
