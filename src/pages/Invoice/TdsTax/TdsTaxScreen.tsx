@@ -8,12 +8,21 @@ const TdsTaxScreen: React.FC = () => {
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
-        setKey((prev) => prev + 1)
-    }, [tdsTaxValue])
+        setKey((prev) => prev + 1);
+    }, [tdsTaxValue]);
+
+    const handleClose = () => {
+        // Implement the logic to close the dialog
+        console.log("Dialog closed");
+    };
 
     return (
         <>
-            <TdsTaxCreate key={key} tdsTaxValue={tdsTaxValue} />
+            <TdsTaxCreate
+                key={key}
+                tdsTaxValue={tdsTaxValue}
+                onClose={handleClose} // Pass the onClose function
+            />
             <TdsTaxList />
         </>
     );

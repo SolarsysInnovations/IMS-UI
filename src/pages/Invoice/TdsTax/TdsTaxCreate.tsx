@@ -11,8 +11,11 @@ import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification
 import { useCreateTdsTaxMutation, useGetTdsTaxListQuery, useUpdateTdsTaxMutation } from '../../../redux-store/api/injectedApis';
 import { clearTdsTaxData } from '../../../redux-store/slices/tdsSlice';
 
+interface TdsTaxCreateProps extends TdsTaxFormProps {
+    onClose: () => void;
+}
 
-const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
+const TdsTaxCreate = ({ tdsTaxValue, onClose }: TdsTaxCreateProps) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const [addTdsTax, { isLoading: tdsTaxAddLoading, isSuccess: tdsTaxAddSuccess, isError: tdsTaxAddError, error: tdsTaxAddErrorObject }] = useCreateTdsTaxMutation();
@@ -24,7 +27,7 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
     const initialValue = tdsTaxValue || tdsTaxInitialValue;
 
     useEffect(() => {
-        refetch()
+        refetch();
     }, [tdsTaxUpdateSuccess]);
 
     const onSubmit = useMemo(() => async (values: TdsTaxProps, actions: any) => {
@@ -36,14 +39,15 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
             }
             actions.resetForm();
             refetch();
-            dispatch(clearTdsTaxData())
+            dispatch(clearTdsTaxData());
+            onClose(); // Call onClose to close the dialog
 
         } catch (error) {
             console.error("An error occurred during form submission:", error);
         } finally {
             actions.setSubmitting(false);
-        };
-    }, [addTdsTax, updateTdsTax, tdsTaxValue, refetch, dispatch, tdsTaxAddSuccess]);
+        }
+    }, [addTdsTax, updateTdsTax, tdsTaxValue, refetch, dispatch, tdsTaxAddSuccess, onClose]);
 
     // * ------ adding tds tax -------------------------
     useSnackbarNotifications({
@@ -65,7 +69,6 @@ const TdsTaxCreate = ({ tdsTaxValue }: TdsTaxFormProps) => {
 
     return (
         <div>
-            {/* Use DynamicServiceCreate with the required props */}
             <DynamicFormCreate
                 headerName={tdsTaxValue ? 'Edit Tds Tax ' : 'Create Tds Tax'}
                 showTable={true}
