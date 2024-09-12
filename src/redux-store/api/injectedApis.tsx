@@ -346,8 +346,8 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
                     }),
                 }),
                 getCompanyLogo: builder.query<any[], void>({
-                     query: () => ({
-                        url: API_URLS.getLogo,
+                     query: (id) => ({
+                        url: `${API_URLS.companyLogo}/${id}`,
                         method: 'POST',
                     }),
                 }),
