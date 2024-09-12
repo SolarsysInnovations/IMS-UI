@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
 // Invoice Document component for PDF
 const InvoiceDocument = ({ invoiceData, company }: any) => {
    // const   { data: companyData, refetch } = useGetCompanyLogoQuery();
-let companys= company
-console.log(company,"URL", (companys));
+//let companys= company
+//console.log(company,"URL", (companys));
 
     console.log(company,"invoiceData :", invoiceData);
     //console.log(companyData, "company");
@@ -82,7 +82,7 @@ console.log(company,"URL", (companys));
             <Page size='A4' style={styles.page} >
                 <View style={{ flexDirection: "row", alignItems: "center", gap: "30px" }}>
                     <View>
-                        <img style={styles.image} src={companys} />
+                        <Image style={styles.image} src={company} />
                         {/* <p>{companyData}</p> */}
                        
                     </View>

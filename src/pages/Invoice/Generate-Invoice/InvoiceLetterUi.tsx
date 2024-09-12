@@ -3,7 +3,7 @@ import InvoiceDocument from "./InvoiceDocument";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import { useGetCompanyLogoQuery, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
+import { useGetLogoMutation, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
 import { selectUserDetails, selectUserRole } from "../../../redux-store/auth/authSlice";
 import { formatDate } from "../../../services/utils/dataFormatter";
 import StageStepper from "../../../components/ui/StepperUi";
@@ -34,7 +34,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
     const { refetch } = useGetInvoiceListQuery();
     const [resMessage, setResMessage] = useState('');
     const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
-    const   { data: companyData, } = useGetCompanyLogoQuery();
+    const    companyData  = useGetLogoMutation();
 
     useEffect(() => {
         if (invoiceDatas && customers && companyDetails && tdsTaxList) {
