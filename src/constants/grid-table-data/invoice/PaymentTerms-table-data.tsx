@@ -71,7 +71,7 @@ export const paymentTermsColumns: GridColDef[] = [
 
     {
         field: 'termName',
-        headerName: 'Tax Name',
+        headerName: 'Term Name',
         width: 150,
         editable: false,
     },

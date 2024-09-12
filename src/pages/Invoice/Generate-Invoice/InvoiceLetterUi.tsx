@@ -191,7 +191,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
                 };
 
                 let response = await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
-                setResMessage(response.data.message);
+                setResMessage(response?response.data.message:"Invoice Updated Successfully");
             } catch (error) {
                 console.log("Error updating invoice data", error);
             }

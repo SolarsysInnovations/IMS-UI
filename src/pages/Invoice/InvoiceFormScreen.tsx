@@ -107,11 +107,10 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     useSnackbarNotifications({
         success: invoiceUpdatedSuccess,
         error: invoiceUpdateError,
-        successMessage: resMessage,
+        successMessage: resMessage?resMessage:"Invoice Updated Successfully",
         errorMessage: 'Error updating invoice',
         errorObject: invoiceUpdateErrorObject,
     });
-
     useEffect(() => {
       if (addInvoiceSuccess || invoiceUpdatedSuccess) {
           setRedirect(true);
