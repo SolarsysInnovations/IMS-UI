@@ -63,7 +63,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                     userDetails: {
                         userName: values.userName,
                         userEmail: values.userEmail,
-                        // password: values.password,
+                        password: values.password,
                         userRole: values.userRole,
                         userMobile: values.userMobile,
                         description: values.description,

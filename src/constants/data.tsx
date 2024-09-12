@@ -6,7 +6,7 @@ import Reportsinvoice from "../pages/reports/Reports-invoice";
 import SettingScreen from "../pages/settings/settings";
 import CustomerList from "../pages/customer/Customer-list-screen";
 import InvoiceList from "../pages/Invoice/Invoice-list-screen";
-import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded, SettingsSuggestRounded } from "@mui/icons-material"
+import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded,Apartment , SettingsSuggestRounded } from "@mui/icons-material"
 import GroupIcon from '@mui/icons-material/Group';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
@@ -138,7 +138,7 @@ export const sidebarTwo = [
     title: "Company",
     path: "/company",
     element: <CompanyList />,
-    icon: Home,
+    icon: Apartment ,
     isParent: true,
     subItems: [
       {

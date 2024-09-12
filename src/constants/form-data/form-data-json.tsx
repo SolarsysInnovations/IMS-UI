@@ -308,6 +308,10 @@ export const CompanyEditFields: FieldProps[] = [
                 width: ''
             },
             {
+                name: 'password', required: true, disabled: false, label: 'Password', type: 'password', gridSize: 5, validation: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+                width: ''
+            },
+            {
                 name: 'userRole', required: true, disabled: false, label: 'userRole', type: 'select', gridSize: 5, options: [{ value: "ADMIN", label: "ADMIN" }],
                 width: ''
             },
