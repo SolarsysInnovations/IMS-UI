@@ -20,15 +20,12 @@ interface CompanyValueProps {
 const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) => {
 
     const [addCompany, { isLoading: companyAddLoading, isSuccess: companyAddSuccess, isError: companyAddError, error: companyAddErrorObject }] = useCreateUserMutation();
-
     const [updateCompany, { isLoading: companyUpdateLoading, isSuccess: companyUpdateSuccess, isError: companyUpdateError, error: companyUpdateErrorObject }] = useUpdateUserMutation();
-
     const { data: company, error, isLoading, refetch } = useGetUsersListQuery();
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const initialValues = companyEditInitialValues || superAdminCompanyUsersInitialValues;
-
     const fields = mode === 'create' ? CompanyFields : CompanyEditFields;
 
     useSnackbarNotifications({
@@ -47,11 +44,9 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
         successMessage: 'Company updated successfully',
     });
 
-    console.log("companyEditInitialValues", companyEditInitialValues)
-
     useEffect(() => {
         if (companyUpdateSuccess) {
-            navigate(-1)
+            navigate(-1);
         };
         refetch();
     }, [companyAddSuccess, companyUpdateSuccess, refetch]);
@@ -88,7 +83,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
 
                 await updateCompany({ id: companyEditInitialValues.id, data: transformedData });
                 dispatch(clearData());
-
             } else {
                 const transformedData = {
                     userDetails: {
@@ -120,9 +114,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                 dispatch(clearData());
             }
 
-            dispatch(clearData());
             actions.resetForm();
-
         } catch (error) {
             console.error("An error occurred during form submission:", error);
         } finally {
@@ -131,16 +123,15 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
     }, [updateCompany, dispatch, addCompany, companyEditInitialValues, mode]);
 
     return (
-        <>
+        <div style={{ maxHeight: '90vh', overflowY: 'auto', paddingRight: '1rem' }}>
             <DynamicFormCreate
                 showTable={true}
-                // fields={Object.keys(companyEditInitialValues).length === 0 ? CompanyFields : CompanyEditFields}
                 fields={fields}
                 initialValues={initialValues}
                 validationSchema={companyDetailsValidationSchema}
                 onSubmit={onSubmit}
             />
-        </>
+        </div>
     );
 };
 

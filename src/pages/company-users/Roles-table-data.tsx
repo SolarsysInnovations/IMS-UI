@@ -134,9 +134,9 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
                 canEdit={canEditUsers}
             />
 
-            <DialogBoxUi
+<DialogBoxUi
                 open={openModal}
-                content={<UserForm userEditValue={roleData} mode={roleData ? "edit" : "create"} />}
+                content={<UserForm userEditValue={roleData} mode={roleData ? "edit" : "create"} onClose={handleModalClose} />}
                 handleClose={handleModalClose}
             />
         </Stack>
