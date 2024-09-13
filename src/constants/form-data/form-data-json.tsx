@@ -21,11 +21,11 @@ export const customerFields: FieldProps[] = [
         label: 'Address Information',
         subFields: [
             {
-                name: 'customerName', required: false, disabled: false, label: 'Customer Name', type: 'text', gridSize: 3,
+                name: 'customerName', required: true, disabled: false, label: 'Customer Name', type: 'text', gridSize: 3,
                 width: ''
             },
             {
-                name: 'companyName', required: false, disabled: false, label: 'Company Name', type: 'text', gridSize: 3,
+                name: 'companyName', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 3,
                 width: ''
             },
             {
@@ -33,7 +33,7 @@ export const customerFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'customerPhone', required: true, disabled: false, label: 'Customer Phone', type: 'number', gridSize: 3,
+                name: 'customerPhone', required: false, disabled: false, label: 'Customer Phone', type: 'number', gridSize: 3,
                 width: ''
             },
         ]
@@ -64,15 +64,15 @@ export const customerFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             {
-                name: 'country', required: true, disabled: false, label: 'country/region', type: 'selectCountry', gridSize: 3,
+                name: 'country', required: false, disabled: false, label: 'country/region', type: 'selectCountry', gridSize: 3,
                 width: ''
             },
             {
-                name: 'state', required: true, disabled: false, label: 'State', type: 'selectState', gridSize: 3,
+                name: 'state', required: false, disabled: false, label: 'State', type: 'selectState', gridSize: 3,
                 width: ''
             },
             {
-                name: 'city', required: true, disabled: false, label: 'City', type: 'selectCity', gridSize: 3,
+                name: 'city', required: false, disabled: false, label: 'City', type: 'selectCity', gridSize: 3,
                 width: ''
             },
             {
@@ -80,7 +80,7 @@ export const customerFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'pinCode', required: true, disabled: false, label: 'PinCode', type: 'number', gridSize: 3,
+                name: 'pinCode', required: false, disabled: false, label: 'PinCode', type: 'number', gridSize: 3,
                 width: ''
             },
         ]
@@ -92,15 +92,15 @@ export const customerFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             {
-                name: 'contactName', required: true, disabled: false, label: 'Contact Name', type: 'text', gridSize: 3,
+                name: 'contactName', required: false, disabled: false, label: 'Contact Name', type: 'text', gridSize: 3,
                 width: ''
             },
             {
-                name: 'contactEmail', required: true, disabled: false, label: 'Contact Email', type: 'email', gridSize: 3,
+                name: 'contactEmail', required: false, disabled: false, label: 'Contact Email', type: 'email', gridSize: 3,
                 width: ''
             },
             {
-                name: 'contactPhone', required: true, disabled: false, label: 'Contact Phone', type: 'number', gridSize: 3,
+                name: 'contactPhone', required: false, disabled: false, label: 'Contact Phone', type: 'number', gridSize: 3,
                 width: ''
             },
         ]
@@ -119,7 +119,7 @@ export const serviceFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'serviceDescription', required: true, disabled: false, label: 'Service Description', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required'),
+                name: 'serviceDescription', required: false, disabled: false, label: 'Service Description', type: 'text', gridSize: 5, validation: Yup.string().required('Description is required'),
                 width: ''
             },
             {
@@ -204,11 +204,11 @@ export const CompanyFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'userMobile', required: true, disabled: false, label: 'User Mobile', type: 'number', gridSize: 5, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('User Mobile is required'),
+                name: 'userMobile', required: false, disabled: false, label: 'User Mobile', type: 'number', gridSize: 5, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('User Mobile is required'),
                 width: ''
             },
             {
-                name: 'description', required: true, disabled: false, label: 'Description', type: 'textArea', gridSize: 5, validation: Yup.string().required('Description is required'),
+                name: 'description', required: false, disabled: false, label: 'Description', type: 'textArea', gridSize: 5, validation: Yup.string().required('Description is required'),
                 width: ''
             },
             // {
@@ -232,19 +232,19 @@ export const CompanyFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5,
+                name: 'companyPhone', required: false, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5,
                 width: ''
             },
             {
-                name: 'companyCountry', required: true, disabled: false, label: 'Company Country', type: 'selectCountry', gridSize: 5,
+                name: 'companyCountry', required: false, disabled: false, label: 'Company Country', type: 'selectCountry', gridSize: 5,
                 width: ''
             },
             {
-                name: 'companyState', required: true, disabled: false, label: 'Company State', type: 'selectState', gridSize: 5,
+                name: 'companyState', required: false, disabled: false, label: 'Company State', type: 'selectState', gridSize: 5,
                 width: ''
             },
             {
-                name: 'companyCity', required: true, disabled: false, label: 'Company City', type: 'selectCity', gridSize: 5, validation: Yup.string().required('Company City is required'),
+                name: 'companyCity', required: false, disabled: false, label: 'Company City', type: 'selectCity', gridSize: 5, validation: Yup.string().required('Company City is required'),
                 width: ''
             },
             {
@@ -252,7 +252,7 @@ export const CompanyFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'companyWebsite', required: true, disabled: false, label: 'Company Website', type: 'text', gridSize: 5,
+                name: 'companyWebsite', required: false, disabled: false, label: 'Company Website', type: 'text', gridSize: 5,
                 width: ''
             },
             {
@@ -272,19 +272,19 @@ export const CompanyFields: FieldProps[] = [
         titleGridSize: 12,
         subFields: [
             {
-                name: 'customerLimit', required: true, disabled: false, label: 'Customer Limit', type: 'number', gridSize: 5,
+                name: 'customerLimit', required: false, disabled: false, label: 'Customer Limit', type: 'number', gridSize: 5,
                 width: ''
             },
             {
-                name: 'invoiceLimit', required: true, disabled: false, label: 'Invoice Limit', type: 'number', gridSize: 5,
+                name: 'invoiceLimit', required: false, disabled: false, label: 'Invoice Limit', type: 'number', gridSize: 5,
                 width: ''
             },
             {
-                name: 'userLimit', required: true, disabled: false, label: 'User Limit', type: 'number', gridSize: 5,
+                name: 'userLimit', required: false, disabled: false, label: 'User Limit', type: 'number', gridSize: 5,
                 width: ''
             },
             {
-                name: 'serviceLimit', required: true, disabled: false, label: 'Service Limit', type: 'number', gridSize: 5,
+                name: 'serviceLimit', required: false, disabled: false, label: 'Service Limit', type: 'number', gridSize: 5,
                 width: ''
             },
         ]
@@ -561,11 +561,11 @@ export const RolesFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'userMobile', required: true, disabled: false, label: 'Phone Number', type: 'number', gridSize: 6, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('userMobile is required'),
+                name: 'userMobile', required: false, disabled: false, label: 'Phone Number', type: 'number', gridSize: 6, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('userMobile is required'),
                 width: ''
             },
             {
-                name: 'description', required: true, disabled: false, label: 'Description', type: 'text', gridSize: 6, validation: Yup.string().required('description is required'),
+                name: 'description', required: false, disabled: false, label: 'Description', type: 'text', gridSize: 6, validation: Yup.string().required('description is required'),
                 width: ''
             },
         ]
