@@ -8,6 +8,7 @@ import { selectUserRole } from "../../redux-store/auth/authSlice";
 import { useSelector } from "react-redux";
 import RoleBasedTabs from "../../components/ui/RoleBasedTabs";
 import { Typography } from "@mui/material";
+import UploadScreen from "./upload/uploadScreen";
 
 const SettingScreen = () => {
   const [initialValuesLoaded, setInitialValuesLoaded] = useState<boolean>(false);
@@ -23,6 +24,7 @@ const SettingScreen = () => {
 
   const tabs = [
     { label: "Company Settings", component: <SettingsCompanyDetailsScreen />, roles: ["ADMIN", "APPROVER", "STANDARDUSER","SUPERADMIN"] },
+    { label: "Upload", component: <UploadScreen />, roles: ["ADMIN", "APPROVER", "STANDARDUSER","SUPERADMIN"] },
     { label: "Portals", component: <LinkScreen />, roles: ["ADMIN"] },
     { label: "Tax", component: <TaxConfig />, roles: ["ADMIN"] },
     { label: "About", component: <About />, roles: ["ADMIN", "APPROVER", "STANDARDUSER","SUPERADMIN"] },
