@@ -52,7 +52,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
         content={<SettingsCompanyForm companyValue={companyInfo?.companyDetails} mode="edit" handleCloseDialog={handleCloseDialog} />}
         handleClose={handleCloseDialog}
       />
-      <TableHeader buttons={button} />        <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>  <CompanyLogo/></Grid>
+      <TableHeader buttons={button} />        <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}></Grid>
 
       {companyInfo && (
         <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>
