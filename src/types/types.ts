@@ -261,3 +261,7 @@ export interface InvoiceMailReasonProps {
     toMail: string;
     reason: string;
 }
+export interface CompanyLogoProps {
+    companyLogo: any;
+    
+}
