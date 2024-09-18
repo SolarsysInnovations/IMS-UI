@@ -1,0 +1,59 @@
+body {
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.ck-editor__editable_inline {
+  height: 250px;
+}
+
+/* .custom-dropdown {
+  width: 100%;
+  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid #c4c4c4;
+  font-size: 12px;
+  font-family: "Inter", "Segoe UI", "Apple Color Emoji", "Segoe UI Emoji";
+  transition: border-color 0.2s, box-shadow 0.2s;
+  color: #000000;
+  opacity: 0.8;
+}
+
+.custom-dropdown:hover {
+  background-color: "action.hover";
+  border: 1px solid;
+} */
+
+.custom-dropdown:focus {
+  /* border-color: #0a2be5; */
+  border: 2px solid #171cec;
+  /* box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2); */
+}
+
+/* ::-webkit-scrollbar-thumb {
+  background: red; 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000; 
+} */
+::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+/* ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}  */
+
+.apexcharts-legend.apx-legend-position-right,
+.apexcharts-legend.apx-legend-position-left {
+  top: 6px !important;
+}
