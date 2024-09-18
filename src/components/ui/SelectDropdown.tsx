@@ -2,6 +2,8 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Button, Paper } from '@mui/material';
+import { SxProps } from '@mui/system'; // Import SxProps
+import { Theme } from '@mui/material/styles'; // Import Theme
 
 interface ValueProps {
   value: string;
@@ -23,7 +25,9 @@ interface SelectDropdownProps {
   required?: boolean;
   disabled?: boolean;
   variant?: 'outlined' | 'filled' | 'standard';
+  sx?: SxProps<Theme>; // Add sx prop to allow custom styles
 }
+
 
 export default function SelectDropdown({
   applySmallSizeStyle = false,
@@ -39,6 +43,7 @@ export default function SelectDropdown({
   labelText,
   required,
   variant,
+  sx,  // Accept sx prop
   onChange,
 }: SelectDropdownProps) {
   return (
@@ -69,9 +74,6 @@ export default function SelectDropdown({
           overflow: "hidden",
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          '&:hover': {
-            // backgroundColor: `action.hover`,
-          },
         },
         "& .MuiFormLabel-root": {
           fontSize: "12px"
@@ -79,9 +81,7 @@ export default function SelectDropdown({
         '& .MuiAutocomplete-input': {
           fontSize: "12px"
         },
-        '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
-          fontSize: "12px"
-        },
+        ...(sx || {}), // Add sx prop to override or add additional styles
       }}
       isOptionEqualToValue={(option, value) => option.value === value.value}
       renderInput={(params) => <TextField error={error} helperText={helperText} required={required} sx={{ fontSize: "12px !important" }} variant='outlined' {...params} label={labelText} />}
@@ -105,3 +105,4 @@ export default function SelectDropdown({
     />
   );
 }
+

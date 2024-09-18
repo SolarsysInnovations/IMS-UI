@@ -112,7 +112,7 @@ const AdminDashboardScreen = ({ adminData }: any) => {
   ];
   // Check if adminData is undefined and provide default values if necessary
   if (!adminData) {
-    return <div>No data available</div>;
+    return <div></div>;
   }
   // Provide default values based on the actual structure of adminData
   const invoiceOverviewAmountData = adminData.invoiceOverview || {};
