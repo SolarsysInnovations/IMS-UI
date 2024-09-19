@@ -23,6 +23,7 @@ import SettingRoleScreen from "../pages/settings/settings-role";
 import DashboardScreen from "../pages/Dashboard/Dashboard";
 import ServicesList from "../pages/service/service-list-screen";
 import SendEmail from "../pages/Invoice/Send-email";
+ import CompanyLogo from "../pages/settings/settings-company/company-logo";
 
 const getUserRole = () => {
   return localStorage.getItem('userRole');
@@ -171,18 +172,18 @@ export const sidebarTwo = [
     ],
     allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
   },
-  // {
-  //   path: '/settings',
-  //   element: <SettingScreen />,
-  //   allowedRoles: [],
-  //   subItems: [
-  //     {
-  //       path: '/send-email',
-  //       element: <SendEmail />,
-  //       allowedRoles: [],
-  //     },
-  //   ],
-  // }
+  {
+    path: '/settings',
+    element: <SettingScreen />,
+    allowedRoles: [],
+    subItems: [
+      {
+        path: '/companyLogo',
+        element: <CompanyLogo />,
+        allowedRoles: [],
+      },
+    ],
+  }
  ];
 
 export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED", "PAID",];

@@ -52,10 +52,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
         content={<SettingsCompanyForm companyValue={companyInfo?.companyDetails} mode="edit" handleCloseDialog={handleCloseDialog} />}
         handleClose={handleCloseDialog}
       />
-      <TableHeader buttons={button} />
+      <TableHeader buttons={button} />        <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}></Grid>
+
       {companyInfo && (
         <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>
-          <Grid sx={{ marginTop: "0px" }} item xs={7}>
+        
+         <Grid sx={{ marginTop: "0px" }} item xs={7}>
             <Box gap={3}>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
@@ -142,7 +144,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
               </div>
             </Box>
           </Grid>
-        </Grid>
+         </Grid>
       )}
     </>
   );

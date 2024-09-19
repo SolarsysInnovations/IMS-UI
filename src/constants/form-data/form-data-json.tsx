@@ -145,7 +145,7 @@ export const CompanyDetailsFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5, validation: Yup.string().typeError('Must be a number').required('Company Phone is required'),
+                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'PhoneNumber', gridSize: 5, validation: Yup.string().typeError('Must be a number').required('Company Phone is required'),
                 width: ''
             },
             {
@@ -174,6 +174,10 @@ export const CompanyDetailsFields: FieldProps[] = [
             },
             {
                 name: 'companyRegNumber', required: true, disabled: false, label: 'Company RegNumber', type: 'text', gridSize: 5, validation: Yup.string().required('Company RegNumber is required'),
+                width: ''
+            },
+            {
+                name: 'Upload', required: true, disabled: false, label: 'Profile', type: 'upload', gridSize: 5, validation: Yup.string().required('Image is required'),
                 width: ''
             },
         ]

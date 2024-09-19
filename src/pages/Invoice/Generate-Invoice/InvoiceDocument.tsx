@@ -1,7 +1,7 @@
 import React from "react";
 import { Document, Page, Text, View, StyleSheet, Image, pdf } from "@react-pdf/renderer";
-
-const randomImageUrl = "https://picsum.photos/200";
+ 
+const randomImageUrl = "http://localhost:8081/settings/getLogo";
 
 // Styles for PDF document
 const styles = StyleSheet.create({
@@ -59,8 +59,14 @@ const styles = StyleSheet.create({
 });
 
 // Invoice Document component for PDF
-const InvoiceDocument = ({ invoiceData }: any) => {
-    console.log("invoiceData :", invoiceData);
+const InvoiceDocument = ({ invoiceData, company }: any) => {
+   // const   { data: companyData, refetch } = useGetCompanyLogoQuery();
+//let companys= company
+//console.log(company,"URL", (companys));
+
+    console.log(company,"invoiceData :", invoiceData);
+    //console.log(companyData, "company");
+    
     // if (invoiceData) {
     //     console.log("invoicesddsfds Data", invoiceData);
 
@@ -76,7 +82,9 @@ const InvoiceDocument = ({ invoiceData }: any) => {
             <Page size='A4' style={styles.page} >
                 <View style={{ flexDirection: "row", alignItems: "center", gap: "30px" }}>
                     <View>
-                        <Image style={styles.image} src={randomImageUrl} />
+                        <Image style={styles.image} src={company} />
+                        {/* <p>{companyData}</p> */}
+                       
                     </View>
                     <View>
                         <Text style={styles.header}>{invoiceData?.companyDetails?.companyName}</Text>
