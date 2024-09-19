@@ -16,7 +16,7 @@ import SelectDropdown from '../../components/ui/SelectDropdown';
 
 const DashboardScreen: React.FC = () => {
   const [getDashboard, { data, isLoading, isError, error }] = useGetDashboardMutation();
-  const [responseData, setResponseData] = useState<any>(null);
+  const [responseData, setResponseData] = useState<any>({});
   const userRole = useSelector(selectUserRole);
   const [isDataFetched, setIsDataFetched] = useState(false);
 
@@ -25,12 +25,15 @@ const DashboardScreen: React.FC = () => {
     const fetchInitialData = async () => {
       try {
         const response = await getDashboard({ startDate: '', endDate: '' }).unwrap();
-        setResponseData(response);
+        setResponseData(response || {}); // Default to empty object if no response
+      console.log("response",response);
       } catch (error) {
         console.error("Error fetching initial dashboard data:", error);
+        setResponseData({});
       } finally {
         setIsDataFetched(true);
       }
+      console.log("responseData",responseData);
     };
 
     fetchInitialData();
@@ -46,7 +49,7 @@ const DashboardScreen: React.FC = () => {
         startDate: formattedStartDate,
         endDate: formattedEndDate,
       }).unwrap();
-      setResponseData(response);
+      setResponseData(response || {});
     } catch (error) {
       console.error("Error fetching filtered dashboard data:", error);
     }
@@ -132,22 +135,9 @@ const DashboardScreen: React.FC = () => {
       <Grid container spacing={2} mt={3}>
         <Grid item xs={12} display="flex" justifyContent="center">
           <Box width="100%" maxWidth="1200px">
-            {isDataFetched && !responseData ? (
-              <Typography
-                variant="h6"
-                align="center"
-                color="GrayText"
-                sx={{
-                  fontFamily: 'Arial, sans-serif',
-                  fontSize: '15px',
-                  fontWeight: 500,
-                  letterSpacing: '0.5px',
-                  color: '#707070',
-                }}
-              >
-                No data available. Please apply filters or try again later.
-              </Typography>
-            ) : (
+            {isLoading && <Typography align="center">Loading dashboard...</Typography>}
+            {/* {isError && <Typography align="center" color="error">Error loading dashboard data</Typography>} */}
+            {!isLoading &&  (
               <>
                 {userRole === Roles.APPROVER ? (
                   <ApproverDashboardScreen approverData={responseData} />

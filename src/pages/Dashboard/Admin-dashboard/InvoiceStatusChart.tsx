@@ -60,17 +60,25 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
 
     useEffect(() => {
         if (invoicePieChartData) {
-            const { pending, approved, returned, deleted, draft, mailed, paid } = invoicePieChartData;
+            const {
+                pending = { noOfInvoices: 0 },
+                approved = { noOfInvoices: 0 },
+                returned = { noOfInvoices: 0 },
+                deleted = { noOfInvoices: 0 },
+                draft = { noOfInvoices: 0 },
+                mailed = { noOfInvoices: 0 },
+                paid = { noOfInvoices: 0 },
+            } = invoicePieChartData;
 
             setChartData({
                 series: [
-                    returned.noOfInvoices,
-                    pending.noOfInvoices,
-                    approved.noOfInvoices,
-                    draft.noOfInvoices,
-                    deleted.noOfInvoices,
-                    mailed.noOfInvoices,
-                    paid.noOfInvoices
+                    returned.noOfInvoices ?? 0,
+                    pending.noOfInvoices ?? 0,
+                    approved.noOfInvoices ?? 0,
+                    draft.noOfInvoices ?? 0,
+                    deleted.noOfInvoices ?? 0,
+                    mailed.noOfInvoices ?? 0,
+                    paid.noOfInvoices ?? 0
                 ],
                 options: {
                     ...chartData.options,
