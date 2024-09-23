@@ -155,6 +155,7 @@ export const invoiceCreateInitialValue: InvoiceInitialValueProps = {
     invoiceStatus: "DRAFT",
     discountPercentage: null,
     totalAmount: null,
+    retainerFee:null,
     notes: "Thanks for your business transaction",
     termsAndConditions: "",
     taxAmount: {
@@ -178,6 +179,7 @@ export const invoiceEditInitialValue: InvoiceInitialValueProps = {
     invoiceStatus: "PENDING",
     discountPercentage: null,
     totalAmount: null,
+    retainerFee: null,
     notes: "Thanks for your business transaction",
     termsAndConditions: "",
     taxAmount: {

@@ -12,7 +12,7 @@ interface InvoiceCalculationProps {
     invoiceTotalAmount: number | null | undefined;
     setSelectedTdsAmount: any;
     tdsAmount: number | null;
-
+    retainerFee: number
 }
 const tdsOptions = [
     {
@@ -20,7 +20,7 @@ const tdsOptions = [
         label: "Professional Service 10%"
     },
 ]
-const InvoiceCalculation = ({ tdsAmount, setSelectedTdsAmount, subTotalInvoiceAmount, values, setDiscountPercentage, setFieldValue, discountAmount, invoiceTotalAmount }: InvoiceCalculationProps) => {
+const InvoiceCalculation = ({ tdsAmount, setSelectedTdsAmount, subTotalInvoiceAmount, values, setDiscountPercentage, setFieldValue, discountAmount, invoiceTotalAmount, retainerFee }: InvoiceCalculationProps) => {
     return (
         <>
             <Grid container mt={3} mb={3} spacing={4} justifyContent="flex-end">
@@ -98,7 +98,7 @@ const InvoiceCalculation = ({ tdsAmount, setSelectedTdsAmount, subTotalInvoiceAm
                     }}>
 
                         <Typography variant="subtitle1" color="initial">Total Amount: </Typography>
-                        <Typography variant="subtitle2" color="initial">{invoiceTotalAmount}</Typography>
+                        <Typography variant="subtitle2" color="initial">{retainerFee}</Typography>
                     </Box>
                 </Box>
             </Grid>

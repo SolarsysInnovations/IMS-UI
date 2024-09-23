@@ -155,6 +155,7 @@ export interface InvoiceInitialValueProps {
     totalAmount: number | null;
     discountPercentage: number | null;
     notes: string;
+    retainerFee: null;
     termsAndConditions: string;
     taxAmount: TaxAmountProps;
     servicesList: ServiceListProps[];
