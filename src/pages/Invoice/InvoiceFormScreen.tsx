@@ -134,7 +134,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     }, [invoiceValues]);
 
     useEffect(() => {
-        const subtotalAfterRetainer = Math.max(subTotalInvoiceAmount - retainerAmount, 0);
+        const subtotalAfterRetainer = Math.max(subTotalInvoiceAmount + retainerAmount, 0);
     
         const disAmount = (subtotalAfterRetainer * (discountPercentage ?? 0)) / 100;
         setDiscountAmount(disAmount);
@@ -842,7 +842,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 />
                               </Box>
                               <Typography variant="body2" color="initial">
-                                -{retainerAmount}
+                                +{retainerAmount}
                               </Typography>
                             </Box>
                           )}

@@ -109,6 +109,7 @@ const InvoiceDocument = ({ invoiceData, company }: any) => {
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Invoice No: {invoiceData?.invoiceNumber}</Text>
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Payment Terms: {invoiceData?.paymentTerms} </Text>
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Due Date: {invoiceData?.dueDate}</Text>
+                        {invoiceData?.retainerFee &&<Text style={{ fontSize: '14px', marginBottom: "5px" }}>Retainer Fee: {invoiceData?.retainerFee}</Text>}
                     </View>
                 </View>
 
@@ -150,7 +151,7 @@ const InvoiceDocument = ({ invoiceData, company }: any) => {
                                 <Text style={styles.tableCell}>{invoiceData.subTotal}</Text>
                             </View>
                         </View>
-                        <View style={{ flexDirection: "row", gap: "30px", justifyContent: "space-between", marginTop: "30px" }}>
+                      { invoiceData.discountPercentage&& <View style={{ flexDirection: "row", gap: "30px", justifyContent: "space-between", marginTop: "30px" }}>
                             <View>
                                 {" "}
                                 <Text style={[styles.tableCell, { fontSize: "14px" }]}>Discount Percentage {`( ${invoiceData.discountPercentage} % )`}</Text>
@@ -159,7 +160,7 @@ const InvoiceDocument = ({ invoiceData, company }: any) => {
                                 {" "}
                                 <Text style={styles.tableCell}>{invoiceData.discountPercentageValue}</Text>
                             </View>
-                        </View>
+                        </View>}
                         <View style={{ flexDirection: "row", gap: "30px", justifyContent: "space-between", marginTop: "30px" }}>
                             <View>
                                 {" "}
