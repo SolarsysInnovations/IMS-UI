@@ -24,7 +24,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   // Fetch company logo using companyId from companyInfo
   const { data: logoData, isSuccess: logoSuccess, isError: logoError } = useGetCompanyLogoQuery(companyInfo?.companyDetails?.id);
 
-  // Function to convert ArrayBuffer to base64
+  // Convert ArrayBuffer to base64
   const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
     let binary = '';
     const bytes = new Uint8Array(buffer);
@@ -32,16 +32,23 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
     for (let i = 0; i < len; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
-    return window.btoa(binary);
+    return window.btoa(binary); // Convert to base64
+  };
+
+  // Get base64 string for company logo
+  const getCompanyLogo = () => {
+    if (logoData && logoData.companyLogo) {
+      const base64String = logoData.companyLogo; // Assuming companyLogo is a base64 string
+      return `data:image/jpeg;base64,${base64String}`;
+    }
+    return null;
   };
 
   useEffect(() => {
     if (logoSuccess && logoData) {
-      console.log("Fetched company logo data:", logoData);
-    } else if (logoError) {
-      console.error("Error fetching company logo");
+      console.log("Logo Base64 String:", logoData.companyLogo); // Logs the base64 string of the logo
     }
-  }, [logoData, logoSuccess, logoError]);
+  }, [logoData, logoSuccess]);
 
   const handleEditClick = async () => {
     try {
@@ -76,7 +83,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
 
       {companyInfo && (
         <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>
-          <Grid sx={{ marginTop: "0px" }} item xs={7}>
+          <Grid item xs={7}>
             <Box gap={3}>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
@@ -115,7 +122,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
             </Box>
           </Grid>
 
-          <Grid sx={{ marginTop: "0px" }} item xs={4}>
+          <Grid item xs={4}>
             <Box gap={3}>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
@@ -123,7 +130,6 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                   <span>: {companyInfo?.companyDetails.companyPhone}</span>
                 </p>
               </div>
-
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
                   <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company Website</span>
@@ -150,9 +156,10 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
                   <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Uploaded Image</span>
-                  {logoSuccess && logoData ? (
+                  {logoData && logoData.companyLogo ? (
                     <img
-                      src={`data:image/png;base64,${arrayBufferToBase64(logoData.companyLogo)}`} // Convert to base64
+                      // Display company logo using base64 string
+                      src={getCompanyLogo() ?? undefined}
                       alt="Company Logo"
                       style={{ maxWidth: "100px", maxHeight: "100px" }}
                     />
