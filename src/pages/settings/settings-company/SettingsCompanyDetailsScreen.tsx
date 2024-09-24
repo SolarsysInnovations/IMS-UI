@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useGetSingleCompanySettingMutation } from "../../../redux-store/api/injectedApis";
+import { useGetSingleCompanySettingMutation, useGetCompanyLogoQuery } from "../../../redux-store/api/injectedApis";
 import { Box, Grid } from "@mui/material";
 import TableHeader from "../../../components/layouts/TableHeader";
 import { Edit } from "@mui/icons-material";
@@ -15,13 +15,33 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
   const [getData, { data: customerData, isSuccess: C_success, isError: C_error }] = useGetSingleCompanySettingMutation();
-
   const companyInfo = useSelector(selectUserDetails);
-  console.log("companyInfo", companyInfo);
+  const userRole = useSelector(selectUserRole);
 
   const [openModal, setOpenModal] = useState(false);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
-  const userRole = useSelector(selectUserRole);
+
+  // Fetch company logo using companyId from companyInfo
+  const { data: logoData, isSuccess: logoSuccess, isError: logoError } = useGetCompanyLogoQuery(companyInfo?.companyDetails?.id);
+
+  // Function to convert ArrayBuffer to base64
+  const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  };
+
+  useEffect(() => {
+    if (logoSuccess && logoData) {
+      console.log("Fetched company logo data:", logoData);
+    } else if (logoError) {
+      console.error("Error fetching company logo");
+    }
+  }, [logoData, logoSuccess, logoError]);
 
   const handleEditClick = async () => {
     try {
@@ -43,8 +63,8 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
     setIsOpenDialogBox(false); // Close the dialog box
   };
 
-  const button = userRole !== "APPROVER" && userRole !== "ENDUSER" ? [{ label: "Edit", icon: Edit, onClick: () => handleEditClick() }] : [];
-  
+  const button = userRole !== "APPROVER" && userRole !== "ENDUSER" ? [{ label: "Edit", icon: Edit, onClick: handleEditClick }] : [];
+
   return (
     <>
       <DialogBoxUi
@@ -52,99 +72,98 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
         content={<SettingsCompanyForm companyValue={companyInfo?.companyDetails} mode="edit" handleCloseDialog={handleCloseDialog} />}
         handleClose={handleCloseDialog}
       />
-      <TableHeader buttons={button} />        <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}></Grid>
+      <TableHeader buttons={button} />
 
       {companyInfo && (
         <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>
-        
-         <Grid sx={{ marginTop: "0px" }} item xs={7}>
+          <Grid sx={{ marginTop: "0px" }} item xs={7}>
             <Box gap={3}>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
-                    Company Name
-                  </span>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company Name</span>
                   <span>: {companyInfo?.companyDetails.companyName}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
-                    Company Address
-                  </span>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company Address</span>
                   <span>: {companyInfo?.companyDetails.companyAddress}</span>
                 </p>
               </div>
               <div>
-              <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
-                    Company City
-                  </span>
+                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company City</span>
                   <span>: {companyInfo?.companyDetails.companyCity}</span>
                 </p>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
-                    Company State
-                  </span>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company State</span>
                   <span>: {companyInfo?.companyDetails.companyState}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
-                    Company Country
-                  </span>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company Country</span>
                   <span>: {companyInfo?.companyDetails.companyCountry}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
-                    Company E-mail
-                  </span>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company E-mail</span>
                   <span>: {companyInfo?.companyDetails.companyEmail}</span>
                 </p>
               </div>
             </Box>
           </Grid>
+
           <Grid sx={{ marginTop: "0px" }} item xs={4}>
             <Box gap={3}>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
-                    Company Phone
-                  </span>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company Phone</span>
                   <span>: {companyInfo?.companyDetails.companyPhone}</span>
                 </p>
               </div>
 
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
-                    Company Website
-                  </span>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company Website</span>
                   <span>: {companyInfo?.companyDetails.companyWebsite}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
-                    Company Tax Num
-                  </span>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company Tax Num</span>
                   <span>: {companyInfo?.companyDetails.companyTaxNumber}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
-                    Company Reg Num
-                  </span>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Company Reg Num</span>
                   <span>: {companyInfo?.companyDetails.companyRegNumber}</span>
                 </p>
               </div>
             </Box>
           </Grid>
-         </Grid>
+
+          <Grid item xs={12}>
+            <Box gap={3}>
+              <div>
+                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Uploaded Image</span>
+                  {logoSuccess && logoData ? (
+                    <img
+                      src={`data:image/png;base64,${arrayBufferToBase64(logoData.companyLogo)}`} // Convert to base64
+                      alt="Company Logo"
+                      style={{ maxWidth: "100px", maxHeight: "100px" }}
+                    />
+                  ) : (
+                    <span>: No image available</span>
+                  )}
+                </p>
+              </div>
+            </Box>
+          </Grid>
+        </Grid>
       )}
     </>
   );

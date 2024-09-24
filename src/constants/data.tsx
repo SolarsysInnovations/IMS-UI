@@ -23,7 +23,7 @@ import SettingRoleScreen from "../pages/settings/settings-role";
 import DashboardScreen from "../pages/Dashboard/Dashboard";
 import ServicesList from "../pages/service/service-list-screen";
 import SendEmail from "../pages/Invoice/Send-email";
- import CompanyLogo from "../pages/settings/settings-company/company-logo";
+//  import CompanyLogo from "../pages/settings/settings-company/company-logo";
 
 const getUserRole = () => {
   return localStorage.getItem('userRole');
@@ -176,13 +176,13 @@ export const sidebarTwo = [
     path: '/settings',
     element: <SettingScreen />,
     allowedRoles: [],
-    subItems: [
-      {
-        path: '/companyLogo',
-        element: <CompanyLogo />,
-        allowedRoles: [],
-      },
-    ],
+    // subItems: [
+    //   {
+    //     path: '/companyLogo',
+    //     element: <CompanyLogo />,
+    //     allowedRoles: [],
+    //   },
+    // ],
   }
  ];
 

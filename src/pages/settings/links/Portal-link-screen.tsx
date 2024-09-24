@@ -18,7 +18,7 @@ const LinkScreen = () => {
 
   const handleModalClose = () => {
     setIsOpenDialogBox(false);
-    setKey(prevKey => prevKey + 1); // Reset the key to force a re-render
+    setKey(prevKey => prevKey + 1); 
   };
 
   useEffect(() => {
@@ -39,10 +39,10 @@ const LinkScreen = () => {
           <PortalLinkCreate 
             key={key} 
             linkValue={linkValue} 
-            handleClose={handleModalClose} // Ensure dialog can be closed
+            handleClose={handleModalClose}
           />
         }
-        handleClose={handleModalClose} // Ensure dialog can be closed
+        handleClose={handleModalClose} 
       />
     </>
   );

@@ -56,6 +56,9 @@ export enum ApiEndpoint {
     SETTINGS_CREATE = "settingsCreate",
     SETTINGS_LIST = "settingsList",
     SETTINGS_UPDATE = "settingsUpdate",
+    //Logo_Upload
+    SETTINGS_COMPANY_LOGO = "companyLogoUpload",
+    SETTINGS_COMPANY_LOGO_GET="getCompanyLogo",
     //Link
     LINK_CREATE = "linkCreate",
     LINK_GET = "linkGet",
@@ -79,8 +82,7 @@ export enum ApiEndpoint {
     COMPANY_CREATE = "companyCreate",
     COMPANY_UPDATE = "companyUpdate",
     COMPANY_DELETE = "companyDelete",
-    COMPANY_LOGO = "companyLogo",
-    COMPANY_LOGO_GET="getLogo"
+   
 };
 
 export type ApiUrls = {
@@ -163,10 +165,9 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.COMPANY_UPDATE]: `/company/update`,
     [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
     [ApiEndpoint.COMPANY_LIST]: `/company/list`,
-    [ApiEndpoint.COMPANY_LOGO]: `/settings/upload`,
-    [ApiEndpoint.COMPANY_LOGO_GET]: `/settings/getLogo`,
-
-
+    //Logo_Upload
+    [ApiEndpoint.SETTINGS_COMPANY_LOGO]: `/settings/upload`,
+    [ApiEndpoint.SETTINGS_COMPANY_LOGO_GET]: `/settings/getCompanyLogo`,
     //dashboard endpoints
     [ApiEndpoint.DASHBOARD_GET]: `/dashboard`,
 

@@ -227,6 +227,3 @@ export const ChangePasswordInitialValue: ChangePasswordInitialValueProps = {
     confirmPassword: "",
     userName: "",
 }
-export const companyLogoInitialProps = {
-    companyLogo: null,
- }
