@@ -151,25 +151,27 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
             </Box>
           </Grid>
 
-          <Grid item xs={12}>
-            <Box gap={3}>
-              <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Uploaded Image</span>
-                  {logoData && logoData.companyLogo ? (
-                    <img
-                      // Display company logo using base64 string
-                      src={getCompanyLogo() ?? undefined}
-                      alt="Company Logo"
-                      style={{ maxWidth: "100px", maxHeight: "100px" }}
-                    />
-                  ) : (
-                    <span>: No image available</span>
-                  )}
-                </p>
-              </div>
-            </Box>
-          </Grid>
+          <Grid container spacing={2}>
+  <Grid item xs={12}>
+    <Box display="flex" alignItems="center" sx={{marginTop:"10px"}} gap={3}>
+      <Box component="span" fontWeight={500} width="140px" fontSize="13px">
+        Uploaded Image 
+      </Box>
+      {logoData && logoData.companyLogo ? (
+        <img
+          src={getCompanyLogo() ?? undefined}
+          alt="Company Logo"
+          style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "contain" }}
+        />
+      ) : (
+        <Box component="span" fontSize="13px">
+          : No image available
+        </Box>
+      )}
+    </Box>
+  </Grid>
+</Grid>
+
         </Grid>
       )}
     </>
