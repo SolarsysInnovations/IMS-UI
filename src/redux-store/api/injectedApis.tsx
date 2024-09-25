@@ -338,19 +338,19 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
                         body: company,
                     }),
                 }),
-                addCompanyLogo: builder.mutation<any[], Partial<any>>({
-                    query: (logo) => ({
-                        url: API_URLS.companyLogo,
-                        method: 'POST',
-                        body: logo,
-                    }),
-                }),
-                getLogo: builder.mutation<any, { id: number; data: Partial<any> }>({
-                    query: (id) => ({
-                        url: `${API_URLS.companyLogo}/${id}`,
-                        method: 'POST',
-                    }),
-                }),
+                // addCompanyLogo: builder.mutation<any[], Partial<any>>({
+                //     query: (logo) => ({
+                //         url: API_URLS.companyLogo,
+                //         method: 'POST',
+                //         body: logo,
+                //     }),
+                // }),
+                // getLogo: builder.mutation<any, { id: number; data: Partial<any> }>({
+                //     query: (id) => ({
+                //         url: `${API_URLS.companyLogo}/${id}`,
+                //         method: 'POST',
+                //     }),
+                // }),
                // ! ----------- companyDetails end --------------
 
                // ! ----------- settingsPortal start --------------
@@ -389,11 +389,44 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
                     method: 'POST',
     
                 }),
-    
+            }),
 
+    // ! ----------- settingsPortal end --------------
+
+
+    // addCompanyLogo: builder.mutation<any[], Partial<any>>({
+                //     query: (logo) => ({
+                //         url: API_URLS.companyLogo,
+                //         method: 'POST',
+                //         body: logo,
+                //     }),
+                // }),
+                // getLogo: builder.mutation<any, { id: number; data: Partial<any> }>({
+                //     query: (id) => ({
+                //         url: `${API_URLS.companyLogo}/${id}`,
+                //         method: 'POST',
+                //     }),
+                // }),
+    // ! ----------- Upload Logo --------------
+
+    getCompanyLogo: builder.query<any, void>({
+        query: () => ({
+            url: API_URLS.getCompanyLogo,
+          method: 'POST',
+        }),
+        // Set caching for 5 minutes (300 seconds)
+        keepUnusedDataFor: 5 * 60 * 1000, // in seconds
+      }),
+      
+      addCompanyLogo: builder.mutation<any, FormData>({
+        query: (companyLogo) => ({
+          url: API_URLS.companyLogoUpload,
+          method: 'POST',
+          body:companyLogo,
+        }),
+      }),
     }),
 
-    }),
 });
 
 // user export
@@ -431,4 +464,4 @@ export const { useGetCompanySettingQuery, useAddCompanySettingMutation, useGetSi
 
 //portal Link export
 export const { useGetPortalLinkQuery, useGetSinglePortalLinkMutation, useAddPortalLinkMutation, useUpdatePortalLinkMutation, useDeletePortalLinkMutation } = apiEndPointLists;
-export const { useAddCompanyLogoMutation, useGetLogoMutation } = apiEndPointLists;
+export const { useAddCompanyLogoMutation, useGetCompanyLogoQuery } = apiEndPointLists;

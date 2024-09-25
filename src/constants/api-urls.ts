@@ -79,8 +79,8 @@ export enum ApiEndpoint {
     COMPANY_CREATE = "companyCreate",
     COMPANY_UPDATE = "companyUpdate",
     COMPANY_DELETE = "companyDelete",
-    COMPANY_LOGO = "companyLogo",
-    COMPANY_LOGO_GET="getLogo"
+    COMPANY_LOGO = "companyLogoUpload",
+    COMPANY_LOGO_GET="getCompanyLogo"
 };
 
 export type ApiUrls = {
@@ -164,7 +164,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.COMPANY_DELETE]: `/company/delete`,
     [ApiEndpoint.COMPANY_LIST]: `/company/list`,
     [ApiEndpoint.COMPANY_LOGO]: `/settings/upload`,
-    [ApiEndpoint.COMPANY_LOGO_GET]: `/settings/getLogo`,
+    [ApiEndpoint.COMPANY_LOGO_GET]: `/settings/getCompanyLogo`,
 
 
     //dashboard endpoints
