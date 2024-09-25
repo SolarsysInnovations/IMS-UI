@@ -3,7 +3,7 @@ import InvoiceDocument from "./InvoiceDocument";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import { useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
+import { useGetLogoMutation, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
 import { selectUserDetails, selectUserRole } from "../../../redux-store/auth/authSlice";
 import { formatDate } from "../../../services/utils/dataFormatter";
 import StageStepper from "../../../components/ui/StepperUi";
@@ -34,7 +34,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
     const { refetch } = useGetInvoiceListQuery();
     const [resMessage, setResMessage] = useState('');
     const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
-    // const    companyData  = useGetLogoMutation();
+    const    companyData  = useGetLogoMutation();
 
     useEffect(() => {
         if (invoiceDatas && customers && companyDetails && tdsTaxList) {
@@ -224,7 +224,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
                         showToolbar={false}
                         style={{ overflow: "hidden", width: '400px', height: '770px', border: 'none', backgroundColor: 'transparent' }}
                     >
-                        <InvoiceDocument invoiceData={data}  />
+                        <InvoiceDocument invoiceData={data} company={companyData} />
                     </PDFViewer>
                 </div>
                 <div style={{ marginTop: '20px', textAlign: 'center' }}>

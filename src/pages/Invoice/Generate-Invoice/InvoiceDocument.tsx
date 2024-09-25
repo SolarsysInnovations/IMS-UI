@@ -108,7 +108,7 @@ const InvoiceDocument = ({ invoiceData, company }: any) => {
                         {/* <Text style={styles.subHeader}>Invoice :</Text> */}
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Invoice No: {invoiceData?.invoiceNumber}</Text>
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Payment Terms: {invoiceData?.paymentTerms} </Text>
-                       {invoiceData?.dueDate && <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Due Date: {invoiceData?.dueDate}</Text>}
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Due Date: {invoiceData?.dueDate}</Text>
                         {invoiceData?.retainerFee &&<Text style={{ fontSize: '14px', marginBottom: "5px" }}>Retainer Fee: {invoiceData?.retainerFee}</Text>}
                     </View>
                 </View>
