@@ -27,6 +27,7 @@ const DashboardScreen: React.FC = () => {
   const [getDashboard, { data, isLoading, isError, error }] = useGetDashboardMutation();
   const [responseData, setResponseData] = useState<any>({});
   const userRole = useSelector(selectUserRole);
+  const [isDataFetched, setIsDataFetched] = useState(false);
 
   // Fetch initial data without filters
   useEffect(() => {
