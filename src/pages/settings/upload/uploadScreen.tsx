@@ -1,14 +1,48 @@
-import { Grid, Button, CircularProgress, Typography } from '@mui/material'; // Importing MUI components
-import React, { useState, ChangeEvent } from 'react';
+import { Grid, Button, CircularProgress, Typography } from '@mui/material';
+import React, { useState, ChangeEvent, useEffect } from 'react';
+import { useAddCompanyLogoMutation } from "../../../../src/redux-store/api/injectedApis";
+import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 
 const UploadScreen: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
+  const [savedLogoUrl, setSavedLogoUrl] = useState<string | null>(null);
+
+  // Mutation for uploading the logo
+  const [addCompanyLogo, { isSuccess, isError, data }] = useAddCompanyLogoMutation();
+
+  // Snackbar notifications
+  useSnackbarNotifications({
+    success: isSuccess,
+    successMessage: 'Logo has been uploaded successfully',
+    error: isError,
+    errorMessage: 'Error uploading logo. Please try again.',
+  });
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      const responseData = data as { logoUrl: string };
+      setSavedLogoUrl(responseData.logoUrl);
+      setLoading(false); // Stop loading after success
+      setSelectedFile(null); // Reset the file input after saving
+      setImagePreview(null); // Reset the preview after saving
+    }
+  }, [isSuccess, data]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     if (file) {
+      if (file.size > 2 * 1024 * 1024) { // 2MB size limit
+        alert('File size exceeds 2MB');
+        return;
+      }
+      const allowedTypes = ['image/jpeg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('Invalid file type. Please upload a JPG or PNG image.');
+        return;
+      }
+
       setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -18,34 +52,34 @@ const UploadScreen: React.FC = () => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (selectedFile) {
       setLoading(true);
-      // Simulate file upload delay
-      setTimeout(() => {
-        setLoading(false);
-        // Handle the file save logic here
-        console.log(`Saving file: ${selectedFile.name}`);
-      }, 2000); // 2 seconds delay for demonstration
+      try {
+        const formData = new FormData();
+        formData.append('companyLogo', selectedFile);
+        await addCompanyLogo(formData).unwrap();
+      } catch (error) {
+        console.error('Error uploading logo:', error);
+      }
     }
   };
 
   return (
     <Grid
       container
-      sx={{ 
-        marginTop: '20px', 
-        padding: '20px', 
+      sx={{
+        marginTop: '20px',
+        padding: '20px',
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'column', // Stack elements vertically
+        flexDirection: 'column',
       }}
     >
-      {/* Hidden File input for uploading files */}
       <input
         accept="image/*"
-        style={{ display: 'none' }} // Hides the input
-        id="contained-button-file"  // Matches the label's htmlFor
+        style={{ display: 'none' }}
+        id="contained-button-file"
         type="file"
         onChange={handleFileChange}
       />
@@ -56,43 +90,65 @@ const UploadScreen: React.FC = () => {
         </Button>
       </label>
 
-      {/* Image Preview Thumbnail */}
-      {imagePreview && (
+      {imagePreview && !savedLogoUrl && (
         <div style={{ margin: '20px 0', textAlign: 'center' }}>
-          <img 
-            src={imagePreview as string} 
-            alt="Preview" 
-            style={{ 
-              maxWidth: '150px', // Thumbnail width
-              maxHeight: '150px', // Thumbnail height
-              objectFit: 'cover', // Preserve aspect ratio
-              border: '1px solid #ddd', // Light border
-              borderRadius: '8px', // Rounded corners
-            }} 
+          <img
+            src={imagePreview as string}
+            alt="Preview"
+            style={{
+              maxWidth: '150px',
+              maxHeight: '150px',
+              objectFit: 'cover',
+              border: '1px solid #ddd',
+              borderRadius: '8px',
+            }}
           />
         </div>
       )}
 
-      {/* Save button, only visible when a file is selected */}
-      {selectedFile && (
+      {savedLogoUrl && (
+        <div style={{ margin: '20px 0', textAlign: 'center' }}>
+          <img
+            src={savedLogoUrl}
+            alt="Saved Logo"
+            style={{
+              maxWidth: '150px',
+              maxHeight: '150px',
+              objectFit: 'cover',
+              border: '1px solid #ddd',
+              borderRadius: '8px',
+            }}
+          />
+        </div>
+      )}
+
+      {selectedFile && !savedLogoUrl && (
         <div>
-          <Button 
-            variant="contained" 
-            color="info" 
+          <Button
+            variant="contained"
+            color="info"
             onClick={handleSave}
-            sx={{ margin: '20px' }} // Add margin for spacing
+            sx={{ margin: '20px' }}
           >
             Save
           </Button>
-          
-          {/* Loading Spinner */}
+
           {loading && (
             <div style={{ marginTop: '20px', textAlign: 'center' }}>
               <CircularProgress />
-              <Typography variant="caption" sx={{ marginLeft: '10px' }}>Uploading...</Typography>
+              <Typography variant="caption" sx={{ marginLeft: '10px' }}>
+                Uploading...
+              </Typography>
             </div>
           )}
         </div>
+      )}
+
+      {/* Show upload button and saved logo after saving */}
+      {savedLogoUrl && (
+        <Button variant="contained" color="primary" onClick={() => setSavedLogoUrl(null)}>
+          Upload Another Logo
+        </Button>
       )}
     </Grid>
   );
