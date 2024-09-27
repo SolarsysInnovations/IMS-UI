@@ -64,6 +64,7 @@ import { useGetInvoiceListQuery } from "../../../redux-store/api/injectedApis";
 
 
 const AdminDashboardScreen = ({ adminData }: any) => {
+  console.log("adminData",adminData);
   const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceListQuery();
   const columns: GridColDef[] = [
     // {
@@ -111,9 +112,7 @@ const AdminDashboardScreen = ({ adminData }: any) => {
   },
   ];
   // Check if adminData is undefined and provide default values if necessary
-  if (!adminData) {
-    return <div>No data available</div>;
-  }
+  
   // Provide default values based on the actual structure of adminData
   const invoiceOverviewAmountData = adminData.invoiceOverview || {};
   const invoicePieChartData = adminData.invoiceStatus || {};

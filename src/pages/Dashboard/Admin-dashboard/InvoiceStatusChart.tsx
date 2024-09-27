@@ -18,6 +18,7 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
                     startAngle: -90,
                     endAngle: 270,
                     donut: {
+                        size: '65%',
                         labels: {
                             show: true,
                             total: {
@@ -38,8 +39,8 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
             dataLabels: {
                 enabled: false,
             },
-            colors: ['#F97300', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E', '#FF204E', "#00224D"],
-            labels: ["Returned", "Pending", "Approved", "Draft", "Deleted", "MAILED", "Paid"],
+            colors: ['#F97300', '#FFD700', '#4E9F3D', '#4ECCA3', '#FF204E', '#FF204E'],
+            labels: [], // Labels will be set dynamically
             responsive: [
                 {
                     breakpoint: 480,
@@ -59,17 +60,25 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
 
     useEffect(() => {
         if (invoicePieChartData) {
-            const { pending, approved, returned, deleted, draft, mailed, paid } = invoicePieChartData;
+            const {
+                pending = { noOfInvoices: 0 },
+                approved = { noOfInvoices: 0 },
+                returned = { noOfInvoices: 0 },
+                deleted = { noOfInvoices: 0 },
+                draft = { noOfInvoices: 0 },
+                mailed = { noOfInvoices: 0 },
+                paid = { noOfInvoices: 0 },
+            } = invoicePieChartData;
 
             setChartData({
                 series: [
-                    returned.noOfInvoices,
-                    pending.noOfInvoices,
-                    approved.noOfInvoices,
-                    draft.noOfInvoices,
-                    deleted.noOfInvoices,
-                    mailed.noOfInvoices,
-                    paid.noOfInvoices
+                    returned.noOfInvoices ?? 0,
+                    pending.noOfInvoices ?? 0,
+                    approved.noOfInvoices ?? 0,
+                    draft.noOfInvoices ?? 0,
+                    deleted.noOfInvoices ?? 0,
+                    mailed.noOfInvoices ?? 0,
+                    paid.noOfInvoices ?? 0
                 ],
                 options: {
                     ...chartData.options,
@@ -78,6 +87,7 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
                         'Pending',
                         'Approved',
                         'Draft',
+                        'Deleted',
                         'Mailed',
                         'Paid',
                     ]

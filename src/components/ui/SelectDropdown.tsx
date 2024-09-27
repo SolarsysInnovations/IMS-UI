@@ -1,8 +1,8 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Button, Paper } from '@mui/material';
-
+import { Button, Paper, SxProps } from '@mui/material';
+import { Theme } from '@mui/system';
 interface ValueProps {
   value: string;
   label: string;
@@ -23,6 +23,7 @@ interface SelectDropdownProps {
   required?: boolean;
   disabled?: boolean;
   variant?: 'outlined' | 'filled' | 'standard';
+  sx?:SxProps<Theme>;
 }
 
 export default function SelectDropdown({
@@ -39,6 +40,7 @@ export default function SelectDropdown({
   labelText,
   required,
   variant,
+  sx,
   onChange,
 }: SelectDropdownProps) {
   return (

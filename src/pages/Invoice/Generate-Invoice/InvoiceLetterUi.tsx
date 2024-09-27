@@ -3,7 +3,7 @@ import InvoiceDocument from "./InvoiceDocument";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import { useGetLogoMutation, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
+import {  useGetCompanyLogoQuery, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
 import { selectUserDetails, selectUserRole } from "../../../redux-store/auth/authSlice";
 import { formatDate } from "../../../services/utils/dataFormatter";
 import StageStepper from "../../../components/ui/StepperUi";
@@ -34,7 +34,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
     const { refetch } = useGetInvoiceListQuery();
     const [resMessage, setResMessage] = useState('');
     const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
-    const    companyData  = useGetLogoMutation();
+    // const    companyData  = useGetLogoMutation();
 
     useEffect(() => {
         if (invoiceDatas && customers && companyDetails && tdsTaxList) {
@@ -216,6 +216,24 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
           await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
         }
       };
+  const companyInfo = useSelector(selectUserDetails);
+
+      const { data: logoData, isSuccess: logoSuccess, isError: logoError } = useGetCompanyLogoQuery(companyInfo?.companyDetails?.id);
+     
+      const getCompanyLogo = () => {
+        if (logoData && logoData.companyLogo) {
+          const base64String = logoData.companyLogo; // Assuming companyLogo is a base64 string
+          return( `data:image/png;base64,${base64String}` ||`data:image/jpeg;base64,${base64String}`);
+        }
+        return null;
+      };
+    
+      useEffect(() => {
+        if (logoSuccess && logoData) {
+          console.log("Logo Base64 String:", logoData.companyLogo); // Logs the base64 string of the logo
+        }
+      }, [logoData, logoSuccess]);
+    
     return (
         <>
             <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column", padding: "0px 30px 30px 30px" }}>
@@ -224,7 +242,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
                         showToolbar={false}
                         style={{ overflow: "hidden", width: '400px', height: '770px', border: 'none', backgroundColor: 'transparent' }}
                     >
-                        <InvoiceDocument invoiceData={data} company={companyData} />
+                        <InvoiceDocument invoiceData={data} companyLogo={getCompanyLogo} />
                     </PDFViewer>
                 </div>
                 <div style={{ marginTop: '20px', textAlign: 'center' }}>

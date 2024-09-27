@@ -1,12 +1,15 @@
-import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Image, pdf } from '@react-pdf/renderer';
-//const randomImageUrl = 'https://picsum.photos/200';
+import React from "react";
+import { Document, Page, Text, View, StyleSheet, Image, pdf } from "@react-pdf/renderer";
+ 
+const randomImageUrl = "http://localhost:8081/settings/getLogo";
+
 // Styles for PDF document
 const styles = StyleSheet.create({
     page: {
-        flexDirection: 'column',
-        backgroundColor: '#fff',
-        padding: 30,
+        flexDirection: "column",
+        backgroundColor: "#fff",
+
+        padding: "30px 30px 0px 30px",
     },
     section: {
         margin: 10,
@@ -45,51 +48,63 @@ const styles = StyleSheet.create({
         padding: 8,
         fontSize: 12,
         flex: 1,
-        textAlign: 'center',
+        textAlign: "center",
     },
     tableHeader: {
-        fontWeight: 'bold',
+        fontWeight: "bold",
     },
     tableCellLast: {
-        borderRight: 'none',
-    }
+        borderRight: "none",
+    },
 });
+
 // Invoice Document component for PDF
-const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
-    if (invoiceData) {
-        console.log("invoicesddsfds Data", invoiceData)
-        console.log("customer Name", invoiceData.customerDetails);
-    };
-    console.log(invoiceData , "invoiceletter", invoiceData?.subTotal);
-    console.log(companyLogo());
+const InvoiceDocument = ({ invoiceData, company }: any) => {
+   // const   { data: companyData, refetch } = useGetCompanyLogoQuery();
+//let companys= company
+//console.log(company,"URL", (companys));
+
+    console.log(company,"invoiceData :", invoiceData);
+    //console.log(companyData, "company");
     
-    return (
+    // if (invoiceData) {
+    //     console.log("invoicesddsfds Data", invoiceData);
+
+    //     console.log("customer Name", invoiceData.customerDetails);
+    // }
+
+    // tdsAmountValue: 11000,
+    // discountPercentageValue: 4050,
+    // gstPercentageValue: 6548,
+    // totalValue: 126503
+    return invoiceData ? (
         <Document>
-            <Page size="A4" style={styles.page}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: "30px" }}>
+            <Page size='A4' style={styles.page} >
+                <View style={{ flexDirection: "row", alignItems: "center", gap: "30px" }}>
                     <View>
-                        <Image style={styles.image} src={companyLogo() ?? "loading..."}  />
-                         
-        <img
-          src={ companyLogo() ?? undefined}
-          alt="Company Logo"
-          style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "contain" }}
-        /> 
+                        <Image style={styles.image} src={company} />
+                        {/* <p>{companyData}</p> */}
+                       
                     </View>
                     <View>
-                    <Text style={styles.header}>{invoiceData?.companyDetails?.companyName}</Text>
+                        <Text style={styles.header}>{invoiceData?.companyDetails?.companyName}</Text>
                     </View>
                 </View>
+
                 <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'space-between', marginTop: "20px" }}>
                     <View>
-                    <Text style={{ fontSize: '16px', marginBottom: "10px" }}>Invoice To:</Text>
+                        {/* <Text style={styles.subHeader}>To :</Text> */}
+                        <Text style={{ fontSize: '16px', marginBottom: "10px" }}>Invoice To:</Text>
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.companyName} </Text>
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.customerName} </Text>
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.customerEmail}</Text>
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.customerPhone}</Text>
-                     </View>
-                    
-                     <View >
+                    </View>
+                    {/* <View style={styles.section}>
+                        <Text style={styles.subHeader}>From :</Text>
+                        <Text style={styles.text}>Company Name: {invoiceData?.companyDetails?.companyName}</Text>
+                    </View> */}
+                    <View >
                         {/* <Text style={styles.subHeader}>Invoice :</Text> */}
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Invoice No: {invoiceData?.invoiceNumber}</Text>
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>Payment Terms: {invoiceData?.paymentTerms} </Text>
@@ -97,19 +112,21 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                         {invoiceData?.retainerFee &&<Text style={{ fontSize: '14px', marginBottom: "5px" }}>Retainer Fee: {invoiceData?.retainerFee}</Text>}
                     </View>
                 </View>
+
                 <View style={{ borderTop: "1px solid #000", marginTop: "20px" }}></View>
                 <View style={styles.table}>
                     <View style={[styles.tableRow, styles.tableHeader]}>
-                        <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Service Acc Code</Text>
+                        <Text style={[styles.tableCell, { fontWeight: "bold" }]}>Service Acc Code</Text>
                         {/* <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Service Des</Text> */}
-                        <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Service Qty</Text>
-                        <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Service Amount</Text>
-                        <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Total Amount</Text>
+                        <Text style={[styles.tableCell, { fontWeight: "bold" }]}>Service Qty</Text>
+                        <Text style={[styles.tableCell, { fontWeight: "bold" }]}>Service Amount</Text>
+                        <Text style={[styles.tableCell, { fontWeight: "bold" }]}>Total Amount</Text>
                     </View>
                     <View style={{ borderTop: "1px solid #000" }}></View>
+
                     {/* Example table rows */}
-                    {invoiceData?.servicesList?.map((service: any) => (
-                        <View style={[styles.tableRow, { marginTop: "20px" }]} >
+                    {invoiceData?.servicesList?.map((service: any, index: number) => (
+                        <View style={[styles.tableRow, index === 0 ? { marginTop: "20px" } : { marginTop: "0px" }]}>
                             <Text style={styles.tableCell}>{service.serviceAccountingCode}</Text>
                             {/* <Text style={styles.tableCell}>{service.serviceDescription}</Text> */}
                             <Text style={styles.tableCell}>{service.serviceQty}</Text>
@@ -117,49 +134,51 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                             <Text style={[styles.tableCell, styles.tableCellLast]}>{service.serviceTotalAmount}</Text>
                         </View>
                     ))}
-                    <View style={{ borderTop: "1px solid #000", marginTop: "30px" }}></View>
+                    <View style={{ borderTop: "1px solid #000", marginTop: "10px" }}></View>
                 </View>
-                <View style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: "15px" }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: "10px" }}>
                     <View>
                         <Text style={styles.tableCell}>Payment Method :</Text>
                     </View>
                     <View>
                         <View style={{ flexDirection: "row", gap: "30px", justifyContent: "space-between" }}>
                             <View>
-                                 
+                                {" "}
                                 <Text style={[styles.tableCell, { fontSize: "14px" }]}>Sub Total</Text>
                             </View>
                             <View>
-
-                               <Text style={styles.tableCell}>{invoiceData?.subTotal}</Text>
+                                {" "}
+                                <Text style={styles.tableCell}>{invoiceData.subTotal}</Text>
                             </View>
                         </View>
-                      { invoiceData?.discountPercentage &&<View style={{ flexDirection: "row", gap: "30px", justifyContent: "space-between", marginTop: "30px" }}>
+                      { invoiceData.discountPercentage&& <View style={{ flexDirection: "row", gap: "30px", justifyContent: "space-between", marginTop: "30px" }}>
                             <View>
-                              <Text style={[styles.tableCell, { fontSize: "14px" }]}>Discount Percentage {`( ${invoiceData?.discountPercentage} % )`}</Text>  
+                                {" "}
+                                <Text style={[styles.tableCell, { fontSize: "14px" }]}>Discount Percentage {`( ${invoiceData.discountPercentage} % )`}</Text>
                             </View>
                             <View>
-                                  <Text style={styles.tableCell}>{invoiceData?.discountPercentageValue}</Text>  
+                                {" "}
+                                <Text style={styles.tableCell}>{invoiceData.discountPercentageValue}</Text>
                             </View>
                         </View>}
                         <View style={{ flexDirection: "row", gap: "30px", justifyContent: "space-between", marginTop: "30px" }}>
                             <View>
-                                 
-                                <Text style={[styles.tableCell, { fontSize: "14px" }]}>Gst Percentage {`( ${invoiceData?.gstPercentage} % )`}</Text>  
+                                {" "}
+                                <Text style={[styles.tableCell, { fontSize: "14px" }]}>Gst Percentage {`( ${invoiceData.discountPercentage} % )`}</Text>
                             </View>
                             <View>
-                                 
-                               <Text style={styles.tableCell}>{invoiceData?.gstPercentageValue}</Text> 
+                                {" "}
+                                <Text style={styles.tableCell}>{invoiceData.gstPercentageValue}</Text>
                             </View>
                         </View>
                         <View style={{ flexDirection: "row", gap: "30px", justifyContent: "space-between", marginTop: "30px" }}>
                             <View>
-                                 
-                                 <Text style={[styles.tableCell, { fontSize: "14px" }]}>Tds Tax {`( ${invoiceData?.taxAmount.tds} )`}</Text>  
+                                {" "}
+                                <Text style={[styles.tableCell, { fontSize: "14px" }]}>Tds Tax {`( ${invoiceData.taxAmount.tds} )`}</Text>
                             </View>
                             <View>
-                                 
-                               <Text style={styles.tableCell}>{invoiceData?.tdsAmountValue}</Text> 
+                                {" "}
+                                <Text style={styles.tableCell}>{invoiceData.tdsAmountValue}</Text>
                             </View>
                         </View>
 
@@ -168,13 +187,13 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                                 <Text style={[styles.tableCell, { fontSize: "16px" }]}>Total Amount</Text>
                             </View>
                             <View>
-                                <Text style={styles.tableCell}>{invoiceData?.totalValue}</Text>  
+                                <Text style={styles.tableCell}>{invoiceData.totalValue}</Text>
                             </View>
                         </View>
 
                     </View>
                 </View>
-                <View style={{ borderTop: "1px solid #000", marginTop: "20px" }}></View>
+
                 <View style={[styles.subHeader, { marginTop: "20px" }]}>
                     <Text style={styles.text}>Terms & Conditions :</Text>
                 </View>
@@ -183,6 +202,9 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                 </View>
             </Page>
         </Document>
-    )
+    ) : (
+        <p>...loading</p>
+    );
 };
+
 export default InvoiceDocument;
