@@ -3,7 +3,6 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Button, Paper, SxProps } from '@mui/material';
 import { Theme } from '@mui/system';
-
 interface ValueProps {
   value: string;
   label: string;
@@ -24,7 +23,7 @@ interface SelectDropdownProps {
   required?: boolean;
   disabled?: boolean;
   variant?: 'outlined' | 'filled' | 'standard';
-  sx?: SxProps<Theme>; // Add sx as an optional prop
+  sx?:SxProps<Theme>;
 }
 
 export default function SelectDropdown({
@@ -41,7 +40,7 @@ export default function SelectDropdown({
   labelText,
   required,
   variant,
-  sx, // Destructure sx
+  sx,
   onChange,
 }: SelectDropdownProps) {
   return (

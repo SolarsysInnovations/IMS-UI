@@ -56,7 +56,7 @@ const AdminDashboardInvoiceOverviewAmount = ({ invoiceOverviewAmountData }: any)
     // Always render the cards, even if values are 0
     return (
         <Grid container spacing={2}>
-            {invoiceAmount.length > 0 ? (
+            {invoiceAmount?.length > 0 ? (
                 invoiceAmount.map((data, index) => (
                     <Grid item key={data.label || index} xs={4}>
                         <Card sx={{ width: "180px", height: "140px", padding: "10px 15px" }}>

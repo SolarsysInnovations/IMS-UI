@@ -802,7 +802,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             }}
                           >
                             <Typography variant="body2" color="initial">
-                              Sub Total:{" "}
+                              Sub Total: 
                             </Typography>
                             <Typography variant="body2" color="initial">
                               {subTotalInvoiceAmount}

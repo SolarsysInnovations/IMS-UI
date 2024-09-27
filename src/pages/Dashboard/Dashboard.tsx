@@ -22,9 +22,9 @@ interface SelectDropdownProps {
   sx?: SxProps<Theme>; // Add sx as an optional prop
 }
 
-
 const DashboardScreen: React.FC = () => {
-  const [getDashboard, { data, isLoading, isError, error }] = useGetDashboardMutation();
+  const [getDashboard, { data, isLoading, isError, error }] =
+    useGetDashboardMutation();
   const [responseData, setResponseData] = useState<any>({});
   const userRole = useSelector(selectUserRole);
   const [isDataFetched, setIsDataFetched] = useState(false);
@@ -33,7 +33,10 @@ const DashboardScreen: React.FC = () => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const response = await getDashboard({ startDate: '', endDate: '' }).unwrap();
+        const response = await getDashboard({
+          startDate: "",
+          endDate: "",
+        }).unwrap();
         setResponseData(response || {}); // Default to empty object if no response
         console.log("response", response);
       } catch (error) {
@@ -45,9 +48,12 @@ const DashboardScreen: React.FC = () => {
   }, [getDashboard]);
 
   // Handle date range changes and fetch filtered data
-  const handleDateRangeChange = async (startDate: Dayjs | null, endDate: Dayjs | null) => {
-    const formattedStartDate = startDate ? startDate.format('YYYY-MM-DD') : '';
-    const formattedEndDate = endDate ? endDate.format('YYYY-MM-DD') : '';
+  const handleDateRangeChange = async (
+    startDate: Dayjs | null,
+    endDate: Dayjs | null
+  ) => {
+    const formattedStartDate = startDate ? startDate.format("YYYY-MM-DD") : "";
+    const formattedEndDate = endDate ? endDate.format("YYYY-MM-DD") : "";
 
     try {
       const response = await getDashboard({
@@ -64,24 +70,24 @@ const DashboardScreen: React.FC = () => {
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
     if (newValue) {
       const today = dayjs();
-      if (newValue.value === 'Today') {
-        setFieldValue('startDate', today);
-        setFieldValue('endDate', today);
-      } else if (newValue.value === 'This Week') {
-        setFieldValue('startDate', today.startOf('week'));
-        setFieldValue('endDate', today.endOf('week'));
-      } else if (newValue.value === 'Last 7 Days') {
-        setFieldValue('startDate', today.subtract(7, 'days'));
-        setFieldValue('endDate', today);
-      } else if (newValue.value === 'This Month') {
-        setFieldValue('startDate', today.startOf('month'));
-        setFieldValue('endDate', today.endOf('month'));
-      } else if (newValue.value === 'Last 30 Days') {
-        setFieldValue('startDate', today.subtract(30, 'days'));
-        setFieldValue('endDate', today);
-      } else if (newValue.value === 'Custom') {
-        setFieldValue('startDate', null);
-        setFieldValue('endDate', null);
+      if (newValue.value === "Today") {
+        setFieldValue("startDate", today);
+        setFieldValue("endDate", today);
+      } else if (newValue.value === "This Week") {
+        setFieldValue("startDate", today.startOf("week"));
+        setFieldValue("endDate", today.endOf("week"));
+      } else if (newValue.value === "Last 7 Days") {
+        setFieldValue("startDate", today.subtract(7, "days"));
+        setFieldValue("endDate", today);
+      } else if (newValue.value === "This Month") {
+        setFieldValue("startDate", today.startOf("month"));
+        setFieldValue("endDate", today.endOf("month"));
+      } else if (newValue.value === "Last 30 Days") {
+        setFieldValue("startDate", today.subtract(30, "days"));
+        setFieldValue("endDate", today);
+      } else if (newValue.value === "Custom") {
+        setFieldValue("startDate", null);
+        setFieldValue("endDate", null);
       }
     }
   };
