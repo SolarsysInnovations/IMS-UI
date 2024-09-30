@@ -34,8 +34,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
     const { refetch } = useGetInvoiceListQuery();
     const [resMessage, setResMessage] = useState('');
     const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
-    // const    companyData  = useGetLogoMutation();
-
+ 
     useEffect(() => {
         if (invoiceDatas && customers && companyDetails && tdsTaxList) {
             // Find the relevant customer

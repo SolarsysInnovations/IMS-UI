@@ -15,19 +15,16 @@ import SelectDropdown from "../../components/ui/SelectDropdown";
 import { SxProps, Theme } from "@mui/system";
 import AdminDashboardScreen from "./Admin-dashboard/Dashboard-screen";
 
-interface SelectDropdownProps {
-  onChange: (newValue: any) => void;
-  options: { value: string; label: string }[];
-  labelText: string;
-  sx?: SxProps<Theme>; // Add sx as an optional prop
-}
-
 const DashboardScreen: React.FC = () => {
   const [getDashboard, { data, isLoading, isError, error }] =
     useGetDashboardMutation();
   const [responseData, setResponseData] = useState<any>({});
   const userRole = useSelector(selectUserRole);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  
+  // State for date ranges
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
   // Fetch initial data without filters
   useEffect(() => {
@@ -37,7 +34,7 @@ const DashboardScreen: React.FC = () => {
           startDate: "",
           endDate: "",
         }).unwrap();
-        setResponseData(response || {}); // Default to empty object if no response
+        setResponseData(response || {});
         console.log("response", response);
       } catch (error) {
         console.error("Error fetching initial dashboard data:", error);
@@ -61,6 +58,10 @@ const DashboardScreen: React.FC = () => {
         endDate: formattedEndDate,
       }).unwrap();
       setResponseData(response || {});
+      
+      // Set the state for start and end dates
+      setStartDate(startDate);
+      setEndDate(endDate);
     } catch (error) {
       console.error("Error fetching filtered dashboard data:", error);
     }
@@ -68,26 +69,38 @@ const DashboardScreen: React.FC = () => {
 
   // Dropdown logic to handle preset date ranges
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
+    const today = dayjs();
     if (newValue) {
-      const today = dayjs();
       if (newValue.value === "Today") {
         setFieldValue("startDate", today);
         setFieldValue("endDate", today);
+        setStartDate(today);
+        setEndDate(today);
       } else if (newValue.value === "This Week") {
         setFieldValue("startDate", today.startOf("week"));
         setFieldValue("endDate", today.endOf("week"));
+        setStartDate(today.startOf("week"));
+        setEndDate(today.endOf("week"));
       } else if (newValue.value === "Last 7 Days") {
         setFieldValue("startDate", today.subtract(7, "days"));
         setFieldValue("endDate", today);
+        setStartDate(today.subtract(7, "days"));
+        setEndDate(today);
       } else if (newValue.value === "This Month") {
         setFieldValue("startDate", today.startOf("month"));
         setFieldValue("endDate", today.endOf("month"));
+        setStartDate(today.startOf("month"));
+        setEndDate(today.endOf("month"));
       } else if (newValue.value === "Last 30 Days") {
         setFieldValue("startDate", today.subtract(30, "days"));
         setFieldValue("endDate", today);
+        setStartDate(today.subtract(30, "days"));
+        setEndDate(today);
       } else if (newValue.value === "Custom") {
         setFieldValue("startDate", null);
         setFieldValue("endDate", null);
+        setStartDate(null);
+        setEndDate(null);
       }
     }
   };
@@ -171,7 +184,7 @@ const DashboardScreen: React.FC = () => {
                 ) : userRole === Roles.SUPERADMIN ? (
                   <SuperAdminDashboardScreen superAdminData={responseData} />
                 ) : userRole === Roles.ADMIN ? (
-                  <AdminDashboardScreen adminData={responseData} />
+                  <AdminDashboardScreen adminData={responseData} startDate={startDate?.format("YYYY-MM-DD") || ""} endDate={endDate?.format("YYYY-MM-DD") || ""} />
                 ) : (
                   <Typography>
                     Something went wrong on the dashboard.

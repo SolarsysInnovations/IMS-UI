@@ -84,6 +84,7 @@ export default function SelectDropdown({
         '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
           fontSize: "12px"
         },
+        ...sx, // Apply sx prop passed from parent
       }}
       isOptionEqualToValue={(option, value) => option.value === value.value}
       renderInput={(params) => <TextField error={error} helperText={helperText} required={required} sx={{ fontSize: "12px !important" }} variant='outlined' {...params} label={labelText} />}
