@@ -92,7 +92,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
 
     const handleDownload = async () => {
         const doc = (
-            <InvoiceDocument invoiceData={data} />
+            <InvoiceDocument invoiceData={data}  companyLogo={getCompanyLogo}  />
         );
         const asPdf = pdf(doc); // Create a new instance of pdf with the document
         const blob = await asPdf.toBlob(); // Convert the PDF document to a Blob

@@ -69,13 +69,7 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: "30px" }}>
                     <View>
                         <Image style={styles.image} src={companyLogo() ?? "loading..."}  />
-                         
-        <img
-          src={ companyLogo() ?? undefined}
-          alt="Company Logo"
-          style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "contain" }}
-        /> 
-                    </View>
+                            </View>
                     <View>
                     <Text style={styles.header}>{invoiceData?.companyDetails?.companyName}</Text>
                     </View>
