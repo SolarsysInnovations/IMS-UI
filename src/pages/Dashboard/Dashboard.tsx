@@ -20,7 +20,6 @@ const DashboardScreen: React.FC = () => {
     useGetDashboardMutation();
   const [responseData, setResponseData] = useState<any>({});
   const userRole = useSelector(selectUserRole);
-  const [isDataFetched, setIsDataFetched] = useState(false);
   
   // State for date ranges
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
@@ -44,7 +43,7 @@ const DashboardScreen: React.FC = () => {
     fetchInitialData();
   }, [getDashboard]);
 
-  // Handle date range changes and fetch filtered data
+  // Handle date range changes
   const handleDateRangeChange = async (
     startDate: Dayjs | null,
     endDate: Dayjs | null
@@ -112,9 +111,10 @@ const DashboardScreen: React.FC = () => {
           startDate: null as Dayjs | null,
           endDate: null as Dayjs | null,
         }}
-        onSubmit={(values) =>
-          handleDateRangeChange(values.startDate, values.endDate)
-        }
+        onSubmit={(values) => {
+          // Call handleDateRangeChange on form submit
+          handleDateRangeChange(values.startDate, values.endDate);
+        }}
       >
         {({ values, setFieldValue, handleSubmit }) => (
           <form onSubmit={handleSubmit}>
@@ -178,13 +178,28 @@ const DashboardScreen: React.FC = () => {
             ) : (
               <>
                 {userRole === Roles.APPROVER ? (
-                  <ApproverDashboardScreen approverData={responseData} />
+                  <ApproverDashboardScreen
+                    approverData={responseData}
+                    startDate={startDate?.format("YYYY-MM-DD") || ""}
+                    endDate={endDate?.format("YYYY-MM-DD") || ""}
+                  />
                 ) : userRole === Roles.STANDARDUSER ? (
-                  <EndUserDashboardScreen standardUserData={responseData} />
+                  <EndUserDashboardScreen 
+                    standardUserData={responseData} 
+                    startDate={startDate?.format("YYYY-MM-DD") || ""}
+                    endDate={endDate?.format("YYYY-MM-DD") || ""}
+                  />
                 ) : userRole === Roles.SUPERADMIN ? (
-                  <SuperAdminDashboardScreen superAdminData={responseData} />
+                  <SuperAdminDashboardScreen superAdminData={responseData} 
+                  startDate={startDate?.format("YYYY-MM-DD") || ""} 
+                  endDate={endDate?.format("YYYY-MM-DD") || ""} 
+                  />
                 ) : userRole === Roles.ADMIN ? (
-                  <AdminDashboardScreen adminData={responseData} startDate={startDate?.format("YYYY-MM-DD") || ""} endDate={endDate?.format("YYYY-MM-DD") || ""} />
+                  <AdminDashboardScreen 
+                    adminData={responseData} 
+                    startDate={startDate?.format("YYYY-MM-DD") || ""} 
+                    endDate={endDate?.format("YYYY-MM-DD") || ""} 
+                  />
                 ) : (
                   <Typography>
                     Something went wrong on the dashboard.

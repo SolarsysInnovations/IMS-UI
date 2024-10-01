@@ -86,7 +86,12 @@ const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
           </Grid>
         ) : (
           <Grid item xs={12}>
-            <p>No data available. Please apply the date filters to view the invoices.</p>
+             <GridDataUi
+              showToolbar={true}
+              columns={columns || []}
+              tableData={[]}
+              checkboxSelection={false}
+            />
           </Grid>
         )}
       </Grid>

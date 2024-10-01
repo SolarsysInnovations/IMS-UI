@@ -28,11 +28,41 @@ export const columns: GridColDef[] = [
     },
 
 ];
-const SuperAdminCustomersList = ({ superAdminCustomersListData }: any) => {
 
+interface SuperAdminInvoiceListProps {
+    superAdminCustomersListData: any;
+    startDate?: string;
+    endDate?: string;
+}
+
+const SuperAdminCustomersList: React.FC<SuperAdminInvoiceListProps> = ({
+    superAdminCustomersListData,
+    startDate,
+    endDate,
+}) => {
+    const hasFiltersApplied = Boolean(startDate && endDate);
     return (
         <>
-            <GridDataUi showToolbar={false} columns={columns} tableData={superAdminCustomersListData || []} checkboxSelection={false} />
+         {hasFiltersApplied ? (
+                superAdminCustomersListData && superAdminCustomersListData.length > 0 ? (
+                    <GridDataUi 
+                        showToolbar={false} 
+                        columns={columns} 
+                        tableData={superAdminCustomersListData} 
+                        checkboxSelection={false} 
+                    />
+                ) : (
+                    <div>No invoices found.</div>
+                )
+            ) : (
+                <GridDataUi 
+                    showToolbar={false} 
+                    columns={columns} 
+                    tableData={[]} // Empty data for grid
+                    checkboxSelection={false} 
+                />
+            )}
+
         </>
     )
 }
