@@ -282,7 +282,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
             <DialogBoxUi
           open={isOpenDialogBox}
           content={
-            <SendEmail onSuccess={handleEmailSuccess} />  
+            <SendEmail invoiceData={data} onSuccess={handleEmailSuccess} />  
           }
           handleClose={handleDialogBoxClose}
         />

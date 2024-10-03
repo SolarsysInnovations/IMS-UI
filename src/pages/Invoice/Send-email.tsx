@@ -13,10 +13,11 @@ import { useNavigate } from "react-router-dom";
 import CancelIcon from '@mui/icons-material/Close';
 
 interface SendEmailProps {
-  onSuccess: () => void;  // Add this line to define the prop type
+  onSuccess: () => void; 
+  invoiceData:any // Add this line to define the prop type
 }
 
-const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
+const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showFilename, setShowFileName] = useState<string[]>([]);
   const pathname = 'sendMail';
@@ -42,7 +43,7 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
   ) => {
     try {
       const formData = new FormData();
-      formData.append("recipientEmail", values.recipientEmail || "");
+      formData.append("recipientEmail", invoiceData?.customerDetails?.customerEmail || "");
      // formData.append("cc", values.cc || "");
       formData.append("subject", values.subject || "");
       formData.append("body", values.body || "");
@@ -67,6 +68,7 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
       setSubmitting(false);
     }
   };
+console.log(invoiceData,"invoiceDatainvoiceDatainvoiceDatainvoiceDatainvoiceData",invoiceData?.customerDetails?.customerEmail);
 
   useSnackbarNotifications({
     error: sendEmailError,
@@ -92,7 +94,8 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
                 label="To Email"
                 name="recipientEmail"
                 type="email"
-                value={values.recipientEmail}
+                disabled={true}
+                value={invoiceData?.customerDetails?.customerEmail}
                 onChange={handleChange}
                 error={touched.recipientEmail && Boolean(errors.recipientEmail)}
                 helperText={touched.recipientEmail && errors.recipientEmail}
@@ -144,10 +147,9 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess }) => {
                 color="primary"
                 component="label"
                 startIcon={<CloudUploadIcon />}
-                sx={{ height: "30px", width: "100px", mt: 2, mb: 2 }}
+                sx={{ height: "30px", width: "15px", mt: 2, mb: 2 ,pt:5, borderRadius:"500px", padding:"5px"}}
               >
-                Upload file
-                <input
+                 <input
                   type="file"
                   hidden
                   multiple
