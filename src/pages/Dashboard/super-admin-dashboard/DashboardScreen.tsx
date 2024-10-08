@@ -4,10 +4,18 @@ import { CircularProgress, Grid, Typography } from '@mui/material';
 import { useGetInvoiceListQuery } from '../../../redux-store/api/injectedApis';
 import { useEffect } from 'react';
 
+
+interface CompanyOverview {
+    id: string;  // Add appropriate fields based on your data structure
+    companyName: string;
+    totalInvoices: number;
+    // Add other fields here
+}
 interface SuperAdminData {
     totalNoOfCompany: number;
     totalNoOfInvoices: number;
-    allInvoicesList: any[]; // Ideally, you should define a more specific type for the invoices.
+    allInvoicesList: any[];
+    companyOverview?: CompanyOverview[]; // Ideally, you should define a more specific type for the invoices.
   }
 
   
@@ -15,6 +23,7 @@ const defaultSuperAdminData: SuperAdminData = {
     totalNoOfCompany: 0,
     totalNoOfInvoices: 0,
     allInvoicesList:[],
+    companyOverview: [],
   };
 
   interface SuperAdminDashboardScreenProps {
@@ -54,28 +63,27 @@ const defaultSuperAdminData: SuperAdminData = {
         totalNoOfCompany: superAdminData.totalNoOfCompany || 0,
         totalNoOfInvoices: superAdminData.totalNoOfInvoices || 0,
     };
+    const companyOverviewData = superAdminData.companyOverview || [];
 
-    // Use the invoiceList data or fallback to superAdminData's allInvoicesList
-    const invoiceListData = Array.isArray(invoiceList) ? invoiceList : superAdminData.allInvoicesList;
-console.log("invoiceListData",invoiceListData);
     return (
         <>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
+      <Grid container spacing={-1}>
+        {superAdminOverviewData && (
+              <Grid item xs={12}>
+                <div style={{ padding: '16px', backgroundColor: '#fff' }}>
                     <SuperAdminDashboardOverview overviewData={superAdminOverviewData} />
-                </Grid>
+                </div>
             </Grid>
-            {invoiceListData.length > 0 ? (
-                <Grid item xs={12}>
-                    <SuperAdminCustomersList 
-                        superAdminCustomersListData={invoiceListData} 
-                        startDate={startDate} // Pass startDate if needed
-                        endDate={endDate}     // Pass endDate if needed
-                    />
-                </Grid>
-            ) : (
-                <Typography>No invoices available</Typography> // Show message if no invoices
-            )}
+        )}
+        {companyOverviewData && (
+            <Grid item xs={12}>
+                <div style={{ padding: '16px', backgroundColor: '#fff' }}>
+                    <SuperAdminCustomersList superAdminCustomersListData={companyOverviewData} />
+                </div>
+            </Grid>
+        )}
+    </Grid>
+
         </>
     );
 };

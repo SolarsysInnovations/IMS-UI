@@ -191,10 +191,11 @@ const DashboardScreen: React.FC = () => {
                   />
                 ) : userRole === Roles.SUPERADMIN ? (
                   <SuperAdminDashboardScreen
-                    superAdminData={responseData}
-                    startDate={startDate?.format("DD-MM-YYYY") || ""}
-                    endDate={endDate?.format("DD-MM-YYYY") || ""}
-                  />
+  superAdminData={responseData}
+  startDate={startDate?.format("DD-MM-YYYY") || ""}
+  endDate={endDate?.format("DD-MM-YYYY") || ""}
+/>
+
                 ) : userRole === Roles.ADMIN ? (
                   <AdminDashboardScreen
                     adminData={responseData}

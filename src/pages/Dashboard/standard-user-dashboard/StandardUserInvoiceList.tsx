@@ -2,7 +2,6 @@ import React from 'react';
 import GridDataUi from '../../../components/GridTable/GridData';
 import { GridColDef } from '@mui/x-data-grid';
 
-
 export const columns: GridColDef[] = [
     {
         field: 'customerName',
@@ -37,7 +36,7 @@ export const columns: GridColDef[] = [
 ];
 
 interface StandardUserInvoiceListProps {
-    invoiceListData: any;
+    invoiceListData: any[];
     startDate?: string;
     endDate?: string;
 }
@@ -47,30 +46,15 @@ const StandardUserInvoiceList: React.FC<StandardUserInvoiceListProps> = ({
     startDate,
     endDate,
 }) => {
-    const hasFiltersApplied = Boolean(startDate && endDate);
-    console.log("invoiceListData",invoiceListData);
+    const hasInvoices = invoiceListData && invoiceListData.length > 0;
+
     return (
-        <>
-            {hasFiltersApplied ? (
-                invoiceListData && invoiceListData.length > 0 ? (
-                    <GridDataUi 
-                        showToolbar={false} 
-                        columns={columns} 
-                        tableData={invoiceListData} 
-                        checkboxSelection={false} 
-                    />
-                ) : (
-                    <div>No invoices found.</div>
-                )
-            ) : (
-                <GridDataUi 
-                    showToolbar={false} 
-                    columns={columns} 
-                    tableData={[]} // Empty data for grid
-                    checkboxSelection={false} 
-                />
-            )}
-        </>
+        <GridDataUi 
+            showToolbar={false} 
+            columns={columns} 
+            tableData={hasInvoices ? invoiceListData : []} // Empty grid if no invoices
+            checkboxSelection={false} 
+        />
     );
 };
 

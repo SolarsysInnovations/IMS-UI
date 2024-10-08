@@ -59,7 +59,7 @@ const EndUserDashboardScreen: React.FC<EndUserDashboardScreenProps> = ({
   };
 
   const invoiceListData = Array.isArray(invoiceList) ? invoiceList : standardUserData.allInvoicesList;
-console.log("invoiceList",invoiceList);
+
   return (
     <>
       <Grid container spacing={2}>
@@ -67,15 +67,11 @@ console.log("invoiceList",invoiceList);
           <StandardUserDashboardOverview approverOverViewData={overviewData} />
         </Grid>
       </Grid>
-      {invoiceListData.length > 0 ? (
-        <StandardUserInvoiceList 
-          invoiceListData={invoiceListData}
-          startDate={startDate} // Pass startDate
-          endDate={endDate}     // Pass endDate
-        />
-      ) : (
-        <Typography>No invoices available</Typography> // Show message if no invoices
-      )}
+      <StandardUserInvoiceList 
+        invoiceListData={invoiceListData} // Pass data (can be empty)
+        startDate={startDate} // Pass startDate
+        endDate={endDate}     // Pass endDate
+      />
     </>
   );
 };

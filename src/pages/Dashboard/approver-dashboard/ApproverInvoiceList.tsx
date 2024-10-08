@@ -67,37 +67,32 @@ export const columns: GridColDef[] = [
     },
 ];
 
-const ApproverInvoiceList = ({ companyOverviewList, startDate, endDate }: { companyOverviewList: any; startDate?: string; endDate?: string; }) => {
-    // Filter to only include pending invoices
-    const filteredInvoices = companyOverviewList?.filter((invoice: any) => {
-        return invoice.invoiceStatus === 'PENDING'; // Adjust condition if needed
-    }) || [];
+const ApproverInvoiceList = ({
+    companyOverviewList,
+    startDate,
+    endDate
+}: {
+    companyOverviewList: any;
+    startDate?: string;
+    endDate?: string;
+}) => {
+    console.log("companyOverviewList", companyOverviewList); // Debug to check the data being passed
 
     // Check if the date filters are applied
     const hasFiltersApplied = Boolean(startDate && endDate);
 
+    // Filtered data if filters are applied
+    const filteredInvoices = hasFiltersApplied
+        ? companyOverviewList?.filter((invoice: any) => invoice.invoiceStatus === 'PENDING') || []
+        :  []; // Show all data if no filters are applied
+console.log("filteredInvoices", filteredInvoices);
     return (
-        <>
-            {hasFiltersApplied ? (
-                filteredInvoices.length > 0 ? (
-                    <GridDataUi
-                        showToolbar={false}
-                        columns={columns}
-                        tableData={filteredInvoices} // Pass the filtered data
-                        checkboxSelection={false}
-                    />
-                ) : (
-                    <div>No pending invoices found for the selected date range.</div>
-                )
-            ) : (
-                <GridDataUi
-                    showToolbar={false}
-                    columns={columns}
-                    tableData={[]} // Empty data for grid
-                    checkboxSelection={false}
-                />
-            )}
-        </>
+        <GridDataUi
+            showToolbar={false}
+            columns={columns}
+            tableData={filteredInvoices} // Use filtered or all data
+            checkboxSelection={false}
+        />
     );
 };
 

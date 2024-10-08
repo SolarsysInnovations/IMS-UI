@@ -79,15 +79,12 @@ const ApproverDashboardScreen: React.FC<ApproverDashboardScreenProps> = ({
         )}
       </Grid>
 
-      {companyOverviewList.length > 0 ? (
         <ApproverInvoiceList 
           companyOverviewList={companyOverviewList} 
           startDate={startDate} // Pass startDate
           endDate={endDate}     // Pass endDate
         />
-      ) : (
-        <div>No pending invoices found.</div>
-      )}
+    
     </>
   );
 };
