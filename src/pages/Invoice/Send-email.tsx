@@ -46,8 +46,6 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
       formData.append("recipientEmail", invoiceData?.customerDetails?.customerEmail || "");
      // formData.append("cc", values.cc || "");
       formData.append("subject", values.subject || "");
-      formData.append("body", values.body || "");
-
       uploadedFiles.forEach((file) => {
         formData.append("file", file);
       });

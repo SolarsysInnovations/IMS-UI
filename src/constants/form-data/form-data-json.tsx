@@ -40,7 +40,6 @@ export const customerFields: FieldProps[] = [
     },
     {
         name: 'otherDetails',
-        label: 'Other Details',
         type: 'section',
         titleGridSize: 12,
         subFields: [
