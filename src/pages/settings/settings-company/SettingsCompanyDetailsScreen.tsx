@@ -24,16 +24,16 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   // Fetch company logo using companyId from companyInfo
   const { data: logoData, isSuccess: logoSuccess, isError: logoError } = useGetCompanyLogoQuery(companyInfo?.companyDetails?.id);
 
-  // Convert ArrayBuffer to base64
-  const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary); // Convert to base64
-  };
+  // // Convert ArrayBuffer to base64
+  // const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
+  //   let binary = '';
+  //   const bytes = new Uint8Array(buffer);
+  //   const len = bytes.byteLength;
+  //   for (let i = 0; i < len; i++) {
+  //     binary += String.fromCharCode(bytes[i]);
+  //   }
+  //   return window.btoa(binary); // Convert to base64
+  // };
 
   // Get base64 string for company logo
   const getCompanyLogo = () => {
@@ -155,7 +155,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   <Grid item xs={12}>
     <Box display="flex" alignItems="center" sx={{marginTop:"10px"}} gap={3}>
       <Box component="span" fontWeight={500} width="140px" fontSize="13px">
-        Uploaded Image 
+        Logo :
       </Box>
       {logoData && logoData.companyLogo ? (
         <img

@@ -1,53 +1,31 @@
 import React, { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Box, Grid, Typography } from "@mui/material";
-import ApproverDashboardScreen from "./approver-dashboard/DashboardScreen";
 import { selectUserRole } from "../../redux-store/auth/authSlice";
 import { useSelector } from "react-redux";
 import { Roles } from "../../constants/Enums";
-import EndUserDashboardScreen from "./standard-user-dashboard/DashboardScreen";
-import SuperAdminDashboardScreen from "./super-admin-dashboard/DashboardScreen";
 import { useGetDashboardMutation } from "../../redux-store/api/injectedApis";
 import { Formik } from "formik";
 import DatePickerUi from "../../components/ui/DatePicker";
 import ButtonSmallUi from "../../components/ui/ButtonSmall";
 import SelectDropdown from "../../components/ui/SelectDropdown";
-import { SxProps, Theme } from "@mui/system";
+import ApproverDashboardScreen from "./approver-dashboard/DashboardScreen";
+import EndUserDashboardScreen from "./standard-user-dashboard/DashboardScreen";
+import SuperAdminDashboardScreen from "./super-admin-dashboard/DashboardScreen";
 import AdminDashboardScreen from "./Admin-dashboard/Dashboard-screen";
 
 const DashboardScreen: React.FC = () => {
-  const [getDashboard, { data, isLoading, isError, error }] =
-    useGetDashboardMutation();
+  const [getDashboard, { data, isLoading, isError, error }] = useGetDashboardMutation();
   const [responseData, setResponseData] = useState<any>({});
   const userRole = useSelector(selectUserRole);
 
-  // State for date ranges
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const today = dayjs();
+  const [startDate, setStartDate] = useState<Dayjs | null>(today.startOf("month"));
+  const [endDate, setEndDate] = useState<Dayjs | null>(today.endOf("month"));
+  const [isCustomRange, setIsCustomRange] = useState(false);
 
-  // Fetch initial data without filters
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        const response = await getDashboard({
-          startDate: "",
-          endDate: "",
-        }).unwrap();
-        setResponseData(response || {});
-        console.log("response", response);
-      } catch (error) {
-        console.error("Error fetching initial dashboard data:", error);
-        setResponseData({});
-      }
-    };
-    fetchInitialData();
-  }, [getDashboard]);
-
-  // Handle date range changes
-  const handleDateRangeChange = async (
-    startDate: Dayjs | null,
-    endDate: Dayjs | null
-  ) => {
+  // Handle form submission to apply date filters
+  const handleApplyFilter = async (startDate: Dayjs | null, endDate: Dayjs | null) => {
     const formattedStartDate = startDate ? startDate.format("DD-MM-YYYY") : "";
     const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
 
@@ -57,18 +35,17 @@ const DashboardScreen: React.FC = () => {
         endDate: formattedEndDate,
       }).unwrap();
       setResponseData(response || {});
-
-      // Set the state for start and end dates
-      setStartDate(startDate);
-      setEndDate(endDate);
     } catch (error) {
       console.error("Error fetching filtered dashboard data:", error);
+      setResponseData({});
     }
   };
 
   // Dropdown logic to handle preset date ranges
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
     const today = dayjs();
+    setIsCustomRange(newValue.value === "Custom");
+
     if (newValue) {
       if (newValue.value === "Today") {
         setFieldValue("startDate", today);
@@ -108,27 +85,21 @@ const DashboardScreen: React.FC = () => {
     <Box px={0} py={2}>
       <Formik
         initialValues={{
-          startDate: null as Dayjs | null,
-          endDate: null as Dayjs | null,
+          startDate: startDate,
+          endDate: endDate,
         }}
         onSubmit={(values) => {
-          // Call handleDateRangeChange on form submit
-          handleDateRangeChange(values.startDate, values.endDate);
+          // Call handleApplyFilter on form submit
+          handleApplyFilter(values.startDate, values.endDate);
         }}
       >
         {({ values, setFieldValue, handleSubmit }) => (
           <form onSubmit={handleSubmit}>
-            <Grid
-              container
-              spacing={2}
-              alignItems="center"
-              justifyContent="flex-end"
-            >
+            <Grid container spacing={2} alignItems="center" justifyContent="flex-end">
               <Grid item xs={12} sm={4} md={3}>
                 <SelectDropdown
-                  onChange={(newValue: any) =>
-                    handleDropdownChange(newValue, setFieldValue)
-                  }
+                  defaultValue={{ value: "This Month", label: "This Month" }}
+                  onChange={(newValue: any) => handleDropdownChange(newValue, setFieldValue)}
                   options={[
                     { value: "Today", label: "Today" },
                     { value: "This Week", label: "This Week" },
@@ -142,13 +113,15 @@ const DashboardScreen: React.FC = () => {
                 />
               </Grid>
 
+              {/* Show DatePickerUi components only for custom date range */}
               <Grid item xs={12} sm={4} md={3}>
                 <DatePickerUi
                   label="Start Date"
                   onChange={(date: string | null) =>
                     setFieldValue("startDate", date ? dayjs(date) : undefined)
                   }
-                  value={values.startDate || undefined} // Use undefined instead of null
+                  value={values.startDate || undefined}
+                  disabled={!isCustomRange}
                 />
               </Grid>
 
@@ -158,7 +131,8 @@ const DashboardScreen: React.FC = () => {
                   onChange={(date: string | null) =>
                     setFieldValue("endDate", date ? dayjs(date) : undefined)
                   }
-                  value={values.endDate || undefined} // Use undefined instead of null
+                  value={values.endDate || undefined}
+                  disabled={!isCustomRange}
                 />
               </Grid>
 
@@ -170,6 +144,7 @@ const DashboardScreen: React.FC = () => {
         )}
       </Formik>
 
+      {/* Displaying the data */}
       <Grid container spacing={2} mt={3}>
         <Grid item xs={12} display="flex" justifyContent="center">
           <Box width="100%" maxWidth="1200px">
@@ -178,34 +153,13 @@ const DashboardScreen: React.FC = () => {
             ) : (
               <>
                 {userRole === Roles.APPROVER ? (
-                  <ApproverDashboardScreen
-                    approverData={responseData}
-                    startDate={startDate?.format("DD-MM-YYYY") || ""}
-                    endDate={endDate?.format("DD-MM-YYYY") || ""}
-                  />
+                  <ApproverDashboardScreen approverData={responseData} startDate={startDate?.format("DD-MM-YYYY") || ""} endDate={endDate?.format("DD-MM-YYYY") || ""} />
                 ) : userRole === Roles.STANDARDUSER ? (
-                  <EndUserDashboardScreen
-                    standardUserData={responseData}
-                    startDate={startDate?.format("DD-MM-YYYY") || ""}
-                    endDate={endDate?.format("DD-MM-YYYY") || ""}
-                  />
+                  <EndUserDashboardScreen standardUserData={responseData} startDate={startDate?.format("DD-MM-YYYY") || ""} endDate={endDate?.format("DD-MM-YYYY") || ""} />
                 ) : userRole === Roles.SUPERADMIN ? (
-                  <SuperAdminDashboardScreen
-  superAdminData={responseData}
-  startDate={startDate?.format("DD-MM-YYYY") || ""}
-  endDate={endDate?.format("DD-MM-YYYY") || ""}
-/>
-
-                ) : userRole === Roles.ADMIN ? (
-                  <AdminDashboardScreen
-                    adminData={responseData}
-                    startDate={startDate?.format("DD-MM-YYYY") || ""}
-                    endDate={endDate?.format("DD-MM-YYYY") || ""}
-                  />
+                  <SuperAdminDashboardScreen superAdminData={responseData} startDate={startDate?.format("DD-MM-YYYY") || ""} endDate={endDate?.format("DD-MM-YYYY") || ""} />
                 ) : (
-                  <Typography>
-                    Something went wrong on the dashboard.
-                  </Typography>
+                  <AdminDashboardScreen adminData={responseData} startDate={startDate?.format("DD-MM-YYYY") || ""} endDate={endDate?.format("DD-MM-YYYY") || ""} />
                 )}
               </>
             )}
