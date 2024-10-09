@@ -4,11 +4,12 @@ import { Add, Approval, KeyboardBackspaceTwoTone, Save, } from '@mui/icons-mater
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, } from 'react-redux';
-import { Box, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Divider, Grid, Paper, Table, TableBody, TableCell,Tooltip, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
 import { AppDispatch, } from '../../redux-store/store'
 import RadioUi from '../../components/ui/RadioGroup';
 import { Formik, Form } from 'formik';
+import {  IconButton } from "@mui/material";
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
 import { InvoiceInitialValueProps } from '../../types/types';
@@ -30,6 +31,7 @@ import { useCreateInvoiceMutation, useGetCustomersListQuery, useGetGstTypeListQu
 import { clearInvoiceData, setInvoiceData } from '../../redux-store/slices/invoiceSlice';
 import ServiceScreen from './service/ServiceScreen';
 import { useRolePermissions } from '../../hooks/useRolePermission';
+import CancelIcon from '@mui/icons-material/Close';
 
 interface Service {
     id: string; // Ensure id is mandatory
@@ -619,26 +621,34 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             >
                               <TableHead>
                                 <TableRow>
-                                  <TableCell>Service Accounting Code</TableCell>
+                                  <TableCell  sx={{ width: "140px" }}
+                                     >Service Accounting Code</TableCell>
+                                 <TableCell
+                                    sx={{ width: "320px" }}
+                                    align="center"
+                                  >
+                                    Description
+                                  </TableCell> 
                                   <TableCell
-                                    sx={{ width: "140px" }}
-                                    align="left"
+                                    sx={{ width: "50px" }}
+                                    align="center"
                                   >
                                     Quantity
                                   </TableCell>
+                                  
                                   <TableCell
-                                    sx={{ width: "140px" }}
-                                    align="left"
+                                    sx={{ width: "100px" }}
+                                    align="center"
                                   >
                                     Service Amount
                                   </TableCell>
                                   <TableCell
-                                    sx={{ width: "140px" }}
+                                    sx={{ width: "100px" }}
                                     align="right"
                                   >
                                     Amount
                                   </TableCell>
-                                  <TableCell align="left"></TableCell>
+                                  <TableCell align="center"></TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -718,6 +728,14 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         />
                                       </TableCell>
                                       <TableCell align="right">
+                                      <Tooltip title={item?.serviceDescription}>
+                                     <Typography
+                                     align="center"
+                                           variant="body2" 
+                                        >{item?.serviceDescription?.slice(0,30)+"..." }</Typography></Tooltip>
+                                        </TableCell>
+
+                                      <TableCell align="right">
                                         <TextFieldUi
                                           type="number"
                                           value={item?.serviceQty}
@@ -738,13 +756,13 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         {item?.serviceTotalAmount}
                                       </TableCell>
                                       <TableCell align="right">
-                                        <ButtonSmallUi
-                                          type="button"
+                                      <IconButton  type="button"
                                           onClick={() =>
                                             handleRemoveRow(item?.id)
                                           }
-                                          label="Remove"
-                                        />
+                                          >
+                        <CancelIcon color="secondary"   />
+                      </IconButton> 
                                       </TableCell>
                                     </TableRow>
                                   )
