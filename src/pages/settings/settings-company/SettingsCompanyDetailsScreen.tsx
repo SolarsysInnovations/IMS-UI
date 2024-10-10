@@ -20,35 +20,24 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [companyLogo, setCompanyLogo] = useState<string | null>(null); // Local state for logo
 
   // Fetch company logo using companyId from companyInfo
   const { data: logoData, isSuccess: logoSuccess, isError: logoError } = useGetCompanyLogoQuery(companyInfo?.companyDetails?.id);
 
-  // // Convert ArrayBuffer to base64
-  // const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
-  //   let binary = '';
-  //   const bytes = new Uint8Array(buffer);
-  //   const len = bytes.byteLength;
-  //   for (let i = 0; i < len; i++) {
-  //     binary += String.fromCharCode(bytes[i]);
-  //   }
-  //   return window.btoa(binary); // Convert to base64
-  // };
-
-  // Get base64 string for company logo
-  const getCompanyLogo = () => {
-    if (logoData && logoData.companyLogo) {
-      const base64String = logoData.companyLogo; // Assuming companyLogo is a base64 string
-      return `data:image/jpeg;base64,${base64String}`;
-    }
-    return null;
-  };
-
+  // Update the company logo in local state when logoData changes
   useEffect(() => {
     if (logoSuccess && logoData) {
-      console.log("Logo Base64 String:", logoData.companyLogo); // Logs the base64 string of the logo
+      setCompanyLogo(`data:image/jpeg;base64,${logoData.companyLogo}`); // Update local logo state
     }
   }, [logoData, logoSuccess]);
+
+  // Fetch company details when component mounts or companyInfo changes
+  useEffect(() => {
+    if (companyInfo?.companyDetails?.id) {
+      getData(companyInfo.companyDetails.id); // Fetch company details if id exists
+    }
+  }, [companyInfo]);
 
   const handleEditClick = async () => {
     try {
@@ -152,26 +141,25 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
           </Grid>
 
           <Grid container spacing={2}>
-  <Grid item xs={12}>
-    <Box display="flex" alignItems="center" sx={{marginTop:"10px"}} gap={3}>
-      <Box component="span" fontWeight={500} width="140px" fontSize="13px">
-        Logo :
-      </Box>
-      {logoData && logoData.companyLogo ? (
-        <img
-          src={getCompanyLogo() ?? undefined}
-          alt="Company Logo"
-          style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "contain" }}
-        />
-      ) : (
-        <Box component="span" fontSize="13px">
-          : No image available
-        </Box>
-      )}
-    </Box>
-  </Grid>
-</Grid>
-
+            <Grid item xs={12}>
+              <Box display="flex" alignItems="center" sx={{ marginTop: "10px" }} gap={3}>
+                <Box component="span" fontWeight={500} width="140px" fontSize="13px">
+                  Logo :
+                </Box>
+                {companyLogo ? (
+                  <img
+                    src={companyLogo} // Use local state for logo
+                    alt="Company Logo"
+                    style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "contain" }}
+                  />
+                ) : (
+                  <Box component="span" fontSize="13px">
+                    : No image available
+                  </Box>
+                )}
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
       )}
     </>

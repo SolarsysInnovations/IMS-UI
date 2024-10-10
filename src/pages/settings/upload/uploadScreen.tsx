@@ -3,6 +3,7 @@ import React, { useState, ChangeEvent, useEffect } from "react";
 import {
   useAddCompanyLogoMutation,
   useGetCompanyLogoQuery,
+  useDeleteCompanyLogoMutation,
 } from "../../../../src/redux-store/api/injectedApis";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 import { selectUserDetails } from "../../../redux-store/auth/authSlice";
@@ -11,44 +12,61 @@ import { useDispatch, useSelector } from "react-redux";
 const UploadScreen: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(
-    null
-  );
+  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
   const [savedLogoUrl, setSavedLogoUrl] = useState<string | null>(null);
-  const companyInfo = useSelector(selectUserDetails);
+  const [base64String, setBase64String] = useState<string | null>(null);
 
-  const [addCompanyLogo, { isSuccess, isError, data }] =
-    useAddCompanyLogoMutation();
-  const {
-    data: logoData,
-    isSuccess: logoSuccess,
-    isError: logoError,
-  } = useGetCompanyLogoQuery(companyInfo?.companyDetails?.id);
+  const companyInfo = useSelector(selectUserDetails);
+  const { id: companyId } = companyInfo?.companyDetails || {};
+
+  const [deleteCompanyLogo, { isLoading: deleteCompanyLoading, isSuccess: deleteCompanySuccess, isError: deleteCompanyError, error: deleteCompanyErrorObject }] = useDeleteCompanyLogoMutation();
+  const [addCompanyLogo, { isSuccess: uploadSuccess, isError: uploadError, data }] = useAddCompanyLogoMutation();
+  const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch, isFetching, error: logoFetchError } = useGetCompanyLogoQuery(companyId);
 
   useSnackbarNotifications({
-    success: isSuccess,
+    error: deleteCompanyError,
+    errorMessage: 'Error deleting company logo',
+    success: deleteCompanySuccess,
+    successMessage: 'Logo deleted successfully',
+    errorObject: deleteCompanyErrorObject,
+  });
+
+  useSnackbarNotifications({
+    success: uploadSuccess,
     successMessage: "Logo has been uploaded successfully",
-    error: isError,
+    error: uploadError,
     errorMessage: "Error uploading logo. Please try again.",
   });
 
+  // Reset state when the component mounts or when the companyId changes
   useEffect(() => {
-    if (isSuccess && data) {
+    setSelectedFile(null);
+    setImagePreview(null);
+    setSavedLogoUrl(null);
+    setBase64String(null); // Reset base64String
+  }, [companyId]);
+
+  // Handle successful logo upload
+  useEffect(() => {
+    if (uploadSuccess && data) {
       const responseData = data as { logoUrl: string };
       setSavedLogoUrl(responseData.logoUrl);
       setLoading(false);
       setSelectedFile(null);
       setImagePreview(null);
+      refetch(); // Fetch the updated logo data after upload
     }
-  }, [isSuccess, data]);
+  }, [uploadSuccess, data, refetch]);
 
-  const getCompanyLogo = () => {
+  // Update base64String when logoData changes
+  useEffect(() => {
     if (logoData && logoData.companyLogo) {
-      const base64String = logoData.companyLogo;
-      return `data:image/jpeg;base64,${base64String}`;
+      const logoBase64 = logoData.companyLogo;
+      setBase64String(`data:image/jpeg;base64,${logoBase64}`); // Set base64String state
+    } else {
+      setBase64String(null); // Reset base64String if no logo exists
     }
-    return null;
-  };
+  }, [logoData]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
@@ -72,6 +90,15 @@ const UploadScreen: React.FC = () => {
     }
   };
 
+  const handleDeleteClick = async () => {
+    const confirmed = window.confirm("Are you sure you want to delete this logo?");
+    if (confirmed && companyId) {
+      setBase64String(null); // Set base64String to null immediately
+      await deleteCompanyLogo(companyId).unwrap(); // Await deletion to ensure completion
+      refetch(); // Refetch to update the state after deletion
+    }
+  };
+
   const handleSave = async () => {
     if (selectedFile) {
       setLoading(true);
@@ -81,6 +108,7 @@ const UploadScreen: React.FC = () => {
         await addCompanyLogo(formData).unwrap();
       } catch (error) {
         console.error("Error uploading logo:", error);
+        setLoading(false);
       }
     }
   };
@@ -102,7 +130,7 @@ const UploadScreen: React.FC = () => {
         item
         xs={12}
         sm={6}
-        md={4} // More control on medium screens
+        md={4}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -111,9 +139,9 @@ const UploadScreen: React.FC = () => {
         }}
       >
         {/* Display Company Logo or No Image Text */}
-        {logoData && logoData.companyLogo ? (
+        {base64String ? (
           <img
-            src={getCompanyLogo() ?? undefined}
+            src={base64String}
             alt="Company Logo"
             style={{
               maxWidth: "250px",
@@ -127,6 +155,16 @@ const UploadScreen: React.FC = () => {
             No image available
           </Box>
         )}
+
+        <Button
+          variant="outlined"
+          color="error"
+          sx={{ marginTop: "10px" }}
+          onClick={handleDeleteClick}
+          disabled={deleteCompanyLoading || !logoData?.companyLogo}
+        >
+          Remove
+        </Button>
 
         {/* Upload instructions */}
         <Typography
@@ -176,7 +214,7 @@ const UploadScreen: React.FC = () => {
                 marginBottom: "10px",
               }}
             />
-            <Button variant="contained" color="info" onClick={handleSave}>
+            <Button variant="contained" color="info" onClick={handleSave} disabled={loading}>
               Save
             </Button>
           </Box>
@@ -194,33 +232,13 @@ const UploadScreen: React.FC = () => {
                 objectFit: "cover",
                 border: "1px solid #ddd",
                 borderRadius: "8px",
-                marginBottom: "10px",
               }}
             />
           </div>
         )}
 
-        {/* Loading spinner */}
-        {loading && (
-          <Box sx={{ marginTop: "20px", textAlign: "center" }}>
-            <CircularProgress size={24} />
-            <Typography variant="caption" sx={{ marginLeft: "10px" }}>
-              Uploading...
-            </Typography>
-          </Box>
-        )}
-
-        {/* Upload Another button */}
-        {savedLogoUrl && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setSavedLogoUrl(null)}
-            sx={{ marginTop: "10px" }}
-          >
-            Upload Another Logo
-          </Button>
-        )}
+        {/* Loading indicator */}
+        {loading && <CircularProgress sx={{ marginTop: "10px" }} />}
       </Grid>
     </Grid>
   );
