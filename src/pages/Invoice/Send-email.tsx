@@ -6,7 +6,7 @@ import ButtonSmallUi from "../../components/ui/ButtonSmall";
 import { useSendEmailNotificationMutation } from "../../redux-store/api/injectedApis";
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { SendEmailInitialValueProps } from "../../types/types";
-import { sendEmailValidationSchema } from "../../constants/forms/validations/validationSchema";
+// import { sendEmailValidationSchema } from "../../constants/forms/validations/validationSchema";
 import { SendEmailInitialValue } from '../../constants/forms/formikInitialValues';
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useNavigate } from "react-router-dom";
@@ -46,8 +46,6 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
       formData.append("recipientEmail", invoiceData?.customerDetails?.customerEmail || "");
      // formData.append("cc", values.cc || "");
       formData.append("subject", values.subject || "");
-      formData.append("body", values.body || "");
-
       uploadedFiles.forEach((file) => {
         formData.append("file", file);
       });
@@ -81,7 +79,7 @@ console.log(invoiceData,"invoiceDatainvoiceDatainvoiceDatainvoiceDatainvoiceData
   return (
     <Formik
       initialValues={SendEmailInitialValue}
-      validationSchema={sendEmailValidationSchema}
+      // validationSchema={sendEmailValidationSchema}
       onSubmit={handleSubmit}
     >
       {({ values, errors, touched, handleChange, handleSubmit }) => (

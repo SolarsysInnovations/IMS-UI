@@ -156,14 +156,14 @@ export const paymentTermsValidationSchema = Yup.object().shape({
         .required('totalDays is required'),
 });
 
-export const sendEmailValidationSchema = Yup.object().shape({
-    //   fromemail: Yup.string()
-    //     .email("Invalid email address")
-    //     .required("From Email is required"),
-    recipientEmail: Yup.string()
-        .email("Invalid email address")
-        .required("To Email is required"),
-});
+// export const sendEmailValidationSchema = Yup.object().shape({
+//     //   fromemail: Yup.string()
+//     //     .email("Invalid email address")
+//     //     .required("From Email is required"),
+//     recipientEmail: Yup.string()
+//         .email("Invalid email address")
+//         .required("To Email is required"),
+// });
 
 export const RoleValidationSchema = Yup.object().shape({
     // userName: Yup.string().required('Username is required'),
