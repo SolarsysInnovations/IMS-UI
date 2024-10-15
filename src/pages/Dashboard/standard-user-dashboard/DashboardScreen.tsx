@@ -1,77 +1,49 @@
-import React, { useEffect } from "react";
+import React from "react";
 import StandardUserDashboardOverview from "./StandardUserDashboardOverview";
 import StandardUserInvoiceList from "./StandardUserInvoiceList";
-import { Grid, CircularProgress, Typography } from "@mui/material";
-import { useGetInvoiceListQuery } from "../../../redux-store/api/injectedApis";
+import { Grid } from "@mui/material";
 
-// Define the type for standardUserData
 interface StandardUserData {
   totalInvoices: number;
   pendingInvoices: number;
   approvedInvoices: number;
-  allInvoicesList: any[]; // Ideally, you should define a more specific type for the invoices.
+  allInvoicesList: any[];
 }
 
-// Define default props
 const defaultStandardUserData: StandardUserData = {
   totalInvoices: 0,
   pendingInvoices: 0,
   approvedInvoices: 0,
-  allInvoicesList: [],
+  allInvoicesList: [], // Default to an empty array
 };
 
 interface EndUserDashboardScreenProps {
-  standardUserData?: StandardUserData; // Make standardUserData optional
-  startDate?: string; 
-  endDate?: string; 
+  standardUserData?: StandardUserData;
 }
 
 const EndUserDashboardScreen: React.FC<EndUserDashboardScreenProps> = ({
-  standardUserData = defaultStandardUserData,
-  startDate,
-  endDate,
+  standardUserData = defaultStandardUserData, // Use defaultStandardUserData if not provided
 }) => {
-  // Fetch the invoice list using the API hook
-  const { data: invoiceList, error, isLoading, refetch } = useGetInvoiceListQuery();
 
-  // Refetch the invoice list based on start and end dates
-  useEffect(() => {
-    if (startDate && endDate) {
-      refetch(); // Refetch when date filters change
-    }
-  }, [startDate, endDate, refetch]);
-
-  // Loading state
-  if (isLoading) {
-    return <CircularProgress />; // Show loading indicator
-  }
-
-  // Error handling
-  if (error) {
-    return <Typography color="error">Error fetching invoice list</Typography>; // Show error message
-  }
-
-  // Structure overview data
-  const overviewData = {
+  const approverOverViewData = {
     totalInvoices: standardUserData.totalInvoices,
     pendingInvoices: standardUserData.pendingInvoices,
     approvedInvoices: standardUserData.approvedInvoices,
   };
 
-  const invoiceListData = Array.isArray(invoiceList) ? invoiceList : standardUserData.allInvoicesList;
+  const invoiceListData = standardUserData.allInvoicesList; // This will default to an empty array if no data is present
 
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={8}>
-          <StandardUserDashboardOverview approverOverViewData={overviewData} />
-        </Grid>
+        {approverOverViewData && (
+          <Grid item xs={8}>
+            <StandardUserDashboardOverview approverOverViewData={approverOverViewData} />
+          </Grid>
+        )}
       </Grid>
-      <StandardUserInvoiceList 
-        invoiceListData={invoiceListData} // Pass data (can be empty)
-        startDate={startDate} // Pass startDate
-        endDate={endDate}     // Pass endDate
-      />
+      {/* Always render StandardUserInvoiceList, even if invoiceListData is empty */}
+      <StandardUserInvoiceList invoiceListData={invoiceListData} />
     </>
   );
 };

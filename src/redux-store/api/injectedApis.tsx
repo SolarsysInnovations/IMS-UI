@@ -410,8 +410,8 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
     // ! ----------- Upload Logo --------------
 
     getCompanyLogo: builder.query<any, void>({
-        query: () => ({
-            url: API_URLS.getCompanyLogo,
+        query: (id) => ({
+            url: `${API_URLS.getCompanyLogo}/${id}`,
           method: 'POST',
         }),
         // Set caching for 5 minutes (300 seconds)
@@ -427,7 +427,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
       }),
       deleteCompanyLogo: builder.mutation<void, number>({
         query: (id) => ({
-            url: API_URLS.companyLogoDelete,
+            url: `${API_URLS.companyLogoDelete}/${id}`,
             method: 'POST',
         }),
     }),

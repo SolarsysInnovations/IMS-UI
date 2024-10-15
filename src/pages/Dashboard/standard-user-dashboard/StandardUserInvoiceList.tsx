@@ -1,4 +1,3 @@
-import React from 'react';
 import GridDataUi from '../../../components/GridTable/GridData';
 import { GridColDef } from '@mui/x-data-grid';
 
@@ -35,26 +34,16 @@ export const columns: GridColDef[] = [
     },
 ];
 
-interface StandardUserInvoiceListProps {
-    invoiceListData: any[];
-    startDate?: string;
-    endDate?: string;
-}
-
-const StandardUserInvoiceList: React.FC<StandardUserInvoiceListProps> = ({
-    invoiceListData,
-    startDate,
-    endDate,
-}) => {
-    const hasInvoices = invoiceListData && invoiceListData.length > 0;
-
+const StandardUserInvoiceList = ({ invoiceListData }: any) => {
     return (
-        <GridDataUi 
-            showToolbar={false} 
-            columns={columns} 
-            tableData={hasInvoices ? invoiceListData : []} // Empty grid if no invoices
-            checkboxSelection={false} 
-        />
+        <>
+            <GridDataUi
+                showToolbar={false}
+                columns={columns}
+                tableData={invoiceListData || []} // Use empty array if no data is available
+                checkboxSelection={false}
+            />
+        </>
     );
 };
 

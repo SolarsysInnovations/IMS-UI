@@ -153,9 +153,9 @@ const DashboardScreen: React.FC = () => {
             ) : (
               <>
                 {userRole === Roles.APPROVER ? (
-                  <ApproverDashboardScreen approverData={responseData} startDate={startDate?.format("DD-MM-YYYY") || ""} endDate={endDate?.format("DD-MM-YYYY") || ""} />
+                  <ApproverDashboardScreen approverData={responseData} />
                 ) : userRole === Roles.STANDARDUSER ? (
-                  <EndUserDashboardScreen standardUserData={responseData} startDate={startDate?.format("DD-MM-YYYY") || ""} endDate={endDate?.format("DD-MM-YYYY") || ""} />
+                  <EndUserDashboardScreen standardUserData={responseData}  />
                 ) : userRole === Roles.SUPERADMIN ? (
                   <SuperAdminDashboardScreen superAdminData={responseData} startDate={startDate?.format("DD-MM-YYYY") || ""} endDate={endDate?.format("DD-MM-YYYY") || ""} />
                 ) : (
