@@ -22,7 +22,6 @@ const UploadScreen: React.FC = () => {
   const [deleteCompanyLogo, { isLoading: deleteCompanyLoading, isSuccess: deleteCompanySuccess, isError: deleteCompanyError, error: deleteCompanyErrorObject }] = useDeleteCompanyLogoMutation();
   const [addCompanyLogo, { isSuccess: uploadSuccess, isError: uploadError, data }] = useAddCompanyLogoMutation();
   const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch, isFetching, error: logoFetchError } = useGetCompanyLogoQuery(companyId);
-
   useSnackbarNotifications({
     error: deleteCompanyError,
     errorMessage: 'Error deleting company logo',
@@ -58,16 +57,18 @@ const UploadScreen: React.FC = () => {
     }
   }, [uploadSuccess, data, refetch]);
 
-  // Update base64String when logoData changes
   useEffect(() => {
-    if (logoData && logoData.companyLogo) {
-      const logoBase64 = logoData.companyLogo;
-      setBase64String(`data:image/jpeg;base64,${logoBase64}`); // Set base64String state
+    if (logoSuccess && logoData.companyLogo) {
+      setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`); // Set base64String state
+    } else if (logoError && logoFetchError?.status === 404) {
+      // If there's a 404 error, reset base64String
+      setBase64String(null);
+
     } else {
       setBase64String(null); // Reset base64String if no logo exists
     }
-  }, [logoData]);
-
+  }, [logoSuccess, logoError, logoFetchError]);
+  
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     if (file) {
@@ -94,10 +95,19 @@ const UploadScreen: React.FC = () => {
     const confirmed = window.confirm("Are you sure you want to delete this logo?");
     if (confirmed && companyId) {
       setBase64String(null); // Set base64String to null immediately
+      setImagePreview(null);  // Clear the image preview immediately
       await deleteCompanyLogo(companyId).unwrap(); // Await deletion to ensure completion
       refetch(); // Refetch to update the state after deletion
     }
   };
+
+  useEffect(() => {
+    if (deleteCompanySuccess) {
+      // After successfully deleting, reset the base64 string and image preview
+      setBase64String(null);
+      setImagePreview(null);
+    }
+  }, [deleteCompanySuccess]);
 
   const handleSave = async () => {
     if (selectedFile) {
@@ -138,30 +148,30 @@ const UploadScreen: React.FC = () => {
           padding: "10px",
         }}
       >
-        {/* Display Company Logo or No Image Text */}
-        {base64String ? (
-          <img
-            src={base64String}
-            alt="Company Logo"
-            style={{
-              maxWidth: "250px",
-              maxHeight: "250px",
-              objectFit: "contain",
-              marginBottom: "10px",
-            }}
-          />
-        ) : (
-          <Box component="span" fontSize="13px" sx={{ marginBottom: "10px" }}>
-            No image available
-          </Box>
-        )}
+      {/* Display Company Logo or No Image Text */}
+      {base64String ? (
+        <img
+          src={base64String}
+          alt="Company Logo"
+          style={{
+            maxWidth: "250px",
+            maxHeight: "250px",
+            objectFit: "contain",
+            marginBottom: "10px",
+          }}
+        />
+      ) : (
+        <Box component="span" fontSize="13px" sx={{ marginBottom: "10px" }}>
+          No image available
+        </Box>
+      )}
 
         <Button
           variant="outlined"
           color="error"
           sx={{ marginTop: "10px" }}
           onClick={handleDeleteClick}
-          disabled={deleteCompanyLoading || !logoData?.companyLogo}
+          disabled={!base64String}
         >
           Remove
         </Button>
@@ -198,47 +208,45 @@ const UploadScreen: React.FC = () => {
             sx={{
               marginTop: "20px",
               display: "flex",
-              flexDirection: "column",
+              justifyContent: "center",
               alignItems: "center",
+              position: "relative",
             }}
           >
             <img
               src={imagePreview as string}
               alt="Preview"
               style={{
-                maxWidth: "150px",
-                maxHeight: "150px",
-                objectFit: "cover",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                marginBottom: "10px",
+                maxWidth: "200px",
+                maxHeight: "200px",
+                objectFit: "contain",
+                border: "1px solid grey",
+                borderRadius: "4px",
               }}
             />
-            <Button variant="contained" color="info" onClick={handleSave} disabled={loading}>
-              Save
-            </Button>
+            {loading && (
+              <CircularProgress
+                size={24}
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  marginLeft: "-12px",
+                  marginTop: "-12px",
+                }}
+              />
+            )}
           </Box>
         )}
-
-        {/* Saved logo display */}
-        {savedLogoUrl && (
-          <div style={{ marginTop: "20px", textAlign: "center" }}>
-            <img
-              src={savedLogoUrl}
-              alt="Saved Logo"
-              style={{
-                maxWidth: "150px",
-                maxHeight: "150px",
-                objectFit: "cover",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-              }}
-            />
-          </div>
-        )}
-
-        {/* Loading indicator */}
-        {loading && <CircularProgress sx={{ marginTop: "10px" }} />}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSave}
+          disabled={!selectedFile || loading}
+          sx={{ marginTop: "20px" }}
+        >
+          Save
+        </Button>
       </Grid>
     </Grid>
   );
