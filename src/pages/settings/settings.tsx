@@ -24,7 +24,7 @@ const SettingScreen = () => {
 
   const tabs = [
     { label: "Company Settings", component: <SettingsCompanyDetailsScreen />, roles: ["ADMIN", "APPROVER", "STANDARDUSER","SUPERADMIN"] },
-    { label: "Upload", component: <UploadScreen />, roles: ["ADMIN", "APPROVER", "STANDARDUSER","SUPERADMIN"] },
+    { label: "Upload", component: <UploadScreen />, roles: ["ADMIN"] },
     { label: "Portals", component: <LinkScreen />, roles: ["ADMIN"] },
     { label: "Tax", component: <TaxConfig />, roles: ["ADMIN"] },
     { label: "About", component: <About />, roles: ["ADMIN", "APPROVER", "STANDARDUSER","SUPERADMIN"] },
