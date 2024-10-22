@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { StorageKeys } from '../../hooks/useSessionStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
-import { LoginProps } from '../../types/types';
+import { ForgetPwdProps } from '../../types/types';
 
 
-export const loginApi = createApi({
-    reducerPath: 'loginApi',
+export const forgetPwdApi = createApi({
+    reducerPath: 'forgetPwdApi',
     baseQuery: fetchBaseQuery({
         baseUrl: BASE_LOCAL_URL,
         prepareHeaders: (headers, { getState }) => {
@@ -18,9 +18,9 @@ export const loginApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        login: builder.mutation<any, Partial<LoginProps>>({
+        forgetPwd : builder.mutation<any, Partial<ForgetPwdProps>>({
             query: (userData) => ({
-                url: API_URLS.login,
+                url: API_URLS.forgetPwd,
                 method: 'POST',
                 body: userData
             }),
@@ -29,4 +29,4 @@ export const loginApi = createApi({
     }),
 });
 
-export const { useLoginMutation } = loginApi;
+export const { useForgetPwdMutation } = forgetPwdApi;

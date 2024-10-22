@@ -8,6 +8,11 @@ export const loginInitialValue: LoginProps = {
     // username: "",
     password: "",
 }
+export const forgetPwdInitialValue: LoginProps = {
+    userEmail: "",
+    // username: "",
+    password: "",
+}
 
 // 
 export const superAdminCompanyUsersInitialValues: SuperAdminUsersInitialValueProps = {

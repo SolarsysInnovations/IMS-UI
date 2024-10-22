@@ -6,6 +6,7 @@ export const BASE_LOCAL_URL = JAVA_URL;
 
 export enum ApiEndpoint {
     LOGIN = "login",
+    FORGET_PWD = "forgetPwd",
     // user
     USER_LIST = "userList",
     USER_CREATE = "userCreate",
@@ -89,6 +90,7 @@ export type ApiUrls = {
 
 export const API_URLS: ApiUrls = {
     [ApiEndpoint.LOGIN]: `/login`,
+    [ApiEndpoint.FORGET_PWD]: `/verification/admin@abc.com`,
 
     // user
     [ApiEndpoint.USER_LIST]: `/user/list`,
