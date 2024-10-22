@@ -10,7 +10,7 @@ import TextFieldLarge from "../components/ui/TextFieldLarge";
 import { RemoveRedEyeRounded, VisibilityOff, VisibilityOffRounded, VisibilityOutlined } from "@mui/icons-material";
 import { AppDispatch } from "../redux-store/store";
 import { useLoginMutation } from "../redux-store/auth/loginApi";
-import { LocalStorageKeys, useLocalStorage } from "../hooks/useLocalStorage";
+import { StorageKeys, useSessionStorage } from "../hooks/useSessionStorage";
 import { loginValidationSchema } from "../constants/forms/validations/validationSchema";
 import { loginInitialValue } from "../constants/forms/formikInitialValues";
 import { LoginProps } from "../types/types";
@@ -32,7 +32,7 @@ interface LoginResponse {
 const Login = () => {
   const [login, { isLoading, error: loginError }] = useLoginMutation()
   const dispatch = useDispatch<AppDispatch>();
-  const [userToken, setUserToken] = useLocalStorage(LocalStorageKeys.TOKEN, "");
+  const [userToken, setUserToken] = useSessionStorage(StorageKeys.TOKEN, "");
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
 

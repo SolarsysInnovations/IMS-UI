@@ -9,7 +9,7 @@ import TextFieldUi from "../components/ui/TextField";
 import ButtonUi from '../components/ui/Button';
 import { useLoginMutation } from '../redux-store/auth/loginApi';
 import { useNavigate } from 'react-router-dom';
-import { LocalStorageKeys, useLocalStorage } from '../hooks/useLocalStorage';
+import { StorageKeys, useSessionStorage } from '../hooks/useSessionStorage';
 
 interface LoginProps {
   userEmail: string;
@@ -25,7 +25,7 @@ interface LoginResponse {
 const ForgetPassword = () => {
   const [login, { error: loginError }] = useLoginMutation();
   const dispatch = useDispatch<AppDispatch>();
-  const [userToken, setUserToken] = useLocalStorage(LocalStorageKeys.TOKEN, "");
+  const [userToken, setUserToken] = useSessionStorage(StorageKeys.TOKEN, "");
   const navigate = useNavigate();
 
  

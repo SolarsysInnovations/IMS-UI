@@ -1,7 +1,6 @@
 import { useState } from "react";
 
-
-export enum LocalStorageKeys {
+export enum StorageKeys {
     TOKEN = "token",
     THEME_PREFERENCE = "theme_preference",
     USER_PREFERENCES = "user_preferences",
@@ -9,15 +8,12 @@ export enum LocalStorageKeys {
     SERVICE_EDIT = "serviceDetails",
 }
 
-
-
-
 type SetValue<T> = (value: T) => void;
 
-export function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
+export function useSessionStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
     const [storedValue, setStoredValue] = useState<T>(() => {
         try {
-            const item = window.localStorage.getItem(key);
+            const item = window.sessionStorage.getItem(key);
             return item ? JSON.parse(item) : initialValue;
         } catch (error) {
             console.error(`Error parsing JSON for key ${key}:`, error);
@@ -29,7 +25,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T
         try {
             const valueToStore = value instanceof Function ? value(storedValue) : value;
             setStoredValue(valueToStore);
-            window.localStorage.setItem(key, JSON.stringify(valueToStore));
+            window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
         } catch (error) {
             console.error(`Error setting value for key ${key}:`, error);
         }
