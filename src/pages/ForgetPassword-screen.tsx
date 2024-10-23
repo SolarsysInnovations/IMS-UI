@@ -1,14 +1,20 @@
-import React from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import React ,{useState}from "react";
+import { Avatar, Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import { Formik, Form } from "formik";
 import { forgetPwdValidationSchema } from "../constants/forms/validations/validationSchema";
 import { forgetPwdInitialValue } from "../constants/forms/formikInitialValues";
 import TextFieldUi from "../components/ui/TextField";
 import ButtonUi from "../components/ui/Button";
-import { useForgetPwdMutation } from "../redux-store/auth/forgetpwdApi";
 import { useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useSnackbarNotifications } from "../hooks/useSnackbarNotification"; // Snackbar hook
+import Container from "@mui/material/Container";
+import HelpIcon from '@mui/icons-material/Help';
+import { useForgetPwdMutation } from "../redux-store/auth/forgetpwdApi";
+import { useDispatch } from "react-redux";
+import { StorageKeys, useSessionStorage } from "../hooks/useSessionStorage";
+import { AppDispatch } from "../redux-store/store";
+
 
 interface ForgetPasswordProps {
   userEmail: string;
@@ -22,6 +28,9 @@ interface ForgetPasswordResponse {
 }
 
 const ForgetPassword: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [userToken, setUserToken] = useSessionStorage(StorageKeys.TOKEN, "");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [
     forgetPassword,
     {
@@ -71,25 +80,29 @@ const ForgetPassword: React.FC = () => {
       }}
     >
       {({ errors, touched, values, handleChange, isSubmitting }) => (
-        <Box
-          sx={{
-            mt: 10,
-            backgroundColor: "background.paper",
-            display: "flex",
-            justifyContent: "center",
-            minHeight: "60vh",
-            alignItems: "center",
-          }}
+           <Container maxWidth="md">
+             <Box
+         sx={{
+          marginTop: 15,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent:"center",
+          alignItems: "center",
+        }}
         >
+       <Card sx={{ boxShadow: "4"}}>
+         <CardContent sx={{ m: 3, alignItems:'center' }}>
+         <Avatar sx={{ m: "auto", bgcolor: "primary.main" }}>
+              <HelpIcon />
+            </Avatar>
+          <Typography component="h1" variant="h5" sx={{ mt: 2 , ml: 3}}>
+        Forget Password
+      </Typography>
           <Box sx={{ maxWidth: 500, width: "100%", px: 3 }}>
             <Form noValidate>
               <Grid container spacing={2}>
-                {/* Title */}
                 <Grid item xs={12}>
-                  <Typography variant="h6" align="left">
-                    Forget Password
-                  </Typography>
-                  <Typography color="text.secondary" variant="body2">
+                  <Typography color="text.secondary" variant="body2" sx={{ fontSize:"12px",fontPalette:'light',color: "Highlight", mt: 2}}>
                     Please enter the email address you'd like your password
                     reset information sent to.
                   </Typography>
@@ -99,7 +112,7 @@ const ForgetPassword: React.FC = () => {
                 <Grid item xs={12}>
                   <TextFieldUi
                     fullWidth
-                    label="Enter your Email"
+                    label="Enter your Email *"
                     name="userEmail"
                     type="email" // Set input type to email
                     value={values.userEmail}
@@ -133,7 +146,11 @@ const ForgetPassword: React.FC = () => {
               )}
             </Form>
           </Box>
+        
+        </CardContent>
+        </Card>
         </Box>
+        </Container>
       )}
     </Formik>
   );

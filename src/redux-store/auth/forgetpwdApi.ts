@@ -20,7 +20,7 @@ export const forgetPwdApi = createApi({
     endpoints: (builder) => ({
         forgetPwd : builder.mutation<any, Partial<ForgetPwdProps>>({
             query: (userData) => ({
-                url: API_URLS.forgetPwd,
+                url: `${API_URLS.forgetPwd}/${userData.userEmail}`,
                 method: 'POST',
                 body: userData
             }),

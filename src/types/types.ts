@@ -9,8 +9,7 @@ export interface LoginProps {
 
 export interface ForgetPwdProps {
     userEmail: string;
-    // username: string;
-    password: string;
+
 };
 
 export interface GstTypeProps {

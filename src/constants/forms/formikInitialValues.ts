@@ -1,5 +1,5 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps, AdminCompanyUsersInitialValueProps, SuperAdminUsersInitialValueProps, } from "../../types/types";
+import { InvoiceInitialValueProps, LoginProps, ForgetPwdProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps, AdminCompanyUsersInitialValueProps, SuperAdminUsersInitialValueProps, } from "../../types/types";
 import { format } from "path";
 import { companyDetailsValidationSchema } from './validations/validationSchema';
 
@@ -8,10 +8,8 @@ export const loginInitialValue: LoginProps = {
     // username: "",
     password: "",
 }
-export const forgetPwdInitialValue: LoginProps = {
+export const forgetPwdInitialValue: ForgetPwdProps = {
     userEmail: "",
-    // username: "",
-    password: "",
 }
 
 // 

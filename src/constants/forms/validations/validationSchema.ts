@@ -41,11 +41,6 @@ export const forgetPwdValidationSchema = Yup.object({
                 return true;
             }
         ),
-    // username: Yup.string()
-    //     .required('Email is required'),
-    password: Yup.string()
-        .max(255)
-        .required('Password is required'),
 });
 
 export const invoiceValidationSchema = Yup.object({
