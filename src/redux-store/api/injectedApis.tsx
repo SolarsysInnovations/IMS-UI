@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { LocalStorageKeys } from '../../hooks/useLocalStorage';
+import { StorageKeys } from '../../hooks/useSessionStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
-import { InvoiceInitialValueProps, RoleInitialValueProps, SendEmailInitialValueProps } from '../../types/types';
+import { ForgetPwdProps, InvoiceInitialValueProps, RoleInitialValueProps, SendEmailInitialValueProps } from '../../types/types';
 import { get } from 'http';
 
 interface DashboardRequestProps {
@@ -431,6 +431,19 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
             method: 'POST',
         }),
     }),
+
+            // ! ------------ forget pwd start ---------------
+
+   forgetPwd : builder.mutation<any, ForgetPwdProps>({
+                query: (userEmail) => ({
+          url: API_URLS.forgetPwd,
+          method: 'POST',
+          body: userEmail,
+        }),
+      }),
+        // ! ------------ forget pwd end ---------------
+
+
     }),
 
 });
@@ -471,3 +484,4 @@ export const { useGetCompanySettingQuery, useAddCompanySettingMutation, useGetSi
 //portal Link export
 export const { useGetPortalLinkQuery, useGetSinglePortalLinkMutation, useAddPortalLinkMutation, useUpdatePortalLinkMutation, useDeletePortalLinkMutation } = apiEndPointLists;
 export const { useAddCompanyLogoMutation,useDeleteCompanyLogoMutation, useGetCompanyLogoQuery } = apiEndPointLists;
+export const { useForgetPwdMutation } = apiEndPointLists;

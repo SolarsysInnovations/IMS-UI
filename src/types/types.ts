@@ -7,6 +7,10 @@ export interface LoginProps {
     password: string;
 };
 
+export interface ForgetPwdProps {
+    userEmail: string;
+
+};
 
 export interface GstTypeProps {
     id?: string | undefined;

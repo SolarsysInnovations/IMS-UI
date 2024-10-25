@@ -24,6 +24,25 @@ export const loginValidationSchema = Yup.object({
         .required('Password is required'),
 });
 
+export const forgetPwdValidationSchema = Yup.object({
+    userEmail: Yup.string()
+        .email('Must be a valid email')
+        .max(255, 'Email must be at most 255 characters')
+        .required('Email is required')
+        .test(
+            'valid-domain',
+            'Invalid email domain',
+            (value) => {
+                const forbiddenDomains = ['email.com'];
+                if (value) {
+                    const domain = value.split('@')[1];
+                    return !forbiddenDomains.includes(domain);
+                }
+                return true;
+            }
+        ),
+});
+
 export const invoiceValidationSchema = Yup.object({
     invoiceType: Yup.string()
         .max(255)

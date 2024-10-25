@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { LocalStorageKeys } from '../../hooks/useLocalStorage';
+import { StorageKeys } from '../../hooks/useSessionStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { LoginProps } from '../../types/types';
 
@@ -9,7 +9,7 @@ export const loginApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: BASE_LOCAL_URL,
         prepareHeaders: (headers, { getState }) => {
-            const token = localStorage.getItem(LocalStorageKeys.TOKEN);
+            const token = sessionStorage.getItem(StorageKeys.TOKEN);
             if (token) {
                 const cleanedToken = token.replace(/^"(.*)"$/, '$1');
                 headers.set('Authorization', `Bearer ${cleanedToken}`);

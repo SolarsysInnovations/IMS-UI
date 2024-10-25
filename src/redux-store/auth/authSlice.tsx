@@ -16,13 +16,13 @@ interface User {
     refresh: string | null;
 }
 
-// Retrieve token and refresh token from local storage
-const tokenFromStorage = localStorage.getItem('accessToken');
-const refreshTokenFromStorage = localStorage.getItem('refresh');
-const userRoleFromStorage = localStorage.getItem("userRole");
-const userEmailFromStorage = localStorage.getItem("userEmail");
-const userNameFromStorage = localStorage.getItem("userName");
-const userDetailsFromStorage = localStorage.getItem("userDetails");
+// Retrieve token and refresh token from session storage
+const tokenFromStorage = sessionStorage.getItem('accessToken');
+const refreshTokenFromStorage = sessionStorage.getItem('refresh');
+const userRoleFromStorage = sessionStorage.getItem("userRole");
+const userEmailFromStorage = sessionStorage.getItem("userEmail");
+const userNameFromStorage = sessionStorage.getItem("userName");
+const userDetailsFromStorage = sessionStorage.getItem("userDetails");
 
 // Define the initial state
 const initialState: AuthState = {
@@ -49,13 +49,13 @@ const authSlice = createSlice({
             state.userName = userName;
             state.userEmail = userEmail;
             state.userDetails = userDetails;
-            // Store tokens in local storage
-            localStorage.setItem('accessToken', accessToken || "");
-            localStorage.setItem('refresh', refresh || "");
-            localStorage.setItem('userRole', userRole || "");
-            localStorage.setItem('userName', userName || "");
-            localStorage.setItem('userEmail', userEmail || "");
-            localStorage.setItem('userDetails', JSON.stringify(userDetails) || "{}");
+            // Store tokens in session storage
+            sessionStorage.setItem('accessToken', accessToken || "");
+            sessionStorage.setItem('refresh', refresh || "");
+            sessionStorage.setItem('userRole', userRole || "");
+            sessionStorage.setItem('userName', userName || "");
+            sessionStorage.setItem('userEmail', userEmail || "");
+            sessionStorage.setItem('userDetails', JSON.stringify(userDetails) || "{}");
         },
         logOut: (state) => {
             state.user = null;
@@ -65,21 +65,21 @@ const authSlice = createSlice({
             state.userName = null; // Reset user name
             state.userEmail = null; // Reset user email
             state.userDetails = null; // Reset user email
-            // Remove tokens from local storage
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refresh');
-            localStorage.removeItem('userRole');
-            localStorage.removeItem('userName');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userDetails');
+            // Remove tokens from session storage
+            sessionStorage.removeItem('accessToken');
+            sessionStorage.removeItem('refresh');
+            sessionStorage.removeItem('userRole');
+            sessionStorage.removeItem('userName');
+            sessionStorage.removeItem('userEmail');
+            sessionStorage.removeItem('userDetails');
         },
         updateAccessToken: (state, action) => {
             const { accessToken, refresh } = action.payload;
             state.accessToken = accessToken;
             state.refresh = refresh;
-            // Update token in local storage
-            localStorage.setItem('accessToken', accessToken || "");
-            localStorage.setItem('refresh', refresh || "");
+            // Update token in session storage
+            sessionStorage.setItem('accessToken', accessToken || "");
+            sessionStorage.setItem('refresh', refresh || "");
         }
     },
 });
