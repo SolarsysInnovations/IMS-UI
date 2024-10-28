@@ -3,7 +3,7 @@ import { StorageKeys } from '../../hooks/useSessionStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
-import { ForgetPwdProps, InvoiceInitialValueProps, RoleInitialValueProps, SendEmailInitialValueProps } from '../../types/types';
+import { ForgetPwdProps, InvoiceInitialValueProps, RoleInitialValueProps, SendEmailInitialValueProps, InvoicesInitialValueProps } from '../../types/types';
 import { get } from 'http';
 
 interface DashboardRequestProps {
@@ -108,7 +108,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         // ! ------------ customers end ---------------
 
         // ! ------------- invoice start --------------
-        getInvoiceList: builder.query<InvoiceInitialValueProps[], void>({
+        getInvoiceList: builder.mutation<InvoicesInitialValueProps[], any>({
             query: () => ({
                 url: API_URLS.invoiceList,
                 method: 'POST',
@@ -467,7 +467,7 @@ export const { useGetTdsTaxListQuery, useCreateTdsTaxMutation, useUpdateTdsTaxMu
 export const { useGetGstTypeListQuery, useCreateGstTypeMutation, useUpdateGstTypeMutation, useDeleteGstTypeMutation, useGetSingleGstTypeMutation } = apiEndPointLists;
 
 // invoice export 
-export const { useGetInvoiceListQuery, useCreateInvoiceMutation, useDeleteInvoiceMutation, useUpdateInvoiceMutation, useGetSingleInvoiceMutation } = apiEndPointLists;
+export const { useGetInvoiceListMutation, useCreateInvoiceMutation, useDeleteInvoiceMutation, useUpdateInvoiceMutation, useGetSingleInvoiceMutation } = apiEndPointLists;
 
 // invoice reports
 export const { useGetReportInvoiceMutation } = apiEndPointLists;

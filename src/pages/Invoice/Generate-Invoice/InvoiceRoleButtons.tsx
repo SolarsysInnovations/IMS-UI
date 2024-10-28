@@ -7,7 +7,7 @@ import { selectUserRole } from '../../../redux-store/auth/authSlice';
 import SplitButton from '../../../components/ui/SplitButton';
 import StageStepper from '../../../components/ui/StepperUi';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import { useGetInvoiceListQuery, useUpdateInvoiceMutation } from '../../../redux-store/api/injectedApis';
+import { useGetInvoiceListMutation, useUpdateInvoiceMutation } from '../../../redux-store/api/injectedApis';
 
 const InvoiceRoleButtons = () => {
     const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
@@ -15,7 +15,7 @@ const InvoiceRoleButtons = () => {
     const userRole = useSelector(selectUserRole);
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const [showTracker, setShowTracker] = useState(false);
-    const { refetch } = useGetInvoiceListQuery();
+    const { refetch } = useGetInvoiceListMutation();
     const [resMessage, setResMessage] = useState('');
 
     useSnackbarNotifications({

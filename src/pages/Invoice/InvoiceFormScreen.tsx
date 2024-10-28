@@ -27,7 +27,7 @@ import { addDays, format } from 'date-fns';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { useCreateInvoiceMutation, useGetCustomersListQuery, useGetGstTypeListQuery, useGetInvoiceListQuery, useGetPaymentTermsListQuery, useGetServiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from '../../redux-store/api/injectedApis';
+import { useCreateInvoiceMutation, useGetCustomersListQuery, useGetGstTypeListQuery, useGetInvoiceListMutation, useGetPaymentTermsListQuery, useGetServiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from '../../redux-store/api/injectedApis';
 import { clearInvoiceData, setInvoiceData } from '../../redux-store/slices/invoiceSlice';
 import ServiceScreen from './service/ServiceScreen';
 import { useRolePermissions } from '../../hooks/useRolePermission';
@@ -52,7 +52,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     // popUps
     const [popUpComponent, setPopUpComponent] = useState("");
     const { data: customers, error, isLoading, refetch: customerRefetch } = useGetCustomersListQuery();
-    const { data: invoiceList, refetch: invoiceRefetch } = useGetInvoiceListQuery();
+    const { data: invoiceList, refetch: invoiceRefetch } = useGetInvoiceListMutation();
     const [addInvoice, { isSuccess: addInvoiceSuccess, isError: addInvoiceError, error: addInvoiceErrorObject }] = useCreateInvoiceMutation();
     const [updateInvoice, { isSuccess: invoiceUpdatedSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);

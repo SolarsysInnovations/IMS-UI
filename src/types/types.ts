@@ -152,6 +152,7 @@ export interface InvoiceInitialValueProps {
     gstType: string;
     gstPercentage: number | null;
     startDate: string;
+    endDate: string;
     dueDate: string;
     gstInNumber: string;
     paymentTerms: string;

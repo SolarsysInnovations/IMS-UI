@@ -3,7 +3,7 @@ import InvoiceDocument from "./InvoiceDocument";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import {  useGetCompanyLogoQuery, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
+import {  useGetCompanyLogoQuery, useGetCustomersListQuery, useGetInvoiceListMutation, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
 import { selectUserDetails, selectUserRole } from "../../../redux-store/auth/authSlice";
 import { formatDate } from "../../../services/utils/dataFormatter";
 import StageStepper from "../../../components/ui/StepperUi";
@@ -31,7 +31,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
     const userRole = useSelector(selectUserRole);
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const [showTracker, setShowTracker] = useState(false);
-    const { refetch } = useGetInvoiceListQuery();
+    const { refetch } = useGetInvoiceListMutation();
     const [resMessage, setResMessage] = useState('');
     const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
  

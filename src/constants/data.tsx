@@ -64,7 +64,7 @@ export const sidebarTwo = [
     id: 3,
     title: "Invoices",
     path: "/invoice/list",
-    element: <InvoiceList />,
+    element: <InvoiceList startDate={""} endDate={""} />,
     icon: ReceiptIcon,
     isParent: true,
     subItems: [

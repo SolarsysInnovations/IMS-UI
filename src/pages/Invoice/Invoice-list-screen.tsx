@@ -10,12 +10,16 @@ import { MyCellRenderer } from '../../constants/grid-table-data/invoice/invoice-
 import { GridColDef } from '@mui/x-data-grid';
 import { selectUserRole } from '../../redux-store/auth/authSlice';
 import useErrorHandler from '../../hooks/useErrorHanlder';
-import { Typography } from '@mui/material';
-import { useGetInvoiceListQuery } from '../../redux-store/api/injectedApis';
+ import { useGetInvoiceListMutation } from '../../redux-store/api/injectedApis';
 import { clearInvoiceData } from '../../redux-store/slices/invoiceSlice';
 import { useRolePermissions } from '../../hooks/useRolePermission';
-
-// ! ---------- important const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
+import dayjs, { Dayjs } from "dayjs";
+import { Box, Grid, Typography } from "@mui/material";
+import DatePickerUi from '../../components/ui/DatePicker';
+import ButtonSmallUi from '../../components/ui/ButtonSmall';
+import { Formik } from "formik";
+import SelectDropdown from '../../components/ui/SelectDropdown';
+ // ! ---------- important const InvoiceStatusCell = ({ params }: { params: GridRenderCellParams }) => {
 
 //     // const [status, setStatus] = useState<ValueProps | null>(params.value);
 //     const [status, setStatus] = useState(params.value);
@@ -135,13 +139,21 @@ import { useRolePermissions } from '../../hooks/useRolePermission';
 // };
 
 
-const InvoiceList = () => {
+const Invoicelist = (p0: { startDate: string; endDate: string; }) => {
     const userRole = useSelector(selectUserRole);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const pathname = usePathname();
-    const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceListQuery();
-    const invoiceListErrorMessage = useErrorHandler(errorInvoiceList);
+    const [getInvoiceList, { data, isLoading, isError, error }] =   useGetInvoiceListMutation();
+    const [responseData, setResponseData] = useState<any>({});
+   
+    const today = dayjs();
+    const [startDate, setStartDate] = useState<Dayjs | null>(today.startOf("month"));
+    const [endDate, setEndDate] = useState<Dayjs | null>(today.endOf("month"));
+    const [isCustomRange, setIsCustomRange] = useState(false);
+  
+    // const { data: invoiceList, error: errorInvoiceList, isLoading, refetch } = useGetInvoiceListMutation();
+    const invoiceListErrorMessage = useErrorHandler(error);
     // const buttons = [];
 
     const { canCreateInvoices } = useRolePermissions()
@@ -249,15 +261,133 @@ const InvoiceList = () => {
     //         },
     //     )
     // }
+    const handleApplyFilter = async (startDate: Dayjs | null, endDate: Dayjs | null) => {
+        const formattedStartDate = startDate ? startDate.format("DD-MM-YYYY") : "";
+        const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
+              console.log(formattedStartDate, formattedEndDate);
 
+        try {
+          const response = getInvoiceList({
+              startDate: formattedStartDate,
+              endDate: formattedEndDate,
+          })
+          //.unwrap();
+          
+          setResponseData(response || {});
+        } catch (error) {
+
+
+          console.error("Error fetching filtered dashboard data:", error);
+          setResponseData({});
+        }
+      };
+    
+      // Dropdown logic to handle preset date ranges
+      const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
+        const today = dayjs();
+        setIsCustomRange(newValue.value === "Custom");
+    
+        if (newValue) {
+          if (newValue.value === "Today") {
+            setFieldValue("startDate", today);
+            setFieldValue("endDate", today);
+            setStartDate(today);
+            setEndDate(today);
+          } else if (newValue.value === "This Week") {
+            setFieldValue("startDate", today.startOf("week"));
+            setFieldValue("endDate", today.endOf("week"));
+            setStartDate(today.startOf("week"));
+            setEndDate(today.endOf("week"));
+          } else if (newValue.value === "Last 7 Days") {
+            setFieldValue("startDate", today.subtract(7, "days"));
+            setFieldValue("endDate", today);
+            setStartDate(today.subtract(7, "days"));
+            setEndDate(today);
+          } else if (newValue.value === "This Month") {
+            setFieldValue("startDate", today.startOf("month"));
+            setFieldValue("endDate", today.endOf("month"));
+            setStartDate(today.startOf("month"));
+            setEndDate(today.endOf("month"));
+          } else if (newValue.value === "Last 30 Days") {
+            setFieldValue("startDate", today.subtract(30, "days"));
+            setFieldValue("endDate", today);
+            setStartDate(today.subtract(30, "days"));
+            setEndDate(today);
+          } else if (newValue.value === "Custom") {
+            setFieldValue("startDate", null);
+            setFieldValue("endDate", null);
+            setStartDate(null);
+            setEndDate(null);
+          }
+        }
+      };
     return (
         <>
-            <TableHeader headerName={pathname} buttons={resolvedButtons} />
+         <Formik
+        initialValues={{
+          startDate: startDate,
+          endDate: endDate,
+        }}
+        onSubmit={(values) => {
+          // Call handleApplyFilter on form submit
+          handleApplyFilter(values.startDate, values.endDate);
+        }}
+      >
+        {({ values, setFieldValue, handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2} alignItems="center" justifyContent="flex-end">
+              <Grid item xs={12} sm={4} md={3}>
+                <SelectDropdown
+                  defaultValue={{ value: "This Month", label: "This Month" }}
+                  onChange={(newValue: any) => handleDropdownChange(newValue, setFieldValue)}
+                  options={[
+                    { value: "Today", label: "Today" },
+                    { value: "This Week", label: "This Week" },
+                    { value: "Last 7 Days", label: "Last 7 Days" },
+                    { value: "This Month", label: "This Month" },
+                    { value: "Last 30 Days", label: "Last 30 Days" },
+                    { value: "Custom", label: "Custom" },
+                  ]}
+                  labelText="Select Date Range"
+                  sx={{ width: "100%" }}
+                />
+              </Grid>
+
+              {/* Show DatePickerUi components only for custom date range */}
+              <Grid item xs={12} sm={4} md={3}>
+                <DatePickerUi
+                  label="Start Date"
+                  onChange={(date: string | null) =>
+                    setFieldValue("startDate", date ? dayjs(date) : undefined)
+                  }
+                  value={values.startDate || undefined}
+                  disabled={!isCustomRange}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={4} md={3}>
+                <DatePickerUi
+                  label="End Date"
+                  onChange={(date: string | null) =>
+                    setFieldValue("endDate", date ? dayjs(date) : undefined)
+                  }
+                  value={values.endDate || undefined}
+                  disabled={!isCustomRange}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={2}>
+                <ButtonSmallUi label="Apply Filter" type="submit" fullWidth />
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Formik>   <TableHeader headerName={pathname} buttons={resolvedButtons} />
             {invoiceListErrorMessage ? <Typography variant="caption" color="initial">Error :{invoiceListErrorMessage}</Typography> :
-                <GridDataUi showToolbar={true} columns={columns || []} tableData={invoiceList || []} checkboxSelection={false} />
+                <GridDataUi showToolbar={true} columns={columns || []} tableData={responseData || []} checkboxSelection={false}    />
             }
         </>
     );
 };
 
-export default InvoiceList;
+export default Invoicelist;

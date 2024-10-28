@@ -10,7 +10,7 @@ import ModalUi from "../../../components/ui/ModalUi";
 import InvoiceUi from "../../../pages/Invoice/Generate-Invoice/InvoiceUi";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
-import { useDeleteInvoiceMutation, useGetInvoiceListQuery, useGetSingleInvoiceMutation, } from "../../../redux-store/api/injectedApis";
+import { useDeleteInvoiceMutation, useGetInvoiceListMutation, useGetSingleInvoiceMutation, } from "../../../redux-store/api/injectedApis";
 import { clearInvoiceData, setInvoiceData } from "../../../redux-store/slices/invoiceSlice";
 import DialogBoxUi from "../../../components/ui/DialogBox";
 import ActionButtons from "../../../components/ui/ActionButtons";
@@ -47,7 +47,7 @@ import { useRolePermissions } from "../../../hooks/useRolePermission";
 
 export const MyCellRenderer = ({ row }: { row: any }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const { refetch: getInvoiceList } = useGetInvoiceListQuery();
+    const { refetch: getInvoiceList } = useGetInvoiceListMutation();
     const [isModalOpen, setIsModalOpen] = useState<boolean | undefined>(false);
     const [deleteInvoice, { isSuccess: invoiceDeleteSuccess, isError: invoiceDeleteError, error: invoiceDeleteErrorObject }] = useDeleteInvoiceMutation();
     const [getInvoice,] = useGetSingleInvoiceMutation();

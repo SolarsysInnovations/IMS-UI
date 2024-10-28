@@ -10,7 +10,7 @@ import { GstTypeFields, InvoiceMailReasonFields } from '../../../constants/form-
 import { InvoiceEmailReasonValidationSchemas, gstTypeValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { invoiceMailReasonInitialValue } from '../../../constants/forms/formikInitialValues';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import { useGetInvoiceListQuery, useUpdateInvoiceMutation } from '../../../redux-store/api/injectedApis';
+import { useGetInvoiceListMutation, useUpdateInvoiceMutation } from '../../../redux-store/api/injectedApis';
 
 // create and edit screen
 
@@ -20,7 +20,7 @@ const MailReason = ({ invoiceData, setNestedOpen }: any) => {
 
     const navigate = useNavigate();
 
-    const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceListQuery();
+    const { data: invoiceList, error: invoiceListError, isLoading: invoiceListLoading, refetch: getInvoiceList } = useGetInvoiceListMutation();
 
     // const invoiceData = useSelector((state: any) => state.globalState.data);
 
