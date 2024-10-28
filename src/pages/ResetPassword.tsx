@@ -63,7 +63,9 @@ const ResetPassword = () => {
         <Card sx={{ boxShadow: "4" }}>
           <CardContent sx={{ m: 3 }}>
             <Avatar sx={{ m: "auto", bgcolor: "primary.main" }}>
+              
               <LockResetIcon />
+
             </Avatar>
             <Typography component="h1" variant="h5" sx={{ mt: 1 }}>
               Reset Password
