@@ -113,27 +113,40 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                   <span>: {companyInfo?.companyDetails.companyName}</span>
                 </p>
               </div>
+           <div>
+  <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+    <span
+      style={{
+        fontWeight: "500",
+        width: "140px",
+        display: "inline-block",
+        verticalAlign: "top", // Ensures alignment
+      }}
+    >
+      Company Address
+    </span>
+    <span
+      style={{
+        display: "inline-block",
+        maxWidth: "300px", // Adjust width to prevent overflow
+        verticalAlign: "top",
+        wordWrap: "break-word", // Ensures long addresses wrap to new lines
+      }}
+    >
+      : {companyInfo?.companyDetails.companyAddress}
+    </span>
+  </p>
+</div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
                   <span
                     style={{
                       fontWeight: "500",
+                      maxWidth: "300px",
+                      wordWrap: "break-word",
                       width: "140px",
                       display: "inline-block",
-                    }}
-                  >
-                    Company Address
-                  </span>
-                  <span>: {companyInfo?.companyDetails.companyAddress}</span>
-                </p>
-              </div>
-              <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      verticalAlign: "top",
                     }}
                   >
                     Company City
