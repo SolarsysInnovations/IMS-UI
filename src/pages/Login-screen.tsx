@@ -149,12 +149,12 @@ const Login = () => {
   >
     Forgot Password?
   </Link>
-  <Link
+  {/* <Link
     style={{ color: palette.primary.main, textDecoration: 'none' , marginLeft:'10px'}}
     to="/resetpassword"  // Change this line
   >
     Reset Password?
-  </Link>
+  </Link> */}
 </FormHelperText>
                 <Box sx={{ mt: 2 }}>
                   <ButtonUi fullWidth={true} loading={isSubmitting} color="primary" label='Login' variant='contained' type='submit' />
