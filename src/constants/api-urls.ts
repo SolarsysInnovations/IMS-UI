@@ -23,6 +23,7 @@ export enum ApiEndpoint {
     CUSTOMER_GET = "customerGet",
     // invoice
     INVOICE_LIST = "invoiceList",
+    INVOICE_LIST_SCREEN = "invoiceListScreen",
     INVOICE_CREATE = "invoiceCreate",
     INVOICE_UPDATE = "invoiceUpdate",
     INVOICE_DELETE = "invoiceDelete",
@@ -111,6 +112,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.CUSTOMER_GET]: `/customer/get`,
     // invoice endpoints
     [ApiEndpoint.INVOICE_LIST]: `/invoice/list`,
+    [ApiEndpoint.INVOICE_LIST_SCREEN]: `/invoice/list`,
     [ApiEndpoint.INVOICE_CREATE]: `/invoice/create`,
     [ApiEndpoint.INVOICE_DELETE]: `/invoice/delete`,
     [ApiEndpoint.INVOICE_GET]: `/invoice/get`,

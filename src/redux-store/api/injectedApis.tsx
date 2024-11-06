@@ -10,6 +10,10 @@ interface DashboardRequestProps {
     startDate?: string;
     endDate?: string;
 };
+interface InvoiceRequestProps{
+    startDate?: string;
+    endDate?: string;
+}
 
 export const apiEndPointLists = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -112,6 +116,14 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
             query: () => ({
                 url: API_URLS.invoiceList,
                 method: 'POST',
+              
+            }),
+        }),
+        getInvoiceListScreen: builder.mutation<any, InvoiceRequestProps>({
+            query: (data) => ({
+                url: API_URLS.invoiceListScreen,
+                method: 'POST',
+                body: data,
             }),
         }),
         createInvoice: builder.mutation<any, Partial<InvoiceInitialValueProps>>({
@@ -467,7 +479,7 @@ export const { useGetTdsTaxListQuery, useCreateTdsTaxMutation, useUpdateTdsTaxMu
 export const { useGetGstTypeListQuery, useCreateGstTypeMutation, useUpdateGstTypeMutation, useDeleteGstTypeMutation, useGetSingleGstTypeMutation } = apiEndPointLists;
 
 // invoice export 
-export const { useGetInvoiceListQuery, useCreateInvoiceMutation, useDeleteInvoiceMutation, useUpdateInvoiceMutation, useGetSingleInvoiceMutation } = apiEndPointLists;
+export const { useGetInvoiceListQuery, useGetInvoiceListScreenMutation, useCreateInvoiceMutation, useDeleteInvoiceMutation, useUpdateInvoiceMutation, useGetSingleInvoiceMutation } = apiEndPointLists;
 
 // invoice reports
 export const { useGetReportInvoiceMutation } = apiEndPointLists;
