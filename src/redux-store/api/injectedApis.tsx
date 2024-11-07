@@ -3,7 +3,7 @@ import { StorageKeys } from '../../hooks/useSessionStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
-import { ForgetPwdProps, InvoiceInitialValueProps, RoleInitialValueProps, SendEmailInitialValueProps } from '../../types/types';
+import { ForgetPwdProps, InvoiceInitialValueProps, ResetPwdProps, RoleInitialValueProps, SendEmailInitialValueProps } from '../../types/types';
 import { get } from 'http';
 
 interface DashboardRequestProps {
@@ -455,7 +455,15 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
       }),
         // ! ------------ forget pwd end ---------------
 
-
+         // ! ------------ reset pwd start ---------------
+        resetPwd : builder.mutation<any, ResetPwdProps>({
+            query: (data) => ({
+            url: API_URLS.resetPwd,
+            method: 'POST',
+            body: data,
+    }),
+  }),
+   // ! ------------ reset pwd end ---------------
     }),
 
 });
@@ -497,3 +505,5 @@ export const { useGetCompanySettingQuery, useAddCompanySettingMutation, useGetSi
 export const { useGetPortalLinkQuery, useGetSinglePortalLinkMutation, useAddPortalLinkMutation, useUpdatePortalLinkMutation, useDeletePortalLinkMutation } = apiEndPointLists;
 export const { useAddCompanyLogoMutation,useDeleteCompanyLogoMutation, useGetCompanyLogoQuery } = apiEndPointLists;
 export const { useForgetPwdMutation } = apiEndPointLists;
+export const { useResetPwdMutation } = apiEndPointLists;
+

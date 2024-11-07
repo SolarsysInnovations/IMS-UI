@@ -12,6 +12,12 @@ export interface ForgetPwdProps {
 
 };
 
+export interface ResetPwdProps {
+    token: string;
+    newPassword: string;
+
+};
+
 export interface GstTypeProps {
     id?: string | undefined;
     gstName: string,
