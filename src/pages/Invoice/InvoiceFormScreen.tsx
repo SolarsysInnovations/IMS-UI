@@ -552,8 +552,8 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             
                                 if (totalDays > 0) {
                                   const today = new Date();
-                                  const startDate = format(today, "DD-MM-YYYY");
-                                  const dueDate = format(addDays(today, totalDays), "DD-MM-YYYY");
+                                  const startDate = format(today, "dd-MM-yyyy");
+                                  const dueDate = format(addDays(today, totalDays), "dd-MM-yyyy");
                                   setFieldValue("startDate", startDate);
                                   setFieldValue("dueDate", dueDate);
                                   setFieldValue("paymentTerms", newValue.value);
