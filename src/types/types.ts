@@ -169,8 +169,10 @@ export interface InvoiceInitialValueProps {
     termsAndConditions: string;
     taxAmount: TaxAmountProps;
     servicesList: ServiceListProps[];
+    
 
-}; export interface InvoicesInitialValueProps {
+};
+ export interface InvoicesInitialValueProps {
    // invoiceDate: string;
     startDate: string;
     endDate: string;

@@ -112,7 +112,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.CUSTOMER_GET]: `/customer/get`,
     // invoice endpoints
     [ApiEndpoint.INVOICE_LIST]: `/invoice/list`,
-    [ApiEndpoint.INVOICE_LIST_SCREEN]: `/invoice/list`,
+    [ApiEndpoint.INVOICE_LIST_SCREEN]: `/invoice/dateList`,
     [ApiEndpoint.INVOICE_CREATE]: `/invoice/create`,
     [ApiEndpoint.INVOICE_DELETE]: `/invoice/delete`,
     [ApiEndpoint.INVOICE_GET]: `/invoice/get`,
