@@ -233,6 +233,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
             }));
         }
     };
+    const paymentOptions:any[]=[
+      { value: "monthly", label: "Monthly" },
+      { value: "quarterly", label: "Quarterly" },
+      { value: "annually", label: "Annually" },
+    ];
     return (
         <Formik
             initialValues={invoiceValues}
@@ -521,68 +526,123 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         </Grid>
                         <Grid item xs={3}>
                           <Box>
+                          {values.invoiceType === "Retainer" ? ( 
                             <SelectDropdown
-                              button={canCreatePayment}
-                              onMouseDown={() => {
-                                setPopUpComponent(
-                                  PopupComponents.PAYMENT_TERMS
-                                );
-                                setIsOpenDialogBox(true);
-                              }}
-                              onChange={(newValue: any) => {
-                                if (newValue) {
-                                  const selectedPaymentTerms =
-                                    paymentTerms?.find(
-                                      (item) => item.termName === newValue.value
-                                    );
-                                  if (selectedPaymentTerms) {
-                                    const today = new Date();
-                                    const startDate = format(
-                                      today,
-                                      "dd-MM-yyyy"
-                                    );
-                                    const dueDate = format(
-                                      addDays(
-                                        today,
-                                        selectedPaymentTerms.totalDays
-                                      ),
-                                      "dd-MM-yyyy"
-                                    );
-                                    setFieldValue("startDate", startDate);
-                                    setFieldValue("dueDate", dueDate);
-                                    setFieldValue(
-                                      "paymentTerms",
-                                      newValue.value
-                                    );
-                                  } else {
-                                    setFieldValue("startDate", "");
-                                    setFieldValue("dueDate", "");
-                                  }
+                            onMouseDown={() => {
+                              setPopUpComponent(PopupComponents.PAYMENT_TERMS);
+                              setIsOpenDialogBox(true);
+                            }}
+                            onChange={(newValue: any) => {
+                              if (newValue) {
+                                // Determine the number of days based on the selected term
+                                let totalDays;
+                                switch (newValue.value) {
+                                  case "monthly":
+                                    totalDays = 30;
+                                    break;
+                                  case "quarterly":
+                                    totalDays = 45;
+                                    break;
+                                  case "annually":
+                                    totalDays = 365;
+                                    break;
+                                  default:
+                                    totalDays = 0; // Default to 0 if an unknown term is selected
+                                }
+                            
+                                if (totalDays > 0) {
+                                  const today = new Date();
+                                  const startDate = format(today, "dd-MM-yyyy");
+                                  const dueDate = format(addDays(today, totalDays), "dd-MM-yyyy");
+                                  setFieldValue("startDate", startDate);
+                                  setFieldValue("dueDate", dueDate);
+                                  setFieldValue("paymentTerms", newValue.value);
                                 } else {
-                                  setFieldValue("paymentTerms", "");
                                   setFieldValue("startDate", "");
                                   setFieldValue("dueDate", "");
                                 }
-                              }}
-                              required={true}
-                              options={paymentTermsOptions}
-                              value={
-                                values.paymentTerms
-                                  ? {
-                                      value: values.paymentTerms,
-                                      label: values.paymentTerms,
-                                    }
-                                  : null
+                              } else {
+                                setFieldValue("paymentTerms", "");
+                                setFieldValue("startDate", "");
+                                setFieldValue("dueDate", "");
                               }
-                              labelText="Payment Terms"
-                              error={
-                                touched.paymentTerms &&
-                                Boolean(errors.paymentTerms)
+                            }}
+                            
+                            required={true}
+                            options={paymentOptions}
+                            value={
+                              values.paymentTerms
+                                ? {
+                                    value: values.paymentTerms,
+                                    label: values.paymentTerms[0].toUpperCase() + values.paymentTerms.slice(1).toLowerCase(),
+                                  }
+                                : null
+                            }                            
+                            labelText="Payment Terms"
+                            error={touched.paymentTerms && Boolean(errors.paymentTerms)}
+                            helperText={touched.paymentTerms && errors.paymentTerms}
+                          />): <SelectDropdown
+                            button={canCreatePayment}
+                            onMouseDown={() => {
+                              setPopUpComponent(
+                                PopupComponents.PAYMENT_TERMS
+                              );
+                              setIsOpenDialogBox(true);
+                            }}
+                            onChange={(newValue: any) => {
+                              if (newValue) {
+                                const selectedPaymentTerms =
+                                  paymentTerms?.find(
+                                    (item) => item.termName === newValue.value
+                                  );
+                                if (selectedPaymentTerms) {
+                                  const today = new Date();
+                                  const startDate = format(
+                                    today,
+                                    "dd-MM-yyyy"
+                                  );
+                                  const dueDate = format(
+                                    addDays(
+                                      today,
+                                      selectedPaymentTerms.totalDays
+                                    ),
+                                    "dd-MM-yyyy"
+                                  );
+                                  setFieldValue("startDate", startDate);
+                                  setFieldValue("dueDate", dueDate);
+                                  setFieldValue(
+                                    "paymentTerms",
+                                    newValue.value
+                                  );
+                                } else {
+                                  setFieldValue("startDate", "");
+                                  setFieldValue("dueDate", "");
+                                }
+                              } else {
+                                setFieldValue("paymentTerms", "");
+                                setFieldValue("startDate", "");
+                                setFieldValue("dueDate", "");
                               }
-                              helperText={
-                                touched.paymentTerms && errors.paymentTerms
-                              }
-                            />
+                            }}
+                            required={true}
+                            options={paymentTermsOptions}
+                            value={
+                              values.paymentTerms
+                                ? {
+                                    value: values.paymentTerms,
+                                    label: values.paymentTerms,
+                                  }
+                                : null
+                            }
+                            labelText="Payment Terms"
+                            error={
+                              touched.paymentTerms &&
+                              Boolean(errors.paymentTerms)
+                            }
+                            helperText={
+                              touched.paymentTerms && errors.paymentTerms
+                            }
+                          />}
                           </Box>
                         </Grid>
 
