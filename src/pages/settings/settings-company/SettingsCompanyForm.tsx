@@ -3,6 +3,7 @@ import {
   useGetCompanySettingQuery,
   useAddCompanySettingMutation,
   useUpdateCompanySettingMutation,
+  useGetCompanySettingByIdQuery,
 } from "../../../redux-store/api/injectedApis";
 import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
 import { companyDetailsValidationSchema } from "../../../constants/forms/validations/validationSchema";
@@ -14,12 +15,14 @@ import { CompanyDetailsFields } from "../../../constants/form-data/form-data-jso
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 import { superAdminCompanyUsersInitialValues } from "../../../constants/forms/formikInitialValues";
 import { selectUserDetails } from "../../../redux-store/auth/authSlice";
+import { ToastContainer, toast } from 'react-toastify';
 
 interface SettingsCompanyFormProps extends CompanyFormProps {
   handleCloseDialog: () => void;
 }
 
 const SettingsCompanyForm = ({ companyValue, mode, handleCloseDialog }: SettingsCompanyFormProps) => {
+  console.log("companyValue", companyValue);
   const dispatch = useDispatch<AppDispatch>();
   const [openModal, setOpenModal] = useState(false);
 
@@ -42,8 +45,8 @@ const SettingsCompanyForm = ({ companyValue, mode, handleCloseDialog }: Settings
       error: companyUpdateErrorObject,
     },
   ] = useUpdateCompanySettingMutation();
-
-  const { data: settingsList, refetch } = useGetCompanySettingQuery();
+  const companyIdString = sessionStorage.getItem("id") || "";
+  const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
 
   const userDetailsFromStorage = useSelector(selectUserDetails);
   const userDetails = typeof userDetailsFromStorage === 'string' ? JSON.parse(userDetailsFromStorage) : userDetailsFromStorage;
@@ -51,6 +54,7 @@ const SettingsCompanyForm = ({ companyValue, mode, handleCloseDialog }: Settings
 
   const initialValue = companyValue || superAdminCompanyUsersInitialValues;
   const fields = CompanyDetailsFields;
+
 
   useSnackbarNotifications({
     error: companyAddError,
@@ -68,54 +72,102 @@ const SettingsCompanyForm = ({ companyValue, mode, handleCloseDialog }: Settings
     successMessage: "Company updated successfully",
   });
 
+
   useEffect(() => {
     if (companyAddSuccess || companyUpdateSuccess) {
-      window.location.reload();
+      // Instead of refetching the entire list, you can refetch the specific company by its ID
+      if (companyValue?.id) {
+        refetchCompanyData();
+      }
     }
-  }, [companyAddSuccess, companyUpdateSuccess]);
+  }, [companyAddSuccess, companyUpdateSuccess, companyValue, refetchCompanyData]);
+  
+
+
+//   useEffect(() => {
+//     if (isAddSuccess || isUpdateSuccess) {
+//         refetch(); // Refetch data after successful add or update
+//     }
+// }, [isAddSuccess, isUpdateSuccess, refetch]);
+
 
   const onSubmit = async (values: CompanyFormProps, actions: any) => {
     try {
-      if (mode === "edit" && userDetails?.companyDetails) {
-        await updateCompany({
-          id: userDetails.companyDetails.id,
-          company: values,
-        });
-
-        // Update userDetails in localStorage
-        const userDetailsFromStorage = localStorage.getItem('userDetails');
-        if (userDetailsFromStorage) {
-          const userDetailsData = JSON.parse(userDetailsFromStorage);
-
-          // Update only companyDetails with new values
-          userDetailsData.companyDetails = {
-            ...userDetailsData.companyDetails,
-            ...values,
-          };
-
-          // Store updated userDetails back in localStorage
-          localStorage.setItem('userDetails', JSON.stringify(userDetailsData));
+        if (mode === "edit" && companyValue) {
+            await updateCompany({ id: companyValue.id, company: values });
+            dispatch(clearData());
         } else {
-          throw new Error('User details not found in localStorage.');
+            await addCompany(values);
         }
-
-        dispatch(clearData());
-      } else {
-        await addCompany(values);
-      }
-      actions.resetForm();
-      handleCloseDialog();
+        actions.resetForm();
+        // toast.success("Saved successfully!"); // Show toast after updating fields
+        handleCloseDialog(); // Close modal after saving
     } catch (error) {
-      console.error("An error occurred during form submission:", error);
+        console.error("An error occurred during form submission:", error);
+        toast.error("Error occurred while saving fields."); // Show error toast if submission fails
     }
-  };
+};
+
+
+  // const onSubmit = async (values: CompanyFormProps, actions: any) => {
+  //   try {
+  //     if (mode === "edit" && userDetails?.companyDetails) {
+  //       await updateCompany({
+  //         id: userDetails.companyDetails.id,
+  //         company: values,
+  //       });
+
+  //       // Update userDetails in localStorage
+  //       const userDetailsFromStorage = localStorage.getItem('userDetails');
+  //       if (userDetailsFromStorage) {
+  //         const userDetailsData = JSON.parse(userDetailsFromStorage);
+
+  //         // Update only companyDetails with new values
+  //         userDetailsData.companyDetails = {
+  //           ...userDetailsData.companyDetails,
+  //           ...values,
+  //         };
+
+  //         // Store updated userDetails back in localStorage
+  //         localStorage.setItem('userDetails', JSON.stringify(userDetailsData));
+  //       } else {
+  //         throw new Error('User details not found in localStorage.');
+  //       }
+
+  //       dispatch(clearData());
+  //     } else {
+  //       await addCompany(values);
+  //     }
+  //     actions.resetForm();
+  //     handleCloseDialog();
+  //   } catch (error) {
+  //     console.error("An error occurred during form submission:", error);
+  //   }
+  // };
 
   const updateFormValue = (setFieldValue: Function) => {
+    
     // Update form values
   };
 
   return (
     <>
+
+<ToastContainer />
+            {/* <DynamicFormCreate
+                showTable={true}
+                headerName="Update your Company Information"
+                updateFormValue={updateFormValue}
+                fields={CompanyDetailsFields}
+                initialValues={initialValue || []}
+                validationSchema={companyDetailsValidationSchema}
+                onSubmit={onSubmit}
+                buttons={[
+                    { label: 'Save',icon: Save, onClick: onSubmit }
+                ]}
+            /> */}
+
+
       <DynamicFormCreate
         showTable={true}
         headerName="Update your Company Information"

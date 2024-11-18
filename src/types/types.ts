@@ -204,7 +204,7 @@ export interface SuperAdminUsersInitialValueProps {
     userRole: string;
     userMobile: string;
     description: string;
-    // companyName: "Marvel",
+
     companyName: string;
     companyAddress: string;
     companyState: string;

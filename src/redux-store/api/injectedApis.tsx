@@ -318,9 +318,15 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
 
                 // ! ----------- companyDetails start --------------
 
-            getSingleCompanySetting: builder.mutation<void, number>({
+            getSingleCompanySetting: builder.mutation<void, string>({
                     query: (id) => ({
                         url: `${API_URLS.settingsGet}/${id}`,
+                        method: 'POST',
+                    }),
+                }),
+                getCompanySettingById: builder.query<void, string>({
+                    query: (id) => ({
+                        url: `${API_URLS.settingsCompanyGet}/${id}`,
                         method: 'POST',
                     }),
                 }),
@@ -421,7 +427,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
                 // }),
     // ! ----------- Upload Logo --------------
 
-    getCompanyLogo: builder.query<any, void>({
+    getCompanyLogo: builder.query<any, string>({
         query: (id) => ({
             url: `${API_URLS.getCompanyLogo}/${id}`,
           method: 'POST',
@@ -429,6 +435,13 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         // Set caching for 5 minutes (300 seconds)
         keepUnusedDataFor: 5 * 60 * 1000, // in seconds
       }),
+
+      getSingleCompanyLogo: builder.mutation<void, number>({
+        query: (id) => ({
+            url: `${API_URLS.settingsGet}/${id}`,
+            method: 'POST',
+        }),
+    }),
       
       addCompanyLogo: builder.mutation<any, FormData>({
         query: (companyLogo) => ({
@@ -499,7 +512,7 @@ export const { useSendEmailNotificationMutation } = apiEndPointLists;
 
 
 //company Details export
-export const { useGetCompanySettingQuery, useAddCompanySettingMutation, useGetSingleCompanySettingMutation, useUpdateCompanySettingMutation } = apiEndPointLists;
+export const { useGetCompanySettingQuery, useGetCompanySettingByIdQuery, useAddCompanySettingMutation, useGetSingleCompanySettingMutation, useUpdateCompanySettingMutation } = apiEndPointLists;
 
 //portal Link export
 export const { useGetPortalLinkQuery, useGetSinglePortalLinkMutation, useAddPortalLinkMutation, useUpdatePortalLinkMutation, useDeletePortalLinkMutation } = apiEndPointLists;

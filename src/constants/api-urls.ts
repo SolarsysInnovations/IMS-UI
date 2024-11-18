@@ -60,6 +60,7 @@ export enum ApiEndpoint {
     SETTINGS_CREATE = "settingsCreate",
     SETTINGS_LIST = "settingsList",
     SETTINGS_UPDATE = "settingsUpdate",
+    SETTINGS_COMPANY_GET = "settingsCompanyGet",
     //Link
     LINK_CREATE = "linkCreate",
     LINK_GET = "linkGet",
@@ -149,6 +150,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.SETTINGS_LIST]: `/settings/list`,
     [ApiEndpoint.SETTINGS_GET]: `settings/get`,
     [ApiEndpoint.SETTINGS_UPDATE]: `settings/update`,
+    [ApiEndpoint.SETTINGS_COMPANY_GET]: `/settings/getCompany`,
     //link endpoints
     [ApiEndpoint.LINK_CREATE]: `/portal/create`,
     [ApiEndpoint.LINK_GET]: `/portal/get`,
