@@ -427,7 +427,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
                 // }),
     // ! ----------- Upload Logo --------------
 
-    getCompanyLogo: builder.query<any, string>({
+    getCompanyLogoById: builder.query<any, string>({
         query: (id) => ({
             url: `${API_URLS.getCompanyLogo}/${id}`,
           method: 'POST',
@@ -516,7 +516,7 @@ export const { useGetCompanySettingQuery, useGetCompanySettingByIdQuery, useAddC
 
 //portal Link export
 export const { useGetPortalLinkQuery, useGetSinglePortalLinkMutation, useAddPortalLinkMutation, useUpdatePortalLinkMutation, useDeletePortalLinkMutation } = apiEndPointLists;
-export const { useAddCompanyLogoMutation,useDeleteCompanyLogoMutation, useGetCompanyLogoQuery } = apiEndPointLists;
+export const { useAddCompanyLogoMutation,useDeleteCompanyLogoMutation, useGetCompanyLogoByIdQuery } = apiEndPointLists;
 export const { useForgetPwdMutation } = apiEndPointLists;
 export const { useResetPwdMutation } = apiEndPointLists;
 

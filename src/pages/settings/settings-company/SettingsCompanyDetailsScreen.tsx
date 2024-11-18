@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../redux-store/store";
 import {
   useGetCompanySettingByIdQuery,
-  useGetCompanyLogoQuery,
+  useGetCompanyLogoByIdQuery,
   useGetSingleCompanySettingMutation,
 } from "../../../redux-store/api/injectedApis";
 import { Box, Grid } from "@mui/material";
@@ -16,6 +16,8 @@ import { selectUserRole } from "../../../redux-store/auth/authSlice";
 import usePathname from "../../../hooks/usePathname";
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
+  console.log("SettingsCompanyDetailsScreen Rendered");
+
   const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
   const [openModal, setOpenModal] = useState(false);
@@ -24,31 +26,29 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
 
   const userRole = useSelector(selectUserRole);
   const companyIdString = sessionStorage.getItem("id") || ""; // Use empty string as fallback
-
+  const { id: companyId } = companyDetails || {};
+  
   // Fetch company details based on the stored company ID
   const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
   const [getData, { data: customerData }] = useGetSingleCompanySettingMutation();
-  // const { data: logoData, isSuccess: logoSuccess, isError: logoError } = useGetCompanyLogoQuery(companyInfo?.companyDetails?.id);
-
-  // useEffect(() => {
-  //   if (companyIdString) {
-  //     getData(companyIdString); // Fetch company details when the company ID is available
-  //   }
-  // }, [companyIdString]);
+  const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch: refetchLogoData } = useGetCompanyLogoByIdQuery(companyId);
 
   useEffect(() => {
     if (companyData) {
       setCompanyDetails(companyData);
+      console.log("Fetched company data:", companyData); // Log company data
     }
   }, [companyData]);
 
   useEffect(() => {
     if (pathname === "/settings") {
-      window.location.reload();
+      refetchCompanyData();
+      refetchLogoData();
     }
-  }, [pathname]);
+  }, [pathname, refetchCompanyData, refetchLogoData]);
 
   const handleEditClick = async () => {
+    console.log("Edit button clicked");
     if (!companyDetails?.id) {
       console.error("Company ID is not defined.");
       return;
@@ -67,15 +67,18 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
       console.error("Error handling edit click:", error);
     }
   };
-  
 
   const handleCloseDialog = () => {
+    console.log("Dialog closed");
     refetchCompanyData();
-    setIsOpenDialogBox(false); // Close the dialog box after saving
+    setIsOpenDialogBox(false);
   };
 
-  const button = userRole !== "APPROVER" && userRole !== "ENDUSER" ? [{ label: "Edit", icon: Edit, onClick: handleEditClick }] : [];
-console.log("companydetaills",companyDetails);
+  const button =
+    userRole !== "APPROVER" && userRole !== "ENDUSER"
+      ? [{ label: "Edit", icon: Edit, onClick: handleEditClick }]
+      : [];
+  console.log("Current company details:", companyDetails);
   return (
     <>
       <DialogBoxUi
@@ -172,14 +175,14 @@ console.log("companydetaills",companyDetails);
                 </p>
               </div>
               
-           {/* {companyId && userRole === "ADMIN" && ( */}
+            {companyIdString && userRole === "ADMIN" && (
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Box display="flex" alignItems="center" sx={{ marginTop: "10px" }}>
                   <Box component="span" fontWeight={500} width="140px" fontSize="13px">
                     Logo :
                   </Box>
-                  {/* {logoData ? (
+                   {logoData ? (
                     <img
                       src={`data:image/jpeg;base64,${logoData.companyLogo}`}
                       alt="Company Logo"
@@ -187,11 +190,11 @@ console.log("companydetaills",companyDetails);
                     />
                   ) : (
                     <Box component="span" fontSize="13px">No image available</Box>
-                  )} */}
+                  )} 
                 </Box>
               </Grid>
             </Grid>
-          {/* )}  */}
+           )}  
             </Box>
           </Grid>
         </Grid>
