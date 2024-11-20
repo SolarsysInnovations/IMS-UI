@@ -87,7 +87,7 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({ row, onDelete })
         <Stack direction="row" spacing={1}>
             <ActionButtons
                 canView={canViewInvoices}
-                canDelete={canDeleteInvoices}
+                canDelete={canDeleteInvoices && row.invoiceStatus !== "PENDING"}
                 canEdit={canEditInvoices && row.invoiceStatus !== "PENDING"}
                 onDeleteClick={handleDeleteClick}
                 onEditClick={handleEditClick}
