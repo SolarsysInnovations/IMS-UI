@@ -3,13 +3,17 @@ import { StorageKeys } from '../../hooks/useSessionStorage';
 import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from '../api/apiSlice';
-import { ForgetPwdProps, InvoiceInitialValueProps, RoleInitialValueProps, SendEmailInitialValueProps, InvoicesInitialValueProps } from '../../types/types';
+import { ForgetPwdProps, InvoiceInitialValueProps, ResetPwdProps, RoleInitialValueProps, SendEmailInitialValueProps } from '../../types/types';
 import { get } from 'http';
 
 interface DashboardRequestProps {
     startDate?: string;
     endDate?: string;
 };
+interface InvoiceRequestProps{
+    startDate?: string;
+    endDate?: string;
+}
 
 export const apiEndPointLists = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -112,6 +116,14 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
             query: () => ({
                 url: API_URLS.invoiceList,
                 method: 'POST',
+              
+            }),
+        }),
+        getInvoiceListScreen: builder.mutation<any, InvoiceRequestProps>({
+            query: (data) => ({
+                url: API_URLS.invoiceListScreen,
+                method: 'POST',
+                body: data,
             }),
         }),
         createInvoice: builder.mutation<any, Partial<InvoiceInitialValueProps>>({
@@ -306,9 +318,15 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
 
                 // ! ----------- companyDetails start --------------
 
-            getSingleCompanySetting: builder.mutation<void, number>({
+            getSingleCompanySetting: builder.mutation<void, string>({
                     query: (id) => ({
                         url: `${API_URLS.settingsGet}/${id}`,
+                        method: 'POST',
+                    }),
+                }),
+                getCompanySettingById: builder.query<void, string>({
+                    query: (id) => ({
+                        url: `${API_URLS.settingsCompanyGet}/${id}`,
                         method: 'POST',
                     }),
                 }),
@@ -409,7 +427,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
                 // }),
     // ! ----------- Upload Logo --------------
 
-    getCompanyLogo: builder.query<any, void>({
+    getCompanyLogoById: builder.query<any, string>({
         query: (id) => ({
             url: `${API_URLS.getCompanyLogo}/${id}`,
           method: 'POST',
@@ -417,6 +435,13 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
         // Set caching for 5 minutes (300 seconds)
         keepUnusedDataFor: 5 * 60 * 1000, // in seconds
       }),
+
+      getSingleCompanyLogo: builder.mutation<void, number>({
+        query: (id) => ({
+            url: `${API_URLS.settingsGet}/${id}`,
+            method: 'POST',
+        }),
+    }),
       
       addCompanyLogo: builder.mutation<any, FormData>({
         query: (companyLogo) => ({
@@ -443,7 +468,15 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
       }),
         // ! ------------ forget pwd end ---------------
 
-
+         // ! ------------ reset pwd start ---------------
+        resetPwd : builder.mutation<any, ResetPwdProps>({
+            query: (data) => ({
+            url: API_URLS.resetPwd,
+            method: 'POST',
+            body: data,
+    }),
+  }),
+   // ! ------------ reset pwd end ---------------
     }),
 
 });
@@ -467,7 +500,7 @@ export const { useGetTdsTaxListQuery, useCreateTdsTaxMutation, useUpdateTdsTaxMu
 export const { useGetGstTypeListQuery, useCreateGstTypeMutation, useUpdateGstTypeMutation, useDeleteGstTypeMutation, useGetSingleGstTypeMutation } = apiEndPointLists;
 
 // invoice export 
-export const { useGetInvoiceListMutation, useCreateInvoiceMutation, useDeleteInvoiceMutation, useUpdateInvoiceMutation, useGetSingleInvoiceMutation } = apiEndPointLists;
+export const { useGetInvoiceListQuery, useGetInvoiceListScreenMutation, useCreateInvoiceMutation, useDeleteInvoiceMutation, useUpdateInvoiceMutation, useGetSingleInvoiceMutation } = apiEndPointLists;
 
 // invoice reports
 export const { useGetReportInvoiceMutation } = apiEndPointLists;
@@ -479,9 +512,11 @@ export const { useSendEmailNotificationMutation } = apiEndPointLists;
 
 
 //company Details export
-export const { useGetCompanySettingQuery, useAddCompanySettingMutation, useGetSingleCompanySettingMutation, useUpdateCompanySettingMutation } = apiEndPointLists;
+export const { useGetCompanySettingQuery, useGetCompanySettingByIdQuery, useAddCompanySettingMutation, useGetSingleCompanySettingMutation, useUpdateCompanySettingMutation } = apiEndPointLists;
 
 //portal Link export
 export const { useGetPortalLinkQuery, useGetSinglePortalLinkMutation, useAddPortalLinkMutation, useUpdatePortalLinkMutation, useDeletePortalLinkMutation } = apiEndPointLists;
-export const { useAddCompanyLogoMutation,useDeleteCompanyLogoMutation, useGetCompanyLogoQuery } = apiEndPointLists;
+export const { useAddCompanyLogoMutation,useDeleteCompanyLogoMutation, useGetCompanyLogoByIdQuery } = apiEndPointLists;
 export const { useForgetPwdMutation } = apiEndPointLists;
+export const { useResetPwdMutation } = apiEndPointLists;
+

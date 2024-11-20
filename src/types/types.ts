@@ -12,6 +12,12 @@ export interface ForgetPwdProps {
 
 };
 
+export interface ResetPwdProps {
+    token: string;
+    newPassword: string;
+
+};
+
 export interface GstTypeProps {
     id?: string | undefined;
     gstName: string,
@@ -164,8 +170,10 @@ export interface InvoiceInitialValueProps {
     termsAndConditions: string;
     taxAmount: TaxAmountProps;
     servicesList: ServiceListProps[];
+    
 
-}; export interface InvoicesInitialValueProps {
+};
+ export interface InvoicesInitialValueProps {
    // invoiceDate: string;
     startDate: string;
     endDate: string;
@@ -197,7 +205,7 @@ export interface SuperAdminUsersInitialValueProps {
     userRole: string;
     userMobile: string;
     description: string;
-    // companyName: "Marvel",
+
     companyName: string;
     companyAddress: string;
     companyState: string;

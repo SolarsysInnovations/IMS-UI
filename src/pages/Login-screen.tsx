@@ -19,6 +19,7 @@ import TextFieldUi from "../components/ui/TextField";
 
 interface LoginResponse {
   data?: {
+    id: any;
     user: any;
     accessToken: any;
     refresh: any;
@@ -56,8 +57,8 @@ const Login = () => {
           if (loginResult.data && "accessToken" in loginResult.data) {
             // Check if the response contains a refresh token
             if (loginResult.data.accessToken) {
-              const { user, accessToken, refresh, userRole, userName, userEmail, userDetails } = loginResult.data;
-              dispatch(setCredentials({ user, accessToken, refresh, userRole, userName, userEmail, userDetails }));
+              const { id,user, accessToken, refresh, userRole, userName, userEmail, userDetails } = loginResult.data;
+              dispatch(setCredentials({ id,user, accessToken, refresh, userRole, userName, userEmail, userDetails }));
             } else {
               const { user, accessToken } = loginResult.data;
               dispatch(setCredentials({ user, accessToken }));
@@ -149,12 +150,12 @@ const Login = () => {
   >
     Forgot Password?
   </Link>
-  <Link
+  {/* <Link
     style={{ color: palette.primary.main, textDecoration: 'none' , marginLeft:'10px'}}
     to="/resetpassword"  // Change this line
   >
     Reset Password?
-  </Link>
+  </Link> */}
 </FormHelperText>
                 <Box sx={{ mt: 2 }}>
                   <ButtonUi fullWidth={true} loading={isSubmitting} color="primary" label='Login' variant='contained' type='submit' />

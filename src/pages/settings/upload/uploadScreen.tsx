@@ -2,73 +2,69 @@ import { Grid, Button, CircularProgress, Typography, Box } from "@mui/material";
 import React, { useState, ChangeEvent, useEffect } from "react";
 import {
   useAddCompanyLogoMutation,
-  useGetCompanyLogoQuery,
+  useGetCompanyLogoByIdQuery,
   useDeleteCompanyLogoMutation,
+  useGetCompanySettingByIdQuery,
 } from "../../../../src/redux-store/api/injectedApis";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 import { selectUserDetails } from "../../../redux-store/auth/authSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { clearCompanyLogo, setCompanyLogo } from "../../../redux-store/global/globalState";
+import { useDispatch } from "react-redux";
+
 
 const UploadScreen: React.FC = () => {
+  const dispatch = useDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
   const [savedLogoUrl, setSavedLogoUrl] = useState<string | null>(null);
   const [base64String, setBase64String] = useState<string | null>(null);
+  const [companyDetails, setCompanyDetails] = useState<any>(null);
 
   const companyInfo = useSelector(selectUserDetails);
-  const { id: companyId } = companyInfo?.companyDetails || {};
+  const companyIdString = sessionStorage.getItem("id") || "";
 
-  const [deleteCompanyLogo, { isLoading: deleteCompanyLoading, isSuccess: deleteCompanySuccess, isError: deleteCompanyError, error: deleteCompanyErrorObject }] = useDeleteCompanyLogoMutation();
+  // Fetch company data
+  const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
   const [addCompanyLogo, { isSuccess: uploadSuccess, isError: uploadError, data }] = useAddCompanyLogoMutation();
-  const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch, isFetching, error: logoFetchError } = useGetCompanyLogoQuery(companyId);
-  useSnackbarNotifications({
-    error: deleteCompanyError,
-    errorMessage: 'Error deleting company logo',
-    success: deleteCompanySuccess,
-    successMessage: 'Logo deleted successfully',
-    errorObject: deleteCompanyErrorObject,
-  });
+  const [deleteCompanyLogo, { isLoading: deleteCompanyLoading, isSuccess: deleteCompanySuccess, isError: deleteCompanyError }] =
+    useDeleteCompanyLogoMutation();
 
-  useSnackbarNotifications({
-    success: uploadSuccess,
-    successMessage: "Logo has been uploaded successfully",
-    error: uploadError,
-    errorMessage: "Error uploading logo. Please try again.",
-  });
+  // Fetch logo data after company ID is available
+  const { id: companyId } = companyDetails || {};
+  const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch: refetchLogo } = useGetCompanyLogoByIdQuery(
+    companyId,
+    { skip: !companyId } // Skip fetching until companyId is available
+  );
 
-  // Reset state when the component mounts or when the companyId changes
   useEffect(() => {
-    setSelectedFile(null);
-    setImagePreview(null);
-    setSavedLogoUrl(null);
-    setBase64String(null); // Reset base64String
-  }, [companyId]);
-
-  // Handle successful logo upload
+    if (companyData) {
+      setCompanyDetails(companyData);
+    }
+  }, [companyData]);
+  
   useEffect(() => {
     if (uploadSuccess && data) {
-      const responseData = data as { logoUrl: string };
-      setSavedLogoUrl(responseData.logoUrl);
-      setLoading(false);
-      setSelectedFile(null);
-      setImagePreview(null);
-      refetch(); // Fetch the updated logo data after upload
+        const responseData = data as { logoUrl: string };
+        setSavedLogoUrl(responseData.logoUrl);
+        dispatch(setCompanyLogo(responseData.logoUrl)); // Update Redux state
+        setLoading(false);
+        setSelectedFile(null);
+        setImagePreview(null);
+        refetchLogo(); // Fetch updated logo data after upload
     }
-  }, [uploadSuccess, data, refetch]);
+}, [uploadSuccess, data, dispatch, refetchLogo]);
+
 
   useEffect(() => {
-    if (logoSuccess && logoData.companyLogo) {
-      setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`); // Set base64String state
-    } else if (logoError && logoFetchError?.status === 404) {
-      // If there's a 404 error, reset base64String
-      setBase64String(null);
-
+    if (logoSuccess && logoData?.companyLogo) {
+      setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
     } else {
-      setBase64String(null); // Reset base64String if no logo exists
+      setBase64String(null);
     }
-  }, [logoSuccess, logoError, logoFetchError]);
-  
+  }, [logoSuccess, logoData]);
+
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     if (file) {
@@ -94,20 +90,19 @@ const UploadScreen: React.FC = () => {
   const handleDeleteClick = async () => {
     const confirmed = window.confirm("Are you sure you want to delete this logo?");
     if (confirmed && companyId) {
-      setBase64String(null); // Set base64String to null immediately
-      setImagePreview(null);  // Clear the image preview immediately
-      await deleteCompanyLogo(companyId).unwrap(); // Await deletion to ensure completion
-      refetch(); // Refetch to update the state after deletion
+        try {
+            await deleteCompanyLogo(companyId).unwrap();
+            // Clear the logo from the Redux store
+            dispatch(clearCompanyLogo()); // Dispatch action to clear logo
+            setBase64String(null); // Optionally clear local state as well
+            setSavedLogoUrl(null);
+            refetchLogo();
+        } catch (error) {
+            console.error("Error deleting logo:", error);
+        }
     }
-  };
+};
 
-  useEffect(() => {
-    if (deleteCompanySuccess) {
-      // After successfully deleting, reset the base64 string and image preview
-      setBase64String(null);
-      setImagePreview(null);
-    }
-  }, [deleteCompanySuccess]);
 
   const handleSave = async () => {
     if (selectedFile) {
@@ -123,6 +118,20 @@ const UploadScreen: React.FC = () => {
     }
   };
 
+  useSnackbarNotifications({
+    success: uploadSuccess,
+    successMessage: "Logo uploaded successfully",
+    error: uploadError,
+    errorMessage: "Error uploading logo",
+  });
+
+  useSnackbarNotifications({
+    success: deleteCompanySuccess,
+    successMessage: "Logo deleted successfully",
+    error: deleteCompanyError,
+    errorMessage: "Error deleting logo",
+  });
+
   return (
     <Grid
       container
@@ -133,7 +142,7 @@ const UploadScreen: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         maxWidth: "100%",
-        overflow: "auto", // Avoid full page scrolling
+        overflow: "auto",
       }}
     >
       <Grid
@@ -148,23 +157,22 @@ const UploadScreen: React.FC = () => {
           padding: "10px",
         }}
       >
-      {/* Display Company Logo or No Image Text */}
-      {base64String ? (
-        <img
-          src={base64String}
-          alt="Company Logo"
-          style={{
-            maxWidth: "250px",
-            maxHeight: "250px",
-            objectFit: "contain",
-            marginBottom: "10px",
-          }}
-        />
-      ) : (
-        <Box component="span" fontSize="13px" sx={{ marginBottom: "10px" }}>
-          No image available
-        </Box>
-      )}
+        {base64String ? (
+          <img
+            src={base64String}
+            alt="Company Logo"
+            style={{
+              maxWidth: "250px",
+              maxHeight: "250px",
+              objectFit: "contain",
+              marginBottom: "10px",
+            }}
+          />
+        ) : (
+          <Box component="span" fontSize="13px" sx={{ marginBottom: "10px" }}>
+            No image available
+          </Box>
+        )}
 
         <Button
           variant="outlined"
@@ -176,7 +184,6 @@ const UploadScreen: React.FC = () => {
           Remove
         </Button>
 
-        {/* Upload instructions */}
         <Typography
           variant="caption"
           sx={{
@@ -188,7 +195,6 @@ const UploadScreen: React.FC = () => {
           (Only jpeg/png format images are allowed to upload here*)
         </Typography>
 
-        {/* Hidden input and Upload button */}
         <input
           accept="image/*"
           style={{ display: "none" }}
@@ -202,8 +208,7 @@ const UploadScreen: React.FC = () => {
           </Button>
         </label>
 
-        {/* Image Preview */}
-        {imagePreview && !savedLogoUrl && (
+        {imagePreview && (
           <Box
             sx={{
               marginTop: "20px",

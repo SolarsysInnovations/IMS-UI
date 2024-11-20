@@ -1,63 +1,78 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux-store/store";
 import {
+  useGetCompanySettingByIdQuery,
+  useGetCompanyLogoByIdQuery,
   useGetSingleCompanySettingMutation,
-  useGetCompanyLogoQuery,
 } from "../../../redux-store/api/injectedApis";
 import { Box, Grid } from "@mui/material";
-import TableHeader from "../../../components/layouts/TableHeader";
-import { Edit } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../../redux-store/store";
-import usePathname from "../../../hooks/usePathname";
 import { setData } from "../../../redux-store/global/globalState";
-import DialogBoxUi from "../../../components/ui/DialogBox";
+import TableHeader from "../../../components/layouts/TableHeader";
 import SettingsCompanyForm from "./SettingsCompanyForm";
-import {
-  selectUserDetails,
-  selectUserRole,
-} from "../../../redux-store/auth/authSlice";
+import { Edit } from "@mui/icons-material";
+import DialogBoxUi from "../../../components/ui/DialogBox";
+import { selectUserRole } from "../../../redux-store/auth/authSlice";
+import usePathname from "../../../hooks/usePathname";
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
+  console.log("SettingsCompanyDetailsScreen Rendered");
+
   const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
-  const [
-    getData,
-    { data: customerData, isSuccess: C_success, isError: C_error },
-  ] = useGetSingleCompanySettingMutation();
-  const companyInfo = useSelector(selectUserDetails);
-  const userRole = useSelector(selectUserRole);
-
   const [openModal, setOpenModal] = useState(false);
+  const [companyDetails, setCompanyDetails] = useState<any>(null);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
-  const [companyLogo, setCompanyLogo] = useState<string | null>(null); // Local state for logo
+  const [base64String, setBase64String] = useState<string | null>(null);
+  const userRole = useSelector(selectUserRole);
+  const companyIdString = sessionStorage.getItem("id") || ""; // Use empty string as fallback
+  const { id: companyId } = companyDetails || {};
+  const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
 
-  // Fetch company logo using companyId from companyInfo
-  const {
-    data: logoData,
-    isSuccess: logoSuccess,
-    isError: logoError,
-  } = useGetCompanyLogoQuery(companyInfo?.companyDetails?.id);
+  const [getData, { data: customerData }] = useGetSingleCompanySettingMutation();
 
-  // Update the company logo in local state when logoData changes
+  const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch: refetchLogoData } = useGetCompanyLogoByIdQuery(companyId, {
+    skip: !companyId, 
+  });
+
+
+  
   useEffect(() => {
-    if (logoSuccess && logoData) {
-      setCompanyLogo(`data:image/jpeg;base64,${logoData.companyLogo}`); // Update local logo state
+    if (logoSuccess && logoData?.companyLogo) {
+      setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
+    } else {
+      setBase64String(null);
     }
-  }, [logoData, logoSuccess]);
+  }, [logoSuccess, logoData]);
 
-  // Fetch company details when component mounts or companyInfo changes
+
   useEffect(() => {
-    if (companyInfo?.companyDetails?.id) {
-      getData(companyInfo.companyDetails.id); // Fetch company details if id exists
+    if (companyData) {
+      setCompanyDetails(companyData);
+      console.log("Fetched company data:", companyData);
     }
-  }, [companyInfo]);
+  }, [companyData]);
+
+  useEffect(() => {
+    if (companyIdString) {
+      refetchCompanyData();
+    }
+    if(companyId){
+      refetchLogoData();
+    }
+  }, [companyIdString, companyId, refetchCompanyData, refetchLogoData]);
 
   const handleEditClick = async () => {
+    console.log("Edit button clicked");
+    if (!companyDetails?.id) {
+      console.error("Company ID is not defined.");
+      return;
+    }
     try {
-      const response = await getData(companyInfo.companyDetails.id);
+      const response = await getData(companyDetails.id);
       if ("data" in response) {
         const companyData = response.data;
-        await dispatch(setData(companyData));
+        await dispatch(setData(companyData)); // Store company data in global state
         setOpenModal(true);
         setIsOpenDialogBox(true);
       } else {
@@ -69,7 +84,10 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   };
 
   const handleCloseDialog = () => {
-    setIsOpenDialogBox(false); // Close the dialog box
+    console.log("Dialog closed");
+    refetchCompanyData();
+    refetchLogoData();
+    setIsOpenDialogBox(false);
   };
 
   const button =
@@ -77,13 +95,17 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
       ? [{ label: "Edit", icon: Edit, onClick: handleEditClick }]
       : [];
 
+  if (!companyDetails) {
+    return <div></div>; // Ensure companyDetails are fetched before rendering the content
+  }
+
   return (
     <>
       <DialogBoxUi
         open={opendialogBox}
         content={
           <SettingsCompanyForm
-            companyValue={companyInfo?.companyDetails}
+            companyValue={companyDetails}
             mode="edit"
             handleCloseDialog={handleCloseDialog}
           />
@@ -92,194 +114,111 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
       />
       <TableHeader buttons={button} />
 
-      {companyInfo && (
-        <Grid
-          container
-          sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}
-        >
+      {companyIdString && (
+        <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>
           <Grid item xs={7}>
             <Box gap={3}>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
-                    }}
-                  >
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
                     Company Name
                   </span>
-                  <span>: {companyInfo?.companyDetails.companyName}</span>
+                  <span>: {companyDetails?.companyName}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
-                    }}
-                  >
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
                     Company Address
                   </span>
-                  <span>: {companyInfo?.companyDetails.companyAddress}</span>
+                  <span>: {companyDetails?.companyAddress}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
-                    }}
-                  >
-                    Company City
-                  </span>
-                  <span>: {companyInfo?.companyDetails.companyCity}</span>
-                </p>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
-                    }}
-                  >
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
                     Company State
                   </span>
-                  <span>: {companyInfo?.companyDetails.companyState}</span>
+                  <span>: {companyDetails?.companyState}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
-                    }}
-                  >
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
                     Company Country
                   </span>
-                  <span>: {companyInfo?.companyDetails.companyCountry}</span>
+                  <span>: {companyDetails?.companyCountry}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
-                    }}
-                  >
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
                     Company E-mail
                   </span>
-                  <span>: {companyInfo?.companyDetails.companyEmail}</span>
+                  <span>: {companyDetails?.companyEmail}</span>
                 </p>
               </div>
             </Box>
           </Grid>
-
-          <Grid item xs={4}>
+          <Grid sx={{ marginTop: "0px" }} item xs={4}>
             <Box gap={3}>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
-                    }}
-                  >
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
                     Company Phone
                   </span>
-                  <span>: {companyInfo?.companyDetails.companyPhone}</span>
+                  <span>: {companyDetails?.companyPhone}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
-                    }}
-                  >
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
                     Company Website
                   </span>
-                  <span>: {companyInfo?.companyDetails.companyWebsite}</span>
+                  <span>: {companyDetails?.companyWebsite}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
-                    }}
-                  >
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
                     Company Tax Num
                   </span>
-                  <span>: {companyInfo?.companyDetails.companyTaxNumber}</span>
+                  <span>: {companyDetails?.companyTaxNumber}</span>
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
-                  <span
-                    style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
-                    }}
-                  >
+                  <span style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>
                     Company Reg Num
                   </span>
-                  <span>: {companyInfo?.companyDetails.companyRegNumber}</span>
+                  <span>: {companyDetails?.companyRegNumber}</span>
                 </p>
               </div>
+
+              {companyIdString && userRole === "ADMIN" && (
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Box display="flex" alignItems="center" sx={{ marginTop: "10px" }}>
+                      <Box component="span" fontWeight={500} width="140px" fontSize="13px">
+                        Logo :
+                      </Box>
+                      
+                      
+                      {base64String ? (
+                        <img
+                          src={base64String}
+                          alt="Company Logo"
+                          style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "contain" }}
+                        />
+                      ) : (
+                        <Box component="span" fontSize="13px">No image available</Box>
+                      )}
+                    </Box>
+                  </Grid>
+                </Grid>
+              )}
             </Box>
           </Grid>
-
-          {companyInfo && userRole === "ADMIN" && (
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  sx={{ marginTop: "10px" }}
-                >
-                  <Box
-                    component="span"
-                    fontWeight={500}
-                    width="140px"
-                    fontSize="13px"
-                  >
-                    Logo :
-                  </Box>
-                  {companyLogo ? (
-                    <img
-                      src={companyLogo} // Use local state for logo
-                      alt="Company Logo"
-                      style={{
-                        maxWidth: "150px",
-                        maxHeight: "150px",
-                        objectFit: "contain",
-                      }}
-                    />
-                  ) : (
-                    <Box component="span" fontSize="13px">
-                      : No image available
-                    </Box>
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          )}
         </Grid>
       )}
     </>

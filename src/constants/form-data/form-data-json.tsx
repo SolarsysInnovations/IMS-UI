@@ -135,46 +135,15 @@ export const CompanyDetailsFields: FieldProps[] = [
         type: 'section',
         titleGridSize: 12,
         subFields: [
-            {
-                name: 'companyName', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 5, validation: Yup.string().required('Company Name is required'),
-                width: ''
-            },
-            {
-                name: 'companyEmail', required: true, disabled: false, label: 'Company Email', type: 'text', gridSize: 5, validation: Yup.string().email('Invalid email').required('Company Email is required'),
-                width: ''
-            },
-            {
-                name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5, validation: Yup.string().typeError('Must be a number').required('Company Phone is required'),
-                width: ''
-            },
-            {
-                name: 'companyCountry', required: true, disabled: false, label: 'Company Country', type: 'selectCountry', gridSize: 5, validation: Yup.string().required('Company Country is required'),
-                width: ''
-            },
-            {
-                name: 'companyState', required: true, disabled: false, label: 'Company State', type: 'selectState', gridSize: 5, validation: Yup.string().required('Company State is required'),
-                width: ''
-            },
-            {
-                name: 'companyCity', required: true, disabled: false, label: 'Company City', type: 'selectCity', gridSize: 5, validation: Yup.string().required('Company City is required'),
-                width: ''
-            },
-            {
-                name: 'companyAddress', required: true, disabled: false, label: 'Company Address', type: 'text', gridSize: 5, validation: Yup.string().required('Company Address is required'),
-                width: ''
-            },
-            {
-                name: 'companyWebsite', required: true, disabled: false, label: 'Company Website', type: 'text', gridSize: 5, validation: Yup.string().url('Invalid URL').required('Company Website is required'),
-                width: ''
-            },
-            {
-                name: 'companyTaxNumber', required: true, disabled: false, label: 'Company TaxNumber', type: 'text', gridSize: 5, validation: Yup.string().required('Company TaxNumber is required'),
-                width: ''
-            },
-            {
-                name: 'companyRegNumber', required: true, disabled: false, label: 'Company RegNumber', type: 'text', gridSize: 5, validation: Yup.string().required('Company RegNumber is required'),
-                width: ''
-            }
+            { name: 'companyName', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 5, width: ''},
+            { name: 'companyEmail', required: true, disabled: false, label: 'Company Email', type: 'text', gridSize: 5,width: '' },
+            { name: 'companyPhone', required: true, disabled: false, label: 'Company Phone', type: 'number', gridSize: 5,width: '' },
+            { name: 'companyCountry', required: true, disabled: false, label: 'Company Country', type: 'selectCountry', gridSize: 5,width: '' },
+            { name: 'companyState', required: true, disabled: false, label: 'Company State', type: 'selectState', gridSize: 5,width: '' },
+            { name: 'companyAddress', required: true, disabled: false, label: 'Company Address', type: 'text', gridSize: 5,width: '' },
+            { name: 'companyWebsite', required: true, disabled: false, label: 'Company Website', type: 'text', gridSize: 5, width: ''},
+            { name: 'companyTaxNumber', required: true, disabled: false, label: 'Company TaxNumber', type: 'text', gridSize: 5,width: '' },
+            { name: 'companyRegNumber', required: true, disabled: false, label: 'Company RegNumber', type: 'text', gridSize: 5,width: '' },
         ]
     },
 ];

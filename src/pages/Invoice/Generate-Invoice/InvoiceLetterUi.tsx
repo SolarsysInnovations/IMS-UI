@@ -3,7 +3,7 @@ import InvoiceDocument from "./InvoiceDocument";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import {  useGetCompanyLogoQuery, useGetCustomersListQuery, useGetInvoiceListMutation, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
+import {  useGetCompanyLogoByIdQuery, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
 import { selectUserDetails, selectUserRole } from "../../../redux-store/auth/authSlice";
 import { formatDate } from "../../../services/utils/dataFormatter";
 import StageStepper from "../../../components/ui/StepperUi";
@@ -217,7 +217,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
       };
   const companyInfo = useSelector(selectUserDetails);
 
-      const { data: logoData, isSuccess: logoSuccess, isError: logoError } = useGetCompanyLogoQuery(companyInfo?.companyDetails?.id);
+      const { data: logoData, isSuccess: logoSuccess, isError: logoError } = useGetCompanyLogoByIdQuery(companyInfo?.companyDetails?.id);
      
       const getCompanyLogo = () => {
         if (logoData && logoData.companyLogo) {

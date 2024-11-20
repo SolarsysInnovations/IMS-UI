@@ -43,7 +43,7 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<Navigate to={token ? "/dashboard" : "/login"} />} />
           <Route path="/forgotpassword" element={token ? <Navigate to="/login" /> : <ForgetPassword />} />
-          <Route path="/resetpassword" element={<ResetPassword />} />
+          <Route path="/resetpassword" element={token ? <Navigate to="/login" /> : <ResetPassword />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
