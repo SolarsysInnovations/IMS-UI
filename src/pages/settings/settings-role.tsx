@@ -15,13 +15,15 @@ const SettingRoleScreen = () => {
     loadInitialValues();
   }, []);
 
+  useEffect(() => {
+    // Trigger a refetch or any necessary update when the tab changes
+    if (currentTabIndex === 0) {
+      // Refetch data when the SettingsCompanyDetailsScreen is displayed
+      // You can trigger a function to refetch the data or reset local state here if needed
+    }
+  }, [currentTabIndex]);  // Trigger when the tab index changes
+
   const loadInitialValues = () => {
-    // Your logic to load initial values goes here
-    // Example:
-    // fetchData().then((data) => {
-    //   // Set initial values based on the fetched data
-    //   setInitialValuesLoaded(true);
-    // });
     setInitialValuesLoaded(true); // For demonstration, setting it to true immediately
   };
 

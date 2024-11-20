@@ -9,8 +9,12 @@ import {
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
 import { selectUserDetails } from "../../../redux-store/auth/authSlice";
 import { useSelector } from "react-redux";
+import { clearCompanyLogo, setCompanyLogo } from "../../../redux-store/global/globalState";
+import { useDispatch } from "react-redux";
+
 
 const UploadScreen: React.FC = () => {
+  const dispatch = useDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
@@ -39,17 +43,19 @@ const UploadScreen: React.FC = () => {
       setCompanyDetails(companyData);
     }
   }, [companyData]);
-
+  
   useEffect(() => {
     if (uploadSuccess && data) {
-      const responseData = data as { logoUrl: string };
-      setSavedLogoUrl(responseData.logoUrl);
-      setLoading(false);
-      setSelectedFile(null);
-      setImagePreview(null);
-      refetchLogo(); // Fetch updated logo data after upload
+        const responseData = data as { logoUrl: string };
+        setSavedLogoUrl(responseData.logoUrl);
+        dispatch(setCompanyLogo(responseData.logoUrl)); // Update Redux state
+        setLoading(false);
+        setSelectedFile(null);
+        setImagePreview(null);
+        refetchLogo(); // Fetch updated logo data after upload
     }
-  }, [uploadSuccess, data, refetchLogo]);
+}, [uploadSuccess, data, dispatch, refetchLogo]);
+
 
   useEffect(() => {
     if (logoSuccess && logoData?.companyLogo) {
@@ -84,16 +90,19 @@ const UploadScreen: React.FC = () => {
   const handleDeleteClick = async () => {
     const confirmed = window.confirm("Are you sure you want to delete this logo?");
     if (confirmed && companyId) {
-      try {
-        await deleteCompanyLogo(companyId).unwrap();
-        setBase64String(null);
-        setSavedLogoUrl(null);
-        refetchLogo();
-      } catch (error) {
-        console.error("Error deleting logo:", error);
-      }
+        try {
+            await deleteCompanyLogo(companyId).unwrap();
+            // Clear the logo from the Redux store
+            dispatch(clearCompanyLogo()); // Dispatch action to clear logo
+            setBase64String(null); // Optionally clear local state as well
+            setSavedLogoUrl(null);
+            refetchLogo();
+        } catch (error) {
+            console.error("Error deleting logo:", error);
+        }
     }
-  };
+};
+
 
   const handleSave = async () => {
     if (selectedFile) {

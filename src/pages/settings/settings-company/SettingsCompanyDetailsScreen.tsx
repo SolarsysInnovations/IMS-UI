@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../../redux-store/store";
+import { AppDispatch, RootState } from "../../../redux-store/store";
 import {
   useGetCompanySettingByIdQuery,
   useGetCompanyLogoByIdQuery,
@@ -23,29 +23,44 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
-
+  const [base64String, setBase64String] = useState<string | null>(null);
   const userRole = useSelector(selectUserRole);
   const companyIdString = sessionStorage.getItem("id") || ""; // Use empty string as fallback
   const { id: companyId } = companyDetails || {};
-  
-  // Fetch company details based on the stored company ID
   const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
+
   const [getData, { data: customerData }] = useGetSingleCompanySettingMutation();
-  const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch: refetchLogoData } = useGetCompanyLogoByIdQuery(companyId);
-    
+
+  const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch: refetchLogoData } = useGetCompanyLogoByIdQuery(companyId, {
+    skip: !companyId, 
+  });
+
+
+  
+  useEffect(() => {
+    if (logoSuccess && logoData?.companyLogo) {
+      setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
+    } else {
+      setBase64String(null);
+    }
+  }, [logoSuccess, logoData]);
+
+
   useEffect(() => {
     if (companyData) {
       setCompanyDetails(companyData);
-      console.log("Fetched company data:", companyData); // Log company data
+      console.log("Fetched company data:", companyData);
     }
   }, [companyData]);
-  
+
   useEffect(() => {
-    if (pathname === "/settings") {
+    if (companyIdString) {
       refetchCompanyData();
-      if (companyId) refetchLogoData();
     }
-  }, [pathname, companyId, refetchCompanyData, refetchLogoData]);
+    if(companyId){
+      refetchLogoData();
+    }
+  }, [companyIdString, companyId, refetchCompanyData, refetchLogoData]);
 
   const handleEditClick = async () => {
     console.log("Edit button clicked");
@@ -71,15 +86,19 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const handleCloseDialog = () => {
     console.log("Dialog closed");
     refetchCompanyData();
-    refetchLogoData(); // Ensure the logo is also refreshed
+    refetchLogoData();
     setIsOpenDialogBox(false);
   };
-  
+
   const button =
     userRole !== "APPROVER" && userRole !== "ENDUSER"
       ? [{ label: "Edit", icon: Edit, onClick: handleEditClick }]
       : [];
-  console.log("Current company details:", companyDetails);
+
+  if (!companyDetails) {
+    return <div></div>; // Ensure companyDetails are fetched before rendering the content
+  }
+
   return (
     <>
       <DialogBoxUi
@@ -175,28 +194,29 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                   <span>: {companyDetails?.companyRegNumber}</span>
                 </p>
               </div>
-              
-            {companyIdString && userRole === "ADMIN" && (
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Box display="flex" alignItems="center" sx={{ marginTop: "10px" }}>
-                  <Box component="span" fontWeight={500} width="140px" fontSize="13px">
-                    Logo :
-                  </Box>
-                  {logoData?.companyLogo ? (
-                    <img
-                      src={`data:image/jpeg;base64,${logoData.companyLogo}`}
-                      alt="Company Logo"
-                      style={{ maxWidth: "150px", 
-                        maxHeight: "150px", objectFit: "contain" }}
-                    />
-                  ) : (
-                    <Box component="span" fontSize="13px">No image available</Box>
-                  )} 
-                </Box>
-              </Grid>
-            </Grid>
-           )}  
+
+              {companyIdString && userRole === "ADMIN" && (
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Box display="flex" alignItems="center" sx={{ marginTop: "10px" }}>
+                      <Box component="span" fontWeight={500} width="140px" fontSize="13px">
+                        Logo :
+                      </Box>
+                      
+                      
+                      {base64String ? (
+                        <img
+                          src={base64String}
+                          alt="Company Logo"
+                          style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "contain" }}
+                        />
+                      ) : (
+                        <Box component="span" fontSize="13px">No image available</Box>
+                      )}
+                    </Box>
+                  </Grid>
+                </Grid>
+              )}
             </Box>
           </Grid>
         </Grid>
