@@ -32,20 +32,20 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
   const [getData, { data: customerData }] = useGetSingleCompanySettingMutation();
   const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch: refetchLogoData } = useGetCompanyLogoByIdQuery(companyId);
-
+    
   useEffect(() => {
     if (companyData) {
       setCompanyDetails(companyData);
       console.log("Fetched company data:", companyData); // Log company data
     }
   }, [companyData]);
-
+  
   useEffect(() => {
     if (pathname === "/settings") {
       refetchCompanyData();
-      refetchLogoData();
+      if (companyId) refetchLogoData();
     }
-  }, [pathname, refetchCompanyData, refetchLogoData]);
+  }, [pathname, companyId, refetchCompanyData, refetchLogoData]);
 
   const handleEditClick = async () => {
     console.log("Edit button clicked");
@@ -71,9 +71,10 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const handleCloseDialog = () => {
     console.log("Dialog closed");
     refetchCompanyData();
+    refetchLogoData(); // Ensure the logo is also refreshed
     setIsOpenDialogBox(false);
   };
-
+  
   const button =
     userRole !== "APPROVER" && userRole !== "ENDUSER"
       ? [{ label: "Edit", icon: Edit, onClick: handleEditClick }]
@@ -182,11 +183,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                   <Box component="span" fontWeight={500} width="140px" fontSize="13px">
                     Logo :
                   </Box>
-                   {logoData ? (
+                  {logoData?.companyLogo ? (
                     <img
                       src={`data:image/jpeg;base64,${logoData.companyLogo}`}
                       alt="Company Logo"
-                      style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "contain" }}
+                      style={{ maxWidth: "150px", 
+                        maxHeight: "150px", objectFit: "contain" }}
                     />
                   ) : (
                     <Box component="span" fontSize="13px">No image available</Box>

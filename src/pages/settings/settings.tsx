@@ -12,6 +12,7 @@ import UploadScreen from "./upload/uploadScreen";
 
 const SettingScreen = () => {
   const [initialValuesLoaded, setInitialValuesLoaded] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("Company Settings");
   const userRole = useSelector(selectUserRole) || "user"; // Provide a default role if null
 
   useEffect(() => {
@@ -22,12 +23,21 @@ const SettingScreen = () => {
     setInitialValuesLoaded(true);
   };
 
+  const handleTabChange = (newTabIndex: number) => {
+    setActiveTab(tabs[newTabIndex].label); // Now we pass the tab label, not the index
+  };
+  
+
   const tabs = [
     { label: "Company Settings", component: <SettingsCompanyDetailsScreen />, roles: ["ADMIN", "APPROVER", "STANDARDUSER","SUPERADMIN"] },
     { label: "Upload", component: <UploadScreen />, roles: ["ADMIN"] },
     { label: "Portals", component: <LinkScreen />, roles: ["ADMIN"] },
     { label: "Tax", component: <TaxConfig />, roles: ["ADMIN"] },
-    { label: "About", component: <About />, roles: ["ADMIN", "APPROVER", "STANDARDUSER","SUPERADMIN"] },
+    {
+      label: "About",
+      component: <About />,
+      roles: ["ADMIN", "APPROVER", "STANDARDUSER", "SUPERADMIN"],
+    },
   ];
 
   return (
