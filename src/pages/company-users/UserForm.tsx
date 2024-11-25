@@ -10,14 +10,14 @@ import { AppDispatch } from '../../redux-store/store';
 import { useCreateUserMutation, useUpdateUserMutation } from '../../redux-store/api/injectedApis';
 import { AdminCompanyUsersInitialValueProps } from '../../types/types';
 import { RoleValidationSchema } from "../../constants/forms/validations/validationSchema";
-
 interface UserValueProps {
     userEditValue: any;
     mode: 'create' | 'edit';
-    onClose: () => void; // Add onClose prop
+    onClose: () => void;
+    refetchUserList: () => void; // Add this prop
 };
 
-const UserForm = ({ userEditValue, mode, onClose }: UserValueProps) => {
+const UserForm = ({ userEditValue, mode, onClose, refetchUserList }: UserValueProps) => {
     const [addUser, { isSuccess: userAddSuccess, isError: userAddError, error: userAddErrorObject }] = useCreateUserMutation();
     const [updateUser, { isSuccess: userUpdateSuccess, isError: userUpdateError, error: userUpdateErrorObject }] = useUpdateUserMutation();
     const dispatch = useDispatch<AppDispatch>();
@@ -43,10 +43,12 @@ const UserForm = ({ userEditValue, mode, onClose }: UserValueProps) => {
 
     useEffect(() => {
         if (userAddSuccess || userUpdateSuccess) {
-            onClose(); // Close dialog when operation is successful
+            refetchUserList(); // Trigger refetch after success
+            onClose(); // Close dialog
         }
-    }, [userAddSuccess, userUpdateSuccess, onClose]);
+    }, [userAddSuccess, userUpdateSuccess, refetchUserList, onClose]);
 
+    
     const onSubmit = useMemo(() => async (values: AdminCompanyUsersInitialValueProps, actions: any) => {
         try {
             const id = values.id;
@@ -86,7 +88,7 @@ const UserForm = ({ userEditValue, mode, onClose }: UserValueProps) => {
     return (
         <DynamicFormCreate
             showTable={true}
-            fields={fields}
+            fields={mode === 'create' ? RolesFields : RolesEditFields}
             initialValues={initialValues}
             validationSchema={RoleValidationSchema}
             onSubmit={onSubmit}

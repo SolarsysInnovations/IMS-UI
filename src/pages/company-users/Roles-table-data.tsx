@@ -78,8 +78,16 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
     const [deleteRole, { isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteUserMutation();
 
     useEffect(() => {
-        refetch();
+        if (roleDeleteSuccess) {
+            refetch(); // Refetch the list after a successful delete
+        }
     }, [roleDeleteSuccess, refetch]);
+    
+    useEffect(() => {
+        if (C_success) {
+            dispatch(setRoleData(roleData)); // Set the role data after fetching
+        }
+    }, [roleData, C_success, dispatch]);
 
     useEffect(() => {
         dispatch(setRoleData(roleData));
@@ -95,8 +103,9 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
 
     const handleModalClose = () => {
         setOpenModal(false);
-        refetch();
+        refetch(); // Refetch data after closing the modal
     };
+    
 
     const handleEditClick = async () => {
         try {
@@ -118,11 +127,11 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
         if (id) {
             const confirmed = window.confirm("Are you sure you want to delete this role?");
             if (confirmed) {
-                deleteRole(id);
-                refetch();
+                deleteRole(id); // Trigger delete mutation
             }
         }
     };
+    
 
     return (
         <Stack direction="row" spacing={1}>
@@ -136,7 +145,7 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
 
 <DialogBoxUi
                 open={openModal}
-                content={<UserForm userEditValue={roleData} mode={roleData ? "edit" : "create"} onClose={handleModalClose} />}
+                content={<UserForm userEditValue={roleData} mode={roleData ? "edit" : "create"} onClose={handleModalClose}  refetchUserList={refetch} />}
                 handleClose={handleModalClose}
             />
         </Stack>
