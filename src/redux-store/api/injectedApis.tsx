@@ -49,6 +49,12 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
+        getUserRole: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `${API_URLS.userRoleGet}/${id}`,
+                method: 'POST',
+            }),
+        }),
 
         deleteUser: builder.mutation<void, number>({
             query: (id) => ({
@@ -482,7 +488,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
 });
 
 // user export
-export const { useGetUsersListQuery, useCreateUserMutation, useUpdateUserMutation, useDeleteUserMutation, useGetSingleUserMutation } = apiEndPointLists;
+export const { useGetUsersListQuery, useCreateUserMutation, useUpdateUserMutation, useDeleteUserMutation, useGetSingleUserMutation , useGetUserRoleMutation} = apiEndPointLists;
 
 // dashboard export 
 export const { useGetDashboardMutation } = apiEndPointLists;

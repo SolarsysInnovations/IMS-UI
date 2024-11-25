@@ -10,10 +10,12 @@ import { AppDispatch } from '../../redux-store/store';
 import { useDispatch } from 'react-redux';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { RolesEditFields } from '../../constants/form-data/form-data-json';
-import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from '../../redux-store/api/injectedApis';
+import { useDeleteUserMutation, useGetUserRoleMutation, useGetUsersListQuery } from '../../redux-store/api/injectedApis';
 import UserForm from './UserForm';
 import ActionButtons from '../../components/ui/ActionButtons';
 import { useRolePermissions } from '../../hooks/useRolePermission';
+import TableHeader from '../../components/layouts/TableHeader';
+import UserDetails from './UserDetaills';
 
 const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"]
 
@@ -63,18 +65,17 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
         </select>
     );
 };
-const MyCellRenderer = ({ id, }: { id: any, }) => {
+const MyCellRenderer = ({ id }: { id: any, }) => {
 
     const dispatch = useDispatch<AppDispatch>();
     const [openModal, setOpenModal] = useState(false);
     const [roleId, setRoleId] = useState<string | null>(null);
-    const [rolesData, setRolesData] = useState(null);
+    // const [rolesData, setRolesData] = useState(null);
     const { data: roleDetails, refetch } = useGetUsersListQuery();
     const pathname = usePathname();
-    const { canEditUsers, canDeleteUsers } = useRolePermissions();
-
-    const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetSingleUserMutation();
-
+    const { canEditUsers, canDeleteUsers,canViewUsers } = useRolePermissions();
+    const [openDialogBox, setIsOpenDialogBox] = useState(false);
+    const [getRole, { data: roleData, isSuccess: C_success, isError: C_error, isLoading: getRoleLoading, }] = useGetUserRoleMutation();    
     const [deleteRole, { isSuccess: roleDeleteSuccess, isError: roleDeleteError, error: roleDeleteErrorObject }] = useDeleteUserMutation();
 
     useEffect(() => {
@@ -123,6 +124,30 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
         }
     }
 
+    const handleDialogOpen = async () => {
+        try {
+            const response = await getRole(id);
+            if ('data' in response) {
+                // Extract the userDetails from the response
+                const userData = response.data;
+                console.log(userData, "userData");
+                
+                if (userData) {
+                    // Only set the dialog box open if userDetails are available
+                    setIsOpenDialogBox(true);
+                    dispatch(setRoleData(response)); // Optionally set role data if needed
+                } else {
+                    console.error('No userDetails found in the response');
+                }
+            } else {
+                console.error('Error response:', response.error);
+            }
+        } catch (error) {
+            console.error('Error fetching customer data:', error);
+        }
+    };
+    
+
     const handleDeleteClick = () => {
         if (id) {
             const confirmed = window.confirm("Are you sure you want to delete this role?");
@@ -138,14 +163,16 @@ const MyCellRenderer = ({ id, }: { id: any, }) => {
             <ActionButtons
                 onDeleteClick={handleDeleteClick}
                 onEditClick={handleEditClick}
-                onViewClick={() => { }}
+                onViewClick={handleDialogOpen}
+                canView={canViewUsers}
                 canDelete={canDeleteUsers}
                 canEdit={canEditUsers}
             />
 
 <DialogBoxUi
-                open={openModal}
-                content={<UserForm userEditValue={roleData} mode={roleData ? "edit" : "create"} onClose={handleModalClose}  refetchUserList={refetch} />}
+               open={openDialogBox}
+
+                content={<> <TableHeader headerName="User Details" /><UserDetails userDetails={roleData || {}} /></>}
                 handleClose={handleModalClose}
             />
         </Stack>

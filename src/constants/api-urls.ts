@@ -15,6 +15,7 @@ export enum ApiEndpoint {
     USER_UPDATE = "userUpdate",
     USER_DELETE = "userDelete",
     USER_GET = "userGet",
+    USER_ROLE_GET = "userRoleGet",
     // customer
     CUSTOMER_LIST = "customerList",
     CUSTOMER_CREATE = "customerCreate",
@@ -104,6 +105,7 @@ export const API_URLS: ApiUrls = {
     [ApiEndpoint.USER_UPDATE]: `/user/update`,
     [ApiEndpoint.USER_DELETE]: `/user/delete`,
     [ApiEndpoint.USER_GET]: `/user/get`,
+    [ApiEndpoint.USER_ROLE_GET]: `/user/findByRegister`,
 
     // customer endpoints
     [ApiEndpoint.CUSTOMER_LIST]: `/customer/list`,
