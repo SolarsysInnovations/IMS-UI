@@ -14,7 +14,6 @@ import { useRolePermissions } from '../../hooks/useRolePermission';
 const UserList = () => {
     const dispatch = useDispatch<AppDispatch>();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
-    const { data: serviceList, error, isLoading } = useGetServiceListQuery();
     const { data: userListData, refetch } = useGetUsersListQuery();
     const pathname = usePathname();
     const companyUserData = useSelector((state: any) => state.globalState.data);

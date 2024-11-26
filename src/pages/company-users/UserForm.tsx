@@ -71,12 +71,13 @@ const UserForm = ({ userEditValue, mode, onClose, refetchUserList }: UserValuePr
 
   return (
     <DynamicFormCreate
-      showTable={true}
-      fields={mode === "create" ? RolesFields : RolesEditFields}
-      initialValues={initialValues}
-      validationSchema={RoleValidationSchema}
-      onSubmit={onSubmit}
-    />
+    showTable={true}
+    headerName={mode === "create" ? "User Create" : "User Edit"}
+    fields={mode === "create" ? RolesFields : RolesEditFields}
+    initialValues={initialValues}
+    validationSchema={RoleValidationSchema}
+    onSubmit={onSubmit}
+  />
   );
 };
 

@@ -8,7 +8,7 @@ interface UserDetailsProps {
         userName?: string;
         userEmail?: string;
         userRole?: string;
-        userMobile?: string;
+        userMobile?: number;
         description?: string;
     };
 }
