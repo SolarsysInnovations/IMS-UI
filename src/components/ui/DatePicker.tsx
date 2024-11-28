@@ -10,9 +10,10 @@ interface DatePickerProps {
     label?: string;
     required?: boolean;
     disabled?: boolean;
+    sx?: object;
 }
 
-export default function DatePickerUi({ label, value, disabled, required, onChange }: DatePickerProps) {
+export default function DatePickerUi({ label, value, disabled, required, onChange, sx }: DatePickerProps) {
     const [dateValue, setDateValue] = useState<Dayjs | null>(null);
 
     useEffect(() => {
@@ -69,7 +70,25 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
                 slotProps={{
                     textField: {
                         variant: "outlined", size: "small",
-                    }
+                    },
+                    popper: {
+                        sx: {
+                            '& .MuiPickersCalendarHeader-root': {
+                                minHeight: '40px',
+                                minWidth: '10px', // Adjust height of calendar header
+                            },
+                            '& .MuiDayPicker-root': {
+                                minWidth: '280px', // Adjust calendar width
+                                minHeight: '300px', // Adjust calendar height
+                            },
+                            '& .MuiPickersYear-yearButton': {
+                                fontSize: '14px', // Adjust year font size
+                            },
+                            '& .MuiPickersMonth-root': {
+                                fontSize: '14px', // Adjust month font size
+                            },
+                        },
+                    },
                 }}
             />
         </LocalizationProvider>

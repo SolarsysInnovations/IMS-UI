@@ -109,12 +109,33 @@ export default function Header() {
           }}
         >
           <Grid container alignItems="center" spacing={2}>
-            {location.pathname === "/dashboard" && (
-              <Grid item xs={6} display="flex" alignItems="center" sx={{ fontWeight: 500 }}>
-                Hello {userRole}!
-              </Grid>
-            )}
-          </Grid>
+  {location.pathname === "/dashboard" && (
+    <Grid
+      item
+      xs={6}
+      display="flex"
+      alignItems="center"
+      sx={{
+        fontWeight: 500, // General font styling for the text
+        fontSize: "1.25rem",
+      }}
+    >
+      Hello,{" "}
+      <Box
+        component="span"
+        sx={{
+          fontWeight: "bold", // Highlight userRole
+          color: "primary.main", // Use theme's primary color
+          marginLeft: 1, // Add spacing between 'Hello' and the role
+        }}
+      >
+        {userRole}
+      </Box>
+      
+    </Grid>
+  )}
+</Grid>
+
           <Grid item xs={6} display="flex">
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {/* <Tooltip title='Add item'>

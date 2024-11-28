@@ -95,8 +95,9 @@ const DashboardScreen: React.FC = () => {
       >
         {({ values, setFieldValue, handleSubmit }) => (
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={2} alignItems="center" justifyContent="flex-end">
-              <Grid item xs={12} sm={4} md={3}>
+           <Grid container spacing={2} alignItems="center" justifyContent="center">
+
+              <Grid item xs={12} sm={4} md={2}>
                 <SelectDropdown
                   defaultValue={{ value: "This Month", label: "This Month" }}
                   onChange={(newValue: any) => handleDropdownChange(newValue, setFieldValue)}
@@ -114,27 +115,38 @@ const DashboardScreen: React.FC = () => {
               </Grid>
 
               {/* Show DatePickerUi components only for custom date range */}
-              <Grid item xs={12} sm={4} md={3}>
-                <DatePickerUi
-                  label="Start Date"
-                  onChange={(date: string | null) =>
-                    setFieldValue("startDate", date ? dayjs(date) : undefined)
-                  }
-                  value={values.startDate || undefined}
-                  disabled={!isCustomRange}
-                />
-              </Grid>
+              <Grid item xs={12} sm={4} md={2}>
+  <DatePickerUi
+    label="Start Date"
+    onChange={(date: string | null) =>
+      setFieldValue("startDate", date ? dayjs(date) : undefined)
+    }
+    value={values.startDate || undefined}
+    disabled={!isCustomRange}
+    sx={{ 
+      '.MuiInputBase-root': { fontSize: '0.875rem' }, // Adjust text size
+      '.MuiFormLabel-root': { fontSize: '0.75rem' }, // Adjust label size
+      width: '80%', // Adjust the width of the DatePicker
+    }}
+  />
+</Grid>
 
-              <Grid item xs={12} sm={4} md={3}>
-                <DatePickerUi
-                  label="End Date"
-                  onChange={(date: string | null) =>
-                    setFieldValue("endDate", date ? dayjs(date) : undefined)
-                  }
-                  value={values.endDate || undefined}
-                  disabled={!isCustomRange}
-                />
-              </Grid>
+<Grid item xs={12} sm={4} md={2}>
+  <DatePickerUi
+    label="End Date"
+    onChange={(date: string | null) =>
+      setFieldValue("endDate", date ? dayjs(date) : undefined)
+    }
+    value={values.endDate || undefined}
+    disabled={!isCustomRange}
+    sx={{ 
+      '.MuiInputBase-root': { fontSize: '0.875rem' }, // Adjust text size
+      '.MuiFormLabel-root': { fontSize: '0.75rem' }, // Adjust label size
+      width: '80%', // Adjust the width of the DatePicker
+    }}
+  />
+</Grid>
+
 
               <Grid item xs={12} sm={12} md={2}>
                 <ButtonSmallUi label="Apply Filter" type="submit" fullWidth />
