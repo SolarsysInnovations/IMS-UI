@@ -34,7 +34,7 @@ import { loginInitialValue } from "../constants/forms/formikInitialValues";
 import { LoginProps } from "../types/types";
 import { setCredentials } from "../redux-store/auth/authSlice";
 import TextFieldUi from "../components/ui/TextField";
-
+import Logo from "../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png";
 interface LoginResponse {
   data?: {
     id: any;
@@ -141,10 +141,10 @@ const Login = () => {
                   sx={{
                     width: 100,
                     height: 100,
-                    bgcolor: "primary.main",
+                    bgcolor: "white",
                     color: "white",
                   }}
-                  src="https://img.freepik.com/free-psd/gradient-abstract-logo_23-2150689648.jpg?size=626&ext=jpg&ga=GA1.1.373236869.1707911526&semt=ais"
+                  src={Logo}
                 />
               </Box>
               <Stack
@@ -238,10 +238,12 @@ const Login = () => {
                   <ButtonUi
                     fullWidth={true}
                     loading={isSubmitting}
-                    color="primary"
                     label="Login"
                     variant="contained"
                     type="submit"
+                    // sx={{
+                    //   backgroundColor: "GrayText"
+                    // }}
                   />
                 </Box>
               </Form>

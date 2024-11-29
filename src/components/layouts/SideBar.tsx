@@ -21,6 +21,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { selectUserRole } from '../../redux-store/auth/authSlice';
 import { useSelector } from 'react-redux';
 import { sidebarTwo } from '../../constants/data';
+import Logo from "../../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png";
 
 const drawerWidth = 250;
 
@@ -116,9 +117,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <Box sx={{ display: 'flex' }}>
       <Drawer variant="permanent" open={open}>
-        <Avatar sx={{ transition: "0.2s", marginLeft: open ? 3 : 1.5, marginTop: 2, width: 40, height: 40, bgcolor: "primary.main", color: "white", }}
-          src="https://img.freepik.com/free-psd/gradient-abstract-logo_23-2150689648.jpg?size=626&ext=jpg&ga=GA1.1.373236869.1707911526&semt=ais"
-        />
+        <Avatar sx={{ transition: "0.2s", bgcolor: "white", marginLeft: open ? 3 : 1.5, marginTop: 2, width: 40, height: 40, color: "white", }}
+          src={Logo}/>  
         <DrawerHeader style={{ backgroundColor: "#1C2536", display: "flex", alignItems: "center" }}>
           {open && <Typography variant="h6" sx={{ color: 'white', textAlign: 'left', marginLeft: 2 }}>Invoice</Typography>}
           <IconButton onClick={handleDrawerClose}>

@@ -49,7 +49,7 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
-        getUserRole: builder.mutation<void, number>({
+        getUserRole: builder.mutation< any , string >({
             query: (id) => ({
                 url: `${API_URLS.userRoleGet}/${id}`,
                 method: 'POST',
