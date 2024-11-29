@@ -197,8 +197,9 @@ const InvoiceList = () => {
                 >
                     {({ values, setFieldValue, handleSubmit }) => (
                         <form onSubmit={handleSubmit}>
-                            <Grid container spacing={2} alignItems="center" justifyContent="flex-end">
-                                <Grid item xs={12} sm={4} md={3}>
+                             <Grid container spacing={2} alignItems="center" justifyContent="center">
+
+<Grid item xs={12} sm={4} md={2}>
                                     <SelectDropdown
                                         defaultValue={{ value: "This Month", label: "This Month" }}
                                         onChange={(newValue: any) => handleDropdownChange(newValue, setFieldValue)}
@@ -214,7 +215,7 @@ const InvoiceList = () => {
                                         sx={{ width: "100%" }}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={4} md={3}>
+                                <Grid item xs={12} sm={4} md={2}>
                                     <DatePickerUi
                                         label="Start Date"
                                         onChange={(date: string | null) => setFieldValue("startDate", date ? dayjs(date) : undefined)}
@@ -222,7 +223,7 @@ const InvoiceList = () => {
                                         disabled={!isCustomRange}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={4} md={3}>
+                                <Grid item xs={12} sm={4} md={2}>
                                     <DatePickerUi
                                         label="End Date"
                                         onChange={(date: string | null) => setFieldValue("endDate", date ? dayjs(date) : undefined)}

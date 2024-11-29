@@ -58,7 +58,7 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
     }, [roleData, dispatch, C_success])
     const handleViewClick = async () => {
         try {
-          const response = await getUserRole(id);
+          const response = await getUserRole(id.toString()); 
           if ( "data" in response) {
          
             setUserData(response.data); // Ensures data is defined
@@ -75,7 +75,7 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
       
       const handleEditClick = async () => {
         try {
-          const response = await getUserRole(id);
+          const response = await getUserRole(id.toString());
           if ( "data" in response) {
             setUserData(response.data); // Ensures data is defined
             dispatch(setRoleData(response.data));
