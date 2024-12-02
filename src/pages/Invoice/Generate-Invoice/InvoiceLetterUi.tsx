@@ -3,7 +3,7 @@ import InvoiceDocument from "./InvoiceDocument";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import {  useGetCompanyLogoByIdQuery, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useGetUserRoleMutation, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
+import {  useGetCompanyLogoByIdQuery, useGetCompanySettingByIdQuery, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useGetUserRoleMutation, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
 import { selectCurrentId, selectUserDetails } from "../../../redux-store/auth/authSlice";
 import { formatDate } from "../../../services/utils/dataFormatter";
 import StageStepper from "../../../components/ui/StepperUi";
@@ -25,18 +25,19 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
     const invoiceDatas = useSelector((state: any) => state.invoiceState.data);
     const { data: customers } = useGetCustomersListQuery();
     const { data: tdsTaxList } = useGetTdsTaxListQuery();
-    const companyDetails = useSelector(selectUserDetails);
     const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
     const invoiceData = useSelector((state: any) => state.invoiceState.data);
     const [getUserRole, { data: userRoleData, isLoading }] = useGetUserRoleMutation();
     const id = useSelector(selectCurrentId);
+    const companyIdString = sessionStorage.getItem("id") || ""; 
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const [showTracker, setShowTracker] = useState(false);
     const { refetch } = useGetInvoiceListQuery();
     const [resMessage, setResMessage] = useState('');
     const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
- 
-
+    const [base64String, setBase64String] = useState<string | null>(null);
+    const [companyDetails, setCompanyDetails] = useState<any>(null);
+    const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
     useEffect(() => {
         if (!userRoleData && id) { // Ensure `id` is not null
             getUserRole(id); // Pass the `id` only if it's a string
@@ -243,7 +244,21 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
           console.log("Logo Base64 String:", logoData.companyLogo); // Logs the base64 string of the logo
         }
       }, [logoData, logoSuccess]);
+      console.log(data, "dattttta",invoiceData, invoiceDatas,companyInfo);
     
+      useEffect(() => {
+          if (logoSuccess && logoData?.companyLogo) {
+            setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
+          } else {
+            setBase64String(null);
+          }
+        }, [logoSuccess, logoData]);
+        useEffect(() => {
+          if (companyData) {
+            setCompanyDetails(companyData);
+            console.log("Fetched company data:", companyData);
+          }
+        }, [companyData]);
     return (
         <>
             <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column", padding: "0px 30px 30px 30px" }}>
