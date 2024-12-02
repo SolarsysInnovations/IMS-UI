@@ -23,8 +23,6 @@ import {
 import {
   logOut,
   selectCurrentId,
-  selectUserName,
-  selectUserRole,
 } from "../../redux-store/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
@@ -188,7 +186,7 @@ export default function Header() {
     },
   ] = useGetUserRoleMutation();
   const id = useSelector(selectCurrentId);
-  const userName = useSelector(selectUserName);
+  const userName = userRoleData?.userName || "Guest"; 
   const userRole = userRoleData?.userRole || "Guest";
   console.log("userRoleData", userRoleData);
 
