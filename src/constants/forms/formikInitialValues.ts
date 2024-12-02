@@ -216,7 +216,6 @@ export const SendEmailInitialValue: SendEmailInitialValueProps = {
 }
 
 export const RoleInitialValue: RoleInitialValueProps = {
-    id: "",
     userName: "",
     userRole: "",
     userEmail: "",

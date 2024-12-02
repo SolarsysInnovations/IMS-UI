@@ -58,6 +58,7 @@ const UserForm = ({ userEditValue, mode, onClose, refetchUserList }: UserValuePr
           await updateUser({ id: values.id, data: { userDetails: values } });
         } else {
           await addUser({ userDetails: values });
+        
         }
         dispatch(clearData());
         actions.resetForm();

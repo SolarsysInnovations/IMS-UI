@@ -3,8 +3,8 @@ import InvoiceDocument from "./InvoiceDocument";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import {  useGetCompanyLogoByIdQuery, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
-import { selectUserDetails, selectUserRole } from "../../../redux-store/auth/authSlice";
+import {  useGetCompanyLogoByIdQuery, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useGetUserRoleMutation, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
+import { selectCurrentId, selectUserDetails } from "../../../redux-store/auth/authSlice";
 import { formatDate } from "../../../services/utils/dataFormatter";
 import StageStepper from "../../../components/ui/StepperUi";
 import ButtonUi from "../../../components/ui/Button";
@@ -28,13 +28,22 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
     const companyDetails = useSelector(selectUserDetails);
     const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
     const invoiceData = useSelector((state: any) => state.invoiceState.data);
-    const userRole = useSelector(selectUserRole);
+    const [getUserRole, { data: userRoleData, isLoading }] = useGetUserRoleMutation();
+    const id = useSelector(selectCurrentId);
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const [showTracker, setShowTracker] = useState(false);
     const { refetch } = useGetInvoiceListQuery();
     const [resMessage, setResMessage] = useState('');
     const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
  
+
+    useEffect(() => {
+        if (!userRoleData && id) { // Ensure `id` is not null
+            getUserRole(id); // Pass the `id` only if it's a string
+        }
+    }, [getUserRole, id, userRoleData]);
+    
+
     useEffect(() => {
         if (invoiceDatas && customers && companyDetails && tdsTaxList) {
             // Find the relevant customer
@@ -104,6 +113,8 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
 
     const getAvailableOptions = () => {
         const allOptions = [];
+        const userRole = userRoleData?.role; // Extract userRole from API response
+
         switch (userRole) {
             case Roles.ADMIN:
             case Roles.STANDARDUSER:

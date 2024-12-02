@@ -18,7 +18,7 @@ import { Avatar, Collapse, ListSubheader } from '@mui/material';
 import Header from './Header';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { selectCurrentId, selectUserRole } from '../../redux-store/auth/authSlice';
+import { selectCurrentId } from '../../redux-store/auth/authSlice';
 import { useSelector } from 'react-redux';
 import { sidebarTwo } from '../../constants/data';
 import Logo from "../../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png";

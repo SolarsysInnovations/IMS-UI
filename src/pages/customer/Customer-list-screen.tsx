@@ -6,11 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { columns } from '../../constants/grid-table-data/customer-table-data';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
-import { useGetCustomersListQuery, useUpdateCustomerMutation } from '../../redux-store/api/injectedApis';
+import { useGetCustomersListQuery } from '../../redux-store/api/injectedApis';
 import { clearCustomerData } from '../../redux-store/slices/customerSlice';
-import { selectUserRole } from '../../redux-store/auth/authSlice';
-import { applicationUserAccess } from '../../constants/data';
-import { Roles } from '../../constants/Enums';
 import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const CustomerList = () => {

@@ -1,27 +1,28 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import ButtonUi from '../../../components/ui/Button';
 import { InvoiceOptions, InvoiceStatus, Roles } from '../../../constants/Enums';
-import { selectUserRole } from '../../../redux-store/auth/authSlice';
+import { selectCurrentId } from '../../../redux-store/auth/authSlice';
 import SplitButton from '../../../components/ui/SplitButton';
 import StageStepper from '../../../components/ui/StepperUi';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import { useGetInvoiceListQuery, useUpdateInvoiceMutation } from '../../../redux-store/api/injectedApis';
+import { useGetInvoiceListQuery, useGetUserRoleMutation, useUpdateInvoiceMutation } from '../../../redux-store/api/injectedApis';
+import { useSelector } from 'react-redux';
 
 const InvoiceRoleButtons = () => {
     const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
     const invoiceData = useSelector((state: any) => state.invoiceState.data);
-    const userRole = useSelector(selectUserRole);
+    const [getUserRole, { data: userRoleData, isLoading: isRoleLoading }] = useGetUserRoleMutation();
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
     const [showTracker, setShowTracker] = useState(false);
     const { refetch } = useGetInvoiceListQuery();
     const [resMessage, setResMessage] = useState('');
+    const id = useSelector(selectCurrentId);
 
     useSnackbarNotifications({
         error: invoiceUpdateError,
         errorObject: invoiceUpdateErrorObject,
-        errorMessage: 'Error While updating ',
+        errorMessage: 'Error While updating',
         success: invoiceUpdateSuccess,
         successMessage: resMessage,
     });
@@ -38,6 +39,12 @@ const InvoiceRoleButtons = () => {
             }
         }
     }, [invoiceData]);
+
+    useEffect(() => {
+        if (id) {
+            getUserRole(id); // Trigger fetching the user role
+        }
+    }, [id, getUserRole]);
 
     const handleOptionClick = async (option: any) => {
         if (invoiceData.invoiceStatus !== option) {
@@ -78,6 +85,8 @@ const InvoiceRoleButtons = () => {
 
     const getAvailableOptions = () => {
         const allOptions = [];
+        const userRole = userRoleData?.role; // Dynamically fetched role
+
         switch (userRole) {
             case Roles.ADMIN:
             case Roles.STANDARDUSER:
@@ -100,9 +109,9 @@ const InvoiceRoleButtons = () => {
 
     const availableOptions = getAvailableOptions();
 
-
-
-    return (
+    return isRoleLoading ? (
+        <Box>Loading...</Box>
+    ) : (
         <Box gap={2} sx={{ display: "flex", justifyContent: "left", flexDirection: "row", gap: "20px", marginTop: "10px" }}>
             <SplitButton
                 key={currentInvoiceStatus} // Ensure re-render
@@ -123,7 +132,7 @@ const InvoiceRoleButtons = () => {
                     sx={{
                         padding: "20px 25px", position: "absolute", top: -150, right: 0, zIndex: 1300,
                         backgroundColor: "background.paper", borderRadius: "10px", display: showTracker ? "block" : "none",
-                    }}    >
+                    }}>
                     <StageStepper stages={invoiceData.invoiceStages} />
                 </Card>
             </Box>

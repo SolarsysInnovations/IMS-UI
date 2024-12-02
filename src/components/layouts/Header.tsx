@@ -24,7 +24,6 @@ import {
   logOut,
   selectCurrentId,
   selectUserName,
-  selectUserRole,
 } from "../../redux-store/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";

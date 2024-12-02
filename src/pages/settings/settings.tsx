@@ -4,20 +4,33 @@ import About from "../about/About";
 import TaxConfig from "./TaxConfig";
 import LinkScreen from "./links/Portal-link-screen";
 import SettingsCompanyDetailsScreen from "./settings-company/SettingsCompanyDetailsScreen";
-import { selectUserRole } from "../../redux-store/auth/authSlice";
+import { selectCurrentId } from "../../redux-store/auth/authSlice";
 import { useSelector } from "react-redux";
 import RoleBasedTabs from "../../components/ui/RoleBasedTabs";
 import { Typography } from "@mui/material";
 import UploadScreen from "./upload/uploadScreen";
+import { useGetUserRoleMutation } from "../../redux-store/api/injectedApis";
 
 const SettingScreen = () => {
   const [initialValuesLoaded, setInitialValuesLoaded] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("Company Settings");
-  const userRole = useSelector(selectUserRole) || "user"; // Provide a default role if null
-
+  const id = useSelector(selectCurrentId);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [getUserRole, { data: userRoleData, isLoading }] = useGetUserRoleMutation();
+  console.log("roleData", userRoleData);
   useEffect(() => {
-    loadInitialValues();
-  }, []);
+    if (id) {
+      getUserRole(id) // Pass id directly here
+        .unwrap()
+        .then((response) => {
+          setUserRole(response?.userRole || null);
+          loadInitialValues();
+        })
+        .catch((error) => {
+          console.error("Error fetching user role:", error);
+        });
+    }
+  }, [id, getUserRole]);
 
   const loadInitialValues = () => {
     setInitialValuesLoaded(true);
@@ -46,7 +59,7 @@ const SettingScreen = () => {
         {initialValuesLoaded ? (
           <RoleBasedTabs tabs={tabs} userRole={userRole} />
         ) : (
-          <Typography>Loading initial values...</Typography>
+          <Typography></Typography>
         )}
       </Container>
     </React.Fragment>

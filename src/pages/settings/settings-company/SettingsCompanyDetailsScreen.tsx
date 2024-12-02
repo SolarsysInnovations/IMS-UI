@@ -5,6 +5,7 @@ import {
   useGetCompanySettingByIdQuery,
   useGetCompanyLogoByIdQuery,
   useGetSingleCompanySettingMutation,
+  useGetUserRoleMutation,
 } from "../../../redux-store/api/injectedApis";
 import { Box, Grid } from "@mui/material";
 import { setData } from "../../../redux-store/global/globalState";
@@ -12,7 +13,7 @@ import TableHeader from "../../../components/layouts/TableHeader";
 import SettingsCompanyForm from "./SettingsCompanyForm";
 import { Edit } from "@mui/icons-material";
 import DialogBoxUi from "../../../components/ui/DialogBox";
-import { selectUserRole } from "../../../redux-store/auth/authSlice";
+import { selectCurrentId } from "../../../redux-store/auth/authSlice";
 import usePathname from "../../../hooks/usePathname";
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
@@ -24,19 +25,32 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const [companyDetails, setCompanyDetails] = useState<any>(null);
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
   const [base64String, setBase64String] = useState<string | null>(null);
-  const userRole = useSelector(selectUserRole);
-  const companyIdString = sessionStorage.getItem("id") || ""; // Use empty string as fallback
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [getUserRole, { data: userRoleData, isLoading }] = useGetUserRoleMutation();
+  const userId =  useSelector(selectCurrentId) || ""; // Use empty string as fallback
   const { id: companyId } = companyDetails || {};
-  const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
+  const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(userId);
 
-  const [getData, { data: customerData }] = useGetSingleCompanySettingMutation();
+  const [getData] = useGetSingleCompanySettingMutation();
 
   const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch: refetchLogoData } = useGetCompanyLogoByIdQuery(companyId, {
     skip: !companyId, 
   });
 
 
-  
+  useEffect(() => {
+    if (userId) {
+      getUserRole(userId) // Pass id directly here
+        .unwrap()
+        .then((response) => {
+          setUserRole(response?.userRole || null);
+        })
+        .catch((error) => {
+          console.error("Error fetching user role:", error);
+        });
+    }
+  }, [userId, getUserRole]);
+
   useEffect(() => {
     if (logoSuccess && logoData?.companyLogo) {
       setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
@@ -54,13 +68,13 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   }, [companyData]);
 
   useEffect(() => {
-    if (companyIdString) {
+    if (userId) {
       refetchCompanyData();
     }
     if(companyId){
       refetchLogoData();
     }
-  }, [companyIdString, companyId, refetchCompanyData, refetchLogoData]);
+  }, [userId, companyId, refetchCompanyData, refetchLogoData]);
 
   const handleEditClick = async () => {
     console.log("Edit button clicked");
@@ -114,7 +128,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
       />
       <TableHeader buttons={button} />
 
-      {companyIdString && (
+      {userId && (
         <Grid container sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}>
           <Grid item xs={7}>
             <Box gap={3}>
@@ -195,7 +209,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
 
-              {companyIdString && userRole === "ADMIN" && (
+              {userId && userRole === "ADMIN" && (
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Box display="flex" alignItems="center" sx={{ marginTop: "10px" }}>
