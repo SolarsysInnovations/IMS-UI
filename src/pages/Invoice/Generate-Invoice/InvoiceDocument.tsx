@@ -77,10 +77,10 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                 <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'space-between', marginTop: "20px" }}>
                     <View>
                     <Text style={{ fontSize: '16px', marginBottom: "10px" }}>Invoice To:</Text>
-                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.companyName} </Text>
-                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.customerName} </Text>
-                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.customerEmail}</Text>
-                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerDetails?.customerPhone}</Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.companyName} </Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerName} </Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerEmail}</Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerPhone}</Text>
                      </View>
                     
                      <View >
