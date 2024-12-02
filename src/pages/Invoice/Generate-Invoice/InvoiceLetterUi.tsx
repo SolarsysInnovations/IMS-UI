@@ -36,6 +36,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
     const [resMessage, setResMessage] = useState('');
     const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
     const [base64String, setBase64String] = useState<string | null>(null);
+    const [userRole, setUserRole] = useState<string | null>(null);
     const [companyDetails, setCompanyDetails] = useState<any>(null);
     const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
     useEffect(() => {
@@ -44,6 +45,19 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
         }
     }, [getUserRole, id, userRoleData]);
     
+    
+  useEffect(() => {
+    if (id) {
+      getUserRole(id) // Pass id directly here
+        .unwrap()
+        .then((response) => {
+          setUserRole(response?.userRole || null);
+        })
+        .catch((error) => {
+          console.error("Error fetching user role:", error);
+        });
+    }
+  }, [id, getUserRole]);
 
     useEffect(() => {
         if (invoiceDatas && customers && companyDetails && tdsTaxList) {
@@ -114,8 +128,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
 
     const getAvailableOptions = () => {
         const allOptions = [];
-        const userRole = userRoleData?.role; // Extract userRole from API response
-
+        const userRole = userRoleData?.role;
         switch (userRole) {
             case Roles.ADMIN:
             case Roles.STANDARDUSER:
