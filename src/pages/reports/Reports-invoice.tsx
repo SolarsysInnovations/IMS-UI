@@ -70,8 +70,8 @@ const Reportsinvoice: React.FC = () => {
                         <ModalUi topHeight='70%' open={isModalOpen} onClose={handleCloseModal} >
                         </ModalUi>
                         <Form id="createClientForm" noValidate >
-                            <Grid container spacing={2}>
-                                <Grid item xs={3}>
+                        <Grid container spacing={2} alignItems="center" justifyContent="center">
+                        <Grid item xs={12} sm={4} md={2}>
                                     <Box>
                                         <SelectDropdown
                                              onChange={(newValue: any) => {
@@ -130,7 +130,7 @@ const Reportsinvoice: React.FC = () => {
                                     </Box>
                                 </Grid>
 
-                                <Grid item xs={2}>
+                                <Grid item xs={12} sm={4} md={2}>
                                     <Box>
                                         <DatePickerUi
                                             label="Start Date"
@@ -139,7 +139,7 @@ const Reportsinvoice: React.FC = () => {
                                         />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={2}>
+                                <Grid item xs={12} sm={4} md={2}>
                                     <Box>
                                         <DatePickerUi
                                             label="End Date"
@@ -148,8 +148,8 @@ const Reportsinvoice: React.FC = () => {
                                         />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={2}>
-                                    <ButtonSmallUi size='small' label='Run Reports' variant='contained' onClick={handleSubmit} />
+                                <Grid item xs={12} sm={4} md={2}>
+                                <ButtonSmallUi label="Run Reports" type="submit" fullWidth onClick={handleSubmit} />
                                 </Grid>
                                 <Grid container marginTop={5} marginLeft={2} style={{ width: 'calc(100% - 16px)' }}>
                                     <GridDataUi showToolbar={true} columns={columns} tableData={tableData || []} checkboxSelection={false} />

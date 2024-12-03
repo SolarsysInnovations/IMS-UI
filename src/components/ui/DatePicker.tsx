@@ -10,32 +10,35 @@ interface DatePickerProps {
     label?: string;
     required?: boolean;
     disabled?: boolean;
+    sx?: object;
 }
 
-export default function DatePickerUi({ label, value, disabled, required, onChange }: DatePickerProps) {
+export default function DatePickerUi({
+    label,
+    value,
+    disabled,
+    required,
+    onChange,
+    sx,
+}: DatePickerProps) {
     const [dateValue, setDateValue] = useState<Dayjs | null>(null);
 
     useEffect(() => {
-        if (typeof value === 'string') {
-            if (dayjs(value).isValid()) {
-                setDateValue(dayjs(value));
+        if (value) {
+            const parsedDate = typeof value === "string" ? dayjs(value, "DD-MM-YYYY") : value;
+            if (parsedDate.isValid()) {
+                setDateValue(parsedDate);
             } else {
-                const parsedDate = dayjs(value, 'DD-MM-YYYY');
-                if (parsedDate.isValid()) {
-                    setDateValue(parsedDate);
-                } else {
-                    setDateValue(null);
-                }
+                setDateValue(null);
             }
-        } else if (dayjs.isDayjs(value)) {
-            setDateValue(value);
         } else {
             setDateValue(null);
         }
     }, [value]);
 
-    const formatDate = (date: Dayjs | null): string => {
-        return date ? date.format('DD-MM-YYYY') : '';
+    const handleDateChange = (date: Dayjs | null) => {
+        setDateValue(date);
+        onChange(date ? date.format("DD-MM-YYYY") : ""); // Send formatted date
     };
 
     return (
@@ -43,35 +46,28 @@ export default function DatePickerUi({ label, value, disabled, required, onChang
             <DatePicker
                 disabled={disabled}
                 value={dateValue}
-                onChange={(date) => {
-                    const formattedDate = formatDate(date);
-                    onChange(formattedDate);
-                }}
-                views={['year', 'month', 'day']}
+                onChange={handleDateChange}
+                views={["year", "month", "day"]}
                 label={label}
-                format="DD-MM-YYYY" // Set the desired date format here
+                format="DD-MM-YYYY"
                 sx={{
                     width: "100%",
-                    '& .MuiOutlinedInput-root': {
+                    "& .MuiOutlinedInput-root": {
                         fontSize: "12px",
                         borderRadius: "8px !important",
-                        overflow: "hidden",
-                        borderColor: `action.active`,
-                        transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-                        '&:hover': {
-                            backgroundColor: `action.hover`,
-                        },
                     },
                     "& .MuiFormLabel-root": {
-                        fontSize: "12px"
+                        fontSize: "12px",
                     },
                 }}
                 slotProps={{
                     textField: {
-                        variant: "outlined", size: "small",
-                    }
+                        variant: "outlined",
+                        size: "small",
+                    },
                 }}
             />
         </LocalizationProvider>
     );
 }
+

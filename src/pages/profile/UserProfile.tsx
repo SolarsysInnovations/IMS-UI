@@ -61,7 +61,7 @@ const UserProfile = () => {
           <Typography variant="body2" color="textSecondary" gutterBottom>
             Email address
           </Typography>
-          <Typography variant="subtitle2" color="textSecondary">
+          <Typography variant="subtitle2" color="textPrimary">
             {userEmail || 'N/A'}
           </Typography>
         </Grid>
@@ -69,7 +69,7 @@ const UserProfile = () => {
           <Typography variant="body2" color="textSecondary" gutterBottom>
             Phone
           </Typography>
-          <Typography variant="subtitle2" color="textSecondary">
+          <Typography variant="subtitle2" color="textPrimary">
             {userMobile || '7502447897'}
           </Typography>
         </Grid>
@@ -77,7 +77,7 @@ const UserProfile = () => {
           <Typography variant="body2" color="textSecondary" gutterBottom>
            Description
           </Typography>
-          <Typography variant="subtitle2" color="textSecondary">
+          <Typography variant="subtitle2" color="textPrimary">
             {userDescription || 'profile'}
           </Typography>
         </Grid>

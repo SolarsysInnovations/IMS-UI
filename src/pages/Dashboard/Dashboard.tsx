@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { Box, Grid, Typography } from "@mui/material";
-import { selectUserRole } from "../../redux-store/auth/authSlice";
-import { useSelector } from "react-redux";
+import { Box, Grid, Typography, CircularProgress } from "@mui/material";
 import { Roles } from "../../constants/Enums";
-import { useGetDashboardMutation } from "../../redux-store/api/injectedApis";
+import { useGetDashboardMutation, useGetUserRoleMutation } from "../../redux-store/api/injectedApis";
 import { Formik } from "formik";
 import DatePickerUi from "../../components/ui/DatePicker";
 import ButtonSmallUi from "../../components/ui/ButtonSmall";
@@ -13,22 +11,39 @@ import ApproverDashboardScreen from "./approver-dashboard/DashboardScreen";
 import EndUserDashboardScreen from "./standard-user-dashboard/DashboardScreen";
 import SuperAdminDashboardScreen from "./super-admin-dashboard/DashboardScreen";
 import AdminDashboardScreen from "./Admin-dashboard/Dashboard-screen";
+import { selectCurrentId } from "../../redux-store/auth/authSlice";
+import { useSelector } from "react-redux";
 
 const DashboardScreen: React.FC = () => {
-  const [getDashboard, { data, isLoading, isError, error }] = useGetDashboardMutation();
+  const id = useSelector(selectCurrentId); // Get `id` from authSlice
+  const [getDashboard, { data, isLoading }] = useGetDashboardMutation();
+  const [getUserRole, { data: userRoleData, isLoading: isUserRoleLoading, isError: isUserRoleError }] = useGetUserRoleMutation();
   const [responseData, setResponseData] = useState<any>({});
-  const userRole = useSelector(selectUserRole);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const today = dayjs();
   const [startDate, setStartDate] = useState<Dayjs | null>(today.startOf("month"));
   const [endDate, setEndDate] = useState<Dayjs | null>(today.endOf("month"));
   const [isCustomRange, setIsCustomRange] = useState(false);
 
-  // Handle form submission to apply date filters
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      if (!id) return; // Ensure `id` is available
+      try {
+        const response = await getUserRole(id).unwrap();
+        setUserRole(response?.userRole || null);
+      } catch {
+        setUserRole(null);
+      }
+    };
+    fetchUserRole();
+  }, [id, getUserRole]);
+
   const handleApplyFilter = async (startDate: Dayjs | null, endDate: Dayjs | null) => {
     const formattedStartDate = startDate ? startDate.format("DD-MM-YYYY") : "";
     const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
-
+    console.log("enddate",endDate);
+    console.log("startDate",startDate);
     try {
       const response = await getDashboard({
         startDate: formattedStartDate,
@@ -41,7 +56,24 @@ const DashboardScreen: React.FC = () => {
     }
   };
 
-  // Dropdown logic to handle preset date ranges
+  if (isUserRoleLoading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress />
+        {/* <Typography ml={2}>Loading user role...</Typography> */}
+      </Box>
+    );
+  }
+
+  if (!userRole) {
+    return isUserRoleError ? (
+      <Typography align="center">Error fetching user role. Please try again.</Typography>
+    ) 
+    : (
+      <Typography align="center"></Typography>
+    );
+  }
+
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
     const today = dayjs();
     setIsCustomRange(newValue.value === "Custom");
@@ -81,6 +113,7 @@ const DashboardScreen: React.FC = () => {
     }
   };
 
+  
   return (
     <Box px={0} py={2}>
       <Formik
@@ -88,16 +121,13 @@ const DashboardScreen: React.FC = () => {
           startDate: startDate,
           endDate: endDate,
         }}
-        onSubmit={(values) => {
-          // Call handleApplyFilter on form submit
-          handleApplyFilter(values.startDate, values.endDate);
-        }}
+        onSubmit={(values) => handleApplyFilter(values.startDate, values.endDate)}
       >
         {({ values, setFieldValue, handleSubmit }) => (
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={2} alignItems="center" justifyContent="flex-end">
-              <Grid item xs={12} sm={4} md={3}>
-                <SelectDropdown
+            <Grid container spacing={2} alignItems="center" justifyContent="center">
+              <Grid item xs={12} sm={4} md={2}>
+              <SelectDropdown
                   defaultValue={{ value: "This Month", label: "This Month" }}
                   onChange={(newValue: any) => handleDropdownChange(newValue, setFieldValue)}
                   options={[
@@ -113,34 +143,31 @@ const DashboardScreen: React.FC = () => {
                 />
               </Grid>
 
-              {/* Show DatePickerUi components only for custom date range */}
-              <Grid item xs={12} sm={4} md={3}>
-                <DatePickerUi
-                  label="Start Date"
-                  onChange={(date: string | null) =>
-                    setFieldValue("startDate", date ? dayjs(date) : undefined)
-                  }
-                  value={values.startDate || undefined}
-                  disabled={!isCustomRange}
-                />
-              </Grid>
+              <Grid item xs={12} sm={4} md={2}>
+                    <DatePickerUi
+        label="Start Date"
+        onChange={(date) => setFieldValue("startDate", dayjs(date, "DD-MM-YYYY"))}
+        value={values.startDate || undefined} 
+        disabled={!isCustomRange}
+        sx={{ width: "80%" }}
+    />
+                </Grid>
 
-              <Grid item xs={12} sm={4} md={3}>
+                <Grid item xs={12} sm={4} md={2}>
                 <DatePickerUi
-                  label="End Date"
-                  onChange={(date: string | null) =>
-                    setFieldValue("endDate", date ? dayjs(date) : undefined)
-                  }
-                  value={values.endDate || undefined}
-                  disabled={!isCustomRange}
-                />
-              </Grid>
+        label="End Date"
+        onChange={(date) => setFieldValue("endDate", dayjs(date, "DD-MM-YYYY"))}
+        value={values.endDate || undefined} 
+        disabled={!isCustomRange}
+        sx={{ width: "80%" }}
+    />
+                </Grid>
 
-              <Grid item xs={12} sm={12} md={2}>
-                <ButtonSmallUi label="Apply Filter" type="submit" fullWidth />
-              </Grid>
+                <Grid item xs={12} sm={12} md={2}>
+                    <ButtonSmallUi label="Apply Filter" type="submit" fullWidth />
+                </Grid>
             </Grid>
-          </form>
+        </form>
         )}
       </Formik>
 

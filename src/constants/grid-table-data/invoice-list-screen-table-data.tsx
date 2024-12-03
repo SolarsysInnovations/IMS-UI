@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import React, { useEffect, useState, useCallback } from "react";
 import { Stack } from "@mui/system";
 import { useNavigate } from "react-router-dom";
-import { useDeleteInvoiceMutation, useGetInvoiceListQuery, useGetInvoiceListScreenMutation } from '../../redux-store/api/injectedApis';
+import { useDeleteInvoiceMutation, useGetInvoiceListQuery, useGetInvoiceListScreenMutation, useGetSingleInvoiceMutation } from '../../redux-store/api/injectedApis';
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 import { useRolePermissions } from "../../hooks/useRolePermission";
 import { clearInvoiceData, setInvoiceData } from "../../redux-store/slices/invoiceSlice";
@@ -26,7 +26,7 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({ row, onDelete })
     const [preview, setPreview] = useState(false);
 
     const [deleteInvoice, { isSuccess: invoiceDeleteSuccess, isError: invoiceDeleteError, error: invoiceDeleteErrorObject }] = useDeleteInvoiceMutation();
-    const [getInvoice] = useGetInvoiceListScreenMutation();
+     const [getList,{ data: invoice }] =useGetSingleInvoiceMutation()
 
     useSnackbarNotifications({
         error: invoiceDeleteError,
@@ -41,9 +41,10 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({ row, onDelete })
             alert("Editing is not allowed when the invoice status is PENDING.");
             return;
         }
+console.log(row, "idddddd" );
 
         try {
-            const response = await getInvoice(row.id);
+            const response = await getList(row.id);
             if ('data' in response) {
                 dispatch(setInvoiceData(response.data));
                 navigate("/invoice/create");
@@ -53,13 +54,15 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({ row, onDelete })
         } catch (error) {
             console.error('Error handling edit click:', error);
         }
-    }, [row, dispatch, navigate, getInvoice]);
+    }, [row, dispatch, navigate, getList]);
 
     const handleDetails = useCallback(async () => {
         try {
-            const response = await getInvoice(row.id);
+            const response = await getList(row.id);
             if ('data' in response) {
-                dispatch(clearInvoiceData());
+                  dispatch(clearInvoiceData());
+                  console.log(response.data,"response",invoice);
+                  
                 dispatch(setInvoiceData(response.data));
                 setPreview(true);
                 setIsModalOpen(true);
@@ -69,7 +72,7 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({ row, onDelete })
         } catch (error) {
             console.error('Error handling details click:', error);
         }
-    }, [row, dispatch, getInvoice]);
+    }, [row, dispatch, getList]);
 
     const handleDeleteClick = async () => {
         const confirmed = window.confirm("Are you sure you want to delete this invoice?");
@@ -87,7 +90,7 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({ row, onDelete })
         <Stack direction="row" spacing={1}>
             <ActionButtons
                 canView={canViewInvoices}
-                canDelete={canDeleteInvoices}
+                canDelete={canDeleteInvoices && row.invoiceStatus !== "PENDING"}
                 canEdit={canEditInvoices && row.invoiceStatus !== "PENDING"}
                 onDeleteClick={handleDeleteClick}
                 onEditClick={handleEditClick}

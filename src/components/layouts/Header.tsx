@@ -1,8 +1,29 @@
-import { AppBar, Toolbar, IconButton, Box, Menu, MenuItem, ListItemIcon, Tooltip, Typography, Grid } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Box,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Tooltip,
+  Typography,
+  Grid,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
-import { AccountCircle, Logout, PersonAdd, Settings, Person, Lock } from "@mui/icons-material";
-import { logOut, selectUserName, selectUserRole } from "../../redux-store/auth/authSlice";
+import { useEffect, useState } from "react";
+import {
+  AccountCircle,
+  Logout,
+  PersonAdd,
+  Settings,
+  Person,
+  Lock,
+} from "@mui/icons-material";
+import {
+  logOut,
+  selectCurrentId,
+} from "../../redux-store/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import DialogBoxUi from "../ui/DialogBox";
@@ -13,14 +34,66 @@ import GroupIcon from "@mui/icons-material/Group";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { capitalize } from "../../services/utils/capitalization";
 import { Roles } from "../../constants/Enums";
+import { useGetUserRoleMutation } from "../../redux-store/api/injectedApis";
 
-const PopupComponents = { USER_PROFILE: "userprofile", CHANGE_PASSWORD: "changepassword" };
+const PopupComponents = {
+  USER_PROFILE: "userprofile",
+  CHANGE_PASSWORD: "changepassword",
+};
 const menuItems = [
-  { icon: <Person sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "User Profile", component: PopupComponents.USER_PROFILE },
-  { icon: <Lock sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Change Password", component: PopupComponents.CHANGE_PASSWORD },
- // { icon: <PersonAdd sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Add another account" },
-  { icon: <Settings sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Settings", route: "/settings" },
-  { icon: <Logout sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Logout", action: "logout" },
+  {
+    icon: (
+      <Person
+        sx={{
+          color: "grey.500",
+          marginRight: "10px",
+          ":hover": { color: "primary.main" },
+        }}
+      />
+    ),
+    text: "User Profile",
+    component: PopupComponents.USER_PROFILE,
+  },
+  {
+    icon: (
+      <Lock
+        sx={{
+          color: "grey.500",
+          marginRight: "10px",
+          ":hover": { color: "primary.main" },
+        }}
+      />
+    ),
+    text: "Change Password",
+    component: PopupComponents.CHANGE_PASSWORD,
+  },
+  // { icon: <PersonAdd sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Add another account" },
+  {
+    icon: (
+      <Settings
+        sx={{
+          color: "grey.500",
+          marginRight: "10px",
+          ":hover": { color: "primary.main" },
+        }}
+      />
+    ),
+    text: "Settings",
+    route: "/settings",
+  },
+  {
+    icon: (
+      <Logout
+        sx={{
+          color: "grey.500",
+          marginRight: "10px",
+          ":hover": { color: "primary.main" },
+        }}
+      />
+    ),
+    text: "Logout",
+    action: "logout",
+  },
 ];
 
 const exceptEndUser: any = !Roles.STANDARDUSER;
@@ -29,17 +102,48 @@ const addMenuItems = [
   {
     title: "PURCHASES",
     items: [
-      { icon: <ShoppingCartIcon sx={{ color: "grey.500", marginRight: "10px" }} />, text: "Add Invoice", route: "invoice/create" },
+      {
+        icon: (
+          <ShoppingCartIcon sx={{ color: "grey.500", marginRight: "10px" }} />
+        ),
+        text: "Add Invoice",
+        route: "invoice/create",
+      },
     ],
   },
 ];
 
-const MenuComponent = ({ anchorEl, open, handleClose, menuItems, onMenuItemClick }: any) => (
+const MenuComponent = ({
+  anchorEl,
+  open,
+  handleClose,
+  menuItems,
+  onMenuItemClick,
+}: any) => (
   <Menu
     anchorEl={anchorEl}
     open={open}
     onClose={handleClose}
-    PaperProps={{ elevation: 0, sx: { borderRadius: "5px", filter: "drop-shadow(0px 1px 1px rgba(0,0,0,0.32))", mt: 1.5, "&::before": { content: '""', display: "block", position: "absolute", top: 0, right: 14, width: 10, height: 10, bgcolor: "background.paper", transform: "translateY(-50%) rotate(45deg)", zIndex: 0 } } }}
+    PaperProps={{
+      elevation: 0,
+      sx: {
+        borderRadius: "5px",
+        filter: "drop-shadow(0px 1px 1px rgba(0,0,0,0.32))",
+        mt: 1.5,
+        "&::before": {
+          content: '""',
+          display: "block",
+          position: "absolute",
+          top: 0,
+          right: 14,
+          width: 10,
+          height: 10,
+          bgcolor: "background.paper",
+          transform: "translateY(-50%) rotate(45deg)",
+          zIndex: 0,
+        },
+      },
+    }}
     transformOrigin={{ horizontal: "right", vertical: "top" }}
     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
   >
@@ -49,7 +153,14 @@ const MenuComponent = ({ anchorEl, open, handleClose, menuItems, onMenuItemClick
         onClick={() => onMenuItemClick(item)}
         sx={{ ":hover": { color: "primary.dark" }, fontSize: "13px" }}
       >
-        <ListItemIcon sx={{ "& .css-c7koz-MuiSvgIcon-root": { width: "20px" }, ":hover": { color: "primary.dark" } }}>{item.icon}</ListItemIcon>
+        <ListItemIcon
+          sx={{
+            "& .css-c7koz-MuiSvgIcon-root": { width: "20px" },
+            ":hover": { color: "primary.dark" },
+          }}
+        >
+          {item.icon}
+        </ListItemIcon>
         {item.text}
       </MenuItem>
     ))}
@@ -58,15 +169,34 @@ const MenuComponent = ({ anchorEl, open, handleClose, menuItems, onMenuItemClick
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [addMenuAnchorEl, setAddMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [addMenuAnchorEl, setAddMenuAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
   const [opendialogBox, setIsOpenDialogBox] = useState(false);
   const [popUpComponent, setPopUpComponent] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation(); // Get the current location
+  const [
+    getUserRole,
+    {
+      data: userRoleData,
+      isLoading: isUserRoleLoading,
+      isError: isUserRoleError,
+    },
+  ] = useGetUserRoleMutation();
+  const id = useSelector(selectCurrentId);
+  const userName = userRoleData?.userName || "Guest"; 
+  const userRole = userRoleData?.userRole || "Guest";
+  console.log("userRoleData", userRoleData);
 
-  const userName = useSelector(selectUserName);
-  const userRole = useSelector(selectUserRole);
+  // Fetch user role on component mount
+  useEffect(() => {
+    if (id) {
+      getUserRole(id);
+    }
+  }, [getUserRole, id]);
+  console.log("User ID:", id);
 
   const handleMenuOpen = (setAnchor: any) => (event: any) => {
     setAnchor(event.currentTarget);
@@ -93,9 +223,13 @@ export default function Header() {
   return (
     <>
       <AppBar
-        sx={{ width: "100%", boxShadow: "none", backgroundColor: "#fbfbff !important" }}
-        position='sticky'
-        color='transparent'
+        sx={{
+          width: "100%",
+          boxShadow: "none",
+          backgroundColor: "#fbfbff !important",
+        }}
+        position="sticky"
+        color="transparent"
       >
         <Toolbar
           sx={{
@@ -109,12 +243,34 @@ export default function Header() {
           }}
         >
           <Grid container alignItems="center" spacing={2}>
-            {location.pathname === "/dashboard" && (
-              <Grid item xs={6} display="flex" alignItems="center" sx={{ fontWeight: 500 }}>
-                Hello {userRole}!
+            {location.pathname === "/dashboard" && userRoleData?.userRole && (
+              <Grid
+                item
+                xs={6}
+                display="flex"
+                alignItems="center"
+                sx={{
+                  fontWeight: 500, // General font styling for the text
+                  fontSize: "1.25rem",
+                }}
+              >
+                Hello,{" "}
+                <Box
+                  component="span"
+                  sx={{
+                    fontWeight: "bold", // Highlight userRole
+                    color: "primary.main", // Use theme's primary color
+                    marginLeft: 1, // Add spacing between 'Hello' and the role
+                  }}
+                >
+                  {typeof userRoleData.userRole === "string"
+                    ? userRoleData.userRole
+                    : ""}
+                </Box>
               </Grid>
             )}
           </Grid>
+
           <Grid item xs={6} display="flex">
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {/* <Tooltip title='Add item'>
@@ -134,11 +290,11 @@ export default function Header() {
                   />
                 </IconButton>
               </Tooltip> */}
-              <Tooltip title='Account settings'>
+              <Tooltip title="Account settings">
                 <IconButton
                   sx={{ width: "30px" }}
                   onClick={handleMenuOpen(setAnchorEl)}
-                  size='small'
+                  size="small"
                 >
                   <Person
                     sx={{
@@ -151,10 +307,7 @@ export default function Header() {
                   />
                 </IconButton>
               </Tooltip>
-              <Typography
-                variant='caption'
-                color='initial'
-              >
+              <Typography variant="caption" color="initial">
                 {capitalize(userName)}
               </Typography>
             </Box>

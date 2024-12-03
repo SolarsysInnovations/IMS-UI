@@ -3,7 +3,7 @@ import InvoiceDocument from "./InvoiceDocument";
 import { pdf, PDFViewer } from "@react-pdf/renderer";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import {  useGetCompanyLogoByIdQuery, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
+import {  useGetCompanyLogoByIdQuery, useGetCompanySettingByIdQuery, useGetCustomersListQuery, useGetInvoiceListQuery, useGetTdsTaxListQuery, useUpdateInvoiceMutation } from "../../../redux-store/api/injectedApis";
 import { selectUserDetails, selectUserRole } from "../../../redux-store/auth/authSlice";
 import { formatDate } from "../../../services/utils/dataFormatter";
 import StageStepper from "../../../components/ui/StepperUi";
@@ -14,6 +14,7 @@ import { InvoiceOptions, InvoiceStatus, Roles } from "../../../constants/Enums";
 import { Card } from "@mui/material";
 import DialogBoxUi from "../../../components/ui/DialogBox";
 import SendEmail from "../Send-email";
+import { RootState } from "../../../redux-store/store";
 
 // InvoiceLetterUi Component
 interface InvoiceLetterUiProps {
@@ -22,11 +23,11 @@ interface InvoiceLetterUiProps {
 const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
 
     const [data, setData] = useState();
-    const invoiceDatas = useSelector((state: any) => state.invoiceState.data);
+
+    const invoiceDatas = useSelector((state: RootState) => state.invoiceState.data);
     const { data: customers } = useGetCustomersListQuery();
     const { data: tdsTaxList } = useGetTdsTaxListQuery();
-    const companyDetails = useSelector(selectUserDetails);
-    const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
+     const [updateInvoice, { isSuccess: invoiceUpdateSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
     const invoiceData = useSelector((state: any) => state.invoiceState.data);
     const userRole = useSelector(selectUserRole);
     const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
@@ -34,29 +35,37 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
     const { refetch } = useGetInvoiceListMutation();
     const [resMessage, setResMessage] = useState('');
     const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
- 
+    const [base64String, setBase64String] = useState<string | null>(null);
+    const companyIdString = sessionStorage.getItem("id") || "";  
+    const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
+    const [companyDetails, setCompanyDetails] = useState<any>(null);
+    const { id: companyId } = companyDetails || {};
+
+    const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch: refetchLogoData } = useGetCompanyLogoByIdQuery(companyId, {
+        skip: !companyId, 
+      });
     useEffect(() => {
         if (invoiceDatas && customers && companyDetails && tdsTaxList) {
             // Find the relevant customer
             const filteredCustomer = customers.find(
-                (customer: any) => customer.customerName === invoiceDatas.customerName
+                (customer: any) => customer.customerName === invoiceData.customerName
             );
 
             // Calculate the subtotal from servicesList
-            const subTotalValue = invoiceDatas.servicesList.reduce(
+            const subTotalValue = invoiceData.servicesList.reduce(
                 (acc: number, service: any) => acc + service.serviceTotalAmount,
                 0
             );
 
             // Calculate the discount amount
-            const discountPercentageValue = (subTotalValue * invoiceDatas.discountPercentage) / 100;
+            const discountPercentageValue = (subTotalValue * invoiceData.discountPercentage) / 100;
 
             // Calculate the GST amount
-            const gstPercentageValue = ((subTotalValue - discountPercentageValue) * invoiceDatas.gstPercentage) / 100;
+            const gstPercentageValue = ((subTotalValue - discountPercentageValue) * invoiceData.gstPercentage) / 100;
 
             // Find the relevant TDS tax object
             const filteredTdsTax = tdsTaxList.find(
-                (tdsTax: any) => invoiceDatas.taxAmount.tds === tdsTax.taxName
+                (tdsTax: any) => invoiceData.taxAmount.tds === tdsTax.taxName
             );
 
             // Calculate the total value before TDS
@@ -73,12 +82,12 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
 
             // Merge all data including calculated values
             const mergedData = {
-                ...invoiceDatas,
+                ...invoiceData,
                 companyDetails: { ...companyDetails.companyDetails },
-                customerDetails: filteredCustomer || invoiceDatas.customerDetails,
-                startDate: formatDate(invoiceDatas.startDate),
-                dueDate: formatDate(invoiceDatas.dueDate),
-                invoiceDate: formatDate(invoiceDatas.invoiceDate),
+                customerDetails: filteredCustomer || invoiceData.customerDetails,
+                startDate: formatDate(invoiceData.startDate),
+                dueDate: formatDate(invoiceData.dueDate),
+                invoiceDate: formatDate(invoiceData.invoiceDate),
                 subTotal: Math.round(subTotalValue),
                 tdsAmountValue: Math.round(tdsAmount),
                 discountPercentageValue: Math.round(discountPercentageValue),
@@ -86,6 +95,8 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
                 totalValue: Math.round(finalTotalValue),
             };
             setData(mergedData);
+            console.log(invoiceDatas,"ggg",invoiceData);
+            
         }
     }, [invoiceDatas, customers, companyDetails, tdsTaxList]);
 
@@ -217,8 +228,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
       };
   const companyInfo = useSelector(selectUserDetails);
 
-      const { data: logoData, isSuccess: logoSuccess, isError: logoError } = useGetCompanyLogoByIdQuery(companyInfo?.companyDetails?.id);
-     
+      
       const getCompanyLogo = () => {
         if (logoData && logoData.companyLogo) {
           const base64String = logoData.companyLogo; // Assuming companyLogo is a base64 string
@@ -232,7 +242,21 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
           console.log("Logo Base64 String:", logoData.companyLogo); // Logs the base64 string of the logo
         }
       }, [logoData, logoSuccess]);
+    console.log(data, "dattttta",invoiceData, invoiceDatas,companyInfo);
     
+    useEffect(() => {
+        if (logoSuccess && logoData?.companyLogo) {
+          setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
+        } else {
+          setBase64String(null);
+        }
+      }, [logoSuccess, logoData]);
+      useEffect(() => {
+        if (companyData) {
+          setCompanyDetails(companyData);
+          console.log("Fetched company data:", companyData);
+        }
+      }, [companyData]);
     return (
         <>
             <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column", padding: "0px 30px 30px 30px" }}>
@@ -241,7 +265,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
                         showToolbar={false}
                         style={{ overflow: "hidden", width: '400px', height: '770px', border: 'none', backgroundColor: 'transparent' }}
                     >
-                        <InvoiceDocument invoiceData={data} companyLogo={getCompanyLogo} />
+                        <InvoiceDocument invoiceData={invoiceData} companyLogo={getCompanyLogo} />
                     </PDFViewer>
                 </div>
                 <div style={{ marginTop: '20px', textAlign: 'center' }}>

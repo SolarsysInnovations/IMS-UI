@@ -18,9 +18,12 @@ import { Avatar, Collapse, ListSubheader } from '@mui/material';
 import Header from './Header';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { selectUserRole } from '../../redux-store/auth/authSlice';
+import { selectCurrentId, selectUserRole } from '../../redux-store/auth/authSlice';
 import { useSelector } from 'react-redux';
 import { sidebarTwo } from '../../constants/data';
+import Logo from "../../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png";
+import { useEffect, useState } from 'react';
+import { useGetUserRoleMutation } from '../../redux-store/api/injectedApis';
 
 const drawerWidth = 250;
 
@@ -80,45 +83,46 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {
-  const [activeItem, setActiveItem] = React.useState<string>('');
-  const [role, setRole] = React.useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const userRole = useSelector(selectUserRole);
+  const [open, setOpen] = useState(true);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [activeItem, setActiveItem] = React.useState<string>('');
+  const id = useSelector(selectCurrentId);
+  const [getUserRole, { data: userRoleData, isLoading }] = useGetUserRoleMutation();
 
-  const [open, setOpen] = React.useState(true);
-  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
+  useEffect(() => {
+    if (id) {
+      getUserRole(id) // Pass id directly here
+        .unwrap()
+        .then((response) => {
+          setUserRole(response?.userRole || null);
+        })
+        .catch((error) => {
+          console.error("Error fetching user role:", error);
+        });
+    }
+  }, [id, getUserRole]);
 
+  const handleDrawerClose = () => {
+    setOpen((prev) => !prev);
+    setOpenIndex(null);
+  };
+
+  const handleItemClick = (path: string) => {
+    navigate(path);
+  };
   const handleCollapse = (index: number) => {
     setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
   };
-  const handleDrawerClose = () => {
-    setOpen(prev => !prev)
-    setOpenIndex(null)
-  };
-
-  const handleItemClick = (path: any) => {
-    navigate(path)
-    setActiveItem(path);
-  };
-
-  React.useEffect(() => {
-    setActiveItem(location.pathname)
-  }, [location.pathname]);
-
-  React.useEffect(() => {
-    const userRole = localStorage.getItem("userRole");
-    setRole(userRole);
-  }, []);
-
-  const isActive = (path: any) => location.pathname.startsWith(path);
+  const isActive = (path: string) => location.pathname.startsWith(path);
 
   return (
     <Box sx={{ display: 'flex' }}>
       <Drawer variant="permanent" open={open}>
-        <Avatar sx={{ transition: "0.2s", marginLeft: open ? 3 : 1.5, marginTop: 2, width: 40, height: 40, bgcolor: "primary.main", color: "white", }}
-          src="https://img.freepik.com/free-psd/gradient-abstract-logo_23-2150689648.jpg?size=626&ext=jpg&ga=GA1.1.373236869.1707911526&semt=ais"
-        />
+        <Avatar sx={{ transition: "0.2s", bgcolor: "white", marginLeft: open ? 3 : 1.5, marginTop: 2, width: 40, height: 40, color: "white", }}
+          src={Logo}/>  
         <DrawerHeader style={{ backgroundColor: "#1C2536", display: "flex", alignItems: "center" }}>
           {open && <Typography variant="h6" sx={{ color: 'white', textAlign: 'left', marginLeft: 2 }}>Invoice</Typography>}
           <IconButton onClick={handleDrawerClose}>
