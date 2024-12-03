@@ -45,16 +45,19 @@ const UploadScreen: React.FC = () => {
   }, [companyData]);
   
   useEffect(() => {
-    if (uploadSuccess && data) {
-        const responseData = data as { logoUrl: string };
-        setSavedLogoUrl(responseData.logoUrl);
-        dispatch(setCompanyLogo(responseData.logoUrl)); // Update Redux state
-        setLoading(false);
-        setSelectedFile(null);
-        setImagePreview(null);
-        refetchLogo(); // Fetch updated logo data after upload
+    if (uploadSuccess && data && companyId) {
+      const responseData = data as { logoUrl: string };
+      setSavedLogoUrl(responseData.logoUrl);
+      dispatch(setCompanyLogo(responseData.logoUrl));
+      setLoading(false);
+      setSelectedFile(null);
+      setImagePreview(null);
+  
+      // Only refetch if the query has already started
+      refetchLogo();
     }
-}, [uploadSuccess, data, dispatch, refetchLogo]);
+  }, [uploadSuccess, data, companyId, dispatch, refetchLogo]);
+  
 
 
   useEffect(() => {
@@ -162,15 +165,25 @@ const UploadScreen: React.FC = () => {
             src={base64String}
             alt="Company Logo"
             style={{
-              maxWidth: "250px",
-              maxHeight: "250px",
-              objectFit: "contain",
-              marginBottom: "10px",
-            }}
+              width: "200px",
+              height: "200px",
+              objectFit: "contain", // Ensures the image scales properly inside the fixed box
+              marginBottom: "10px",            }}
           />
         ) : (
-          <Box component="span" fontSize="13px" sx={{ marginBottom: "10px" }}>
-            No image available
+          <Box
+    component="span"
+    sx={{
+      display: "inline-block",  // Ensures the box is inline for better alignment
+      fontSize: "12px",         // Slightly larger font for emphasis
+      fontWeight: "bold",       // Makes the text bold for better visibility
+      marginBottom: "10px",     // Adds spacing below the text
+      color: "red",           // White text for contrast
+      padding: "5px 10px",      // Adds padding around the text
+      borderRadius: "5px",      // Slightly rounded corners for aesthetic appeal
+    }}
+  >
+          * No image available *
           </Box>
         )}
 
@@ -222,9 +235,9 @@ const UploadScreen: React.FC = () => {
               src={imagePreview as string}
               alt="Preview"
               style={{
-                maxWidth: "200px",
-                maxHeight: "200px",
-                objectFit: "contain",
+                width: "150px",
+                height: "150px",
+                objectFit: "contain", // Maintains aspect ratio within the fixed dimensions
                 border: "1px solid grey",
                 borderRadius: "4px",
               }}

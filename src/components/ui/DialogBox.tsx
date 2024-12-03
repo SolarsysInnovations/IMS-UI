@@ -34,9 +34,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 const DialogBoxUi = ({
   open: defaultOpen = false,
-  paperWidth,
-  paperMaxWidth,
-  paperMinHeight,
+  paperWidth = "800px", // Default width
+  paperMaxWidth = "600px", // Default max width
+  paperMinHeight = "100px", // Default min height
   title,
   maxwidth,
   minWidth = "400px", // Default minimum width
@@ -71,24 +71,29 @@ const DialogBoxUi = ({
           },
         }}
       >
+          <DialogTitle sx={{ m: 0, p: 2 }}>
         <IconButton
           aria-label="close"
           onClick={handleCloseDialog}
           sx={{
             position: "absolute",
-            right: 6,
-            top: 3,
+            right: 8,
+            top: 8,
             color: (theme) => theme.palette.grey[500],
           }}
         >
           <CloseIcon sx={{ width: "20px" }} />
         </IconButton>
-        <DialogContent
-          sx={{
-            ...maxwidth,
+        </DialogTitle>
+         <DialogContent
+         sx={{
+           ...(typeof maxwidth === "object" ? maxwidth : {}), 
             minWidth: "200px",
-            minHeight: "200px",
-            margin: "30px 20px 20px 20px",
+            minHeight: "100px",
+            margin: "20px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
           }}
         >
           {content}

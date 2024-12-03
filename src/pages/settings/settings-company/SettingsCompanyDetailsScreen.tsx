@@ -214,21 +214,40 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                   <Grid item xs={12}>
                     <Box display="flex" alignItems="center" sx={{ marginTop: "10px" }}>
                       <Box component="span" fontWeight={500} width="140px" fontSize="13px">
-                        Logo :
-                      </Box>
-                      
-                      
-                      {base64String ? (
-                        <img
-                          src={base64String}
-                          alt="Company Logo"
-                          style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "contain" }}
-                        />
-                      ) : (
-                        <Box component="span" fontSize="13px">No image available</Box>
-                      )}
-                    </Box>
-                  </Grid>
+                      Logo
+      </Box>
+      :{" "}
+      <Box
+        sx={{
+          width: "150px",
+          height: "150px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          border: base64String ? "1px solid #ddd" : "none", // Conditional border
+          borderRadius: "8px",
+          overflow: "hidden",
+          backgroundColor: base64String ? "transparent" : "#f8f9fa", // Optional background for no image
+        }}
+      >
+        {base64String ? (
+          <img
+            src={base64String}
+            alt="Company Logo"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+            }}
+          />
+        ) : (
+          <Box component="span" fontSize="13px">
+            No image available
+          </Box>
+        )}
+      </Box>
+    </Box>
+  </Grid>
                 </Grid>
               )}
             </Box>

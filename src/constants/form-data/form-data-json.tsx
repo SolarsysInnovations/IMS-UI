@@ -131,7 +131,6 @@ export const serviceFields: FieldProps[] = [
 export const CompanyDetailsFields: FieldProps[] = [
     {
         name: 'Company Information',
-        label: 'Company Information :',
         type: 'section',
         titleGridSize: 12,
         subFields: [
