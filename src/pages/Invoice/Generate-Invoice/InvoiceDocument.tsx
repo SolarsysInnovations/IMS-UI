@@ -71,7 +71,7 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                         <Image style={styles.image} src={companyLogo() ?? "loading..."}  />
                             </View>
                     <View>
-                    <Text style={styles.header}>{invoiceData?.companyDetails?.companyName}</Text>
+                    <Text style={styles.header}>{invoiceData?.companyName}</Text>
                     </View>
                 </View>
                 <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'space-between', marginTop: "20px" }}>
@@ -80,7 +80,7 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.companyName} </Text>
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerName} </Text>
                         <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerEmail}</Text>
-                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerPhone}</Text>
+                        <Text style={{ fontSize: '14px', marginBottom: "5px" }}>{invoiceData?.customerContact}</Text>
                      </View>
                     
                      <View >
