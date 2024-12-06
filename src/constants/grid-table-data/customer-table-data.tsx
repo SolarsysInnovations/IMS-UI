@@ -46,7 +46,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             if ('data' in response) {
                 const customerData = response.data;
                 dispatch(setCustomerData(customerData));
-                navigate('/customer/create');
+                navigate('/customer/edit');
             } else {
                 console.error('Error response:', response.error);
             }

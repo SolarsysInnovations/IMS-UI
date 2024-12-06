@@ -82,7 +82,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
         const companyData = response.data;
         console.log("edit company data", companyData);
         dispatch(setUserData(companyData));
-        navigate("/company/create");
+        navigate("/company/edit");
       } else {
         console.error("Error response:", response.error);
       }

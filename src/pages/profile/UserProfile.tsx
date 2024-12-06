@@ -43,7 +43,7 @@ const UserProfile = () => {
           <Typography variant="body2" color="textSecondary" gutterBottom>
             Name
           </Typography>
-          <Typography variant="subtitle2" color="textSecondary">
+          <Typography variant="subtitle2" color="black">
             {userData.userName}
           </Typography>
         </Grid>
@@ -51,7 +51,7 @@ const UserProfile = () => {
           <Typography variant="body2" color="textSecondary" gutterBottom>
             Role
           </Typography>
-          <Typography variant="subtitle2" color="textSecondary">
+          <Typography variant="subtitle2" color="black">
             {userData.userRole}
           </Typography>
         </Grid>
