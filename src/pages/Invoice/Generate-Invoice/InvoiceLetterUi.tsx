@@ -115,17 +115,16 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
 
     const handleDownload = async () => {
         const doc = (
-            <InvoiceDocument invoiceData={data}  companyLogo={getCompanyLogo}  />
+            <InvoiceDocument invoiceData={data} companyLogo={base64String} />
         );
         const asPdf = pdf(doc); // Create a new instance of pdf with the document
         const blob = await asPdf.toBlob(); // Convert the PDF document to a Blob
-        // Create a download link and click it programmatically
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = 'invoice.pdf';
+        link.download = "invoice.pdf";
         link.click();
     };
-
+    
     const getAvailableOptions = () => {
         const allOptions = [];
         const userRole = userRoleData?.role;
@@ -240,10 +239,14 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
           await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
         }
       };
-  const companyInfo = useSelector(selectUserDetails);
 
-      const { data: logoData, isSuccess: logoSuccess, isError: logoError } = useGetCompanyLogoByIdQuery(companyInfo?.companyDetails?.id);
+      
+      const { data: logoData, isSuccess: logoSuccess, isError: logoError , refetch:refetchCompanyLogo} = useGetCompanyLogoByIdQuery(companyDetails?.id, {
+        skip: !companyDetails?.id
+      });
      
+
+      
       const getCompanyLogo = () => {
         if (logoData && logoData.companyLogo) {
           const base64String = logoData.companyLogo; // Assuming companyLogo is a base64 string
@@ -257,31 +260,49 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
           console.log("Logo Base64 String:", logoData.companyLogo); // Logs the base64 string of the logo
         }
       }, [logoData, logoSuccess]);
-      console.log(data, "dattttta",invoiceData, invoiceDatas,companyInfo);
-    
+
       useEffect(() => {
-          if (logoSuccess && logoData?.companyLogo) {
-            setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
-          } else {
-            setBase64String(null);
-          }
-        }, [logoSuccess, logoData]);
+        if (companyDetails && companyDetails.id) {
+          // Now we can safely fetch the logo
+          refetchCompanyLogo();  // Function to trigger the logo fetch query
+        }
+      }, [companyDetails]);
+    
+    //   useEffect(() => {
+    //       if (logoSuccess && logoData?.companyLogo) {
+    //         setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
+    //       } else {
+    //         setBase64String(null);
+    //       }
+    //     }, [logoSuccess, logoData]);
         useEffect(() => {
           if (companyData) {
             setCompanyDetails(companyData);
             console.log("Fetched company data:", companyData);
           }
         }, [companyData]);
+
+        useEffect(() => {
+            if (logoData?.companyLogo) {
+                console.log("Base64 Logo:", logoData.companyLogo);
+                setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
+            }
+        }, [logoData]);
+        
+        
     return (
         <>
             <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column", padding: "0px 30px 30px 30px" }}>
                 <div style={{ width: '100%', height: '95vh', textAlign: "center", overflow: 'hidden', alignItems: "center" }}>
-                    <PDFViewer
+                {base64String ? (    <PDFViewer
                         showToolbar={false}
                         style={{ overflow: "hidden", width: '400px', height: '770px', border: 'none', backgroundColor: 'transparent' }}
                     >
-                        <InvoiceDocument invoiceData={data} companyLogo={getCompanyLogo} />
+                       <InvoiceDocument invoiceData={data} companyLogo={base64String} />
                     </PDFViewer>
+                    ) : (
+                        <div>Loading PDF...</div>
+                    )}
                 </div>
                 <div style={{ marginTop: '20px', textAlign: 'center' }}>
                     <Box gap={2} sx={{ display: "flex", justifyContent: "right", flexDirection: "row", gap: "20px", marginTop: "10px" }}>

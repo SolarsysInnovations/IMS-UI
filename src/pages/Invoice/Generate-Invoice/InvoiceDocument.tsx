@@ -61,14 +61,14 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
         console.log("customer Name", invoiceData.customerDetails);
     };
     console.log(invoiceData , "invoiceletter", invoiceData?.subTotal);
-    console.log(companyLogo());
+    console.log(companyLogo);
     
     return (
         <Document>
             <Page size="A4" style={styles.page}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: "30px" }}>
                     <View>
-                        <Image style={styles.image} src={companyLogo() ?? "loading..."}  />
+                        <Image style={styles.image} src={companyLogo ?? "loading..."}  />
                             </View>
                     <View>
                     <Text style={styles.header}>{invoiceData?.companyName}</Text>

@@ -18,7 +18,7 @@ interface InvoiceUiProps {
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, setIsModalOpen }: InvoiceUiProps) {
+function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, setIsModalOpen, invoiceData }: InvoiceUiProps) {
 
   return (
     <>
