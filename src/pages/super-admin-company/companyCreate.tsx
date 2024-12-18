@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import * as Yup from 'yup'; // Import Yup for validation
+import * as Yup from 'yup'; 
 import { CompanyEditFields, CompanyFields } from '../../constants/form-data/form-data-json';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
@@ -18,15 +18,27 @@ interface CompanyValueProps {
 };
 
 const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) => {
-
     const [addCompany, { isLoading: companyAddLoading, isSuccess: companyAddSuccess, isError: companyAddError, error: companyAddErrorObject }] = useCreateUserMutation();
     const [updateCompany, { isLoading: companyUpdateLoading, isSuccess: companyUpdateSuccess, isError: companyUpdateError, error: companyUpdateErrorObject }] = useUpdateUserMutation();
     const { data: company, error, isLoading, refetch } = useGetUsersListQuery();
-
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const initialValues = companyEditInitialValues || superAdminCompanyUsersInitialValues;
-    const fields = mode === 'create' ? CompanyFields : CompanyEditFields;
+    
+    // Dynamically modify fields based on 'mode'
+    const fields = useMemo(() => {
+        if (mode === 'create') {
+            return CompanyFields; // Include password field
+        } else {
+            // Filter out password field in edit mode
+            const editedFields = CompanyEditFields.map(section => ({
+                ...section,
+                subFields: section.subFields?.filter(field => field.name !== 'password') || [], // Ensure subFields is not undefined
+            }));
+            return editedFields;
+        }
+    }, [mode]);
+    
 
     useSnackbarNotifications({
         error: companyAddError,
@@ -47,7 +59,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
     useEffect(() => {
         if (companyUpdateSuccess) {
             navigate(-1);
-        };
+        }
         refetch();
     }, [companyAddSuccess, companyUpdateSuccess, refetch]);
 
@@ -58,7 +70,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                     userDetails: {
                         userName: values.userName,
                         userEmail: values.userEmail,
-                        password: values.password,
                         userRole: values.userRole,
                         userMobile: values.userMobile,
                         description: values.description,
@@ -88,7 +99,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
                     userDetails: {
                         userName: values.userName,
                         userEmail: values.userEmail,
-                        password: values.password,
+                        password: values.password,  // Only included in 'create' mode
                         userRole: values.userRole,
                         userMobile: values.userMobile,
                         description: values.description,
@@ -125,6 +136,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
     return (
         <div style={{ maxHeight: '90vh', overflowY: 'auto', paddingRight: '1rem' }}>
             <DynamicFormCreate
+                headerName={mode=== 'edit' ? 'Company Edit' : 'Company Create'}
                 showTable={true}
                 fields={fields}
                 initialValues={initialValues}

@@ -63,36 +63,59 @@ const InvoiceList = () => {
   );
   const [error, setError] = useState(null);
   // const { refetch } = useGetInvoiceListQuery();
-  const handleApplyFilter = useCallback(
-    async (startDate: Dayjs | null, endDate: Dayjs | null) => {
-      if (!startDate || !endDate || filterApplied) {
-        console.warn(
-          "Both start date and end date must be selected, or filter is already applied."
-        );
-        return;
-      }
 
-      setIsLoading(true);
-      const formattedStartDate = startDate
-        ? startDate.format("DD-MM-YYYY")
-        : "";
-      const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
-      try {
-        const response = await getInvoiceListScreen({
-          startDate: formattedStartDate,
-          endDate: formattedEndDate,
-        }).unwrap();
-        setInvoiceList(response);
+  const handleApplyFilter = async (
+    startDate: Dayjs | null,
+    endDate: Dayjs | null
+  ) => {
+    const formattedStartDate = startDate ? startDate.format("DD-MM-YYYY") : "";
+    const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
+    console.log("enddate", endDate);
+    console.log("startDate", startDate);
+    try {
+      const response = await getInvoiceListScreen({
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+      }).unwrap();
+      setInvoiceList(response);
         setFilterApplied(true);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching filtered invoice data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [startDate, endDate, filterApplied, getInvoiceListScreen]
-  );
+    } catch (error) {
+      console.error("Error fetching filtered dashboard data:", error);
+      setIsLoading(false);
+    }
+  };
+
+
+  // const handleApplyFilter = useCallback(
+  //   async (startDate: Dayjs | null, endDate: Dayjs | null) => {
+  //     if (!startDate || !endDate || filterApplied) {
+  //       console.warn(
+  //         "Both start date and end date must be selected, or filter is already applied."
+  //       );
+  //       return;
+  //     }
+
+  //     setIsLoading(true);
+  //     const formattedStartDate = startDate
+  //       ? startDate.format("DD-MM-YYYY")
+  //       : "";
+  //     const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
+  //     try {
+  //       const response = await getInvoiceListScreen({
+  //         startDate: formattedStartDate,
+  //         endDate: formattedEndDate,
+  //       }).unwrap();
+  //       setInvoiceList(response);
+  //       setFilterApplied(true);
+  //       setError(null);
+  //     } catch (error) {
+  //       console.error("Error fetching filtered invoice data:", error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   },
+  //   [startDate, endDate, filterApplied, getInvoiceListScreen]
+  // );
 
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
     const today = dayjs();
