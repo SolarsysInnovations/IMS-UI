@@ -1,41 +1,58 @@
 import React, { useState, useCallback } from "react";
 import { Form, Formik, FormikHelpers } from "formik";
-import { Box, Grid, Button, Typography, IconButton, styled } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Button,
+  Typography,
+  IconButton,
+  styled,
+} from "@mui/material";
 import TextFieldUi from "../../components/ui/TextField";
 import ButtonSmallUi from "../../components/ui/ButtonSmall";
 import { useSendEmailNotificationMutation } from "../../redux-store/api/injectedApis";
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 import { SendEmailInitialValueProps } from "../../types/types";
 // import { sendEmailValidationSchema } from "../../constants/forms/validations/validationSchema";
-import { SendEmailInitialValue } from '../../constants/forms/formikInitialValues';
+import { SendEmailInitialValue } from "../../constants/forms/formikInitialValues";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useNavigate } from "react-router-dom";
-import CancelIcon from '@mui/icons-material/Close';
+import CancelIcon from "@mui/icons-material/Close";
 
 interface SendEmailProps {
-  onSuccess: () => void; 
-  invoiceData:any // Add this line to define the prop type
+  onSuccess: () => void;
+  invoiceData: any; // Add this line to define the prop type
 }
 
 const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showFilename, setShowFileName] = useState<string[]>([]);
-  const pathname = 'sendMail';
+  const pathname = "sendMail";
   const navigate = useNavigate();
-  const [sendEmail, { isSuccess: sendEmailSuccess, isError: sendEmailError, error: sendEmailErrorObject }] = useSendEmailNotificationMutation();
-  const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const fileList = Array.from(files);
-      const fileNames = fileList.map(file => file.name);
-      setUploadedFiles(prevFiles => [...prevFiles, ...fileList]);
-      setShowFileName(prevNames => [...prevNames, ...fileNames]);
-    }
-  }, []);
+  const [
+    sendEmail,
+    {
+      isSuccess: sendEmailSuccess,
+      isError: sendEmailError,
+      error: sendEmailErrorObject,
+    },
+  ] = useSendEmailNotificationMutation();
+  const handleFileUpload = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const files = event.target.files;
+      if (files && files.length > 0) {
+        const fileList = Array.from(files);
+        const fileNames = fileList.map((file) => file.name);
+        setUploadedFiles((prevFiles) => [...prevFiles, ...fileList]);
+        setShowFileName((prevNames) => [...prevNames, ...fileNames]);
+      }
+    },
+    []
+  );
 
   const handleRemoveFile = useCallback((index: number) => {
-    setUploadedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
-    setShowFileName(prevNames => prevNames.filter((_, i) => i !== index));
+    setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setShowFileName((prevNames) => prevNames.filter((_, i) => i !== index));
   }, []);
   const handleSubmit = async (
     values: SendEmailInitialValueProps,
@@ -43,8 +60,11 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
   ) => {
     try {
       const formData = new FormData();
-      formData.append("recipientEmail", invoiceData?.customerDetails?.customerEmail || "");
-     // formData.append("cc", values.cc || "");
+      formData.append(
+        "recipientEmail",
+        invoiceData?.customerDetails?.customerEmail || ""
+      );
+      // formData.append("cc", values.cc || "");
       formData.append("subject", values.subject || "");
       uploadedFiles.forEach((file) => {
         formData.append("file", file);
@@ -52,13 +72,12 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
 
       await sendEmail(formData);
 
-     // if (sendEmailSuccess) {
-         onSuccess();  
-        resetForm();
-        setUploadedFiles([]);
+      // if (sendEmailSuccess) {
+      onSuccess();
+      resetForm();
+      setUploadedFiles([]);
 
-        
-   //   }
+      //   }
     } catch (error) {
       console.error("An error occurred during send email:", error);
       alert("Failed to send email. Please try again later.");
@@ -66,14 +85,18 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
       setSubmitting(false);
     }
   };
-console.log(invoiceData,"invoiceDatainvoiceDatainvoiceDatainvoiceDatainvoiceData",invoiceData?.customerDetails?.customerEmail);
+  console.log(
+    invoiceData,
+    "invoiceDatainvoiceDatainvoiceDatainvoiceDatainvoiceData",
+    invoiceData?.customerDetails?.customerEmail
+  );
 
   useSnackbarNotifications({
     error: sendEmailError,
     errorObject: sendEmailErrorObject,
-    errorMessage: 'Error Sending Mail',
+    errorMessage: "Error Sending Mail",
     success: sendEmailSuccess,
-    successMessage: 'Mail sent successfully',
+    successMessage: "Mail sent successfully",
   });
 
   return (
@@ -83,7 +106,14 @@ console.log(invoiceData,"invoiceDatainvoiceDatainvoiceDatainvoiceDatainvoiceData
       onSubmit={handleSubmit}
     >
       {({ values, errors, touched, handleChange, handleSubmit }) => (
-        <Form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column" }}>
+        <Form
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginTop: "10px",
+          }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextFieldUi
@@ -125,14 +155,25 @@ console.log(invoiceData,"invoiceDatainvoiceDatainvoiceDatainvoiceDatainvoiceData
               {showFilename.map((fileName, index) => (
                 <React.Fragment key={index}>
                   <Grid item xs={5}>
-                    <Box sx={{ mt: 1, mb: -1, display: "flex", position: "relative", left: "15px" }}>
+                    <Box
+                      sx={{
+                        mt: 1,
+                        mb: -1,
+                        display: "flex",
+                        position: "relative",
+                        left: "15px",
+                      }}
+                    >
                       <Typography>{fileName}</Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={7}>
                     <Box sx={{ mt: 1, display: "flex" }}>
                       <IconButton onClick={() => handleRemoveFile(index)}>
-                        <CancelIcon color="secondary" sx={{ position: "relative" }} />
+                        <CancelIcon
+                          color="secondary"
+                          sx={{ position: "relative" }}
+                        />
                       </IconButton>
                     </Box>
                   </Grid>
@@ -145,9 +186,17 @@ console.log(invoiceData,"invoiceDatainvoiceDatainvoiceDatainvoiceDatainvoiceData
                 color="primary"
                 component="label"
                 startIcon={<CloudUploadIcon />}
-                sx={{ height: "30px", width: "15px", mt: 2, mb: 2 ,pt:5, borderRadius:"500px", padding:"5px"}}
+                sx={{
+                  height: "30px",
+                  width: "15px",
+                  mt: 2,
+                  mb: 2,
+                  pt: 5,
+                  borderRadius: "500px",
+                  padding: "5px",
+                }}
               >
-                 <input
+                <input
                   type="file"
                   hidden
                   multiple

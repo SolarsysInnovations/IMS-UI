@@ -10,15 +10,14 @@ interface InvoiceUiProps {
   subtotal?: number | null;
   discount?: number | null;
   tds?: number | null;
-  isModalOpen?: any;
-  downloadPdf?: boolean;
-  preview?: boolean;
   setIsModalOpen?: Dispatch<SetStateAction<boolean | undefined>>;
+    downloadPdf?: boolean;
+  preview?: boolean;
 }
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, setIsModalOpen, invoiceData }: InvoiceUiProps) {
+function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, invoiceData, setIsModalOpen }: InvoiceUiProps) {
 
   return (
     <>

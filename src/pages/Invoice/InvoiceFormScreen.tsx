@@ -56,7 +56,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const [addInvoice, { isSuccess: addInvoiceSuccess, isError: addInvoiceError, error: addInvoiceErrorObject }] = useCreateInvoiceMutation();
     const [updateInvoice, { isSuccess: invoiceUpdatedSuccess, isError: invoiceUpdateError, error: invoiceUpdateErrorObject }] = useUpdateInvoiceMutation();
     const [opendialogBox, setIsOpenDialogBox] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState<boolean | undefined>(false);
     const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
     const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
     const [discountAmount, setDiscountAmount] = useState<number | null>(null);
@@ -339,7 +339,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                               discount={discountAmount}
                               subtotal={subTotalInvoiceAmount}
                               tds={tdsAmount}
-                              isModalOpen={setIsModalOpen}
+                              setIsModalOpen={setIsModalOpen}
                             />
                           ) : null}
                         </>
