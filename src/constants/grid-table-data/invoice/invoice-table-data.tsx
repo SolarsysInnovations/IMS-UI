@@ -131,7 +131,7 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
                     open={isModalOpen}
                     content={
                         <>
-                            <InvoiceUi preview={preview} setIsModalOpen={setIsModalOpen} />
+                            <InvoiceUi preview={preview} />
                         </>
                     }
                     handleClose={() => {

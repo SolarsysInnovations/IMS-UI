@@ -1,6 +1,6 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Image, pdf } from '@react-pdf/renderer';
-//const randomImageUrl = 'https://picsum.photos/200';
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
+
 // Styles for PDF document
 const styles = StyleSheet.create({
     page: {
@@ -8,15 +8,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 30,
     },
-    section: {
-        margin: 10,
-        padding: 10,
-        flexGrow: 1,
-    },
     header: {
         fontSize: 50,
         fontWeight: 100,
-        marginBottom: 0,
+        marginBottom: 10,
     },
     subHeader: {
         fontSize: 16,
@@ -33,13 +28,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     table: {
-        marginTop: 5,
-        marginBottom: 5,
+        marginVertical: 10,
     },
     tableRow: {
-        flexDirection: "row",
-        marginTop: 5,
-        marginBottom: 5,
+        flexDirection: 'row',
+        marginVertical: 5,
     },
     tableCell: {
         padding: 8,
@@ -50,10 +43,15 @@ const styles = StyleSheet.create({
     tableHeader: {
         fontWeight: 'bold',
     },
+    divider: {
+        borderTop: '1px solid #000',
+        marginVertical: 10,
+    },
     tableCellLast: {
         borderRight: 'none',
     }
 });
+
 // Invoice Document component for PDF
 const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
     if (invoiceData) {

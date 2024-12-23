@@ -16,11 +16,8 @@ import DialogBoxUi from "../../../components/ui/DialogBox";
 import SendEmail from "../Send-email";
 
 // InvoiceLetterUi Component
-interface InvoiceLetterUiProps {
-    setIsModalOpen?: Dispatch<SetStateAction<boolean | undefined>>;
-}
-const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
 
+const InvoiceLetterUi = ({ setIsModalOpen }: { setIsModalOpen?: Dispatch<SetStateAction<boolean | undefined>> }) =>{
     const [data, setData] = useState();
     const invoiceDatas = useSelector((state: any) => state.invoiceState.data);
     const { data: customers } = useGetCustomersListQuery();
@@ -45,6 +42,18 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
         }
     }, [getUserRole, id, userRoleData]);
     
+    useEffect(() => {
+      if (invoiceUpdateSuccess) {
+        if (typeof setIsModalOpen === "function") {
+          setIsModalOpen(false);
+        } else {
+          console.error("setIsModalOpen is not a function", setIsModalOpen);
+        }
+        refetch();
+      }
+    }, [invoiceUpdateSuccess, refetch]);
+
+
     
   useEffect(() => {
     if (id) {
@@ -161,13 +170,14 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
         successMessage: resMessage,
     });
 
-    useEffect(() => {
-        refetch();
-        console.log('hello world');
-        if (invoiceUpdateSuccess) {
-            setIsModalOpen?.(false)
-        };
-    }, [invoiceUpdateSuccess, refetch]);
+   
+  useEffect(() => {
+    if (invoiceUpdateSuccess) {
+      setIsModalOpen?.(false); // Close the dialog box on success
+      refetch(); // Trigger refetch of the invoice list
+    }
+  }, [invoiceUpdateSuccess, refetch]);
+
 
     useEffect(() => {
         if (invoiceData) {
@@ -211,22 +221,34 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
                         return;
                 }
                 if (newStatus) {
-                    updatedInvoiceData = { ...invoiceData, invoiceStatus: newStatus };
-                };
-
-                let response = await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
-                setResMessage(response?response.data.message:"Invoice Updated Successfully");
-            } catch (error) {
-                console.log("Error updating invoice data", error);
+                  updatedInvoiceData = { ...invoiceData, invoiceStatus: newStatus };
+                }
+        
+                // Call updateInvoice and explicitly set modal state on success
+                await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData })
+                  .unwrap()
+                  .then((response) => {
+                    console.log("Invoice updated successfully:", response);
+                    setResMessage(response.message || "Invoice Updated Successfully");
+                    setIsModalOpen?.(false); // Close modal
+                    refetch(); // Refetch invoice list
+                  })
+                  .catch((error) => {
+                    console.error("Error updating invoice data:", error);
+                  });
+              } catch (error) {
+                console.error("Error in handleOptionClick:", error);
+              }
             }
-        }
-    };
-    useEffect(() => {
-        if (invoiceUpdateSuccess) {
-          setIsModalOpen?.(false);
-        }
-        refetch();
-      }, [invoiceUpdateSuccess, refetch, setIsModalOpen]);
+          };
+        
+          useEffect(() => {
+            if (invoiceUpdateSuccess) {
+              setIsModalOpen?.(false);
+              refetch(); // Refetch invoice list
+            }
+          }, [invoiceUpdateSuccess, refetch]);
+        
     
       const handleDialogBoxClose = () => {
         setIsOpenDialogBox(false);
@@ -291,64 +313,122 @@ const InvoiceLetterUi = ({ setIsModalOpen }: InvoiceLetterUiProps) => {
         
         
     return (
-        <>
-            <Box sx={{ display: 'flex', justifyContent: "center", flexDirection: "column", padding: "0px 30px 30px 30px" }}>
-                <div style={{ width: '100%', height: '95vh', textAlign: "center", overflow: 'hidden', alignItems: "center" }}>
-                {base64String ? (    <PDFViewer
-                        showToolbar={false}
-                        style={{ overflow: "hidden", width: '400px', height: '770px', border: 'none', backgroundColor: 'transparent' }}
-                    >
-                       <InvoiceDocument invoiceData={data} companyLogo={base64String} />
-                    </PDFViewer>
-                    ) : (
-                        <div>Loading PDF...</div>
-                    )}
-                </div>
-                <div style={{ marginTop: '20px', textAlign: 'center' }}>
-                    <Box gap={2} sx={{ display: "flex", justifyContent: "right", flexDirection: "row", gap: "20px", marginTop: "10px" }}>
-                        <ButtonUi label='Download Pdf' smallButtonCss
-                            onClick={() => { handleDownload() }}
-                        />
-                        {availableOptions.length < 1 ? "" : (
-                            <SplitButton
-                                key={currentInvoiceStatus} // Ensure re-render
-                                disabledOptions={[availableOptions.indexOf(invoiceData.invoiceStatus)]}
-                                options={availableOptions}
-                                defaultIndex={0} // Always use the first available option as the default
-                                onOptionClick={handleOptionClick}
-                            />
-                        )}
+      <>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          padding: "0px 30px 30px 30px",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            height: "85vh",
+            textAlign: "center",
+            overflow: "hidden",
+            alignItems: "center",
+          }}
+        >
+          {base64String ? (
+              <PDFViewer
+                showToolbar={false}
+                style={{
+                  overflow: "hidden",
+                  width: "400px",
+                  height: "770px",
+                  border: "none",
+                  backgroundColor: "transparent",
+                  marginTop: "5px",
+                }}
+              >
+                <InvoiceDocument invoiceData={data} companyLogo={base64String} />
+              </PDFViewer>
+          ) : (
+            <div>Loading PDF...</div>
+          )}
+        </div>
+        <div style={{ marginTop: "20px", textAlign: "center" }}>
+          <Box
+            gap={2}
+            sx={{
+              display: "flex",
+              justifyContent: "right",
+              flexDirection: "row",
+              gap: "20px",
+              marginTop: "10px",
+            }}
+          >
+            <ButtonUi
+              label="Download Pdf"
+              smallButtonCss
+              onClick={() => {
+                handleDownload();
+              }}
+            />
+            {(userRole === Roles.ADMIN || userRole === Roles.STANDARDUSER) &&
+              invoiceData.invoiceStatus === InvoiceStatus.DRAFT && (
+                <ButtonUi
+                  label="Send for Approver"
+                  smallButtonCss
+                  onClick={() => {
+                    handleOptionClick(InvoiceOptions.SENT_TO_APPROVER).catch(
+                      (error) => {
+                        console.error("Error handling option click:", error);
+                      }
+                    );
+                  }}
+                />
+              )}
+            {availableOptions.length > 0 && (
+              <SplitButton
+                key={currentInvoiceStatus} // Ensures re-render when status changes
+                disabledOptions={[
+                  availableOptions.indexOf(invoiceData.invoiceStatus),
+                ]}
+                options={availableOptions}
+                defaultIndex={0} // Set the first option as default
+                onOptionClick={handleOptionClick}
+              />
+            )}
 
-                        <Box sx={{ position: "relative" }}>
-                            <ButtonUi
-                                label="View Tracker"
-                                smallButtonCss
-                                onMouseEnter={() => setShowTracker(true)}
-                                onMouseLeave={() => setShowTracker(false)}
-                            />
-                            <Card
-                                sx={{
-                                    padding: "10px 25px", position: "absolute", top: -120, right: 5, zIndex: 1300,
-                                    backgroundColor: "background.paper", borderRadius: "10px", display: showTracker ? "block" : "none",
-                                }}    >
-                                <StageStepper stages={invoiceData.invoiceStages} />
-                            </Card>
-                        </Box>
-                    </Box>
-                </div>
+            <Box sx={{ position: "relative" }}>
+              <ButtonUi
+                label="View Tracker"
+                smallButtonCss
+                onMouseEnter={() => setShowTracker(true)}
+                onMouseLeave={() => setShowTracker(false)}
+              />
+              <Card
+                sx={{
+                  padding: "10px 25px",
+                  position: "absolute",
+                  top: -120,
+                  right: 5,
+                  zIndex: 1300,
+                  backgroundColor: "background.paper",
+                  borderRadius: "10px",
+                  display: showTracker ? "block" : "none",
+                }}
+              >
+                <StageStepper stages={invoiceData.invoiceStages} />
+              </Card>
             </Box>
+          </Box>
+        </div>
+      </Box>
 
-            {/* INVOICE EMAIL DIALOG BOX */}
-            <DialogBoxUi
-          open={isOpenDialogBox}
-          content={
-            <SendEmail invoiceData={data} onSuccess={handleEmailSuccess} />  
-          }
-          handleClose={handleDialogBoxClose}
-        />
-        </>
-    );
+      {/* INVOICE EMAIL DIALOG BOX */}
+      <DialogBoxUi
+        open={isOpenDialogBox}
+        content={
+          <SendEmail invoiceData={data} onSuccess={handleEmailSuccess} />
+        }
+        handleClose={handleDialogBoxClose}
+      />
+    </>
+  );
 };
-
 
 export default InvoiceLetterUi;

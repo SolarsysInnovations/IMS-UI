@@ -22,12 +22,13 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({ row, onDelete })
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { canEditInvoices, canViewInvoices, canDeleteInvoices } = useRolePermissions();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState<boolean | undefined>(false);
     const [preview, setPreview] = useState(false);
 
     const [deleteInvoice, { isSuccess: invoiceDeleteSuccess, isError: invoiceDeleteError, error: invoiceDeleteErrorObject }] = useDeleteInvoiceMutation();
      const [getList,{ data: invoice }] =useGetSingleInvoiceMutation()
-
+     const { refetch: getInvoiceList, isSuccess: refetchSuccess } = useGetInvoiceListQuery();
+          
     useSnackbarNotifications({
         error: invoiceDeleteError,
         errorMessage: 'Error deleting invoice',
@@ -60,19 +61,21 @@ console.log(row, "idddddd" );
         try {
             const response = await getList(row.id);
             if ('data' in response) {
-                  dispatch(clearInvoiceData());
-                  console.log(response.data,"response",invoice);
-                  
+                dispatch(clearInvoiceData());
+                console.log(response.data, "response", invoice);
                 dispatch(setInvoiceData(response.data));
                 setPreview(true);
                 setIsModalOpen(true);
+
+                // Refetch the invoice list after the dialog is opened
+                await getInvoiceList();
             } else {
                 console.error('Error response:', response.error);
             }
         } catch (error) {
             console.error('Error handling details click:', error);
         }
-    }, [row, dispatch, getList]);
+    }, [row, dispatch, getList, getInvoiceList]);
 
     const handleDeleteClick = async () => {
         const confirmed = window.confirm("Are you sure you want to delete this invoice?");
@@ -99,7 +102,7 @@ console.log(row, "idddddd" );
 
             <DialogBoxUi
                 open={isModalOpen}
-                content={<InvoiceUi invoiceData={row} />}
+                content={<InvoiceUi invoiceData={row} setIsModalOpen={setIsModalOpen}/>}
                 handleClose={() => setIsModalOpen(false)}
             />
         </Stack>
