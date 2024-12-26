@@ -135,29 +135,28 @@ const InvoiceLetterUi = ({ setIsModalOpen }: { setIsModalOpen?: Dispatch<SetStat
     };
     
     const getAvailableOptions = () => {
-        const allOptions = [];
-        const userRole = userRoleData?.role;
-        switch (userRole) {
-            case Roles.ADMIN:
-            case Roles.STANDARDUSER:
-                if (invoiceData.invoiceStatus === InvoiceStatus.DRAFT || invoiceData.invoiceStatus === InvoiceStatus.RETURNED) {
-                    allOptions.push(InvoiceOptions.SENT_TO_APPROVER);
-                } else if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
-                    allOptions.push(InvoiceOptions.MAILED)
-                } else if (invoiceData.invoiceStatus === InvoiceStatus.MAILED) {
-                    allOptions.push(InvoiceOptions.PAID);
-                }
-                break;
-            case Roles.APPROVER:
-                if (invoiceData.invoiceStatus === InvoiceStatus.PENDING) {
-                    allOptions.push(InvoiceOptions.APPROVE, InvoiceOptions.RETURN);
-                }
-                break;
-            default:
-                return [];
-        }
-        return allOptions.filter(option => option !== invoiceData.invoiceStatus);
-    };
+      const allOptions = [];
+      switch (userRole) {
+          case Roles.ADMIN:
+          case Roles.STANDARDUSER:
+              if (invoiceData.invoiceStatus === InvoiceStatus.DRAFT || invoiceData.invoiceStatus === InvoiceStatus.RETURNED) {
+                  allOptions.push(InvoiceOptions.SENT_TO_APPROVER);
+              } else if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
+                  allOptions.push(InvoiceOptions.MAILED)
+              } else if (invoiceData.invoiceStatus === InvoiceStatus.MAILED) {
+                  allOptions.push(InvoiceOptions.PAID);
+              }
+              break;
+          case Roles.APPROVER:
+              if (invoiceData.invoiceStatus === InvoiceStatus.PENDING) {
+                  allOptions.push(InvoiceOptions.APPROVE, InvoiceOptions.RETURN);
+              }
+              break;
+          default:
+              return [];
+      }
+      return allOptions.filter(option => option !== invoiceData.invoiceStatus);
+  };
 
     const availableOptions = getAvailableOptions();
 
@@ -198,7 +197,7 @@ const InvoiceLetterUi = ({ setIsModalOpen }: { setIsModalOpen?: Dispatch<SetStat
         if (invoiceData.invoiceStatus !== option) {
             try {
                 let updatedInvoiceData = { ...invoiceData };
-                let newStatus;
+                let newStatus: InvoiceStatus;
 
                 switch (option) {
                     case InvoiceOptions.APPROVE:
@@ -230,7 +229,12 @@ const InvoiceLetterUi = ({ setIsModalOpen }: { setIsModalOpen?: Dispatch<SetStat
                   .then((response) => {
                     console.log("Invoice updated successfully:", response);
                     setResMessage(response.message || "Invoice Updated Successfully");
-                    setIsModalOpen?.(false); // Close modal
+                    setIsModalOpen?.(false);
+                    if (newStatus === InvoiceStatus.APPROVED) {
+                      setResMessage(response.message || "Invoice Approved Successfully");
+                  } else if (newStatus === InvoiceStatus.RETURNED) {
+                    setResMessage(response.message || "Invoice Returned Successfully");
+                  } // Close modal
                     refetch(); // Refetch invoice list
                   })
                   .catch((error) => {
