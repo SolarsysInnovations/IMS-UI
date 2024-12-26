@@ -103,15 +103,14 @@ const InvoiceLetterUi = ({ setIsModalOpen }: { setIsModalOpen?: Dispatch<SetStat
 
             // Calculate the final total value after applying TDS
             const finalTotalValue = totalValueBeforeTds - tdsAmount;
-
             // Merge all data including calculated values
             const mergedData = {
                 ...invoiceDatas,
                 companyDetails: { ...companyDetails.companyDetails },
                 customerDetails: filteredCustomer || invoiceDatas.customerDetails,
-                startDate: formatDate(invoiceDatas.startDate),
-                dueDate: formatDate(invoiceDatas.dueDate),
-                invoiceDate: formatDate(invoiceDatas.invoiceDate),
+                startDate: invoiceDatas.startDate,
+                dueDate: invoiceDatas.dueDate,
+                invoiceDate:invoiceDatas.invoiceDate,
                 subTotal: Math.round(subTotalValue),
                 tdsAmountValue: Math.round(tdsAmount),
                 discountPercentageValue: Math.round(discountPercentageValue),
