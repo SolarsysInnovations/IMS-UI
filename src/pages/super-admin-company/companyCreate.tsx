@@ -23,7 +23,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
     const { data: company, error, isLoading, refetch } = useGetUsersListQuery();
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const initialValues = companyEditInitialValues || superAdminCompanyUsersInitialValues;
+    const initialValues =  mode === 'edit' ? companyEditInitialValues : superAdminCompanyUsersInitialValues;
     
     // Dynamically modify fields based on 'mode'
     const fields = useMemo(() => {
@@ -62,7 +62,7 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
         }
         refetch();
     }, [companyAddSuccess, companyUpdateSuccess, refetch]);
-
+    
     const onSubmit = useMemo(() => async (values: SuperAdminUsersInitialValueProps, actions: any) => {
         try {
             if (mode === 'edit' && companyEditInitialValues) {
@@ -132,6 +132,10 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
             actions.setSubmitting(false);
         }
     }, [updateCompany, dispatch, addCompany, companyEditInitialValues, mode]);
+
+    console.log("companyDetailsValidationSchema", companyDetailsValidationSchema);
+    console.log("initialValues", initialValues);
+    console.log("companyEditInitialValues", companyEditInitialValues);
 
     return (
         <div style={{ maxHeight: '90vh', overflowY: 'auto', paddingRight: '1rem' }}>
