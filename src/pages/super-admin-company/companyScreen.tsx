@@ -11,15 +11,18 @@ const CompanyScreen: React.FC = () => {
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
-        if (companyValue) {
+        if (companyValue && companyValue.companyDetails && companyValue.userDetails) {
             const mergedObject = {
                 ...companyValue.companyDetails,
                 ...companyValue.userDetails
             };
             setMergedData(mergedObject);
+            console.log("mergedObject", mergedObject);
+        } else {
+            console.log("companyValue is not in the expected format or is undefined.");
         }
     }, [companyValue]);
-
+    
 
     const mode = companyValue ? 'edit' : 'create';
     useEffect(() => {

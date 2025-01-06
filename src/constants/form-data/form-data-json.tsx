@@ -231,6 +231,7 @@ export const CompanyFields: FieldProps[] = [
                 width: ''
             },
         ]
+        
     },
     {
         name: 'Configuration',
