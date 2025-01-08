@@ -54,19 +54,20 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
         try {
             if (customerEditInitialValues) {
                 const id: number = values?.id;
-                await updateCustomer({ id: id, data: values });
+                await updateCustomer({ id: id, data: values }).unwrap();
                 dispatch(clearCustomerData());
             } else {
-                await addCustomer(values);
+                await addCustomer(values).unwrap();
                 dispatch(clearCustomerData());
             }
             actions.resetForm();
         } catch (error) {
-            console.error("An error occurred during form submission:", error);
+            console.error("Error during submission:", error);
         } finally {
             actions.setSubmitting(false);
         }
     }, [addCustomer, updateCustomer, customerEditInitialValues, dispatch]);
+    
 
     return (
         <>

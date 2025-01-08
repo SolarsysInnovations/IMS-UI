@@ -87,7 +87,10 @@ export const customerValidationSchema = Yup.object().shape({
     customerName: Yup.string().required('Customer Name is required'),
     companyName: Yup.string().required('Company Name is required'),
     customerEmail: Yup.string().email('Invalid email').required('Customer Email is required'),
-    // customerPhone: Yup.string().required('Customer Number is required'),
+    customerPhone: Yup.string()
+    .trim()
+    .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
+    .required('Customer Number is required'),
     // paymentTerms: Yup.string().required('Payment Terms is required'),
     country: Yup.string().required('Country is required'),
     address: Yup.string().required('Address is required'),
@@ -116,22 +119,34 @@ export const linkValidationSchema = Yup.object().shape({
 export const companyValidationSchema = Yup.object().shape({
     companyName: Yup.string().required('Company Name is required'),
     companyAddress: Yup.string().required('Company Address is required'),
-    companyCity: Yup.string().notRequired(), // Add this if it's optional
+    companyCity: Yup.string().notRequired(),
     companyState: Yup.string().required('Company State is required'),
     companyCountry: Yup.string().required('Company Country is required'),
     companyEmail: Yup.string().email('Invalid email format').required('Company Email is required'),
-    companyPhone: Yup.string().required('Company Phone is required'),
-    companyCell: Yup.string().notRequired(), // Change if optional
-    companyWebsite: Yup.string().url('Invalid URL').required('Company Website is required'),
+    companyPhone: Yup.string()
+        .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
+        .required('Company Phone is required'),
+    companyCell: Yup.string()
+        .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
+        .notRequired(),
+    companyWebsite: Yup.string().required('Company Website is required'),
     companyTaxNumber: Yup.string().required('Company Tax Number is required'),
     companyRegNumber: Yup.string().required('Company Reg Number is required'),
     companyRegisterDate: Yup.string().notRequired(),
     userName: Yup.string().required('User Name is required'),
     userEmail: Yup.string().email('Invalid email format').required('User Email is required'),
-    password: Yup.string().required('Password is required'),
+    password: Yup.string()
+        .min(8, 'Password must be at least 8 characters long')
+        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+        .matches(/[0-9]/, 'Password must contain at least one number')
+        .matches(/[@$!%*?&#]/, 'Password must contain at least one special character')
+        .required('Password is required'),
     userRole: Yup.string().required('User role is required'),
-    userMobile: Yup.string().required('User mobile is required'),
-    userAccess: Yup.string().notRequired(), 
+    userMobile: Yup.string()
+        .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
+        .required('User mobile is required'),
+    userAccess: Yup.string().notRequired(),
 });
 
 export const companyDetailsValidationSchema = Yup.object().shape({
@@ -141,17 +156,25 @@ export const companyDetailsValidationSchema = Yup.object().shape({
     companyState: Yup.string().required('Company State is required'),
     companyCountry: Yup.string().required('Company Country is required'),
     companyEmail: Yup.string().email('Invalid email format').required('Company Email is required'),
-    companyPhone: Yup.string().required('Company Phone is required'),
-    companyCell: Yup.string().notRequired(), // Change if optional
-    companyWebsite: Yup.string().url('Invalid URL').required('Company Website is required'),
+    companyPhone:  Yup.string()
+    .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits').required('Company Phone is required'),
+    companyCell: Yup.string()
+    .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits').required('Company Cell is required'), // Change if optional
+    companyWebsite: Yup.string().required('Company Website is required'),
     companyTaxNumber: Yup.string().required('Company Tax Number is required'),
     companyRegNumber: Yup.string().required('Company Reg Number is required'),
     companyRegisterDate: Yup.string().notRequired(),
     userName: Yup.string().required('User Name is required'),
     userEmail: Yup.string().email('Invalid email format').required('User Email is required'),
-    password: Yup.string().required('Password is required'),
+    password:  Yup.string()
+    .min(8, 'Password must be at least 8 characters long')
+    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .matches(/[0-9]/, 'Password must contain at least one number')
+    .matches(/[@$!%*?&#]/, 'Password must contain at least one special character'),
     userRole: Yup.string().required('User role is required'),
-    userMobile: Yup.string().required('User mobile is required'),
+    userMobile: Yup.string()
+    .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits').required('User mobile is required'),
     userAccess: Yup.string().notRequired(), // Change if required
 });
 export const gstTypeValidationSchema = Yup.object().shape({
@@ -194,25 +217,33 @@ export const paymentTermsValidationSchema = Yup.object().shape({
 // });
 
 export const RoleValidationSchema = Yup.object().shape({
-     userName: Yup.string().required('Username is required'),
-    // userEmail: Yup.string().email('Invalid email format').required('Email is required'),
-     password: Yup.string().required('Password is required'),
-     userRole: Yup.string().required('User role is required'),
-    // userMobile: Yup.string().required('Mobile number is required'),
-    // description: Yup.string().required('Description is required'),
+    userName: Yup.string().required('Username is required'),
+    password: Yup.string()
+        .min(8, 'Password must be at least 8 characters long')
+        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+        .matches(/[0-9]/, 'Password must contain at least one number')
+        .matches(/[@$!%*?&#]/, 'Password must contain at least one special character')
+        .required('Password is required'),
+    userRole: Yup.string().required('User role is required'),
+    userMobile: Yup.string()
+        .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
+        .required('Mobile number is required'),
 });
+
 
 export const PasswordValidationSchema = Yup.object().shape({
     currentPassword: Yup.string()
-        .required('currentPassword is required')
+        .required('Current Password is required')
         .max(255),
     newPassword: Yup.string()
         .min(8, 'New Password must be at least 8 characters long')
-        .max(255)
-        .notOneOf([Yup.ref('currentPassword'), null], 'New Password cannot be the same as the Current Password')
+        .matches(/[A-Z]/, 'New Password must contain at least one uppercase letter')
+        .matches(/[a-z]/, 'New Password must contain at least one lowercase letter')
+        .matches(/[0-9]/, 'New Password must contain at least one number')
+        .matches(/[@$!%*?&#]/, 'New Password must contain at least one special character')
         .required('New Password is required'),
     confirmPassword: Yup.string()
-        .max(255)
         .oneOf([Yup.ref('newPassword')], 'Confirm Password must match New Password')
-        .required('confirmPassword is required'),
-})
+        .required('Confirm Password is required'),
+});
