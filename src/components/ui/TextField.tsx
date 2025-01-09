@@ -5,6 +5,7 @@ interface TextFieldProps {
     label?: string;
     value?: string | number;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onPaste?: (e: React.ClipboardEvent<HTMLInputElement>) => void;
     disabled?: boolean;
     startAdornment?: React.ReactNode;
     endAdornment?: React.ReactNode;
@@ -18,7 +19,7 @@ interface TextFieldProps {
     sx?: any;
 }
 
-const TextFieldUi = ({ sx, width, required, label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth }: TextFieldProps) => {
+const TextFieldUi = ({ sx, width, required, label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth,onPaste }: TextFieldProps) => {
 
     return (
         <TextField
@@ -41,7 +42,9 @@ const TextFieldUi = ({ sx, width, required, label, value, onChange, disabled, en
                 endAdornment: endAdornment ? (
                     <InputAdornment position='end'>{endAdornment}</InputAdornment>
                 ) : undefined,
-            }}
+            }}  inputProps={{
+                onPaste: onPaste, // Apply onPaste directly to the input element
+              }}
             sx={{
 
                 width: `${width}`,
