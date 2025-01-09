@@ -101,7 +101,7 @@ export const customerValidationSchema = Yup.object().shape({
         Yup.object().shape({
             // contactName: Yup.string().required('Contact Person Name is required'),
             // contactEmail: Yup.string().email('Invalid email').required('Contact Person Email is required'),
-            // contactPhone: Yup.string().required('Contact Person Phone is required'),
+            contactPhone: Yup.string() .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits').required('Contact Person Phone is required'),
         })
     ).min(1, 'At least one contact person is required'),
 });
