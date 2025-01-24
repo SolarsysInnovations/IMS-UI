@@ -1,6 +1,8 @@
 import * as Yup from 'yup';
 import { FieldProps } from "../../types/types";
-
+import YupPassword from 'yup-password'
+import PasswordVisibilityToggle from '../../services/utils/PasswordToggle';
+YupPassword(Yup) 
 export const customerFields: FieldProps[] = [
     {
         type: 'section',
@@ -164,8 +166,9 @@ export const CompanyFields: FieldProps[] = [
             },
             {
                 name: 'password', required: true, disabled: false, label: 'Password', type: 'password', gridSize: 5, validation: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
-                width: ''
-            },
+                  width: ''
+              },
+              
             {
                 name: 'userRole', required: true, disabled: false, label: 'userRole', type: 'select', gridSize: 5, options: [{ value: "ADMIN", label: "ADMIN" }], validation: Yup.string().required('User Role is required'),
                 width: ''
@@ -275,10 +278,7 @@ export const CompanyEditFields: FieldProps[] = [
                 name: 'userEmail', required: true, disabled: false, label: 'User E-mail', type: 'text', gridSize: 5,
                 width: ''
             },
-            {
-                name: 'password', required: true, disabled: false, label: 'Password', type: 'password', gridSize: 5, validation: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
-                width: ''
-            },
+           
             {
                 name: 'userRole', required: true, disabled: false, label: 'userRole', type: 'select', gridSize: 5, options: [{ value: "ADMIN", label: "ADMIN" }],
                 width: ''
@@ -521,13 +521,13 @@ export const RolesFields: FieldProps[] = [
                 width: ''
             },
             {
-                name: 'userEmail', required: true, disabled: false, label: 'Email', type: 'email', gridSize: 6, validation: Yup.string().email('Invalid email').required('userEmail is required'),
+                name: 'userEmail', required: true, disabled: false, label: 'Email', type: 'email', gridSize: 6, validation: Yup.string().required('userEmail is required'),
                 width: ''
             },
             {
                 name: 'password', required: true, disabled: false, label: 'Password', type: 'password', gridSize: 6, validation: Yup.string().min(8, 'Password must be at least 8 characters').required('password is required'),
                 width: ''
-            },
+              },
             {
                 name: 'userMobile', required: false, disabled: false, label: 'Phone Number', type: 'number', gridSize: 6, validation: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Too short').max(15, 'Too long').required('userMobile is required'),
                 width: ''
