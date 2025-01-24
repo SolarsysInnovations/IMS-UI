@@ -36,10 +36,10 @@ export const superAdminCompanyUsersInitialValues: SuperAdminUsersInitialValuePro
     companyTaxNumber: "",
     companyRegNumber: "",
     // * ----------user configuration ----------
-    customerLimit:"",
-    invoiceLimit:"",
-    userLimit:"",
-    serviceLimit:"",
+    customerLimit:0,
+    invoiceLimit:0,
+    userLimit:0,
+    serviceLimit:0,
 };
 export const adminCompanyUsersInitialValues: AdminCompanyUsersInitialValueProps = {
     // * ---------- user registration ----------
