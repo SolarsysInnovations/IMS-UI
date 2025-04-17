@@ -69,7 +69,7 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                         <Image style={styles.image} src={companyLogo ?? "loading..."}  />
                             </View>
                     <View>
-                    <Text style={styles.header}>{invoiceData?.companyName}</Text>
+                    <Text style={styles.header}>Invoice</Text>
                     </View>
                 </View>
                 <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'space-between', marginTop: "20px" }}>
@@ -93,7 +93,7 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                 <View style={styles.table}>
                     <View style={[styles.tableRow, styles.tableHeader]}>
                         <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Service Acc Code</Text>
-                        {/* <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Service Des</Text> */}
+                        <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Service Des</Text> 
                         <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Service Qty</Text>
                         <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Service Amount</Text>
                         <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>Total Amount</Text>
