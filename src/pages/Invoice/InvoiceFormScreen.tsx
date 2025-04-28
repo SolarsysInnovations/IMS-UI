@@ -22,17 +22,16 @@ import {
   TableHead,
   TableRow,
   Typography,
+  IconButton,
 } from "@mui/material";
 import TextFieldUi from "../../components/ui/TextField";
 import { AppDispatch } from "../../redux-store/store";
 import RadioUi from "../../components/ui/RadioGroup";
 import { Formik, Form } from "formik";
-import { IconButton } from "@mui/material";
 import { invoiceValidationSchema } from "../../constants/forms/validations/validationSchema";
 import { invoiceCreateInitialValue } from "../../constants/forms/formikInitialValues";
 import { InvoiceInitialValueProps } from "../../types/types";
 import DatePickerUi from "../../components/ui/DatePicker";
-import ModalUi from "../../components/ui/ModalUi";
 import { generateOptions } from "../../services/utils/dropdownOptions";
 import InvoiceUi from "./Generate-Invoice/InvoiceUi";
 import { invoiceType } from "../../constants/invoiceData";
@@ -64,7 +63,7 @@ import { useRolePermissions } from "../../hooks/useRolePermission";
 import CancelIcon from "@mui/icons-material/Close";
 
 interface Service {
-  id: string; // Ensure id is mandatory
+  id: string;
   serviceAccountingCode: string;
   serviceDescription: string;
   serviceAmount: number;
@@ -79,15 +78,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
   const navigate = useNavigate();
-  // popUps
   const [popUpComponent, setPopUpComponent] = useState("");
   const {
     data: customers,
-    error,
-    isLoading,
     refetch: customerRefetch,
   } = useGetCustomersListQuery();
-  const { data: invoiceList, refetch: invoiceRefetch } =
+  const { refetch: invoiceRefetch } =
     useGetInvoiceListQuery();
   const [
     addInvoice,
@@ -147,6 +143,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   const [resMessage, setResMessage] = useState("");
   const { canCreateTds, canCreateGst, canCreatePayment, canCreateService } =
     useRolePermissions();
+
   const PopupComponents = {
     GST_TYPE: "gstType",
     PAYMENT_TERMS: "paymentTerms",
@@ -178,6 +175,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     errorMessage: "Error updating invoice",
     errorObject: invoiceUpdateErrorObject,
   });
+
   useEffect(() => {
     if (addInvoiceSuccess || invoiceUpdatedSuccess) {
       setRedirect(true);
@@ -186,10 +184,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
 
   useEffect(() => {
     if (redirect) {
-      navigate(-1); // Redirect to the previous page
+      navigate(-1);
     }
   }, [redirect, navigate]);
-  React.useEffect(() => {
+
+  useEffect(() => {
     if (invoiceValues) {
       const sumSubTotal = invoiceValues.servicesList.reduce(
         (acc: any, row: any) => acc + row.serviceTotalAmount,
@@ -263,12 +262,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
       const updatedServicesList = prevInvoiceValues.servicesList.map(
         (service: any, serviceIndex: any) => {
           if (serviceIndex === index) {
-            const serviceQty = isNaN(parsedValue) ? 0 : parsedValue; // If parsedValue is NaN, set quantity to 0
-            const serviceTotalAmount = serviceQty * service.serviceAmount; // Calculate the amount
+            const serviceQty = isNaN(parsedValue) ? 0 : parsedValue;
+            const serviceTotalAmount = serviceQty * service.serviceAmount;
             return {
               ...service,
               serviceQty,
-              serviceTotalAmount, // Update the amount in the service
+              serviceTotalAmount,
             };
           }
           return service;
@@ -329,7 +328,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         { setSubmitting, resetForm }
       ) => {
         try {
-          // values.invoiceTotalAmount = invoiceTotalAmount
           values.servicesList = invoiceValues.servicesList;
           values.totalAmount = invoiceTotalAmount ?? null;
           if (invoiceValue) {
@@ -349,6 +347,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
           resetForm();
           setInvoiceValues({ ...invoiceValues });
         } catch (error) {
+          console.error("Error submitting form:", error);
         } finally {
           setSubmitting(false);
         }

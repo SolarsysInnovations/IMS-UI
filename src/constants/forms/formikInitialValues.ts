@@ -53,22 +53,25 @@ export const adminCompanyUsersInitialValues: AdminCompanyUsersInitialValueProps 
 };
 
 export const customerInitialValues = {
-    customerType: "",
-    customerName: "",
-    companyName: "",
-    customerEmail: "",
-    customerPhone: "",
-    paymentTerms: "",
-    country: "",
-    address: "",
-    city: "",
-    state: "",
-    pinCode: "",
-    contactPersons: [{
-        contactName: '',
-        contactEmail: '',
-        contactPhone: '',
-    },],
+  customerType: "",
+  customerName: "",
+  companyName: "",
+  customerEmail: "",
+  customerPhone: "",
+  paymentTerms: "",
+  panNumber: "",
+  country: "",
+  address: "",
+  city: "",
+  state: "",
+  pinCode: "",
+  contactPersons: [
+    {
+      contactName: "",
+      contactEmail: "",
+      contactPhone: "",
+    },
+  ],
 };
 
 export const serviceInitialValues = {

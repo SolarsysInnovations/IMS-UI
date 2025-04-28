@@ -104,6 +104,7 @@ export const customerValidationSchema = Yup.object().shape({
             contactPhone: Yup.string() .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits').required('Contact Person Phone is required'),
         })
     ).min(1, 'At least one contact person is required'),
+    panNumber: Yup.string().matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "PAN NO should be in this format ABCD1234F").required(),
 });
 
 export const serviceValidationSchema = Yup.object().shape({
