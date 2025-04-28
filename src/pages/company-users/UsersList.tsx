@@ -20,7 +20,6 @@ const UserList = () => {
 
     const [key, setKey] = useState<number>(0);
     const { canCreateUsers } = useRolePermissions();
-    console.log("canCreateUsers",canCreateUsers); // Check the value here
     
 
     const mode = companyUserData ? 'edit' : 'create';

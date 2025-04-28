@@ -54,12 +54,6 @@ const styles = StyleSheet.create({
 
 // Invoice Document component for PDF
 const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
-    if (invoiceData) {
-        console.log("invoicesddsfds Data", invoiceData)
-        console.log("customer Name", invoiceData.customerDetails);
-    };
-    console.log(invoiceData , "invoiceletter", invoiceData?.subTotal);
-    console.log(companyLogo);
     
     return (
         <Document>

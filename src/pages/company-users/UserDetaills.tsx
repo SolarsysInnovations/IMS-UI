@@ -14,7 +14,6 @@ interface UserDetailsProps {
 }
 
 const UserDetails = ({ userDetails }: UserDetailsProps) => {
-    console.log(userDetails,"USERDETAILLS");
     const values = userDetails;
     const fieldsToShow = [
         { key: 'userName', label: 'User Name' },

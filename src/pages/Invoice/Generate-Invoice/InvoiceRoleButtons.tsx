@@ -66,7 +66,6 @@ const InvoiceRoleButtons = () => {
                         newStatus = InvoiceStatus.PENDING;
                         break;
                     default:
-                        console.log("Unknown option");
                         return;
                 }
 
@@ -76,9 +75,8 @@ const InvoiceRoleButtons = () => {
 
                 let response = await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
                 setResMessage(response.data.message);
-                console.log("Updated Invoice Data", updatedInvoiceData);
             } catch (error) {
-                console.log("Error updating invoice data", error);
+                console.error("Error updating invoice data", error);
             }
         }
     };

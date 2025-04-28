@@ -64,7 +64,6 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
   }, [companyAddSuccess, companyUpdateSuccess, refetch]);
 
   const onSubmit = async (values: any, actions: any) => {
-    console.log("Form submission started. Values:", values); // Debugging
     try {
       const transformedData = {
         userDetails: {
@@ -93,17 +92,13 @@ const CompanyCreate = ({ companyEditInitialValues, mode }: CompanyValueProps) =>
         },
       };
 
-      console.log("Transformed Data for API:", transformedData); // Debugging
 
       if (mode === 'edit' && companyEditInitialValues?.id) {
-        console.log("Calling updateCompany API..."); // Debugging
         await updateCompany({ id: companyEditInitialValues.id, data: transformedData });
       } else {
-        console.log("Calling addCompany API..."); // Debugging
         await addCompany(transformedData);
       }
 
-      console.log("API call succeeded."); // Debugging
       actions.resetForm();
       dispatch(clearData());
     } catch (error) {

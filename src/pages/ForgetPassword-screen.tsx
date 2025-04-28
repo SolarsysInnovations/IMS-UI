@@ -43,7 +43,6 @@ const ForgetPassword: React.FC = () => {
     success: forgetPasswordSuccess,
     successMessage: "Password reset email sent",
   });
-  console.log("forgetPasswordSuccess",forgetPasswordSuccess);
 
   useEffect(() => {
     if (forgetPasswordSuccess) {
@@ -62,12 +61,9 @@ const ForgetPassword: React.FC = () => {
       onSubmit={async (values: ForgetPasswordProps, { setSubmitting, resetForm }) => {
         try {
           const response: ForgetPasswordResponse = await forgetPassword(values).unwrap(); // Use unwrap to handle errors directly
-console.log("response",response);
-console.log("forgetPasswordSuccess",forgetPasswordSuccess);
 
           // Check for success message in response
           if (response.data?.message) {
-            console.log("Password reset email sent:", response.data.message);
             // Navigate to login on success
           } else {
             console.error("Error sending reset email:", response);

@@ -54,7 +54,6 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("submit");
     const data = new FormData(e.currentTarget as HTMLFormElement);
     const newpassword = data.get("newpassword") as string;
     const confirmpassword = data.get("confirmpassword") as string;

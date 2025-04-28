@@ -12,8 +12,6 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = () => {
     const companyValue = useSelector((state: any) => state.userState.data); // Replace 'any' with a specific type if possible
     const [mergedData, setMergedData] = useState<{ [key: string]: any }>({});
 
-    console.log("companyValue",companyValue);
-
     
     useEffect(() => {
 
@@ -23,7 +21,6 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = () => {
                 ...companyValue.companyDetails
             };
             setMergedData(mergedObject);
-            console.log("mergedObject",mergedObject);
             
         }
 

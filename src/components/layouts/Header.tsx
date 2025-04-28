@@ -188,7 +188,7 @@ export default function Header() {
   const id = useSelector(selectCurrentId);
   const userName = userRoleData?.userName || "Guest"; 
   const userRole = userRoleData?.userRole || "Guest";
-  console.log("userRoleData", userRoleData);
+
 
   // Fetch user role on component mount
   useEffect(() => {
@@ -196,7 +196,6 @@ export default function Header() {
       getUserRole(id);
     }
   }, [getUserRole, id]);
-  console.log("User ID:", id);
 
   const handleMenuOpen = (setAnchor: any) => (event: any) => {
     setAnchor(event.currentTarget);

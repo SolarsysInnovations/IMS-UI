@@ -17,7 +17,6 @@ import { selectCurrentId } from "../../../redux-store/auth/authSlice";
 import usePathname from "../../../hooks/usePathname";
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
-  console.log("SettingsCompanyDetailsScreen Rendered");
 
   const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
@@ -68,7 +67,6 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   useEffect(() => {
     if (companyData) {
       setCompanyDetails(companyData);
-      console.log("Fetched company data:", companyData);
     }
   }, [companyData]);
 
@@ -82,7 +80,6 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   }, [userId, companyId, refetchCompanyData, refetchLogoData]);
 
   const handleEditClick = async () => {
-    console.log("Edit button clicked");
     if (!companyDetails?.id) {
       console.error("Company ID is not defined.");
       return;
@@ -103,7 +100,6 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   };
 
   const handleCloseDialog = () => {
-    console.log("Dialog closed");
     refetchCompanyData();
     refetchLogoData();
     setIsOpenDialogBox(false);

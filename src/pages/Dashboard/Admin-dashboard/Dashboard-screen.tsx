@@ -27,7 +27,6 @@ const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
 
   // Extract invoice list from the data
   const invoiceList = adminData?.invoiceList || []; 
-  console.log("adminData",adminData?.invoiceList);// Ensure invoiceList is an empty array if not present
 
   const columns: GridColDef[] = [
     {
@@ -64,9 +63,7 @@ const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
 
   // Provide default values based on the actual structure of adminData
   const invoiceOverviewAmountData = adminData.invoiceOverview || {};
-  console.log("invoiceOverviewAmountData", invoiceOverviewAmountData);
   const invoicePieChartData = adminData.invoiceStatus || {};
-  console.log("invoicePieChartData", invoicePieChartData);
   return (
     <>
       <Grid container spacing={2}>

@@ -337,14 +337,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
               id: invoiceValue.id,
               data: values,
             });
-            console.log("API Response:", response);
             setResMessage(response.data.message);
-            console.log("sent to approver message", response.data.message);
             dispatch(clearInvoiceData());
             resetForm();
             navigate(-1);
           } else {
-            console.log("values", values);
             const response = await addInvoice(values);
             setResMessage(response.data.message);
             resetForm();
@@ -352,7 +349,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
           resetForm();
           setInvoiceValues({ ...invoiceValues });
         } catch (error) {
-          console.error("An error occurred during login:", error);
         } finally {
           setSubmitting(false);
         }

@@ -57,7 +57,6 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
   //         rolesGetUser(userEmail).then(response => {
   //             if (response && response.data) {
   //                 let pwd = (response[`data`] && response[`data`][`password`]) ? response[`data`][`password`] : '';
-  //                 console.log("pwd", pwd)
   //             }
   //         })
   //     }
@@ -82,7 +81,6 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
       });
       resetForm();
       onClose();
-      console.log("Password change successfully!");
     } catch (error) {
       console.error("An error occurred during sendemail:", error);
     } finally {

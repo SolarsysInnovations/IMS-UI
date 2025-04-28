@@ -70,8 +70,6 @@ const InvoiceList = () => {
   ) => {
     const formattedStartDate = startDate ? startDate.format("DD-MM-YYYY") : "";
     const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
-    console.log("enddate", endDate);
-    console.log("startDate", startDate);
     try {
       const response = await getInvoiceListScreen({
         startDate: formattedStartDate,

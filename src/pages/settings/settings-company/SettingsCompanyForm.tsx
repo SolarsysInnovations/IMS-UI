@@ -22,7 +22,6 @@ interface SettingsCompanyFormProps extends CompanyFormProps {
 }
 
 const SettingsCompanyForm = ({ companyValue, mode, handleCloseDialog }: SettingsCompanyFormProps) => {
-  console.log("companyValue", companyValue);
   const dispatch = useDispatch<AppDispatch>();
   const [openModal, setOpenModal] = useState(false);
 
@@ -50,7 +49,6 @@ const SettingsCompanyForm = ({ companyValue, mode, handleCloseDialog }: Settings
 
   const userDetailsFromStorage = useSelector(selectUserDetails);
   const userDetails = typeof userDetailsFromStorage === 'string' ? JSON.parse(userDetailsFromStorage) : userDetailsFromStorage;
-  console.log("userDetails", userDetails?.companyDetails);
 
   const initialValue = companyValue || superAdminCompanyUsersInitialValues;
   const fields = CompanyDetailsFields;

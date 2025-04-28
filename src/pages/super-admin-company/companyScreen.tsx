@@ -17,9 +17,6 @@ const CompanyScreen: React.FC = () => {
                 ...companyValue.userDetails
             };
             setMergedData(mergedObject);
-            console.log("mergedObject", mergedObject);
-        } else {
-            console.log("companyValue is not in the expected format or is undefined.");
         }
     }, [companyValue]);
     

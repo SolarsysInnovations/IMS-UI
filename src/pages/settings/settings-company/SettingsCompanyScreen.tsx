@@ -4,7 +4,6 @@ import SettingsCompanyForm from "./SettingsCompanyForm";
 
 const SettingsCompanyScreen = () => {
     const companyValue = useSelector((state: any) => state.globalState.data);
-    console.log("company value", companyValue);
 
     const [key, setKey] = useState<number>(0);
 

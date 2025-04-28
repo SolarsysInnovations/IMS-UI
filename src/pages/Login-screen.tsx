@@ -1,31 +1,18 @@
+import React, { useEffect, useState, useContext } from "react";
 import {
-  Alert,
   Avatar,
   Box,
-  Button,
   FormHelperText,
-  Icon,
   IconButton,
   Stack,
-  Tab,
-  Tabs,
-  TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
 import ButtonUi from "../components/ui/Button";
 import { Link, useNavigate } from "react-router-dom";
 import palette from "../theme/create-pallet";
-import { Formik, Form, Field, FormikHelpers } from "formik";
-import * as Yup from "yup";
+import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
-import TextFieldLarge from "../components/ui/TextFieldLarge";
-import {
-  RemoveRedEyeRounded,
-  VisibilityOff,
-  VisibilityOffRounded,
-  VisibilityOutlined,
-} from "@mui/icons-material";
+import { VisibilityOff, VisibilityOutlined } from "@mui/icons-material";
 import { AppDispatch } from "../redux-store/store";
 import { useLoginMutation } from "../redux-store/auth/loginApi";
 import { StorageKeys, useSessionStorage } from "../hooks/useSessionStorage";
@@ -35,6 +22,7 @@ import { LoginProps } from "../types/types";
 import { setCredentials } from "../redux-store/auth/authSlice";
 import TextFieldUi from "../components/ui/TextField";
 import Logo from "../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png";
+import { InvoiceContext } from "../invoiceContext/invoiceContext";
 interface LoginResponse {
   data?: {
     id: any;
@@ -49,7 +37,8 @@ interface LoginResponse {
   error?: any;
 }
 const Login = () => {
-  const [login, { isLoading, error: loginError }] = useLoginMutation();
+  const context = useContext(InvoiceContext);
+  const [login, { error: loginError }] = useLoginMutation();
   const dispatch = useDispatch<AppDispatch>();
   const [userToken, setUserToken] = useSessionStorage(StorageKeys.TOKEN, "");
   const navigate = useNavigate();
@@ -84,6 +73,10 @@ const Login = () => {
                 userEmail,
                 userDetails,
               } = loginResult.data;
+              context.userRole = userRole;
+              context.userName = userName;
+              context.userEmail = userEmail;
+              context.userId = id;
               dispatch(
                 setCredentials({
                   id,
@@ -112,7 +105,6 @@ const Login = () => {
           resetForm();
         } catch (error) {
           console.error("An error occurred during login:", error);
-          console.log("Error details:", error); // Add this line to log the error object
         }
       }}
     >

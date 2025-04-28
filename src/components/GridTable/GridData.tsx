@@ -26,8 +26,6 @@ export default function GridDataUi({ onEditStart, onCellEditStop, onCellEditor, 
                 // onCellEditStop={(params: any, event: any) => {
                 //     const newValue = event.target.value;
                 //     const rowId = params.id;
-                //     console.log('New value:', newValue);
-                //     console.log('Row ID:', rowId);
                 // }}
 
 

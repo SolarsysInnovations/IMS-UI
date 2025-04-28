@@ -19,7 +19,6 @@ export const useRolePermissions = () => {
 
     useEffect(() => {
         if (userRoleData) {
-            console.log("Fetched User Role Data:", userRoleData);
             setUserRole(userRoleData.userRole); // Access 'userRole' instead of 'role'
         }
     }, [userRoleData]);
@@ -31,11 +30,8 @@ export const useRolePermissions = () => {
         }
     }, [error]);
 
-    console.log("USER ROLEEE", userRole);
-
     // Ensure userRole is always a valid key for applicationUserAccess
     const finalUserRole = userRole ?? Roles.GUEST; // Use Roles.GUEST if userRole is undefined
-    console.log("Final User Role:", finalUserRole);
 
     // Fetch role permissions from the applicationUserAccess
     const rolePermissions = applicationUserAccess[finalUserRole] || {};
