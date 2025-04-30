@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import TableHeader from "../../components/layouts/TableHeader";
 import {
   Add,
@@ -23,6 +23,7 @@ import {
   TableRow,
   Typography,
   IconButton,
+  Button,
 } from "@mui/material";
 import TextFieldUi from "../../components/ui/TextField";
 import { AppDispatch } from "../../redux-store/store";
@@ -79,12 +80,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   const pathname = usePathname();
   const navigate = useNavigate();
   const [popUpComponent, setPopUpComponent] = useState("");
-  const {
-    data: customers,
-    refetch: customerRefetch,
-  } = useGetCustomersListQuery();
-  const { refetch: invoiceRefetch } =
-    useGetInvoiceListQuery();
+  const { data: customers, refetch: customerRefetch } =
+    useGetCustomersListQuery();
+  const { refetch: invoiceRefetch } = useGetInvoiceListQuery();
+  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
+  const [image, setImage] = useState<string | null>(null);
   const [
     addInvoice,
     {
@@ -318,6 +318,41 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     { value: "quarterly", label: "Quarterly" },
     { value: "annually", label: "Annually" },
   ];
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const maybefile = event.target.files?.[0];
+    if (!maybefile) {
+      console.error("No file selected");
+      return;
+    }
+    const file: File = maybefile;
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert("File size exceeds 2MB");
+        return;
+      }
+      const allowedTypes = ["image/jpeg", "image/png"];
+      if (!allowedTypes.includes(file.type)) {
+        alert("Invalid file type. Please upload a JPG or PNG image.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const image = reader.result as string;
+        const processedImage = image.replace(/^data:image\/[a-z]+;base64,/, "");
+        setImage(processedImage);
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    if (imagePreview) {
+      setImagePreview(null);
+    }
+  };
+
   return (
     <Formik
       initialValues={invoiceValues}
@@ -340,7 +375,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
             resetForm();
             navigate(-1);
           } else {
-            const response = await addInvoice(values);
+            const updatedInvoiceValues = {
+              ...values,
+              signatureFile: image,
+            };
+            const response = await addInvoice(updatedInvoiceValues);
             setResMessage(response.data.message);
             resetForm();
           }
@@ -501,8 +540,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             setFieldValue(
                               "customerId",
                               selectedCustomerDetails.id
-                            ); // <-- store the ID
-                            // optionally populate other fields
+                            );
                             setFieldValue(
                               "customerEmail",
                               selectedCustomerDetails.customerEmail
@@ -810,7 +848,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         updatedServiceList[index] = {
                                           ...selectedService,
                                           id: item.id,
-                                        }; // Update the existing service in the list
+                                        };
                                         setInvoiceValues((prevState: any) => ({
                                           ...prevState,
                                           servicesList: updatedServiceList,
@@ -1065,6 +1103,72 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     <Typography variant="subtitle2" color="initial">
                       {invoiceTotalAmount}
                     </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={6}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "20px",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    {!imagePreview && (
+                      <Box>
+                        <input
+                          accept="image/*"
+                          style={{ display: "none" }}
+                          id="contained-button-file"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                        <label htmlFor="contained-button-file">
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            component="span"
+                            sx={{ marginTop: "10px" }}
+                          >
+                            Upload
+                          </Button>
+                        </label>
+                      </Box>
+                    )}
+                    {imagePreview && (
+                      <Box
+                        sx={{
+                          marginTop: "20px",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "relative",
+                        }}
+                      >
+                        <img
+                          src={imagePreview as string}
+                          alt="Preview"
+                          style={{
+                            width: "150px",
+                            height: "150px",
+                            objectFit: "contain",
+                            border: "1px solid grey",
+                            borderRadius: "4px",
+                          }}
+                        />
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          sx={{ marginTop: "10px" }}
+                          onClick={handleDeleteClick}
+                        >
+                          Remove
+                        </Button>
+                      </Box>
+                    )}
                   </Box>
                 </Grid>
               </Grid>

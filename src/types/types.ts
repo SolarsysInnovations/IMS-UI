@@ -150,27 +150,26 @@ interface TaxAmountProps {
     tds: string;
 };
 export interface InvoiceInitialValueProps {
-    id?: string;
-    invoiceDate: Date;
-    invoiceType: string;
-    invoiceNumber: string;
-    customerName: string;
-    gstType: string;
-    gstPercentage: number | null;
-    startDate: string;
-    dueDate: string;
-    gstInNumber: string;
-    paymentTerms: string;
-    invoiceStatus: string;
-    totalAmount: number | null;
-    discountPercentage: number | null;
-    notes: string;
-    retainerFee: null;
-    termsAndConditions: string;
-    taxAmount: TaxAmountProps;
-    servicesList: ServiceListProps[];
-    
-
+  id?: string;
+  invoiceDate: Date;
+  invoiceType: string;
+  invoiceNumber: string;
+  customerName: string;
+  gstType: string;
+  gstPercentage: number | null;
+  startDate: string;
+  dueDate: string;
+  gstInNumber: string;
+  paymentTerms: string;
+  invoiceStatus: string;
+  totalAmount: number | null;
+  discountPercentage: number | null;
+  notes: string;
+  retainerFee: null;
+  termsAndConditions: string;
+  taxAmount: TaxAmountProps;
+  servicesList: ServiceListProps[];
+  signatureFile: string | null;
 };
  export interface InvoicesInitialValueProps {
    // invoiceDate: string;
