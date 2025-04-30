@@ -10,31 +10,25 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  AccountCircle,
   Logout,
-  PersonAdd,
   Settings,
   Person,
   Lock,
 } from "@mui/icons-material";
 import {
   logOut,
-  selectCurrentId,
 } from "../../redux-store/auth/authSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import DialogBoxUi from "../ui/DialogBox";
 import UserProfile from "../../pages/profile/UserProfile";
 import ChangePassword from "../../pages/profile/ChangePassword";
 import { useNavigate, useLocation } from "react-router-dom";
-import GroupIcon from "@mui/icons-material/Group";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { capitalize } from "../../services/utils/capitalization";
-import { Roles } from "../../constants/Enums";
-import { useGetUserRoleMutation } from "../../redux-store/api/injectedApis";
+import { useInVoiceContext } from "../../invoiceContext/invoiceContext";
 
 const PopupComponents = {
   USER_PROFILE: "userprofile",
@@ -67,7 +61,6 @@ const menuItems = [
     text: "Change Password",
     component: PopupComponents.CHANGE_PASSWORD,
   },
-  // { icon: <PersonAdd sx={{ color: "grey.500", marginRight: "10px", ":hover": { color: "primary.main" } }} />, text: "Add another account" },
   {
     icon: (
       <Settings
@@ -95,8 +88,6 @@ const menuItems = [
     action: "logout",
   },
 ];
-
-const exceptEndUser: any = !Roles.STANDARDUSER;
 
 const addMenuItems = [
   {
@@ -172,30 +163,14 @@ export default function Header() {
   const [addMenuAnchorEl, setAddMenuAnchorEl] = useState<null | HTMLElement>(
     null
   );
-  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [openDialogBox, setOpenDialogBox] = useState(false);
   const [popUpComponent, setPopUpComponent] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation(); // Get the current location
-  const [
-    getUserRole,
-    {
-      data: userRoleData,
-      isLoading: isUserRoleLoading,
-      isError: isUserRoleError,
-    },
-  ] = useGetUserRoleMutation();
-  const id = useSelector(selectCurrentId);
-  const userName = userRoleData?.userName || "Guest"; 
-  const userRole = userRoleData?.userRole || "Guest";
-
-
-  // Fetch user role on component mount
-  useEffect(() => {
-    if (id) {
-      getUserRole(id);
-    }
-  }, [getUserRole, id]);
+  const context = useInVoiceContext();
+  const userName = context.userDetails.userName || "Guest"; 
+  const userRole = context.userDetails.userRole || "Guest";
 
   const handleMenuOpen = (setAnchor: any) => (event: any) => {
     setAnchor(event.currentTarget);
@@ -208,7 +183,7 @@ export default function Header() {
   const handleMenuItemClick = (item: any) => {
     if (item.component) {
       setPopUpComponent(item.component);
-      setIsOpenDialogBox(true);
+      setOpenDialogBox(true);
     } else if (item.route) {
       navigate(item.route);
     } else if (item.action === "logout") {
@@ -242,7 +217,7 @@ export default function Header() {
           }}
         >
           <Grid container alignItems="center" spacing={2}>
-            {location.pathname === "/dashboard" && userRoleData?.userRole && (
+            {location.pathname === "/dashboard" && userRole && (
               <Grid
                 item
                 xs={6}
@@ -262,9 +237,7 @@ export default function Header() {
                     marginLeft: 1, // Add spacing between 'Hello' and the role
                   }}
                 >
-                  {typeof userRoleData.userRole === "string"
-                    ? userRoleData.userRole
-                    : ""}
+                  {context.userDetails.userName}
                 </Box>
               </Grid>
             )}
@@ -327,21 +300,21 @@ export default function Header() {
           onMenuItemClick={handleMenuItemClick}
         />
         <DialogBoxUi
-          open={opendialogBox}
+          open={openDialogBox}
           content={
             popUpComponent === PopupComponents.USER_PROFILE ? (
               <UserProfile />
             ) : popUpComponent === PopupComponents.CHANGE_PASSWORD ? (
               <ChangePassword
                 onClose={() => {
-                  setIsOpenDialogBox(false);
+                  setOpenDialogBox(false);
                   setPopUpComponent("");
                 }}
               />
             ) : null
           }
           handleClose={() => {
-            setIsOpenDialogBox(false);
+            setOpenDialogBox(false);
             setPopUpComponent("");
           }}
         />

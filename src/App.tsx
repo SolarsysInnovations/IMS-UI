@@ -10,6 +10,7 @@ import Login from "./pages/Login-screen";
 import Unauthorized from "./unauthorized";
 import ForgetPassword from "./pages/ForgetPassword-screen";
 import ResetPassword from "./pages/ResetPassword";
+import { InvoiceContextProvider } from "./invoiceContext/invoiceContext";
 
 function App() {
   const token = useSelector(selectCurrentToken);
@@ -35,18 +36,32 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          {generateRoutes(sidebarTwo)}
-          <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
-          <Route path="/unauthorized" element={<Unauthorized />} />
-          <Route path="*" element={<Navigate to={token ? "/dashboard" : "/login"} />} />
-          <Route path="/forgotpassword" element={token ? <Navigate to="/login" /> : <ForgetPassword />} />
-          <Route path="/resetpassword" element={token ? <Navigate to="/login" /> : <ResetPassword />} />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <InvoiceContextProvider>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <Routes>
+            {generateRoutes(sidebarTwo)}
+            <Route
+              path="/login"
+              element={token ? <Navigate to="/dashboard" /> : <Login />}
+            />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route
+              path="*"
+              element={<Navigate to={token ? "/dashboard" : "/login"} />}
+            />
+            <Route
+              path="/forgotpassword"
+              element={token ? <Navigate to="/login" /> : <ForgetPassword />}
+            />
+            <Route
+              path="/resetpassword"
+              element={token ? <Navigate to="/login" /> : <ResetPassword />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </InvoiceContextProvider>
   );
 }
 

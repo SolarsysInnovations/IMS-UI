@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -22,7 +22,7 @@ import { LoginProps } from "../types/types";
 import { setCredentials } from "../redux-store/auth/authSlice";
 import TextFieldUi from "../components/ui/TextField";
 import Logo from "../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png";
-import { InvoiceContext } from "../invoiceContext/invoiceContext";
+import { useInVoiceContext } from "../invoiceContext/invoiceContext";
 interface LoginResponse {
   data?: {
     id: any;
@@ -37,7 +37,7 @@ interface LoginResponse {
   error?: any;
 }
 const Login = () => {
-  const context = useContext(InvoiceContext);
+  const context = useInVoiceContext();
   const [login, { error: loginError }] = useLoginMutation();
   const dispatch = useDispatch<AppDispatch>();
   const [userToken, setUserToken] = useSessionStorage(StorageKeys.TOKEN, "");
@@ -73,10 +73,10 @@ const Login = () => {
                 userEmail,
                 userDetails,
               } = loginResult.data;
-              context.userRole = userRole;
-              context.userName = userName;
-              context.userEmail = userEmail;
-              context.userId = id;
+              context.userDetails.userRole = userRole;
+              context.userDetails.userName = userName;
+              context.userDetails.userEmail = userEmail;
+              context.userDetails.userId = id;
               dispatch(
                 setCredentials({
                   id,

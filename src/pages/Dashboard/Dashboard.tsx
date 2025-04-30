@@ -1,11 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { Box, Grid, Typography, CircularProgress } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { Roles } from "../../constants/Enums";
-import {
-  useGetDashboardMutation,
-  useGetUserRoleMutation,
-} from "../../redux-store/api/injectedApis";
+import { useGetDashboardMutation } from "../../redux-store/api/injectedApis";
 import { Formik } from "formik";
 import DatePickerUi from "../../components/ui/DatePicker";
 import ButtonSmallUi from "../../components/ui/ButtonSmall";
@@ -14,24 +11,13 @@ import ApproverDashboardScreen from "./approver-dashboard/DashboardScreen";
 import EndUserDashboardScreen from "./standard-user-dashboard/DashboardScreen";
 import SuperAdminDashboardScreen from "./super-admin-dashboard/DashboardScreen";
 import AdminDashboardScreen from "./Admin-dashboard/Dashboard-screen";
-import { selectCurrentId } from "../../redux-store/auth/authSlice";
-import { useSelector } from "react-redux";
-import { InvoiceContext } from "../../invoiceContext/invoiceContext";
+import { useInVoiceContext } from "../../invoiceContext/invoiceContext";
 
 const DashboardScreen: React.FC = () => {
-  const id = useSelector(selectCurrentId); // Get `id` from authSlice
-  const context = useContext(InvoiceContext);
-  const [getDashboard, { data, isLoading }] = useGetDashboardMutation();
-  const [
-    getUserRole,
-    {
-      data: userRoleData,
-      isLoading: isUserRoleLoading,
-      isError: isUserRoleError,
-    },
-  ] = useGetUserRoleMutation();
+  const context = useInVoiceContext();
+  const [getDashboard, { isLoading }] = useGetDashboardMutation();
   const [responseData, setResponseData] = useState<any>({});
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const userRole = context.userDetails.userRole;
 
   const today = dayjs();
   const [startDate, setStartDate] = useState<Dayjs | null>(
@@ -39,62 +25,24 @@ const DashboardScreen: React.FC = () => {
   );
   const [endDate, setEndDate] = useState<Dayjs | null>(today.endOf("month"));
   const [isCustomRange, setIsCustomRange] = useState(false);
-
-  useEffect(() => {
-    const fetchUserRole = async () => {
-      if (!id) return; // Ensure `id` is available
-      try {
-        const response = await getUserRole(id).unwrap();
-        setUserRole(response?.userRole || null);
-      } catch {
-        setUserRole(null);
-      }
-    };
-    fetchUserRole();
-  }, [id, getUserRole]);
-
   const handleApplyFilter = async (
     startDate: Dayjs | null,
     endDate: Dayjs | null
   ) => {
     const formattedStartDate = startDate ? startDate.format("DD-MM-YYYY") : "";
     const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
-    
+
     try {
       const response = await getDashboard({
         startDate: formattedStartDate,
         endDate: formattedEndDate,
       }).unwrap();
-      setResponseData(response || {});
+      setResponseData(response ?? {});
     } catch (error) {
       console.error("Error fetching filtered dashboard data:", error);
       setResponseData({});
     }
   };
-
-  if (isUserRoleLoading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <CircularProgress />
-        {/* <Typography ml={2}>Loading user role...</Typography> */}
-      </Box>
-    );
-  }
-
-  if (!userRole) {
-    return isUserRoleError ? (
-      <Typography align="center">
-        Error fetching user role. Please try again.
-      </Typography>
-    ) : (
-      <Typography align="center"></Typography>
-    );
-  }
 
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
     const today = dayjs();
@@ -134,6 +82,30 @@ const DashboardScreen: React.FC = () => {
       }
     }
   };
+
+  function roleBasedDashboard(userRole: string) {
+    if (userRole === Roles.APPROVER) {
+      return <ApproverDashboardScreen approverData={responseData} />;
+    } else if (userRole === Roles.STANDARDUSER) {
+      return <EndUserDashboardScreen standardUserData={responseData} />;
+    } else if (userRole === Roles.SUPERADMIN) {
+      return (
+        <SuperAdminDashboardScreen
+          superAdminData={responseData}
+          startDate={startDate?.format("DD-MM-YYYY") ?? ""}
+          endDate={endDate?.format("DD-MM-YYYY") ?? ""}
+        />
+      );
+    } else {
+      return (
+        <AdminDashboardScreen
+          adminData={responseData}
+          startDate={startDate?.format("DD-MM-YYYY") ?? ""}
+          endDate={endDate?.format("DD-MM-YYYY") ?? ""}
+        />
+      );
+    }
+  }
 
   return (
     <Box px={0} py={2}>
@@ -212,25 +184,7 @@ const DashboardScreen: React.FC = () => {
             {isLoading ? (
               <Typography align="center">Loading dashboard...</Typography>
             ) : (
-              <>
-                {userRole === Roles.APPROVER ? (
-                  <ApproverDashboardScreen approverData={responseData} />
-                ) : userRole === Roles.STANDARDUSER ? (
-                  <EndUserDashboardScreen standardUserData={responseData} />
-                ) : userRole === Roles.SUPERADMIN ? (
-                  <SuperAdminDashboardScreen
-                    superAdminData={responseData}
-                    startDate={startDate?.format("DD-MM-YYYY") || ""}
-                    endDate={endDate?.format("DD-MM-YYYY") || ""}
-                  />
-                ) : (
-                  <AdminDashboardScreen
-                    adminData={responseData}
-                    startDate={startDate?.format("DD-MM-YYYY") || ""}
-                    endDate={endDate?.format("DD-MM-YYYY") || ""}
-                  />
-                )}
-              </>
+              roleBasedDashboard(userRole)
             )}
           </Box>
         </Grid>
