@@ -37,14 +37,12 @@ const MailReason = ({ invoiceData, setNestedOpen }: any) => {
     const onSubmit = useMemo(() => async (values: InvoiceMailReasonProps, actions: any) => {
         try {
             if (invoiceData) {
-                //console.log("values", values);
                 const updatedInvoice = {
                     ...invoiceData,
                     invoiceReason: values.reason,
                     mailTo: values.toMail,
                     // invoiceStatus: invoiceData.invoiceStatus
                 }
-                // console.log("updatedInvoice", updatedInvoice);
                 await updateInvoice({ id: invoiceData.id, data: updatedInvoice });
                 setNestedOpen(false);
                 dispatch(clearData());

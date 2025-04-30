@@ -22,7 +22,6 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
     // useEffect(() => {
     //     if (serviceData) {
-    //         console.log('service:', serviceData);
     //         setServiceDetails(serviceData);
     //     }
     // }, [serviceData]);

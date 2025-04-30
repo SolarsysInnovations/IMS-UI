@@ -35,7 +35,6 @@ const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
     const initialValues = serviceEditInitialValues || defaultServiceInitialValues;
 
     const onSubmit = async (values: serviceCreationProps, actions: any) => {
-        console.log("Submitting form with values:", values);
         try {
             if (serviceEditInitialValues) {
                 const id = serviceEditInitialValues.id;

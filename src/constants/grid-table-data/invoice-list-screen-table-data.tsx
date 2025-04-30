@@ -42,7 +42,6 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({ row, onDelete })
             alert("Editing is not allowed when the invoice status is PENDING.");
             return;
         }
-console.log(row, "idddddd" );
 
         try {
             const response = await getList(row.id);
@@ -62,7 +61,6 @@ console.log(row, "idddddd" );
             const response = await getList(row.id);
             if ('data' in response) {
                 dispatch(clearInvoiceData());
-                console.log(response.data, "response", invoice);
                 dispatch(setInvoiceData(response.data));
                 setPreview(true);
                 setIsModalOpen(true);

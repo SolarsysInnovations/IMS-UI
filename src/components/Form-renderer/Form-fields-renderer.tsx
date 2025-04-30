@@ -88,9 +88,6 @@ const renderSelectField = (field: any, meta: any, subField: SubField, setFieldVa
 
 // --------------------input field renderer-------------------
 const renderTextField = (field: any, meta: any, subField: SubField) => {
-
-  console.log("meta, field, subField", meta, field, subField);
-
   return (
     <TextFieldUi
       required={subField.required}
@@ -113,7 +110,6 @@ const renderTextField = (field: any, meta: any, subField: SubField) => {
 // --------------------Phone field renderer-------------------
 
 const renderPhoneField = (field: any, meta: any, subField: SubField, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
-  console.log("meta, field, subField", meta, field, subField);
 
   return (
     <PhoneInputUi
@@ -136,7 +132,6 @@ const renderUploadField = (
   subField: SubField,
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
 ) => {
-  console.log('meta, field, subField', meta, field, subField);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

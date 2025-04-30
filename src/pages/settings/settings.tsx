@@ -17,7 +17,7 @@ const SettingScreen = () => {
   const id = useSelector(selectCurrentId);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [getUserRole, { data: userRoleData, isLoading }] = useGetUserRoleMutation();
-  console.log("roleData", userRoleData);
+  
   useEffect(() => {
     if (id) {
       getUserRole(id) // Pass id directly here

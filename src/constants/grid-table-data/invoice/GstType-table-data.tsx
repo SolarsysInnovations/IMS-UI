@@ -24,7 +24,6 @@ const MyCellRenderer = ({ id }: { id: any }) => {
             const response = await getGstTypeById(id);
             if (response && 'data' in response) {
                 const gstTypeData = response.data;
-                console.log("gstTypeData", gstTypeData);
                 dispatch(setGstTypeData(gstTypeData));
             } else {
                 console.error('Invalid response format:', response);

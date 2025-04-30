@@ -52,7 +52,7 @@ const CompanyLogo: React.FC = () => {
 
       // Handle success response
       if (companyLogoSuccess) {
-        console.log("Logo sent successfully!");
+
         resetForm();
         setUploadedFiles([]);
         setShowFileName([]);

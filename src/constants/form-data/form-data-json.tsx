@@ -1,111 +1,195 @@
 import * as Yup from 'yup';
 import { FieldProps } from "../../types/types";
-import YupPassword from 'yup-password'
-import PasswordVisibilityToggle from '../../services/utils/PasswordToggle';
-YupPassword(Yup) 
-export const customerFields: FieldProps[] = [
-    {
-        type: 'section',
-        titleGridSize: 12,
-        name: "info",
-        subFields: [
-            {
-                name: 'customerType', required: false, disabled: false, label: 'Customer Type', type: 'radio', gridSize: 3, options: [{ value: "Business", label: "Business" },
-                { value: "Individual", label: "Individual" }],
-                width: ''
-            },
-        ]
-    },
-    {
-        type: 'section',
-        titleGridSize: 12,
-        name: "info",
-        label: 'Address Information',
-        subFields: [
-            {
-                name: 'customerName', required: true, disabled: false, label: 'Customer Name', type: 'text', gridSize: 3,
-                width: ''
-            },
-            {
-                name: 'companyName', required: true, disabled: false, label: 'Company Name', type: 'text', gridSize: 3,
-                width: ''
-            },
-            {
-                name: 'customerEmail', required: true, disabled: false, label: 'Customer Email', type: 'email', gridSize: 3,
-                width: ''
-            },
-            {
-                name: 'customerPhone', required: false, disabled: false, label: 'Customer Phone', type: 'number', gridSize: 3,
-                width: ''
-            },
-        ]
-    },
-    {
-        name: 'otherDetails',
-        type: 'section',
-        titleGridSize: 12,
-        subFields: [
-            {
-                name: 'paymentTerms', required: true, disabled: false, label: 'Payment Terms', type: 'select', gridSize: 3, options: [{ value: "Monthly", label: "Monthly" },
-                { value: "Annual", label: "Annual" },
-                { value: "Quarterly", label: "Quarterly" },
-                { value: "Due on receipt", label: "Due on receipt" },
-                { value: "Net 30", label: "Net 30" },
-                { value: "Net 45", label: "Net 45" },
-                ],
-                width: ''
-            },
+import YupPassword from 'yup-password';
 
-        ]
-    },
-    {
-        name: 'country',
-        label: 'Country / region',
-        type: 'section',
-        titleGridSize: 12,
-        subFields: [
-            {
-                name: 'country', required: false, disabled: false, label: 'country/region', type: 'selectCountry', gridSize: 3,
-                width: ''
-            },
-            {
-                name: 'state', required: false, disabled: false, label: 'State', type: 'selectState', gridSize: 3,
-                width: ''
-            },
-            {
-                name: 'city', required: false, disabled: false, label: 'City', type: 'selectCity', gridSize: 3,
-                width: ''
-            },
-            {
-                name: 'address', required: true, disabled: false, label: 'Address', type: 'text', gridSize: 3,
-                width: ''
-            },
-            {
-                name: 'pinCode', required: false, disabled: false, label: 'PinCode', type: 'number', gridSize: 3,
-                width: ''
-            },
-        ]
-    },
-    {
-        name: 'contactPersons',
-        label: 'Contact Persons',
-        type: 'array',
-        titleGridSize: 12,
-        subFields: [
-            {
-                name: 'contactName', required: false, disabled: false, label: 'Contact Name', type: 'text', gridSize: 3,
-                width: ''
-            },
-            {
-                name: 'contactEmail', required: false, disabled: false, label: 'Contact Email', type: 'email', gridSize: 3,
-                width: ''
-            },
-            {
-                name: 'contactPhone', required: false, disabled: false, label: 'Contact Phone', type: 'number', gridSize: 3,
-                width: ''
-            },
-        ]
-    },
+YupPassword(Yup) 
+
+export const customerFields: FieldProps[] = [
+  {
+    type: "section",
+    titleGridSize: 12,
+    name: "info",
+    subFields: [
+      {
+        name: "customerType",
+        required: false,
+        disabled: false,
+        label: "Customer Type",
+        type: "radio",
+        gridSize: 3,
+        options: [
+          { value: "Business", label: "Business" },
+          { value: "Individual", label: "Individual" },
+        ],
+        width: "",
+      },
+    ],
+  },
+  {
+    type: "section",
+    titleGridSize: 12,
+    name: "info",
+    label: "Address Information",
+    subFields: [
+      {
+        name: "customerName",
+        required: true,
+        disabled: false,
+        label: "Customer Name",
+        type: "text",
+        gridSize: 3,
+        width: "",
+      },
+      {
+        name: "companyName",
+        required: true,
+        disabled: false,
+        label: "Company Name",
+        type: "text",
+        gridSize: 3,
+        width: "",
+      },
+      {
+        name: "customerEmail",
+        required: true,
+        disabled: false,
+        label: "Customer Email",
+        type: "email",
+        gridSize: 3,
+        width: "",
+      },
+      {
+        name: "customerPhone",
+        required: false,
+        disabled: false,
+        label: "Customer Phone",
+        type: "number",
+        gridSize: 3,
+        width: "",
+      },
+    ],
+  },
+  {
+    name: "otherDetails",
+    type: "section",
+    titleGridSize: 12,
+    subFields: [
+      {
+        name: "paymentTerms",
+        required: true,
+        disabled: false,
+        label: "Payment Terms",
+        type: "select",
+        gridSize: 3,
+        options: [
+          { value: "Monthly", label: "Monthly" },
+          { value: "Annual", label: "Annual" },
+          { value: "Quarterly", label: "Quarterly" },
+          { value: "Due on receipt", label: "Due on receipt" },
+          { value: "Net 30", label: "Net 30" },
+          { value: "Net 45", label: "Net 45" },
+        ],
+        width: "",
+      },
+      {
+        name: "panNumber",
+        required: true,
+        disabled: false,
+        label: "PAN",
+        type: "text",
+        gridSize: 3,
+        width: "",
+      },
+    ],
+  },
+  {
+    name: "country",
+    label: "Country / region",
+    type: "section",
+    titleGridSize: 12,
+    subFields: [
+      {
+        name: "country",
+        required: false,
+        disabled: false,
+        label: "country/region",
+        type: "selectCountry",
+        gridSize: 3,
+        width: "",
+      },
+      {
+        name: "state",
+        required: false,
+        disabled: false,
+        label: "State",
+        type: "selectState",
+        gridSize: 3,
+        width: "",
+      },
+      {
+        name: "city",
+        required: false,
+        disabled: false,
+        label: "City",
+        type: "selectCity",
+        gridSize: 3,
+        width: "",
+      },
+      {
+        name: "address",
+        required: true,
+        disabled: false,
+        label: "Address",
+        type: "text",
+        gridSize: 3,
+        width: "",
+      },
+      {
+        name: "pinCode",
+        required: false,
+        disabled: false,
+        label: "PinCode",
+        type: "number",
+        gridSize: 3,
+        width: "",
+      },
+    ],
+  },
+  {
+    name: "contactPersons",
+    label: "Contact Persons",
+    type: "array",
+    titleGridSize: 12,
+    subFields: [
+      {
+        name: "contactName",
+        required: false,
+        disabled: false,
+        label: "Contact Name",
+        type: "text",
+        gridSize: 3,
+        width: "",
+      },
+      {
+        name: "contactEmail",
+        required: false,
+        disabled: false,
+        label: "Contact Email",
+        type: "email",
+        gridSize: 3,
+        width: "",
+      },
+      {
+        name: "contactPhone",
+        required: false,
+        disabled: false,
+        label: "Contact Phone",
+        type: "number",
+        gridSize: 3,
+        width: "",
+      },
+    ],
+  },
 ];
 
 

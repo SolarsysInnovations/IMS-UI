@@ -237,7 +237,7 @@ const UploadScreen: React.FC = () => {
               style={{
                 width: "150px",
                 height: "150px",
-                objectFit: "contain", // Maintains aspect ratio within the fixed dimensions
+                objectFit: "contain",
                 border: "1px solid grey",
                 borderRadius: "4px",
               }}

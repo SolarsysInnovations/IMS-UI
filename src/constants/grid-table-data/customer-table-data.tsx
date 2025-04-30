@@ -26,7 +26,6 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     const navigate = useNavigate();
 
     const { canViewCustomers, canEditCustomers, canDeleteCustomers } = useRolePermissions();
-    console.log(canViewCustomers, canEditCustomers, canDeleteCustomers, "canViewCustomers,canEditCustomers,canDeleteCustomers");
 
     useEffect(() => {
         refetch();
@@ -156,11 +155,9 @@ export const columns: GridColDef[] = [
     //     width: 250,
     //     editable: false,
     //     renderCell: (params: any) => {
-    //         console.log('params.value:', params.row);
     //         return (
     //             <ul className="flex">
     //                 {params.value?.map((person: any) => {
-    //                     console.log('person:', person);
     //                     return (
     //                         <li key={person.id}>{person.contactName}</li>
     //                     );

@@ -13,7 +13,6 @@ const TdsTaxScreen: React.FC = () => {
 
     const handleClose = () => {
         // Implement the logic to close the dialog
-        console.log("Dialog closed");
     };
 
     return (

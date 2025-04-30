@@ -48,9 +48,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       const response = await getCompany(id);
       if ("data" in response) {
         const companyData = response.data;
-        console.log("Fetched company data:", companyData); // Check the data in the console
         dispatch(setUserData(companyData));
-        console.log("companyData after", companyData)
         setOpenModal(true);
       } else {
         console.error("Error fetching company data:", response.error);
@@ -80,7 +78,6 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       const response = await getCompany(id);
       if ("data" in response) {
         const companyData = response.data;
-        console.log("edit company data", companyData);
         dispatch(setUserData(companyData));
         navigate("/company/edit");
       } else {

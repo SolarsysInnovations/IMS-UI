@@ -51,8 +51,6 @@ const AdminDashboardInvoiceOverviewAmount = ({ invoiceOverviewAmountData }: any)
     // Use invoiceOverviewAmountData if provided, otherwise fallback to dummy data
     const invoiceAmount = transformInvoiceData(invoiceOverviewAmountData);
 
-    console.log("invoiceOverviewAmountData", invoiceOverviewAmountData);
-
     // Always render the cards, even if values are 0
     return (
         <Grid container spacing={2}>

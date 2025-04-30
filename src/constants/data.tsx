@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGetUserRoleMutation } from "../redux-store/api/injectedApis";
 import { Roles } from "./Enums";
-import { Home, ReceiptRounded, LogoutOutlined, AccountCircleRounded, Apartment, SettingsSuggestRounded } from "@mui/icons-material";
+import { Home, Apartment } from "@mui/icons-material";
 import GroupIcon from '@mui/icons-material/Group';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
@@ -28,7 +28,7 @@ import SettingScreen from "../pages/settings/settings";
 
 const Sidebar = () => {
   const [userRole, setUserRole] = useState(null);
-  const [getUserRole, { data, isLoading, isError }] = useGetUserRoleMutation();
+  const [getUserRole] = useGetUserRoleMutation();
   const id = useSelector(selectCurrentId);
   useEffect(() => {
     if (id) {
@@ -515,6 +515,3 @@ export const applicationUserAccess: ApplicationUserAccess = {
 
   },
 };
-
-
-console.log(applicationUserAccess[Roles.ADMIN].canCreateCustomers);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Box, Grid, Typography, CircularProgress } from "@mui/material";
 import { Roles } from "../../constants/Enums";
@@ -16,9 +16,11 @@ import SuperAdminDashboardScreen from "./super-admin-dashboard/DashboardScreen";
 import AdminDashboardScreen from "./Admin-dashboard/Dashboard-screen";
 import { selectCurrentId } from "../../redux-store/auth/authSlice";
 import { useSelector } from "react-redux";
+import { InvoiceContext } from "../../invoiceContext/invoiceContext";
 
 const DashboardScreen: React.FC = () => {
   const id = useSelector(selectCurrentId); // Get `id` from authSlice
+  const context = useContext(InvoiceContext);
   const [getDashboard, { data, isLoading }] = useGetDashboardMutation();
   const [
     getUserRole,
@@ -57,8 +59,7 @@ const DashboardScreen: React.FC = () => {
   ) => {
     const formattedStartDate = startDate ? startDate.format("DD-MM-YYYY") : "";
     const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
-    console.log("enddate", endDate);
-    console.log("startDate", startDate);
+    
     try {
       const response = await getDashboard({
         startDate: formattedStartDate,

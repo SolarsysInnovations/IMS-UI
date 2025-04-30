@@ -20,7 +20,6 @@ const ServiceEditScreen = () => {
     };
 
     useEffect(() => {
-        console.log("Service State Details:", serviceStateDetails); // Check what is in serviceStateDetails
 
         // Add event listener for back button
         const handlePopState = () => {
@@ -46,7 +45,6 @@ const ServiceEditScreen = () => {
     const onSubmit = async (values: any, actions: any) => {
         try {
             const id = values.id;
-            console.log("id", id); // Ensure id is correctly retrieved
             if (id !== undefined) {
                 await updateService({
                     id: id,
@@ -61,7 +59,7 @@ const ServiceEditScreen = () => {
                 console.error("ID is undefined");
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 

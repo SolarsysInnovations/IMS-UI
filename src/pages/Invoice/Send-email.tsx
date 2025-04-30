@@ -85,11 +85,6 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
       setSubmitting(false);
     }
   };
-  console.log(
-    invoiceData,
-    "invoiceDatainvoiceDatainvoiceDatainvoiceDatainvoiceData",
-    invoiceData?.customerDetails?.customerEmail
-  );
 
   useSnackbarNotifications({
     error: sendEmailError,

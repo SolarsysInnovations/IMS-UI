@@ -46,8 +46,6 @@ const TaxConfig = () => {
             validate={() => ({})}
             onSubmit={async (values: InvoiceInitialValueProps, { setSubmitting, resetForm }) => {
                 try {
-                    console.log(values);
-
                     resetForm();
                     setInvoiceValues({ ...invoiceValues })
                 } catch (error) {

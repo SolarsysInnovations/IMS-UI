@@ -13,9 +13,7 @@ const InvoiceCreateScreen = () => {
     }, [invoiceValue]);
 
     return (
-        <>
             <InvoiceFormScreen key={key} invoiceValue={invoiceValue} />
-        </>
     )
 }
 

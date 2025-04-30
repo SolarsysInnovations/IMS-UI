@@ -62,17 +62,6 @@ const styles = StyleSheet.create({
 const InvoiceDocument = ({ invoiceData, company }: any) => {
    // const   { data: companyData, refetch } = useGetCompanyLogoQuery();
 //let companys= company
-//console.log(company,"URL", (companys));
-
-    console.log(company,"invoiceData :", invoiceData);
-    //console.log(companyData, "company");
-    
-    // if (invoiceData) {
-    //     console.log("invoicesddsfds Data", invoiceData);
-
-    //     console.log("customer Name", invoiceData.customerDetails);
-    // }
-
     // tdsAmountValue: 11000,
     // discountPercentageValue: 4050,
     // gstPercentageValue: 6548,

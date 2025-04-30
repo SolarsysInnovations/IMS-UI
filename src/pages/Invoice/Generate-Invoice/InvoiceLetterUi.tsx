@@ -215,7 +215,6 @@ const InvoiceLetterUi = ({ setIsModalOpen }: { setIsModalOpen?: Dispatch<SetStat
                         newStatus = InvoiceStatus.PENDING;
                         break;
                     default:
-                        console.log("Unknown option");
                         return;
                 }
                 if (newStatus) {
@@ -226,7 +225,6 @@ const InvoiceLetterUi = ({ setIsModalOpen }: { setIsModalOpen?: Dispatch<SetStat
                 await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData })
                   .unwrap()
                   .then((response) => {
-                    console.log("Invoice updated successfully:", response);
                     setResMessage(response.message || "Invoice Updated Successfully");
                     setIsModalOpen?.(false);
                     if (newStatus === InvoiceStatus.APPROVED) {
@@ -279,12 +277,6 @@ const InvoiceLetterUi = ({ setIsModalOpen }: { setIsModalOpen?: Dispatch<SetStat
         }
         return null;
       };
-    
-      useEffect(() => {
-        if (logoSuccess && logoData) {
-          console.log("Logo Base64 String:", logoData.companyLogo); // Logs the base64 string of the logo
-        }
-      }, [logoData, logoSuccess]);
 
       useEffect(() => {
         if (companyDetails && companyDetails.id) {
@@ -303,13 +295,11 @@ const InvoiceLetterUi = ({ setIsModalOpen }: { setIsModalOpen?: Dispatch<SetStat
         useEffect(() => {
           if (companyData) {
             setCompanyDetails(companyData);
-            console.log("Fetched company data:", companyData);
           }
         }, [companyData]);
 
         useEffect(() => {
             if (logoData?.companyLogo) {
-                console.log("Base64 Logo:", logoData.companyLogo);
                 setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
             }
         }, [logoData]);

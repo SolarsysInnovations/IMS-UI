@@ -37,11 +37,9 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
         id: updatedRoles.id,
         data: updatedRoles,
       });
-      console.log("Update response:", response);
       if ("error" in response) {
         console.error("Error updating invoice status:", response.error);
       } else {
-        console.log(`Invoice status updated: ${newStatus}`);
       }
     } catch (error) {
       console.error("Error updating invoice status:", error);

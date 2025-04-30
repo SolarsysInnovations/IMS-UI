@@ -53,22 +53,25 @@ export const adminCompanyUsersInitialValues: AdminCompanyUsersInitialValueProps 
 };
 
 export const customerInitialValues = {
-    customerType: "",
-    customerName: "",
-    companyName: "",
-    customerEmail: "",
-    customerPhone: "",
-    paymentTerms: "",
-    country: "",
-    address: "",
-    city: "",
-    state: "",
-    pinCode: "",
-    contactPersons: [{
-        contactName: '',
-        contactEmail: '',
-        contactPhone: '',
-    },],
+  customerType: "",
+  customerName: "",
+  companyName: "",
+  customerEmail: "",
+  customerPhone: "",
+  paymentTerms: "",
+  panNumber: "",
+  country: "",
+  address: "",
+  city: "",
+  state: "",
+  pinCode: "",
+  contactPersons: [
+    {
+      contactName: "",
+      contactEmail: "",
+      contactPhone: "",
+    },
+  ],
 };
 
 export const serviceInitialValues = {
@@ -87,7 +90,6 @@ export const gstTypeInitialValue: GstTypeProps = {
 };
 
 const fromMail = localStorage.getItem("userEmail");
-console.log("fromMail", fromMail);
 
 export const invoiceMailReasonInitialValue: InvoiceMailReasonProps = {
     fromMail: fromMail || "",
@@ -145,50 +147,52 @@ const currentDate = new Date();
 const defaultInvoiceType = `IMS-${formatDate(currentDate)}`;
 
 export const invoiceCreateInitialValue: InvoiceInitialValueProps = {
-    invoiceDate: new Date(),
-    invoiceType: "",
-    invoiceNumber: defaultInvoiceType,
-    customerName: "",
-    gstType: "",
-    gstPercentage: null,
-    gstInNumber: "",
-    paymentTerms: "",
-    startDate: '',
-    dueDate: '',
-    invoiceStatus: "DRAFT",
-    discountPercentage: null,
-    totalAmount: null,
-    retainerFee:null,
-    notes: "Thanks for your business transaction",
-    termsAndConditions: "",
-    taxAmount: {
-        tds: "",
-    },
-    servicesList: [],
+  invoiceDate: new Date(),
+  invoiceType: "",
+  invoiceNumber: defaultInvoiceType,
+  customerName: "",
+  gstType: "",
+  gstPercentage: null,
+  gstInNumber: "",
+  paymentTerms: "",
+  startDate: "",
+  dueDate: "",
+  invoiceStatus: "DRAFT",
+  discountPercentage: null,
+  totalAmount: null,
+  retainerFee: null,
+  notes: "Thanks for your business transaction",
+  termsAndConditions: "",
+  taxAmount: {
+    tds: "",
+  },
+  servicesList: [],
+  signatureFile: null,
 };
 
 export const invoiceEditInitialValue: InvoiceInitialValueProps = {
-    id: "",
-    invoiceDate: new Date(),
-    invoiceType: "",
-    invoiceNumber: "",
-    customerName: "",
-    gstType: "",
-    gstPercentage: null,
-    gstInNumber: "",
-    paymentTerms: "",
-    startDate: '',
-    dueDate: '',
-    invoiceStatus: "PENDING",
-    discountPercentage: null,
-    totalAmount: null,
-    retainerFee: null,
-    notes: "Thanks for your business transaction",
-    termsAndConditions: "",
-    taxAmount: {
-        tds: "",
-    },
-    servicesList: [],
+  id: "",
+  invoiceDate: new Date(),
+  invoiceType: "",
+  invoiceNumber: "",
+  customerName: "",
+  gstType: "",
+  gstPercentage: null,
+  gstInNumber: "",
+  paymentTerms: "",
+  startDate: "",
+  dueDate: "",
+  invoiceStatus: "PENDING",
+  discountPercentage: null,
+  totalAmount: null,
+  retainerFee: null,
+  notes: "Thanks for your business transaction",
+  termsAndConditions: "",
+  taxAmount: {
+    tds: "",
+  },
+  servicesList: [],
+  signatureFile: null,
 };
 export const invoicesInitialValue: InvoicesInitialValueProps = {
 
