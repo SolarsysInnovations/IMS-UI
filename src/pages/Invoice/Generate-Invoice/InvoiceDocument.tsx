@@ -98,7 +98,7 @@ const InvoiceDocument = ({ invoiceData,companyLogo }: any) => {
                         <View style={[styles.tableRow, { marginTop: "20px" }]} >
                             <Text style={styles.tableCell}>{service.serviceAccountingCode}</Text>
                             {/* <Text style={styles.tableCell}>{service.serviceDescription}</Text> */}
-                            <Text style={styles.tableCell}>{service.serviceQty}</Text>
+                            <Text style={styles.tableCell}>{service.serviceHours}</Text>
                             <Text style={[styles.tableCell, styles.tableCellLast]}>{service.serviceAmount}</Text>
                             <Text style={[styles.tableCell, styles.tableCellLast]}>{service.serviceTotalAmount}</Text>
                         </View>
