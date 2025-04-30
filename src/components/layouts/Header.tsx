@@ -167,7 +167,7 @@ export default function Header() {
   const [popUpComponent, setPopUpComponent] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current location
+  const location = useLocation();
   const context = useInVoiceContext();
   const userName = context.userDetails.userName || "Guest"; 
   const userRole = context.userDetails.userRole || "Guest";
@@ -237,7 +237,7 @@ export default function Header() {
                     marginLeft: 1, // Add spacing between 'Hello' and the role
                   }}
                 >
-                  {context.userDetails.userName}
+                  {userName}
                 </Box>
               </Grid>
             )}

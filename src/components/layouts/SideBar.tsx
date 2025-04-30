@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -8,22 +8,18 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { capitalize } from '../../services/utils/capitalization';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Avatar, Collapse, ListSubheader } from '@mui/material';
+import { Avatar, Collapse } from '@mui/material';
 import Header from './Header';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { selectCurrentId } from '../../redux-store/auth/authSlice';
-import { useSelector } from 'react-redux';
 import { sidebarTwo } from '../../constants/data';
 import Logo from "../../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png";
-import { useEffect, useState } from 'react';
-import { useGetUserRoleMutation } from '../../redux-store/api/injectedApis';
+import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
 
 const drawerWidth = 250;
 
@@ -83,36 +79,19 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {
+  const context = useInVoiceContext();
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(true);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const userRole = context.userDetails.userRole || "Guest";
   const [activeItem, setActiveItem] = React.useState<string>('');
-  const id = useSelector(selectCurrentId);
-  const [getUserRole, { data: userRoleData, isLoading }] = useGetUserRoleMutation();
-
-  useEffect(() => {
-    if (id) {
-      getUserRole(id) // Pass id directly here
-        .unwrap()
-        .then((response) => {
-          setUserRole(response?.userRole || null);
-        })
-        .catch((error) => {
-          console.error("Error fetching user role:", error);
-        });
-    }
-  }, [id, getUserRole]);
 
   const handleDrawerClose = () => {
     setOpen((prev) => !prev);
     setOpenIndex(null);
   };
 
-  const handleItemClick = (path: string) => {
-    navigate(path);
-  };
   const handleCollapse = (index: number) => {
     setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
   };
@@ -130,11 +109,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </IconButton>
         </DrawerHeader>
 
-        {/*  */}
         <List
-          // sx={{ width: '100%', }}
-          // component="nav"
-          // aria-labelledby="nested-list-subheader"
           disablePadding={true} sx={{ mt: 1, }}
         >
           <>

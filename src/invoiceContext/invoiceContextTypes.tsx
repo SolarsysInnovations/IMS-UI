@@ -5,12 +5,14 @@ interface UserDetailsInterface {
   userId: string;
   userName: string;
   userEmail: string | null;
+  userMobile: string | null;
+  description: string | null;
   userRole: RoleType;
 }
 
 interface CompanyDetailsInterface {
-  comPanyName: string | null;
-  comPanyId: string | null;
+  companyName: string | null;
+  companyId: string | null;
 }
 export interface InvoiceContextType {
   userDetails: UserDetailsInterface;

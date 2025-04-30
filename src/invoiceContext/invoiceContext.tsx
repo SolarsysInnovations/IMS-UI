@@ -6,11 +6,13 @@ let invoiceContextValue: InvoiceContextType = {
     userId: "",
     userName: "",
     userEmail: "",
+    userMobile: "",
+    description: "",
     userRole: "GUEST",
   },
   companyDetails: {
-    comPanyName: "",
-    comPanyId: "",
+    companyName: "",
+    companyId: "",
   },
 };
 

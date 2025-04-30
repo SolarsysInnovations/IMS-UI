@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Box, Grid, Typography } from "@mui/material";
 import { Roles } from "../../constants/Enums";
-import { useGetDashboardMutation } from "../../redux-store/api/injectedApis";
+import {
+  useGetDashboardMutation
+} from "../../redux-store/api/injectedApis";
 import { Formik } from "formik";
 import DatePickerUi from "../../components/ui/DatePicker";
 import ButtonSmallUi from "../../components/ui/ButtonSmall";
@@ -18,20 +20,19 @@ const DashboardScreen: React.FC = () => {
   const [getDashboard, { isLoading }] = useGetDashboardMutation();
   const [responseData, setResponseData] = useState<any>({});
   const userRole = context.userDetails.userRole;
-
   const today = dayjs();
   const [startDate, setStartDate] = useState<Dayjs | null>(
     today.startOf("month")
   );
   const [endDate, setEndDate] = useState<Dayjs | null>(today.endOf("month"));
   const [isCustomRange, setIsCustomRange] = useState(false);
+
   const handleApplyFilter = async (
     startDate: Dayjs | null,
     endDate: Dayjs | null
   ) => {
     const formattedStartDate = startDate ? startDate.format("DD-MM-YYYY") : "";
     const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
-
     try {
       const response = await getDashboard({
         startDate: formattedStartDate,
@@ -107,90 +108,89 @@ const DashboardScreen: React.FC = () => {
     }
   }
 
-  return (
-    <Box px={0} py={2}>
-      <Formik
-        initialValues={{
-          startDate: startDate,
-          endDate: endDate,
-        }}
-        onSubmit={(values) =>
-          handleApplyFilter(values.startDate, values.endDate)
-        }
-      >
-        {({ values, setFieldValue, handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <Grid
-              container
-              spacing={2}
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Grid item xs={12} sm={4} md={2}>
-                <SelectDropdown
-                  defaultValue={{ value: "This Month", label: "This Month" }}
-                  onChange={(newValue: any) =>
-                    handleDropdownChange(newValue, setFieldValue)
-                  }
-                  options={[
-                    { value: "Today", label: "Today" },
-                    { value: "This Week", label: "This Week" },
-                    { value: "Last 7 Days", label: "Last 7 Days" },
-                    { value: "This Month", label: "This Month" },
-                    { value: "Last 30 Days", label: "Last 30 Days" },
-                    { value: "Custom", label: "Custom" },
-                  ]}
-                  labelText="Select Date Range"
-                  sx={{ width: "100%" }}
-                />
-              </Grid>
+    return (
+      <Box px={0} py={2}>
+        <Formik
+          initialValues={{
+            startDate: startDate,
+            endDate: endDate,
+          }}
+          onSubmit={(values) =>
+            handleApplyFilter(values.startDate, values.endDate)
+          }
+        >
+          {({ values, setFieldValue, handleSubmit }) => (
+            <form onSubmit={handleSubmit}>
+              <Grid
+                container
+                spacing={2}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Grid item xs={12} sm={4} md={2}>
+                  <SelectDropdown
+                    defaultValue={{ value: "This Month", label: "This Month" }}
+                    onChange={(newValue: any) =>
+                      handleDropdownChange(newValue, setFieldValue)
+                    }
+                    options={[
+                      { value: "Today", label: "Today" },
+                      { value: "This Week", label: "This Week" },
+                      { value: "Last 7 Days", label: "Last 7 Days" },
+                      { value: "This Month", label: "This Month" },
+                      { value: "Last 30 Days", label: "Last 30 Days" },
+                      { value: "Custom", label: "Custom" },
+                    ]}
+                    labelText="Select Date Range"
+                    sx={{ width: "100%" }}
+                  />
+                </Grid>
 
-              <Grid item xs={12} sm={4} md={2}>
-                <DatePickerUi
-                  label="Start Date"
-                  onChange={(date) =>
-                    setFieldValue("startDate", dayjs(date, "DD-MM-YYYY"))
-                  }
-                  value={values.startDate || undefined}
-                  disabled={!isCustomRange}
-                  sx={{ width: "80%" }}
-                />
-              </Grid>
+                <Grid item xs={12} sm={4} md={2}>
+                  <DatePickerUi
+                    label="Start Date"
+                    onChange={(date) =>
+                      setFieldValue("startDate", dayjs(date, "DD-MM-YYYY"))
+                    }
+                    value={values.startDate || undefined}
+                    disabled={!isCustomRange}
+                    sx={{ width: "80%" }}
+                  />
+                </Grid>
 
-              <Grid item xs={12} sm={4} md={2}>
-                <DatePickerUi
-                  label="End Date"
-                  onChange={(date) =>
-                    setFieldValue("endDate", dayjs(date, "DD-MM-YYYY"))
-                  }
-                  value={values.endDate || undefined}
-                  disabled={!isCustomRange}
-                  sx={{ width: "80%" }}
-                />
-              </Grid>
+                <Grid item xs={12} sm={4} md={2}>
+                  <DatePickerUi
+                    label="End Date"
+                    onChange={(date) =>
+                      setFieldValue("endDate", dayjs(date, "DD-MM-YYYY"))
+                    }
+                    value={values.endDate || undefined}
+                    disabled={!isCustomRange}
+                    sx={{ width: "80%" }}
+                  />
+                </Grid>
 
-              <Grid item xs={12} sm={12} md={2}>
-                <ButtonSmallUi label="Apply Filter" type="submit" fullWidth />
+                <Grid item xs={12} sm={12} md={2}>
+                  <ButtonSmallUi label="Apply Filter" type="submit" fullWidth />
+                </Grid>
               </Grid>
-            </Grid>
-          </form>
-        )}
-      </Formik>
+            </form>
+          )}
+        </Formik>
 
-      {/* Displaying the data */}
-      <Grid container spacing={2} mt={3}>
-        <Grid item xs={12} display="flex" justifyContent="center">
-          <Box width="100%" maxWidth="1200px">
-            {isLoading ? (
-              <Typography align="center">Loading dashboard...</Typography>
-            ) : (
-              roleBasedDashboard(userRole)
-            )}
-          </Box>
+        <Grid container spacing={2} mt={3}>
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <Box width="100%" maxWidth="1200px">
+              {isLoading ? (
+                <Typography align="center">Loading dashboard...</Typography>
+              ) : (
+                roleBasedDashboard(userRole)
+              )}
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
-  );
+      </Box>
+    );
 };
 
 export default DashboardScreen;
