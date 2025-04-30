@@ -23,7 +23,7 @@ export interface ServiceListProps {
   id: number;
   serviceAccountingCode: string;
   serviceAmount: number;
-  serviceQty: number;
+  serviceHours: number;
   serviceTotalAmount: number;
 }
 

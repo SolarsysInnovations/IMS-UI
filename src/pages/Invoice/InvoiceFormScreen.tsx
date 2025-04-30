@@ -68,7 +68,7 @@ interface Service {
   serviceAccountingCode: string;
   serviceDescription: string;
   serviceAmount: number;
-  serviceQty: number;
+  serviceHours: number;
   serviceTotalAmount: number;
 }
 interface InvoiceGetValueProps {
@@ -233,7 +233,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
         id: `${rowIdCounter.current++}`, // Manually assign unique ID
         serviceAccountingCode: s.serviceAccountingCode,
         serviceDescription: s.serviceDescription,
-        serviceQty: 0,
+        serviceHours: 0,
         serviceAmount: s.serviceAmount,
         serviceTotalAmount: 0,
       }));
@@ -262,11 +262,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
       const updatedServicesList = prevInvoiceValues.servicesList.map(
         (service: any, serviceIndex: any) => {
           if (serviceIndex === index) {
-            const serviceQty = isNaN(parsedValue) ? 0 : parsedValue;
-            const serviceTotalAmount = serviceQty * service.serviceAmount;
+            const serviceHours = isNaN(parsedValue) ? 0 : parsedValue;
+            const serviceTotalAmount = serviceHours * service.serviceAmount;
             return {
               ...service,
-              serviceQty,
+              serviceHours,
               serviceTotalAmount,
             };
           }
@@ -285,7 +285,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     const newRow = {
       id: `row_${Date.now()}`,
       serviceAccountingCode: "",
-      serviceQty: 0,
+      serviceHours: 0,
       serviceAmount: 0,
       serviceTotalAmount: 0,
     };
@@ -796,7 +796,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             Description
                           </TableCell>
                           <TableCell sx={{ width: "50px" }} align="center">
-                            Quantity
+                            Hours
                           </TableCell>
 
                           <TableCell sx={{ width: "100px" }} align="center">
@@ -861,7 +861,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                       updatedServiceList[index] = {
                                         ...updatedServiceList[index],
                                         serviceAccountingCode: "",
-                                        serviceQty: 0,
+                                        serviceHours: 0,
                                         serviceTotalAmount: 0,
                                       };
                                       setInvoiceValues((prevState: any) => ({
@@ -884,7 +884,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                               <TableCell align="right">
                                 <TextFieldUi
                                   type="number"
-                                  value={item?.serviceQty}
+                                  value={item?.serviceHours}
                                   // label='INout sample'
                                   onChange={(e) =>
                                     handleQuantityChange(e, index)
