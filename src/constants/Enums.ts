@@ -19,7 +19,7 @@ export enum Roles {
     ADMIN = "ADMIN",
     APPROVER = "APPROVER",
     STANDARDUSER = "STANDARDUSER",
-    GUEST = "GUEST"
+    GUEST = "GUEST",
 };
 
 

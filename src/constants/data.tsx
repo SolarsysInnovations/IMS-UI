@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useGetUserRoleMutation } from "../redux-store/api/injectedApis";
 import { Roles } from "./Enums";
 import { Home, Apartment } from "@mui/icons-material";
 import GroupIcon from '@mui/icons-material/Group';
@@ -22,28 +20,7 @@ import UserScreen from "../pages/company-users/UserScreen";
 import SettingRoleScreen from "../pages/settings/settings-role";
 import ServicesList from "../pages/service/service-list-screen";
 import CompanyLogo from "../pages/settings/settings-company/company-logo";
-import { selectCurrentId } from "../redux-store/auth/authSlice";
-import { useSelector } from "react-redux";
 import SettingScreen from "../pages/settings/settings";
-
-const Sidebar = () => {
-  const [userRole, setUserRole] = useState(null);
-  const [getUserRole] = useGetUserRoleMutation();
-  const id = useSelector(selectCurrentId);
-  useEffect(() => {
-    if (id) {
-      getUserRole(id) // Pass id directly here
-        .unwrap()
-        .then((response) => {
-          setUserRole(response?.userRole || null);
-        })
-        .catch((error) => {
-          console.error("Error fetching user role:", error);
-        });
-    }
-  }, [id, getUserRole]);
-
-}
 
   export const sidebarTwo = [
     {
@@ -211,7 +188,6 @@ export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED",
 interface UserAccess {
   canCreateCustomers: boolean;
   canViewCustomers: boolean;
-  // canViewCustomerList: boolean;
   canEditCustomers: boolean;
   canDeleteCustomers: boolean;
   canCreateInvoices: boolean;
@@ -513,5 +489,5 @@ export const applicationUserAccess: ApplicationUserAccess = {
    canEditService: false,
    canDeleteService: false,
 
-  },
+  }
 };

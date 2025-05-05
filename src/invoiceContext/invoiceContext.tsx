@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import { InvoiceContextType } from "./invoiceContextTypes";
+import { Roles } from "../constants/Enums";
 
 let invoiceContextValue: InvoiceContextType = {
   userDetails: {
@@ -8,7 +9,7 @@ let invoiceContextValue: InvoiceContextType = {
     userEmail: "",
     userMobile: "",
     description: "",
-    userRole: "",
+    userRole: Roles.GUEST,
   },
   companyDetails: {
     companyName: "",

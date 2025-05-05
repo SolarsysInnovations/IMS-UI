@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import * as Yup from "yup";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { customerFields } from "../../constants/form-data/form-data-json";
 import { customerInitialValues } from "../../constants/forms/formikInitialValues";

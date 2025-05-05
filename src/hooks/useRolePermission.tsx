@@ -1,40 +1,14 @@
-import { useSelector } from 'react-redux';
-import { selectCurrentId } from '../redux-store/auth/authSlice';
 import { applicationUserAccess } from '../constants/data';
 import { Roles } from '../constants/Enums';
-import { useGetUserRoleMutation } from '../redux-store/api/injectedApis';
-import { useEffect, useState } from 'react';
+import { useInVoiceContext } from '../invoiceContext/invoiceContext';
 
 export const useRolePermissions = () => {
-    const id = useSelector(selectCurrentId);
-    const [getUserRole, { data: userRoleData, isLoading, error }] = useGetUserRoleMutation();
-    const [userRole, setUserRole] = useState<Roles | undefined>(undefined);
+    const context = useInVoiceContext();
+    const userRole = context.userDetails.userRole;
 
-    // Trigger the API to fetch user role if needed
-    useEffect(() => {
-        if (id) {
-            getUserRole(id); // Assuming `id` is the user identifier
-        }
-    }, [id, getUserRole]);
+    const finalUserRole = Roles[userRole] ?? Roles.GUEST;
 
-    useEffect(() => {
-        if (userRoleData) {
-            setUserRole(userRoleData.userRole); // Access 'userRole' instead of 'role'
-        }
-    }, [userRoleData]);
-
-    // Log error if any
-    useEffect(() => {
-        if (error) {
-            console.error("Error fetching user role:", error);
-        }
-    }, [error]);
-
-    // Ensure userRole is always a valid key for applicationUserAccess
-    const finalUserRole = userRole ?? Roles.GUEST; // Use Roles.GUEST if userRole is undefined
-
-    // Fetch role permissions from the applicationUserAccess
-    const rolePermissions = applicationUserAccess[finalUserRole] || {};
+    const rolePermissions = applicationUserAccess[finalUserRole] ?? {};
 
     return rolePermissions;
 };

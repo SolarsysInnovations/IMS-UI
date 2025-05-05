@@ -1,8 +1,5 @@
 import * as Yup from 'yup';
 import { FieldProps } from "../../types/types";
-import YupPassword from 'yup-password';
-
-YupPassword(Yup) 
 
 export const customerFields: FieldProps[] = [
   {

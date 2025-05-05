@@ -1,5 +1,4 @@
-type RoleType = "ADMIN" | "STANDARDUSER" | "GUEST" | "APPROVER" | "SUPERADMIN" | "";
-
+import { Roles } from "../constants/Enums";
 
 interface UserDetailsInterface {
   userId: string;
@@ -7,7 +6,7 @@ interface UserDetailsInterface {
   userEmail: string | null;
   userMobile: string | null;
   description: string | null;
-  userRole: RoleType;
+  userRole: Roles;
 }
 
 interface CompanyDetailsInterface {
