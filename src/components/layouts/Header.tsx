@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -10,16 +11,8 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
-import { useState } from "react";
-import {
-  Logout,
-  Settings,
-  Person,
-  Lock,
-} from "@mui/icons-material";
-import {
-  logOut,
-} from "../../redux-store/auth/authSlice";
+import { Logout, Settings, Person, Lock } from "@mui/icons-material";
+import { logOut } from "../../redux-store/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
 import DialogBoxUi from "../ui/DialogBox";
@@ -140,7 +133,7 @@ const MenuComponent = ({
   >
     {menuItems.map((item: any, index: any) => (
       <MenuItem
-        key={index}
+        key={`${item.text}-${index}`}
         onClick={() => onMenuItemClick(item)}
         sx={{ ":hover": { color: "primary.dark" }, fontSize: "13px" }}
       >
@@ -159,6 +152,7 @@ const MenuComponent = ({
 );
 
 export default function Header() {
+  const context = useInVoiceContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [addMenuAnchorEl, setAddMenuAnchorEl] = useState<null | HTMLElement>(
     null
@@ -168,8 +162,7 @@ export default function Header() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
-  const context = useInVoiceContext();
-  const userName = context.userDetails.userName || "Guest"; 
+  const userName = context.userDetails.userName || "Guest";
   const userRole = context.userDetails.userRole || "Guest";
 
   const handleMenuOpen = (setAnchor: any) => (event: any) => {
@@ -194,8 +187,21 @@ export default function Header() {
     setAddMenuAnchorEl(null);
   };
 
+  function handlePopupMenuOpen(popUpComponent: string){
+    if(popUpComponent === PopupComponents.USER_PROFILE) {
+      return <UserProfile />;
+    }else if(popUpComponent === PopupComponents.CHANGE_PASSWORD) {
+      return <ChangePassword
+        onClose={() => {
+          setOpenDialogBox(false);
+          setPopUpComponent("");
+        }}
+      />;
+    }
+    return null;
+  }
+
   return (
-    <>
       <AppBar
         sx={{
           width: "100%",
@@ -224,7 +230,7 @@ export default function Header() {
                 display="flex"
                 alignItems="center"
                 sx={{
-                  fontWeight: 500, // General font styling for the text
+                  fontWeight: 500,
                   fontSize: "1.25rem",
                 }}
               >
@@ -232,9 +238,9 @@ export default function Header() {
                 <Box
                   component="span"
                   sx={{
-                    fontWeight: "bold", // Highlight userRole
-                    color: "primary.main", // Use theme's primary color
-                    marginLeft: 1, // Add spacing between 'Hello' and the role
+                    fontWeight: "bold",
+                    color: "primary.main",
+                    marginLeft: 1,
                   }}
                 >
                   {userName}
@@ -245,23 +251,6 @@ export default function Header() {
 
           <Grid item xs={6} display="flex">
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              {/* <Tooltip title='Add item'>
-                <IconButton
-                  sx={{ width: "30px" }}
-                  onClick={handleMenuOpen(setAddMenuAnchorEl)}
-                  size='small'
-                >
-                  <AddIcon
-                    sx={{
-                      ":hover": {
-                        color: "primary.main",
-                      },
-                      color: "grey.500",
-                      width: "20px",
-                    }}
-                  />
-                </IconButton>
-              </Tooltip> */}
               <Tooltip title="Account settings">
                 <IconButton
                   sx={{ width: "30px" }}
@@ -301,24 +290,12 @@ export default function Header() {
         />
         <DialogBoxUi
           open={openDialogBox}
-          content={
-            popUpComponent === PopupComponents.USER_PROFILE ? (
-              <UserProfile />
-            ) : popUpComponent === PopupComponents.CHANGE_PASSWORD ? (
-              <ChangePassword
-                onClose={() => {
-                  setOpenDialogBox(false);
-                  setPopUpComponent("");
-                }}
-              />
-            ) : null
-          }
+          content={handlePopupMenuOpen(popUpComponent)}
           handleClose={() => {
             setOpenDialogBox(false);
             setPopUpComponent("");
           }}
         />
       </AppBar>
-    </>
   );
 }

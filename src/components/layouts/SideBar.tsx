@@ -51,7 +51,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'space-between',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -85,7 +84,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [open, setOpen] = useState(true);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const userRole = context.userDetails.userRole || "Guest";
-  const [activeItem, setActiveItem] = React.useState<string>('');
+  const [activeItem, setActiveItem] = React.useState<string>("");
 
   const handleDrawerClose = () => {
     setOpen((prev) => !prev);
@@ -98,32 +97,62 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const isActive = (path: string) => location.pathname.startsWith(path);
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <Drawer variant="permanent" open={open}>
-        <Avatar sx={{ transition: "0.2s", bgcolor: "white", marginLeft: open ? 3 : 1.5, marginTop: 2, width: 40, height: 40, color: "white", }}
-          src={Logo}/>  
-        <DrawerHeader style={{ backgroundColor: "#1C2536", display: "flex", alignItems: "center" }}>
-          {open && <Typography variant="h6" sx={{ color: 'white', textAlign: 'left', marginLeft: 2 }}>Invoice</Typography>}
+        <Avatar
+          sx={{
+            transition: "0.2s",
+            bgcolor: "white",
+            marginLeft: open ? 3 : 1.5,
+            marginTop: 2,
+            width: 40,
+            height: 40,
+            color: "white",
+          }}
+          src={Logo}
+        />
+        <DrawerHeader
+          style={{
+            backgroundColor: "#1C2536",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {open && (
+            <Typography
+              variant="h6"
+              sx={{ color: "white", textAlign: "left", marginLeft: 2 }}
+            >
+              Invoice
+            </Typography>
+          )}
           <IconButton onClick={handleDrawerClose}>
-            {!open ? <MenuIcon style={{ color: "#fff" }} /> : <ChevronLeftIcon style={{ color: "#fff" }} />}
+            {!open ? (
+              <MenuIcon style={{ color: "#fff" }} />
+            ) : (
+              <ChevronLeftIcon style={{ color: "#fff" }} />
+            )}
           </IconButton>
         </DrawerHeader>
 
-        <List
-          disablePadding={true} sx={{ mt: 1, }}
-        >
+        <List disablePadding={true} sx={{ mt: 1 }}>
           <>
             {sidebarTwo?.map((item: any, index: number) => {
-              if (!item.allowedRoles || (userRole && item.allowedRoles.includes(userRole))) {
+              if (
+                !item.allowedRoles ||
+                (userRole && item.allowedRoles.includes(userRole))
+              ) {
                 return (
                   <React.Fragment key={item.id}>
                     <ListItemButton
                       sx={{
                         width: "200px",
                         "&:hover": {
-                          backgroundColor: 'rgba(255, 255, 255, 0.067)'
+                          backgroundColor: "rgba(255, 255, 255, 0.067)",
                         },
-                        backgroundColor: isActive(item.path) ? "rgba(255, 255, 255, 0.067) " : "",
+                        backgroundColor: isActive(item.path)
+                          ? "rgba(255, 255, 255, 0.067) "
+                          : "",
                         paddingTop: "2px",
                         paddingBottom: "2px",
                         marginTop: "10px",
@@ -131,37 +160,82 @@ export default function MainLayout({ children }: MainLayoutProps) {
                         marginLeft: open ? 2 : 0,
                         borderRadius: "5px",
                         minHeight: 10,
-                        justifyContent: open ? 'initial' : 'center',
+                        justifyContent: open ? "initial" : "center",
                         px: 2.5,
                       }}
                       onClick={() => navigate(item.path)}
                     >
-                      <ListItemIcon sx={{
-                        minWidth: "43px",
-                      }}>
+                      <ListItemIcon
+                        sx={{
+                          minWidth: "43px",
+                        }}
+                      >
                         {React.createElement(item.icon, {
                           sx: {
                             width: "22px",
-                            color: isActive(item.path) ? 'primary.main' : 'primary.light'
-                          }
+                            color: isActive(item.path)
+                              ? "primary.main"
+                              : "primary.light",
+                          },
                         })}
                       </ListItemIcon>
                       <ListItemText
                         primary={
-                          <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === item.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600, marginLeft: "5px" }}>
+                          <Typography
+                            color="inherit"
+                            variant="subtitle1"
+                            sx={{
+                              color:
+                                activeItem === item.path
+                                  ? `primary.contrastText`
+                                  : `primary.light`,
+                              fontSize: 14,
+                              fontWeight: 600,
+                              marginLeft: "5px",
+                            }}
+                          >
                             {capitalize(item.title)}
                           </Typography>
                         }
                       />
-                      {item.subItems && item.subItems.some((subItem: any) => subItem.show) && (
-                        openIndex === index ?
-                          <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} /> :
-                          <KeyboardArrowDownIcon onClick={(e) => { e.stopPropagation(); handleCollapse(index); }} sx={{ width: "15px", color: `primary.light`, backgroundColor: `#ffffff14`, borderRadius: "10px", padding: "0 5px" }} />
-                      )}
-
+                      {item.subItems &&
+                        item.subItems.some((subItem: any) => subItem.show) &&
+                        (openIndex === index ? (
+                          <KeyboardArrowDownIcon
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCollapse(index);
+                            }}
+                            sx={{
+                              width: "15px",
+                              color: `primary.light`,
+                              backgroundColor: `#ffffff14`,
+                              borderRadius: "10px",
+                              padding: "0 5px",
+                            }}
+                          />
+                        ) : (
+                          <KeyboardArrowDownIcon
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCollapse(index);
+                            }}
+                            sx={{
+                              width: "15px",
+                              color: `primary.light`,
+                              backgroundColor: `#ffffff14`,
+                              borderRadius: "10px",
+                              padding: "0 5px",
+                            }}
+                          />
+                        ))}
                     </ListItemButton>
                     {item.subItems && (
-                      <Collapse in={openIndex === index} timeout="auto" unmountOnExit>
+                      <Collapse
+                        in={openIndex === index}
+                        timeout="auto"
+                        unmountOnExit
+                      >
                         <List component="div" disablePadding>
                           {item.subItems
                             .filter((subItem: any) => subItem.show !== false)
@@ -171,27 +245,55 @@ export default function MainLayout({ children }: MainLayoutProps) {
                                 sx={{
                                   width: "200px",
                                   "&:hover": {
-                                    backgroundColor: 'rgba(255, 255, 255, 0.067)'
+                                    backgroundColor:
+                                      "rgba(255, 255, 255, 0.067)",
                                   },
-                                  backgroundColor: activeItem === subItem.path ? "rgba(255, 255, 255, 0.067) " : "",
+                                  backgroundColor:
+                                    activeItem === subItem.path
+                                      ? "rgba(255, 255, 255, 0.067) "
+                                      : "",
                                   paddingTop: "2px",
                                   paddingBottom: "2px",
                                   marginTop: "10px",
                                   transition: "0.2s",
-                                  marginLeft: open ? 2 : 2,
+                                  marginLeft: 2,
                                   borderRadius: "5px",
                                   minHeight: 10,
-                                  justifyContent: open ? 'initial' : 'center',
+                                  justifyContent: open ? "initial" : "center",
                                   px: 2.5,
                                 }}
                                 onClick={() => navigate(subItem.path)}
                               >
-                                <ListItemIcon sx={{ width: 'fit-content', minWidth: '20px !important' }}>
-                                  <FiberManualRecordIcon sx={{ width: '10px', color: activeItem === subItem.path ? `primary.main` : `primary.light` }} />
+                                <ListItemIcon
+                                  sx={{
+                                    width: "fit-content",
+                                    minWidth: "20px !important",
+                                  }}
+                                >
+                                  <FiberManualRecordIcon
+                                    sx={{
+                                      width: "10px",
+                                      color:
+                                        activeItem === subItem.path
+                                          ? `primary.main`
+                                          : `primary.light`,
+                                    }}
+                                  />
                                 </ListItemIcon>
                                 <ListItemText
                                   primary={
-                                    <Typography color="inherit" variant="subtitle1" sx={{ color: activeItem === subItem.path ? `primary.contrastText` : `primary.light`, fontSize: 14, fontWeight: 600 }}>
+                                    <Typography
+                                      color="inherit"
+                                      variant="subtitle1"
+                                      sx={{
+                                        color:
+                                          activeItem === subItem.path
+                                            ? `primary.contrastText`
+                                            : `primary.light`,
+                                        fontSize: 14,
+                                        fontWeight: 600,
+                                      }}
+                                    >
                                       {capitalize(subItem.title)}
                                     </Typography>
                                   }
@@ -201,21 +303,19 @@ export default function MainLayout({ children }: MainLayoutProps) {
                         </List>
                       </Collapse>
                     )}
-                  </React.Fragment>);
+                  </React.Fragment>
+                );
               }
-            }
-            )}
+            })}
           </>
         </List>
         {/*  <Divider /> */}
         <Divider />
       </Drawer>
-      <Box component="main" sx={{ width: "500px", flexGrow: 1, }}>
+      <Box component="main" sx={{ width: "500px", flexGrow: 1 }}>
         <Header />
-        <Box sx={{ px: 2, }}>
-          {children}
-        </Box>
+        <Box sx={{ px: 2 }}>{children}</Box>
       </Box>
-    </Box >
+    </Box>
   );
 }

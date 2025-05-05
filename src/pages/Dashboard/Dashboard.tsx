@@ -108,6 +108,14 @@ const DashboardScreen: React.FC = () => {
     }
   }
 
+  if(!userRole && isLoading) {
+    return (
+      <Box px={0} py={2}>
+        <Typography align="center">Loading dashboard...</Typography>
+      </Box>
+    );
+  }
+
     return (
       <Box px={0} py={2}>
         <Formik

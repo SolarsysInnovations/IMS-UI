@@ -8,7 +8,7 @@ let invoiceContextValue: InvoiceContextType = {
     userEmail: "",
     userMobile: "",
     description: "",
-    userRole: "GUEST",
+    userRole: "",
   },
   companyDetails: {
     companyName: "",
@@ -16,7 +16,7 @@ let invoiceContextValue: InvoiceContextType = {
   },
 };
 
-const InvoiceContext = createContext(invoiceContextValue);   
+const InvoiceContext = createContext(invoiceContextValue);
 const useInVoiceContext = () => useContext(InvoiceContext);
 
 function InvoiceContextProvider({

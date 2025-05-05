@@ -1,7 +1,5 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import ButtonSmallUi from '../ui/ButtonSmall';
-import { ButtonProps } from '@mui/material/Button';
 import ButtonUi from '../ui/Button';
 
 interface TableHeaderProps {

@@ -1,4 +1,4 @@
-type RoleType = "ADMIN" | "STANDARDUSER" | "GUEST" | "APPROVER" | "SUPERADMIN";
+type RoleType = "ADMIN" | "STANDARDUSER" | "GUEST" | "APPROVER" | "SUPERADMIN" | "";
 
 
 interface UserDetailsInterface {
