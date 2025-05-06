@@ -7,35 +7,32 @@ import {
   useGetCompanySettingByIdQuery,
 } from "../../../../src/redux-store/api/injectedApis";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
-import { selectUserDetails } from "../../../redux-store/auth/authSlice";
-import { useSelector } from "react-redux";
 import { clearCompanyLogo, setCompanyLogo } from "../../../redux-store/global/globalState";
 import { useDispatch } from "react-redux";
+import { useInVoiceContext } from "../../../invoiceContext/invoiceContext";
 
 
 const UploadScreen: React.FC = () => {
+  const context = useInVoiceContext();
   const dispatch = useDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
-  const [savedLogoUrl, setSavedLogoUrl] = useState<string | null>(null);
   const [base64String, setBase64String] = useState<string | null>(null);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
-
-  const companyInfo = useSelector(selectUserDetails);
-  const companyIdString = sessionStorage.getItem("id") || "";
+  const companyIdString = context.companyDetails.companyId ?? "";
 
   // Fetch company data
-  const { data: companyData, refetch: refetchCompanyData } = useGetCompanySettingByIdQuery(companyIdString);
+  const { data: companyData } = useGetCompanySettingByIdQuery(companyIdString);
   const [addCompanyLogo, { isSuccess: uploadSuccess, isError: uploadError, data }] = useAddCompanyLogoMutation();
-  const [deleteCompanyLogo, { isLoading: deleteCompanyLoading, isSuccess: deleteCompanySuccess, isError: deleteCompanyError }] =
+  const [deleteCompanyLogo, { isSuccess: deleteCompanySuccess, isError: deleteCompanyError }] =
     useDeleteCompanyLogoMutation();
 
   // Fetch logo data after company ID is available
-  const { id: companyId } = companyDetails || {};
-  const { data: logoData, isSuccess: logoSuccess, isError: logoError, refetch: refetchLogo } = useGetCompanyLogoByIdQuery(
+  const { id: companyId } = companyDetails ?? {};
+  const { data: logoData, isSuccess: logoSuccess, refetch: refetchLogo } = useGetCompanyLogoByIdQuery(
     companyId,
-    { skip: !companyId } // Skip fetching until companyId is available
+    { skip: !companyId }
   );
 
   useEffect(() => {
@@ -47,13 +44,10 @@ const UploadScreen: React.FC = () => {
   useEffect(() => {
     if (uploadSuccess && data && companyId) {
       const responseData = data as { logoUrl: string };
-      setSavedLogoUrl(responseData.logoUrl);
       dispatch(setCompanyLogo(responseData.logoUrl));
       setLoading(false);
       setSelectedFile(null);
       setImagePreview(null);
-  
-      // Only refetch if the query has already started
       refetchLogo();
     }
   }, [uploadSuccess, data, companyId, dispatch, refetchLogo]);
@@ -97,8 +91,7 @@ const UploadScreen: React.FC = () => {
             await deleteCompanyLogo(companyId).unwrap();
             // Clear the logo from the Redux store
             dispatch(clearCompanyLogo()); // Dispatch action to clear logo
-            setBase64String(null); // Optionally clear local state as well
-            setSavedLogoUrl(null);
+            setBase64String(null);
             refetchLogo();
         } catch (error) {
             console.error("Error deleting logo:", error);
@@ -167,20 +160,20 @@ const UploadScreen: React.FC = () => {
             style={{
               width: "200px",
               height: "200px",
-              objectFit: "contain", // Ensures the image scales properly inside the fixed box
+              objectFit: "contain",
               marginBottom: "10px",            }}
           />
         ) : (
           <Box
     component="span"
     sx={{
-      display: "inline-block",  // Ensures the box is inline for better alignment
-      fontSize: "12px",         // Slightly larger font for emphasis
-      fontWeight: "bold",       // Makes the text bold for better visibility
-      marginBottom: "10px",     // Adds spacing below the text
-      color: "red",           // White text for contrast
-      padding: "5px 10px",      // Adds padding around the text
-      borderRadius: "5px",      // Slightly rounded corners for aesthetic appeal
+      display: "inline-block",
+      fontSize: "12px",       
+      fontWeight: "bold",     
+      marginBottom: "10px",   
+      color: "red",         
+      padding: "5px 10px",    
+      borderRadius: "5px",    
     }}
   >
           * No image available *

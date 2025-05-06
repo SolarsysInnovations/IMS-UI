@@ -3,22 +3,16 @@ import { Form, Formik, FormikHelpers } from "formik";
 import { Box, Grid, Button, Typography, IconButton, InputLabel } from "@mui/material";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
 import { CompanyLogoProps } from "../../../types/types";
-import { useNavigate } from "react-router-dom";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CancelIcon from '@mui/icons-material/Close';
-
 import { useAddCompanyLogoMutation } from "../../../redux-store/api/injectedApis";
 import { companyLogoInitialProps } from "../../../constants/forms/formikInitialValues";
 
 const CompanyLogo: React.FC = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [showFilename, setShowFileName] = useState<string[]>([]);
+  const [showFileName, setShowFileName] = useState<string[]>([]);
   const [companyLogo, { isSuccess: companyLogoSuccess, isError: companyLogoError, error: companyLogoErrorObject }] = useAddCompanyLogoMutation();
   
- // const pathname = 'Company Logo';
-  const navigate = useNavigate();
-
-  // Handle file upload
   const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -44,7 +38,7 @@ const CompanyLogo: React.FC = () => {
       const formData = new FormData();
 
       uploadedFiles.forEach((file) => {
-        formData.append("files", file); // Ensure the key matches what the backend expects (e.g., "files" or "file")
+        formData.append("files", file);
       });
       
       // Submit the logo via the mutation
@@ -74,7 +68,6 @@ const CompanyLogo: React.FC = () => {
   return (
     <Formik
       initialValues={companyLogoInitialProps}
-    //  validationSchema={companyLogoValidationSchema}
       onSubmit={handleSubmit}
     >
       {({ handleSubmit }) => (
@@ -99,7 +92,7 @@ const CompanyLogo: React.FC = () => {
           
           {/* Display uploaded files */}
           <Grid container spacing={1}>
-            {showFilename.map((fileName, index) => (
+            {showFileName.map((fileName, index) => (
               <React.Fragment key={index}>
                 <Grid item xs={5}>
                   <Box sx={{ mt: 1, mb: -1, display: "flex", position: "relative", left: "15px" }}>

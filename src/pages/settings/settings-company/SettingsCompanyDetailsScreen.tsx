@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux-store/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux-store/store";
 import {
   useGetCompanySettingByIdQuery,
   useGetCompanyLogoByIdQuery,
   useGetSingleCompanySettingMutation,
-  useGetUserRoleMutation,
 } from "../../../redux-store/api/injectedApis";
 import { Box, Grid } from "@mui/material";
 import { setData } from "../../../redux-store/global/globalState";
@@ -13,22 +12,19 @@ import TableHeader from "../../../components/layouts/TableHeader";
 import SettingsCompanyForm from "./SettingsCompanyForm";
 import { Edit } from "@mui/icons-material";
 import DialogBoxUi from "../../../components/ui/DialogBox";
-import { selectCurrentId } from "../../../redux-store/auth/authSlice";
-import usePathname from "../../../hooks/usePathname";
+import { useInVoiceContext } from "../../../invoiceContext/invoiceContext";
+import { Roles } from "../../../constants/Enums";
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
-
+  const context = useInVoiceContext();
   const dispatch = useDispatch<AppDispatch>();
-  const pathname = usePathname();
   const [openModal, setOpenModal] = useState(false);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
-  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [openDialogBox, setOpenDialogBox] = useState(false);
   const [base64String, setBase64String] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
-  const [getUserRole, { data: userRoleData, isLoading }] =
-    useGetUserRoleMutation();
-  const userId = useSelector(selectCurrentId) || ""; // Use empty string as fallback
-  const { id: companyId } = companyDetails || {};
+  const userRole = context.userDetails.userRole;
+  const userId = context.userDetails.userId;
+  const { id: companyId } = companyDetails ?? {};
   const { data: companyData, refetch: refetchCompanyData } =
     useGetCompanySettingByIdQuery(userId);
 
@@ -37,24 +33,10 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const {
     data: logoData,
     isSuccess: logoSuccess,
-    isError: logoError,
     refetch: refetchLogoData,
   } = useGetCompanyLogoByIdQuery(companyId, {
     skip: !companyId,
   });
-
-  useEffect(() => {
-    if (userId) {
-      getUserRole(userId) // Pass id directly here
-        .unwrap()
-        .then((response) => {
-          setUserRole(response?.userRole || null);
-        })
-        .catch((error) => {
-          console.error("Error fetching user role:", error);
-        });
-    }
-  }, [userId, getUserRole]);
 
   useEffect(() => {
     if (logoSuccess && logoData?.companyLogo) {
@@ -88,9 +70,9 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
       const response = await getData(companyDetails.id);
       if ("data" in response) {
         const companyData = response.data;
-        await dispatch(setData(companyData)); // Store company data in global state
+        dispatch(setData(companyData));
         setOpenModal(true);
-        setIsOpenDialogBox(true);
+        setOpenDialogBox(true);
       } else {
         console.error("Error response:", response.error);
       }
@@ -102,22 +84,22 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const handleCloseDialog = () => {
     refetchCompanyData();
     refetchLogoData();
-    setIsOpenDialogBox(false);
+    setOpenDialogBox(false);
   };
 
   const button =
-    userRole !== "APPROVER" && userRole !== "ENDUSER"
+    userRole !== Roles.APPROVER && userRole !== Roles.STANDARDUSER
       ? [{ label: "Edit", icon: Edit, onClick: handleEditClick }]
       : [];
 
   if (!companyDetails) {
-    return <div></div>; // Ensure companyDetails are fetched before rendering the content
+    return <div></div>;
   }
 
   return (
     <>
       <DialogBoxUi
-        open={opendialogBox}
+        open={openDialogBox}
         content={
           <SettingsCompanyForm
             companyValue={companyDetails}
