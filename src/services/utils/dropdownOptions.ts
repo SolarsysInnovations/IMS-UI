@@ -7,8 +7,6 @@ export const generateOptions = (
     data?.map((item: any) => ({
       value: item[valueKey],
       label: item[labelKey],
-    })) || []
+    })) ?? []
   );
 };
-
-// Usage:

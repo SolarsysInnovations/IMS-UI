@@ -24,8 +24,8 @@ const userDetailsFromStorage = sessionStorage.getItem('userDetails');
 const initialState: AuthState = {
   id: idFromStorage,
   user: null,
-  accessToken: tokenFromStorage || null,
-  refresh: refreshTokenFromStorage || null,
+  accessToken: tokenFromStorage ?? null,
+  refresh: refreshTokenFromStorage ?? null,
   userDetails: userDetailsFromStorage
     ? JSON.parse(userDetailsFromStorage)
     : null,
@@ -37,8 +37,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      const { id, userEmail, userName, accessToken, refresh, userRole } =
-        action.payload;
+      const { id, accessToken, refresh } = action.payload;
 
       // Update state with the new credentials
       state.id = id;
@@ -47,9 +46,9 @@ const authSlice = createSlice({
       state.refresh = refresh;
 
       // Store credentials in session storage
-      sessionStorage.setItem('id', id || '');
-      sessionStorage.setItem('accessToken', accessToken || '');
-      sessionStorage.setItem('refresh', refresh || '');
+      sessionStorage.setItem('id', id ?? '');
+      sessionStorage.setItem('accessToken', accessToken ?? '');
+      sessionStorage.setItem('refresh', refresh ?? '');
     },
     logOut: (state) => {
       // Reset state values
@@ -67,8 +66,8 @@ const authSlice = createSlice({
       state.refresh = refresh;
 
       // Update tokens in session storage
-      sessionStorage.setItem('accessToken', accessToken || '');
-      sessionStorage.setItem('refresh', refresh || '');
+      sessionStorage.setItem('accessToken', accessToken ?? '');
+      sessionStorage.setItem('refresh', refresh ?? '');
     },
   },
 });

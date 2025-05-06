@@ -1,8 +1,4 @@
-import {
-  GridColDef,
-  GridDeleteIcon,
-  GridValueSetterParams,
-} from '@mui/x-data-grid';
+import { GridColDef, GridValueSetterParams } from '@mui/x-data-grid';
 
 const id = 1;
 
@@ -24,7 +20,7 @@ export const columns: GridColDef[] = [
     headerName: 'Qty',
     width: 150,
     editable: true,
-    valueGetter: (params: any) => params.value || 0,
+    valueGetter: (params: any) => params.value ?? 0,
     valueSetter: (params: GridValueSetterParams) => {
       let newValue = params.value; // New value entered by the user
       let row = { ...params.row }; // Copy the row object
@@ -39,6 +35,6 @@ export const columns: GridColDef[] = [
     headerName: 'Total Amount',
     width: 150,
     editable: false,
-    valueGetter: (params: any) => params.value || 0,
+    valueGetter: (params: any) => params.value ?? 0,
   },
 ];

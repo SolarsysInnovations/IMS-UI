@@ -12,7 +12,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { clearServiceData } from '../../redux-store/slices/serviceSlice';
-import { serviceCreationProps } from '../../types/types';
+import { ServiceCreationProps } from '../../types/types';
 
 const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
   const [
@@ -58,7 +58,7 @@ const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
 
   const initialValues = serviceEditInitialValues || defaultServiceInitialValues;
 
-  const onSubmit = async (values: serviceCreationProps, actions: any) => {
+  const onSubmit = async (values: ServiceCreationProps, actions: any) => {
     try {
       if (serviceEditInitialValues) {
         const id = serviceEditInitialValues.id;

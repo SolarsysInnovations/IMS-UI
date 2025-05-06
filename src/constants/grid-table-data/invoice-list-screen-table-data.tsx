@@ -1,12 +1,10 @@
-// Import necessary libraries and hooks
 import { useDispatch } from 'react-redux';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Stack } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import {
   useDeleteInvoiceMutation,
   useGetInvoiceListQuery,
-  useGetInvoiceListScreenMutation,
   useGetSingleInvoiceMutation,
 } from '../../redux-store/api/injectedApis';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
@@ -20,7 +18,7 @@ import DialogBoxUi from '../../components/ui/DialogBox';
 import InvoiceUi from '../../pages/Invoice/Generate-Invoice/InvoiceUi';
 
 interface MyCellRendererProps {
-  row: any; // You may want to replace `any` with a specific type for the `row` if available
+  row: any;
   onDelete: (id: string) => void;
 }
 
@@ -43,9 +41,8 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({
       error: invoiceDeleteErrorObject,
     },
   ] = useDeleteInvoiceMutation();
-  const [getList, { data: invoice }] = useGetSingleInvoiceMutation();
-  const { refetch: getInvoiceList, isSuccess: refetchSuccess } =
-    useGetInvoiceListQuery();
+  const [getList] = useGetSingleInvoiceMutation();
+  const { refetch: getInvoiceList } = useGetInvoiceListQuery();
 
   useSnackbarNotifications({
     error: invoiceDeleteError,

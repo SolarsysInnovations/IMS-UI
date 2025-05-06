@@ -1,14 +1,5 @@
-import { RemoveRedEyeOutlined } from '@mui/icons-material';
 import { IconButton, Stack } from '@mui/material';
-import {
-  GridColDef,
-  GridDeleteIcon,
-  GridValueSetterParams,
-} from '@mui/x-data-grid';
-import ModalUi from '../../../components/ui/ModalUi';
-import InvoiceUi from '../../../pages/Invoice/Generate-Invoice/InvoiceUi';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
 import { AppDispatch } from '../../../redux-store/store';
 import { useDispatch } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
@@ -16,18 +7,15 @@ import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification
 import {
   useDeleteTdsTaxMutation,
   useGetSingleTdsTaxMutation,
-  useGetTdsTaxListQuery,
 } from '../../../redux-store/api/injectedApis';
 import { setTdsTaxData } from '../../../redux-store/slices/tdsSlice';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data: getTdsTax, refetch } = useGetTdsTaxListQuery();
-  const [getPaymentTerm, {}] = useGetSingleTdsTaxMutation();
+  const [getPaymentTerm] = useGetSingleTdsTaxMutation();
   const [
     deleteTdsTax,
     {
-      isLoading: tdsTaxDeleteLoading,
       isSuccess: tdsTaxDeleteSuccess,
       isError: tdsTaxDeleteError,
       error: tdsTaxDeleteErrorObject,

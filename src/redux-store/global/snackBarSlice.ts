@@ -1,4 +1,3 @@
-// snackbarSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Define interface for slice state
@@ -15,7 +14,7 @@ const snackbarSlice = createSlice({
     isOpen: false,
     message: '',
     severity: 'info',
-  } as SnackbarState, // Ensure initial state type is SnackbarState
+  } as SnackbarState,
   reducers: {
     showSnackbar(
       state,
@@ -26,7 +25,7 @@ const snackbarSlice = createSlice({
     ) {
       state.isOpen = true;
       state.message = action.payload.message;
-      state.severity = action.payload.severity || 'info';
+      state.severity = action.payload.severity ?? 'info';
     },
     hideSnackbar(state) {
       state.isOpen = false;

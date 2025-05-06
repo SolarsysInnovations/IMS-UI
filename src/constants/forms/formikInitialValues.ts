@@ -1,10 +1,9 @@
-import { number } from 'yup';
 import {
   InvoiceInitialValueProps,
   LoginProps,
   ForgetPwdProps,
   DyCreateCustomerProps,
-  serviceCreationProps,
+  ServiceCreationProps,
   GstTypeProps,
   TdsTaxProps,
   SendEmailInitialValueProps,
@@ -17,8 +16,6 @@ import {
   AdminCompanyUsersInitialValueProps,
   SuperAdminUsersInitialValueProps,
 } from '../../types/types';
-import { format } from 'path';
-import { companyDetailsValidationSchema } from './validations/validationSchema';
 
 export const loginInitialValue: LoginProps = {
   userEmail: '',
@@ -111,7 +108,7 @@ export const gstTypeInitialValue: GstTypeProps = {
 const fromMail = localStorage.getItem('userEmail');
 
 export const invoiceMailReasonInitialValue: InvoiceMailReasonProps = {
-  fromMail: fromMail || '',
+  fromMail: fromMail ?? '',
   toMail: '',
   reason: '',
 };
@@ -146,7 +143,7 @@ export const dyCustomerInitialValue: DyCreateCustomerProps = {
     },
   ],
 };
-export const dyserviceInitialValues: serviceCreationProps = {
+export const dyserviceInitialValues: ServiceCreationProps = {
   serviceAccountingCode: '',
   serviceDescription: '',
   serviceAmount: 0,

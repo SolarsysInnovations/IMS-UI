@@ -3,7 +3,6 @@ import * as Yup from 'yup';
 // -------- customer ------------------------
 export interface LoginProps {
   userEmail: string;
-  // username: string;
   password: string;
 }
 
@@ -17,7 +16,7 @@ export interface ResetPwdProps {
 }
 
 export interface GstTypeProps {
-  id?: string | undefined;
+  id?: string;
   gstName: string;
   gstPercentage: number | null;
 }
@@ -25,7 +24,7 @@ export interface GstTypeFormProps {
   gstTypeValue?: GstTypeProps;
 }
 export interface TdsTaxProps {
-  id?: string | undefined;
+  id?: string;
   taxName: string;
   taxPercentage: number | null;
 }
@@ -40,8 +39,8 @@ export interface CompanyFormProps {
   mode?: 'create' | 'edit';
 }
 export interface LinkFormProps {
-  linkValue: linkCreationProps;
-  handleClose: () => void; // Add this line
+  linkValue: LinkCreationProps;
+  handleClose: () => void;
 }
 export interface PaymentTermsProps {
   id?: string;
@@ -167,21 +166,19 @@ export interface InvoiceInitialValueProps {
   signatureFile: string | null;
 }
 export interface InvoicesInitialValueProps {
-  // invoiceDate: string;
   startDate: string;
   endDate: string;
   filter: string;
 }
 
 export interface ArAgingInitialValueProps {
-  // invoiceDate: string;
   startDate: string;
   endDate: string;
   filter: string;
 }
 
 // ---------- service  --------------------
-export interface serviceCreationProps {
+export interface ServiceCreationProps {
   serviceAccountingCode: string;
   serviceDescription: string;
   serviceAmount: number;
@@ -223,7 +220,7 @@ export interface AdminCompanyUsersInitialValueProps {
   description: string;
 }
 
-export interface linkCreationProps {
+export interface LinkCreationProps {
   id: string;
   label: string;
   url: string;
@@ -235,9 +232,7 @@ export interface SendEmailInitialValueProps {
   body: string;
   fromemail: string;
   recipientEmail: string;
-  //description: string;
   file: File | null;
-  // cc: string;
   subject: string;
 }
 
