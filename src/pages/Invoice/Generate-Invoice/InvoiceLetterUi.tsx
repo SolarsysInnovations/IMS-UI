@@ -16,7 +16,7 @@ import {
   selectCurrentId,
   selectUserDetails,
 } from '../../../redux-store/auth/authSlice';
-import { formatDate } from '../../../services/utils/dataFormatter';
+import { formatDate } from '../../../services/utils/dateFormatter';
 import StageStepper from '../../../components/ui/StepperUi';
 import ButtonUi from '../../../components/ui/Button';
 import SplitButton from '../../../components/ui/SplitButton';

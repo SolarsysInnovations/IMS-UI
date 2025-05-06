@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
@@ -43,7 +43,7 @@ interface CompanyUserData {
 const CompanyList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { data: company, error, isLoading, refetch } = useGetUsersListQuery();
+  const { data: company, error, isLoading } = useGetUsersListQuery();
   const [mergedData, setMergedData] = useState<any[]>([]);
   const pathname = usePathname();
   const { canCreateCompanies } = useRolePermissions();

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { linkFields } from '../../../constants/form-data/form-data-json';
 import { linkInitialValues } from '../../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
@@ -16,13 +16,11 @@ import { useNavigate } from 'react-router-dom';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 
 const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
-  const [openModal, setOpenModal] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [
     addLink,
     {
-      isLoading: linkAddLoading,
       isSuccess: linkAddSuccess,
       isError: linkAddError,
       error: linkAddErrorObject,
@@ -31,13 +29,12 @@ const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
   const [
     updateLink,
     {
-      isLoading: linkUpdateLoading,
       isSuccess: linkUpdateSuccess,
       isError: linkUpdateError,
       error: linkUpdateErrorObject,
     },
   ] = useUpdatePortalLinkMutation();
-  const { data: linkList, refetch } = useGetPortalLinkQuery();
+  const { refetch } = useGetPortalLinkQuery();
 
   const initialValue = linkValue || linkInitialValues;
 

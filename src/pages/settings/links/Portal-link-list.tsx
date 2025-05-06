@@ -35,11 +35,10 @@ const PortalLinkList: React.FC = () => {
     {
       isSuccess: deleteLinkSuccess,
       isError: deleteLinkError,
-      error: deleteLinkErrorObject,
     },
   ] = useDeletePortalLinkMutation();
   const [getLink] = useGetSinglePortalLinkMutation();
-  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [openDialogBox, setOpenDialogBox] = useState(false);
   const linkValue = useSelector((state: any) => state.globalState.data);
   const [key, setKey] = useState<number>(0);
 
@@ -52,7 +51,7 @@ const PortalLinkList: React.FC = () => {
 
   useEffect(() => {
     refetch();
-  }, [linkCreation]); // Refetch data after creation or deletion
+  }, [linkCreation, refetch]); // Refetch data after creation or deletion
 
   useEffect(() => {
     if (deleteLinkSuccess) {
@@ -65,7 +64,7 @@ const PortalLinkList: React.FC = () => {
         errorMessage: 'Error deleting Link',
       });
     }
-  }, [deleteLinkSuccess, deleteLinkError]);
+  }, [deleteLinkSuccess, deleteLinkError, refetch]);
 
   // Call the snackbar notification hook at the top level
   useSnackbarNotifications({
@@ -80,7 +79,7 @@ const PortalLinkList: React.FC = () => {
       const response = await getLink(id);
       if ('data' in response) {
         dispatch(setData(response.data));
-        setIsOpenDialogBox(true);
+        setOpenDialogBox(true);
       } else {
         console.error('Error response:', response.error);
       }
@@ -104,7 +103,7 @@ const PortalLinkList: React.FC = () => {
 
   const handleModalClose = () => {
     setKey((prevKey) => prevKey + 1); // Reset the key to force component re-render
-    setIsOpenDialogBox(false); // Close the dialog
+    setOpenDialogBox(false); // Close the dialog
     refetch(); // Refetch the data after closing
   };
 
@@ -119,7 +118,7 @@ const PortalLinkList: React.FC = () => {
   return (
     <Box>
       <DialogBoxUi
-        open={opendialogBox}
+        open={openDialogBox}
         content={
           <PortalLinkCreate
             linkValue={linkValue}

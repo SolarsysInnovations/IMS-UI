@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 // Define valid variant names as a union type
@@ -7,16 +6,7 @@ type ButtonVariant = 'text' | 'outlined' | 'contained';
 
 interface ButtonProps {
   label?: string;
-  variant?: ButtonVariant; // Use the defined union type for variant
-  color?:
-    | 'primary'
-    | 'secondary'
-    | 'inherit'
-    | 'default'
-    | 'error'
-    | 'info'
-    | 'success'
-    | 'warning';
+  variant?: ButtonVariant;
   disabled?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
@@ -25,34 +15,29 @@ interface ButtonProps {
   sx?: React.CSSProperties;
   type?: 'submit' | 'button';
   fullWidth?: boolean;
-  component?: React.ElementType;
-  hasBackground?: boolean;
   loading?: boolean;
   smallButtonCss?: boolean;
-  gridButton?: boolean;
-  onMouseEnter?: (e: React.MouseEvent) => void; // Hover event
-  onMouseLeave?: (e: React.MouseEvent) => void; // Hover event
+  onMouseEnter?: (e: React.MouseEvent) => void;
+  onMouseLeave?: (e: React.MouseEvent) => void;
+  color?: 'primary' | 'secondary';
 }
 
 const ButtonUi: React.FC<ButtonProps> = ({
   onMouseEnter,
   onMouseLeave,
   label,
-  variant = 'contained', // Default variant
-  color = 'primary', // Default color
+  variant = 'contained',
   disabled = false,
   startIcon,
   endIcon,
   onClick,
-  size = 'medium', // Default size
+  size = 'medium',
   sx,
-  type = 'submit', // Default type
+  type = 'submit', 
   fullWidth = false,
-  component,
-  hasBackground = true, // Default to true
   loading = false,
   smallButtonCss,
-  gridButton = true,
+  color = 'primary',
 }) => {
   return (
     <LoadingButton
@@ -62,11 +47,6 @@ const ButtonUi: React.FC<ButtonProps> = ({
         },
         padding: '10px 16px',
         ...sx,
-        ...(gridButton
-          ? {
-              // border: " 1px solid #6366F1 !important",
-            }
-          : {}),
         ...(smallButtonCss
           ? {
               borderRadius: '5px',
@@ -93,7 +73,7 @@ const ButtonUi: React.FC<ButtonProps> = ({
       onMouseEnter={onMouseEnter} // Hover event handler
       onMouseLeave={onMouseLeave} // Hover event handler
     >
-      {label || 'Continue'}
+      {label ?? 'Continue'}
     </LoadingButton>
   );
 };

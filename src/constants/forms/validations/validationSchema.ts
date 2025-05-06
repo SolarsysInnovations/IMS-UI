@@ -13,8 +13,6 @@ export const loginValidationSchema = Yup.object({
       }
       return true;
     }),
-  // username: Yup.string()
-  //     .required('Email is required'),
   password: Yup.string().max(255).required('Password is required'),
 });
 
@@ -42,24 +40,8 @@ export const invoiceValidationSchema = Yup.object({
     .min(0, 'gstPercentage must be a positive number')
     .max(999, 'gstPercentage must be a three-digit number')
     .required('GST Percentage is required'),
-  // invoiceDate: Yup.string()
-  //     .max(255)
-  //     .required('paymentTerms is required'),
   gstInNumber: Yup.string().max(255).required('Country is required'),
-  // paymentTerms: Yup.string()
-  //     .max(255)
-  //     .required('Payment is required'),
   startDate: Yup.string().required('Due date is required'),
-  // notes: Yup.string()
-  //     .max(255)
-  //     .required('notes is required'),
-  // // invoiceStatus: Yup.string()
-  // //     .max(255)
-  // //     .required('state is required'),
-  // service: Yup.array()
-  //     .min(1, "At least one service must be selected")
-  //     .of(Yup.string())
-  //     .required("services is required"),
 });
 
 export const customerValidationSchema = Yup.object().shape({
@@ -99,45 +81,12 @@ export const customerValidationSchema = Yup.object().shape({
 
 export const serviceValidationSchema = Yup.object().shape({
   serviceAccountingCode: Yup.string().required('Accounting Code is required'),
-  // serviceDescription: Yup.string().required('Description is required'),
   serviceAmount: Yup.string().required('Amount is required'),
 });
 export const linkValidationSchema = Yup.object().shape({
   label: Yup.string().required('Link is required'),
   url: Yup.string().required('URL is required'),
-  // description: Yup.string().required('Description is required'),
 });
-// export const companyValidationSchema = Yup.object().shape({
-//     companyName: Yup.string().required('Company Name is required'),
-//     companyAddress: Yup.string().required('Company Address is required'),
-//     companyCity: Yup.string().notRequired(),
-//     companyState: Yup.string().required('Company State is required'),
-//     companyCountry: Yup.string().required('Company Country is required'),
-//     companyEmail: Yup.string().email('Invalid email format').required('Company Email is required'),
-//     companyPhone: Yup.string()
-//         .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
-//         .required('Company Phone is required'),
-//     companyCell: Yup.string()
-//         .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
-//         .notRequired(),
-//     companyWebsite: Yup.string().required('Company Website is required'),
-//     companyTaxNumber: Yup.string().required('Company Tax Number is required'),
-//     companyRegNumber: Yup.string().required('Company Reg Number is required'),
-//     userName: Yup.string().required('User Name is required'),
-//     userEmail: Yup.string().email('Invalid email format').required('User Email is required'),
-//     password: Yup.string()
-//         .min(8, 'Password must be at least 8 characters long')
-//         .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-//         .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-//         .matches(/[0-9]/, 'Password must contain at least one number')
-//         .matches(/[@$!%*?&#]/, 'Password must contain at least one special character')
-//         .required('Password is required'),
-//     userRole: Yup.string().required('User role is required'),
-//     userMobile: Yup.string()
-//         .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
-//         .required('User mobile is required'),
-//     userAccess: Yup.string().notRequired(),
-// });
 
 export const companyDetailsValidationSchema = Yup.object({
   companyName: Yup.string().required('Company Name is required'),
@@ -151,9 +100,6 @@ export const companyDetailsValidationSchema = Yup.object({
   companyPhone: Yup.string()
     .matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits')
     .required('Company Phone is required'),
-  // companyCell: Yup.string()
-  //     .matches(/^[0-9]{10}$/, 'Cell number must be exactly 10 digits')
-  //     .required('Company Cell is required'),
   companyWebsite: Yup.string().required('Company Website is required'),
   companyTaxNumber: Yup.string().required('Company Tax Number is required'),
   companyRegNumber: Yup.string().required('Company Reg Number is required'),
@@ -183,18 +129,10 @@ export const companyDetailsValidationSchema = Yup.object({
 });
 export const gstTypeValidationSchema = Yup.object().shape({
   gstName: Yup.string().required('gstName is required'),
-  // gstPercentage: Yup.number()
-  //     .min(0, 'gstPercentage must be a positive number')
-  //     // .max(999, 'gstPercentage must be a three-digit number')
-  //     .required('gstPercentage is required'),
 });
 
 export const tdsTaxValidationSchema = Yup.object().shape({
   taxName: Yup.string().required('taxName is required'),
-  // gstPercentage: Yup.number()
-  //     .min(0, 'gstPercentage must be a positive number')
-  //     // .max(999, 'gstPercentage must be a three-digit number')
-  //     .required('gstPercentage is required'),
 });
 
 export const InvoiceEmailReasonValidationSchemas = Yup.object().shape({
@@ -210,15 +148,6 @@ export const paymentTermsValidationSchema = Yup.object().shape({
     .max(365, 'totalDays must be a three-digit number')
     .required('totalDays is required'),
 });
-
-// export const sendEmailValidationSchema = Yup.object().shape({
-//     //   fromemail: Yup.string()
-//     //     .email("Invalid email address")
-//     //     .required("From Email is required"),
-//     recipientEmail: Yup.string()
-//         .email("Invalid email address")
-//         .required("To Email is required"),
-// });
 
 export const RoleValidationSchema = Yup.object().shape({
   userName: Yup.string().required('Username is required'),

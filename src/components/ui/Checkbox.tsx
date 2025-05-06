@@ -3,10 +3,10 @@ import Checkbox from '@mui/material/Checkbox';
 import { FormControlLabel, FormGroup } from '@mui/material';
 
 interface CheckboxesProps {
-  label?: string;
-  disabled?: boolean;
-  checked?: boolean;
-  onChange?: ((event: React.ChangeEvent<HTMLInputElement>) => void) | undefined;
+  readonly label?: string;
+  readonly disabled?: boolean;
+  readonly checked?: boolean;
+  readonly onChange?: ((event: React.ChangeEvent<HTMLInputElement>) => void);
 }
 
 export default function CheckboxesUi({

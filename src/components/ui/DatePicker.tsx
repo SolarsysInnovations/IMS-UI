@@ -5,21 +5,21 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 
 interface DatePickerProps {
-  value?: string | Dayjs;
-  onChange: (value: string) => void;
-  label?: string;
-  required?: boolean;
-  disabled?: boolean;
-  sx?: object;
+  readonly value?: string | Dayjs;
+  readonly onChange: (value: string) => void;
+  readonly label?: string;
+  readonly disabled?: boolean;
+  readonly sx?:string | object;
+  readonly required?: boolean;
 }
 
 export default function DatePickerUi({
   label,
   value,
   disabled,
-  required,
   onChange,
-  sx,
+  required,
+  sx
 }: DatePickerProps) {
   const [dateValue, setDateValue] = useState<Dayjs | null>(null);
 

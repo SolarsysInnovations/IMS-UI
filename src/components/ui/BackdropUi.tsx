@@ -3,8 +3,8 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
 interface BackDropUiProps {
-  open: boolean;
-  onClose: () => void;
+  readonly open: boolean;
+  readonly onClose: () => void;
 }
 export default function BackDropUi({ open, onClose }: BackDropUiProps) {
   return (
