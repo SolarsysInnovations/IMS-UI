@@ -1,6 +1,6 @@
-import GridDataUi from "../../../components/GridTable/GridData";
-import { paymentTermsColumns } from "../../../constants/grid-table-data/invoice/PaymentTerms-table-data";
-import { useGetPaymentTermsListQuery } from "../../../redux-store/api/injectedApis";
+import GridDataUi from '../../../components/GridTable/GridData';
+import { paymentTermsColumns } from '../../../constants/grid-table-data/invoice/PaymentTerms-table-data';
+import { useGetPaymentTermsListQuery } from '../../../redux-store/api/injectedApis';
 
 const PaymentTermsList = () => {
   const {

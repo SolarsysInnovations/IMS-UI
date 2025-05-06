@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const invoiceSlice = createSlice({
-  name: "invoice",
+  name: 'invoice',
   initialState: {
     data: null,
     loading: false,

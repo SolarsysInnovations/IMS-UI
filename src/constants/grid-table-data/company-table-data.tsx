@@ -1,23 +1,23 @@
-import { Box, IconButton, Stack } from "@mui/material";
-import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
-import EditIcon from "@mui/icons-material/Edit";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import React, { useEffect, useState } from "react";
-import { RemoveRedEyeOutlined } from "@mui/icons-material";
-import ModalUi from "../../components/ui/ModalUi";
-import CompanyDetails from "../../pages/super-admin-company/companyDetailsScreen";
-import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
+import { Box, IconButton, Stack } from '@mui/material';
+import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
+import EditIcon from '@mui/icons-material/Edit';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { RemoveRedEyeOutlined } from '@mui/icons-material';
+import ModalUi from '../../components/ui/ModalUi';
+import CompanyDetails from '../../pages/super-admin-company/companyDetailsScreen';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import {
   useDeleteUserMutation,
   useGetSingleUserMutation,
   useGetUsersListQuery,
-} from "../../redux-store/api/injectedApis";
-import { setUserData } from "../../redux-store/slices/userSlice";
-import TableHeader from "../../components/layouts/TableHeader";
-import DialogBoxUi from "../../components/ui/DialogBox";
-import ActionButtons from "../../components/ui/ActionButtons";
-import { useRolePermissions } from "../../hooks/useRolePermission";
+} from '../../redux-store/api/injectedApis';
+import { setUserData } from '../../redux-store/slices/userSlice';
+import TableHeader from '../../components/layouts/TableHeader';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import ActionButtons from '../../components/ui/ActionButtons';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
   const dispatch = useDispatch();
@@ -40,9 +40,9 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   // Snackbar notifications
   useSnackbarNotifications({
     error: deleteCompanyError,
-    errorMessage: "Error deleting company",
+    errorMessage: 'Error deleting company',
     success: deleteCompanySuccess,
-    successMessage: "Company deleted successfully",
+    successMessage: 'Company deleted successfully',
     errorObject: deleteCompanyErrorObject,
   });
 
@@ -59,28 +59,28 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   const handleModalOpen = async () => {
     try {
       const response = await getCompany(id);
-      if ("data" in response) {
+      if ('data' in response) {
         const companyData = response.data;
         dispatch(setUserData(companyData));
         setOpenModal(true);
       } else {
-        console.error("Error fetching company data:", response.error);
+        console.error('Error fetching company data:', response.error);
       }
     } catch (error) {
-      console.error("Error fetching company data:", error);
+      console.error('Error fetching company data:', error);
     }
   };
 
   const handleDialogOpen = async () => {
     try {
       const response = await getCompany(id);
-      if ("data" in response) {
+      if ('data' in response) {
         setIsOpenDialogBox(true);
       } else {
-        console.error("Error response:", response.error);
+        console.error('Error response:', response.error);
       }
     } catch (error) {
-      console.error("Error fetching customer data:", error);
+      console.error('Error fetching customer data:', error);
     }
   };
 
@@ -89,21 +89,21 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   const handleEditClick = async () => {
     try {
       const response = await getCompany(id);
-      if ("data" in response) {
+      if ('data' in response) {
         const companyData = response.data;
         dispatch(setUserData(companyData));
-        navigate("/company/edit");
+        navigate('/company/edit');
       } else {
-        console.error("Error response:", response.error);
+        console.error('Error response:', response.error);
       }
     } catch (error) {
-      console.error("Error handling edit click:", error);
+      console.error('Error handling edit click:', error);
     }
   };
 
   const handleDeleteClick = () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this company?",
+      'Are you sure you want to delete this company?',
     );
     if (confirmed) {
       deleteCompany(id);
@@ -128,7 +128,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
         content={
           <>
             <TableHeader headerName="Company Details" />
-            <Box sx={{ marginTop: "15px" }}>
+            <Box sx={{ marginTop: '15px' }}>
               <CompanyDetails details={companyData || []} />
             </Box>
           </>
@@ -141,8 +141,8 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
 export const columns: GridColDef[] = [
   {
-    field: "Action",
-    headerName: "Action",
+    field: 'Action',
+    headerName: 'Action',
     width: 140,
     editable: false,
     renderCell: (params: any) => {
@@ -151,20 +151,20 @@ export const columns: GridColDef[] = [
     },
   },
   {
-    field: "companyName",
-    headerName: "Company Name",
+    field: 'companyName',
+    headerName: 'Company Name',
     width: 150,
     editable: true,
   },
   {
-    field: "userName",
-    headerName: "User Name",
+    field: 'userName',
+    headerName: 'User Name',
     width: 150,
     editable: false,
   },
   {
-    field: "userRole",
-    headerName: "User Role",
+    field: 'userRole',
+    headerName: 'User Role',
     width: 150,
     editable: false,
   },

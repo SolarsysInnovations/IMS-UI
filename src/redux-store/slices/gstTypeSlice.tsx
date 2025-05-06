@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const gstTypeSlice = createSlice({
-  name: "tdsTax",
+  name: 'tdsTax',
   initialState: {
     data: null,
     loading: false,

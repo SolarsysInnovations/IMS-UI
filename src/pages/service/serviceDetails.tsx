@@ -1,6 +1,6 @@
-import React, { ReactNode, useState } from "react";
-import Typography from "@mui/material/Typography";
-import { Grid } from "@mui/material";
+import React, { ReactNode, useState } from 'react';
+import Typography from '@mui/material/Typography';
+import { Grid } from '@mui/material';
 
 interface serviceDetailsProps {
   details: any;
@@ -20,7 +20,7 @@ const ServiceDetails = ({ details }: serviceDetailsProps) => {
                     <div key={index}>
                       {Object.entries(item).map(([subKey, subValue]) => (
                         <div key={subKey}>
-                          <strong>{subKey}:</strong> {subValue as string}{" "}
+                          <strong>{subKey}:</strong> {subValue as string}{' '}
                         </div>
                       ))}
                     </div>

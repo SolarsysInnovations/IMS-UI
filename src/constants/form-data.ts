@@ -1,5 +1,5 @@
 interface TextField {
-  type: "text" | "number"; // Update type to include 'number'
+  type: 'text' | 'number'; // Update type to include 'number'
   value: any; // Update value type to string or number
   error: string;
   fullWidth: boolean;
@@ -9,7 +9,7 @@ interface TextField {
 }
 
 interface DropdownField {
-  type: "dropdown";
+  type: 'dropdown';
   value: string;
   options: string[]; // Add options property for dropdown fields
   error: string;
@@ -27,32 +27,32 @@ type InputObject = {
 // Define inputObject with proper structure
 const inputObjects: InputObject = {
   email: {
-    type: "text",
-    value: "",
-    error: "",
+    type: 'text',
+    value: '',
+    error: '',
     fullWidth: false,
-    label: "email",
+    label: 'email',
     onChange: (value: string) => {}, // Provide a valid function here if needed
-    helperText: "",
+    helperText: '',
   },
   phoneNumber: {
-    type: "number",
-    value: "",
-    error: "",
+    type: 'number',
+    value: '',
+    error: '',
     fullWidth: false,
-    label: "phoneNumber",
+    label: 'phoneNumber',
     onChange: (value: string) => {}, // Provide a valid function here if needed
-    helperText: "",
+    helperText: '',
   },
   movies: {
-    type: "dropdown",
-    options: ["Option 1", "Option 2"], // Include options for dropdown field
-    value: "",
-    error: "",
+    type: 'dropdown',
+    options: ['Option 1', 'Option 2'], // Include options for dropdown field
+    value: '',
+    error: '',
     fullWidth: false,
-    label: "movies",
+    label: 'movies',
     onChange: (value: string) => {}, // Provide a valid function here if needed
-    helperText: "",
+    helperText: '',
   },
 };
 

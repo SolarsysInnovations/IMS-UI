@@ -1,21 +1,21 @@
-import { Box, IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack } from '@mui/material';
 import {
   GridColDef,
   GridDeleteIcon,
   GridValueSetterParams,
-} from "@mui/x-data-grid";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux-store/store";
-import TableHeader from "../../components/layouts/TableHeader";
-import usePathname from "../../hooks/usePathname";
-import React from "react";
+} from '@mui/x-data-grid';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
+import TableHeader from '../../components/layouts/TableHeader';
+import usePathname from '../../hooks/usePathname';
+import React from 'react';
 import {
   useDeleteServiceMutation,
   useGetServiceListQuery,
   useGetSingleServiceMutation,
-} from "../../redux-store/api/injectedApis";
-import ServiceDetails from "../../pages/service/serviceDetails";
+} from '../../redux-store/api/injectedApis';
+import ServiceDetails from '../../pages/service/serviceDetails';
 
 const id = 1;
 
@@ -73,7 +73,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
              <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>  */}
-      <Box sx={{ marginTop: "15px" }}>
+      <Box sx={{ marginTop: '15px' }}>
         <ServiceDetails details={id} />
       </Box>
     </Stack>
@@ -82,32 +82,32 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
 export const columns: GridColDef[] = [
   {
-    field: "customerName",
-    headerName: "Customer Name",
+    field: 'customerName',
+    headerName: 'Customer Name',
     width: 180,
     editable: false,
   },
   {
-    field: "days0to30",
-    headerName: "0-30 Days",
+    field: 'days0to30',
+    headerName: '0-30 Days',
     width: 180,
     editable: true,
   },
   {
-    field: "days30to45",
-    headerName: "30-45 Days",
+    field: 'days30to45',
+    headerName: '30-45 Days',
     width: 240,
     editable: false,
   },
   {
-    field: "above45",
-    headerName: "Above 45 Days",
+    field: 'above45',
+    headerName: 'Above 45 Days',
     width: 180,
     editable: false,
   },
   {
-    field: "total",
-    headerName: "Total Amount",
+    field: 'total',
+    headerName: 'Total Amount',
     width: 150,
     editable: false,
     valueGetter: (params: any) => params.value || 0,

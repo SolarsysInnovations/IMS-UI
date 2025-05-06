@@ -1,6 +1,6 @@
-import { Grid } from "@mui/material";
-import React from "react";
-import GridDataUi from "../../components/GridTable/GridData";
+import { Grid } from '@mui/material';
+import React from 'react';
+import GridDataUi from '../../components/GridTable/GridData';
 
 interface InvoiceGridProps {
   columns: any;

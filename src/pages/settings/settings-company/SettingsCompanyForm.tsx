@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import {
   useAddCompanySettingMutation,
   useUpdateCompanySettingMutation,
   useGetCompanySettingByIdQuery,
-} from "../../../redux-store/api/injectedApis";
-import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
-import { companyDetailsValidationSchema } from "../../../constants/forms/validations/validationSchema";
-import { clearData } from "../../../redux-store/global/globalState";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux-store/store";
-import { CompanyFormProps } from "../../../types/types";
-import { CompanyDetailsFields } from "../../../constants/form-data/form-data-json";
-import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
-import { superAdminCompanyUsersInitialValues } from "../../../constants/forms/formikInitialValues";
-import { ToastContainer, toast } from "react-toastify";
+} from '../../../redux-store/api/injectedApis';
+import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
+import { companyDetailsValidationSchema } from '../../../constants/forms/validations/validationSchema';
+import { clearData } from '../../../redux-store/global/globalState';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux-store/store';
+import { CompanyFormProps } from '../../../types/types';
+import { CompanyDetailsFields } from '../../../constants/form-data/form-data-json';
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
+import { superAdminCompanyUsersInitialValues } from '../../../constants/forms/formikInitialValues';
+import { ToastContainer, toast } from 'react-toastify';
 
 interface SettingsCompanyFormProps extends CompanyFormProps {
   handleCloseDialog: () => void;
@@ -43,7 +43,7 @@ const SettingsCompanyForm = ({
       error: companyUpdateErrorObject,
     },
   ] = useUpdateCompanySettingMutation();
-  const companyIdString = sessionStorage.getItem("id") || "";
+  const companyIdString = sessionStorage.getItem('id') || '';
   const { refetch: refetchCompanyData } =
     useGetCompanySettingByIdQuery(companyIdString);
 
@@ -53,17 +53,17 @@ const SettingsCompanyForm = ({
   useSnackbarNotifications({
     error: companyAddError,
     errorObject: companyAddErrorObject,
-    errorMessage: "Error creating Company",
+    errorMessage: 'Error creating Company',
     success: companyAddSuccess,
-    successMessage: "Company created successfully",
+    successMessage: 'Company created successfully',
   });
 
   useSnackbarNotifications({
     error: companyUpdateError,
     errorObject: companyUpdateErrorObject,
-    errorMessage: "Error updating Company",
+    errorMessage: 'Error updating Company',
     success: companyUpdateSuccess,
-    successMessage: "Company updated successfully",
+    successMessage: 'Company updated successfully',
   });
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const SettingsCompanyForm = ({
 
   const onSubmit = async (values: CompanyFormProps, actions: any) => {
     try {
-      if (mode === "edit" && companyValue) {
+      if (mode === 'edit' && companyValue) {
         await updateCompany({ id: companyValue.id, company: values });
         dispatch(clearData());
       } else {
@@ -90,8 +90,8 @@ const SettingsCompanyForm = ({
       actions.resetForm();
       handleCloseDialog();
     } catch (error) {
-      console.error("An error occurred during form submission:", error);
-      toast.error("Error occurred while saving fields.");
+      console.error('An error occurred during form submission:', error);
+      toast.error('Error occurred while saving fields.');
     }
   };
 

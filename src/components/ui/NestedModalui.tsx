@@ -1,16 +1,16 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 
 const style = {
-  overflow: "scroll",
-  position: "absolute" as "absolute",
-  top: "10%",
-  left: "20%",
+  overflow: 'scroll',
+  position: 'absolute' as 'absolute',
+  top: '10%',
+  left: '20%',
   // transform: 'translate(-50%, -50%)',
-  width: "55%",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  width: '55%',
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   pt: 2,
   px: 4,

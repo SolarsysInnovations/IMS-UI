@@ -1,5 +1,5 @@
-import { InputAdornment, TextField } from "@mui/material";
-import React from "react";
+import { InputAdornment, TextField } from '@mui/material';
+import React from 'react';
 
 interface TextFieldProps {
   label?: string;
@@ -13,19 +13,19 @@ interface TextFieldProps {
   helperText?: any;
   name?: string;
   type:
-    | "text"
-    | "password"
-    | "number"
-    | "email"
-    | "tel"
-    | "url"
-    | "search"
-    | "date"
-    | "time"
-    | "datetime-local"
-    | "month"
-    | "week"
-    | "color";
+    | 'text'
+    | 'password'
+    | 'number'
+    | 'email'
+    | 'tel'
+    | 'url'
+    | 'search'
+    | 'date'
+    | 'time'
+    | 'datetime-local'
+    | 'month'
+    | 'week'
+    | 'color';
   fullWidth?: boolean;
   required?: boolean;
   width?: string;
@@ -76,30 +76,30 @@ const TextFieldUi = ({
       }}
       sx={{
         width: `${width}`,
-        borderRadius: "8px !important",
-        "& .MuiOutlinedInput-root": {
+        borderRadius: '8px !important',
+        '& .MuiOutlinedInput-root': {
           ...sx,
-          borderRadius: "8px !important",
-          overflow: "hidden",
+          borderRadius: '8px !important',
+          overflow: 'hidden',
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          "&:hover": {
+          '&:hover': {
             // backgroundColor: `action.hover`,
           },
         },
-        " & .MuiFormLabel-root": {
-          fontSize: "12px",
+        ' & .MuiFormLabel-root': {
+          fontSize: '12px',
         },
-        " & .MuiOutlinedInput-root": {
-          fontSize: "12px",
+        ' & .MuiOutlinedInput-root': {
+          fontSize: '12px',
         },
-        "& .css-1o5h54k-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
-          fontSize: "13px",
+        '& .css-1o5h54k-MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
+          fontSize: '13px',
         },
-        "& input:-webkit-autofill": {
-          "-webkit-box-shadow": "0 0 0 1000px white inset !important",
-          "box-shadow": "0 0 0 1000px white inset !important",
-          "-webkit-text-fill-color": "black !important",
+        '& input:-webkit-autofill': {
+          '-webkit-box-shadow': '0 0 0 1000px white inset !important',
+          'box-shadow': '0 0 0 1000px white inset !important',
+          '-webkit-text-fill-color': 'black !important',
         },
       }}
     />

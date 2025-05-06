@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { Form, Formik, FormikHelpers } from "formik";
+import React, { useState, useCallback } from 'react';
+import { Form, Formik, FormikHelpers } from 'formik';
 import {
   Box,
   Grid,
@@ -7,13 +7,13 @@ import {
   Typography,
   IconButton,
   InputLabel,
-} from "@mui/material";
-import ButtonSmallUi from "../../../components/ui/ButtonSmall";
-import { CompanyLogoProps } from "../../../types/types";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import CancelIcon from "@mui/icons-material/Close";
-import { useAddCompanyLogoMutation } from "../../../redux-store/api/injectedApis";
-import { companyLogoInitialProps } from "../../../constants/forms/formikInitialValues";
+} from '@mui/material';
+import ButtonSmallUi from '../../../components/ui/ButtonSmall';
+import { CompanyLogoProps } from '../../../types/types';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CancelIcon from '@mui/icons-material/Close';
+import { useAddCompanyLogoMutation } from '../../../redux-store/api/injectedApis';
+import { companyLogoInitialProps } from '../../../constants/forms/formikInitialValues';
 
 const CompanyLogo: React.FC = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -55,7 +55,7 @@ const CompanyLogo: React.FC = () => {
       const formData = new FormData();
 
       uploadedFiles.forEach((file) => {
-        formData.append("files", file);
+        formData.append('files', file);
       });
 
       // Submit the logo via the mutation
@@ -70,12 +70,12 @@ const CompanyLogo: React.FC = () => {
 
       // Handle error response
       if (companyLogoError) {
-        console.error("Error sending logo:", companyLogoErrorObject);
-        alert("Failed to send logo. Please try again.");
+        console.error('Error sending logo:', companyLogoErrorObject);
+        alert('Failed to send logo. Please try again.');
       }
     } catch (error) {
-      console.error("An error occurred during logo submission:", error);
-      alert("Unexpected error occurred. Please try again later.");
+      console.error('An error occurred during logo submission:', error);
+      alert('Unexpected error occurred. Please try again later.');
     } finally {
       setSubmitting(false);
     }
@@ -86,14 +86,14 @@ const CompanyLogo: React.FC = () => {
       {({ handleSubmit }) => (
         <Form
           onSubmit={handleSubmit}
-          style={{ display: "flex", flexDirection: "column" }}
+          style={{ display: 'flex', flexDirection: 'column' }}
         >
           <Grid item xs={12}>
             <InputLabel
               style={{
-                fontWeight: "500",
-                width: "140px",
-                display: "inline-block",
+                fontWeight: '500',
+                width: '140px',
+                display: 'inline-block',
               }}
             >
               Upload Company Logo
@@ -103,7 +103,7 @@ const CompanyLogo: React.FC = () => {
               color="primary"
               component="label"
               startIcon={<CloudUploadIcon />}
-              sx={{ borderRadius: "50%", mt: 2, mb: 2 }}
+              sx={{ borderRadius: '50%', mt: 2, mb: 2 }}
             >
               <input type="file" hidden multiple onChange={handleFileUpload} />
             </Button>
@@ -118,9 +118,9 @@ const CompanyLogo: React.FC = () => {
                     sx={{
                       mt: 1,
                       mb: -1,
-                      display: "flex",
-                      position: "relative",
-                      left: "15px",
+                      display: 'flex',
+                      position: 'relative',
+                      left: '15px',
                     }}
                   >
                     <Typography>{fileName}</Typography>
@@ -131,9 +131,9 @@ const CompanyLogo: React.FC = () => {
                     sx={{
                       mt: 1,
                       mb: -1,
-                      display: "flex",
-                      position: "relative",
-                      right: "10px",
+                      display: 'flex',
+                      position: 'relative',
+                      right: '10px',
                     }}
                   >
                     <IconButton
@@ -142,7 +142,7 @@ const CompanyLogo: React.FC = () => {
                     >
                       <CancelIcon
                         color="secondary"
-                        sx={{ position: "relative" }}
+                        sx={{ position: 'relative' }}
                       />
                     </IconButton>
                   </Box>

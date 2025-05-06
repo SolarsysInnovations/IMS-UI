@@ -1,6 +1,6 @@
-import SuperAdminDashboardOverview from "./SuperAdminDashboardOverview";
-import SuperAdminCustomersList from "./SuperAdminCustomersList";
-import { Grid } from "@mui/material";
+import SuperAdminDashboardOverview from './SuperAdminDashboardOverview';
+import SuperAdminCustomersList from './SuperAdminCustomersList';
+import { Grid } from '@mui/material';
 
 const SuperAdminDashboardScreen = ({ superAdminData }: any) => {
   if (!superAdminData) {
@@ -17,7 +17,7 @@ const SuperAdminDashboardScreen = ({ superAdminData }: any) => {
       <Grid container spacing={-1}>
         {superAdminOverviewData && (
           <Grid item xs={12}>
-            <div style={{ padding: "16px", backgroundColor: "#fff" }}>
+            <div style={{ padding: '16px', backgroundColor: '#fff' }}>
               <SuperAdminDashboardOverview
                 overviewData={superAdminOverviewData}
               />
@@ -26,7 +26,7 @@ const SuperAdminDashboardScreen = ({ superAdminData }: any) => {
         )}
         {companyOverviewData && (
           <Grid item xs={12}>
-            <div style={{ padding: "16px", backgroundColor: "#fff" }}>
+            <div style={{ padding: '16px', backgroundColor: '#fff' }}>
               <SuperAdminCustomersList
                 superAdminCustomersListData={companyOverviewData}
               />

@@ -1,14 +1,14 @@
-import React from "react";
-import { Box, Grid, Typography } from "@mui/material";
-import TableHeader from "../../components/layouts/TableHeader";
-import { useInVoiceContext } from "../../invoiceContext/invoiceContext";
+import React from 'react';
+import { Box, Grid, Typography } from '@mui/material';
+import TableHeader from '../../components/layouts/TableHeader';
+import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
 
 const UserProfile = () => {
   const context = useInVoiceContext();
 
   return (
     <Box
-      sx={{ border: "1px solid #e0e0e0", borderRadius: "8px", padding: "20px" }}
+      sx={{ border: '1px solid #e0e0e0', borderRadius: '8px', padding: '20px' }}
     >
       <TableHeader headerName="Personal Details" />
       <Grid mt={0.5} container spacing={3}>

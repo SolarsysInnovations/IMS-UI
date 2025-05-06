@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { Form, Formik, FormikHelpers } from "formik";
+import React, { useState, useCallback } from 'react';
+import { Form, Formik, FormikHelpers } from 'formik';
 import {
   Box,
   Grid,
@@ -7,17 +7,17 @@ import {
   Typography,
   IconButton,
   styled,
-} from "@mui/material";
-import TextFieldUi from "../../components/ui/TextField";
-import ButtonSmallUi from "../../components/ui/ButtonSmall";
-import { useSendEmailNotificationMutation } from "../../redux-store/api/injectedApis";
-import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
-import { SendEmailInitialValueProps } from "../../types/types";
+} from '@mui/material';
+import TextFieldUi from '../../components/ui/TextField';
+import ButtonSmallUi from '../../components/ui/ButtonSmall';
+import { useSendEmailNotificationMutation } from '../../redux-store/api/injectedApis';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { SendEmailInitialValueProps } from '../../types/types';
 // import { sendEmailValidationSchema } from "../../constants/forms/validations/validationSchema";
-import { SendEmailInitialValue } from "../../constants/forms/formikInitialValues";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useNavigate } from "react-router-dom";
-import CancelIcon from "@mui/icons-material/Close";
+import { SendEmailInitialValue } from '../../constants/forms/formikInitialValues';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useNavigate } from 'react-router-dom';
+import CancelIcon from '@mui/icons-material/Close';
 
 interface SendEmailProps {
   onSuccess: () => void;
@@ -27,7 +27,7 @@ interface SendEmailProps {
 const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showFilename, setShowFileName] = useState<string[]>([]);
-  const pathname = "sendMail";
+  const pathname = 'sendMail';
   const navigate = useNavigate();
   const [
     sendEmail,
@@ -61,13 +61,13 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
     try {
       const formData = new FormData();
       formData.append(
-        "recipientEmail",
-        invoiceData?.customerDetails?.customerEmail || "",
+        'recipientEmail',
+        invoiceData?.customerDetails?.customerEmail || '',
       );
       // formData.append("cc", values.cc || "");
-      formData.append("subject", values.subject || "");
+      formData.append('subject', values.subject || '');
       uploadedFiles.forEach((file) => {
-        formData.append("file", file);
+        formData.append('file', file);
       });
 
       await sendEmail(formData);
@@ -79,8 +79,8 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
 
       //   }
     } catch (error) {
-      console.error("An error occurred during send email:", error);
-      alert("Failed to send email. Please try again later.");
+      console.error('An error occurred during send email:', error);
+      alert('Failed to send email. Please try again later.');
     } finally {
       setSubmitting(false);
     }
@@ -89,9 +89,9 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
   useSnackbarNotifications({
     error: sendEmailError,
     errorObject: sendEmailErrorObject,
-    errorMessage: "Error Sending Mail",
+    errorMessage: 'Error Sending Mail',
     success: sendEmailSuccess,
-    successMessage: "Mail sent successfully",
+    successMessage: 'Mail sent successfully',
   });
 
   return (
@@ -104,9 +104,9 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
         <Form
           onSubmit={handleSubmit}
           style={{
-            display: "flex",
-            flexDirection: "column",
-            marginTop: "10px",
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: '10px',
           }}
         >
           <Grid container spacing={2}>
@@ -154,20 +154,20 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
                       sx={{
                         mt: 1,
                         mb: -1,
-                        display: "flex",
-                        position: "relative",
-                        left: "15px",
+                        display: 'flex',
+                        position: 'relative',
+                        left: '15px',
                       }}
                     >
                       <Typography>{fileName}</Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={7}>
-                    <Box sx={{ mt: 1, display: "flex" }}>
+                    <Box sx={{ mt: 1, display: 'flex' }}>
                       <IconButton onClick={() => handleRemoveFile(index)}>
                         <CancelIcon
                           color="secondary"
-                          sx={{ position: "relative" }}
+                          sx={{ position: 'relative' }}
                         />
                       </IconButton>
                     </Box>
@@ -182,13 +182,13 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
                 component="label"
                 startIcon={<CloudUploadIcon />}
                 sx={{
-                  height: "30px",
-                  width: "15px",
+                  height: '30px',
+                  width: '15px',
                   mt: 2,
                   mb: 2,
                   pt: 5,
-                  borderRadius: "500px",
-                  padding: "5px",
+                  borderRadius: '500px',
+                  padding: '5px',
                 }}
               >
                 <input

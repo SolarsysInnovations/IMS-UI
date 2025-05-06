@@ -1,6 +1,6 @@
-import { applicationUserAccess } from "../constants/data";
-import { Roles } from "../constants/Enums";
-import { useInVoiceContext } from "../invoiceContext/invoiceContext";
+import { applicationUserAccess } from '../constants/data';
+import { Roles } from '../constants/Enums';
+import { useInVoiceContext } from '../invoiceContext/invoiceContext';
 
 export const useRolePermissions = () => {
   const context = useInVoiceContext();

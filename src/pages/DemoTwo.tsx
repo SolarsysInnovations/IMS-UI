@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import jsPdf from "jspdf";
-import html2canvas from "html2canvas";
-import { Box, Stack, Typography } from "@mui/material";
-import { Document, Page, pdfjs } from "react-pdf";
+import React, { useState } from 'react';
+import jsPdf from 'jspdf';
+import html2canvas from 'html2canvas';
+import { Box, Stack, Typography } from '@mui/material';
+import { Document, Page, pdfjs } from 'react-pdf';
 interface InvoiceUiProps {
   invoiceData?: any;
 }
@@ -11,7 +11,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 function DemoTwo({ invoiceData }: InvoiceUiProps) {
   const printPDF = () => {
-    const element = document.querySelector("#invoiceCapture");
+    const element = document.querySelector('#invoiceCapture');
     if (!element) {
       console.error("Element with id 'invoiceCapture' not found");
       return;
@@ -23,35 +23,35 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
       let heightLeft = imgHeight;
       let position = 0;
       heightLeft -= pageHeight;
-      const doc = new jsPdf("p", "mm");
-      doc.addImage(canvas, "PNG", 0, position, imgWidth, imgHeight, "", "FAST");
+      const doc = new jsPdf('p', 'mm');
+      doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
         doc.addPage();
         doc.addImage(
           canvas,
-          "PNG",
+          'PNG',
           0,
           position,
           imgWidth,
           imgHeight,
-          "",
-          "FAST",
+          '',
+          'FAST',
         );
         heightLeft -= pageHeight;
       }
-      const pdfData = doc.output("datauristring");
-      localStorage.setItem("invoicePDF", pdfData);
-      doc.save("Downld.pdf");
+      const pdfData = doc.output('datauristring');
+      localStorage.setItem('invoicePDF', pdfData);
+      doc.save('Downld.pdf');
     });
   };
 
   return (
     <>
-      <div className="App" id="invoiceCapture" style={{ padding: "10px" }}>
+      <div className="App" id="invoiceCapture" style={{ padding: '10px' }}>
         <Box
           sx={{
-            textAlign: "right",
+            textAlign: 'right',
           }}
         >
           <Typography variant="h1" color="initial">
@@ -61,10 +61,10 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
         <>
           <Stack
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               mt: 6,
             }}
           >
@@ -95,10 +95,10 @@ function DemoTwo({ invoiceData }: InvoiceUiProps) {
 
           <Stack
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               mt: 10,
             }}
           >

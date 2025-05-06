@@ -1,14 +1,14 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Card from "@mui/material/Card";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { ArrowDropDown as ArrowDropDownIcon } from "@mui/icons-material";
-import { Grid } from "@mui/material";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
-import ErrorIcon from "@mui/icons-material/Error";
-import DoneIcon from "@mui/icons-material/Done";
-import { roundUp } from "../../../services/utils/decimalconverter";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material';
+import { Grid } from '@mui/material';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import ErrorIcon from '@mui/icons-material/Error';
+import DoneIcon from '@mui/icons-material/Done';
+import { roundUp } from '../../../services/utils/decimalconverter';
 
 const transformInvoiceData = (data: any) => {
   // Safeguard each data object to avoid undefined or null errors
@@ -18,30 +18,30 @@ const transformInvoiceData = (data: any) => {
 
   return [
     {
-      label: "Total",
+      label: 'Total',
       icon: CurrencyRupeeIcon,
-      iconBg: "#635bff",
+      iconBg: '#635bff',
       value: roundUp(total.totalAmount) || 0,
-      childLabel: "Invoice child label",
-      months: "months",
+      childLabel: 'Invoice child label',
+      months: 'months',
       noOfInvoices: roundUp(total.noOfInvoices) || 0,
     },
     {
-      label: "Paid",
+      label: 'Paid',
       icon: DoneIcon,
-      iconBg: "#4E9F3D",
+      iconBg: '#4E9F3D',
       value: roundUp(paid.totalAmount) || 0,
-      childLabel: "Invoice child label",
-      months: "months",
+      childLabel: 'Invoice child label',
+      months: 'months',
       noOfInvoices: roundUp(paid.noOfInvoices) || 0,
     },
     {
-      label: "Unpaid",
+      label: 'Unpaid',
       icon: ErrorIcon,
-      iconBg: "#FF204E",
+      iconBg: '#FF204E',
       value: roundUp(unPaid.totalAmount) || 0,
-      childLabel: "Invoice child label",
-      months: "months",
+      childLabel: 'Invoice child label',
+      months: 'months',
       noOfInvoices: roundUp(unPaid.noOfInvoices) || 0,
     },
   ];
@@ -60,14 +60,14 @@ const AdminDashboardInvoiceOverviewAmount = ({
         invoiceAmount.map((data, index) => (
           <Grid item key={data.label || index} xs={4}>
             <Card
-              sx={{ width: "180px", height: "140px", padding: "10px 15px" }}
+              sx={{ width: '180px', height: '140px', padding: '10px 15px' }}
             >
               <Stack spacing={1}>
                 <Stack
                   direction="row"
                   sx={{
-                    alignItems: "flex-start",
-                    justifyContent: "space-between",
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
                   }}
                   spacing={1}
                 >
@@ -80,8 +80,8 @@ const AdminDashboardInvoiceOverviewAmount = ({
                   <Avatar
                     sx={{
                       backgroundColor: data.iconBg,
-                      height: "30px",
-                      width: "30px",
+                      height: '30px',
+                      width: '30px',
                     }}
                   >
                     {React.createElement(data.icon, { width: 20, height: 20 })}
@@ -89,7 +89,7 @@ const AdminDashboardInvoiceOverviewAmount = ({
                 </Stack>
 
                 <Stack
-                  sx={{ alignItems: "center" }}
+                  sx={{ alignItems: 'center' }}
                   direction="row"
                   spacing={1}
                 >
@@ -101,12 +101,12 @@ const AdminDashboardInvoiceOverviewAmount = ({
                   </Typography>
                 </Stack>
                 <Stack
-                  sx={{ alignItems: "center" }}
+                  sx={{ alignItems: 'center' }}
                   direction="row"
                   spacing={1}
                 >
                   <Stack
-                    sx={{ alignItems: "center" }}
+                    sx={{ alignItems: 'center' }}
                     direction="row"
                     spacing={0.5}
                   >

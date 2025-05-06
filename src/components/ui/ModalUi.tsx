@@ -1,8 +1,8 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
-import CloseIcon from "@mui/icons-material/Close";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface ModalUiProps {
   children?: React.ReactNode;
@@ -21,7 +21,7 @@ export default function ModalUi({
     <div>
       <Modal
         sx={{
-          overflow: "scroll",
+          overflow: 'scroll',
         }}
         keepMounted
         open={open}
@@ -32,23 +32,23 @@ export default function ModalUi({
       >
         <Box
           sx={{
-            position: "absolute" as "absolute",
-            top: `${"10%"}`,
-            left: "25%",
+            position: 'absolute' as 'absolute',
+            top: `${'10%'}`,
+            left: '25%',
 
-            width: "30%",
-            bgcolor: "background.paper",
-            borderRadius: "10px",
+            width: '30%',
+            bgcolor: 'background.paper',
+            borderRadius: '10px',
             boxShadow: 24,
             p: 6,
           }}
         >
           <Button
             onClick={onClose}
-            sx={{ position: "absolute", top: "10px", right: "10px" }}
+            sx={{ position: 'absolute', top: '10px', right: '10px' }}
           >
-            {" "}
-            <CloseIcon sx={{ width: "15px" }} />
+            {' '}
+            <CloseIcon sx={{ width: '15px' }} />
           </Button>
           {children}
         </Box>

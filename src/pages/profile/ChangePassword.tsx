@@ -1,20 +1,20 @@
-import { Box, Grid, IconButton } from "@mui/material";
-import { Form, Formik } from "formik";
-import React, { useState } from "react";
-import TableHeader from "../../components/layouts/TableHeader";
-import TextFieldUi from "../../components/ui/TextField";
-import { ChangePasswordInitialValue } from "../../constants/forms/formikInitialValues";
-import { PasswordValidationSchema } from "../../constants/forms/validations/validationSchema";
-import { ChangePasswordInitialValueProps } from "../../types/types";
-import { useChangePasswordMutation } from "../../redux-store/role/roleApi";
+import { Box, Grid, IconButton } from '@mui/material';
+import { Form, Formik } from 'formik';
+import React, { useState } from 'react';
+import TableHeader from '../../components/layouts/TableHeader';
+import TextFieldUi from '../../components/ui/TextField';
+import { ChangePasswordInitialValue } from '../../constants/forms/formikInitialValues';
+import { PasswordValidationSchema } from '../../constants/forms/validations/validationSchema';
+import { ChangePasswordInitialValueProps } from '../../types/types';
+import { useChangePasswordMutation } from '../../redux-store/role/roleApi';
 import {
   KeyboardBackspaceTwoTone,
   Save,
   VisibilityOff,
   VisibilityOutlined,
-} from "@mui/icons-material";
-import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
-import { useInVoiceContext } from "../../invoiceContext/invoiceContext";
+} from '@mui/icons-material';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
 
 interface ChangePasswordProps {
   onClose: () => void;
@@ -22,7 +22,7 @@ interface ChangePasswordProps {
 
 const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
   const context = useInVoiceContext();
-  const pathname = "Change Password";
+  const pathname = 'Change Password';
   const [passwordValues, setpasswordValues] = useState(
     ChangePasswordInitialValue,
   );
@@ -38,15 +38,15 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
   ] = useChangePasswordMutation();
   const userName = context.userDetails.userName;
   const buttons = [
-    { label: "Back", icon: KeyboardBackspaceTwoTone, onClick: () => onClose() },
-    { label: "Update", icon: Save, onClick: () => handleSubmit },
+    { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => onClose() },
+    { label: 'Update', icon: Save, onClick: () => handleSubmit },
   ];
 
   useSnackbarNotifications({
     error: changePasswordError,
-    errorMessage: "Error changing password",
+    errorMessage: 'Error changing password',
     success: changePasswordSuccess,
-    successMessage: "Password update successfully",
+    successMessage: 'Password update successfully',
     errorObject: changePasswordErrorObject,
   });
 
@@ -64,13 +64,13 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
   ) => {
     try {
       await changePassword({
-        userName: userName ?? "",
+        userName: userName ?? '',
         values: values,
       });
       resetForm();
       onClose();
     } catch (error) {
-      console.error("An error occurred during sendemail:", error);
+      console.error('An error occurred during sendemail:', error);
     } finally {
       setSubmitting(false);
     }
@@ -112,7 +112,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
             <Grid item xs={12}>
               <Box>
                 <TextFieldUi
-                  sx={{ padding: "8px 0" }}
+                  sx={{ padding: '8px 0' }}
                   endAdornment={
                     <IconButton
                       onClick={() => setNewPasswordVisible(!newPasswordVisible)}
@@ -128,7 +128,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
                   fullWidth={false}
                   label="New Password"
                   name="newPassword"
-                  type={newPasswordVisible ? "text" : "password"}
+                  type={newPasswordVisible ? 'text' : 'password'}
                   value={values.newPassword}
                   onChange={handleChange}
                   onPaste={(e) => e.preventDefault()}
@@ -140,7 +140,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
             <Grid item xs={12}>
               <Box>
                 <TextFieldUi
-                  sx={{ padding: "8px 0" }}
+                  sx={{ padding: '8px 0' }}
                   endAdornment={
                     <IconButton
                       onClick={() =>
@@ -158,14 +158,14 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
                   fullWidth={false}
                   label="Confirm Password"
                   name="confirmPassword"
-                  type={confirmPasswordVisible ? "text" : "password"}
+                  type={confirmPasswordVisible ? 'text' : 'password'}
                   value={values.confirmPassword}
                   onChange={handleChange}
                   error={
                     touched.confirmPassword && Boolean(errors.confirmPassword)
                   }
                   helperText={touched.confirmPassword && errors.confirmPassword}
-                />{" "}
+                />{' '}
               </Box>
             </Grid>
           </Grid>

@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const customerSlice = createSlice({
-  name: "customer",
+  name: 'customer',
   initialState: {
     data: null,
     loading: false,

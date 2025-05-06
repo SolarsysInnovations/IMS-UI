@@ -1,7 +1,7 @@
-import { Box, Divider, Grid, Typography } from "@mui/material";
-import React from "react";
-import TextFieldUi from "../../components/ui/TextField";
-import SelectDropdown from "../../components/ui/SelectDropdown";
+import { Box, Divider, Grid, Typography } from '@mui/material';
+import React from 'react';
+import TextFieldUi from '../../components/ui/TextField';
+import SelectDropdown from '../../components/ui/SelectDropdown';
 
 interface InvoiceCalculationProps {
   subTotalInvoiceAmount: number | null;
@@ -16,8 +16,8 @@ interface InvoiceCalculationProps {
 }
 const tdsOptions = [
   {
-    value: "Professional Service 10%",
-    label: "Professional Service 10%",
+    value: 'Professional Service 10%',
+    label: 'Professional Service 10%',
   },
 ];
 const InvoiceCalculation = ({
@@ -36,20 +36,20 @@ const InvoiceCalculation = ({
       <Grid container mt={3} mb={3} spacing={4} justifyContent="flex-end">
         <Box
           sx={{
-            width: "40%",
-            padding: "20px",
-            backgroundColor: "#fafafa",
-            borderRadius: "10px",
+            width: '40%',
+            padding: '20px',
+            backgroundColor: '#fafafa',
+            borderRadius: '10px',
           }}
         >
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
+              display: 'flex',
+              justifyContent: 'space-between',
             }}
           >
             <Typography variant="body2" color="initial">
-              Sub Total:{" "}
+              Sub Total:{' '}
             </Typography>
             <Typography variant="body2" color="initial">
               {subTotalInvoiceAmount}
@@ -57,16 +57,16 @@ const InvoiceCalculation = ({
           </Box>
           <Box
             sx={{
-              marginTop: "10px",
-              display: "flex",
-              justifyContent: "space-between",
+              marginTop: '10px',
+              display: 'flex',
+              justifyContent: 'space-between',
             }}
           >
             <Box
               sx={{
-                display: "flex",
-                gap: "30px",
-                justifyContent: "space-between",
+                display: 'flex',
+                gap: '30px',
+                justifyContent: 'space-between',
               }}
             >
               <TextFieldUi
@@ -77,13 +77,13 @@ const InvoiceCalculation = ({
                 value={
                   values.discountAmount !== null
                     ? values.discountAmount.toString()
-                    : ""
+                    : ''
                 }
                 onChange={(e) => {
                   const value = e.target.value;
-                  const parsedValue = value !== "" ? parseFloat(value) : null;
+                  const parsedValue = value !== '' ? parseFloat(value) : null;
                   setDiscountPercentage(parsedValue); // Set discountAmount as a number or null
-                  setFieldValue("discountAmount", value);
+                  setFieldValue('discountAmount', value);
                 }}
               />
             </Box>
@@ -93,23 +93,23 @@ const InvoiceCalculation = ({
           </Box>
           <Box
             sx={{
-              marginTop: "10px",
-              display: "flex",
-              justifyContent: "space-between",
+              marginTop: '10px',
+              display: 'flex',
+              justifyContent: 'space-between',
             }}
           >
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: 'flex' }}>
               <SelectDropdown
                 width="150px"
                 onChange={(newValue: any) => {
                   if (newValue) {
-                    if (newValue.value === "Professional Service 10%") {
-                      setFieldValue("taxAmount.tds", newValue.value);
+                    if (newValue.value === 'Professional Service 10%') {
+                      setFieldValue('taxAmount.tds', newValue.value);
                       setSelectedTdsAmount(newValue.value);
                     }
-                    setFieldValue("taxAmount.tds", newValue.value);
+                    setFieldValue('taxAmount.tds', newValue.value);
                   } else {
-                    setFieldValue("taxAmount.tds", "");
+                    setFieldValue('taxAmount.tds', '');
                   }
                 }}
                 options={tdsOptions}
@@ -128,16 +128,16 @@ const InvoiceCalculation = ({
               -{tdsAmount}
             </Typography>
           </Box>
-          <Divider sx={{ marginTop: "20px" }} />
+          <Divider sx={{ marginTop: '20px' }} />
           <Box
             sx={{
-              marginTop: "10px",
-              display: "flex",
-              justifyContent: "space-between",
+              marginTop: '10px',
+              display: 'flex',
+              justifyContent: 'space-between',
             }}
           >
             <Typography variant="subtitle1" color="initial">
-              Total Amount:{" "}
+              Total Amount:{' '}
             </Typography>
             <Typography variant="subtitle2" color="initial">
               {retainerFee}

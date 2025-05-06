@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 const useErrorHandler = (error: any) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (error) {
-      setErrorMessage("Something went wrong. Please try again.");
+      setErrorMessage('Something went wrong. Please try again.');
     } else {
       setErrorMessage(null);
     }

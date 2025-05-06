@@ -1,19 +1,19 @@
-import React, { useEffect, useMemo } from "react";
-import { tdsTaxInitialValue } from "../../../constants/forms/formikInitialValues";
-import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
-import { tdsTaxValidationSchema } from "../../../constants/forms/validations/validationSchema";
-import { TdsTaxFields } from "../../../constants/form-data/form-data-json";
-import { TdsTaxFormProps, TdsTaxProps } from "../../../types/types";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux-store/store";
-import { Save } from "@mui/icons-material";
-import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import React, { useEffect, useMemo } from 'react';
+import { tdsTaxInitialValue } from '../../../constants/forms/formikInitialValues';
+import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
+import { tdsTaxValidationSchema } from '../../../constants/forms/validations/validationSchema';
+import { TdsTaxFields } from '../../../constants/form-data/form-data-json';
+import { TdsTaxFormProps, TdsTaxProps } from '../../../types/types';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux-store/store';
+import { Save } from '@mui/icons-material';
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import {
   useCreateTdsTaxMutation,
   useGetTdsTaxListQuery,
   useUpdateTdsTaxMutation,
-} from "../../../redux-store/api/injectedApis";
-import { clearTdsTaxData } from "../../../redux-store/slices/tdsSlice";
+} from '../../../redux-store/api/injectedApis';
+import { clearTdsTaxData } from '../../../redux-store/slices/tdsSlice';
 
 interface TdsTaxCreateProps extends TdsTaxFormProps {
   onClose: () => void;
@@ -63,7 +63,7 @@ const TdsTaxCreate = ({ tdsTaxValue, onClose }: TdsTaxCreateProps) => {
         dispatch(clearTdsTaxData());
         onClose(); // Call onClose to close the dialog
       } catch (error) {
-        console.error("An error occurred during form submission:", error);
+        console.error('An error occurred during form submission:', error);
       } finally {
         actions.setSubmitting(false);
       }
@@ -83,30 +83,30 @@ const TdsTaxCreate = ({ tdsTaxValue, onClose }: TdsTaxCreateProps) => {
   useSnackbarNotifications({
     error: tdsTaxAddError,
     errorObject: tdsTaxAddErrorObject,
-    errorMessage: "Error creating Tds Tax",
+    errorMessage: 'Error creating Tds Tax',
     success: tdsTaxAddSuccess,
-    successMessage: "Tds Tax created successfully",
+    successMessage: 'Tds Tax created successfully',
   });
 
   // * ------ updating tds tax ------------------------
   useSnackbarNotifications({
     error: tdsTaxUpdateError,
     errorObject: tdsTaxUpdateErrorObject,
-    errorMessage: "Error updating Tds Tax",
+    errorMessage: 'Error updating Tds Tax',
     success: tdsTaxUpdateSuccess,
-    successMessage: "Tds Tax update successfully",
+    successMessage: 'Tds Tax update successfully',
   });
 
   return (
     <div>
       <DynamicFormCreate
-        headerName={tdsTaxValue ? "Edit Tds Tax " : "Create Tds Tax"}
+        headerName={tdsTaxValue ? 'Edit Tds Tax ' : 'Create Tds Tax'}
         showTable={true}
         fields={TdsTaxFields}
         initialValues={initialValue}
         validationSchema={tdsTaxValidationSchema}
         onSubmit={onSubmit}
-        buttons={[{ label: "Save", icon: Save, onClick: onSubmit }]}
+        buttons={[{ label: 'Save', icon: Save, onClick: onSubmit }]}
       />
     </div>
   );

@@ -1,23 +1,23 @@
-import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme/theme";
-import RoleBasedRoute from "./services/utils/PrivateRoute";
-import { useSelector } from "react-redux";
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme/theme';
+import RoleBasedRoute from './services/utils/PrivateRoute';
+import { useSelector } from 'react-redux';
 import {
   selectCurrentToken,
   selectCurrentId,
-} from "./redux-store/auth/authSlice";
-import { sidebarTwo } from "./constants/data";
-import Login from "./pages/Login-screen";
-import Unauthorized from "./unauthorized";
-import ForgetPassword from "./pages/ForgetPassword-screen";
-import ResetPassword from "./pages/ResetPassword";
-import { useGetUserRoleMutation } from "./redux-store/api/injectedApis";
+} from './redux-store/auth/authSlice';
+import { sidebarTwo } from './constants/data';
+import Login from './pages/Login-screen';
+import Unauthorized from './unauthorized';
+import ForgetPassword from './pages/ForgetPassword-screen';
+import ResetPassword from './pages/ResetPassword';
+import { useGetUserRoleMutation } from './redux-store/api/injectedApis';
 import {
   InvoiceContextProvider,
   useInVoiceContext,
-} from "./invoiceContext/invoiceContext";
+} from './invoiceContext/invoiceContext';
 
 function App() {
   const context = useInVoiceContext();
@@ -60,7 +60,7 @@ function App() {
           context.companyDetails.companyId = response.companyId;
         })
         .catch((error) => {
-          console.error("Error fetching user role:", error);
+          console.error('Error fetching user role:', error);
         });
     }
   }, [id, getUserRole, context]);
@@ -78,7 +78,7 @@ function App() {
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route
               path="*"
-              element={<Navigate to={token ? "/dashboard" : "/login"} />}
+              element={<Navigate to={token ? '/dashboard' : '/login'} />}
             />
             <Route
               path="/forgotpassword"

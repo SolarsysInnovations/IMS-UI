@@ -1,7 +1,7 @@
-import React from "react";
-import ApproverInvoiceList from "./ApproverInvoiceList";
-import ApproverInvoiceOverView from "./ApproverInvoiceOverView";
-import { Grid } from "@mui/material";
+import React from 'react';
+import ApproverInvoiceList from './ApproverInvoiceList';
+import ApproverInvoiceOverView from './ApproverInvoiceOverView';
+import { Grid } from '@mui/material';
 
 // Define the type for approverData
 interface ApproverData {

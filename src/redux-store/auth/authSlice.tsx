@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 // Define the type for your state
 interface AuthState {
@@ -15,10 +15,10 @@ interface User {
 }
 
 // Retrieve token and other details from session storage
-const tokenFromStorage = sessionStorage.getItem("accessToken");
-const idFromStorage = sessionStorage.getItem("id");
-const refreshTokenFromStorage = sessionStorage.getItem("refresh");
-const userDetailsFromStorage = sessionStorage.getItem("userDetails");
+const tokenFromStorage = sessionStorage.getItem('accessToken');
+const idFromStorage = sessionStorage.getItem('id');
+const refreshTokenFromStorage = sessionStorage.getItem('refresh');
+const userDetailsFromStorage = sessionStorage.getItem('userDetails');
 
 // Define the initial state
 const initialState: AuthState = {
@@ -33,7 +33,7 @@ const initialState: AuthState = {
 
 // Create the authentication slice
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     setCredentials: (state, action) => {
@@ -47,9 +47,9 @@ const authSlice = createSlice({
       state.refresh = refresh;
 
       // Store credentials in session storage
-      sessionStorage.setItem("id", id || "");
-      sessionStorage.setItem("accessToken", accessToken || "");
-      sessionStorage.setItem("refresh", refresh || "");
+      sessionStorage.setItem('id', id || '');
+      sessionStorage.setItem('accessToken', accessToken || '');
+      sessionStorage.setItem('refresh', refresh || '');
     },
     logOut: (state) => {
       // Reset state values
@@ -67,8 +67,8 @@ const authSlice = createSlice({
       state.refresh = refresh;
 
       // Update tokens in session storage
-      sessionStorage.setItem("accessToken", accessToken || "");
-      sessionStorage.setItem("refresh", refresh || "");
+      sessionStorage.setItem('accessToken', accessToken || '');
+      sessionStorage.setItem('refresh', refresh || '');
     },
   },
 });

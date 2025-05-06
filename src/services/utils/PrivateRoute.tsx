@@ -1,10 +1,10 @@
-import React from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { Box, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
-import MainLayout from "../../components/layouts/SideBar";
-import { selectCurrentToken } from "../../redux-store/auth/authSlice";
-import { useInVoiceContext } from "../../invoiceContext/invoiceContext";
+import React from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
+import MainLayout from '../../components/layouts/SideBar';
+import { selectCurrentToken } from '../../redux-store/auth/authSlice';
+import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
 
 interface RoleBasedRouteProps {
   allowedRoles: string[];

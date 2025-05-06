@@ -1,19 +1,19 @@
-import { createContext, useContext } from "react";
-import { InvoiceContextType } from "./invoiceContextTypes";
-import { Roles } from "../constants/Enums";
+import { createContext, useContext } from 'react';
+import { InvoiceContextType } from './invoiceContextTypes';
+import { Roles } from '../constants/Enums';
 
 let invoiceContextValue: InvoiceContextType = {
   userDetails: {
-    userId: "",
-    userName: "",
-    userEmail: "",
-    userMobile: "",
-    description: "",
+    userId: '',
+    userName: '',
+    userEmail: '',
+    userMobile: '',
+    description: '',
     userRole: Roles.GUEST,
   },
   companyDetails: {
-    companyName: "",
-    companyId: "",
+    companyName: '',
+    companyId: '',
   },
 };
 

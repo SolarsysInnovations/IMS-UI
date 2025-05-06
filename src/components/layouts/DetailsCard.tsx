@@ -1,21 +1,21 @@
-import React from "react";
-import { Grid, Typography, Paper } from "@mui/material";
+import React from 'react';
+import { Grid, Typography, Paper } from '@mui/material';
 
 // Example data that could be dynamically provided
 const customerDetailsArray = [
   {
-    firstName: "arun",
-    lastName: "sachin",
+    firstName: 'arun',
+    lastName: 'sachin',
     age: 26,
-    sex: "male",
+    sex: 'male',
     contactPersons: [
       {
-        name: "john",
-        contactNumber: "9876543210",
+        name: 'john',
+        contactNumber: '9876543210',
       },
       {
-        name: "jane",
-        contactNumber: "1234567890",
+        name: 'jane',
+        contactNumber: '1234567890',
       },
     ],
   },
@@ -29,7 +29,7 @@ const flattenCustomerDetails = (detailsArray: typeof customerDetailsArray) => {
     // Flatten userDetails into an array of [key, value] pairs
     const flattenedUserDetails = Object.entries(userDetails).map(
       ([key, value]) => [
-        key.replace(/([A-Z])/g, " $1").toUpperCase(), // Convert camelCase to readable format
+        key.replace(/([A-Z])/g, ' $1').toUpperCase(), // Convert camelCase to readable format
         value,
       ],
     );

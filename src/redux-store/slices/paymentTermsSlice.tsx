@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const paymentTermsSlice = createSlice({
-  name: "paymentTerms",
+  name: 'paymentTerms',
   initialState: {
     data: null,
     loading: false,

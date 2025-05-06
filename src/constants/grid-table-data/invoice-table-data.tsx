@@ -1,21 +1,21 @@
-import { Box, IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack } from '@mui/material';
 import {
   GridColDef,
   GridDeleteIcon,
   GridValueSetterParams,
-} from "@mui/x-data-grid";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux-store/store";
-import TableHeader from "../../components/layouts/TableHeader";
-import usePathname from "../../hooks/usePathname";
-import React from "react";
+} from '@mui/x-data-grid';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
+import TableHeader from '../../components/layouts/TableHeader';
+import usePathname from '../../hooks/usePathname';
+import React from 'react';
 import {
   useDeleteServiceMutation,
   useGetServiceListQuery,
   useGetSingleServiceMutation,
-} from "../../redux-store/api/injectedApis";
-import ServiceDetails from "../../pages/service/serviceDetails";
+} from '../../redux-store/api/injectedApis';
+import ServiceDetails from '../../pages/service/serviceDetails';
 
 const id = 1;
 
@@ -73,7 +73,7 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
              <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
                 <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
             </IconButton>  */}
-      <Box sx={{ marginTop: "15px" }}>
+      <Box sx={{ marginTop: '15px' }}>
         <ServiceDetails details={id} />
       </Box>
     </Stack>
@@ -82,44 +82,44 @@ const MyCellRenderer = ({ id, contactPersons }: any) => {
 
 export const columns: GridColDef[] = [
   {
-    field: "invoiceType",
-    headerName: "Invoice Type",
+    field: 'invoiceType',
+    headerName: 'Invoice Type',
     width: 150,
     editable: true,
   },
   {
-    field: "invoiceNumber",
-    headerName: "Invoice Number",
+    field: 'invoiceNumber',
+    headerName: 'Invoice Number',
     width: 150,
     editable: true,
   },
   {
-    field: "customerName",
-    headerName: "Customer Name",
+    field: 'customerName',
+    headerName: 'Customer Name',
     width: 150,
     editable: false,
   },
   {
-    field: "invoiceDate",
-    headerName: "Invoice Date",
+    field: 'invoiceDate',
+    headerName: 'Invoice Date',
     width: 150,
     editable: false,
   },
   {
-    field: "dueDate",
-    headerName: "Due Date",
+    field: 'dueDate',
+    headerName: 'Due Date',
     width: 150,
     editable: false,
   },
   {
-    field: "invoiceStatus",
-    headerName: "Invoice Status",
+    field: 'invoiceStatus',
+    headerName: 'Invoice Status',
     width: 150,
     editable: false,
   },
   {
-    field: "totalAmount",
-    headerName: "Total",
+    field: 'totalAmount',
+    headerName: 'Total',
     width: 150,
     editable: false,
   },

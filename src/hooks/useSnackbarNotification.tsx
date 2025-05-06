@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { showSnackbar } from "../redux-store/global/snackBarSlice";
-import { AppDispatch } from "../redux-store/store";
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { showSnackbar } from '../redux-store/global/snackBarSlice';
+import { AppDispatch } from '../redux-store/store';
 
 // Better define types for success and error messages
 interface SnackbarNotificationProps {
@@ -23,11 +23,11 @@ export const useSnackbarNotifications = ({
 
   useEffect(() => {
     if (success) {
-      dispatch(showSnackbar({ message: successMessage, severity: "success" }));
+      dispatch(showSnackbar({ message: successMessage, severity: 'success' }));
     }
     if (error) {
       const finalErrorMessage = errorObject?.data?.message || errorMessage;
-      dispatch(showSnackbar({ message: finalErrorMessage, severity: "error" }));
+      dispatch(showSnackbar({ message: finalErrorMessage, severity: 'error' }));
     }
   }, [dispatch, success, error, successMessage, errorMessage, errorObject]); // Ensure correct dependencies
 };

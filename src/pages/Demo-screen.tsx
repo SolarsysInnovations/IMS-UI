@@ -1,6 +1,6 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import React, { forwardRef, useRef } from "react";
-import ReactToPrint from "react-to-print";
+import { Box, Button, Stack, Typography } from '@mui/material';
+import React, { forwardRef, useRef } from 'react';
+import ReactToPrint from 'react-to-print';
 import {
   Page,
   Text,
@@ -8,8 +8,8 @@ import {
   Document,
   StyleSheet,
   View,
-} from "@react-pdf/renderer";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+} from '@react-pdf/renderer';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const DemoScreen = forwardRef(() => {
   const componentRef = useRef<HTMLDivElement>(null);
@@ -29,14 +29,14 @@ const DemoScreen = forwardRef(() => {
           p: 7,
           backgroundImage:
             'url("https://img.freepik.com/free-photo/detailed-structure-marble-natural-pattern-background-design_1258-77564.jpg?t=st=1710155516~exp=1710159116~hmac=0a89aacba17c0a78ab3f273ccefa60ba37401fee5e459395a6523e01cdf5b178&w=740")',
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
         }}
         ref={componentRef}
       >
         <Box
           sx={{
-            textAlign: "right",
+            textAlign: 'right',
           }}
         >
           <Typography variant="h1" color="initial">
@@ -45,10 +45,10 @@ const DemoScreen = forwardRef(() => {
         </Box>
         <Stack
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             mt: 6,
           }}
         >

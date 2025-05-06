@@ -1,21 +1,21 @@
-import { IconButton, Stack } from "@mui/material";
-import { GridColDef, GridDeleteIcon } from "@mui/x-data-grid";
-import EditIcon from "@mui/icons-material/Edit";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux-store/store";
-import { useEffect, useState } from "react";
-import React from "react";
-import DialogBoxUi from "../../components/ui/DialogBox";
+import { IconButton, Stack } from '@mui/material';
+import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
+import EditIcon from '@mui/icons-material/Edit';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
+import { useEffect, useState } from 'react';
+import React from 'react';
+import DialogBoxUi from '../../components/ui/DialogBox';
 import {
   useDeleteServiceMutation,
   useGetServiceListQuery,
   useGetSingleServiceMutation,
-} from "../../redux-store/api/injectedApis";
-import { setServiceData } from "../../redux-store/slices/serviceSlice";
-import ServiceCreate from "../../pages/service/service-create-screen";
-import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
-import ActionButtons from "../../components/ui/ActionButtons";
-import { useRolePermissions } from "../../hooks/useRolePermission";
+} from '../../redux-store/api/injectedApis';
+import { setServiceData } from '../../redux-store/slices/serviceSlice';
+import ServiceCreate from '../../pages/service/service-create-screen';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import ActionButtons from '../../components/ui/ActionButtons';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,31 +39,31 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
   useSnackbarNotifications({
     error: deleteServiceError,
-    errorMessage: "Error adding Service",
+    errorMessage: 'Error adding Service',
     errorObject: deleteServiceErrorObject,
     success: deleteServiceSuccess,
-    successMessage: "Service deleted successfully",
+    successMessage: 'Service deleted successfully',
   });
 
   const handleEditClick = async () => {
     try {
       const response = await getService(id);
-      if ("data" in response) {
+      if ('data' in response) {
         const serviceData = response.data;
         dispatch(setServiceData(serviceData));
         setOpenModal(true);
         setIsOpenDialogBox(true);
       } else {
-        console.error("Error response:", response.error);
+        console.error('Error response:', response.error);
       }
     } catch (error) {
-      console.error("Error handling edit click:", error);
+      console.error('Error handling edit click:', error);
     }
   };
 
   const handleDeleteClick = () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this service?",
+      'Are you sure you want to delete this service?',
     );
     if (confirmed) {
       deletedService(id);
@@ -103,8 +103,8 @@ const MyCellRenderer = ({ id }: { id: any }) => {
 
 export const columns: GridColDef[] = [
   {
-    field: "Action",
-    headerName: "Action",
+    field: 'Action',
+    headerName: 'Action',
     width: 140,
     editable: false,
     renderCell: (params: any) => <MyCellRenderer id={params.row?.id} />,
@@ -117,20 +117,20 @@ export const columns: GridColDef[] = [
 
   // },
   {
-    field: "serviceAccountingCode",
-    headerName: "Service Code",
+    field: 'serviceAccountingCode',
+    headerName: 'Service Code',
     width: 130,
     editable: true,
   },
   {
-    field: "serviceDescription",
-    headerName: "Service Description",
+    field: 'serviceDescription',
+    headerName: 'Service Description',
     width: 350,
     editable: false,
   },
   {
-    field: "serviceAmount",
-    headerName: "Service Amount",
+    field: 'serviceAmount',
+    headerName: 'Service Amount',
     width: 200,
     editable: false,
   },

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import React, { useEffect, useState } from 'react';
+import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import {
   useGetRoleQuery,
   useUpdateRoleMutation,
-} from "../../redux-store/role/roleApi";
+} from '../../redux-store/role/roleApi';
 
-const invoiceOptions = ["ADMIN", "APPROVER", "ENDUSER"];
+const invoiceOptions = ['ADMIN', 'APPROVER', 'ENDUSER'];
 
 const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
   const [status, setStatus] = useState(params.value);
@@ -37,12 +37,12 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
         id: updatedRoles.id,
         data: updatedRoles,
       });
-      if ("error" in response) {
-        console.error("Error updating invoice status:", response.error);
+      if ('error' in response) {
+        console.error('Error updating invoice status:', response.error);
       } else {
       }
     } catch (error) {
-      console.error("Error updating invoice status:", error);
+      console.error('Error updating invoice status:', error);
     }
   };
 
@@ -50,7 +50,7 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
     <select
       value={status}
       onChange={handleChange}
-      style={{ fontSize: "12px", padding: "5px 5px", borderRadius: "5px" }}
+      style={{ fontSize: '12px', padding: '5px 5px', borderRadius: '5px' }}
     >
       {invoiceOptions.map((option) => (
         <option key={option} value={option}>

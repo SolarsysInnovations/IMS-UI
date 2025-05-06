@@ -1,39 +1,39 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Card from "@mui/material/Card";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { ArrowDropDown as ArrowDropDownIcon } from "@mui/icons-material";
-import { Grid } from "@mui/material";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
-import ErrorIcon from "@mui/icons-material/Error";
-import DoneIcon from "@mui/icons-material/Done";
-import { useState, useEffect } from "react";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material';
+import { Grid } from '@mui/material';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import ErrorIcon from '@mui/icons-material/Error';
+import DoneIcon from '@mui/icons-material/Done';
+import { useState, useEffect } from 'react';
 
 const ApproverInvoiceOverView = ({ approverOverViewData }: any) => {
   const [invoiceAmount, setInvoiceAmount] = useState([
     {
-      label: "Total Invoices",
+      label: 'Total Invoices',
       icon: CurrencyRupeeIcon,
-      iconBg: "#635bff",
+      iconBg: '#635bff',
       value: approverOverViewData?.totalInvoices || 0,
-      childLabel: "Invoice child label",
+      childLabel: 'Invoice child label',
       months: approverOverViewData?.totalMonths || 0,
     },
     {
-      label: "Approved Invoices",
+      label: 'Approved Invoices',
       icon: DoneIcon,
-      iconBg: "#4E9F3D",
+      iconBg: '#4E9F3D',
       value: approverOverViewData?.approvedInvoices || 0,
-      childLabel: "Invoice child label",
+      childLabel: 'Invoice child label',
       months: approverOverViewData?.approvedMonths || 0,
     },
     {
-      label: "Pending Invoices",
+      label: 'Pending Invoices',
       icon: ErrorIcon,
-      iconBg: "#FF204E",
+      iconBg: '#FF204E',
       value: approverOverViewData?.pendingInvoices || 0,
-      childLabel: "Invoice child label",
+      childLabel: 'Invoice child label',
       months: approverOverViewData?.pendingMonths || 0,
     },
   ]);
@@ -42,27 +42,27 @@ const ApproverInvoiceOverView = ({ approverOverViewData }: any) => {
     if (approverOverViewData) {
       setInvoiceAmount([
         {
-          label: "Total Invoices",
+          label: 'Total Invoices',
           icon: CurrencyRupeeIcon,
-          iconBg: "#635bff",
+          iconBg: '#635bff',
           value: approverOverViewData.totalInvoices,
-          childLabel: "Invoice child label",
+          childLabel: 'Invoice child label',
           months: approverOverViewData.totalMonths,
         },
         {
-          label: "Approved Invoices",
+          label: 'Approved Invoices',
           icon: DoneIcon,
-          iconBg: "#4E9F3D",
+          iconBg: '#4E9F3D',
           value: approverOverViewData.approvedInvoices,
-          childLabel: "Invoice child label",
+          childLabel: 'Invoice child label',
           months: approverOverViewData.approvedMonths,
         },
         {
-          label: "Pending Invoices",
+          label: 'Pending Invoices',
           icon: ErrorIcon,
-          iconBg: "#FF204E",
+          iconBg: '#FF204E',
           value: approverOverViewData.pendingInvoices,
-          childLabel: "Invoice child label",
+          childLabel: 'Invoice child label',
           months: approverOverViewData.pendingMonths,
         },
       ]);
@@ -73,13 +73,13 @@ const ApproverInvoiceOverView = ({ approverOverViewData }: any) => {
     <Grid container spacing={2}>
       {invoiceAmount.map((data, index) => (
         <Grid key={index} item xs={4}>
-          <Card sx={{ width: "180px", height: "80px", padding: "10px 15px" }}>
+          <Card sx={{ width: '180px', height: '80px', padding: '10px 15px' }}>
             <Stack spacing={1}>
               <Stack
                 direction="row"
                 sx={{
-                  alignItems: "flex-start",
-                  justifyContent: "space-between",
+                  alignItems: 'flex-start',
+                  justifyContent: 'space-between',
                 }}
                 spacing={1}
               >
@@ -92,16 +92,16 @@ const ApproverInvoiceOverView = ({ approverOverViewData }: any) => {
                 <Avatar
                   sx={{
                     backgroundColor: data.iconBg,
-                    height: "30px",
-                    width: "30px",
+                    height: '30px',
+                    width: '30px',
                   }}
                 >
                   {React.createElement(data.icon, { width: 20, height: 20 })}
                 </Avatar>
               </Stack>
-              <Stack sx={{ alignItems: "center" }} direction="row" spacing={1}>
+              <Stack sx={{ alignItems: 'center' }} direction="row" spacing={1}>
                 <Stack
-                  sx={{ alignItems: "center" }}
+                  sx={{ alignItems: 'center' }}
                   direction="row"
                   spacing={0.5}
                 >

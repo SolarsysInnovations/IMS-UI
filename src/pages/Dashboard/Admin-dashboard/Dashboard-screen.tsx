@@ -1,9 +1,9 @@
-import { Grid, Typography, CircularProgress } from "@mui/material";
-import AdminDashboardInvoiceOverviewAmount from "../Admin-dashboard/InvoiceAmount";
-import AdminDashboardInvoicePieChart from "../Admin-dashboard/InvoiceStatusChart";
-import GridDataUi from "../../../components/GridTable/GridData";
-import { GridColDef } from "@mui/x-data-grid";
-import { useGetDashboardMutation } from "../../../redux-store/api/injectedApis";
+import { Grid, Typography, CircularProgress } from '@mui/material';
+import AdminDashboardInvoiceOverviewAmount from '../Admin-dashboard/InvoiceAmount';
+import AdminDashboardInvoicePieChart from '../Admin-dashboard/InvoiceStatusChart';
+import GridDataUi from '../../../components/GridTable/GridData';
+import { GridColDef } from '@mui/x-data-grid';
+import { useGetDashboardMutation } from '../../../redux-store/api/injectedApis';
 
 interface AdminDashboardScreenProps {
   adminData: {
@@ -26,32 +26,32 @@ const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
 
   const columns: GridColDef[] = [
     {
-      field: "invoiceType",
-      headerName: "Invoice Type",
+      field: 'invoiceType',
+      headerName: 'Invoice Type',
       width: 140,
       editable: true,
     },
     {
-      field: "invoiceNumber",
-      headerName: "Invoice Number",
+      field: 'invoiceNumber',
+      headerName: 'Invoice Number',
       width: 150,
       editable: true,
     },
     {
-      field: "customerName",
-      headerName: "Customer Name",
+      field: 'customerName',
+      headerName: 'Customer Name',
       width: 150,
       editable: false,
     },
     {
-      field: "invoiceStatus",
-      headerName: "Invoice Status",
+      field: 'invoiceStatus',
+      headerName: 'Invoice Status',
       width: 150,
       editable: false,
     },
     {
-      field: "createdBy",
-      headerName: "Created by",
+      field: 'createdBy',
+      headerName: 'Created by',
       width: 150,
       editable: false,
     },
@@ -81,11 +81,11 @@ const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
       {isError ? (
         <Grid item xs={12}>
           <Typography color="error">
-            Error loading invoice data: {error?.message ?? "Unknown error"}
+            Error loading invoice data: {error?.message ?? 'Unknown error'}
           </Typography>
         </Grid>
       ) : (
-        <Grid container spacing={2} style={{ marginTop: "16px" }}>
+        <Grid container spacing={2} style={{ marginTop: '16px' }}>
           {isLoading ? (
             <Grid
               item

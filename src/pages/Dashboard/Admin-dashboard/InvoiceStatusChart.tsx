@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import ReactApexChart from "react-apexcharts";
-import { Card } from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import ReactApexChart from 'react-apexcharts';
+import { Card } from '@mui/material';
 
 const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
   const [chartData, setChartData] = useState<{
@@ -10,19 +10,19 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
     series: [],
     options: {
       chart: {
-        type: "donut",
+        type: 'donut',
       },
       plotOptions: {
         pie: {
           startAngle: -90,
           endAngle: 270,
           donut: {
-            size: "65%",
+            size: '65%',
             labels: {
               show: true,
               total: {
                 show: true,
-                label: "Total",
+                label: 'Total',
                 formatter: (w: any) => {
                   const total = w.globals.seriesTotals.reduce(
                     (a: any, b: any) => a + b,
@@ -42,12 +42,12 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
         enabled: false,
       },
       colors: [
-        "#F97300",
-        "#FFD700",
-        "#4E9F3D",
-        "#4ECCA3",
-        "#FF204E",
-        "#FF204E",
+        '#F97300',
+        '#FFD700',
+        '#4E9F3D',
+        '#4ECCA3',
+        '#FF204E',
+        '#FF204E',
       ],
       labels: [], // Labels will be set dynamically
       responsive: [
@@ -59,7 +59,7 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
               height: 200,
             },
             legend: {
-              position: "bottom",
+              position: 'bottom',
             },
           },
         },
@@ -92,13 +92,13 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
         options: {
           ...chartData.options,
           labels: [
-            "Returned",
-            "Pending",
-            "Approved",
-            "Draft",
-            "Deleted",
-            "Mailed",
-            "Paid",
+            'Returned',
+            'Pending',
+            'Approved',
+            'Draft',
+            'Deleted',
+            'Mailed',
+            'Paid',
           ],
         },
       });
@@ -106,8 +106,8 @@ const AdminDashboardInvoicePieChart = ({ invoicePieChartData }: any) => {
   }, [invoicePieChartData]);
 
   return (
-    <Card sx={{ width: "300px", height: "160px" }}>
-      <div id="chart" style={{ padding: "0px", marginTop: "px" }}>
+    <Card sx={{ width: '300px', height: '160px' }}>
+      <div id="chart" style={{ padding: '0px', marginTop: 'px' }}>
         <ReactApexChart
           options={chartData.options}
           series={chartData.series}

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { serviceFields } from "../../constants/form-data/form-data-json";
-import { serviceValidationSchema } from "../../constants/forms/validations/validationSchema";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { DynamicFormCreate } from "../../components/Form-renderer/Dynamic-form";
-import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
+import React, { useEffect, useState } from 'react';
+import { serviceFields } from '../../constants/form-data/form-data-json';
+import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import {
   useGetServiceListQuery,
   useUpdateServiceMutation,
-} from "../../redux-store/api/injectedApis";
+} from '../../redux-store/api/injectedApis';
 
 const ServiceEditScreen = () => {
   const [
@@ -36,19 +36,19 @@ const ServiceEditScreen = () => {
       setIsPopupOpen(false); // Close the popup
     };
 
-    window.addEventListener("popstate", handlePopState);
+    window.addEventListener('popstate', handlePopState);
 
     return () => {
-      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener('popstate', handlePopState);
     };
   }, [serviceStateDetails]);
 
   useSnackbarNotifications({
     error: serviceUpdateError,
     errorObject: serviceUpdateErrorObject,
-    errorMessage: "Error updating Service",
+    errorMessage: 'Error updating Service',
     success: serviceUpdateSuccess,
-    successMessage: "Service updated successfully",
+    successMessage: 'Service updated successfully',
   });
 
   const navigate = useNavigate();
@@ -62,11 +62,11 @@ const ServiceEditScreen = () => {
         });
         setShowSuccessToast(true);
         setTimeout(() => {
-          navigate("/services/list");
+          navigate('/services/list');
           setShowSuccessToast(false);
         }, 2000);
       } else {
-        console.error("ID is undefined");
+        console.error('ID is undefined');
       }
     } catch (error) {
       console.error(error);
@@ -84,8 +84,8 @@ const ServiceEditScreen = () => {
           validationSchema={serviceValidationSchema}
           onSubmit={onSubmit}
           buttons={[
-            { label: "Back", onClick: handleBackClick },
-            { label: "Save", onClick: onSubmit },
+            { label: 'Back', onClick: handleBackClick },
+            { label: 'Save', onClick: onSubmit },
           ]}
         />
       )}

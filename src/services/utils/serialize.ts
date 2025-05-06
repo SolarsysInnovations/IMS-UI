@@ -1,9 +1,9 @@
 export const serializeFormValues = (values: any): any => {
   // If values are already serializable, return them as is
   if (
-    typeof values === "string" ||
-    typeof values === "number" ||
-    typeof values === "boolean" ||
+    typeof values === 'string' ||
+    typeof values === 'number' ||
+    typeof values === 'boolean' ||
     values === null
   ) {
     return values;
@@ -13,7 +13,7 @@ export const serializeFormValues = (values: any): any => {
     return values.map((value) => serializeFormValues(value));
   }
 
-  if (typeof values === "object") {
+  if (typeof values === 'object') {
     const serializedObject: any = {};
     for (const key in values) {
       serializedObject[key] = serializeFormValues(values[key]);

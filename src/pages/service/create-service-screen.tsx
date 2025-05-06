@@ -1,36 +1,36 @@
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import TextFieldUi from "../../components/ui/TextField";
-import SelectDropdown from "../../components/ui/SelectDropdown";
-import { Box, Grid, Stack } from "@mui/material";
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import TextFieldUi from '../../components/ui/TextField';
+import SelectDropdown from '../../components/ui/SelectDropdown';
+import { Box, Grid, Stack } from '@mui/material';
 
 interface InputObject {
   id?: number;
   label: string;
   size?: number;
-  type?: "text" | "number" | "email" | "select";
+  type?: 'text' | 'number' | 'email' | 'select';
   options?: { value: string; label: string }[];
 }
 
 const inputs: InputObject[] = [
-  { id: 1, label: "Name", type: "text", size: 3 },
-  { id: 2, label: "Age", type: "number", size: 3 },
-  { id: 3, label: "Email", type: "email", size: 3 },
+  { id: 1, label: 'Name', type: 'text', size: 3 },
+  { id: 2, label: 'Age', type: 'number', size: 3 },
+  { id: 3, label: 'Email', type: 'email', size: 3 },
   {
     id: 4,
-    label: "City",
-    type: "select",
-    options: [{ value: "arun", label: "arun" }],
+    label: 'City',
+    type: 'select',
+    options: [{ value: 'arun', label: 'arun' }],
     size: 2,
   },
 ];
 
 const validationSchema = Yup.object().shape({
-  Name: Yup.string().required("Name is required"),
-  Age: Yup.number().required("Age is required").positive().integer(),
-  Email: Yup.string().email("Invalid email").required("Email is required"),
-  City: Yup.string().required("City is required"),
+  Name: Yup.string().required('Name is required'),
+  Age: Yup.number().required('Age is required').positive().integer(),
+  Email: Yup.string().email('Invalid email').required('Email is required'),
+  City: Yup.string().required('City is required'),
 });
 
 export const CreateServices: React.FC = () => {
@@ -43,9 +43,9 @@ export const CreateServices: React.FC = () => {
     setFieldValue: any,
   ) => {
     switch (input.type) {
-      case "text":
-      case "number":
-      case "email":
+      case 'text':
+      case 'number':
+      case 'email':
         return (
           <Field
             as={TextFieldUi}
@@ -58,15 +58,15 @@ export const CreateServices: React.FC = () => {
             helperText={touched[input.label] && errors[input.label]}
           />
         );
-      case "select":
+      case 'select':
         return (
           <SelectDropdown
             onChange={(newValue: any) =>
-              setFieldValue(input.label, newValue?.value || "")
+              setFieldValue(input.label, newValue?.value || '')
             }
             labelText={input.label}
             options={input.options || []}
-            value={values[input.label] || ""}
+            value={values[input.label] || ''}
             error={touched[input.label] && Boolean(errors[input.label])}
             helperText={touched[input.label] && errors[input.label]}
           />
@@ -81,10 +81,10 @@ export const CreateServices: React.FC = () => {
       <h2>Input Form</h2>
       <Formik
         initialValues={{
-          Name: "",
-          Age: "",
-          Email: "",
-          City: "",
+          Name: '',
+          Age: '',
+          Email: '',
+          City: '',
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {

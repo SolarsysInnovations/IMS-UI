@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
-import Container from "@mui/material/Container";
-import About from "../about/About";
-import SettingsCompanyDetailsScreen from "./settings-company/SettingsCompanyDetailsScreen";
+import React, { useState, useEffect } from 'react';
+import { Box, Tab, Tabs, Typography } from '@mui/material';
+import Container from '@mui/material/Container';
+import About from '../about/About';
+import SettingsCompanyDetailsScreen from './settings-company/SettingsCompanyDetailsScreen';
 
 const SettingRoleScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);

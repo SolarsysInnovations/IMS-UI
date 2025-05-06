@@ -1,6 +1,6 @@
-import * as React from "react";
-import Checkbox from "@mui/material/Checkbox";
-import { FormControlLabel, FormGroup } from "@mui/material";
+import * as React from 'react';
+import Checkbox from '@mui/material/Checkbox';
+import { FormControlLabel, FormGroup } from '@mui/material';
 
 interface CheckboxesProps {
   label?: string;

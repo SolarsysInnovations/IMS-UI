@@ -1,8 +1,8 @@
-import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import palette from "../../theme/create-pallet";
+import * as React from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import palette from '../../theme/create-pallet';
 interface TabData {
   value: string;
   label: string;
@@ -18,11 +18,11 @@ interface ColorTabsProps {
 
 const TabUi: React.FC<ColorTabsProps> = ({
   tabs = [],
-  defaultValue = tabs[0]?.value || "",
+  defaultValue = tabs[0]?.value || '',
   onChange = () => {},
   textColor,
   indicatorColor,
-  ariaLabel = "tabs",
+  ariaLabel = 'tabs',
 }) => {
   const [value, setValue] = React.useState(defaultValue);
 
@@ -31,10 +31,10 @@ const TabUi: React.FC<ColorTabsProps> = ({
     onChange(newValue);
   };
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: '100%' }}>
       <Tabs
         sx={{
-          minHeight: "39px",
+          minHeight: '39px',
         }}
         value={value}
         onChange={handleChange}
@@ -45,7 +45,7 @@ const TabUi: React.FC<ColorTabsProps> = ({
         {tabs.map((tab) => (
           <Tab
             sx={{
-              padding: "3px  10px",
+              padding: '3px  10px',
             }}
             key={tab.value}
             value={tab.value}

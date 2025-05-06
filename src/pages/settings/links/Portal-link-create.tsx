@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { linkFields } from "../../../constants/form-data/form-data-json";
-import { linkInitialValues } from "../../../constants/forms/formikInitialValues";
-import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
-import { linkValidationSchema } from "../../../constants/forms/validations/validationSchema";
+import React, { useEffect, useState } from 'react';
+import { linkFields } from '../../../constants/form-data/form-data-json';
+import { linkInitialValues } from '../../../constants/forms/formikInitialValues';
+import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
+import { linkValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import {
   useAddPortalLinkMutation,
   useGetPortalLinkQuery,
   useUpdatePortalLinkMutation,
-} from "../../../redux-store/api/injectedApis";
-import { LinkFormProps } from "../../../types/types";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux-store/store";
-import { clearData } from "../../../redux-store/global/globalState";
-import { useNavigate } from "react-router-dom";
-import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+} from '../../../redux-store/api/injectedApis';
+import { LinkFormProps } from '../../../types/types';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux-store/store';
+import { clearData } from '../../../redux-store/global/globalState';
+import { useNavigate } from 'react-router-dom';
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 
 const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
   const [openModal, setOpenModal] = useState(false);
@@ -53,17 +53,17 @@ const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
   useSnackbarNotifications({
     error: linkAddError,
     errorObject: linkAddErrorObject,
-    errorMessage: "Error creating Link",
+    errorMessage: 'Error creating Link',
     success: linkAddSuccess,
-    successMessage: "Link created successfully",
+    successMessage: 'Link created successfully',
   });
 
   useSnackbarNotifications({
     error: linkUpdateError,
     errorObject: linkUpdateErrorObject,
-    errorMessage: "Error updating Link",
+    errorMessage: 'Error updating Link',
     success: linkUpdateSuccess,
-    successMessage: "Link updated successfully",
+    successMessage: 'Link updated successfully',
   });
 
   const onSubmit = async (values: LinkFormProps, actions: any) => {
@@ -78,7 +78,7 @@ const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
       handleClose(); // Close modal after saving
       refetch(); // Refetch updated list
     } catch (error) {
-      console.error("An error occurred during form submission:", error);
+      console.error('An error occurred during form submission:', error);
     }
   };
 
@@ -99,8 +99,8 @@ const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
         validationSchema={linkValidationSchema}
         onSubmit={onSubmit}
         buttons={[
-          { label: "Back", onClick: handleBackClick },
-          { label: "Save", onClick: onSubmit },
+          { label: 'Back', onClick: handleBackClick },
+          { label: 'Save', onClick: onSubmit },
         ]}
       />
     </>

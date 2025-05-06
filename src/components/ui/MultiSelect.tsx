@@ -1,6 +1,6 @@
-import * as React from "react";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
+import * as React from 'react';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 export interface MultiSelectUiProps {
   options?: any[];
@@ -17,7 +17,7 @@ const MultiSelectUi: React.FC<MultiSelectUiProps> = ({
   options,
   getOptionLabel,
   defaultValue = [],
-  label = "Select",
+  label = 'Select',
   value = [], // Default value to an empty array
   onChange,
   error,
@@ -30,28 +30,28 @@ const MultiSelectUi: React.FC<MultiSelectUiProps> = ({
   return (
     <Autocomplete
       sx={{
-        borderRadius: "8px !important",
-        fontSize: "12px",
-        "& .MuiOutlinedInput-root": {
-          borderRadius: "8px !important",
-          overflow: "hidden",
+        borderRadius: '8px !important',
+        fontSize: '12px',
+        '& .MuiOutlinedInput-root': {
+          borderRadius: '8px !important',
+          overflow: 'hidden',
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          "&:hover": {
+          '&:hover': {
             backgroundColor: `action.hover`,
           },
         },
-        "& .MuiAutocomplete-input": {
-          fontSize: "12px",
+        '& .MuiAutocomplete-input': {
+          fontSize: '12px',
         },
-        "& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root": {
-          fontSize: "12px",
+        '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
+          fontSize: '12px',
         },
-        "& .css-1pnrxdh-MuiButtonBase-root-MuiChip-root": {
-          fontSize: "12px",
+        '& .css-1pnrxdh-MuiButtonBase-root-MuiChip-root': {
+          fontSize: '12px',
         },
-        "& .css-ih149s-MuiFormControl-root-MuiTextField-root": {
-          height: "34px !important",
+        '& .css-ih149s-MuiFormControl-root-MuiTextField-root': {
+          height: '34px !important',
         },
       }}
       multiple
@@ -68,7 +68,7 @@ const MultiSelectUi: React.FC<MultiSelectUiProps> = ({
         <TextField
           error={error}
           helperText={helperText}
-          sx={{ fontSize: "12px !important" }}
+          sx={{ fontSize: '12px !important' }}
           variant="outlined"
           {...params}
           label={label}

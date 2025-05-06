@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { Box, Grid } from "@mui/material";
-import { Formik, Form } from "formik";
-import SelectDropdown from "../../components/ui/SelectDropdown";
-import { invoiceCreateInitialValue } from "../../constants/forms/formikInitialValues";
-import { InvoiceInitialValueProps } from "../../types/types";
-import { generateOptions } from "../../services/utils/dropdownOptions";
-import InvoiceUi from "../Invoice/Generate-Invoice/InvoiceUi";
-import { addDays, format } from "date-fns";
-import DialogBoxUi from "../../components/ui/DialogBox";
-import GstTypeScreen from "../Invoice/GstType/GstTypeScreen";
-import PaymentTermsScreen from "../Invoice/paymentTerms/PaymentTermsScreen";
-import TdsTaxScreen from "../Invoice/TdsTax/TdsTaxScreen";
-import TableHeader from "../../components/layouts/TableHeader";
+import { useState } from 'react';
+import { Box, Grid } from '@mui/material';
+import { Formik, Form } from 'formik';
+import SelectDropdown from '../../components/ui/SelectDropdown';
+import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
+import { InvoiceInitialValueProps } from '../../types/types';
+import { generateOptions } from '../../services/utils/dropdownOptions';
+import InvoiceUi from '../Invoice/Generate-Invoice/InvoiceUi';
+import { addDays, format } from 'date-fns';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import GstTypeScreen from '../Invoice/GstType/GstTypeScreen';
+import PaymentTermsScreen from '../Invoice/paymentTerms/PaymentTermsScreen';
+import TdsTaxScreen from '../Invoice/TdsTax/TdsTaxScreen';
+import TableHeader from '../../components/layouts/TableHeader';
 import {
   useGetGstTypeListQuery,
   useGetPaymentTermsListQuery,
   useGetTdsTaxListQuery,
-} from "../../redux-store/api/injectedApis";
-import ServiceEditScreen from "../service/service-edit-screen";
-import { useRolePermissions } from "../../hooks/useRolePermission";
+} from '../../redux-store/api/injectedApis';
+import ServiceEditScreen from '../service/service-edit-screen';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const TaxConfig = () => {
-  const [popUpComponent, setPopUpComponent] = useState("");
+  const [popUpComponent, setPopUpComponent] = useState('');
   const [openDialogBox, setOpenDialogBox] = useState(false);
   // * * * * * * * grid table states * * * * * * * * *
   const { data: paymentTerms } = useGetPaymentTermsListQuery();
@@ -30,21 +30,21 @@ const TaxConfig = () => {
   const { data: tdsTaxData = [] } = useGetTdsTaxListQuery();
 
   // * ----------- to generate the dropdown options -------------
-  const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
-  const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
+  const gstTypeOptions = generateOptions(gstTypesData, 'gstName', 'gstName');
+  const tdsTaxOptions = generateOptions(tdsTaxData, 'taxName', 'taxName');
   const paymentTermsOptions = generateOptions(
     paymentTerms,
-    "termName",
-    "termName",
+    'termName',
+    'termName',
   );
   const { canCreateTds, canCreateGst, canCreatePayment } = useRolePermissions();
 
   const PopupComponents = {
-    GST_TYPE: "gstType",
-    PAYMENT_TERMS: "paymentTerms",
-    TDS_TAX: "tdsTax",
-    SERVICES: "services",
-    INVOICE: "invoice",
+    GST_TYPE: 'gstType',
+    PAYMENT_TERMS: 'paymentTerms',
+    TDS_TAX: 'tdsTax',
+    SERVICES: 'services',
+    INVOICE: 'invoice',
   };
 
   function handlePopupMenuOpen(popUpComponent: string) {
@@ -74,7 +74,7 @@ const TaxConfig = () => {
           resetForm();
           setInvoiceValues({ ...invoiceValues });
         } catch (error) {
-          console.error("An error occurred during login:", error);
+          console.error('An error occurred during login:', error);
         } finally {
           setSubmitting(false);
         }
@@ -91,7 +91,7 @@ const TaxConfig = () => {
               content={handlePopupMenuOpen(popUpComponent)}
               handleClose={() => {
                 setOpenDialogBox(false);
-                setPopUpComponent("");
+                setPopUpComponent('');
               }}
             />
             <Form id="createClientForm" noValidate>
@@ -111,17 +111,17 @@ const TaxConfig = () => {
                           );
                           if (selectedGstType) {
                             setFieldValue(
-                              "gstPercentage",
+                              'gstPercentage',
                               selectedGstType.gstPercentage,
                             );
-                            setFieldValue("gstType", newValue.value);
+                            setFieldValue('gstType', newValue.value);
                           } else {
-                            setFieldValue("gstType", "");
-                            setFieldValue("gstPercentage", null);
+                            setFieldValue('gstType', '');
+                            setFieldValue('gstPercentage', null);
                           }
                         } else {
-                          setFieldValue("gstType", "");
-                          setFieldValue("gstPercentage", null);
+                          setFieldValue('gstType', '');
+                          setFieldValue('gstPercentage', null);
                         }
                       }}
                       options={gstTypeOptions}
@@ -152,22 +152,22 @@ const TaxConfig = () => {
                           );
                           if (selectedPaymentTerms) {
                             const today = new Date();
-                            const startDate = format(today, "dd-MM-yyyy");
+                            const startDate = format(today, 'dd-MM-yyyy');
                             const dueDate = format(
                               addDays(today, selectedPaymentTerms.totalDays),
-                              "dd-MM-yyyy",
+                              'dd-MM-yyyy',
                             );
-                            setFieldValue("startDate", startDate);
-                            setFieldValue("dueDate", dueDate);
-                            setFieldValue("paymentTerms", newValue.value);
+                            setFieldValue('startDate', startDate);
+                            setFieldValue('dueDate', dueDate);
+                            setFieldValue('paymentTerms', newValue.value);
                           } else {
-                            setFieldValue("startDate", "");
-                            setFieldValue("dueDate", "");
+                            setFieldValue('startDate', '');
+                            setFieldValue('dueDate', '');
                           }
                         } else {
-                          setFieldValue("paymentTerms", "");
-                          setFieldValue("startDate", "");
-                          setFieldValue("dueDate", "");
+                          setFieldValue('paymentTerms', '');
+                          setFieldValue('startDate', '');
+                          setFieldValue('dueDate', '');
                         }
                       }}
                       options={paymentTermsOptions}
@@ -188,7 +188,7 @@ const TaxConfig = () => {
                   </Box>
                 </Grid>
                 <Grid item xs={6}>
-                  <Box sx={{ display: "flex" }}>
+                  <Box sx={{ display: 'flex' }}>
                     <SelectDropdown
                       onMouseDown={() => {
                         setOpenDialogBox(true);
@@ -203,12 +203,12 @@ const TaxConfig = () => {
                             (item: any) => item.taxName === newValue.value,
                           );
                           if (selectedTdsTax) {
-                            setFieldValue("taxAmount.tds", newValue.value);
+                            setFieldValue('taxAmount.tds', newValue.value);
                           } else {
-                            setFieldValue("taxAmount.tds", "");
+                            setFieldValue('taxAmount.tds', '');
                           }
                         } else {
-                          setFieldValue("taxAmount.tds", "");
+                          setFieldValue('taxAmount.tds', '');
                         }
                       }}
                       options={tdsTaxOptions}

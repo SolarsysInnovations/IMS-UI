@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export enum StorageKeys {
-  TOKEN = "token",
-  THEME_PREFERENCE = "theme_preference",
-  USER_PREFERENCES = "user_preferences",
-  CUSTOMER_EDIT = "customerDetails",
-  SERVICE_EDIT = "serviceDetails",
+  TOKEN = 'token',
+  THEME_PREFERENCE = 'theme_preference',
+  USER_PREFERENCES = 'user_preferences',
+  CUSTOMER_EDIT = 'customerDetails',
+  SERVICE_EDIT = 'serviceDetails',
 }
 
 type SetValue<T> = (value: T) => void;

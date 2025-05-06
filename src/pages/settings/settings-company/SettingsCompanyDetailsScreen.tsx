@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux-store/store";
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux-store/store';
 import {
   useGetCompanySettingByIdQuery,
   useGetCompanyLogoByIdQuery,
   useGetSingleCompanySettingMutation,
-} from "../../../redux-store/api/injectedApis";
-import { Box, Grid } from "@mui/material";
-import { setData } from "../../../redux-store/global/globalState";
-import TableHeader from "../../../components/layouts/TableHeader";
-import SettingsCompanyForm from "./SettingsCompanyForm";
-import { Edit } from "@mui/icons-material";
-import DialogBoxUi from "../../../components/ui/DialogBox";
-import { useInVoiceContext } from "../../../invoiceContext/invoiceContext";
-import { Roles } from "../../../constants/Enums";
+} from '../../../redux-store/api/injectedApis';
+import { Box, Grid } from '@mui/material';
+import { setData } from '../../../redux-store/global/globalState';
+import TableHeader from '../../../components/layouts/TableHeader';
+import SettingsCompanyForm from './SettingsCompanyForm';
+import { Edit } from '@mui/icons-material';
+import DialogBoxUi from '../../../components/ui/DialogBox';
+import { useInVoiceContext } from '../../../invoiceContext/invoiceContext';
+import { Roles } from '../../../constants/Enums';
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
   const context = useInVoiceContext();
@@ -63,21 +63,21 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
 
   const handleEditClick = async () => {
     if (!companyDetails?.id) {
-      console.error("Company ID is not defined.");
+      console.error('Company ID is not defined.');
       return;
     }
     try {
       const response = await getData(companyDetails.id);
-      if ("data" in response) {
+      if ('data' in response) {
         const companyData = response.data;
         dispatch(setData(companyData));
         setOpenModal(true);
         setOpenDialogBox(true);
       } else {
-        console.error("Error response:", response.error);
+        console.error('Error response:', response.error);
       }
     } catch (error) {
-      console.error("Error handling edit click:", error);
+      console.error('Error handling edit click:', error);
     }
   };
 
@@ -89,7 +89,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
 
   const button =
     userRole !== Roles.APPROVER && userRole !== Roles.STANDARDUSER
-      ? [{ label: "Edit", icon: Edit, onClick: handleEditClick }]
+      ? [{ label: 'Edit', icon: Edit, onClick: handleEditClick }]
       : [];
 
   if (!companyDetails) {
@@ -114,17 +114,17 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
       {userId && (
         <Grid
           container
-          sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}
+          sx={{ backgroundColor: '#f8f9f9', padding: '20px 20px' }}
         >
           <Grid item xs={7}>
             <Box gap={3}>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Name
@@ -134,36 +134,36 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
               </div>
               <p
                 style={{
-                  fontSize: "13px",
-                  margin: "0 0 5px 0",
-                  display: "flex",
+                  fontSize: '13px',
+                  margin: '0 0 5px 0',
+                  display: 'flex',
                 }}
               >
                 <span
                   style={{
-                    fontWeight: "500",
-                    width: "140px",
-                    display: "inline-block",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis", // Optional for long labels
+                    fontWeight: '500',
+                    width: '140px',
+                    display: 'inline-block',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis', // Optional for long labels
                   }}
                 >
                   Company Address
                 </span>
                 <span style={{ flex: 1 }}>
-                  {" "}
+                  {' '}
                   : {companyDetails?.companyAddress}
                 </span>
               </p>
 
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company State
@@ -172,12 +172,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Country
@@ -186,12 +186,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company E-mail
@@ -201,15 +201,15 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
               </div>
             </Box>
           </Grid>
-          <Grid sx={{ marginTop: "0px" }} item xs={4}>
+          <Grid sx={{ marginTop: '0px' }} item xs={4}>
             <Box gap={3}>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Phone
@@ -218,12 +218,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Website
@@ -232,12 +232,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Tax Num
@@ -246,12 +246,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Reg Num
@@ -260,13 +260,13 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
 
-              {userId && userRole === "ADMIN" && (
+              {userId && userRole === 'ADMIN' && (
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Box
                       display="flex"
                       alignItems="center"
-                      sx={{ marginTop: "10px" }}
+                      sx={{ marginTop: '10px' }}
                     >
                       <Box
                         component="span"
@@ -276,20 +276,20 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                       >
                         Logo
                       </Box>
-                      :{" "}
+                      :{' '}
                       <Box
                         sx={{
-                          width: "150px",
-                          height: "150px",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          border: base64String ? "1px solid #ddd" : "none", // Conditional border
-                          borderRadius: "8px",
-                          overflow: "hidden",
+                          width: '150px',
+                          height: '150px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          border: base64String ? '1px solid #ddd' : 'none', // Conditional border
+                          borderRadius: '8px',
+                          overflow: 'hidden',
                           backgroundColor: base64String
-                            ? "transparent"
-                            : "#f8f9fa", // Optional background for no image
+                            ? 'transparent'
+                            : '#f8f9fa', // Optional background for no image
                         }}
                       >
                         {base64String ? (
@@ -297,9 +297,9 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                             src={base64String}
                             alt="Company Logo"
                             style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "contain",
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
                             }}
                           />
                         ) : (

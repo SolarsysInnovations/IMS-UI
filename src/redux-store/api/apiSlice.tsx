@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_LOCAL_URL } from "../../constants/api-urls";
-import { logOut, setCredentials, updateAccessToken } from "../auth/authSlice";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BASE_LOCAL_URL } from '../../constants/api-urls';
+import { logOut, setCredentials, updateAccessToken } from '../auth/authSlice';
 
 interface RootState {
   auth: {
@@ -15,14 +15,14 @@ interface RootState {
 
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_LOCAL_URL,
-  credentials: "include",
+  credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const { accessToken, refresh } = (getState() as RootState).auth;
     if (accessToken) {
-      headers.set("authorization", `Bearer ${accessToken}`);
+      headers.set('authorization', `Bearer ${accessToken}`);
     }
     if (refresh) {
-      headers.set("refresh", refresh);
+      headers.set('refresh', refresh);
     }
     return headers;
   },
@@ -40,9 +40,9 @@ const baseQueryWithReauth = async (
   if (result?.error?.status === 403 || result?.error?.status === 401) {
     const errorMessage = (result.error.data as any)?.message;
 
-    if (errorMessage === "Token expired.") {
+    if (errorMessage === 'Token expired.') {
       // Attempt to refresh the accessToken
-      const refreshResult = await baseQuery("/refresh", api, extraOptions);
+      const refreshResult = await baseQuery('/refresh', api, extraOptions);
 
       // If refresh is successful, update the accessToken and retry the original query
       if (refreshResult?.data) {
@@ -62,7 +62,7 @@ const baseQueryWithReauth = async (
       }
     } else {
       // If the error is not related to token expiration, handle it as is
-      if (errorMessage === "Invalid token.") {
+      if (errorMessage === 'Invalid token.') {
         api.dispatch(logOut());
       }
       return result; // Return the original error response

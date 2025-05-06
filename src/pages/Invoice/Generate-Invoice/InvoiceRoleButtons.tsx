@@ -1,17 +1,17 @@
-import { Box, Card } from "@mui/material";
-import { useEffect, useState } from "react";
-import ButtonUi from "../../../components/ui/Button";
-import { InvoiceOptions, InvoiceStatus, Roles } from "../../../constants/Enums";
-import { selectCurrentId } from "../../../redux-store/auth/authSlice";
-import SplitButton from "../../../components/ui/SplitButton";
-import StageStepper from "../../../components/ui/StepperUi";
-import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import { Box, Card } from '@mui/material';
+import { useEffect, useState } from 'react';
+import ButtonUi from '../../../components/ui/Button';
+import { InvoiceOptions, InvoiceStatus, Roles } from '../../../constants/Enums';
+import { selectCurrentId } from '../../../redux-store/auth/authSlice';
+import SplitButton from '../../../components/ui/SplitButton';
+import StageStepper from '../../../components/ui/StepperUi';
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import {
   useGetInvoiceListQuery,
   useGetUserRoleMutation,
   useUpdateInvoiceMutation,
-} from "../../../redux-store/api/injectedApis";
-import { useSelector } from "react-redux";
+} from '../../../redux-store/api/injectedApis';
+import { useSelector } from 'react-redux';
 
 const InvoiceRoleButtons = () => {
   const [
@@ -28,13 +28,13 @@ const InvoiceRoleButtons = () => {
   const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
   const [showTracker, setShowTracker] = useState(false);
   const { refetch } = useGetInvoiceListQuery();
-  const [resMessage, setResMessage] = useState("");
+  const [resMessage, setResMessage] = useState('');
   const id = useSelector(selectCurrentId);
 
   useSnackbarNotifications({
     error: invoiceUpdateError,
     errorObject: invoiceUpdateErrorObject,
-    errorMessage: "Error While updating",
+    errorMessage: 'Error While updating',
     success: invoiceUpdateSuccess,
     successMessage: resMessage,
   });
@@ -93,7 +93,7 @@ const InvoiceRoleButtons = () => {
         });
         setResMessage(response.data.message);
       } catch (error) {
-        console.error("Error updating invoice data", error);
+        console.error('Error updating invoice data', error);
       }
     }
   };
@@ -133,11 +133,11 @@ const InvoiceRoleButtons = () => {
     <Box
       gap={2}
       sx={{
-        display: "flex",
-        justifyContent: "left",
-        flexDirection: "row",
-        gap: "20px",
-        marginTop: "10px",
+        display: 'flex',
+        justifyContent: 'left',
+        flexDirection: 'row',
+        gap: '20px',
+        marginTop: '10px',
       }}
     >
       <SplitButton
@@ -148,7 +148,7 @@ const InvoiceRoleButtons = () => {
         onOptionClick={handleOptionClick}
       />
 
-      <Box sx={{ position: "relative" }}>
+      <Box sx={{ position: 'relative' }}>
         <ButtonUi
           label="View Tracker"
           smallButtonCss
@@ -157,14 +157,14 @@ const InvoiceRoleButtons = () => {
         />
         <Card
           sx={{
-            padding: "20px 25px",
-            position: "absolute",
+            padding: '20px 25px',
+            position: 'absolute',
             top: -150,
             right: 0,
             zIndex: 1300,
-            backgroundColor: "background.paper",
-            borderRadius: "10px",
-            display: showTracker ? "block" : "none",
+            backgroundColor: 'background.paper',
+            borderRadius: '10px',
+            display: showTracker ? 'block' : 'none',
           }}
         >
           <StageStepper stages={invoiceData.invoiceStages} />

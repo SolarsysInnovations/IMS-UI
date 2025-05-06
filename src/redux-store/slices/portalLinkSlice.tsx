@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const portalLinkSlice = createSlice({
-  name: "link",
+  name: 'link',
   initialState: {
     data: null,
     loading: false,

@@ -1,7 +1,7 @@
-import { useSelector } from "react-redux";
-import GstTypeList from "./GstTypeList";
-import GstTypeForm from "./GstTypeCreate";
-import { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
+import GstTypeList from './GstTypeList';
+import GstTypeForm from './GstTypeCreate';
+import { useEffect, useState } from 'react';
 
 const GstTypeScreen: React.FC = () => {
   const gstValue = useSelector((state: any) => state.gstTypeState.data);

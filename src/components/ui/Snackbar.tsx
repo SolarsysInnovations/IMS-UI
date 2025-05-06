@@ -1,10 +1,10 @@
-import * as React from "react";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
+import * as React from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export interface SnackBarUiProps {
   message: string;
-  severity: "error" | "warning" | "info" | "success";
+  severity: 'error' | 'warning' | 'info' | 'success';
   autoHideDuration?: number;
   isSubmitting?: boolean; // Add a prop to indicate whether form is submitting
 }
@@ -29,7 +29,7 @@ const SnackBarUi: React.FC<SnackBarUiProps> = ({
     event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
     setOpen(false);
@@ -37,7 +37,7 @@ const SnackBarUi: React.FC<SnackBarUiProps> = ({
 
   return (
     <Snackbar
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={open}
       autoHideDuration={autoHideDuration}
       onClose={handleClose}
@@ -46,7 +46,7 @@ const SnackBarUi: React.FC<SnackBarUiProps> = ({
         onClose={handleClose}
         severity={severity}
         variant="filled"
-        sx={{ width: "100%" }}
+        sx={{ width: '100%' }}
       >
         {message}
       </Alert>

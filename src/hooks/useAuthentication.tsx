@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 const useAuthentication = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     return !!token;
   });
 
   useEffect(() => {
     const checkAuthentication = () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) {
         // Token doesn't exist, logout the user
         setAuthenticated(false);
@@ -20,7 +20,7 @@ const useAuthentication = () => {
 
       if (tokenData.exp && currentTime >= tokenData.exp) {
         // Token is expired, logout the user
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAuthenticated(false);
         // You may want to clear other user-related data from local storage here
       } else {
@@ -31,7 +31,7 @@ const useAuthentication = () => {
 
     const parseJwt = (token: any) => {
       try {
-        return JSON.parse(atob(token.split(".")[1]));
+        return JSON.parse(atob(token.split('.')[1]));
       } catch (e) {
         return {};
       }
@@ -41,11 +41,11 @@ const useAuthentication = () => {
     checkAuthentication();
 
     // Listen for changes in local storage (e.g., token updates)
-    window.addEventListener("storage", checkAuthentication);
+    window.addEventListener('storage', checkAuthentication);
 
     // Cleanup
     return () => {
-      window.removeEventListener("storage", checkAuthentication);
+      window.removeEventListener('storage', checkAuthentication);
     };
   }, []);
 

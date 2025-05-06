@@ -1,33 +1,33 @@
-import { Roles } from "./Enums";
-import { Home, Apartment } from "@mui/icons-material";
-import GroupIcon from "@mui/icons-material/Group";
-import ReceiptIcon from "@mui/icons-material/Receipt";
-import MiscellaneousServicesIcon from "@mui/icons-material/MiscellaneousServices";
-import TaskIcon from "@mui/icons-material/Task";
-import GroupsIcon from "@mui/icons-material/Groups";
-import SettingsIcon from "@mui/icons-material/Settings";
-import DashboardScreen from "../pages/Dashboard/Dashboard";
-import Reportscreen from "../pages/reports/Reportscreen";
-import ArAgingscreen from "../pages/reports/Reports-ar-aging";
-import Reportsinvoice from "../pages/reports/Reports-invoice";
-import CustomerList from "../pages/customer/Customer-list-screen";
-import InvoiceList from "../pages/Invoice/Invoice-list-screen";
-import InvoiceCreateScreen from "../pages/Invoice/Invoice-create-screen";
-import CustomerScreen from "../pages/customer/Customer-screen";
-import CompanyList from "../pages/super-admin-company/companyListScreen";
-import CompanyScreen from "../pages/super-admin-company/companyScreen";
-import UserScreen from "../pages/company-users/UserScreen";
-import SettingRoleScreen from "../pages/settings/settings-role";
-import ServicesList from "../pages/service/service-list-screen";
-import CompanyLogo from "../pages/settings/settings-company/company-logo";
-import SettingScreen from "../pages/settings/settings";
+import { Roles } from './Enums';
+import { Home, Apartment } from '@mui/icons-material';
+import GroupIcon from '@mui/icons-material/Group';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
+import TaskIcon from '@mui/icons-material/Task';
+import GroupsIcon from '@mui/icons-material/Groups';
+import SettingsIcon from '@mui/icons-material/Settings';
+import DashboardScreen from '../pages/Dashboard/Dashboard';
+import Reportscreen from '../pages/reports/Reportscreen';
+import ArAgingscreen from '../pages/reports/Reports-ar-aging';
+import Reportsinvoice from '../pages/reports/Reports-invoice';
+import CustomerList from '../pages/customer/Customer-list-screen';
+import InvoiceList from '../pages/Invoice/Invoice-list-screen';
+import InvoiceCreateScreen from '../pages/Invoice/Invoice-create-screen';
+import CustomerScreen from '../pages/customer/Customer-screen';
+import CompanyList from '../pages/super-admin-company/companyListScreen';
+import CompanyScreen from '../pages/super-admin-company/companyScreen';
+import UserScreen from '../pages/company-users/UserScreen';
+import SettingRoleScreen from '../pages/settings/settings-role';
+import ServicesList from '../pages/service/service-list-screen';
+import CompanyLogo from '../pages/settings/settings-company/company-logo';
+import SettingScreen from '../pages/settings/settings';
 
 export const sidebarTwo = [
   {
     id: 1,
-    title: "Dashboard",
+    title: 'Dashboard',
     element: <DashboardScreen />,
-    path: "/dashboard",
+    path: '/dashboard',
     icon: Home,
     isParent: false,
     allowedRoles: [
@@ -39,8 +39,8 @@ export const sidebarTwo = [
   },
   {
     id: 2,
-    title: "Customer",
-    path: "/customer-list",
+    title: 'Customer',
+    path: '/customer-list',
     element: <CustomerList />,
     icon: GroupIcon,
     isParent: true,
@@ -48,16 +48,16 @@ export const sidebarTwo = [
       {
         id: 1,
         show: false,
-        title: "Create Customer",
-        path: "/customer/create",
+        title: 'Create Customer',
+        path: '/customer/create',
         element: <CustomerScreen />,
         allowedRoles: [Roles.ADMIN, Roles.APPROVER],
       },
       {
         id: 1,
         show: false,
-        title: "Create Customer",
-        path: "/customer/edit",
+        title: 'Create Customer',
+        path: '/customer/edit',
         element: <CustomerScreen />,
         allowedRoles: [Roles.ADMIN, Roles.APPROVER],
       },
@@ -66,8 +66,8 @@ export const sidebarTwo = [
   },
   {
     id: 3,
-    title: "Invoices",
-    path: "/invoice/list",
+    title: 'Invoices',
+    path: '/invoice/list',
     element: <InvoiceList />,
     icon: ReceiptIcon,
     isParent: true,
@@ -75,8 +75,8 @@ export const sidebarTwo = [
       {
         id: 1,
         show: false,
-        title: "Create Invoice",
-        path: "/invoice/create",
+        title: 'Create Invoice',
+        path: '/invoice/create',
         element: <InvoiceCreateScreen />,
         allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
       },
@@ -85,8 +85,8 @@ export const sidebarTwo = [
   },
   {
     id: 4,
-    title: "Services",
-    path: "/services/list",
+    title: 'Services',
+    path: '/services/list',
     element: <ServicesList />,
     icon: MiscellaneousServicesIcon,
     isParent: true,
@@ -94,25 +94,25 @@ export const sidebarTwo = [
   },
   {
     id: 5,
-    title: "Reports",
+    title: 'Reports',
     element: <Reportscreen />,
-    path: "/reports",
+    path: '/reports',
     icon: TaskIcon,
     isParent: true,
     subItems: [
       {
         id: 1,
         show: false,
-        title: "AR Aging Report",
-        path: "/reports/araging",
+        title: 'AR Aging Report',
+        path: '/reports/araging',
         element: <ArAgingscreen />,
         allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
       },
       {
         id: 2,
         show: false,
-        title: "Invoice Report",
-        path: "/reports/invoice",
+        title: 'Invoice Report',
+        path: '/reports/invoice',
         element: <Reportsinvoice />,
         allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
       },
@@ -122,8 +122,8 @@ export const sidebarTwo = [
   },
   {
     id: 6,
-    title: "Users",
-    path: "/user/list",
+    title: 'Users',
+    path: '/user/list',
     element: <UserScreen />,
     icon: GroupsIcon,
     isParent: false,
@@ -131,23 +131,23 @@ export const sidebarTwo = [
   },
   {
     id: 7,
-    title: "Company",
-    path: "/company",
+    title: 'Company',
+    path: '/company',
     element: <CompanyList />,
     icon: Apartment,
     isParent: true,
     subItems: [
       {
         id: 1,
-        title: "Create Company",
-        path: "/company/create",
+        title: 'Create Company',
+        path: '/company/create',
         element: <CompanyScreen />,
         allowedRoles: [Roles.SUPERADMIN],
       },
       {
         id: 1,
-        title: "Create Company",
-        path: "/company/edit",
+        title: 'Create Company',
+        path: '/company/edit',
         element: <CompanyScreen />,
         allowedRoles: [Roles.SUPERADMIN],
       },
@@ -156,8 +156,8 @@ export const sidebarTwo = [
   },
   {
     id: 8,
-    title: "Settings",
-    path: "/settings",
+    title: 'Settings',
+    path: '/settings',
     element: <SettingScreen />,
     icon: SettingsIcon,
     isParent: true,
@@ -165,8 +165,8 @@ export const sidebarTwo = [
       {
         id: 1,
         show: false,
-        title: "Role Settings",
-        path: "/settings/Role",
+        title: 'Role Settings',
+        path: '/settings/Role',
         element: <SettingRoleScreen />,
         allowedRoles: [
           Roles.ADMIN,
@@ -184,12 +184,12 @@ export const sidebarTwo = [
     ],
   },
   {
-    path: "/settings",
+    path: '/settings',
     element: <SettingScreen />,
     allowedRoles: [],
     subItems: [
       {
-        path: "/companyLogo",
+        path: '/companyLogo',
         element: <CompanyLogo />,
         allowedRoles: [],
       },
@@ -198,11 +198,11 @@ export const sidebarTwo = [
 ];
 
 export const invoiceStatusOptions = [
-  "DRAFT",
-  "PENDING",
-  "APPROVED",
-  "RETURNED",
-  "PAID",
+  'DRAFT',
+  'PENDING',
+  'APPROVED',
+  'RETURNED',
+  'PAID',
 ];
 
 interface UserAccess {

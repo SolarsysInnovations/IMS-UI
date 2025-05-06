@@ -1,35 +1,35 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
 interface TextAreaUiProps {
   label?: string;
   helperText?: string | undefined | boolean;
   rows?: number;
   defaultValue?: string;
-  size?: "small" | "medium" | undefined;
+  size?: 'small' | 'medium' | undefined;
   error?: boolean | undefined;
   value?: string | number;
   onChange?: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
-  variant?: "outlined" | "standard" | "filled";
+  variant?: 'outlined' | 'standard' | 'filled';
   required?: boolean;
   disabled?: boolean;
   type?:
-    | "text"
-    | "password"
-    | "number"
-    | "email"
-    | "tel"
-    | "url"
-    | "search"
-    | "date"
-    | "time"
-    | "datetime-local"
-    | "month"
-    | "week"
-    | "color";
+    | 'text'
+    | 'password'
+    | 'number'
+    | 'email'
+    | 'tel'
+    | 'url'
+    | 'search'
+    | 'date'
+    | 'time'
+    | 'datetime-local'
+    | 'month'
+    | 'week'
+    | 'color';
 }
 export default function TextAreaUi({
   type,
@@ -49,25 +49,25 @@ export default function TextAreaUi({
     <Box
       component="form"
       sx={{
-        borderRadius: "8px !important",
-        "& .MuiOutlinedInput-root": {
-          fontSize: "13px",
-          borderRadius: "8px !important",
-          overflow: "hidden",
+        borderRadius: '8px !important',
+        '& .MuiOutlinedInput-root': {
+          fontSize: '13px',
+          borderRadius: '8px !important',
+          overflow: 'hidden',
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          "&:hover": {
+          '&:hover': {
             backgroundColor: `action.hover`,
           },
         },
-        "& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root": {
-          fontSize: "13px",
+        '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
+          fontSize: '13px',
         },
-        "& .css-100yy4f-MuiInputBase-root-MuiInput-root": {
-          fontSize: "13px",
+        '& .css-100yy4f-MuiInputBase-root-MuiInput-root': {
+          fontSize: '13px',
         },
-        "& .css-1i1n0be-MuiFormLabel-root-MuiInputLabel-root": {
-          fontSize: "13px",
+        '& .css-1i1n0be-MuiFormLabel-root-MuiInputLabel-root': {
+          fontSize: '13px',
         },
       }}
       noValidate
@@ -78,13 +78,13 @@ export default function TextAreaUi({
         disabled={disabled}
         required={required}
         onChange={onChange}
-        size={size || "small"}
+        size={size || 'small'}
         helperText={helperText}
         error={error}
         fullWidth
         id="outlined-basic"
         label={label}
-        variant={variant || "outlined"}
+        variant={variant || 'outlined'}
         multiline
         rows={rows}
         defaultValue={defaultValue}

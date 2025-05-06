@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface GlobalState {
   companyLogo: string | null;
@@ -9,7 +9,7 @@ const initialState: GlobalState = {
 };
 
 export const globalSlice = createSlice({
-  name: "global",
+  name: 'global',
   initialState: {
     data: null,
     loading: false,

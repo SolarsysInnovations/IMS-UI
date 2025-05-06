@@ -1,8 +1,8 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import InvoiceDocument from "./InvoiceDocument";
-import { pdf, PDFViewer } from "@react-pdf/renderer";
-import { Box } from "@mui/system";
-import { useSelector } from "react-redux";
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import InvoiceDocument from './InvoiceDocument';
+import { pdf, PDFViewer } from '@react-pdf/renderer';
+import { Box } from '@mui/system';
+import { useSelector } from 'react-redux';
 import {
   useGetCompanyLogoByIdQuery,
   useGetCompanySettingByIdQuery,
@@ -11,20 +11,20 @@ import {
   useGetTdsTaxListQuery,
   useGetUserRoleMutation,
   useUpdateInvoiceMutation,
-} from "../../../redux-store/api/injectedApis";
+} from '../../../redux-store/api/injectedApis';
 import {
   selectCurrentId,
   selectUserDetails,
-} from "../../../redux-store/auth/authSlice";
-import { formatDate } from "../../../services/utils/dataFormatter";
-import StageStepper from "../../../components/ui/StepperUi";
-import ButtonUi from "../../../components/ui/Button";
-import SplitButton from "../../../components/ui/SplitButton";
-import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
-import { InvoiceOptions, InvoiceStatus, Roles } from "../../../constants/Enums";
-import { Card } from "@mui/material";
-import DialogBoxUi from "../../../components/ui/DialogBox";
-import SendEmail from "../Send-email";
+} from '../../../redux-store/auth/authSlice';
+import { formatDate } from '../../../services/utils/dataFormatter';
+import StageStepper from '../../../components/ui/StepperUi';
+import ButtonUi from '../../../components/ui/Button';
+import SplitButton from '../../../components/ui/SplitButton';
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
+import { InvoiceOptions, InvoiceStatus, Roles } from '../../../constants/Enums';
+import { Card } from '@mui/material';
+import DialogBoxUi from '../../../components/ui/DialogBox';
+import SendEmail from '../Send-email';
 
 // InvoiceLetterUi Component
 
@@ -49,11 +49,11 @@ const InvoiceLetterUi = ({
   const [getUserRole, { data: userRoleData, isLoading }] =
     useGetUserRoleMutation();
   const id = useSelector(selectCurrentId);
-  const companyIdString = sessionStorage.getItem("id") || "";
+  const companyIdString = sessionStorage.getItem('id') || '';
   const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
   const [showTracker, setShowTracker] = useState(false);
   const { refetch } = useGetInvoiceListQuery();
-  const [resMessage, setResMessage] = useState("");
+  const [resMessage, setResMessage] = useState('');
   const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
   const [base64String, setBase64String] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
@@ -69,10 +69,10 @@ const InvoiceLetterUi = ({
 
   useEffect(() => {
     if (invoiceUpdateSuccess) {
-      if (typeof setIsModalOpen === "function") {
+      if (typeof setIsModalOpen === 'function') {
         setIsModalOpen(false);
       } else {
-        console.error("setIsModalOpen is not a function", setIsModalOpen);
+        console.error('setIsModalOpen is not a function', setIsModalOpen);
       }
       refetch();
     }
@@ -86,7 +86,7 @@ const InvoiceLetterUi = ({
           setUserRole(response?.userRole || null);
         })
         .catch((error) => {
-          console.error("Error fetching user role:", error);
+          console.error('Error fetching user role:', error);
         });
     }
   }, [id, getUserRole]);
@@ -155,9 +155,9 @@ const InvoiceLetterUi = ({
     );
     const asPdf = pdf(doc); // Create a new instance of pdf with the document
     const blob = await asPdf.toBlob(); // Convert the PDF document to a Blob
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = "invoice.pdf";
+    link.download = 'invoice.pdf';
     link.click();
   };
 
@@ -193,7 +193,7 @@ const InvoiceLetterUi = ({
   useSnackbarNotifications({
     error: invoiceUpdateError,
     errorObject: invoiceUpdateErrorObject,
-    errorMessage: "Error While updating ",
+    errorMessage: 'Error While updating ',
     success: invoiceUpdateSuccess,
     successMessage: resMessage,
   });
@@ -254,24 +254,24 @@ const InvoiceLetterUi = ({
         await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData })
           .unwrap()
           .then((response) => {
-            setResMessage(response.message || "Invoice Updated Successfully");
+            setResMessage(response.message || 'Invoice Updated Successfully');
             setIsModalOpen?.(false);
             if (newStatus === InvoiceStatus.APPROVED) {
               setResMessage(
-                response.message || "Invoice Approved Successfully",
+                response.message || 'Invoice Approved Successfully',
               );
             } else if (newStatus === InvoiceStatus.RETURNED) {
               setResMessage(
-                response.message || "Invoice Returned Successfully",
+                response.message || 'Invoice Returned Successfully',
               );
             } // Close modal
             refetch(); // Refetch invoice list
           })
           .catch((error) => {
-            console.error("Error updating invoice data:", error);
+            console.error('Error updating invoice data:', error);
           });
       } catch (error) {
-        console.error("Error in handleOptionClick:", error);
+        console.error('Error in handleOptionClick:', error);
       }
     }
   };
@@ -348,31 +348,31 @@ const InvoiceLetterUi = ({
     <>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          padding: "0px 30px 30px 30px",
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          padding: '0px 30px 30px 30px',
         }}
       >
         <div
           style={{
-            width: "100%",
-            height: "85vh",
-            textAlign: "center",
-            overflow: "hidden",
-            alignItems: "center",
+            width: '100%',
+            height: '85vh',
+            textAlign: 'center',
+            overflow: 'hidden',
+            alignItems: 'center',
           }}
         >
           {base64String ? (
             <PDFViewer
               showToolbar={false}
               style={{
-                overflow: "hidden",
-                width: "400px",
-                height: "770px",
-                border: "none",
-                backgroundColor: "transparent",
-                marginTop: "5px",
+                overflow: 'hidden',
+                width: '400px',
+                height: '770px',
+                border: 'none',
+                backgroundColor: 'transparent',
+                marginTop: '5px',
               }}
             >
               <InvoiceDocument invoiceData={data} companyLogo={base64String} />
@@ -381,15 +381,15 @@ const InvoiceLetterUi = ({
             <div>Loading PDF...</div>
           )}
         </div>
-        <div style={{ marginTop: "20px", textAlign: "center" }}>
+        <div style={{ marginTop: '20px', textAlign: 'center' }}>
           <Box
             gap={2}
             sx={{
-              display: "flex",
-              justifyContent: "right",
-              flexDirection: "row",
-              gap: "20px",
-              marginTop: "10px",
+              display: 'flex',
+              justifyContent: 'right',
+              flexDirection: 'row',
+              gap: '20px',
+              marginTop: '10px',
             }}
           >
             <ButtonUi
@@ -407,7 +407,7 @@ const InvoiceLetterUi = ({
                   onClick={() => {
                     handleOptionClick(InvoiceOptions.SENT_TO_APPROVER).catch(
                       (error) => {
-                        console.error("Error handling option click:", error);
+                        console.error('Error handling option click:', error);
                       },
                     );
                   }}
@@ -425,7 +425,7 @@ const InvoiceLetterUi = ({
               />
             )}
 
-            <Box sx={{ position: "relative" }}>
+            <Box sx={{ position: 'relative' }}>
               <ButtonUi
                 label="View Tracker"
                 smallButtonCss
@@ -434,14 +434,14 @@ const InvoiceLetterUi = ({
               />
               <Card
                 sx={{
-                  padding: "10px 25px",
-                  position: "absolute",
+                  padding: '10px 25px',
+                  position: 'absolute',
                   top: -120,
                   right: 5,
                   zIndex: 1300,
-                  backgroundColor: "background.paper",
-                  borderRadius: "10px",
-                  display: showTracker ? "block" : "none",
+                  backgroundColor: 'background.paper',
+                  borderRadius: '10px',
+                  display: showTracker ? 'block' : 'none',
                 }}
               >
                 <StageStepper stages={invoiceData.invoiceStages} />

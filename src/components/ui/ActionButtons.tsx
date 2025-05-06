@@ -1,9 +1,9 @@
-import React from "react";
-import { Stack } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import { GridDeleteIcon } from "@mui/x-data-grid";
-import RemoveRedEyeOutlined from "@mui/icons-material/RemoveRedEyeOutlined";
-import StyledIconButton from "./IconButton";
+import React from 'react';
+import { Stack } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import { GridDeleteIcon } from '@mui/x-data-grid';
+import RemoveRedEyeOutlined from '@mui/icons-material/RemoveRedEyeOutlined';
+import StyledIconButton from './IconButton';
 
 interface ActionButtonsProps {
   id?: any;
@@ -34,8 +34,8 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
         <EditIcon
           sx={{
             color: `grey.500`,
-            fontSize: "15px",
-            "&:hover": { color: "blue" },
+            fontSize: '15px',
+            '&:hover': { color: 'blue' },
           }}
           fontSize="small"
         />
@@ -48,8 +48,8 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
         <GridDeleteIcon
           sx={{
             color: `grey.500`,
-            fontSize: "15px",
-            "&:hover": { color: "blue" },
+            fontSize: '15px',
+            '&:hover': { color: 'blue' },
           }}
           fontSize="small"
         />
@@ -63,8 +63,8 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
           <RemoveRedEyeOutlined
             sx={{
               color: `grey.500`,
-              fontSize: "15px",
-              "&:hover": { color: "blue" },
+              fontSize: '15px',
+              '&:hover': { color: 'blue' },
             }}
             fontSize="small"
           />

@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import dayjs, { Dayjs } from "dayjs";
-import { Box, Grid, Typography } from "@mui/material";
-import { Roles } from "../../constants/Enums";
-import { useGetDashboardMutation } from "../../redux-store/api/injectedApis";
-import { Formik } from "formik";
-import DatePickerUi from "../../components/ui/DatePicker";
-import ButtonSmallUi from "../../components/ui/ButtonSmall";
-import SelectDropdown from "../../components/ui/SelectDropdown";
-import ApproverDashboardScreen from "./approver-dashboard/DashboardScreen";
-import EndUserDashboardScreen from "./standard-user-dashboard/DashboardScreen";
-import SuperAdminDashboardScreen from "./super-admin-dashboard/DashboardScreen";
-import AdminDashboardScreen from "./Admin-dashboard/Dashboard-screen";
-import { useInVoiceContext } from "../../invoiceContext/invoiceContext";
+import React, { useState } from 'react';
+import dayjs, { Dayjs } from 'dayjs';
+import { Box, Grid, Typography } from '@mui/material';
+import { Roles } from '../../constants/Enums';
+import { useGetDashboardMutation } from '../../redux-store/api/injectedApis';
+import { Formik } from 'formik';
+import DatePickerUi from '../../components/ui/DatePicker';
+import ButtonSmallUi from '../../components/ui/ButtonSmall';
+import SelectDropdown from '../../components/ui/SelectDropdown';
+import ApproverDashboardScreen from './approver-dashboard/DashboardScreen';
+import EndUserDashboardScreen from './standard-user-dashboard/DashboardScreen';
+import SuperAdminDashboardScreen from './super-admin-dashboard/DashboardScreen';
+import AdminDashboardScreen from './Admin-dashboard/Dashboard-screen';
+import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
 
 const DashboardScreen: React.FC = () => {
   const context = useInVoiceContext();
@@ -20,17 +20,17 @@ const DashboardScreen: React.FC = () => {
   const userRole = context.userDetails.userRole;
   const today = dayjs();
   const [startDate, setStartDate] = useState<Dayjs | null>(
-    today.startOf("month"),
+    today.startOf('month'),
   );
-  const [endDate, setEndDate] = useState<Dayjs | null>(today.endOf("month"));
+  const [endDate, setEndDate] = useState<Dayjs | null>(today.endOf('month'));
   const [isCustomRange, setIsCustomRange] = useState(false);
 
   const handleApplyFilter = async (
     startDate: Dayjs | null,
     endDate: Dayjs | null,
   ) => {
-    const formattedStartDate = startDate ? startDate.format("DD-MM-YYYY") : "";
-    const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
+    const formattedStartDate = startDate ? startDate.format('DD-MM-YYYY') : '';
+    const formattedEndDate = endDate ? endDate.format('DD-MM-YYYY') : '';
     try {
       const response = await getDashboard({
         startDate: formattedStartDate,
@@ -38,44 +38,44 @@ const DashboardScreen: React.FC = () => {
       }).unwrap();
       setResponseData(response ?? {});
     } catch (error) {
-      console.error("Error fetching filtered dashboard data:", error);
+      console.error('Error fetching filtered dashboard data:', error);
       setResponseData({});
     }
   };
 
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
     const today = dayjs();
-    setIsCustomRange(newValue.value === "Custom");
+    setIsCustomRange(newValue.value === 'Custom');
 
     if (newValue) {
-      if (newValue.value === "Today") {
-        setFieldValue("startDate", today);
-        setFieldValue("endDate", today);
+      if (newValue.value === 'Today') {
+        setFieldValue('startDate', today);
+        setFieldValue('endDate', today);
         setStartDate(today);
         setEndDate(today);
-      } else if (newValue.value === "This Week") {
-        setFieldValue("startDate", today.startOf("week"));
-        setFieldValue("endDate", today.endOf("week"));
-        setStartDate(today.startOf("week"));
-        setEndDate(today.endOf("week"));
-      } else if (newValue.value === "Last 7 Days") {
-        setFieldValue("startDate", today.subtract(7, "days"));
-        setFieldValue("endDate", today);
-        setStartDate(today.subtract(7, "days"));
+      } else if (newValue.value === 'This Week') {
+        setFieldValue('startDate', today.startOf('week'));
+        setFieldValue('endDate', today.endOf('week'));
+        setStartDate(today.startOf('week'));
+        setEndDate(today.endOf('week'));
+      } else if (newValue.value === 'Last 7 Days') {
+        setFieldValue('startDate', today.subtract(7, 'days'));
+        setFieldValue('endDate', today);
+        setStartDate(today.subtract(7, 'days'));
         setEndDate(today);
-      } else if (newValue.value === "This Month") {
-        setFieldValue("startDate", today.startOf("month"));
-        setFieldValue("endDate", today.endOf("month"));
-        setStartDate(today.startOf("month"));
-        setEndDate(today.endOf("month"));
-      } else if (newValue.value === "Last 30 Days") {
-        setFieldValue("startDate", today.subtract(30, "days"));
-        setFieldValue("endDate", today);
-        setStartDate(today.subtract(30, "days"));
+      } else if (newValue.value === 'This Month') {
+        setFieldValue('startDate', today.startOf('month'));
+        setFieldValue('endDate', today.endOf('month'));
+        setStartDate(today.startOf('month'));
+        setEndDate(today.endOf('month'));
+      } else if (newValue.value === 'Last 30 Days') {
+        setFieldValue('startDate', today.subtract(30, 'days'));
+        setFieldValue('endDate', today);
+        setStartDate(today.subtract(30, 'days'));
         setEndDate(today);
-      } else if (newValue.value === "Custom") {
-        setFieldValue("startDate", null);
-        setFieldValue("endDate", null);
+      } else if (newValue.value === 'Custom') {
+        setFieldValue('startDate', null);
+        setFieldValue('endDate', null);
         setStartDate(null);
         setEndDate(null);
       }
@@ -91,16 +91,16 @@ const DashboardScreen: React.FC = () => {
       return (
         <SuperAdminDashboardScreen
           superAdminData={responseData}
-          startDate={startDate?.format("DD-MM-YYYY") ?? ""}
-          endDate={endDate?.format("DD-MM-YYYY") ?? ""}
+          startDate={startDate?.format('DD-MM-YYYY') ?? ''}
+          endDate={endDate?.format('DD-MM-YYYY') ?? ''}
         />
       );
     } else {
       return (
         <AdminDashboardScreen
           adminData={responseData}
-          startDate={startDate?.format("DD-MM-YYYY") ?? ""}
-          endDate={endDate?.format("DD-MM-YYYY") ?? ""}
+          startDate={startDate?.format('DD-MM-YYYY') ?? ''}
+          endDate={endDate?.format('DD-MM-YYYY') ?? ''}
         />
       );
     }
@@ -135,20 +135,20 @@ const DashboardScreen: React.FC = () => {
             >
               <Grid item xs={12} sm={4} md={2}>
                 <SelectDropdown
-                  defaultValue={{ value: "This Month", label: "This Month" }}
+                  defaultValue={{ value: 'This Month', label: 'This Month' }}
                   onChange={(newValue: any) =>
                     handleDropdownChange(newValue, setFieldValue)
                   }
                   options={[
-                    { value: "Today", label: "Today" },
-                    { value: "This Week", label: "This Week" },
-                    { value: "Last 7 Days", label: "Last 7 Days" },
-                    { value: "This Month", label: "This Month" },
-                    { value: "Last 30 Days", label: "Last 30 Days" },
-                    { value: "Custom", label: "Custom" },
+                    { value: 'Today', label: 'Today' },
+                    { value: 'This Week', label: 'This Week' },
+                    { value: 'Last 7 Days', label: 'Last 7 Days' },
+                    { value: 'This Month', label: 'This Month' },
+                    { value: 'Last 30 Days', label: 'Last 30 Days' },
+                    { value: 'Custom', label: 'Custom' },
                   ]}
                   labelText="Select Date Range"
-                  sx={{ width: "100%" }}
+                  sx={{ width: '100%' }}
                 />
               </Grid>
 
@@ -156,11 +156,11 @@ const DashboardScreen: React.FC = () => {
                 <DatePickerUi
                   label="Start Date"
                   onChange={(date) =>
-                    setFieldValue("startDate", dayjs(date, "DD-MM-YYYY"))
+                    setFieldValue('startDate', dayjs(date, 'DD-MM-YYYY'))
                   }
                   value={values.startDate || undefined}
                   disabled={!isCustomRange}
-                  sx={{ width: "80%" }}
+                  sx={{ width: '80%' }}
                 />
               </Grid>
 
@@ -168,11 +168,11 @@ const DashboardScreen: React.FC = () => {
                 <DatePickerUi
                   label="End Date"
                   onChange={(date) =>
-                    setFieldValue("endDate", dayjs(date, "DD-MM-YYYY"))
+                    setFieldValue('endDate', dayjs(date, 'DD-MM-YYYY'))
                   }
                   value={values.endDate || undefined}
                   disabled={!isCustomRange}
-                  sx={{ width: "80%" }}
+                  sx={{ width: '80%' }}
                 />
               </Grid>
 

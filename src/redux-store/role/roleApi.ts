@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { apiSlice } from "../api/apiSlice";
-import { API_URLS } from "../../constants/api-urls";
-import { RoleInitialValueProps } from "../../types/types";
+import { createSlice } from '@reduxjs/toolkit';
+import { apiSlice } from '../api/apiSlice';
+import { API_URLS } from '../../constants/api-urls';
+import { RoleInitialValueProps } from '../../types/types';
 
 const roleSlice = createSlice({
-  name: "role",
+  name: 'role',
   initialState: {
     data: null,
     loading: false,
@@ -28,7 +28,7 @@ export const roleApi = apiSlice.injectEndpoints({
     getRole: builder.query<RoleInitialValueProps[], void>({
       query: () => ({
         url: API_URLS.rolesList,
-        method: "POST",
+        method: 'POST',
       }),
       // Set caching for 5 minutes (adjust the duration as needed)
       keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
@@ -36,20 +36,20 @@ export const roleApi = apiSlice.injectEndpoints({
     addRole: builder.mutation<any, Partial<any>>({
       query: (data) => ({
         url: API_URLS.rolesCreate,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     deleteRole: builder.mutation<void, string>({
       query: (id) => ({
         url: `${API_URLS.rolesDelete}/${id}`,
-        method: "POST",
+        method: 'POST',
       }),
     }),
     getRoleById: builder.mutation<void, string>({
       query: (id) => ({
         url: API_URLS.rolesGet + `${id}`,
-        method: "POST",
+        method: 'POST',
       }),
     }),
     updateRole: builder.mutation<
@@ -58,14 +58,14 @@ export const roleApi = apiSlice.injectEndpoints({
     >({
       query: ({ id, data }) => ({
         url: `role/update/${id}`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     rolesGetUser: builder.mutation<void, string>({
       query: (userName) => ({
         url: API_URLS.rolesGetUser + `${userName}`,
-        method: "POST",
+        method: 'POST',
         body: userName,
       }),
     }),
@@ -75,7 +75,7 @@ export const roleApi = apiSlice.injectEndpoints({
     >({
       query: ({ values }) => ({
         url: API_URLS.changePassword,
-        method: "POST",
+        method: 'POST',
         body: values,
       }),
     }),

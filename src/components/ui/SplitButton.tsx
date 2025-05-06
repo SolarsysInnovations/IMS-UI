@@ -1,13 +1,13 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import Grow from "@mui/material/Grow";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import MenuItem from "@mui/material/MenuItem";
-import MenuList from "@mui/material/MenuList";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 
 interface SplitButtonProps {
   options: string[];
@@ -64,16 +64,16 @@ const SplitButton: React.FC<SplitButtonProps> = ({
   return (
     <React.Fragment>
       <ButtonGroup
-        sx={{ boxShadow: "none" }}
+        sx={{ boxShadow: 'none' }}
         variant="contained"
         ref={anchorRef}
         aria-label="Button group with a nested menu"
       >
         <Button
           sx={{
-            padding: "1px 15px !important",
-            borderRadius: "5px",
-            fontSize: "12px",
+            padding: '1px 15px !important',
+            borderRadius: '5px',
+            fontSize: '12px',
             ...buttonStyles,
           }}
           onClick={handleClick}
@@ -82,14 +82,14 @@ const SplitButton: React.FC<SplitButtonProps> = ({
         </Button>
         <Button
           sx={{
-            padding: "1px 3px !important",
-            borderRadius: "5px",
-            fontSize: "12px",
+            padding: '1px 3px !important',
+            borderRadius: '5px',
+            fontSize: '12px',
             ...buttonStyles,
           }}
           size="small"
-          aria-controls={open ? "split-button-menu" : undefined}
-          aria-expanded={open ? "true" : undefined}
+          aria-controls={open ? 'split-button-menu' : undefined}
+          aria-expanded={open ? 'true' : undefined}
           aria-label="select merge strategy"
           aria-haspopup="menu"
           onClick={handleToggle}
@@ -100,8 +100,8 @@ const SplitButton: React.FC<SplitButtonProps> = ({
       <Popper
         sx={{
           zIndex: 1,
-          borderRadius: "5px !important",
-          minWidth: "30px !important",
+          borderRadius: '5px !important',
+          minWidth: '30px !important',
           ...menuStyles,
         }}
         open={open}
@@ -115,7 +115,7 @@ const SplitButton: React.FC<SplitButtonProps> = ({
             {...TransitionProps}
             style={{
               transformOrigin:
-                placement === "bottom" ? "center top" : "center bottom",
+                placement === 'bottom' ? 'center top' : 'center bottom',
             }}
           >
             <Paper>
@@ -124,7 +124,7 @@ const SplitButton: React.FC<SplitButtonProps> = ({
                   {options.map((option, index) => (
                     <MenuItem
                       sx={{
-                        fontSize: "13px !important",
+                        fontSize: '13px !important',
                       }}
                       key={option}
                       disabled={disabledOptions.includes(index)}

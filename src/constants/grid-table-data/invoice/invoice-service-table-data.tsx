@@ -2,26 +2,26 @@ import {
   GridColDef,
   GridDeleteIcon,
   GridValueSetterParams,
-} from "@mui/x-data-grid";
+} from '@mui/x-data-grid';
 
 const id = 1;
 
 export const columns: GridColDef[] = [
   {
-    field: "serviceAccountingCode",
-    headerName: "Service Code",
+    field: 'serviceAccountingCode',
+    headerName: 'Service Code',
     width: 200,
     editable: true,
   },
   {
-    field: "serviceAmount",
-    headerName: "Service Amount",
+    field: 'serviceAmount',
+    headerName: 'Service Amount',
     width: 200,
     editable: false,
   },
   {
-    field: "qty",
-    headerName: "Qty",
+    field: 'qty',
+    headerName: 'Qty',
     width: 150,
     editable: true,
     valueGetter: (params: any) => params.value || 0,
@@ -35,8 +35,8 @@ export const columns: GridColDef[] = [
     },
   },
   {
-    field: "totalAmount",
-    headerName: "Total Amount",
+    field: 'totalAmount',
+    headerName: 'Total Amount',
     width: 150,
     editable: false,
     valueGetter: (params: any) => params.value || 0,

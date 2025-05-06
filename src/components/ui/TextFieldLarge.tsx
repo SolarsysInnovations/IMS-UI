@@ -4,8 +4,8 @@ import {
   filledInputClasses,
   inputLabelClasses,
   outlinedInputClasses,
-} from "@mui/material";
-import React from "react";
+} from '@mui/material';
+import React from 'react';
 
 interface TextFieldProps {
   label?: string;
@@ -54,46 +54,46 @@ const TextFieldLarge = ({
         ) : undefined,
       }}
       sx={{
-        "& .MuiInputBase-root": {
-          "&::placeholder": {
+        '& .MuiInputBase-root': {
+          '&::placeholder': {
             opacity: 1,
           },
         },
-        "& .MuiInputBase-input": {
+        '& .MuiInputBase-input': {
           fontSize: 14,
           fontWeight: 500,
-          lineHeight: "24px",
-          "&::placeholder": {
+          lineHeight: '24px',
+          '&::placeholder': {
             color: `text.secondary`,
           },
         },
-        "& .MuiFilledInput-root": {
-          backgroundColor: "transparent",
-          borderRadius: "8px !important",
-          borderStyle: "solid",
+        '& .MuiFilledInput-root': {
+          backgroundColor: 'transparent',
+          borderRadius: '8px !important',
+          borderStyle: 'solid',
           borderWidth: 1,
-          overflow: "hidden",
+          overflow: 'hidden',
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          "&:hover": {
+          '&:hover': {
             backgroundColor: `action.hover`,
           },
-          "&:before": {
-            display: "none",
+          '&:before': {
+            display: 'none',
           },
-          "&:after": {
-            display: "none",
+          '&:after': {
+            display: 'none',
           },
           [`&.${filledInputClasses.disabled}`]: {
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
           },
           [`&.${filledInputClasses.focused}`]: {
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
             borderWidth: 2,
-            boxSizing: "content-box",
+            boxSizing: 'content-box',
             borderColor: `primary.main`,
-            "& .MuiTypography-root": {
-              color: "#6366F1",
+            '& .MuiTypography-root': {
+              color: '#6366F1',
             },
           },
           [`&.${filledInputClasses.error}`]: {
@@ -101,45 +101,45 @@ const TextFieldLarge = ({
             boxShadow: `error.main 0 0 0 2px`,
           },
         },
-        "& .MuiOutlinedInput-root": {
-          "&:hover": {
+        '& .MuiOutlinedInput-root': {
+          '&:hover': {
             // borderWidth: 4,
             outlineColor: `primary.main`,
             outlineWidth: 4,
             backgroundColor: `action.hover`,
-            "& .MuiOutlinedInput-notchedOutline": {
+            '& .MuiOutlinedInput-notchedOutline': {
               // borderColor: `primary.main`,
             },
           },
           [`&.${outlinedInputClasses.focused}`]: {
-            backgroundColor: "transparent",
-            "& .MuiOutlinedInput-notchedOutline": {
+            backgroundColor: 'transparent',
+            '& .MuiOutlinedInput-notchedOutline': {
               borderColor: `primary.main`,
               boxShadow: `primary.main 0 0 0 2px`,
             },
           },
           [`&.${outlinedInputClasses.error}`]: {
-            "& .MuiOutlinedInput-notchedOutline": {
+            '& .MuiOutlinedInput-notchedOutline': {
               borderColor: `error.main`,
               boxShadow: `error.main 0 0 0 2px`,
             },
           },
         },
-        "& .MuiFormLabel-root": {
+        '& .MuiFormLabel-root': {
           fontSize: 14,
           fontWeight: 500,
           [`&.${inputLabelClasses.filled}`]: {
-            transform: "translate(12px, 18px) scale(1)",
+            transform: 'translate(12px, 18px) scale(1)',
           },
           [`&.${inputLabelClasses.shrink}`]: {
             [`&.${inputLabelClasses.standard}`]: {
-              transform: "translate(0, -1.5px) scale(0.85)",
+              transform: 'translate(0, -1.5px) scale(0.85)',
             },
             [`&.${inputLabelClasses.filled}`]: {
-              transform: "translate(12px, 6px) scale(0.85)",
+              transform: 'translate(12px, 6px) scale(0.85)',
             },
             [`&.${inputLabelClasses.outlined}`]: {
-              transform: "translate(14px, -9px) scale(0.85)",
+              transform: 'translate(14px, -9px) scale(0.85)',
             },
           },
         },

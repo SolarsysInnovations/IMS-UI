@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import PortalLinkList from "./Portal-link-list";
-import TableHeader from "../../../components/layouts/TableHeader";
-import { Add } from "@mui/icons-material";
-import DialogBoxUi from "../../../components/ui/DialogBox";
-import PortalLinkCreate from "./Portal-link-create";
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import PortalLinkList from './Portal-link-list';
+import TableHeader from '../../../components/layouts/TableHeader';
+import { Add } from '@mui/icons-material';
+import DialogBoxUi from '../../../components/ui/DialogBox';
+import PortalLinkCreate from './Portal-link-create';
 
 const LinkScreen = () => {
   const linkValue = useSelector((state: any) => state.globalState.data);
@@ -28,8 +28,8 @@ const LinkScreen = () => {
   return (
     <>
       <TableHeader
-        headerName={"Links"}
-        buttons={[{ label: "Add Link", icon: Add, onClick: handleModalOpen }]}
+        headerName={'Links'}
+        buttons={[{ label: 'Add Link', icon: Add, onClick: handleModalOpen }]}
       />
       <PortalLinkList />
 

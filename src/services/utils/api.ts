@@ -7,7 +7,7 @@ export const makeRequest = async (
   id?: any,
 ) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     let requestUrl = url;
 
     if (id) {
@@ -17,7 +17,7 @@ export const makeRequest = async (
       method: method,
       headers: {
         Authorization: `Bearer ${token} `,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     };
 

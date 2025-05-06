@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from 'yup';
 
 // -------- customer ------------------------
 export interface LoginProps {
@@ -37,7 +37,7 @@ export interface ServiceFormProps {
 }
 export interface CompanyFormProps {
   companyValue: AdminCompanyUsersInitialValueProps;
-  mode?: "create" | "edit";
+  mode?: 'create' | 'edit';
 }
 export interface LinkFormProps {
   linkValue: linkCreationProps;

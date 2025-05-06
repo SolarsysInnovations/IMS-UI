@@ -1,7 +1,7 @@
-import { useSelector } from "react-redux";
-import PaymentTermsList from "./PaymentTermsList";
-import { useEffect, useState } from "react";
-import PaymentTermsForm from "./PaymentTermsCreate";
+import { useSelector } from 'react-redux';
+import PaymentTermsList from './PaymentTermsList';
+import { useEffect, useState } from 'react';
+import PaymentTermsForm from './PaymentTermsCreate';
 
 const PaymentTermsScreen: React.FC = () => {
   const paymentTermsValue = useSelector(

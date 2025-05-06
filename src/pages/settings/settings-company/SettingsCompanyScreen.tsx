@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import SettingsCompanyForm from "./SettingsCompanyForm";
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import SettingsCompanyForm from './SettingsCompanyForm';
 
 const SettingsCompanyScreen = () => {
   const companyValue = useSelector((state: any) => state.globalState.data);
@@ -13,7 +13,7 @@ const SettingsCompanyScreen = () => {
 
   const handleCloseDialog = () => {};
 
-  const mode = companyValue ? "edit" : "create";
+  const mode = companyValue ? 'edit' : 'create';
 
   return (
     <SettingsCompanyForm

@@ -1,18 +1,18 @@
-import { Grid, Button, CircularProgress, Typography, Box } from "@mui/material";
-import React, { useState, ChangeEvent, useEffect } from "react";
+import { Grid, Button, CircularProgress, Typography, Box } from '@mui/material';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import {
   useAddCompanyLogoMutation,
   useGetCompanyLogoByIdQuery,
   useDeleteCompanyLogoMutation,
   useGetCompanySettingByIdQuery,
-} from "../../../../src/redux-store/api/injectedApis";
-import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+} from '../../../../src/redux-store/api/injectedApis';
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import {
   clearCompanyLogo,
   setCompanyLogo,
-} from "../../../redux-store/global/globalState";
-import { useDispatch } from "react-redux";
-import { useInVoiceContext } from "../../../invoiceContext/invoiceContext";
+} from '../../../redux-store/global/globalState';
+import { useDispatch } from 'react-redux';
+import { useInVoiceContext } from '../../../invoiceContext/invoiceContext';
 
 const UploadScreen: React.FC = () => {
   const context = useInVoiceContext();
@@ -24,7 +24,7 @@ const UploadScreen: React.FC = () => {
   );
   const [base64String, setBase64String] = useState<string | null>(null);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
-  const companyIdString = context.companyDetails.companyId ?? "";
+  const companyIdString = context.companyDetails.companyId ?? '';
 
   // Fetch company data
   const { data: companyData } = useGetCompanySettingByIdQuery(companyIdString);
@@ -74,12 +74,12 @@ const UploadScreen: React.FC = () => {
     const file = event.target.files?.[0] || null;
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        alert("File size exceeds 2MB");
+        alert('File size exceeds 2MB');
         return;
       }
-      const allowedTypes = ["image/jpeg", "image/png"];
+      const allowedTypes = ['image/jpeg', 'image/png'];
       if (!allowedTypes.includes(file.type)) {
-        alert("Invalid file type. Please upload a JPG or PNG image.");
+        alert('Invalid file type. Please upload a JPG or PNG image.');
         return;
       }
 
@@ -94,7 +94,7 @@ const UploadScreen: React.FC = () => {
 
   const handleDeleteClick = async () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this logo?",
+      'Are you sure you want to delete this logo?',
     );
     if (confirmed && companyId) {
       try {
@@ -104,7 +104,7 @@ const UploadScreen: React.FC = () => {
         setBase64String(null);
         refetchLogo();
       } catch (error) {
-        console.error("Error deleting logo:", error);
+        console.error('Error deleting logo:', error);
       }
     }
   };
@@ -114,10 +114,10 @@ const UploadScreen: React.FC = () => {
       setLoading(true);
       try {
         const formData = new FormData();
-        formData.append("companyLogo", selectedFile);
+        formData.append('companyLogo', selectedFile);
         await addCompanyLogo(formData).unwrap();
       } catch (error) {
-        console.error("Error uploading logo:", error);
+        console.error('Error uploading logo:', error);
         setLoading(false);
       }
     }
@@ -125,16 +125,16 @@ const UploadScreen: React.FC = () => {
 
   useSnackbarNotifications({
     success: uploadSuccess,
-    successMessage: "Logo uploaded successfully",
+    successMessage: 'Logo uploaded successfully',
     error: uploadError,
-    errorMessage: "Error uploading logo",
+    errorMessage: 'Error uploading logo',
   });
 
   useSnackbarNotifications({
     success: deleteCompanySuccess,
-    successMessage: "Logo deleted successfully",
+    successMessage: 'Logo deleted successfully',
     error: deleteCompanyError,
-    errorMessage: "Error deleting logo",
+    errorMessage: 'Error deleting logo',
   });
 
   return (
@@ -142,12 +142,12 @@ const UploadScreen: React.FC = () => {
       container
       spacing={2}
       sx={{
-        marginTop: "20px",
-        padding: "20px",
-        justifyContent: "center",
-        alignItems: "center",
-        maxWidth: "100%",
-        overflow: "auto",
+        marginTop: '20px',
+        padding: '20px',
+        justifyContent: 'center',
+        alignItems: 'center',
+        maxWidth: '100%',
+        overflow: 'auto',
       }}
     >
       <Grid
@@ -156,10 +156,10 @@ const UploadScreen: React.FC = () => {
         sm={6}
         md={4}
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "10px",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '10px',
         }}
       >
         {base64String ? (
@@ -167,23 +167,23 @@ const UploadScreen: React.FC = () => {
             src={base64String}
             alt="Company Logo"
             style={{
-              width: "200px",
-              height: "200px",
-              objectFit: "contain",
-              marginBottom: "10px",
+              width: '200px',
+              height: '200px',
+              objectFit: 'contain',
+              marginBottom: '10px',
             }}
           />
         ) : (
           <Box
             component="span"
             sx={{
-              display: "inline-block",
-              fontSize: "12px",
-              fontWeight: "bold",
-              marginBottom: "10px",
-              color: "red",
-              padding: "5px 10px",
-              borderRadius: "5px",
+              display: 'inline-block',
+              fontSize: '12px',
+              fontWeight: 'bold',
+              marginBottom: '10px',
+              color: 'red',
+              padding: '5px 10px',
+              borderRadius: '5px',
             }}
           >
             * No image available *
@@ -193,7 +193,7 @@ const UploadScreen: React.FC = () => {
         <Button
           variant="outlined"
           color="error"
-          sx={{ marginTop: "10px" }}
+          sx={{ marginTop: '10px' }}
           onClick={handleDeleteClick}
           disabled={!base64String}
         >
@@ -203,9 +203,9 @@ const UploadScreen: React.FC = () => {
         <Typography
           variant="caption"
           sx={{
-            marginTop: "10px",
-            textAlign: "center",
-            color: "grey.500",
+            marginTop: '10px',
+            textAlign: 'center',
+            color: 'grey.500',
           }}
         >
           (Only jpeg/png format images are allowed to upload here*)
@@ -213,7 +213,7 @@ const UploadScreen: React.FC = () => {
 
         <input
           accept="image/*"
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
           id="contained-button-file"
           type="file"
           onChange={handleFileChange}
@@ -223,7 +223,7 @@ const UploadScreen: React.FC = () => {
             variant="contained"
             color="primary"
             component="span"
-            sx={{ marginTop: "10px" }}
+            sx={{ marginTop: '10px' }}
           >
             Upload
           </Button>
@@ -232,33 +232,33 @@ const UploadScreen: React.FC = () => {
         {imagePreview && (
           <Box
             sx={{
-              marginTop: "20px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "relative",
+              marginTop: '20px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'relative',
             }}
           >
             <img
               src={imagePreview as string}
               alt="Preview"
               style={{
-                width: "150px",
-                height: "150px",
-                objectFit: "contain",
-                border: "1px solid grey",
-                borderRadius: "4px",
+                width: '150px',
+                height: '150px',
+                objectFit: 'contain',
+                border: '1px solid grey',
+                borderRadius: '4px',
               }}
             />
             {loading && (
               <CircularProgress
                 size={24}
                 sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  marginLeft: "-12px",
-                  marginTop: "-12px",
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  marginLeft: '-12px',
+                  marginTop: '-12px',
                 }}
               />
             )}
@@ -269,7 +269,7 @@ const UploadScreen: React.FC = () => {
           color="primary"
           onClick={handleSave}
           disabled={!selectedFile || loading}
-          sx={{ marginTop: "20px" }}
+          sx={{ marginTop: '20px' }}
         >
           Save
         </Button>

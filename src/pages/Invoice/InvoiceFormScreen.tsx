@@ -1,14 +1,14 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import TableHeader from "../../components/layouts/TableHeader";
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import TableHeader from '../../components/layouts/TableHeader';
 import {
   Add,
   Approval,
   KeyboardBackspaceTwoTone,
   Save,
-} from "@mui/icons-material";
-import usePathname from "../../hooks/usePathname";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+} from '@mui/icons-material';
+import usePathname from '../../hooks/usePathname';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import {
   Box,
   Divider,
@@ -24,27 +24,27 @@ import {
   Typography,
   IconButton,
   Button,
-} from "@mui/material";
-import TextFieldUi from "../../components/ui/TextField";
-import { AppDispatch } from "../../redux-store/store";
-import RadioUi from "../../components/ui/RadioGroup";
-import { Formik, Form } from "formik";
-import { invoiceValidationSchema } from "../../constants/forms/validations/validationSchema";
-import { invoiceCreateInitialValue } from "../../constants/forms/formikInitialValues";
-import { InvoiceInitialValueProps } from "../../types/types";
-import DatePickerUi from "../../components/ui/DatePicker";
-import { generateOptions } from "../../services/utils/dropdownOptions";
-import InvoiceUi from "./Generate-Invoice/InvoiceUi";
-import { invoiceType } from "../../constants/invoiceData";
-import ButtonSmallUi from "../../components/ui/ButtonSmall";
-import TextAreaUi from "../../components/ui/TextArea";
-import GstTypeScreen from "./GstType/GstTypeScreen";
-import TdsTaxScreen from "./TdsTax/TdsTaxScreen";
-import PaymentTermsScreen from "./paymentTerms/PaymentTermsScreen";
-import { addDays, format } from "date-fns";
-import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
-import DialogBoxUi from "../../components/ui/DialogBox";
-import SelectDropdown from "../../components/ui/SelectDropdown";
+} from '@mui/material';
+import TextFieldUi from '../../components/ui/TextField';
+import { AppDispatch } from '../../redux-store/store';
+import RadioUi from '../../components/ui/RadioGroup';
+import { Formik, Form } from 'formik';
+import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
+import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
+import { InvoiceInitialValueProps } from '../../types/types';
+import DatePickerUi from '../../components/ui/DatePicker';
+import { generateOptions } from '../../services/utils/dropdownOptions';
+import InvoiceUi from './Generate-Invoice/InvoiceUi';
+import { invoiceType } from '../../constants/invoiceData';
+import ButtonSmallUi from '../../components/ui/ButtonSmall';
+import TextAreaUi from '../../components/ui/TextArea';
+import GstTypeScreen from './GstType/GstTypeScreen';
+import TdsTaxScreen from './TdsTax/TdsTaxScreen';
+import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
+import { addDays, format } from 'date-fns';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import SelectDropdown from '../../components/ui/SelectDropdown';
 import {
   useCreateInvoiceMutation,
   useGetCustomersListQuery,
@@ -54,14 +54,14 @@ import {
   useGetServiceListQuery,
   useGetTdsTaxListQuery,
   useUpdateInvoiceMutation,
-} from "../../redux-store/api/injectedApis";
+} from '../../redux-store/api/injectedApis';
 import {
   clearInvoiceData,
   setInvoiceData,
-} from "../../redux-store/slices/invoiceSlice";
-import ServiceScreen from "./service/ServiceScreen";
-import { useRolePermissions } from "../../hooks/useRolePermission";
-import CancelIcon from "@mui/icons-material/Close";
+} from '../../redux-store/slices/invoiceSlice';
+import ServiceScreen from './service/ServiceScreen';
+import { useRolePermissions } from '../../hooks/useRolePermission';
+import CancelIcon from '@mui/icons-material/Close';
 
 interface Service {
   id: string;
@@ -79,7 +79,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
   const navigate = useNavigate();
-  const [popUpComponent, setPopUpComponent] = useState("");
+  const [popUpComponent, setPopUpComponent] = useState('');
   const { data: customers, refetch: customerRefetch } =
     useGetCustomersListQuery();
   const { refetch: invoiceRefetch } = useGetInvoiceListQuery();
@@ -131,27 +131,27 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   // * ----------- to generate the dropdown options -------------
   const customerName = generateOptions(
     customers,
-    "customerName",
-    "customerName",
+    'customerName',
+    'customerName',
   );
-  const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
-  const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
+  const gstTypeOptions = generateOptions(gstTypesData, 'gstName', 'gstName');
+  const tdsTaxOptions = generateOptions(tdsTaxData, 'taxName', 'taxName');
   const paymentTermsOptions = generateOptions(
     paymentTerms,
-    "termName",
-    "termName",
+    'termName',
+    'termName',
   );
   const [preview, setPreview] = useState(false);
-  const [resMessage, setResMessage] = useState("");
+  const [resMessage, setResMessage] = useState('');
   const { canCreateTds, canCreateGst, canCreatePayment, canCreateService } =
     useRolePermissions();
 
   const PopupComponents = {
-    GST_TYPE: "gstType",
-    PAYMENT_TERMS: "paymentTerms",
-    TDS_TAX: "tdsTax",
-    SERVICES: "services",
-    INVOICE: "invoice",
+    GST_TYPE: 'gstType',
+    PAYMENT_TERMS: 'paymentTerms',
+    TDS_TAX: 'tdsTax',
+    SERVICES: 'services',
+    INVOICE: 'invoice',
   };
 
   useEffect(() => {
@@ -166,15 +166,15 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     success: addInvoiceSuccess,
     error: addInvoiceError,
     successMessage: resMessage,
-    errorMessage: "Error adding invoice",
+    errorMessage: 'Error adding invoice',
     errorObject: addInvoiceErrorObject,
   });
 
   useSnackbarNotifications({
     success: invoiceUpdatedSuccess,
     error: invoiceUpdateError,
-    successMessage: resMessage ? resMessage : "Invoice Updated Successfully",
-    errorMessage: "Error updating invoice",
+    successMessage: resMessage ? resMessage : 'Invoice Updated Successfully',
+    errorMessage: 'Error updating invoice',
     errorObject: invoiceUpdateErrorObject,
   });
 
@@ -286,7 +286,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     event.stopPropagation();
     const newRow = {
       id: `row_${Date.now()}`,
-      serviceAccountingCode: "",
+      serviceAccountingCode: '',
       serviceHours: 0,
       serviceAmount: 0,
       serviceTotalAmount: 0,
@@ -316,32 +316,32 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     }
   };
   const paymentOptions: any[] = [
-    { value: "monthly", label: "Monthly" },
-    { value: "quarterly", label: "Quarterly" },
-    { value: "annually", label: "Annually" },
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'quarterly', label: 'Quarterly' },
+    { value: 'annually', label: 'Annually' },
   ];
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const maybefile = event.target.files?.[0];
     if (!maybefile) {
-      console.error("No file selected");
+      console.error('No file selected');
       return;
     }
     const file: File = maybefile;
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        alert("File size exceeds 2MB");
+        alert('File size exceeds 2MB');
         return;
       }
-      const allowedTypes = ["image/jpeg", "image/png"];
+      const allowedTypes = ['image/jpeg', 'image/png'];
       if (!allowedTypes.includes(file.type)) {
-        alert("Invalid file type. Please upload a JPG or PNG image.");
+        alert('Invalid file type. Please upload a JPG or PNG image.');
         return;
       }
       const reader = new FileReader();
       reader.onloadend = () => {
         const image = reader.result as string;
-        const processedImage = image.replace(/^data:image\/[a-z]+;base64,/, "");
+        const processedImage = image.replace(/^data:image\/[a-z]+;base64,/, '');
         setImage(processedImage);
         setImagePreview(reader.result);
       };
@@ -388,7 +388,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
           resetForm();
           setInvoiceValues({ ...invoiceValues });
         } catch (error) {
-          console.error("Error submitting form:", error);
+          console.error('Error submitting form:', error);
         } finally {
           setSubmitting(false);
         }
@@ -410,7 +410,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
               headerName={pathname}
               buttons={[
                 {
-                  label: "Preview",
+                  label: 'Preview',
                   icon: Add,
                   onClick: () => {
                     const updatedValue = {
@@ -427,21 +427,21 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                   disabled: !(isValid && dirty),
                 },
                 {
-                  label: "Sent to Approver",
+                  label: 'Sent to Approver',
                   icon: Approval,
                   disabled: !(isValid && dirty),
                   onClick: () => {
-                    values.invoiceStatus = "PENDING";
+                    values.invoiceStatus = 'PENDING';
                     handleSubmit();
                   },
                 },
                 {
-                  label: "Back",
+                  label: 'Back',
                   icon: KeyboardBackspaceTwoTone,
                   onClick: () => navigate(-1),
                 },
                 {
-                  label: "Save",
+                  label: 'Save',
                   icon: Save,
                   onClick: async () => {
                     handleSubmit();
@@ -476,7 +476,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
               }
               handleClose={() => {
                 setIsOpenDialogBox(false);
-                setPopUpComponent("");
+                setPopUpComponent('');
               }}
             />
             <Form id="createClientForm" noValidate>
@@ -489,9 +489,9 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       disabled={false}
                       onChange={(newValue: any) => {
                         if (newValue) {
-                          setFieldValue("invoiceType", newValue.target.value);
+                          setFieldValue('invoiceType', newValue.target.value);
                         } else {
-                          setFieldValue("invoiceType", "");
+                          setFieldValue('invoiceType', '');
                         }
                       }}
                       groupName="type"
@@ -536,26 +536,26 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
 
                           if (selectedCustomerDetails) {
                             setFieldValue(
-                              "customerName",
+                              'customerName',
                               selectedCustomerDetails.customerName,
                             );
                             setFieldValue(
-                              "customerId",
+                              'customerId',
                               selectedCustomerDetails.id,
                             );
                             setFieldValue(
-                              "customerEmail",
+                              'customerEmail',
                               selectedCustomerDetails.customerEmail,
                             );
                             setFieldValue(
-                              "customerPhone",
+                              'customerPhone',
                               selectedCustomerDetails.customerPhone,
                             );
                             // Add more fields if required
                           }
                         } else {
-                          setFieldValue("customerName", "");
-                          setFieldValue("customerId", "");
+                          setFieldValue('customerName', '');
+                          setFieldValue('customerId', '');
                         }
                       }}
                       error={
@@ -581,17 +581,17 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                           );
                           if (selectedGstType) {
                             setFieldValue(
-                              "gstPercentage",
+                              'gstPercentage',
                               selectedGstType.gstPercentage,
                             );
-                            setFieldValue("gstType", newValue.value);
+                            setFieldValue('gstType', newValue.value);
                           } else {
-                            setFieldValue("gstType", "");
-                            setFieldValue("gstPercentage", null);
+                            setFieldValue('gstType', '');
+                            setFieldValue('gstPercentage', null);
                           }
                         } else {
-                          setFieldValue("gstType", "");
-                          setFieldValue("gstPercentage", null);
+                          setFieldValue('gstType', '');
+                          setFieldValue('gstPercentage', null);
                         }
                       }}
                       required={true}
@@ -619,7 +619,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       name="gstPercentage"
                       type="number"
                       endAdornment="%"
-                      value={values.gstPercentage || ""}
+                      value={values.gstPercentage || ''}
                       onChange={handleChange}
                       error={
                         touched.gstPercentage && Boolean(errors.gstPercentage)
@@ -645,7 +645,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                 </Grid>
                 <Grid item xs={3}>
                   <Box>
-                    {values.invoiceType === "Retainer" ? (
+                    {values.invoiceType === 'Retainer' ? (
                       <SelectDropdown
                         onMouseDown={() => {
                           setPopUpComponent(PopupComponents.PAYMENT_TERMS);
@@ -656,13 +656,13 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             // Determine the number of days based on the selected term
                             let totalDays;
                             switch (newValue.value) {
-                              case "monthly":
+                              case 'monthly':
                                 totalDays = 30;
                                 break;
-                              case "quarterly":
+                              case 'quarterly':
                                 totalDays = 45;
                                 break;
-                              case "annually":
+                              case 'annually':
                                 totalDays = 365;
                                 break;
                               default:
@@ -671,22 +671,22 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
 
                             if (totalDays > 0) {
                               const today = new Date();
-                              const startDate = format(today, "dd-MM-yyyy");
+                              const startDate = format(today, 'dd-MM-yyyy');
                               const dueDate = format(
                                 addDays(today, totalDays),
-                                "dd-MM-yyyy",
+                                'dd-MM-yyyy',
                               );
-                              setFieldValue("startDate", startDate);
-                              setFieldValue("dueDate", dueDate);
-                              setFieldValue("paymentTerms", newValue.value);
+                              setFieldValue('startDate', startDate);
+                              setFieldValue('dueDate', dueDate);
+                              setFieldValue('paymentTerms', newValue.value);
                             } else {
-                              setFieldValue("startDate", "");
-                              setFieldValue("dueDate", "");
+                              setFieldValue('startDate', '');
+                              setFieldValue('dueDate', '');
                             }
                           } else {
-                            setFieldValue("paymentTerms", "");
-                            setFieldValue("startDate", "");
-                            setFieldValue("dueDate", "");
+                            setFieldValue('paymentTerms', '');
+                            setFieldValue('startDate', '');
+                            setFieldValue('dueDate', '');
                           }
                         }}
                         required={true}
@@ -721,22 +721,22 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             );
                             if (selectedPaymentTerms) {
                               const today = new Date();
-                              const startDate = format(today, "dd-MM-yyyy");
+                              const startDate = format(today, 'dd-MM-yyyy');
                               const dueDate = format(
                                 addDays(today, selectedPaymentTerms.totalDays),
-                                "dd-MM-yyyy",
+                                'dd-MM-yyyy',
                               );
-                              setFieldValue("startDate", startDate);
-                              setFieldValue("dueDate", dueDate);
-                              setFieldValue("paymentTerms", newValue.value);
+                              setFieldValue('startDate', startDate);
+                              setFieldValue('dueDate', dueDate);
+                              setFieldValue('paymentTerms', newValue.value);
                             } else {
-                              setFieldValue("startDate", "");
-                              setFieldValue("dueDate", "");
+                              setFieldValue('startDate', '');
+                              setFieldValue('dueDate', '');
                             }
                           } else {
-                            setFieldValue("paymentTerms", "");
-                            setFieldValue("startDate", "");
-                            setFieldValue("dueDate", "");
+                            setFieldValue('paymentTerms', '');
+                            setFieldValue('startDate', '');
+                            setFieldValue('dueDate', '');
                           }
                         }}
                         required={true}
@@ -766,7 +766,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       required={true}
                       label="Start Date"
                       onChange={(date: string) => {
-                        setFieldValue("startDate", date);
+                        setFieldValue('startDate', date);
                       }}
                       value={values.startDate}
                     />
@@ -779,7 +779,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       required={true}
                       label="Due Date"
                       onChange={(date: string) => {
-                        setFieldValue("dueDate", date);
+                        setFieldValue('dueDate', date);
                       }}
                       value={values.dueDate}
                     />
@@ -791,20 +791,20 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                       <TableHead>
                         <TableRow>
-                          <TableCell sx={{ width: "140px" }}>
+                          <TableCell sx={{ width: '140px' }}>
                             Service Accounting Code
                           </TableCell>
-                          <TableCell sx={{ width: "320px" }} align="center">
+                          <TableCell sx={{ width: '320px' }} align="center">
                             Description
                           </TableCell>
-                          <TableCell sx={{ width: "50px" }} align="center">
+                          <TableCell sx={{ width: '50px' }} align="center">
                             Hours
                           </TableCell>
 
-                          <TableCell sx={{ width: "100px" }} align="center">
+                          <TableCell sx={{ width: '100px' }} align="center">
                             Service Amount
                           </TableCell>
-                          <TableCell sx={{ width: "100px" }} align="right">
+                          <TableCell sx={{ width: '100px' }} align="right">
                             Amount
                           </TableCell>
                           <TableCell align="center"></TableCell>
@@ -862,7 +862,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                       ];
                                       updatedServiceList[index] = {
                                         ...updatedServiceList[index],
-                                        serviceAccountingCode: "",
+                                        serviceAccountingCode: '',
                                         serviceHours: 0,
                                         serviceTotalAmount: 0,
                                       };
@@ -878,7 +878,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 <Tooltip title={item?.serviceDescription}>
                                   <Typography align="center" variant="body2">
                                     {item?.serviceDescription?.slice(0, 30) +
-                                      "..."}
+                                      '...'}
                                   </Typography>
                                 </Tooltip>
                               </TableCell>
@@ -929,9 +929,9 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       variant="standard"
                       onChange={(e) => {
                         if (e) {
-                          setFieldValue("notes", e.target.value);
+                          setFieldValue('notes', e.target.value);
                         } else {
-                          setFieldValue("notes", "");
+                          setFieldValue('notes', '');
                         }
                       }}
                       value={values?.notes}
@@ -944,9 +944,9 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       variant="standard"
                       onChange={(e) => {
                         if (e) {
-                          setFieldValue("termsAndConditions", e.target.value);
+                          setFieldValue('termsAndConditions', e.target.value);
                         } else {
-                          setFieldValue("termsAndConditions", "");
+                          setFieldValue('termsAndConditions', '');
                         }
                       }}
                       value={values?.termsAndConditions}
@@ -959,8 +959,8 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                 <Grid item xs={6}>
                   <Box
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <Typography variant="body2" color="initial">
@@ -970,15 +970,15 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       {subTotalInvoiceAmount}
                     </Typography>
                   </Box>
-                  {values.invoiceType === "Retainer" && (
+                  {values.invoiceType === 'Retainer' && (
                     <Box
                       sx={{
-                        marginTop: "10px",
-                        display: "flex",
-                        justifyContent: "space-between",
+                        marginTop: '10px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
                       }}
                     >
-                      {" "}
+                      {' '}
                       <Box>
                         <TextFieldUi
                           required={true}
@@ -986,13 +986,13 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                           label="Retainer Fee"
                           name="retainerFee"
                           type="number"
-                          value={values.retainerFee ?? ""}
+                          value={values.retainerFee ?? ''}
                           onChange={(e) => {
                             const value = e.target.value;
                             const parsedValue =
-                              value !== "" ? parseFloat(value) : 0;
+                              value !== '' ? parseFloat(value) : 0;
                             setRetainerAmount(parsedValue);
-                            setFieldValue("retainerFee", parsedValue);
+                            setFieldValue('retainerFee', parsedValue);
                           }}
                           error={
                             touched.retainerFee && Boolean(errors.retainerFee)
@@ -1007,16 +1007,16 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                   )}
                   <Box
                     sx={{
-                      marginTop: "10px",
-                      display: "flex",
-                      justifyContent: "space-between",
+                      marginTop: '10px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <Box
                       sx={{
-                        display: "flex",
-                        gap: "30px",
-                        justifyContent: "space-between",
+                        display: 'flex',
+                        gap: '30px',
+                        justifyContent: 'space-between',
                       }}
                     >
                       {/* <Typography variant="body2" color="initial">Discount Amount Typography> */}
@@ -1026,13 +1026,13 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         name="discount"
                         type="number"
                         endAdornment="%"
-                        value={values.discountPercentage ?? ""}
+                        value={values.discountPercentage ?? ''}
                         onChange={(e) => {
                           const value = e.target.value;
                           const parsedValue =
-                            value !== "" ? parseFloat(value) : null;
+                            value !== '' ? parseFloat(value) : null;
                           setDiscountPercentage(parsedValue);
-                          setFieldValue("discountPercentage", parsedValue);
+                          setFieldValue('discountPercentage', parsedValue);
                         }}
                       />
                     </Box>
@@ -1042,12 +1042,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                   </Box>
                   <Box
                     sx={{
-                      marginTop: "10px",
-                      display: "flex",
-                      justifyContent: "space-between",
+                      marginTop: '10px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                   >
-                    <Box sx={{ display: "flex" }}>
+                    <Box sx={{ display: 'flex' }}>
                       <SelectDropdown
                         onMouseDown={() => {
                           setIsOpenDialogBox(true);
@@ -1062,16 +1062,16 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                               (item) => item.taxName === newValue.value,
                             );
                             if (selectedTdsTax) {
-                              setFieldValue("taxAmount.tds", newValue.value);
+                              setFieldValue('taxAmount.tds', newValue.value);
                               setSelectedTdsAmount(
                                 selectedTdsTax.taxPercentage,
                               );
                             } else {
-                              setFieldValue("taxAmount.tds", "");
+                              setFieldValue('taxAmount.tds', '');
                               setSelectedTdsAmount(null);
                             }
                           } else {
-                            setFieldValue("taxAmount.tds", "");
+                            setFieldValue('taxAmount.tds', '');
                             setSelectedTdsAmount(null);
                           }
                         }}
@@ -1091,16 +1091,16 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       -{tdsAmount}
                     </Typography>
                   </Box>
-                  <Divider sx={{ marginTop: "20px" }} />
+                  <Divider sx={{ marginTop: '20px' }} />
                   <Box
                     sx={{
-                      marginTop: "10px",
-                      display: "flex",
-                      justifyContent: "space-between",
+                      marginTop: '10px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <Typography variant="subtitle1" color="initial">
-                      Total Amount:{" "}
+                      Total Amount:{' '}
                     </Typography>
                     <Typography variant="subtitle2" color="initial">
                       {invoiceTotalAmount}
@@ -1110,19 +1110,19 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                 <Grid item xs={6}>
                   <Box
                     sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "20px",
-                      marginBottom: "20px",
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '20px',
+                      marginBottom: '20px',
                     }}
                   >
                     {!imagePreview && (
                       <Box>
                         <input
                           accept="image/*"
-                          style={{ display: "none" }}
+                          style={{ display: 'none' }}
                           id="contained-button-file"
                           type="file"
                           onChange={handleFileChange}
@@ -1132,7 +1132,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             variant="contained"
                             color="primary"
                             component="span"
-                            sx={{ marginTop: "10px" }}
+                            sx={{ marginTop: '10px' }}
                           >
                             Upload
                           </Button>
@@ -1142,29 +1142,29 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     {imagePreview && (
                       <Box
                         sx={{
-                          marginTop: "20px",
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          position: "relative",
+                          marginTop: '20px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          position: 'relative',
                         }}
                       >
                         <img
                           src={imagePreview as string}
                           alt="Preview"
                           style={{
-                            width: "150px",
-                            height: "150px",
-                            objectFit: "contain",
-                            border: "1px solid grey",
-                            borderRadius: "4px",
+                            width: '150px',
+                            height: '150px',
+                            objectFit: 'contain',
+                            border: '1px solid grey',
+                            borderRadius: '4px',
                           }}
                         />
                         <Button
                           variant="outlined"
                           color="error"
-                          sx={{ marginTop: "10px" }}
+                          sx={{ marginTop: '10px' }}
                           onClick={handleDeleteClick}
                         >
                           Remove

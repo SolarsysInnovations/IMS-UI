@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import CompanyCreate from "./companyCreate";
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import CompanyCreate from './companyCreate';
 
 const CompanyScreen: React.FC = () => {
   const companyValue = useSelector((state: any) => state.userState.data);
@@ -23,7 +23,7 @@ const CompanyScreen: React.FC = () => {
     }
   }, [companyValue]);
 
-  const mode = companyValue ? "edit" : "create";
+  const mode = companyValue ? 'edit' : 'create';
   useEffect(() => {
     setKey((prev) => prev + 1);
   }, [companyValue]);

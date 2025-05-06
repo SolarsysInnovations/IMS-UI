@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react";
-import GridDataUi from "../../components/GridTable/GridData";
-import TableHeader from "../../components/layouts/TableHeader";
-import usePathname from "../../hooks/usePathname";
-import { Add } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { columns } from "../../constants/grid-table-data/company-table-data";
-import { useGetUsersListQuery } from "../../redux-store/api/injectedApis";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux-store/store";
-import { clearUserData } from "../../redux-store/slices/userSlice";
-import { useRolePermissions } from "../../hooks/useRolePermission";
+import React, { useEffect, useState, useCallback } from 'react';
+import GridDataUi from '../../components/GridTable/GridData';
+import TableHeader from '../../components/layouts/TableHeader';
+import usePathname from '../../hooks/usePathname';
+import { Add } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { columns } from '../../constants/grid-table-data/company-table-data';
+import { useGetUsersListQuery } from '../../redux-store/api/injectedApis';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
+import { clearUserData } from '../../redux-store/slices/userSlice';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 
 interface CompanyDetails {
   companyName: string;
@@ -69,11 +69,11 @@ const CompanyList = () => {
 
   const buttons = [
     {
-      label: "Create Company",
+      label: 'Create Company',
       icon: Add,
       onClick: () => {
         dispatch(clearUserData());
-        navigate("/company/create");
+        navigate('/company/create');
       },
     },
   ];

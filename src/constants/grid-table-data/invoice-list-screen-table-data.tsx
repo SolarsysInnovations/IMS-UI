@@ -1,23 +1,23 @@
 // Import necessary libraries and hooks
-import { useDispatch } from "react-redux";
-import React, { useEffect, useState, useCallback } from "react";
-import { Stack } from "@mui/system";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Stack } from '@mui/system';
+import { useNavigate } from 'react-router-dom';
 import {
   useDeleteInvoiceMutation,
   useGetInvoiceListQuery,
   useGetInvoiceListScreenMutation,
   useGetSingleInvoiceMutation,
-} from "../../redux-store/api/injectedApis";
-import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
-import { useRolePermissions } from "../../hooks/useRolePermission";
+} from '../../redux-store/api/injectedApis';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { useRolePermissions } from '../../hooks/useRolePermission';
 import {
   clearInvoiceData,
   setInvoiceData,
-} from "../../redux-store/slices/invoiceSlice";
-import ActionButtons from "../../components/ui/ActionButtons";
-import DialogBoxUi from "../../components/ui/DialogBox";
-import InvoiceUi from "../../pages/Invoice/Generate-Invoice/InvoiceUi";
+} from '../../redux-store/slices/invoiceSlice';
+import ActionButtons from '../../components/ui/ActionButtons';
+import DialogBoxUi from '../../components/ui/DialogBox';
+import InvoiceUi from '../../pages/Invoice/Generate-Invoice/InvoiceUi';
 
 interface MyCellRendererProps {
   row: any; // You may want to replace `any` with a specific type for the `row` if available
@@ -49,35 +49,35 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({
 
   useSnackbarNotifications({
     error: invoiceDeleteError,
-    errorMessage: "Error deleting invoice",
+    errorMessage: 'Error deleting invoice',
     success: invoiceDeleteSuccess,
-    successMessage: "Invoice deleted successfully",
+    successMessage: 'Invoice deleted successfully',
     errorObject: invoiceDeleteErrorObject,
   });
 
   const handleEditClick = useCallback(async () => {
-    if (row.invoiceStatus === "PENDING") {
-      alert("Editing is not allowed when the invoice status is PENDING.");
+    if (row.invoiceStatus === 'PENDING') {
+      alert('Editing is not allowed when the invoice status is PENDING.');
       return;
     }
 
     try {
       const response = await getList(row.id);
-      if ("data" in response) {
+      if ('data' in response) {
         dispatch(setInvoiceData(response.data));
-        navigate("/invoice/create");
+        navigate('/invoice/create');
       } else {
-        console.error("Error response:", response.error);
+        console.error('Error response:', response.error);
       }
     } catch (error) {
-      console.error("Error handling edit click:", error);
+      console.error('Error handling edit click:', error);
     }
   }, [row, dispatch, navigate, getList]);
 
   const handleDetails = useCallback(async () => {
     try {
       const response = await getList(row.id);
-      if ("data" in response) {
+      if ('data' in response) {
         dispatch(clearInvoiceData());
         dispatch(setInvoiceData(response.data));
         setPreview(true);
@@ -86,23 +86,23 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({
         // Refetch the invoice list after the dialog is opened
         await getInvoiceList();
       } else {
-        console.error("Error response:", response.error);
+        console.error('Error response:', response.error);
       }
     } catch (error) {
-      console.error("Error handling details click:", error);
+      console.error('Error handling details click:', error);
     }
   }, [row, dispatch, getList, getInvoiceList]);
 
   const handleDeleteClick = async () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this invoice?",
+      'Are you sure you want to delete this invoice?',
     );
     if (confirmed) {
       try {
         await deleteInvoice(row.id).unwrap();
         onDelete(row.id); // Update the local state immediately after deletion
       } catch (error) {
-        console.error("Error deleting invoice:", error);
+        console.error('Error deleting invoice:', error);
       }
     }
   };
@@ -111,8 +111,8 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({
     <Stack direction="row" spacing={1}>
       <ActionButtons
         canView={canViewInvoices}
-        canDelete={canDeleteInvoices && row.invoiceStatus !== "PENDING"}
-        canEdit={canEditInvoices && row.invoiceStatus !== "PENDING"}
+        canDelete={canDeleteInvoices && row.invoiceStatus !== 'PENDING'}
+        canEdit={canEditInvoices && row.invoiceStatus !== 'PENDING'}
         onDeleteClick={handleDeleteClick}
         onEditClick={handleEditClick}
         onViewClick={handleDetails}

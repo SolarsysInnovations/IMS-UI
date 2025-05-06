@@ -1,7 +1,7 @@
-import React from "react";
-import StandardUserDashboardOverview from "./StandardUserDashboardOverview";
-import StandardUserInvoiceList from "./StandardUserInvoiceList";
-import { Grid } from "@mui/material";
+import React from 'react';
+import StandardUserDashboardOverview from './StandardUserDashboardOverview';
+import StandardUserInvoiceList from './StandardUserInvoiceList';
+import { Grid } from '@mui/material';
 
 interface StandardUserData {
   totalInvoices: number;

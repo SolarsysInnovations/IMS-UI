@@ -1,6 +1,6 @@
-import GridDataUi from "../../../components/GridTable/GridData";
-import { gstTypeColumns } from "../../../constants/grid-table-data/invoice/GstType-table-data";
-import { useGetGstTypeListQuery } from "../../../redux-store/api/injectedApis";
+import GridDataUi from '../../../components/GridTable/GridData';
+import { gstTypeColumns } from '../../../constants/grid-table-data/invoice/GstType-table-data';
+import { useGetGstTypeListQuery } from '../../../redux-store/api/injectedApis';
 
 const GstTypeList = () => {
   const {

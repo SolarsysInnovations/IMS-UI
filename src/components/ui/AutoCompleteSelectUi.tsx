@@ -1,12 +1,12 @@
-import * as React from "react";
-import TextField from "@mui/material/TextField";
-import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import ListSubheader from "@mui/material/ListSubheader";
-import Popper from "@mui/material/Popper";
-import { useTheme, styled } from "@mui/material/styles";
-import { VariableSizeList, ListChildComponentProps } from "react-window";
-import Typography from "@mui/material/Typography";
+import * as React from 'react';
+import TextField from '@mui/material/TextField';
+import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import ListSubheader from '@mui/material/ListSubheader';
+import Popper from '@mui/material/Popper';
+import { useTheme, styled } from '@mui/material/styles';
+import { VariableSizeList, ListChildComponentProps } from 'react-window';
+import Typography from '@mui/material/Typography';
 
 const LISTBOX_PADDING = 8; // px
 
@@ -18,7 +18,7 @@ function renderRow(props: ListChildComponentProps) {
     top: (style.top as number) + LISTBOX_PADDING,
   };
 
-  if (dataSet.hasOwnProperty("group")) {
+  if (dataSet.hasOwnProperty('group')) {
     return (
       <ListSubheader key={dataSet.key} component="div" style={inlineStyle}>
         {dataSet.group}
@@ -65,14 +65,14 @@ const ListboxComponent = React.forwardRef<
   );
 
   const theme = useTheme();
-  const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
+  const smUp = useMediaQuery(theme.breakpoints.up('sm'), {
     noSsr: true,
   });
   const itemCount = itemData.length;
   const itemSize = smUp ? 36 : 48;
 
   const getChildSize = (child: React.ReactElement) => {
-    if (child.hasOwnProperty("group")) {
+    if (child.hasOwnProperty('group')) {
       return 48;
     }
 
@@ -111,8 +111,8 @@ const ListboxComponent = React.forwardRef<
 
 function random(length: number) {
   const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
 
   for (let i = 0; i < length; i += 1) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -123,8 +123,8 @@ function random(length: number) {
 
 const StyledPopper = styled(Popper)({
   [`& .${autocompleteClasses.listbox}`]: {
-    boxSizing: "border-box",
-    "& ul": {
+    boxSizing: 'border-box',
+    '& ul': {
       padding: 0,
       margin: 0,
     },
@@ -141,13 +141,13 @@ export default function AutoCompleteSelectUi() {
   return (
     <Autocomplete
       sx={{
-        borderRadius: "8px !important",
-        "& .MuiOutlinedInput-root": {
-          borderRadius: "8px !important",
-          overflow: "hidden",
+        borderRadius: '8px !important',
+        '& .MuiOutlinedInput-root': {
+          borderRadius: '8px !important',
+          overflow: 'hidden',
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          "&:hover": {
+          '&:hover': {
             backgroundColor: `action.hover`,
           },
         },

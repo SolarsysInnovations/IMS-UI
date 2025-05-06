@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Field, FieldArray, FieldMetaProps, useFormikContext } from "formik";
-import SelectDropdown from "../ui/SelectDropdown";
-import TextFieldUi from "../ui/TextField";
-import RadioUi from "../ui/RadioGroup";
-import { Box, Grid, IconButton, Typography } from "@mui/material";
-import { FieldProps, SubField } from "../../types/types";
-import DatePickerUi from "../ui/DatePicker";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import AddIcon from "@mui/icons-material/Add";
-import TextAreaUi from "../ui/TextArea";
-import { Country, State, City } from "country-state-city";
-import { generateOptions } from "../../services/utils/dropdownOptions";
-import { VisibilityOff, VisibilityOutlined } from "@mui/icons-material";
-import PhoneInputUi from "../ui/PhoneNumber";
-import Upload from "../ui/Upload";
+import React, { useState, useEffect, useMemo } from 'react';
+import { Field, FieldArray, FieldMetaProps, useFormikContext } from 'formik';
+import SelectDropdown from '../ui/SelectDropdown';
+import TextFieldUi from '../ui/TextField';
+import RadioUi from '../ui/RadioGroup';
+import { Box, Grid, IconButton, Typography } from '@mui/material';
+import { FieldProps, SubField } from '../../types/types';
+import DatePickerUi from '../ui/DatePicker';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import TextAreaUi from '../ui/TextArea';
+import { Country, State, City } from 'country-state-city';
+import { generateOptions } from '../../services/utils/dropdownOptions';
+import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
+import PhoneInputUi from '../ui/PhoneNumber';
+import Upload from '../ui/Upload';
 
 interface RenderCountrySelectFieldProps {
   field: any;
@@ -44,8 +44,8 @@ const RenderCountrySelectField: React.FC<RenderCountrySelectFieldProps> = ({
               onChange(newValue.value);
               setFieldValue(subField.name, newValue.value);
             } else {
-              setFieldValue(subField.name, "");
-              onChange("");
+              setFieldValue(subField.name, '');
+              onChange('');
             }
           }}
           options={options}
@@ -83,8 +83,8 @@ const renderSelectField = (
               onChange(newValue.value);
               setFieldValue(subField.name, newValue.value);
             } else {
-              setFieldValue(subField.name, "");
-              onChange("");
+              setFieldValue(subField.name, '');
+              onChange('');
             }
           }}
           options={options}
@@ -105,7 +105,7 @@ const renderTextField = (field: any, meta: any, subField: SubField) => {
       {...field}
       // variant="outlined"
       // margin="normal"
-      value={field.value || ""}
+      value={field.value || ''}
       startAdornment={
         subField.startAdornment ? (
           <span>{subField.startAdornment}</span>
@@ -133,7 +133,7 @@ const renderPhoneField = (
 ) => {
   return (
     <PhoneInputUi
-      value={field.value || ""}
+      value={field.value || ''}
       onChange={field.onChange(field.name)}
       required={subField.required}
       disabled={subField.disabled}
@@ -141,7 +141,7 @@ const renderPhoneField = (
       error={meta.touched && !!meta.error}
       helperText={meta.touched && meta.error ? meta.error : subField.helperText}
       fullWidth
-      width={subField.width || "100%"}
+      width={subField.width || '100%'}
     />
   );
 };
@@ -204,14 +204,14 @@ const renderPasswordField = (
         </IconButton>
       )
     }
-    value={field.value || ""}
+    value={field.value || ''}
     startAdornment={
       subField.startAdornment ? (
         <span>{subField.startAdornment}</span>
       ) : undefined
     }
     //endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
-    type={passwordVisible ? "text" : subField.type}
+    type={passwordVisible ? 'text' : subField.type}
     fullWidth
     id={subField.name}
     label={subField.label}
@@ -234,7 +234,7 @@ const renderTextArea = (
     {...field}
     // variant="outlined"
     // margin="normal"
-    value={field.value || ""}
+    value={field.value || ''}
     startAdornment={
       subField.startAdornment ? (
         <span>{subField.startAdornment}</span>
@@ -254,7 +254,7 @@ const renderTextArea = (
       if (e) {
         setFieldValue(subField.name, e.target.value);
       } else {
-        setFieldValue(subField.name, "");
+        setFieldValue(subField.name, '');
       }
     }}
   />
@@ -277,7 +277,7 @@ const renderDatePickerField = (
       if (date) {
         setFieldValue(subField.name, date);
       } else {
-        setFieldValue(subField.name, "");
+        setFieldValue(subField.name, '');
       }
     }}
     error={meta.touched && !!meta.error}
@@ -307,7 +307,7 @@ const renderRadioField = (
         if (newValue) {
           setFieldValue(subField.name, newValue.target.value);
         } else {
-          setFieldValue(subField.name, "");
+          setFieldValue(subField.name, '');
         }
       }}
     />
@@ -333,15 +333,15 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
 }) => {
   const filteredData = field.subFields?.filter(
     (data) =>
-      data.type === "selectCountry" ||
-      data.type === "selectState" ||
-      data.type === "selectCity",
+      data.type === 'selectCountry' ||
+      data.type === 'selectState' ||
+      data.type === 'selectCity',
   );
 
   const { values } = useFormikContext<FormFieldProps>();
 
   const countryOptionsGenerate = useMemo(
-    () => generateOptions(Country.getAllCountries(), "name", "isoCode"),
+    () => generateOptions(Country.getAllCountries(), 'name', 'isoCode'),
     [],
   );
 
@@ -356,10 +356,10 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
   useEffect(() => {
     if (filteredData) {
       const selectedCountryField = filteredData.find(
-        (data) => data.type === "selectCountry",
+        (data) => data.type === 'selectCountry',
       );
       const selectedStateField = filteredData.find(
-        (data) => data.type === "selectState",
+        (data) => data.type === 'selectState',
       );
 
       if (!selectedCountryField || !selectedStateField) return;
@@ -369,8 +369,8 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
       );
       const stateOptionsData = generateOptions(
         getStateByIsoCode,
-        "name",
-        "isoCode",
+        'name',
+        'isoCode',
       );
       setStateOptions(stateOptionsData);
 
@@ -381,8 +381,8 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
 
       const generateCityOptions = generateOptions(
         citiesOfAllStates,
-        "name",
-        "name",
+        'name',
+        'name',
       );
       setCityOptions(generateCityOptions);
     }
@@ -407,7 +407,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
   }, [memoizedUpdateFormValue, setFieldValue]);
 
   switch (field.type) {
-    case "section":
+    case 'section':
       return (
         <>
           <Grid item xs={field?.titleGridSize}>
@@ -419,37 +419,37 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
             <Grid pb={2} pl={2} xs={subField.gridSize} key={subField.name}>
               <Field name={subField.name}>
                 {({ field, meta }: any) => {
-                  if (subField.type === "date") {
+                  if (subField.type === 'date') {
                     return renderDatePickerField(
                       field,
                       meta,
                       subField,
                       setFieldValue,
                     );
-                  } else if (subField.type === "select") {
+                  } else if (subField.type === 'select') {
                     return renderSelectField(
                       field,
                       meta,
                       subField,
                       setFieldValue,
                     );
-                  } else if (subField.type === "radio") {
+                  } else if (subField.type === 'radio') {
                     return renderRadioField(
                       field,
                       meta,
                       subField,
                       setFieldValue,
                     );
-                  } else if (subField.type === "textArea") {
+                  } else if (subField.type === 'textArea') {
                     return renderTextArea(field, meta, subField, setFieldValue);
-                  } else if (subField.type === "upload") {
+                  } else if (subField.type === 'upload') {
                     return renderUploadField(
                       field,
                       meta,
                       subField,
                       setFieldValue,
                     );
-                  } else if (subField.type === "PhoneNumber") {
+                  } else if (subField.type === 'PhoneNumber') {
                     return renderPhoneField(
                       field,
                       meta,
@@ -457,16 +457,16 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
                       setFieldValue,
                     );
                   } else if (
-                    subField.type === "selectCountry" ||
-                    subField.type === "selectState" ||
-                    subField.type === "selectCity"
+                    subField.type === 'selectCountry' ||
+                    subField.type === 'selectState' ||
+                    subField.type === 'selectCity'
                   ) {
                     let options = [];
-                    if (subField.type === "selectCountry") {
+                    if (subField.type === 'selectCountry') {
                       options = countryOptions;
-                    } else if (subField.type === "selectState") {
+                    } else if (subField.type === 'selectState') {
                       options = stateOptions;
-                    } else if (subField.type === "selectCity") {
+                    } else if (subField.type === 'selectCity') {
                       options = cityOptions;
                     }
                     return (
@@ -478,7 +478,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
                         setFieldValue={setFieldValue}
                       />
                     );
-                  } else if (subField.type === "password") {
+                  } else if (subField.type === 'password') {
                     return renderPasswordField(
                       field,
                       meta,
@@ -495,7 +495,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
           ))}
         </>
       );
-    case "array":
+    case 'array':
       return (
         <>
           <Grid item xs={field?.titleGridSize}>
@@ -522,30 +522,30 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
                         </Field>
                       </Grid>
                     ))}
-                    <Grid sx={{ display: "flex" }}>
+                    <Grid sx={{ display: 'flex' }}>
                       <Box
                         sx={{
-                          border: "1px solid #c4c4c4",
+                          border: '1px solid #c4c4c4',
                           borderRadius: 2,
                           p: 1,
-                          height: "17px",
-                          display: "flex",
+                          height: '17px',
+                          display: 'flex',
                           ml: 3,
                         }}
                       >
                         <IconButton size="small" onClick={() => remove(index)}>
                           <DeleteIcon
-                            sx={{ color: `#ed5d5a`, fontSize: "18px" }}
+                            sx={{ color: `#ed5d5a`, fontSize: '18px' }}
                           />
                         </IconButton>
                       </Box>
                       <Box
                         sx={{
-                          border: "1px solid #c4c4c4",
+                          border: '1px solid #c4c4c4',
                           borderRadius: 2,
                           p: 1,
-                          height: "17px",
-                          display: "flex",
+                          height: '17px',
+                          display: 'flex',
                           ml: 3,
                         }}
                       >
@@ -554,7 +554,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
                           color="primary"
                           onClick={() => push({})}
                         >
-                          <AddIcon sx={{ fontSize: "18px" }} />
+                          <AddIcon sx={{ fontSize: '18px' }} />
                         </IconButton>
                       </Box>
                     </Grid>
@@ -565,7 +565,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
           </FieldArray>
         </>
       );
-    case "object":
+    case 'object':
       return (
         <div>
           <Typography variant="body2" gutterBottom>

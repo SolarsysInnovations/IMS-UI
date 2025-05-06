@@ -1,11 +1,11 @@
 // SnackBarUi.tsx
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import { hideSnackbar } from "../../redux-store/global/snackBarSlice";
-import { RootState } from "../../redux-store/store";
-import { Slide } from "@mui/material";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { hideSnackbar } from '../../redux-store/global/snackBarSlice';
+import { RootState } from '../../redux-store/store';
+import { Slide } from '@mui/material';
 
 const SlideTransition = (props: any) => {
   return <Slide {...props} direction="left" />;
@@ -21,7 +21,7 @@ const SnackBarUi: React.FC = () => {
     event?: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
     dispatch(hideSnackbar());
@@ -29,7 +29,7 @@ const SnackBarUi: React.FC = () => {
 
   return (
     <Snackbar
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isOpen}
       autoHideDuration={1500} // Adjust as needed
       onClose={handleClose}
@@ -39,7 +39,7 @@ const SnackBarUi: React.FC = () => {
         onClose={handleClose}
         variant="filled"
         severity={severity}
-        sx={{ width: "100%" }}
+        sx={{ width: '100%' }}
       >
         {message}
       </Alert>

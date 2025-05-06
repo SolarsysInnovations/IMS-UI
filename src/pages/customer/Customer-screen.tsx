@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import CustomerCreate from "./Customer-create-screen";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import CustomerCreate from './Customer-create-screen';
 
 const CustomerScreen = () => {
   const customerInitialValues = useSelector(
