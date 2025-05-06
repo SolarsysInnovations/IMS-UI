@@ -95,8 +95,7 @@ const SettingsCompanyForm = ({
     }
   };
 
-  const updateFormValue = (setFieldValue: Function) => {
-  };
+  const updateFormValue = (setFieldValue: Function) => {};
 
   return (
     <>

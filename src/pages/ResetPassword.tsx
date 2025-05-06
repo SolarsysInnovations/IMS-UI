@@ -16,7 +16,15 @@ const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token") as string;
-  const [resetPassword, { isLoading: resetPwdLoading, error: resetPwdErrorObject, isSuccess: resetPwdSuccess, isError: resetPwdError }] = useResetPwdMutation();
+  const [
+    resetPassword,
+    {
+      isLoading: resetPwdLoading,
+      error: resetPwdErrorObject,
+      isSuccess: resetPwdSuccess,
+      isError: resetPwdError,
+    },
+  ] = useResetPwdMutation();
   const [newPasswordVisible, setNewPasswordVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -37,10 +45,9 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (resetPwdSuccess) {
-      navigate("/login"); 
-    };
-}, [resetPwdSuccess,navigate]);
-
+      navigate("/login");
+    }
+  }, [resetPwdSuccess, navigate]);
 
   useSnackbarNotifications({
     error: notification.error,
@@ -49,8 +56,6 @@ const ResetPassword = () => {
     success: notification.success,
     successMessage: notification.successMessage,
   });
-
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,14 +79,16 @@ const ResetPassword = () => {
     }
 
     // Updated regex to include lowercase, uppercase, digit, and allow special characters
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
 
     if (!passwordRegex.test(trimmedNewPassword)) {
       setNotification({
         success: false,
         error: true,
         successMessage: "",
-        errorMessage: "Password must contain at least one number, one uppercase letter, one lowercase letter, and be at least 8 characters long.",
+        errorMessage:
+          "Password must contain at least one number, one uppercase letter, one lowercase letter, and be at least 8 characters long.",
       });
       return;
     }
@@ -146,8 +153,14 @@ const ResetPassword = () => {
                 <Grid item xs={12}>
                   <TextFieldUi
                     endAdornment={
-                      <IconButton onClick={() => setPasswordVisible(!passwordVisible)}>
-                        {passwordVisible ? <VisibilityOutlined /> : <VisibilityOff />}
+                      <IconButton
+                        onClick={() => setPasswordVisible(!passwordVisible)}
+                      >
+                        {passwordVisible ? (
+                          <VisibilityOutlined />
+                        ) : (
+                          <VisibilityOff />
+                        )}
                       </IconButton>
                     }
                     required
@@ -160,8 +173,16 @@ const ResetPassword = () => {
                 <Grid item xs={12}>
                   <TextFieldUi
                     endAdornment={
-                      <IconButton onClick={() => setNewPasswordVisible(!newPasswordVisible)}>
-                        {newPasswordVisible ? <VisibilityOutlined /> : <VisibilityOff />}
+                      <IconButton
+                        onClick={() =>
+                          setNewPasswordVisible(!newPasswordVisible)
+                        }
+                      >
+                        {newPasswordVisible ? (
+                          <VisibilityOutlined />
+                        ) : (
+                          <VisibilityOff />
+                        )}
                       </IconButton>
                     }
                     required
@@ -172,7 +193,12 @@ const ResetPassword = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                  >
                     Submit
                   </Button>
                 </Grid>

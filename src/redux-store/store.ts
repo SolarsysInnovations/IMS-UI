@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from './auth/authSlice';
+import authReducer from "./auth/authSlice";
 import { apiSlice } from "./api/apiSlice";
 import { loginApi } from "./auth/loginApi";
 import { globalSlice } from "./global/globalState";
@@ -11,7 +11,6 @@ import gstTypeSlice from "./slices/gstTypeSlice";
 import paymentTermsSlice from "./slices/paymentTermsSlice";
 import tdsTaxSlice from "./slices/tdsSlice";
 import serviceSlice from "./slices/serviceSlice";
-
 
 export const store = configureStore({
   reducer: {
@@ -28,10 +27,11 @@ export const store = configureStore({
     auth: authReducer,
     snackbar: snackBarSlice,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
-    apiSlice.middleware,
-    loginApi.middleware, // Add loginApi middleware
-  ),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      apiSlice.middleware,
+      loginApi.middleware, // Add loginApi middleware
+    ),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

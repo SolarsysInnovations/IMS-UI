@@ -35,7 +35,7 @@ const TaxConfig = () => {
   const paymentTermsOptions = generateOptions(
     paymentTerms,
     "termName",
-    "termName"
+    "termName",
   );
   const { canCreateTds, canCreateGst, canCreatePayment } = useRolePermissions();
 
@@ -68,7 +68,7 @@ const TaxConfig = () => {
       validate={() => ({})}
       onSubmit={async (
         values: InvoiceInitialValueProps,
-        { setSubmitting, resetForm }
+        { setSubmitting, resetForm },
       ) => {
         try {
           resetForm();
@@ -107,12 +107,12 @@ const TaxConfig = () => {
                       onChange={(newValue: any) => {
                         if (newValue) {
                           const selectedGstType = gstTypesData.find(
-                            (item: any) => item.gstName === newValue.value
+                            (item: any) => item.gstName === newValue.value,
                           );
                           if (selectedGstType) {
                             setFieldValue(
                               "gstPercentage",
-                              selectedGstType.gstPercentage
+                              selectedGstType.gstPercentage,
                             );
                             setFieldValue("gstType", newValue.value);
                           } else {
@@ -148,14 +148,14 @@ const TaxConfig = () => {
                       onChange={(newValue: any) => {
                         if (newValue) {
                           const selectedPaymentTerms = paymentTerms?.find(
-                            (item) => item.termName === newValue.value
+                            (item) => item.termName === newValue.value,
                           );
                           if (selectedPaymentTerms) {
                             const today = new Date();
                             const startDate = format(today, "dd-MM-yyyy");
                             const dueDate = format(
                               addDays(today, selectedPaymentTerms.totalDays),
-                              "dd-MM-yyyy"
+                              "dd-MM-yyyy",
                             );
                             setFieldValue("startDate", startDate);
                             setFieldValue("dueDate", dueDate);
@@ -200,7 +200,7 @@ const TaxConfig = () => {
                       onChange={(newValue: any) => {
                         if (newValue) {
                           const selectedTdsTax = tdsTaxData.find(
-                            (item: any) => item.taxName === newValue.value
+                            (item: any) => item.taxName === newValue.value,
                           );
                           if (selectedTdsTax) {
                             setFieldValue("taxAmount.tds", newValue.value);
@@ -234,4 +234,3 @@ const TaxConfig = () => {
 };
 
 export default TaxConfig;
-    

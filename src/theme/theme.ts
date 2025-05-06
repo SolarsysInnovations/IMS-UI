@@ -1,6 +1,13 @@
 // theme.ts
 import { alpha } from "@mui/material";
-import { createTheme, filledInputClasses, inputLabelClasses, outlinedInputClasses, paperClasses, tableCellClasses } from "@mui/material";
+import {
+  createTheme,
+  filledInputClasses,
+  inputLabelClasses,
+  outlinedInputClasses,
+  paperClasses,
+  tableCellClasses,
+} from "@mui/material";
 import { common } from "@mui/material/colors";
 import { error, info, neutral, success, warning } from "./colors";
 
@@ -43,19 +50,16 @@ const muiTheme = createTheme();
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
-    common: {
-
-    },
+    mode: "light",
+    common: {},
     primary: {
       light: "#9DA4AE",
       main: "#6366F1",
       dark: "#4338CA",
       contrastText: "#FFFFFF",
-
     },
     secondary: {
-      main: '#f50057',
+      main: "#f50057",
       dark: "#4338CA",
       contrastText: "#FFFFFF",
     },
@@ -119,17 +123,18 @@ const theme = createTheme({
       selectedOpacity: 0.08,
       disabled: "#e0e0e0",
       disabledBackground: "#FFFFFF",
-      disabledOpacity: 0.10,
+      disabledOpacity: 0.1,
       focus: "#F3F4F6",
       focusOpacity: 0.12,
       activatedOpacity: 0.12,
-    }
+    },
   },
   shape: {
     borderRadius: 4,
   },
   typography: {
-    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
+    fontFamily:
+      '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     body1: {
       fontSize: "1rem",
       fontWeight: 400,
@@ -159,8 +164,6 @@ const theme = createTheme({
       fontWeight: 500,
       lineHeight: 1.57,
     },
-
-
 
     overline: {
       fontSize: "0.75rem",
@@ -227,9 +230,9 @@ const theme = createTheme({
           // "&:hover": {
           //   backgroundColor: palette.primary.dark,
           // },
-          ':disabled': {
-            backgroundColor: "#9da4ae8c"
-          }
+          ":disabled": {
+            backgroundColor: "#9da4ae8c",
+          },
         },
 
         sizeSmall: {
@@ -257,7 +260,8 @@ const theme = createTheme({
         root: {
           borderRadius: 20,
           [`&.${paperClasses.elevation1}`]: {
-            boxShadow: "0px 5px 22px rgba(0, 0, 0, 0.04), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.03)",
+            boxShadow:
+              "0px 5px 22px rgba(0, 0, 0, 0.04), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.03)",
           },
         },
       },
@@ -354,7 +358,6 @@ const theme = createTheme({
             color: palette.text.secondary, // Placeholder text color
           },
         },
-
       },
     },
     // Overrides for MuiFilledInput component
@@ -367,7 +370,10 @@ const theme = createTheme({
           borderWidth: 1, // Border width
           overflow: "hidden", // Prevent overflow
           borderColor: palette.neutral[200], // Border color
-          transition: muiTheme.transitions.create(["border-color", "box-shadow"]), // Transition for border-color and box-shadow
+          transition: muiTheme.transitions.create([
+            "border-color",
+            "box-shadow",
+          ]), // Transition for border-color and box-shadow
           "&:hover": {
             // backgroundColor: palette.action.hover, // Background color on hover
           },
@@ -428,7 +434,10 @@ const theme = createTheme({
         },
         notchedOutline: {
           borderColor: palette.neutral[200], // Default border color
-          transition: muiTheme.transitions.create(["border-color", "box-shadow"]), // Transition for border-color and box-shadow
+          transition: muiTheme.transitions.create([
+            "border-color",
+            "box-shadow",
+          ]), // Transition for border-color and box-shadow
         },
       },
     },
@@ -468,7 +477,7 @@ const theme = createTheme({
           fontWeight: 500, // Setting font weight for select text
           lineHeight: "24px", // Setting line height for select text
         },
-              },
+      },
     },
     // Overrides for MuiTextField component
     MuiTextField: {

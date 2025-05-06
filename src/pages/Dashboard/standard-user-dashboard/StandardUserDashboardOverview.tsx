@@ -11,7 +11,6 @@ import DoneIcon from "@mui/icons-material/Done";
 import { useState, useEffect } from "react";
 
 const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
-
   const [invoiceAmount, setInvoiceAmount] = useState([
     {
       label: "Total Invoices",
@@ -72,7 +71,10 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
             <Stack spacing={1}>
               <Stack
                 direction="row"
-                sx={{ alignItems: "flex-start", justifyContent: "space-between" }}
+                sx={{
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                }}
                 spacing={1}
               >
                 <Stack spacing={0}>
@@ -81,12 +83,22 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
                   </Typography>
                   <Typography variant="h6">{data.value}</Typography>
                 </Stack>
-                <Avatar sx={{ backgroundColor: data.iconBg, height: '30px', width: '30px' }}>
+                <Avatar
+                  sx={{
+                    backgroundColor: data.iconBg,
+                    height: "30px",
+                    width: "30px",
+                  }}
+                >
                   {React.createElement(data.icon, { width: 20, height: 20 })}
                 </Avatar>
               </Stack>
               <Stack sx={{ alignItems: "center" }} direction="row" spacing={1}>
-                <Stack sx={{ alignItems: "center" }} direction="row" spacing={0.5}>
+                <Stack
+                  sx={{ alignItems: "center" }}
+                  direction="row"
+                  spacing={0.5}
+                >
                   <ArrowDropDownIcon color="secondary" />
                   <Typography color="secondary" variant="body2">
                     diff%
@@ -101,8 +113,7 @@ const StandardUserDashboardOverview = ({ approverOverViewData }: any) => {
           </Card>
         </Grid>
       ))}
-      <Grid item xs={12}>
-      </Grid>
+      <Grid item xs={12}></Grid>
     </Grid>
   );
 };

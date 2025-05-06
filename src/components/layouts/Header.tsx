@@ -155,7 +155,7 @@ export default function Header() {
   const context = useInVoiceContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [addMenuAnchorEl, setAddMenuAnchorEl] = useState<null | HTMLElement>(
-    null
+    null,
   );
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const [popUpComponent, setPopUpComponent] = useState("");
@@ -187,115 +187,117 @@ export default function Header() {
     setAddMenuAnchorEl(null);
   };
 
-  function handlePopupMenuOpen(popUpComponent: string){
-    if(popUpComponent === PopupComponents.USER_PROFILE) {
+  function handlePopupMenuOpen(popUpComponent: string) {
+    if (popUpComponent === PopupComponents.USER_PROFILE) {
       return <UserProfile />;
-    }else if(popUpComponent === PopupComponents.CHANGE_PASSWORD) {
-      return <ChangePassword
-        onClose={() => {
-          setOpenDialogBox(false);
-          setPopUpComponent("");
-        }}
-      />;
+    } else if (popUpComponent === PopupComponents.CHANGE_PASSWORD) {
+      return (
+        <ChangePassword
+          onClose={() => {
+            setOpenDialogBox(false);
+            setPopUpComponent("");
+          }}
+        />
+      );
     }
     return null;
   }
 
   return (
-      <AppBar
+    <AppBar
+      sx={{
+        width: "100%",
+        boxShadow: "none",
+        backgroundColor: "#fbfbff !important",
+      }}
+      position="sticky"
+      color="transparent"
+    >
+      <Toolbar
         sx={{
-          width: "100%",
-          boxShadow: "none",
-          backgroundColor: "#fbfbff !important",
+          "@media (min-width: 600px)": {
+            minHeight: "43px",
+            paddingLeft: "15px !important",
+            paddingRight: "15px !important",
+          },
+          justifyContent: "space-between",
+          backgroundColor: "#ffffff",
         }}
-        position="sticky"
-        color="transparent"
       >
-        <Toolbar
-          sx={{
-            "@media (min-width: 600px)": {
-              minHeight: "43px",
-              paddingLeft: "15px !important",
-              paddingRight: "15px !important",
-            },
-            justifyContent: "space-between",
-            backgroundColor: "#ffffff",
-          }}
-        >
-          <Grid container alignItems="center" spacing={2}>
-            {location.pathname === "/dashboard" && userRole && (
-              <Grid
-                item
-                xs={6}
-                display="flex"
-                alignItems="center"
+        <Grid container alignItems="center" spacing={2}>
+          {location.pathname === "/dashboard" && userRole && (
+            <Grid
+              item
+              xs={6}
+              display="flex"
+              alignItems="center"
+              sx={{
+                fontWeight: 500,
+                fontSize: "1.25rem",
+              }}
+            >
+              Hello,{" "}
+              <Box
+                component="span"
                 sx={{
-                  fontWeight: 500,
-                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                  color: "primary.main",
+                  marginLeft: 1,
                 }}
               >
-                Hello,{" "}
-                <Box
-                  component="span"
-                  sx={{
-                    fontWeight: "bold",
-                    color: "primary.main",
-                    marginLeft: 1,
-                  }}
-                >
-                  {userName}
-                </Box>
-              </Grid>
-            )}
-          </Grid>
+                {userName}
+              </Box>
+            </Grid>
+          )}
+        </Grid>
 
-          <Grid item xs={6} display="flex">
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Tooltip title="Account settings">
-                <IconButton
-                  sx={{ width: "30px" }}
-                  onClick={handleMenuOpen(setAnchorEl)}
-                  size="small"
-                >
-                  <Person
-                    sx={{
-                      ":hover": {
-                        color: "primary.main",
-                      },
-                      color: "grey.500",
-                      width: "20px",
-                    }}
-                  />
-                </IconButton>
-              </Tooltip>
-              <Typography variant="caption" color="initial">
-                {capitalize(userName)}
-              </Typography>
-            </Box>
-          </Grid>
-        </Toolbar>
-        <MenuComponent
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          handleClose={handleMenuClose(setAnchorEl)}
-          menuItems={menuItems}
-          onMenuItemClick={handleMenuItemClick}
-        />
-        <MenuComponent
-          anchorEl={addMenuAnchorEl}
-          open={Boolean(addMenuAnchorEl)}
-          handleClose={handleMenuClose(setAddMenuAnchorEl)}
-          menuItems={addMenuItems.flatMap((group) => group.items)}
-          onMenuItemClick={handleMenuItemClick}
-        />
-        <DialogBoxUi
-          open={openDialogBox}
-          content={handlePopupMenuOpen(popUpComponent)}
-          handleClose={() => {
-            setOpenDialogBox(false);
-            setPopUpComponent("");
-          }}
-        />
-      </AppBar>
+        <Grid item xs={6} display="flex">
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Tooltip title="Account settings">
+              <IconButton
+                sx={{ width: "30px" }}
+                onClick={handleMenuOpen(setAnchorEl)}
+                size="small"
+              >
+                <Person
+                  sx={{
+                    ":hover": {
+                      color: "primary.main",
+                    },
+                    color: "grey.500",
+                    width: "20px",
+                  }}
+                />
+              </IconButton>
+            </Tooltip>
+            <Typography variant="caption" color="initial">
+              {capitalize(userName)}
+            </Typography>
+          </Box>
+        </Grid>
+      </Toolbar>
+      <MenuComponent
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        handleClose={handleMenuClose(setAnchorEl)}
+        menuItems={menuItems}
+        onMenuItemClick={handleMenuItemClick}
+      />
+      <MenuComponent
+        anchorEl={addMenuAnchorEl}
+        open={Boolean(addMenuAnchorEl)}
+        handleClose={handleMenuClose(setAddMenuAnchorEl)}
+        menuItems={addMenuItems.flatMap((group) => group.items)}
+        onMenuItemClick={handleMenuItemClick}
+      />
+      <DialogBoxUi
+        open={openDialogBox}
+        content={handlePopupMenuOpen(popUpComponent)}
+        handleClose={() => {
+          setOpenDialogBox(false);
+          setPopUpComponent("");
+        }}
+      />
+    </AppBar>
   );
 }

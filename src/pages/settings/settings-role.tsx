@@ -6,7 +6,8 @@ import SettingsCompanyDetailsScreen from "./settings-company/SettingsCompanyDeta
 
 const SettingRoleScreen = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
-  const [initialValuesLoaded, setInitialValuesLoaded] = useState<boolean>(false);
+  const [initialValuesLoaded, setInitialValuesLoaded] =
+    useState<boolean>(false);
 
   useEffect(() => {
     loadInitialValues();
@@ -33,7 +34,11 @@ const SettingRoleScreen = () => {
 
   return (
     <React.Fragment>
-      <Tabs value={currentTabIndex} variant="fullWidth" onChange={handleTabChange}>
+      <Tabs
+        value={currentTabIndex}
+        variant="fullWidth"
+        onChange={handleTabChange}
+      >
         <Tab label="Company Information" />
         <Tab label="About" />
       </Tabs>

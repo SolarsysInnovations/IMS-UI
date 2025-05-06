@@ -3,9 +3,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import MainLayout from "../../components/layouts/SideBar";
-import {
-  selectCurrentToken,
-} from "../../redux-store/auth/authSlice";
+import { selectCurrentToken } from "../../redux-store/auth/authSlice";
 import { useInVoiceContext } from "../../invoiceContext/invoiceContext";
 
 interface RoleBasedRouteProps {
@@ -22,13 +20,13 @@ const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({ allowedRoles }) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-   if(!userRole) {
-      return (
-        <Box px={0} py={2}>
-          <Typography align="center">Loading...</Typography>
-        </Box>
-      );
-    }
+  if (!userRole) {
+    return (
+      <Box px={0} py={2}>
+        <Typography align="center">Loading...</Typography>
+      </Box>
+    );
+  }
 
   if (userRole && !allowedRoles.includes(userRole)) {
     return <Navigate to="/unauthorized" state={{ from: location }} replace />;

@@ -1,4 +1,4 @@
-import { Grid, } from "@mui/material";
+import { Grid } from "@mui/material";
 import { pdfjs } from "react-pdf";
 import { useSelector } from "react-redux";
 import InvoiceLetterUi from "./InvoiceLetterUi";
@@ -11,14 +11,21 @@ interface InvoiceUiProps {
   discount?: number | null;
   tds?: number | null;
   setIsModalOpen?: Dispatch<SetStateAction<boolean | undefined>>;
-    downloadPdf?: boolean;
+  downloadPdf?: boolean;
   preview?: boolean;
 }
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function InvoiceUi({ preview, downloadPdf, subtotal, discount, tds, invoiceData, setIsModalOpen }: InvoiceUiProps) {
-
+function InvoiceUi({
+  preview,
+  downloadPdf,
+  subtotal,
+  discount,
+  tds,
+  invoiceData,
+  setIsModalOpen,
+}: InvoiceUiProps) {
   return (
     <>
       <Grid container>

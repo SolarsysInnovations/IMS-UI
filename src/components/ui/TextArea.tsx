@@ -1,6 +1,6 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
 interface TextAreaUiProps {
   label?: string;
@@ -10,34 +10,63 @@ interface TextAreaUiProps {
   size?: "small" | "medium" | undefined;
   error?: boolean | undefined;
   value?: string | number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void; variant?: "outlined" | "standard" | "filled";
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
+  variant?: "outlined" | "standard" | "filled";
   required?: boolean;
   disabled?: boolean;
-  type?: "text" | "password" | "number" | "email" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "color";
+  type?:
+    | "text"
+    | "password"
+    | "number"
+    | "email"
+    | "tel"
+    | "url"
+    | "search"
+    | "date"
+    | "time"
+    | "datetime-local"
+    | "month"
+    | "week"
+    | "color";
 }
-export default function TextAreaUi({ type, error, disabled = false, required = false, variant, onChange, value, size, defaultValue, label, helperText, rows }: TextAreaUiProps) {
+export default function TextAreaUi({
+  type,
+  error,
+  disabled = false,
+  required = false,
+  variant,
+  onChange,
+  value,
+  size,
+  defaultValue,
+  label,
+  helperText,
+  rows,
+}: TextAreaUiProps) {
   return (
     <Box
       component="form"
       sx={{
         borderRadius: "8px !important",
-        '& .MuiOutlinedInput-root': {
+        "& .MuiOutlinedInput-root": {
           fontSize: "13px",
           borderRadius: "8px !important",
           overflow: "hidden",
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          '&:hover': {
+          "&:hover": {
             backgroundColor: `action.hover`,
           },
         },
-        '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
+        "& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root": {
           fontSize: "13px",
         },
-        '& .css-100yy4f-MuiInputBase-root-MuiInput-root': {
+        "& .css-100yy4f-MuiInputBase-root-MuiInput-root": {
           fontSize: "13px",
         },
-        '& .css-1i1n0be-MuiFormLabel-root-MuiInputLabel-root': {
+        "& .css-1i1n0be-MuiFormLabel-root-MuiInputLabel-root": {
           fontSize: "13px",
         },
       }}
@@ -53,7 +82,8 @@ export default function TextAreaUi({ type, error, disabled = false, required = f
         helperText={helperText}
         error={error}
         fullWidth
-        id="outlined-basic" label={label}
+        id="outlined-basic"
+        label={label}
         variant={variant || "outlined"}
         multiline
         rows={rows}

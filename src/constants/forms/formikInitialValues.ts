@@ -1,19 +1,37 @@
 import { number } from "yup";
-import { InvoiceInitialValueProps, LoginProps, ForgetPwdProps, DyCreateCustomerProps, serviceCreationProps, GstTypeProps, TdsTaxProps, SendEmailInitialValueProps, PaymentTermsProps, ArAgingInitialValueProps, InvoicesInitialValueProps, RoleInitialValueProps, ChangePasswordInitialValueProps, InvoiceMailReasonProps, AdminCompanyUsersInitialValueProps, SuperAdminUsersInitialValueProps, } from "../../types/types";
+import {
+  InvoiceInitialValueProps,
+  LoginProps,
+  ForgetPwdProps,
+  DyCreateCustomerProps,
+  serviceCreationProps,
+  GstTypeProps,
+  TdsTaxProps,
+  SendEmailInitialValueProps,
+  PaymentTermsProps,
+  ArAgingInitialValueProps,
+  InvoicesInitialValueProps,
+  RoleInitialValueProps,
+  ChangePasswordInitialValueProps,
+  InvoiceMailReasonProps,
+  AdminCompanyUsersInitialValueProps,
+  SuperAdminUsersInitialValueProps,
+} from "../../types/types";
 import { format } from "path";
-import { companyDetailsValidationSchema } from './validations/validationSchema';
+import { companyDetailsValidationSchema } from "./validations/validationSchema";
 
 export const loginInitialValue: LoginProps = {
-    userEmail: "",
-    // username: "",
-    password: "",
-}
+  userEmail: "",
+  // username: "",
+  password: "",
+};
 export const forgetPwdInitialValue: ForgetPwdProps = {
-    userEmail: "",
-}
+  userEmail: "",
+};
 
-// 
-export const superAdminCompanyUsersInitialValues: SuperAdminUsersInitialValueProps = {
+//
+export const superAdminCompanyUsersInitialValues: SuperAdminUsersInitialValueProps =
+  {
     // * ---------- user registration ----------
     id: "",
     file: null,
@@ -36,12 +54,13 @@ export const superAdminCompanyUsersInitialValues: SuperAdminUsersInitialValuePro
     companyTaxNumber: "",
     companyRegNumber: "",
     // * ----------user configuration ----------
-    customerLimit:0,
-    invoiceLimit:0,
-    userLimit:0,
-    serviceLimit:0,
-};
-export const adminCompanyUsersInitialValues: AdminCompanyUsersInitialValueProps = {
+    customerLimit: 0,
+    invoiceLimit: 0,
+    userLimit: 0,
+    serviceLimit: 0,
+  };
+export const adminCompanyUsersInitialValues: AdminCompanyUsersInitialValueProps =
+  {
     // * ---------- user registration ----------
     id: "",
     userName: "",
@@ -50,7 +69,7 @@ export const adminCompanyUsersInitialValues: AdminCompanyUsersInitialValueProps 
     userRole: "",
     userMobile: "",
     description: "",
-};
+  };
 
 export const customerInitialValues = {
   customerType: "",
@@ -75,73 +94,72 @@ export const customerInitialValues = {
 };
 
 export const serviceInitialValues = {
-    serviceAccountingCode: "",
-    serviceDescription: "",
-    serviceAmount: "",
+  serviceAccountingCode: "",
+  serviceDescription: "",
+  serviceAmount: "",
 };
 export const linkInitialValues = {
-    label: "",
-    url: "",
-    description: "",
+  label: "",
+  url: "",
+  description: "",
 };
 export const gstTypeInitialValue: GstTypeProps = {
-    gstName: "",
-    gstPercentage: 0,
+  gstName: "",
+  gstPercentage: 0,
 };
 
 const fromMail = localStorage.getItem("userEmail");
 
 export const invoiceMailReasonInitialValue: InvoiceMailReasonProps = {
-    fromMail: fromMail || "",
-    toMail: "",
-    reason: "",
+  fromMail: fromMail || "",
+  toMail: "",
+  reason: "",
 };
 
 export const tdsTaxInitialValue: TdsTaxProps = {
-    taxName: "",
-    taxPercentage: 0,
+  taxName: "",
+  taxPercentage: 0,
 };
 
 export const paymentTermsInitialValue: PaymentTermsProps = {
-    termName: "",
-    totalDays: 0,
-
+  termName: "",
+  totalDays: 0,
 };
 
 export const dyCustomerInitialValue: DyCreateCustomerProps = {
-    customerName: "asasa",
-    customerType: "",
-    companyName: "",
-    customerEmail: "",
-    customerPhone: 0,
-    paymentTerms: "",
-    country: "",
-    address: "",
-    city: "",
-    state: "",
-    pinCode: "",
-    contactPerson: [
-        {
-            contactName: "wewe",
-            contactEmail: "",
-            contactPhone: 0,
-        }
-    ],
+  customerName: "asasa",
+  customerType: "",
+  companyName: "",
+  customerEmail: "",
+  customerPhone: 0,
+  paymentTerms: "",
+  country: "",
+  address: "",
+  city: "",
+  state: "",
+  pinCode: "",
+  contactPerson: [
+    {
+      contactName: "wewe",
+      contactEmail: "",
+      contactPhone: 0,
+    },
+  ],
 };
 export const dyserviceInitialValues: serviceCreationProps = {
-    serviceAccountingCode: "",
-    serviceDescription: "",
-    serviceAmount: 0,
+  serviceAccountingCode: "",
+  serviceDescription: "",
+  serviceAmount: 0,
 };
 
 //
 
 const formatDate = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}${month}${day}`;
-}
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}${month}${day}`;
+};
 
 const currentDate = new Date();
 const defaultInvoiceType = `IMS-${formatDate(currentDate)}`;
@@ -195,46 +213,44 @@ export const invoiceEditInitialValue: InvoiceInitialValueProps = {
   signatureFile: null,
 };
 export const invoicesInitialValue: InvoicesInitialValueProps = {
-
-   // invoiceDate: "",
-    startDate: '',
-    endDate: '',
-    filter: "invoiceReport",
+  // invoiceDate: "",
+  startDate: "",
+  endDate: "",
+  filter: "invoiceReport",
 };
 
 export const AragingInitialValue: ArAgingInitialValueProps = {
-   // invoiceDate: "",
-    startDate: "",
-    endDate: "",
-    filter: "agingReport",
-
+  // invoiceDate: "",
+  startDate: "",
+  endDate: "",
+  filter: "agingReport",
 };
 
 export const SendEmailInitialValue: SendEmailInitialValueProps = {
-    recipientEmail: "",
-    fromemail: "",
-    file: null,
-   // cc: "",
-    subject: "",
-    body:"",
-}
+  recipientEmail: "",
+  fromemail: "",
+  file: null,
+  // cc: "",
+  subject: "",
+  body: "",
+};
 
 export const RoleInitialValue: RoleInitialValueProps = {
-    userName: "",
-    userRole: "",
-    userEmail: "",
-    userAccess: "",
-    password: "",
-    userMobile: "",
-    description: "",
-}
+  userName: "",
+  userRole: "",
+  userEmail: "",
+  userAccess: "",
+  password: "",
+  userMobile: "",
+  description: "",
+};
 
 export const ChangePasswordInitialValue: ChangePasswordInitialValueProps = {
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-    userName: "",
-}
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+  userName: "",
+};
 export const companyLogoInitialProps = {
-    companyLogo: null,
- }
+  companyLogo: null,
+};

@@ -7,40 +7,50 @@ import {
   useGetCompanySettingByIdQuery,
 } from "../../../../src/redux-store/api/injectedApis";
 import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
-import { clearCompanyLogo, setCompanyLogo } from "../../../redux-store/global/globalState";
+import {
+  clearCompanyLogo,
+  setCompanyLogo,
+} from "../../../redux-store/global/globalState";
 import { useDispatch } from "react-redux";
 import { useInVoiceContext } from "../../../invoiceContext/invoiceContext";
-
 
 const UploadScreen: React.FC = () => {
   const context = useInVoiceContext();
   const dispatch = useDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(
+    null,
+  );
   const [base64String, setBase64String] = useState<string | null>(null);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
   const companyIdString = context.companyDetails.companyId ?? "";
 
   // Fetch company data
   const { data: companyData } = useGetCompanySettingByIdQuery(companyIdString);
-  const [addCompanyLogo, { isSuccess: uploadSuccess, isError: uploadError, data }] = useAddCompanyLogoMutation();
-  const [deleteCompanyLogo, { isSuccess: deleteCompanySuccess, isError: deleteCompanyError }] =
-    useDeleteCompanyLogoMutation();
+  const [
+    addCompanyLogo,
+    { isSuccess: uploadSuccess, isError: uploadError, data },
+  ] = useAddCompanyLogoMutation();
+  const [
+    deleteCompanyLogo,
+    { isSuccess: deleteCompanySuccess, isError: deleteCompanyError },
+  ] = useDeleteCompanyLogoMutation();
 
   // Fetch logo data after company ID is available
   const { id: companyId } = companyDetails ?? {};
-  const { data: logoData, isSuccess: logoSuccess, refetch: refetchLogo } = useGetCompanyLogoByIdQuery(
-    companyId,
-    { skip: !companyId }
-  );
+  const {
+    data: logoData,
+    isSuccess: logoSuccess,
+    refetch: refetchLogo,
+  } = useGetCompanyLogoByIdQuery(companyId, { skip: !companyId });
 
   useEffect(() => {
     if (companyData) {
       setCompanyDetails(companyData);
     }
   }, [companyData]);
-  
+
   useEffect(() => {
     if (uploadSuccess && data && companyId) {
       const responseData = data as { logoUrl: string };
@@ -51,8 +61,6 @@ const UploadScreen: React.FC = () => {
       refetchLogo();
     }
   }, [uploadSuccess, data, companyId, dispatch, refetchLogo]);
-  
-
 
   useEffect(() => {
     if (logoSuccess && logoData?.companyLogo) {
@@ -85,20 +93,21 @@ const UploadScreen: React.FC = () => {
   };
 
   const handleDeleteClick = async () => {
-    const confirmed = window.confirm("Are you sure you want to delete this logo?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this logo?",
+    );
     if (confirmed && companyId) {
-        try {
-            await deleteCompanyLogo(companyId).unwrap();
-            // Clear the logo from the Redux store
-            dispatch(clearCompanyLogo()); // Dispatch action to clear logo
-            setBase64String(null);
-            refetchLogo();
-        } catch (error) {
-            console.error("Error deleting logo:", error);
-        }
+      try {
+        await deleteCompanyLogo(companyId).unwrap();
+        // Clear the logo from the Redux store
+        dispatch(clearCompanyLogo()); // Dispatch action to clear logo
+        setBase64String(null);
+        refetchLogo();
+      } catch (error) {
+        console.error("Error deleting logo:", error);
+      }
     }
-};
-
+  };
 
   const handleSave = async () => {
     if (selectedFile) {
@@ -161,22 +170,23 @@ const UploadScreen: React.FC = () => {
               width: "200px",
               height: "200px",
               objectFit: "contain",
-              marginBottom: "10px",            }}
+              marginBottom: "10px",
+            }}
           />
         ) : (
           <Box
-    component="span"
-    sx={{
-      display: "inline-block",
-      fontSize: "12px",       
-      fontWeight: "bold",     
-      marginBottom: "10px",   
-      color: "red",         
-      padding: "5px 10px",    
-      borderRadius: "5px",    
-    }}
-  >
-          * No image available *
+            component="span"
+            sx={{
+              display: "inline-block",
+              fontSize: "12px",
+              fontWeight: "bold",
+              marginBottom: "10px",
+              color: "red",
+              padding: "5px 10px",
+              borderRadius: "5px",
+            }}
+          >
+            * No image available *
           </Box>
         )}
 
@@ -209,7 +219,12 @@ const UploadScreen: React.FC = () => {
           onChange={handleFileChange}
         />
         <label htmlFor="contained-button-file">
-          <Button variant="contained" color="primary" component="span" sx={{ marginTop: "10px" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            component="span"
+            sx={{ marginTop: "10px" }}
+          >
             Upload
           </Button>
         </label>

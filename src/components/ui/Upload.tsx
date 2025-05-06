@@ -1,7 +1,7 @@
 // Upload.tsx
-import React from 'react';
-import { Button, Input, InputLabel } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import React from "react";
+import { Button, Input, InputLabel } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 // Define the props interface
 interface UploadProps {
@@ -12,11 +12,16 @@ interface UploadProps {
 }
 
 // Styled component for the hidden input
-const HiddenInput = styled('input')({
-  display: 'none',
+const HiddenInput = styled("input")({
+  display: "none",
 });
 
-const Upload: React.FC<UploadProps> = ({ label, disabled, onChange, helperText }) => {
+const Upload: React.FC<UploadProps> = ({
+  label,
+  disabled,
+  onChange,
+  helperText,
+}) => {
   return (
     <>
       {label && <InputLabel shrink>{label}</InputLabel>}
@@ -28,11 +33,18 @@ const Upload: React.FC<UploadProps> = ({ label, disabled, onChange, helperText }
           onChange={onChange}
           disabled={disabled} // Pass the disabled state
         />
-        <Button variant="contained" color="primary" component="span" disabled={disabled}>
+        <Button
+          variant="contained"
+          color="primary"
+          component="span"
+          disabled={disabled}
+        >
           Upload
         </Button>
       </label>
-      {helperText && <div style={{ marginTop: '8px', color: 'red' }}>{helperText}</div>}
+      {helperText && (
+        <div style={{ marginTop: "8px", color: "red" }}>{helperText}</div>
+      )}
     </>
   );
 };

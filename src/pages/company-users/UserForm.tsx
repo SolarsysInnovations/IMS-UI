@@ -3,11 +3,17 @@ import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
 import { clearData } from "../../redux-store/global/globalState";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux-store/store";
-import { useCreateUserMutation, useUpdateUserMutation } from "../../redux-store/api/injectedApis";
+import {
+  useCreateUserMutation,
+  useUpdateUserMutation,
+} from "../../redux-store/api/injectedApis";
 import { AdminCompanyUsersInitialValueProps } from "../../types/types";
 import { RoleValidationSchema } from "../../constants/forms/validations/validationSchema";
 import { DynamicFormCreate } from "../../components/Form-renderer/Dynamic-form";
-import { RolesEditFields, RolesFields } from "../../constants/form-data/form-data-json";
+import {
+  RolesEditFields,
+  RolesFields,
+} from "../../constants/form-data/form-data-json";
 import { RoleInitialValue } from "../../constants/forms/formikInitialValues";
 
 interface UserValueProps {
@@ -17,13 +23,33 @@ interface UserValueProps {
   refetchUserList: () => void;
 }
 
-const UserForm = ({ userEditValue, mode, onClose, refetchUserList }: UserValueProps) => {
-  const [addUser, { isSuccess: userAddSuccess, isError: userAddError, error: userAddErrorObject }] = useCreateUserMutation();
-  const [updateUser, { isSuccess: userUpdateSuccess, isError: userUpdateError, error: userUpdateErrorObject }] = useUpdateUserMutation();
+const UserForm = ({
+  userEditValue,
+  mode,
+  onClose,
+  refetchUserList,
+}: UserValueProps) => {
+  const [
+    addUser,
+    {
+      isSuccess: userAddSuccess,
+      isError: userAddError,
+      error: userAddErrorObject,
+    },
+  ] = useCreateUserMutation();
+  const [
+    updateUser,
+    {
+      isSuccess: userUpdateSuccess,
+      isError: userUpdateError,
+      error: userUpdateErrorObject,
+    },
+  ] = useUpdateUserMutation();
   const dispatch = useDispatch<AppDispatch>();
 
   // Setting initial values
-  const initialValues = mode === "edit" && userEditValue ? userEditValue : RoleInitialValue;
+  const initialValues =
+    mode === "edit" && userEditValue ? userEditValue : RoleInitialValue;
 
   // Snackbar Notifications
   useSnackbarNotifications({
@@ -58,7 +84,6 @@ const UserForm = ({ userEditValue, mode, onClose, refetchUserList }: UserValuePr
           await updateUser({ id: values.id, data: { userDetails: values } });
         } else {
           await addUser({ userDetails: values });
-        
         }
         dispatch(clearData());
         actions.resetForm();
@@ -72,13 +97,13 @@ const UserForm = ({ userEditValue, mode, onClose, refetchUserList }: UserValuePr
 
   return (
     <DynamicFormCreate
-    showTable={true}
-    headerName={mode === "create" ? "User Create" : "User Edit"}
-    fields={mode === "create" ? RolesFields : RolesEditFields}
-    initialValues={initialValues}
-    validationSchema={RoleValidationSchema}
-    onSubmit={onSubmit}
-  />
+      showTable={true}
+      headerName={mode === "create" ? "User Create" : "User Edit"}
+      fields={mode === "create" ? RolesFields : RolesEditFields}
+      initialValues={initialValues}
+      validationSchema={RoleValidationSchema}
+      onSubmit={onSubmit}
+    />
   );
 };
 

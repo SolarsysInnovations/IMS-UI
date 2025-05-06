@@ -1,8 +1,8 @@
-import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import { Button, Paper, SxProps } from '@mui/material';
-import { Theme } from '@mui/system';
+import * as React from "react";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import { Button, Paper, SxProps } from "@mui/material";
+import { Theme } from "@mui/system";
 interface ValueProps {
   value: string;
   label: string;
@@ -22,8 +22,8 @@ interface SelectDropdownProps {
   applySmallSizeStyle?: boolean;
   required?: boolean;
   disabled?: boolean;
-  variant?: 'outlined' | 'filled' | 'standard';
-  sx?:SxProps<Theme>;
+  variant?: "outlined" | "filled" | "standard";
+  sx?: SxProps<Theme>;
 }
 
 export default function SelectDropdown({
@@ -47,7 +47,7 @@ export default function SelectDropdown({
     <Autocomplete
       disabled={disabled}
       defaultValue={defaultValue}
-      size='small'
+      size="small"
       disablePortal
       id="combo-box-demo"
       options={options}
@@ -66,31 +66,41 @@ export default function SelectDropdown({
         }),
         width: `${width}`,
         borderRadius: "8px",
-        '& .MuiOutlinedInput-root': {
+        "& .MuiOutlinedInput-root": {
           borderRadius: "8px",
           overflow: "hidden",
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          '&:hover': {
+          "&:hover": {
             // backgroundColor: `action.hover`,
           },
         },
         "& .MuiFormLabel-root": {
-          fontSize: "12px"
+          fontSize: "12px",
         },
-        '& .MuiAutocomplete-input': {
-          fontSize: "12px"
+        "& .MuiAutocomplete-input": {
+          fontSize: "12px",
         },
-        '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
-          fontSize: "12px"
+        "& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root": {
+          fontSize: "12px",
         },
         ...sx, // Apply sx prop passed from parent
       }}
       isOptionEqualToValue={(option, value) => option.value === value.value}
-      renderInput={(params) => <TextField error={error} helperText={helperText} required={required} sx={{ fontSize: "12px !important" }} variant='outlined' {...params} label={labelText} />}
+      renderInput={(params) => (
+        <TextField
+          error={error}
+          helperText={helperText}
+          required={required}
+          sx={{ fontSize: "12px !important" }}
+          variant="outlined"
+          {...params}
+          label={labelText}
+        />
+      )}
       PaperComponent={({ children }) => {
         return (
-          <Paper sx={{ '& .MuiAutocomplete-listbox': { fontSize: '13px' } }}>
+          <Paper sx={{ "& .MuiAutocomplete-listbox": { fontSize: "13px" } }}>
             {children}
             {button && (
               <Button

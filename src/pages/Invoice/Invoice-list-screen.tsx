@@ -59,14 +59,14 @@ const InvoiceList = () => {
   const [filterApplied, setFilterApplied] = useState(false);
   const [getInvoiceListScreen] = useGetInvoiceListScreenMutation();
   const [invoiceList, setInvoiceList] = useState<InvoiceInitialValueProps[]>(
-    []
+    [],
   );
   const [error, setError] = useState(null);
   // const { refetch } = useGetInvoiceListQuery();
 
   const handleApplyFilter = async (
     startDate: Dayjs | null,
-    endDate: Dayjs | null
+    endDate: Dayjs | null,
   ) => {
     const formattedStartDate = startDate ? startDate.format("DD-MM-YYYY") : "";
     const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
@@ -76,13 +76,12 @@ const InvoiceList = () => {
         endDate: formattedEndDate,
       }).unwrap();
       setInvoiceList(response);
-        setFilterApplied(true);
+      setFilterApplied(true);
     } catch (error) {
       console.error("Error fetching filtered dashboard data:", error);
       setIsLoading(false);
     }
   };
-
 
   // const handleApplyFilter = useCallback(
   //   async (startDate: Dayjs | null, endDate: Dayjs | null) => {
@@ -156,7 +155,7 @@ const InvoiceList = () => {
 
   const handleDeleteInvoiceLocally = (deletedInvoiceId: any) => {
     setInvoiceList((prevList) =>
-      prevList.filter((invoice) => invoice.id !== deletedInvoiceId)
+      prevList.filter((invoice) => invoice.id !== deletedInvoiceId),
     );
     // Optional: Refetch to ensure data is in sync with the server
   };

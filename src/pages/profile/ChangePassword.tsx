@@ -24,7 +24,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
   const context = useInVoiceContext();
   const pathname = "Change Password";
   const [passwordValues, setpasswordValues] = useState(
-    ChangePasswordInitialValue
+    ChangePasswordInitialValue,
   );
   const [newPasswordVisible, setNewPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -60,7 +60,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
       setSubmitting: (isSubmitting: boolean) => void;
       resetForm: () => void;
       setFieldError: (field: string, message: string) => void;
-    }
+    },
   ) => {
     try {
       await changePassword({

@@ -8,7 +8,11 @@ import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import ModalUi from "../../components/ui/ModalUi";
 import CompanyDetails from "../../pages/super-admin-company/companyDetailsScreen";
 import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
-import { useDeleteUserMutation, useGetSingleUserMutation, useGetUsersListQuery } from "../../redux-store/api/injectedApis";
+import {
+  useDeleteUserMutation,
+  useGetSingleUserMutation,
+  useGetUsersListQuery,
+} from "../../redux-store/api/injectedApis";
 import { setUserData } from "../../redux-store/slices/userSlice";
 import TableHeader from "../../components/layouts/TableHeader";
 import DialogBoxUi from "../../components/ui/DialogBox";
@@ -20,16 +24,25 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   const [openDialogBox, setIsOpenDialogBox] = useState(false);
   const [openModal, setOpenModal] = React.useState(false);
   const { data: services, refetch } = useGetUsersListQuery();
-  const [deleteCompany, { isLoading: deleteCompanyLoading, error: deleteCompanyErrorObject, isSuccess: deleteCompanySuccess, isError: deleteCompanyError }] = useDeleteUserMutation();
+  const [
+    deleteCompany,
+    {
+      isLoading: deleteCompanyLoading,
+      error: deleteCompanyErrorObject,
+      isSuccess: deleteCompanySuccess,
+      isError: deleteCompanyError,
+    },
+  ] = useDeleteUserMutation();
   const [getCompany, { data: companyData }] = useGetSingleUserMutation();
   const navigate = useNavigate();
-  const { canEditCompanies, canViewCompanies, canDeleteCompanies } = useRolePermissions();
+  const { canEditCompanies, canViewCompanies, canDeleteCompanies } =
+    useRolePermissions();
   // Snackbar notifications
   useSnackbarNotifications({
     error: deleteCompanyError,
-    errorMessage: 'Error deleting company',
+    errorMessage: "Error deleting company",
     success: deleteCompanySuccess,
-    successMessage: 'Company deleted successfully',
+    successMessage: "Company deleted successfully",
     errorObject: deleteCompanyErrorObject,
   });
 
@@ -61,13 +74,13 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   const handleDialogOpen = async () => {
     try {
       const response = await getCompany(id);
-      if ('data' in response) {
+      if ("data" in response) {
         setIsOpenDialogBox(true);
       } else {
-        console.error('Error response:', response.error);
+        console.error("Error response:", response.error);
       }
     } catch (error) {
-      console.error('Error fetching customer data:', error);
+      console.error("Error fetching customer data:", error);
     }
   };
 
@@ -89,7 +102,9 @@ const MyCellRenderer = ({ id }: { id: any }) => {
   };
 
   const handleDeleteClick = () => {
-    const confirmed = window.confirm("Are you sure you want to delete this company?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this company?",
+    );
     if (confirmed) {
       deleteCompany(id);
     }
@@ -110,15 +125,12 @@ const MyCellRenderer = ({ id }: { id: any }) => {
         paperWidth="900px"
         paperMaxWidth="900px"
         open={openDialogBox}
-
         content={
           <>
-
             <TableHeader headerName="Company Details" />
             <Box sx={{ marginTop: "15px" }}>
               <CompanyDetails details={companyData || []} />
             </Box>
-
           </>
         }
         handleClose={() => setIsOpenDialogBox(false)}

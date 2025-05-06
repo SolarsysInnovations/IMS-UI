@@ -83,7 +83,9 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   const { data: customers, refetch: customerRefetch } =
     useGetCustomersListQuery();
   const { refetch: invoiceRefetch } = useGetInvoiceListQuery();
-  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(
+    null,
+  );
   const [image, setImage] = useState<string | null>(null);
   const [
     addInvoice,
@@ -105,7 +107,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean | undefined>(false);
   const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
   const [discountPercentage, setDiscountPercentage] = useState<number | null>(
-    null
+    null,
   );
   const [discountAmount, setDiscountAmount] = useState<number | null>(null);
   const [selectedTds, setSelectedTdsAmount] = useState<number | null>(null);
@@ -121,7 +123,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   >([]);
   const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
   const [invoiceValues, setInvoiceValues] = useState(
-    invoiceValue || invoiceCreateInitialValue
+    invoiceValue || invoiceCreateInitialValue,
   );
   const { data: gstTypesData = [] } = useGetGstTypeListQuery();
   const { data: tdsTaxData = [] } = useGetTdsTaxListQuery();
@@ -130,14 +132,14 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   const customerName = generateOptions(
     customers,
     "customerName",
-    "customerName"
+    "customerName",
   );
   const gstTypeOptions = generateOptions(gstTypesData, "gstName", "gstName");
   const tdsTaxOptions = generateOptions(tdsTaxData, "taxName", "taxName");
   const paymentTermsOptions = generateOptions(
     paymentTerms,
     "termName",
-    "termName"
+    "termName",
   );
   const [preview, setPreview] = useState(false);
   const [resMessage, setResMessage] = useState("");
@@ -192,7 +194,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     if (invoiceValues) {
       const sumSubTotal = invoiceValues.servicesList.reduce(
         (acc: any, row: any) => acc + row.serviceTotalAmount,
-        0
+        0,
       );
       setSubTotalInvoiceAmount(sumSubTotal);
       setDiscountPercentage(invoiceValues.discountPercentage);
@@ -203,7 +205,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   useEffect(() => {
     const subtotalAfterRetainer = Math.max(
       subTotalInvoiceAmount + retainerAmount,
-      0
+      0,
     );
 
     const disAmount = (subtotalAfterRetainer * (discountPercentage ?? 0)) / 100;
@@ -245,7 +247,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   React.useEffect(() => {
     if (invoiceValue) {
       const data = tdsTaxData?.find(
-        (item: any) => item?.taxName === invoiceValues.taxAmount.tds
+        (item: any) => item?.taxName === invoiceValues.taxAmount.tds,
       );
       setSelectedTdsAmount(data?.taxPercentage);
     }
@@ -254,7 +256,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
 
   const handleQuantityChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     const { value } = event.target;
     const parsedValue = parseInt(value); // Parse the value to an integer
@@ -271,7 +273,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
             };
           }
           return service;
-        }
+        },
       );
       return {
         ...prevInvoiceValues,
@@ -299,12 +301,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   const handleRemoveRow = (id: string) => {
     // Find the index of the row with the provided id in invoiceValues.servicesList
     const index = invoiceValues.servicesList.findIndex(
-      (row: any) => row.id === id
+      (row: any) => row.id === id,
     );
     if (index !== -1) {
       // Create a new array without the removed row
       const updatedServicesList = invoiceValues.servicesList.filter(
-        (_: any, idx: any) => idx !== index
+        (_: any, idx: any) => idx !== index,
       );
       // Update the state with the new array
       setInvoiceValues((prevState: any) => ({
@@ -360,7 +362,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
       // validate={() => ({})}
       onSubmit={async (
         values: InvoiceInitialValueProps,
-        { setSubmitting, resetForm }
+        { setSubmitting, resetForm },
       ) => {
         try {
           values.servicesList = invoiceValues.servicesList;
@@ -529,25 +531,25 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         if (newValue) {
                           const selectedCustomerDetails = customers?.find(
                             (customer: any) =>
-                              newValue.value === customer.customerName
+                              newValue.value === customer.customerName,
                           );
 
                           if (selectedCustomerDetails) {
                             setFieldValue(
                               "customerName",
-                              selectedCustomerDetails.customerName
+                              selectedCustomerDetails.customerName,
                             );
                             setFieldValue(
                               "customerId",
-                              selectedCustomerDetails.id
+                              selectedCustomerDetails.id,
                             );
                             setFieldValue(
                               "customerEmail",
-                              selectedCustomerDetails.customerEmail
+                              selectedCustomerDetails.customerEmail,
                             );
                             setFieldValue(
                               "customerPhone",
-                              selectedCustomerDetails.customerPhone
+                              selectedCustomerDetails.customerPhone,
                             );
                             // Add more fields if required
                           }
@@ -575,12 +577,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       onChange={(newValue: any) => {
                         if (newValue) {
                           const selectedGstType = gstTypesData.find(
-                            (item: any) => item.gstName === newValue.value
+                            (item: any) => item.gstName === newValue.value,
                           );
                           if (selectedGstType) {
                             setFieldValue(
                               "gstPercentage",
-                              selectedGstType.gstPercentage
+                              selectedGstType.gstPercentage,
                             );
                             setFieldValue("gstType", newValue.value);
                           } else {
@@ -672,7 +674,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                               const startDate = format(today, "dd-MM-yyyy");
                               const dueDate = format(
                                 addDays(today, totalDays),
-                                "dd-MM-yyyy"
+                                "dd-MM-yyyy",
                               );
                               setFieldValue("startDate", startDate);
                               setFieldValue("dueDate", dueDate);
@@ -715,14 +717,14 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         onChange={(newValue: any) => {
                           if (newValue) {
                             const selectedPaymentTerms = paymentTerms?.find(
-                              (item) => item.termName === newValue.value
+                              (item) => item.termName === newValue.value,
                             );
                             if (selectedPaymentTerms) {
                               const today = new Date();
                               const startDate = format(today, "dd-MM-yyyy");
                               const dueDate = format(
                                 addDays(today, selectedPaymentTerms.totalDays),
-                                "dd-MM-yyyy"
+                                "dd-MM-yyyy",
                               );
                               setFieldValue("startDate", startDate);
                               setFieldValue("dueDate", dueDate);
@@ -823,7 +825,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                     (service) => ({
                                       label: service.serviceAccountingCode,
                                       value: service.serviceAccountingCode,
-                                    })
+                                    }),
                                   )}
                                   value={
                                     item.serviceAccountingCode
@@ -839,7 +841,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                         modifiedServiceList.find(
                                           (service) =>
                                             service.serviceAccountingCode ===
-                                            e.value
+                                            e.value,
                                         );
                                       if (selectedService) {
                                         const updatedServiceList = [
@@ -910,7 +912,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 </IconButton>
                               </TableCell>
                             </TableRow>
-                          )
+                          ),
                         )}
                         <ButtonSmallUi
                           type="button"
@@ -1057,12 +1059,12 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         onChange={(newValue: any) => {
                           if (newValue) {
                             const selectedTdsTax = tdsTaxData.find(
-                              (item) => item.taxName === newValue.value
+                              (item) => item.taxName === newValue.value,
                             );
                             if (selectedTdsTax) {
                               setFieldValue("taxAmount.tds", newValue.value);
                               setSelectedTdsAmount(
-                                selectedTdsTax.taxPercentage
+                                selectedTdsTax.taxPercentage,
                               );
                             } else {
                               setFieldValue("taxAmount.tds", "");

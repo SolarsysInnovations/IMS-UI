@@ -4,7 +4,7 @@ import { Tabs, Tab, Box, Typography } from "@mui/material";
 interface TabItem {
   label: string;
   component: React.ReactNode;
-  roles: string[]
+  roles: string[];
 }
 
 interface RoleBasedTabsProps {
@@ -25,13 +25,17 @@ const RoleBasedTabs: React.FC<RoleBasedTabsProps> = ({ tabs, userRole }) => {
     return <Typography>No accessible tabs for your role.</Typography>;
   }
 
-    if (!userRole) {
-      return <Typography>No role detected. Access denied.</Typography>;
-    }
+  if (!userRole) {
+    return <Typography>No role detected. Access denied.</Typography>;
+  }
 
   return (
     <>
-      <Tabs value={currentTabIndex} variant="fullWidth" onChange={handleTabChange}>
+      <Tabs
+        value={currentTabIndex}
+        variant="fullWidth"
+        onChange={handleTabChange}
+      >
         {filteredTabs.map((tab, index) => (
           <Tab key={index} label={tab.label} />
         ))}

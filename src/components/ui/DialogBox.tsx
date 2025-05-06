@@ -71,23 +71,23 @@ const DialogBoxUi = ({
           },
         }}
       >
-          <DialogTitle sx={{ m: 0, p: 2 }}>
-        <IconButton
-          aria-label="close"
-          onClick={handleCloseDialog}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon sx={{ width: "20px" }} />
-        </IconButton>
+        <DialogTitle sx={{ m: 0, p: 2 }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseDialog}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon sx={{ width: "20px" }} />
+          </IconButton>
         </DialogTitle>
-         <DialogContent
-         sx={{
-           ...(typeof maxwidth === "object" ? maxwidth : {}), 
+        <DialogContent
+          sx={{
+            ...(typeof maxwidth === "object" ? maxwidth : {}),
             minWidth: "200px",
             minHeight: "100px",
             margin: "20px",

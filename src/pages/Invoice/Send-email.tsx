@@ -47,7 +47,7 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
         setShowFileName((prevNames) => [...prevNames, ...fileNames]);
       }
     },
-    []
+    [],
   );
 
   const handleRemoveFile = useCallback((index: number) => {
@@ -56,13 +56,13 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
   }, []);
   const handleSubmit = async (
     values: SendEmailInitialValueProps,
-    { setSubmitting, resetForm }: FormikHelpers<SendEmailInitialValueProps>
+    { setSubmitting, resetForm }: FormikHelpers<SendEmailInitialValueProps>,
   ) => {
     try {
       const formData = new FormData();
       formData.append(
         "recipientEmail",
-        invoiceData?.customerDetails?.customerEmail || ""
+        invoiceData?.customerDetails?.customerEmail || "",
       );
       // formData.append("cc", values.cc || "");
       formData.append("subject", values.subject || "");

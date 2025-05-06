@@ -87,7 +87,7 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
         actions.setSubmitting(false);
       }
     },
-    [addCustomer, updateCustomer, customerEditInitialValues, dispatch]
+    [addCustomer, updateCustomer, customerEditInitialValues, dispatch],
   );
 
   return (

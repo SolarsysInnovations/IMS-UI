@@ -1,38 +1,55 @@
 import React, { useState, useCallback } from "react";
 import { Form, Formik, FormikHelpers } from "formik";
-import { Box, Grid, Button, Typography, IconButton, InputLabel } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Button,
+  Typography,
+  IconButton,
+  InputLabel,
+} from "@mui/material";
 import ButtonSmallUi from "../../../components/ui/ButtonSmall";
 import { CompanyLogoProps } from "../../../types/types";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import CancelIcon from '@mui/icons-material/Close';
+import CancelIcon from "@mui/icons-material/Close";
 import { useAddCompanyLogoMutation } from "../../../redux-store/api/injectedApis";
 import { companyLogoInitialProps } from "../../../constants/forms/formikInitialValues";
 
 const CompanyLogo: React.FC = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showFileName, setShowFileName] = useState<string[]>([]);
-  const [companyLogo, { isSuccess: companyLogoSuccess, isError: companyLogoError, error: companyLogoErrorObject }] = useAddCompanyLogoMutation();
-  
-  const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const fileList = Array.from(files);
-      const fileNames = fileList.map(file => file.name);
-      setUploadedFiles(prevFiles => [...prevFiles, ...fileList]);
-      setShowFileName(prevNames => [...prevNames, ...fileNames]);
-    }
-  }, []);
+  const [
+    companyLogo,
+    {
+      isSuccess: companyLogoSuccess,
+      isError: companyLogoError,
+      error: companyLogoErrorObject,
+    },
+  ] = useAddCompanyLogoMutation();
+
+  const handleFileUpload = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const files = event.target.files;
+      if (files && files.length > 0) {
+        const fileList = Array.from(files);
+        const fileNames = fileList.map((file) => file.name);
+        setUploadedFiles((prevFiles) => [...prevFiles, ...fileList]);
+        setShowFileName((prevNames) => [...prevNames, ...fileNames]);
+      }
+    },
+    [],
+  );
 
   // Handle file removal
   const handleRemoveFile = useCallback((index: number) => {
-    setUploadedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
-    setShowFileName(prevNames => prevNames.filter((_, i) => i !== index));
+    setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setShowFileName((prevNames) => prevNames.filter((_, i) => i !== index));
   }, []);
 
   // Handle form submission
   const handleSubmit = async (
     values: CompanyLogoProps,
-    { setSubmitting, resetForm }: FormikHelpers<CompanyLogoProps>
+    { setSubmitting, resetForm }: FormikHelpers<CompanyLogoProps>,
   ) => {
     try {
       const formData = new FormData();
@@ -40,13 +57,12 @@ const CompanyLogo: React.FC = () => {
       uploadedFiles.forEach((file) => {
         formData.append("files", file);
       });
-      
+
       // Submit the logo via the mutation
       await companyLogo(formData);
 
       // Handle success response
       if (companyLogoSuccess) {
-
         resetForm();
         setUploadedFiles([]);
         setShowFileName([]);
@@ -66,14 +82,22 @@ const CompanyLogo: React.FC = () => {
   };
 
   return (
-    <Formik
-      initialValues={companyLogoInitialProps}
-      onSubmit={handleSubmit}
-    >
+    <Formik initialValues={companyLogoInitialProps} onSubmit={handleSubmit}>
       {({ handleSubmit }) => (
-        <Form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column" }}>
+        <Form
+          onSubmit={handleSubmit}
+          style={{ display: "flex", flexDirection: "column" }}
+        >
           <Grid item xs={12}>
-            <InputLabel style={{ fontWeight: "500", width: "140px", display: "inline-block" }}>Upload Company Logo</InputLabel>
+            <InputLabel
+              style={{
+                fontWeight: "500",
+                width: "140px",
+                display: "inline-block",
+              }}
+            >
+              Upload Company Logo
+            </InputLabel>
             <Button
               variant="contained"
               color="primary"
@@ -81,28 +105,45 @@ const CompanyLogo: React.FC = () => {
               startIcon={<CloudUploadIcon />}
               sx={{ borderRadius: "50%", mt: 2, mb: 2 }}
             >
-              <input
-                type="file"
-                hidden
-                multiple
-                onChange={handleFileUpload}
-              />
+              <input type="file" hidden multiple onChange={handleFileUpload} />
             </Button>
           </Grid>
-          
+
           {/* Display uploaded files */}
           <Grid container spacing={1}>
             {showFileName.map((fileName, index) => (
               <React.Fragment key={index}>
                 <Grid item xs={5}>
-                  <Box sx={{ mt: 1, mb: -1, display: "flex", position: "relative", left: "15px" }}>
+                  <Box
+                    sx={{
+                      mt: 1,
+                      mb: -1,
+                      display: "flex",
+                      position: "relative",
+                      left: "15px",
+                    }}
+                  >
                     <Typography>{fileName}</Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={7}>
-                  <Box sx={{ mt: 1, mb: -1, display: "flex", position: "relative", right: "10px" }}>
-                    <IconButton aria-label="Remove file" onClick={() => handleRemoveFile(index)}>
-                      <CancelIcon color="secondary" sx={{ position: "relative" }} />
+                  <Box
+                    sx={{
+                      mt: 1,
+                      mb: -1,
+                      display: "flex",
+                      position: "relative",
+                      right: "10px",
+                    }}
+                  >
+                    <IconButton
+                      aria-label="Remove file"
+                      onClick={() => handleRemoveFile(index)}
+                    >
+                      <CancelIcon
+                        color="secondary"
+                        sx={{ position: "relative" }}
+                      />
                     </IconButton>
                   </Box>
                 </Grid>

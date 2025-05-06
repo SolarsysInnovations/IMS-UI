@@ -1,4 +1,4 @@
-import React, { useEffect }from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme/theme";
@@ -42,7 +42,7 @@ function App() {
         const subRoutes = subItems ? generateRoutes(subItems) : [];
 
         return [mainRoute, ...subRoutes];
-      }
+      },
     );
   };
 

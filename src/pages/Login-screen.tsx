@@ -76,7 +76,7 @@ const Login = () => {
                   userRole,
                   userName,
                   userEmail,
-                })
+                }),
               );
             } else {
               const { accessToken } = loginResult.data;
@@ -86,7 +86,7 @@ const Login = () => {
           } else {
             console.error(
               "Access token not found in login response:",
-              loginResult
+              loginResult,
             );
           }
           resetForm();

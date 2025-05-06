@@ -8,7 +8,15 @@ type ButtonVariant = "text" | "outlined" | "contained";
 interface ButtonProps {
   label?: string;
   variant?: ButtonVariant; // Use the defined union type for variant
-  color?: "primary" | "secondary" | "inherit" | "default" | "error" | "info" | "success" | "warning";
+  color?:
+    | "primary"
+    | "secondary"
+    | "inherit"
+    | "default"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
   disabled?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
@@ -56,20 +64,20 @@ const ButtonUi: React.FC<ButtonProps> = ({
         ...sx,
         ...(gridButton
           ? {
-            // border: " 1px solid #6366F1 !important",
-          }
+              // border: " 1px solid #6366F1 !important",
+            }
           : {}),
         ...(smallButtonCss
           ? {
-            borderRadius: "5px",
-            marginTop: "0px",
-            marginBottom: "0px",
-            padding: "3px 10px",
-            display: "flex",
-            fontSize: "11px",
-            boxShadow: "none",
-            alignItems: "center",
-          }
+              borderRadius: "5px",
+              marginTop: "0px",
+              marginBottom: "0px",
+              padding: "3px 10px",
+              display: "flex",
+              fontSize: "11px",
+              boxShadow: "none",
+              alignItems: "center",
+            }
           : {}),
       }}
       onClick={onClick}
@@ -81,7 +89,7 @@ const ButtonUi: React.FC<ButtonProps> = ({
       startIcon={startIcon}
       endIcon={endIcon}
       loading={loading}
-      loadingIndicator='Loading…'
+      loadingIndicator="Loading…"
       onMouseEnter={onMouseEnter} // Hover event handler
       onMouseLeave={onMouseLeave} // Hover event handler
     >

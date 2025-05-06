@@ -14,8 +14,8 @@ const CustomerList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { data: customers } = useGetCustomersListQuery();
   const { canCreateCustomers } = useRolePermissions();
-   const navigate = useNavigate();
-   const pathname = usePathname();
+  const navigate = useNavigate();
+  const pathname = usePathname();
 
   const buttons = [
     {
@@ -27,7 +27,7 @@ const CustomerList = () => {
       },
     },
   ];
-  
+
   return (
     <>
       {canCreateCustomers && (

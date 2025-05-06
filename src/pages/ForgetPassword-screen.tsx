@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { Formik, Form } from "formik";
 import { forgetPwdValidationSchema } from "../constants/forms/validations/validationSchema";
 import { forgetPwdInitialValue } from "../constants/forms/formikInitialValues";
@@ -9,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useSnackbarNotifications } from "../hooks/useSnackbarNotification"; // Snackbar hook
 import Container from "@mui/material/Container";
-import HelpIcon from '@mui/icons-material/Help';
+import HelpIcon from "@mui/icons-material/Help";
 import { useDispatch } from "react-redux";
 import { StorageKeys, useSessionStorage } from "../hooks/useSessionStorage";
 import { AppDispatch } from "../redux-store/store";
@@ -30,9 +37,16 @@ const ForgetPassword: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [userToken, setUserToken] = useSessionStorage(StorageKeys.TOKEN, "");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [forgetPassword, { isLoading: forgetPasswordLoading, error: forgetPasswordErrorObject, isSuccess: forgetPasswordSuccess, isError: forgetPasswordError }] = useForgetPwdMutation();
+  const [
+    forgetPassword,
+    {
+      isLoading: forgetPasswordLoading,
+      error: forgetPasswordErrorObject,
+      isSuccess: forgetPasswordSuccess,
+      isError: forgetPasswordError,
+    },
+  ] = useForgetPwdMutation();
 
-  
   const navigate = useNavigate();
 
   // Display snackbar notifications for error or success
@@ -46,9 +60,9 @@ const ForgetPassword: React.FC = () => {
 
   useEffect(() => {
     if (forgetPasswordSuccess) {
-      navigate("/login"); 
-    };
-}, [forgetPasswordSuccess,navigate]);
+      navigate("/login");
+    }
+  }, [forgetPasswordSuccess, navigate]);
   // Helper function to check if error is FetchBaseQueryError
   const isFetchBaseQueryError = (error: any): error is FetchBaseQueryError => {
     return error && typeof error === "object" && "status" in error;
@@ -58,9 +72,13 @@ const ForgetPassword: React.FC = () => {
     <Formik
       initialValues={forgetPwdInitialValue}
       validationSchema={forgetPwdValidationSchema}
-      onSubmit={async (values: ForgetPasswordProps, { setSubmitting, resetForm }) => {
+      onSubmit={async (
+        values: ForgetPasswordProps,
+        { setSubmitting, resetForm },
+      ) => {
         try {
-          const response: ForgetPasswordResponse = await forgetPassword(values).unwrap(); // Use unwrap to handle errors directly
+          const response: ForgetPasswordResponse =
+            await forgetPassword(values).unwrap(); // Use unwrap to handle errors directly
 
           // Check for success message in response
           if (response.data?.message) {
@@ -88,7 +106,7 @@ const ForgetPassword: React.FC = () => {
             }}
           >
             <Card sx={{ boxShadow: "4" }}>
-              <CardContent sx={{ m: 3, alignItems: 'center' }}>
+              <CardContent sx={{ m: 3, alignItems: "center" }}>
                 <Avatar sx={{ m: "auto", bgcolor: "primary.main" }}>
                   <HelpIcon />
                 </Avatar>
@@ -99,9 +117,18 @@ const ForgetPassword: React.FC = () => {
                   <Form noValidate>
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
-                        <Typography color="text.secondary" variant="body2" sx={{ fontSize: "12px", fontPalette: 'light', color: "Highlight", mt: 2 }}>
-                          Please enter the email address you'd like your password
-                          reset information sent to.
+                        <Typography
+                          color="text.secondary"
+                          variant="body2"
+                          sx={{
+                            fontSize: "12px",
+                            fontPalette: "light",
+                            color: "Highlight",
+                            mt: 2,
+                          }}
+                        >
+                          Please enter the email address you'd like your
+                          password reset information sent to.
                         </Typography>
                       </Grid>
 
@@ -136,8 +163,9 @@ const ForgetPassword: React.FC = () => {
                     {forgetPasswordError && (
                       <Typography color="error" variant="body2">
                         {isFetchBaseQueryError(forgetPasswordError) &&
-                          forgetPasswordError.data
-                          ? (forgetPasswordError.data as { message: string }).message
+                        forgetPasswordError.data
+                          ? (forgetPasswordError.data as { message: string })
+                              .message
                           : "An error occurred while sending the reset email"}
                       </Typography>
                     )}

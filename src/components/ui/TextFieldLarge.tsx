@@ -1,5 +1,11 @@
-import { InputAdornment, TextField, filledInputClasses, inputLabelClasses, outlinedInputClasses } from "@mui/material";
-import React, { } from "react";
+import {
+  InputAdornment,
+  TextField,
+  filledInputClasses,
+  inputLabelClasses,
+  outlinedInputClasses,
+} from "@mui/material";
+import React from "react";
 
 interface TextFieldProps {
   label?: string;
@@ -15,8 +21,19 @@ interface TextFieldProps {
   fullWidth?: boolean;
 }
 
-const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth }: TextFieldProps) => {
-
+const TextFieldLarge = ({
+  label,
+  value,
+  onChange,
+  disabled,
+  endAdornment,
+  startAdornment,
+  error,
+  helperText,
+  name,
+  type,
+  fullWidth,
+}: TextFieldProps) => {
   return (
     <TextField
       label={label}
@@ -26,33 +43,31 @@ const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startA
       error={error}
       helperText={helperText}
       name={name}
-
       type={type}
       fullWidth={fullWidth}
       InputProps={{
         startAdornment: startAdornment ? (
-          <InputAdornment position='start'>{startAdornment}</InputAdornment>
+          <InputAdornment position="start">{startAdornment}</InputAdornment>
         ) : undefined,
         endAdornment: endAdornment ? (
-          <InputAdornment position='end'>{endAdornment}</InputAdornment>
+          <InputAdornment position="end">{endAdornment}</InputAdornment>
         ) : undefined,
       }}
-
       sx={{
-        '& .MuiInputBase-root': {
-          '&::placeholder': {
+        "& .MuiInputBase-root": {
+          "&::placeholder": {
             opacity: 1,
           },
         },
-        '& .MuiInputBase-input': {
+        "& .MuiInputBase-input": {
           fontSize: 14,
           fontWeight: 500,
           lineHeight: "24px",
-          '&::placeholder': {
+          "&::placeholder": {
             color: `text.secondary`,
           },
         },
-        '& .MuiFilledInput-root': {
+        "& .MuiFilledInput-root": {
           backgroundColor: "transparent",
           borderRadius: "8px !important",
           borderStyle: "solid",
@@ -60,14 +75,13 @@ const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startA
           overflow: "hidden",
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          '&:hover': {
+          "&:hover": {
             backgroundColor: `action.hover`,
-
           },
-          '&:before': {
+          "&:before": {
             display: "none",
           },
-          '&:after': {
+          "&:after": {
             display: "none",
           },
           [`&.${filledInputClasses.disabled}`]: {
@@ -78,7 +92,7 @@ const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startA
             borderWidth: 2,
             boxSizing: "content-box",
             borderColor: `primary.main`,
-            '& .MuiTypography-root': {
+            "& .MuiTypography-root": {
               color: "#6366F1",
             },
           },
@@ -87,31 +101,31 @@ const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startA
             boxShadow: `error.main 0 0 0 2px`,
           },
         },
-        '& .MuiOutlinedInput-root': {
-          '&:hover': {
+        "& .MuiOutlinedInput-root": {
+          "&:hover": {
             // borderWidth: 4,
             outlineColor: `primary.main`,
             outlineWidth: 4,
             backgroundColor: `action.hover`,
-            '& .MuiOutlinedInput-notchedOutline': {
+            "& .MuiOutlinedInput-notchedOutline": {
               // borderColor: `primary.main`,
             },
           },
           [`&.${outlinedInputClasses.focused}`]: {
             backgroundColor: "transparent",
-            '& .MuiOutlinedInput-notchedOutline': {
+            "& .MuiOutlinedInput-notchedOutline": {
               borderColor: `primary.main`,
               boxShadow: `primary.main 0 0 0 2px`,
             },
           },
           [`&.${outlinedInputClasses.error}`]: {
-            '& .MuiOutlinedInput-notchedOutline': {
+            "& .MuiOutlinedInput-notchedOutline": {
               borderColor: `error.main`,
               boxShadow: `error.main 0 0 0 2px`,
             },
           },
         },
-        '& .MuiFormLabel-root': {
+        "& .MuiFormLabel-root": {
           fontSize: 14,
           fontWeight: 500,
           [`&.${inputLabelClasses.filled}`]: {
@@ -131,7 +145,6 @@ const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startA
         },
       }}
     />
-
   );
 };
 

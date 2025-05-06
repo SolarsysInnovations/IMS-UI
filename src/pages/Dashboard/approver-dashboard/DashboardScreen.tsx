@@ -26,10 +26,9 @@ interface ApproverDashboardScreenProps {
 const ApproverDashboardScreen: React.FC<ApproverDashboardScreenProps> = ({
   approverData = defaultApproverData,
 }) => {
-
   if (!approverData) {
     return <div>No data available</div>;
-  };
+  }
 
   const approverOverViewData = {
     totalInvoices: approverData.totalInvoices || 0,
@@ -40,17 +39,18 @@ const ApproverDashboardScreen: React.FC<ApproverDashboardScreenProps> = ({
 
   return (
     <>
-   <Grid container spacing={2}>
-  {approverOverViewData && (
-    <Grid item xs={8}>
-      <ApproverInvoiceOverView approverOverViewData={approverOverViewData} />
-    </Grid>
-  )}
-  </Grid>
-  {companyOverviewList && (
-    
-      <ApproverInvoiceList companyOverviewList={companyOverviewList} />
-  )}
+      <Grid container spacing={2}>
+        {approverOverViewData && (
+          <Grid item xs={8}>
+            <ApproverInvoiceOverView
+              approverOverViewData={approverOverViewData}
+            />
+          </Grid>
+        )}
+      </Grid>
+      {companyOverviewList && (
+        <ApproverInvoiceList companyOverviewList={companyOverviewList} />
+      )}
     </>
   );
 };

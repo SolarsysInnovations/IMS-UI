@@ -1,154 +1,149 @@
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
 // -------- customer ------------------------
 export interface LoginProps {
-    userEmail: string;
-    // username: string;
-    password: string;
-};
+  userEmail: string;
+  // username: string;
+  password: string;
+}
 
 export interface ForgetPwdProps {
-    userEmail: string;
-
-};
+  userEmail: string;
+}
 
 export interface ResetPwdProps {
-    token: string;
-    newPassword: string;
-
-};
+  token: string;
+  newPassword: string;
+}
 
 export interface GstTypeProps {
-    id?: string | undefined;
-    gstName: string,
-    gstPercentage: number | null,
-};
+  id?: string | undefined;
+  gstName: string;
+  gstPercentage: number | null;
+}
 export interface GstTypeFormProps {
-    gstTypeValue?: GstTypeProps;
+  gstTypeValue?: GstTypeProps;
 }
 export interface TdsTaxProps {
-    id?: string | undefined;
-    taxName: string,
-    taxPercentage: number | null,
-};
+  id?: string | undefined;
+  taxName: string;
+  taxPercentage: number | null;
+}
 export interface TdsTaxFormProps {
-    tdsTaxValue: TdsTaxProps;
+  tdsTaxValue: TdsTaxProps;
 }
 export interface ServiceFormProps {
-    serviceValue: ServiceListProps;
+  serviceValue: ServiceListProps;
 }
 export interface CompanyFormProps {
-    companyValue: AdminCompanyUsersInitialValueProps;
-    mode?: 'create' | 'edit';
+  companyValue: AdminCompanyUsersInitialValueProps;
+  mode?: "create" | "edit";
 }
 export interface LinkFormProps {
-    linkValue: linkCreationProps;
-    handleClose: () => void; // Add this line
-  }
+  linkValue: linkCreationProps;
+  handleClose: () => void; // Add this line
+}
 export interface PaymentTermsProps {
-    id?: string,
-    termName: string,
-    totalDays: number | null,
-};
+  id?: string;
+  termName: string;
+  totalDays: number | null;
+}
 export interface PaymentTermsFormProps {
-    paymentTermsValue: PaymentTermsProps
+  paymentTermsValue: PaymentTermsProps;
 }
 interface ContactPersonProps {
-    contactName: string;
-    contactEmail: string;
-    contactPhone: number;
-};
+  contactName: string;
+  contactEmail: string;
+  contactPhone: number;
+}
 export interface DyCreateCustomerProps {
-    id?: any;
-    customerName: string;
-    customerType: string;
-    companyName: string;
-    customerEmail: string;
-    customerPhone: number;
-    paymentTerms: string;
-    country: string;
-    address: string;
-    city: string;
-    state: string;
-    pinCode: string;
-    contactPerson: ContactPersonProps[];
-};
+  id?: any;
+  customerName: string;
+  customerType: string;
+  companyName: string;
+  customerEmail: string;
+  customerPhone: number;
+  paymentTerms: string;
+  country: string;
+  address: string;
+  city: string;
+  state: string;
+  pinCode: string;
+  contactPerson: ContactPersonProps[];
+}
 
 // types.ts
 export interface ButtonProps {
-    label: string;
-    icon?: React.ElementType;
-    onClick: (event?: React.FormEvent<HTMLButtonElement>) => void;
-    disabled?: boolean;
-};
+  label: string;
+  icon?: React.ElementType;
+  onClick: (event?: React.FormEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
+}
 
 export interface FormProps {
-    fields: FieldProps[];
-    initialValues: any;
-    validationSchema: any;
-    onClose?: () => void;
-    showTable?: boolean;
-    onSubmit: (values: any, actions: any) => void;
-    setData?: any;
-    updateFormValue?: (setFieldValue: Function) => void;
-    headerName?: string;
-    isSuccessToast?: boolean;
-    error?: any;
-    toastMessage?: string;
-    buttons?: any;
-    rows?: number;
-
-
-};
+  fields: FieldProps[];
+  initialValues: any;
+  validationSchema: any;
+  onClose?: () => void;
+  showTable?: boolean;
+  onSubmit: (values: any, actions: any) => void;
+  setData?: any;
+  updateFormValue?: (setFieldValue: Function) => void;
+  headerName?: string;
+  isSuccessToast?: boolean;
+  error?: any;
+  toastMessage?: string;
+  buttons?: any;
+  rows?: number;
+}
 export interface SubField {
-    width: string;
-    name: string;
-    label: string;
-    type: string;
-    gridSize?: number;
-    validation?: Yup.StringSchema<string>;
-    options?: { value: string; label: string }[];
-    startAdornment?: any;
-    endAdornment?: any;
-    helperText?: string;
-    required?: boolean;
-    disabled?: boolean;
-    rows?: number;
-};
+  width: string;
+  name: string;
+  label: string;
+  type: string;
+  gridSize?: number;
+  validation?: Yup.StringSchema<string>;
+  options?: { value: string; label: string }[];
+  startAdornment?: any;
+  endAdornment?: any;
+  helperText?: string;
+  required?: boolean;
+  disabled?: boolean;
+  rows?: number;
+}
 
 export interface FieldProps {
-    name: string;
-    label?: string;
-    type: string;
-    titleGridSize?: number;
-    subFields?: SubField[];
-    required?: boolean;
-    disabled?: boolean;
-    rows?: number;
-};
-
+  name: string;
+  label?: string;
+  type: string;
+  titleGridSize?: number;
+  subFields?: SubField[];
+  required?: boolean;
+  disabled?: boolean;
+  rows?: number;
+}
 
 // -------- invoice service ------------------------
 interface ServiceListProps {
-    id: number;
-    serviceAccountingCode: string;
-    serviceAmount: number;
-    serviceHours: number;
-    serviceTotalAmount: number;
-};
+  id: number;
+  serviceAccountingCode: string;
+  serviceAmount: number;
+  serviceHours: number;
+  serviceTotalAmount: number;
+}
 
 export interface ReportListProps {
-    id: string;
-    customerName: string;
-    days0to30: string;
-    days30to45: string;
-    above45: string;
-    total: string;
+  id: string;
+  customerName: string;
+  days0to30: string;
+  days30to45: string;
+  above45: string;
+  total: string;
 }
 
 interface TaxAmountProps {
-    tds: string;
-};
+  tds: string;
+}
 export interface InvoiceInitialValueProps {
   id?: string;
   invoiceDate: Date;
@@ -170,110 +165,106 @@ export interface InvoiceInitialValueProps {
   taxAmount: TaxAmountProps;
   servicesList: ServiceListProps[];
   signatureFile: string | null;
-};
- export interface InvoicesInitialValueProps {
-   // invoiceDate: string;
-    startDate: string;
-    endDate: string;
-    filter: string;
-};
-
-
-export interface ArAgingInitialValueProps {
-   // invoiceDate: string;
-    startDate: string;
-    endDate: string;
-    filter: string;
+}
+export interface InvoicesInitialValueProps {
+  // invoiceDate: string;
+  startDate: string;
+  endDate: string;
+  filter: string;
 }
 
+export interface ArAgingInitialValueProps {
+  // invoiceDate: string;
+  startDate: string;
+  endDate: string;
+  filter: string;
+}
 
 // ---------- service  --------------------
 export interface serviceCreationProps {
-    serviceAccountingCode: string;
-    serviceDescription: string;
-    serviceAmount: number;
-};
+  serviceAccountingCode: string;
+  serviceDescription: string;
+  serviceAmount: number;
+}
 //----------settings--------
 export interface SuperAdminUsersInitialValueProps {
-    id?: string;
-    file: any,
-    userName: string;
-    userEmail: string;
-    password: string;
-    userRole: string;
-    userMobile: string;
-    description: string;
+  id?: string;
+  file: any;
+  userName: string;
+  userEmail: string;
+  password: string;
+  userRole: string;
+  userMobile: string;
+  description: string;
 
-    companyName: string;
-    companyAddress: string;
-    companyState: string;
-    companyCountry: string;
-    companyCity: string;
-    companyEmail: string;
-    companyPhone: string;
-    companyWebsite: string;
-    companyTaxNumber: string;
-    companyRegNumber: string;
-    customerLimit:number,
-    invoiceLimit:number,
-    userLimit:number,
-    serviceLimit:number,
-};
+  companyName: string;
+  companyAddress: string;
+  companyState: string;
+  companyCountry: string;
+  companyCity: string;
+  companyEmail: string;
+  companyPhone: string;
+  companyWebsite: string;
+  companyTaxNumber: string;
+  companyRegNumber: string;
+  customerLimit: number;
+  invoiceLimit: number;
+  userLimit: number;
+  serviceLimit: number;
+}
 
 export interface AdminCompanyUsersInitialValueProps {
-    id?: string;
-    userName: string;
-    userEmail: string;
-    password: string;
-    userRole: string;
-    userMobile: string;
-    description: string;
+  id?: string;
+  userName: string;
+  userEmail: string;
+  password: string;
+  userRole: string;
+  userMobile: string;
+  description: string;
 }
 
 export interface linkCreationProps {
-    id: string;
-    label: string;
-    url: string;
-    description: string;
-};
+  id: string;
+  label: string;
+  url: string;
+  description: string;
+}
 // ---------user login --------------------
 
 export interface SendEmailInitialValueProps {
-    body: string;
-    fromemail: string;
-    recipientEmail: string;
-    //description: string;
-    file: File | null;
-   // cc: string;
-    subject: string;
+  body: string;
+  fromemail: string;
+  recipientEmail: string;
+  //description: string;
+  file: File | null;
+  // cc: string;
+  subject: string;
 }
 
 export interface RoleInitialValueProps {
-    id?: string,
-    userName: string,
-    password: string,
-    userRole: string,
-    userEmail: string,
-    userAccess: string,
-    userMobile?: string,
-    description?: string,
+  id?: string;
+  userName: string;
+  password: string;
+  userRole: string;
+  userEmail: string;
+  userAccess: string;
+  userMobile?: string;
+  description?: string;
 }
 
 export interface ChangePasswordInitialValueProps {
-    currentPassword: string;
-    newPassword: string;
-    confirmPassword: string;
-    userName: string;
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+  userName: string;
 }
-
 
 export interface InvoiceMailReasonProps {
-    id?: string;
-    fromMail: string;
-    toMail: string;
-    reason: string;
+  id?: string;
+  fromMail: string;
+  toMail: string;
+  reason: string;
 }
 export interface CompanyLogoProps {
-    companyLogo: any;
-    
+  companyLogo: any;
 }

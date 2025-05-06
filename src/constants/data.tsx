@@ -1,11 +1,11 @@
 import { Roles } from "./Enums";
 import { Home, Apartment } from "@mui/icons-material";
-import GroupIcon from '@mui/icons-material/Group';
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
-import TaskIcon from '@mui/icons-material/Task';
-import GroupsIcon from '@mui/icons-material/Groups';
-import SettingsIcon from '@mui/icons-material/Settings';
+import GroupIcon from "@mui/icons-material/Group";
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import MiscellaneousServicesIcon from "@mui/icons-material/MiscellaneousServices";
+import TaskIcon from "@mui/icons-material/Task";
+import GroupsIcon from "@mui/icons-material/Groups";
+import SettingsIcon from "@mui/icons-material/Settings";
 import DashboardScreen from "../pages/Dashboard/Dashboard";
 import Reportscreen from "../pages/reports/Reportscreen";
 import ArAgingscreen from "../pages/reports/Reports-ar-aging";
@@ -22,140 +22,145 @@ import ServicesList from "../pages/service/service-list-screen";
 import CompanyLogo from "../pages/settings/settings-company/company-logo";
 import SettingScreen from "../pages/settings/settings";
 
-  export const sidebarTwo = [
-    {
-      id: 1,
-      title: "Dashboard",
-      element: <DashboardScreen />,
-      path: "/dashboard",
-      icon: Home,
+export const sidebarTwo = [
+  {
+    id: 1,
+    title: "Dashboard",
+    element: <DashboardScreen />,
+    path: "/dashboard",
+    icon: Home,
     isParent: false,
-      allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
-    },
-    {
-      id: 2,
-      title: "Customer",
-      path: "/customer-list",
-      element: <CustomerList />,
-      icon: GroupIcon,
-      isParent: true,
-      subItems: [
-        {
-          id: 1,
+    allowedRoles: [
+      Roles.ADMIN,
+      Roles.APPROVER,
+      Roles.STANDARDUSER,
+      Roles.SUPERADMIN,
+    ],
+  },
+  {
+    id: 2,
+    title: "Customer",
+    path: "/customer-list",
+    element: <CustomerList />,
+    icon: GroupIcon,
+    isParent: true,
+    subItems: [
+      {
+        id: 1,
         show: false,
-          title: "Create Customer",
-          path: "/customer/create",
-          element: <CustomerScreen />,
-          allowedRoles: [Roles.ADMIN, Roles.APPROVER],
-        },
-        {
-          id: 1,
+        title: "Create Customer",
+        path: "/customer/create",
+        element: <CustomerScreen />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER],
+      },
+      {
+        id: 1,
         show: false,
-          title: "Create Customer",
-          path: "/customer/edit",
-          element: <CustomerScreen />,
-          allowedRoles: [Roles.ADMIN, Roles.APPROVER],
-        },
-      ],
-      allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-    },
-    {
-      id: 3,
-      title: "Invoices",
-      path: "/invoice/list",
-      element: <InvoiceList />,
-      icon: ReceiptIcon,
-      isParent: true,
-      subItems: [
-        {
-          id: 1,
+        title: "Create Customer",
+        path: "/customer/edit",
+        element: <CustomerScreen />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER],
+      },
+    ],
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+  },
+  {
+    id: 3,
+    title: "Invoices",
+    path: "/invoice/list",
+    element: <InvoiceList />,
+    icon: ReceiptIcon,
+    isParent: true,
+    subItems: [
+      {
+        id: 1,
         show: false,
-          title: "Create Invoice",
-          path: "/invoice/create",
-          element: <InvoiceCreateScreen />,
-          allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-        },
-      ],
-      allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-    },
-    {
-      id: 4,
-      title: "Services",
-      path: "/services/list",
-      element: <ServicesList />,
-      icon: MiscellaneousServicesIcon,
-      isParent: true,
-      allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-    },
-    {
-      id: 5,
-      title: "Reports",
-      element: <Reportscreen />,
-      path: "/reports",
-      icon: TaskIcon,
-      isParent: true,
-      subItems: [
-        {
-          id: 1,
+        title: "Create Invoice",
+        path: "/invoice/create",
+        element: <InvoiceCreateScreen />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      },
+    ],
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+  },
+  {
+    id: 4,
+    title: "Services",
+    path: "/services/list",
+    element: <ServicesList />,
+    icon: MiscellaneousServicesIcon,
+    isParent: true,
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+  },
+  {
+    id: 5,
+    title: "Reports",
+    element: <Reportscreen />,
+    path: "/reports",
+    icon: TaskIcon,
+    isParent: true,
+    subItems: [
+      {
+        id: 1,
         show: false,
-          title: "AR Aging Report",
-          path: "/reports/araging",
-          element: <ArAgingscreen />,
-          allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-        },
-        {
-          id: 2,
+        title: "AR Aging Report",
+        path: "/reports/araging",
+        element: <ArAgingscreen />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      },
+      {
+        id: 2,
         show: false,
-          title: "Invoice Report",
-          path: "/reports/invoice",
-          element: <Reportsinvoice />,
-          allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-        },
-      ],
+        title: "Invoice Report",
+        path: "/reports/invoice",
+        element: <Reportsinvoice />,
+        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+      },
+    ],
 
-      allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
-    },
-    {
-      id: 6,
-      title: "Users",
-      path: "/user/list",
-      element: <UserScreen />,
-      icon: GroupsIcon,
-      isParent: false,
-      allowedRoles: [Roles.ADMIN, Roles.APPROVER],
-    },
-    {
-      id: 7,
-      title: "Company",
-      path: "/company",
-      element: <CompanyList />,
-      icon: Apartment,
-      isParent: true,
-      subItems: [
-        {
-          id: 1,
-          title: "Create Company",
-          path: "/company/create",
-          element: <CompanyScreen />,
-          allowedRoles: [Roles.SUPERADMIN],
-        }, {
-          id: 1,
-          title: "Create Company",
-          path: "/company/edit",
-          element: <CompanyScreen />,
-          allowedRoles: [Roles.SUPERADMIN],
-        },
-        
-      ],
-      allowedRoles: [Roles.SUPERADMIN],
-    },
-    {
-      id: 8,
-      title: "Settings",
-      path: "/settings",
-      element: <SettingScreen />,
-      icon: SettingsIcon,
-      isParent: true,
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER],
+  },
+  {
+    id: 6,
+    title: "Users",
+    path: "/user/list",
+    element: <UserScreen />,
+    icon: GroupsIcon,
+    isParent: false,
+    allowedRoles: [Roles.ADMIN, Roles.APPROVER],
+  },
+  {
+    id: 7,
+    title: "Company",
+    path: "/company",
+    element: <CompanyList />,
+    icon: Apartment,
+    isParent: true,
+    subItems: [
+      {
+        id: 1,
+        title: "Create Company",
+        path: "/company/create",
+        element: <CompanyScreen />,
+        allowedRoles: [Roles.SUPERADMIN],
+      },
+      {
+        id: 1,
+        title: "Create Company",
+        path: "/company/edit",
+        element: <CompanyScreen />,
+        allowedRoles: [Roles.SUPERADMIN],
+      },
+    ],
+    allowedRoles: [Roles.SUPERADMIN],
+  },
+  {
+    id: 8,
+    title: "Settings",
+    path: "/settings",
+    element: <SettingScreen />,
+    icon: SettingsIcon,
+    isParent: true,
     subItems: [
       {
         id: 1,
@@ -163,27 +168,42 @@ import SettingScreen from "../pages/settings/settings";
         title: "Role Settings",
         path: "/settings/Role",
         element: <SettingRoleScreen />,
-        allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
-          },
+        allowedRoles: [
+          Roles.ADMIN,
+          Roles.APPROVER,
+          Roles.STANDARDUSER,
+          Roles.SUPERADMIN,
+        ],
+      },
     ],
-      allowedRoles: [Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER, Roles.SUPERADMIN],
-    },
+    allowedRoles: [
+      Roles.ADMIN,
+      Roles.APPROVER,
+      Roles.STANDARDUSER,
+      Roles.SUPERADMIN,
+    ],
+  },
   {
-    path: '/settings',
+    path: "/settings",
     element: <SettingScreen />,
     allowedRoles: [],
     subItems: [
       {
-        path: '/companyLogo',
+        path: "/companyLogo",
         element: <CompanyLogo />,
         allowedRoles: [],
       },
     ],
-  }
-  ];
+  },
+];
 
-export const invoiceStatusOptions = ["DRAFT", "PENDING", "APPROVED", "RETURNED", "PAID",];
-
+export const invoiceStatusOptions = [
+  "DRAFT",
+  "PENDING",
+  "APPROVED",
+  "RETURNED",
+  "PAID",
+];
 
 interface UserAccess {
   canCreateCustomers: boolean;
@@ -210,7 +230,7 @@ interface UserAccess {
   canViewSettings: boolean;
   canEditSettings: boolean;
   canCreateTds: boolean;
-  canViewTds: boolean
+  canViewTds: boolean;
   canEditTds: boolean;
   canDeleteTds: boolean;
   canCreatePayment: boolean;
@@ -225,7 +245,6 @@ interface UserAccess {
   canViewService: boolean;
   canEditService: boolean;
   canDeleteService: boolean;
-
 }
 
 type ApplicationUserAccess = {
@@ -264,10 +283,10 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canViewSettings: true,
     canEditSettings: true,
     //tds access
-   canCreateTds: true,
-   canViewTds: true,
-   canEditTds: true,
-   canDeleteTds: true,
+    canCreateTds: true,
+    canViewTds: true,
+    canEditTds: true,
+    canDeleteTds: true,
     //payment access
     canCreatePayment: true,
     canViewPayment: true,
@@ -279,11 +298,10 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canEditGst: true,
     canDeleteGst: true,
     //service access
-   canCreateService: true,
-   canViewService: true,
-   canEditService: true,
-   canDeleteService: true,
-
+    canCreateService: true,
+    canViewService: true,
+    canEditService: true,
+    canDeleteService: true,
   },
   [Roles.ADMIN]: {
     // customer access
@@ -313,13 +331,13 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canDeleteCompanies: false,
     // settings access
     canCreateSettings: true,
-    canViewSettings: true,  
+    canViewSettings: true,
     canEditSettings: true,
-     //tds access
-   canCreateTds: true,
-   canViewTds: true,
-   canEditTds: true,
-   canDeleteTds: true,
+    //tds access
+    canCreateTds: true,
+    canViewTds: true,
+    canEditTds: true,
+    canDeleteTds: true,
     //payment access
     canCreatePayment: true,
     canViewPayment: true,
@@ -331,10 +349,10 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canEditGst: true,
     canDeleteGst: true,
     //service access
-   canCreateService: true,
-   canViewService: true,
-   canEditService: true,
-   canDeleteService: true,
+    canCreateService: true,
+    canViewService: true,
+    canEditService: true,
+    canDeleteService: true,
   },
   [Roles.APPROVER]: {
     // customer access
@@ -366,11 +384,11 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
-   //tds access
-   canCreateTds: true,
-   canViewTds: true,
-   canEditTds: true,
-   canDeleteTds: true,
+    //tds access
+    canCreateTds: true,
+    canViewTds: true,
+    canEditTds: true,
+    canDeleteTds: true,
     //payment access
     canCreatePayment: true,
     canViewPayment: true,
@@ -382,10 +400,10 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canEditGst: true,
     canDeleteGst: true,
     //service access
-   canCreateService: true,
-   canViewService: true,
-   canEditService: true,
-   canDeleteService: true,
+    canCreateService: true,
+    canViewService: true,
+    canEditService: true,
+    canDeleteService: true,
   },
   [Roles.STANDARDUSER]: {
     // customer access
@@ -417,11 +435,11 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canCreateSettings: true,
     canViewSettings: true,
     canEditSettings: true,
-   //tds access
-   canCreateTds: false,
-   canViewTds: false,
-   canEditTds: true,
-   canDeleteTds: true,
+    //tds access
+    canCreateTds: false,
+    canViewTds: false,
+    canEditTds: true,
+    canDeleteTds: true,
     //payment access
     canCreatePayment: false,
     canViewPayment: true,
@@ -433,10 +451,10 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canEditGst: true,
     canDeleteGst: true,
     //service access
-   canCreateService: false,
-   canViewService: true,
-   canEditService: true,
-   canDeleteService: true,
+    canCreateService: false,
+    canViewService: true,
+    canEditService: true,
+    canDeleteService: true,
   },
   [Roles.GUEST]: {
     // customer access
@@ -469,10 +487,10 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canViewSettings: false,
     canEditSettings: false,
     //tds access
-   canCreateTds: false,
-   canViewTds: false,
-   canEditTds: false,
-   canDeleteTds: false,
+    canCreateTds: false,
+    canViewTds: false,
+    canEditTds: false,
+    canDeleteTds: false,
     //payment access
     canCreatePayment: false,
     canViewPayment: false,
@@ -484,10 +502,9 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canEditGst: false,
     canDeleteGst: false,
     //service access
-   canCreateService: false,
-   canViewService: false,
-   canEditService: false,
-   canDeleteService: false,
-
-  }
+    canCreateService: false,
+    canViewService: false,
+    canEditService: false,
+    canDeleteService: false,
+  },
 };

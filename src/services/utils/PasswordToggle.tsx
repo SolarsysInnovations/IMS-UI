@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { IconButton, InputAdornment, TextField } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import React, { useState } from "react";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 interface PasswordFieldProps {
   label?: string;
@@ -29,7 +29,7 @@ const PasswordVisibilityToggle: React.FC<PasswordFieldProps> = ({
     <TextField
       label={label}
       name={name}
-      type={showPassword ? 'text' : 'password'}
+      type={showPassword ? "text" : "password"}
       value={value}
       onChange={onChange}
       error={error}
