@@ -1,11 +1,9 @@
-import { API_URLS, BASE_LOCAL_URL } from '../../constants/api-urls';
+import { API_URLS } from '../../constants/api-urls';
 import { apiSlice } from '../api/apiSlice';
 import {
   ForgetPwdProps,
   InvoiceInitialValueProps,
   ResetPwdProps,
-  RoleInitialValueProps,
-  SendEmailInitialValueProps,
 } from '../../types/types';
 
 interface DashboardRequestProps {

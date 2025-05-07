@@ -1,14 +1,6 @@
-import { RemoveRedEyeOutlined } from '@mui/icons-material';
 import { IconButton, Stack } from '@mui/material';
-import {
-  GridColDef,
-  GridDeleteIcon,
-  GridValueSetterParams,
-} from '@mui/x-data-grid';
-import ModalUi from '../../../components/ui/ModalUi';
-import InvoiceUi from '../../../pages/Invoice/Generate-Invoice/InvoiceUi';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
+import { useEffect } from 'react';
 import { AppDispatch } from '../../../redux-store/store';
 import { useDispatch } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
@@ -23,19 +15,18 @@ import { setPaymentTermsData } from '../../../redux-store/slices/paymentTermsSli
 const MyCellRenderer = ({ id }: { id: any }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [getPaymentTerm, {}] = useGetSinglePaymentTermsMutation();
+  const [getPaymentTerm] = useGetSinglePaymentTermsMutation();
 
   const [
     deletePaymentTerms,
     {
-      isLoading: paymentTermsDeleteLoading,
       isSuccess: paymentTermsDeleteSuccess,
       error: paymentTermsErrorObject,
       isError: paymentTermsError,
     },
   ] = useDeletePaymentTermsMutation();
 
-  const { data: getPaymentTermsList, refetch } = useGetPaymentTermsListQuery();
+  const { refetch } = useGetPaymentTermsListQuery();
 
   useEffect(() => {
     refetch();

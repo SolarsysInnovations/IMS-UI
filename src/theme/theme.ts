@@ -1,6 +1,6 @@
 // theme.ts
-import { alpha } from '@mui/material';
 import {
+  alpha,
   createTheme,
   filledInputClasses,
   inputLabelClasses,

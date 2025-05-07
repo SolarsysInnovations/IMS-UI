@@ -1,13 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface GlobalState {
-  companyLogo: string | null;
-}
-
-const initialState: GlobalState = {
-  companyLogo: null, // or a default logo URL if necessary
-};
-
 export const globalSlice = createSlice({
   name: 'global',
   initialState: {

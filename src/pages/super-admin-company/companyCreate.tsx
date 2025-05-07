@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import * as Yup from 'yup'; // Import Yup for validation
 import {
   CompanyEditFields,
   CompanyFields,
@@ -9,7 +8,6 @@ import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { clearData } from '../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
-import { SuperAdminUsersInitialValueProps } from '../../types/types';
 import { useNavigate } from 'react-router-dom';
 import { superAdminCompanyUsersInitialValues } from '../../constants/forms/formikInitialValues';
 import {
@@ -31,7 +29,6 @@ const CompanyCreate = ({
   const [
     addCompany,
     {
-      isLoading: companyAddLoading,
       isSuccess: companyAddSuccess,
       isError: companyAddError,
       error: companyAddErrorObject,
@@ -40,13 +37,12 @@ const CompanyCreate = ({
   const [
     updateCompany,
     {
-      isLoading: companyUpdateLoading,
       isSuccess: companyUpdateSuccess,
       isError: companyUpdateError,
       error: companyUpdateErrorObject,
     },
   ] = useUpdateUserMutation();
-  const { data: company, error, isLoading, refetch } = useGetUsersListQuery();
+  const { refetch } = useGetUsersListQuery();
   const [data, setData] = useState<any>();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -91,7 +87,7 @@ const CompanyCreate = ({
       navigate(-1);
     }
     refetch();
-  }, [companyAddSuccess, companyUpdateSuccess, refetch]);
+  }, [companyAddSuccess, companyUpdateSuccess, refetch, navigate]);
 
   const onSubmit = async (values: any, actions: any) => {
     try {

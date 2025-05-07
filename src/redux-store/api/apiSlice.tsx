@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_LOCAL_URL } from '../../constants/api-urls';
-import { logOut, setCredentials, updateAccessToken } from '../auth/authSlice';
+import { logOut, updateAccessToken } from '../auth/authSlice';
 
 interface RootState {
   auth: {
@@ -65,10 +65,10 @@ const baseQueryWithReauth = async (
       if (errorMessage === 'Invalid token.') {
         api.dispatch(logOut());
       }
-      return result; // Return the original error response
+      return result;
     }
   }
-  return result; // Return the original or retried query result
+  return result;
 };
 
 export const apiSlice = createApi({

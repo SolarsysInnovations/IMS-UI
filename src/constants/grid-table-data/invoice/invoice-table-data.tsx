@@ -1,14 +1,9 @@
-import { IconButton, Stack } from '@mui/material';
-import { GridDeleteIcon } from '@mui/x-data-grid';
-import EditIcon from '@mui/icons-material/Edit';
+import { Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import { useEffect, useState } from 'react';
-import { RemoveRedEyeOutlined } from '@mui/icons-material';
-import ModalUi from '../../../components/ui/ModalUi';
 import InvoiceUi from '../../../pages/Invoice/Generate-Invoice/InvoiceUi';
-import ButtonSmallUi from '../../../components/ui/ButtonSmall';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import {
   useDeleteInvoiceMutation,
@@ -22,35 +17,6 @@ import {
 import DialogBoxUi from '../../../components/ui/DialogBox';
 import ActionButtons from '../../../components/ui/ActionButtons';
 import { useRolePermissions } from '../../../hooks/useRolePermission';
-
-// export const DownloadButtonRenderer = ({ row }: { row: any }) => {
-//     const [downloadPdf, setDownloadPdf] = useState<boolean>(false);
-
-//     const [isModalOpen, setIsModalOpen] = useState(false);
-//     const [invoiceData, setInvoicesData] = useState<any>();
-
-//     const handleOpenModal = () => {
-//         setInvoicesData(row);
-//         setIsModalOpen(true);
-//     };
-
-//     const handleCloseModal = () => {
-//         setIsModalOpen(false);
-//     };
-
-//     return (
-//         <>
-//             <ButtonSmallUi
-//                 variant="outlined"
-//                 label="Download Pdf"
-//                 onClick={handleOpenModal}
-//             />
-//             <ModalUi topHeight='100%' open={isModalOpen} onClose={handleCloseModal} >
-//                 <InvoiceUi downloadPdf={downloadPdf} invoiceData={invoiceData} />
-//             </ModalUi>
-//         </>
-//     );
-// };
 
 export const MyCellRenderer = ({ row }: { row: any }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -134,28 +100,22 @@ export const MyCellRenderer = ({ row }: { row: any }) => {
   };
 
   return (
-    <>
-      <Stack direction="row" spacing={1}>
-        <ActionButtons
-          canView={canViewInvoices}
-          canDelete={canDeleteInvoices}
-          canEdit={canEditInvoices && row.invoiceStatus !== 'PENDING'}
-          onDeleteClick={handleDeleteClick}
-          onEditClick={handleEditClick}
-          onViewClick={handleDetails}
-        />
-        <DialogBoxUi
-          open={isModalOpen}
-          content={
-            <>
-              <InvoiceUi preview={preview} />
-            </>
-          }
-          handleClose={() => {
-            setIsModalOpen(false);
-          }}
-        />
-      </Stack>
-    </>
+    <Stack direction="row" spacing={1}>
+      <ActionButtons
+        canView={canViewInvoices}
+        canDelete={canDeleteInvoices}
+        canEdit={canEditInvoices && row.invoiceStatus !== 'PENDING'}
+        onDeleteClick={handleDeleteClick}
+        onEditClick={handleEditClick}
+        onViewClick={handleDetails}
+      />
+      <DialogBoxUi
+        open={isModalOpen}
+        content={<InvoiceUi preview={preview} />}
+        handleClose={() => {
+          setIsModalOpen(false);
+        }}
+      />
+    </Stack>
   );
 };

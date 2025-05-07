@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useSelector } from 'react-redux';
-import { Box } from '@mui/system';
 
 interface CompanyDetailsProps {
   details?: any; // Replace 'any' with a more specific type if needed
