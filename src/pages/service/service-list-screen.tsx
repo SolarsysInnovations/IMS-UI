@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { columns } from '../../constants/grid-table-data/service-table-data';
-import ModalUi from '../../components/ui/ModalUi';
-import { Box } from '@mui/material';
 import ServiceCreate from './service-create-screen';
-import ServiceEditScreen from './service-edit-screen'; // Import the edit screen
 import { useGetServiceListQuery } from '../../redux-store/api/injectedApis';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import { clearServiceData } from '../../redux-store/slices/serviceSlice';
@@ -18,16 +15,8 @@ import { useRolePermissions } from '../../hooks/useRolePermission';
 const ServicesList = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const {
-    data: serviceList,
-    error,
-    isLoading,
-    refetch,
-  } = useGetServiceListQuery();
-  const serviceStateDetails = useSelector(
-    (state: any) => state.globalState.data,
-  );
-  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const { data: serviceList } = useGetServiceListQuery();
+  const [openDialogBox, setOpenDialogBox] = useState(false);
 
   const { canCreateServices } = useRolePermissions();
   const buttons = [
@@ -36,7 +25,7 @@ const ServicesList = () => {
       icon: Add,
       onClick: () => {
         dispatch(clearServiceData());
-        setIsOpenDialogBox(true);
+        setOpenDialogBox(true);
       },
     },
   ];
@@ -54,14 +43,10 @@ const ServicesList = () => {
         checkboxSelection={false}
       />
       <DialogBoxUi
-        open={opendialogBox}
-        content={
-          <>
-            <ServiceCreate setIsOpenDialogBox={setIsOpenDialogBox} />
-          </>
-        }
+        open={openDialogBox}
+        content={<ServiceCreate setOpenDialogBox={setOpenDialogBox} />}
         handleClose={() => {
-          setIsOpenDialogBox(false);
+          setOpenDialogBox(false);
         }}
       />
     </>

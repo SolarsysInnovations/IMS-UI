@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import {
-  useGetServiceListQuery,
   useUpdateServiceMutation,
 } from '../../redux-store/api/injectedApis';
 
@@ -14,7 +13,6 @@ const ServiceEditScreen = () => {
   const [
     updateService,
     {
-      isLoading: serviceUpdateLoading,
       isSuccess: serviceUpdateSuccess,
       isError: serviceUpdateError,
       error: serviceUpdateErrorObject,
@@ -24,7 +22,6 @@ const ServiceEditScreen = () => {
     (state: any) => state.globalState.data,
   );
   const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const { data: service, error, isLoading, refetch } = useGetServiceListQuery();
   const [isPopupOpen, setIsPopupOpen] = useState(true); // State to control popup visibility
   const handleBackClick = () => {
     navigate(0); // Navigate back
@@ -80,7 +77,7 @@ const ServiceEditScreen = () => {
           headerName="Edit Service"
           showTable={true}
           fields={serviceFields}
-          initialValues={serviceStateDetails || {}} // Ensure to default to an empty object
+          initialValues={serviceStateDetails ?? {}} // Ensure to default to an empty object
           validationSchema={serviceValidationSchema}
           onSubmit={onSubmit}
           buttons={[

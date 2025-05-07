@@ -1,13 +1,10 @@
-import { Box, IconButton, Stack } from '@mui/material';
-import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
-import EditIcon from '@mui/icons-material/Edit';
+import { Box, Stack } from '@mui/material';
+import { GridColDef } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import React, { useEffect, useState } from 'react';
-import { RemoveRedEyeOutlined } from '@mui/icons-material';
 import CustomerDetails from '../../pages/customer/customerDetails';
 import TableHeader from '../../components/layouts/TableHeader';
-import { styled } from '@mui/system';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import {
   useDeleteCustomerMutation,
@@ -22,7 +19,7 @@ import ActionButtons from '../../components/ui/ActionButtons';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [openDialogBox, setIsOpenDialogBox] = useState(false);
+  const [openDialogBox, setOpenDialogBox] = useState(false);
   const { refetch } = useGetCustomersListQuery();
   const [
     deleteCustomer,
@@ -69,7 +66,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     try {
       const response = await getCustomer(id);
       if ('data' in response) {
-        setIsOpenDialogBox(true);
+        setOpenDialogBox(true);
       } else {
         console.error('Error response:', response.error);
       }
@@ -105,11 +102,11 @@ const MyCellRenderer = ({ id }: { id: any }) => {
           <>
             <TableHeader headerName="Customer Details" />
             <Box sx={{ marginTop: '15px' }}>
-              <CustomerDetails details={customerData || {}} />
+              <CustomerDetails details={customerData ?? {}} />
             </Box>
           </>
         }
-        handleClose={() => setIsOpenDialogBox(false)}
+        handleClose={() => setOpenDialogBox(false)}
       />
     </Stack>
   );
@@ -153,37 +150,4 @@ export const columns: GridColDef[] = [
     width: 150,
     editable: false,
   },
-  // {
-  //     field: "country",
-  //     editable: true,
-  //     type: "singleSelect",
-  //     valueOptions: ["United Kingdom", "Spain", "Brazil"]
-  // }
-  // {
-  //     field: 'contactPersons',
-  //     headerName: 'contactPersons',
-  //     width: 250,
-  //     editable: false,
-  //     renderCell: (params: any) => {
-  //         return (
-  //             <ul className="flex">
-  //                 {params.value?.map((person: any) => {
-  //                     return (
-  //                         <li key={person.id}>{person.contactName}</li>
-  //                     );
-  //                 })}
-  //             </ul>
-  //         );
-  //     },
-  // },
-
-  // {
-  //     field: 'fullName',
-  //     headerName: 'Full name',
-  //     description: 'This column has a value getter and is not sortable.',
-  //     sortable: false,
-  //     width: 160,
-  //     valueGetter: (params: GridValueGetterParams) =>
-  //         `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-  // },
 ];

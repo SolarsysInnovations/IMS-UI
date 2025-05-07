@@ -1,28 +1,24 @@
-import { number } from 'yup';
 import {
-  InvoiceInitialValueProps,
-  LoginProps,
-  ForgetPwdProps,
-  DyCreateCustomerProps,
-  serviceCreationProps,
-  GstTypeProps,
-  TdsTaxProps,
-  SendEmailInitialValueProps,
-  PaymentTermsProps,
-  ArAgingInitialValueProps,
-  InvoicesInitialValueProps,
-  RoleInitialValueProps,
-  ChangePasswordInitialValueProps,
-  InvoiceMailReasonProps,
   AdminCompanyUsersInitialValueProps,
+  ArAgingInitialValueProps,
+  ChangePasswordInitialValueProps,
+  DyCreateCustomerProps,
+  ForgetPwdProps,
+  GstTypeProps,
+  InvoiceInitialValueProps,
+  InvoiceMailReasonProps,
+  InvoicesInitialValueProps,
+  LoginProps,
+  PaymentTermsProps,
+  RoleInitialValueProps,
+  SendEmailInitialValueProps,
   SuperAdminUsersInitialValueProps,
+  TdsTaxProps,
+  serviceCreationProps,
 } from '../../types/types';
-import { format } from 'path';
-import { companyDetailsValidationSchema } from './validations/validationSchema';
 
 export const loginInitialValue: LoginProps = {
   userEmail: '',
-  // username: "",
   password: '',
 };
 export const forgetPwdInitialValue: ForgetPwdProps = {
@@ -41,7 +37,6 @@ export const superAdminCompanyUsersInitialValues: SuperAdminUsersInitialValuePro
     userRole: '',
     userMobile: '',
     description: '',
-    // companyName: "Marvel",
     // * ---------- company information ----------
     companyName: '',
     companyEmail: '',
@@ -111,7 +106,7 @@ export const gstTypeInitialValue: GstTypeProps = {
 const fromMail = localStorage.getItem('userEmail');
 
 export const invoiceMailReasonInitialValue: InvoiceMailReasonProps = {
-  fromMail: fromMail || '',
+  fromMail: fromMail ?? '',
   toMail: '',
   reason: '',
 };
@@ -151,8 +146,6 @@ export const dyserviceInitialValues: serviceCreationProps = {
   serviceDescription: '',
   serviceAmount: 0,
 };
-
-//
 
 const formatDate = (date: Date): string => {
   const year = date.getFullYear();

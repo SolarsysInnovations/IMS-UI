@@ -1,9 +1,9 @@
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import TextFieldUi from '../../components/ui/TextField';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import { Box, Grid, Stack } from '@mui/material';
+import { Grid } from '@mui/material';
 
 interface InputObject {
   id?: number;
@@ -66,7 +66,7 @@ export const CreateServices: React.FC = () => {
             }
             labelText={input.label}
             options={input.options || []}
-            value={values[input.label] || ''}
+            value={values[input.label] ?? ''}
             error={touched[input.label] && Boolean(errors[input.label])}
             helperText={touched[input.label] && errors[input.label]}
           />

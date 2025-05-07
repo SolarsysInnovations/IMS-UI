@@ -1,5 +1,5 @@
 import { Roles } from './Enums';
-import { Home, Apartment } from '@mui/icons-material';
+import { Apartment, Home } from '@mui/icons-material';
 import GroupIcon from '@mui/icons-material/Group';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';

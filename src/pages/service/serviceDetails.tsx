@@ -1,12 +1,11 @@
-import React, { ReactNode, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 
-interface serviceDetailsProps {
+interface ServiceDetailsProps {
   details: any;
 }
 
-const ServiceDetails = ({ details }: serviceDetailsProps) => {
+const ServiceDetails = ({ details }: ServiceDetailsProps) => {
   return (
     <Grid container spacing={2}>
       {Object.entries(details).map(([key, value]) => (

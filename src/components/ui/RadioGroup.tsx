@@ -4,7 +4,6 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { string } from 'yup';
 import { Typography } from '@mui/material';
 
 interface RadioOptions {
@@ -13,15 +12,15 @@ interface RadioOptions {
 }
 
 interface RadioFormProps {
-  options?: RadioOptions[];
-  groupName?: string;
-  errorMsg?: any;
-  label?: string;
-  size?: string;
-  value?: string | number;
-  disabled?: boolean;
-  required?: boolean;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  readonly options?: RadioOptions[];
+  readonly groupName?: string;
+  readonly errorMsg?: any;
+  readonly label?: string;
+  readonly size?: string;
+  readonly value?: string | number;
+  readonly disabled?: boolean;
+  readonly required?: boolean;
+  readonly onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 export default function RadioUi({
   errorMsg,

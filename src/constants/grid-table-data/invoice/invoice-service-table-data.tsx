@@ -1,7 +1,5 @@
 import { GridColDef, GridValueSetterParams } from '@mui/x-data-grid';
 
-const id = 1;
-
 export const columns: GridColDef[] = [
   {
     field: 'serviceAccountingCode',

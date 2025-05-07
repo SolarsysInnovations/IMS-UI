@@ -1,24 +1,24 @@
 import { useState } from 'react';
 import {
   AppBar,
+  Box,
+  Grid,
   Toolbar,
   IconButton,
-  Box,
+  ListItemIcon,
   Menu,
   MenuItem,
-  ListItemIcon,
   Tooltip,
   Typography,
-  Grid,
 } from '@mui/material';
-import { Logout, Settings, Person, Lock } from '@mui/icons-material';
+import { Lock, Logout, Person, Settings } from '@mui/icons-material';
 import { logOut } from '../../redux-store/auth/authSlice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import DialogBoxUi from '../ui/DialogBox';
 import UserProfile from '../../pages/profile/UserProfile';
 import ChangePassword from '../../pages/profile/ChangePassword';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { capitalize } from '../../services/utils/capitalization';
 import { useInVoiceContext } from '../../invoiceContext/invoiceContext';

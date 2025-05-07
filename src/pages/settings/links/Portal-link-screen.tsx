@@ -10,14 +10,14 @@ const LinkScreen = () => {
   const linkValue = useSelector((state: any) => state.globalState.data);
 
   const [key, setKey] = useState<number>(0);
-  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [openDialogBox, setOpenDialogBox] = useState(false);
 
   const handleModalOpen = () => {
-    setIsOpenDialogBox(true);
+    setOpenDialogBox(true);
   };
 
   const handleModalClose = () => {
-    setIsOpenDialogBox(false);
+    setOpenDialogBox(false);
     setKey((prevKey) => prevKey + 1); // Reset the key to force a re-render
   };
 
@@ -34,7 +34,7 @@ const LinkScreen = () => {
       <PortalLinkList />
 
       <DialogBoxUi
-        open={opendialogBox}
+        open={openDialogBox}
         content={
           <PortalLinkCreate
             key={key}

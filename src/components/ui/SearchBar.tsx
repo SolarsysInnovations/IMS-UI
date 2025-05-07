@@ -1,13 +1,6 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import { IconButton, InputAdornment } from '@mui/material';
-import {
-  Insights,
-  SearchOffOutlined,
-  SearchOutlined,
-  SearchRounded,
-} from '@mui/icons-material';
 
 const filter = createFilterOptions<FilmOptionType>();
 

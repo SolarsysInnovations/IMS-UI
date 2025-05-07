@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, Paper } from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 
 // Example data that could be dynamically provided
 const customerDetailsArray = [
@@ -19,23 +19,22 @@ const customerDetailsArray = [
       },
     ],
   },
-  // Add more objects if needed
 ];
 
 const flattenCustomerDetails = (detailsArray: typeof customerDetailsArray) => {
-  return detailsArray.flatMap((details, idx) => {
+  return detailsArray.flatMap((details) => {
     const { contactPersons, ...userDetails } = details;
 
     // Flatten userDetails into an array of [key, value] pairs
     const flattenedUserDetails = Object.entries(userDetails).map(
       ([key, value]) => [
-        key.replace(/([A-Z])/g, ' $1').toUpperCase(), // Convert camelCase to readable format
+        key.replace(/([A-Z])/g, ' $1').toUpperCase(),
         value,
       ],
     );
 
     // Flatten contactPersons into an array of [key, value] pairs
-    const flattenedContactPersons = contactPersons.flatMap((person, index) => [
+    const flattenedContactPersons = contactPersons.flatMap((person) => [
       [`Contact Person`, person.name],
       [`Contact Number`, person.contactNumber],
     ]);

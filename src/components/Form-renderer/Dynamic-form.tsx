@@ -1,5 +1,3 @@
-// src/components/Form-renderer/Dynamic-form.tsx
-
 import { useNavigate } from 'react-router-dom';
 import usePathname from '../../hooks/usePathname';
 import { FieldProps, FormProps } from '../../types/types';
@@ -7,8 +5,7 @@ import { Form, Formik } from 'formik';
 import TableHeader from '../layouts/TableHeader';
 import { Grid } from '@mui/material';
 import { FieldRenderer } from './Form-fields-renderer';
-import { Add, KeyboardBackspaceTwoTone, Save } from '@mui/icons-material';
-import { useState } from 'react';
+import { KeyboardBackspaceTwoTone, Save } from '@mui/icons-material';
 import SnackBarUi from '../ui/Snackbar';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
@@ -27,7 +24,6 @@ export const DynamicFormCreate = ({
   initialValues,
   validationSchema,
   onSubmit,
-  onClose,
 }: FormProps) => {
   const pathname = usePathname();
   const navigate = useNavigate();
@@ -36,7 +32,7 @@ export const DynamicFormCreate = ({
 
   const handleClick = () => {
     dispatch(clearData());
-    navigate(-1); // Navigate back to the previous page
+    navigate(-1);
   };
 
   return (
@@ -44,7 +40,6 @@ export const DynamicFormCreate = ({
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        // validate={() => ({})}
         onSubmit={onSubmit}
       >
         {({
@@ -63,10 +58,8 @@ export const DynamicFormCreate = ({
               icon: KeyboardBackspaceTwoTone,
               onClick: handleClick,
             },
-            { label: 'Save', icon: Save, onClick: handleSubmit }, // Use handleSubmit here
+            { label: 'Save', icon: Save, onClick: handleSubmit },
           ];
-          // !------------------- add the below line in default button, if  you want to disable the button in form -----------------
-          // disabled: !(isValid && dirty)
 
           const resolvedButtons = buttons
             ? buttons.map((button: any) => ({
@@ -79,7 +72,7 @@ export const DynamicFormCreate = ({
             <>
               {showTable && (
                 <TableHeader
-                  headerName={headerName || pathname}
+                  headerName={headerName ?? pathname}
                   buttons={resolvedButtons}
                 />
               )}
@@ -99,7 +92,7 @@ export const DynamicFormCreate = ({
                 message={
                   isSuccessToast
                     ? `${toastMessage}`
-                    : `Error: ${error?.message || 'Unknown error occurred'}`
+                    : `Error: ${error?.message ?? 'Unknown error occurred'}`
                 }
                 severity={isSuccessToast ? 'success' : 'error'}
                 isSubmitting={isSuccessToast}

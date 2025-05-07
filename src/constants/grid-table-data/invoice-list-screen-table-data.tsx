@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Stack } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -31,7 +31,6 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({
   const { canEditInvoices, canViewInvoices, canDeleteInvoices } =
     useRolePermissions();
   const [isModalOpen, setIsModalOpen] = useState<boolean | undefined>(false);
-  const [preview, setPreview] = useState(false);
 
   const [
     deleteInvoice,
@@ -77,7 +76,6 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({
       if ('data' in response) {
         dispatch(clearInvoiceData());
         dispatch(setInvoiceData(response.data));
-        setPreview(true);
         setIsModalOpen(true);
 
         // Refetch the invoice list after the dialog is opened

@@ -14,9 +14,7 @@ import {
 } from '../../../redux-store/api/injectedApis';
 import {
   selectCurrentId,
-  selectUserDetails,
 } from '../../../redux-store/auth/authSlice';
-import { formatDate } from '../../../services/utils/dataFormatter';
 import StageStepper from '../../../components/ui/StepperUi';
 import ButtonUi from '../../../components/ui/Button';
 import SplitButton from '../../../components/ui/SplitButton';
@@ -46,10 +44,10 @@ const InvoiceLetterUi = ({
     },
   ] = useUpdateInvoiceMutation();
   const invoiceData = useSelector((state: any) => state.invoiceState.data);
-  const [getUserRole, { data: userRoleData, isLoading }] =
+  const [getUserRole, { data: userRoleData }] =
     useGetUserRoleMutation();
   const id = useSelector(selectCurrentId);
-  const companyIdString = sessionStorage.getItem('id') || '';
+  const companyIdString = sessionStorage.getItem('id') ?? '';
   const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
   const [showTracker, setShowTracker] = useState(false);
   const { refetch } = useGetInvoiceListQuery();
@@ -58,7 +56,7 @@ const InvoiceLetterUi = ({
   const [base64String, setBase64String] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
-  const { data: companyData, refetch: refetchCompanyData } =
+  const { data: companyData } =
     useGetCompanySettingByIdQuery(companyIdString);
   useEffect(() => {
     if (!userRoleData && id) {
@@ -254,15 +252,15 @@ const InvoiceLetterUi = ({
         await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData })
           .unwrap()
           .then((response) => {
-            setResMessage(response.message || 'Invoice Updated Successfully');
+            setResMessage(response.message ?? 'Invoice Updated Successfully');
             setIsModalOpen?.(false);
             if (newStatus === InvoiceStatus.APPROVED) {
               setResMessage(
-                response.message || 'Invoice Approved Successfully',
+                response.message ?? 'Invoice Approved Successfully',
               );
             } else if (newStatus === InvoiceStatus.RETURNED) {
               setResMessage(
-                response.message || 'Invoice Returned Successfully',
+                response.message ?? 'Invoice Returned Successfully',
               );
             } // Close modal
             refetch(); // Refetch invoice list
@@ -300,23 +298,10 @@ const InvoiceLetterUi = ({
 
   const {
     data: logoData,
-    isSuccess: logoSuccess,
-    isError: logoError,
     refetch: refetchCompanyLogo,
   } = useGetCompanyLogoByIdQuery(companyDetails?.id, {
     skip: !companyDetails?.id,
   });
-
-  const getCompanyLogo = () => {
-    if (logoData && logoData.companyLogo) {
-      const base64String = logoData.companyLogo; // Assuming companyLogo is a base64 string
-      return (
-        `data:image/png;base64,${base64String}` ||
-        `data:image/jpeg;base64,${base64String}`
-      );
-    }
-    return null;
-  };
 
   useEffect(() => {
     if (companyDetails && companyDetails.id) {
@@ -324,14 +309,7 @@ const InvoiceLetterUi = ({
       refetchCompanyLogo(); // Function to trigger the logo fetch query
     }
   }, [companyDetails]);
-
-  //   useEffect(() => {
-  //       if (logoSuccess && logoData?.companyLogo) {
-  //         setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
-  //       } else {
-  //         setBase64String(null);
-  //       }
-  //     }, [logoSuccess, logoData]);
+  
   useEffect(() => {
     if (companyData) {
       setCompanyDetails(companyData);

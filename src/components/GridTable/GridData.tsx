@@ -1,18 +1,18 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { DataGrid, GridToolbar, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 
 interface GridDataProps {
-  columns: GridColDef[];
-  tableData?: any;
-  checkboxSelection?: any;
-  showToolbar?: boolean;
-  pagination?: boolean;
-  hideFooter?: boolean;
-  onCellEditor?: any;
-  onCellEditStop?: any;
-  onEditStart?: any;
-  onEditClick?: any;
+  readonly columns: GridColDef[];
+  readonly tableData?: any;
+  readonly checkboxSelection?: any;
+  readonly showToolbar?: boolean;
+  readonly pagination?: boolean;
+  readonly hideFooter?: boolean;
+  readonly onCellEditor?: any;
+  readonly onCellEditStop?: any;
+  readonly onEditStart?: any;
+  readonly onEditClick?: any;
 }
 export default function GridDataUi({
   onEditStart,
@@ -31,11 +31,6 @@ export default function GridDataUi({
         onCellEditStart={onCellEditor}
         onRowEditStart={onEditStart}
         onCellEditStop={onCellEditStop}
-        // onCellEditStop={(params: any, event: any) => {
-        //     const newValue = event.target.value;
-        //     const rowId = params.id;
-        // }}
-
         sx={{
           overflow: 'hidden',
           borderRadius: '10px',
@@ -74,7 +69,7 @@ export default function GridDataUi({
             fontSize: '12px',
           },
         }}
-        rows={tableData || []}
+        rows={tableData ?? []}
         columns={columns || []}
         initialState={{
           // * below pagination for grid table

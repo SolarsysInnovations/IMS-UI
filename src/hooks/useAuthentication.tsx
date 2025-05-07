@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const useAuthentication = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(() => {
@@ -33,6 +33,7 @@ const useAuthentication = () => {
       try {
         return JSON.parse(atob(token.split('.')[1]));
       } catch (e) {
+        console.error('Failed to parse JWT token:', e);
         return {};
       }
     };

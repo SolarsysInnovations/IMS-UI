@@ -14,11 +14,10 @@ import { AppDispatch } from '../../redux-store/store';
 import { clearServiceData } from '../../redux-store/slices/serviceSlice';
 import { serviceCreationProps } from '../../types/types';
 
-const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
+const ServiceCreate = ({ setOpenDialogBox }: any) => {
   const [
     addService,
     {
-      isLoading: serviceAddLoading,
       isSuccess: serviceAddSuccess,
       isError: serviceAddError,
       error: serviceAddErrorObject,
@@ -27,7 +26,6 @@ const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
   const [
     updateService,
     {
-      isLoading: serviceUpdateLoading,
       isSuccess: serviceUpdateSuccess,
       isError: serviceUpdateError,
       error: serviceUpdateErrorObject,
@@ -36,7 +34,7 @@ const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { data: serviceList, refetch } = useGetServiceListQuery();
+  const { refetch } = useGetServiceListQuery();
 
   const serviceEditInitialValues = useSelector(
     (state: any) => state.serviceState.data,
@@ -44,7 +42,7 @@ const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
 
   useSnackbarNotifications({
     error: serviceAddError || serviceUpdateError,
-    errorObject: serviceAddErrorObject || serviceUpdateErrorObject,
+    errorObject: serviceAddErrorObject ?? serviceUpdateErrorObject,
     errorMessage: 'Error creating or updating Service',
     success: serviceAddSuccess || serviceUpdateSuccess,
     successMessage: serviceAddSuccess
@@ -54,9 +52,9 @@ const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
 
   useEffect(() => {
     refetch();
-  }, [serviceUpdateSuccess, serviceAddSuccess]);
+  }, [serviceUpdateSuccess, serviceAddSuccess, refetch]);
 
-  const initialValues = serviceEditInitialValues || defaultServiceInitialValues;
+  const initialValues = serviceEditInitialValues ?? defaultServiceInitialValues;
 
   const onSubmit = async (values: serviceCreationProps, actions: any) => {
     try {
@@ -68,11 +66,11 @@ const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
         }
         await updateService({ id, data: values }).unwrap();
         dispatch(clearServiceData());
-        setIsOpenDialogBox(false);
+        setOpenDialogBox(false);
         actions.resetForm();
       } else {
         await addService(values).unwrap();
-        setIsOpenDialogBox(false);
+        setOpenDialogBox(false);
         actions.resetForm();
       }
     } catch (error: any) {
@@ -90,16 +88,14 @@ const ServiceCreate = ({ setIsOpenDialogBox }: any) => {
   };
 
   return (
-    <>
-      <DynamicFormCreate
-        headerName="Create Service"
-        showTable={true}
-        fields={serviceFields}
-        initialValues={initialValues}
-        validationSchema={serviceValidationSchema}
-        onSubmit={onSubmit}
-      />
-    </>
+    <DynamicFormCreate
+      headerName="Create Service"
+      showTable={true}
+      fields={serviceFields}
+      initialValues={initialValues}
+      validationSchema={serviceValidationSchema}
+      onSubmit={onSubmit}
+    />
   );
 };
 

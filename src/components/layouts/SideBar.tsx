@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { styled, Theme, CSSObject } from '@mui/material/styles';
+import { CSSObject, Theme, styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -73,7 +73,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 interface MainLayoutProps {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {

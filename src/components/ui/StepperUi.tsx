@@ -12,7 +12,7 @@ import { StepConnector, stepConnectorClasses } from '@mui/material';
 const CustomStepIcon: React.FC<StepIconProps & { status?: string }> = (
   props,
 ) => {
-  const { active, completed, className, status } = props;
+  const { active, className, status } = props;
 
   // Determine background color based on status
   let backgroundColor = '#fff';
@@ -116,7 +116,6 @@ const StageStepper: React.FC<StageStepperProps> = ({ stages }) => {
       >
         {stageLabels.map((label, index) => {
           const status = Object.values(stages)[index];
-          const isFailed = status === 'MAILED' || status === 'RETURNED';
           const labelProps: { optional?: React.ReactNode; error?: boolean } =
             {};
           if (isStepFailed(index)) {

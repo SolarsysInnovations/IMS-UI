@@ -7,7 +7,7 @@ export const loginApi = createApi({
   reducerPath: 'loginApi',
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_LOCAL_URL,
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers) => {
       const token = sessionStorage.getItem(StorageKeys.TOKEN);
       if (token) {
         const cleanedToken = token.replace(/^"(.*)"$/, '$1');

@@ -7,13 +7,10 @@ import AutoCompleteSelectUi from '../components/ui/AutoCompleteSelectUi';
 import CheckboxesUi from '../components/ui/Checkbox';
 import BadgeIconUi from '../components/ui/BadgeIcon';
 import TextAreaUi from '../components/ui/TextArea';
-import DatePickerUi from '../components/ui/DatePicker';
 import TimePickerUi from '../components/ui/Time Picker';
 import DateTimePickerUi from '../components/ui/DateTimePicker';
-import GridDataUi from '../components/GridTable/GridData';
 import ButtonSmallUi from '../components/ui/ButtonSmall';
 import SearchBarUi from '../components/ui/SearchBar';
-import { columns } from '../constants/grid-table-data/customer-table-data';
 
 const ComponentsScreen = () => {
   const [checked, setChecked] = React.useState(true);
@@ -37,10 +34,8 @@ const ComponentsScreen = () => {
       />
       <BadgeIconUi />
       <TextAreaUi />
-      {/* <DatePickerUi /> */}
       <TimePickerUi />
       <DateTimePickerUi />
-      {/* <GridDataUi tableData={clientListData} columns={columns} /> */}
     </Stack>
   );
 };

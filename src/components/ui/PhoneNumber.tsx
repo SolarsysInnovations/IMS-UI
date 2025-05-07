@@ -2,7 +2,7 @@ import React from 'react';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { styled } from '@mui/material/styles';
-import { InputLabel, FormControl, FormHelperText } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel } from '@mui/material';
 
 interface PhoneInputUiProps {
   value: string | undefined;
@@ -60,7 +60,7 @@ const PhoneInputUi: React.FC<PhoneInputUiProps> = ({
 
   // Handle phone number changes
   const handlePhoneChange = (newValue: string | undefined) => {
-    onChange(newValue || '');
+    onChange(newValue ?? '');
   };
 
   return (

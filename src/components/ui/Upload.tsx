@@ -1,6 +1,6 @@
 // Upload.tsx
 import React from 'react';
-import { Button, Input, InputLabel } from '@mui/material';
+import { Button, InputLabel } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 // Define the props interface

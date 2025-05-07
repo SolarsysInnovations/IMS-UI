@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme';
 import RoleBasedRoute from './services/utils/PrivateRoute';
 import { useSelector } from 'react-redux';
 import {
-  selectCurrentToken,
   selectCurrentId,
+  selectCurrentToken,
 } from './redux-store/auth/authSlice';
 import { sidebarTwo } from './constants/data';
 import Login from './pages/Login-screen';

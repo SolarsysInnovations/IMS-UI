@@ -3,10 +3,8 @@ import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
+import { useSelector } from 'react-redux';
 import {
-  useGetServiceListQuery,
   useGetUsersListQuery,
 } from '../../redux-store/api/injectedApis';
 import { columns } from './Roles-table-data';
@@ -15,8 +13,7 @@ import UserForm from './UserForm';
 import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const UserList = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [openDialogBox, setOpenDialogBox] = useState(false);
   const { data: userListData, refetch } = useGetUsersListQuery();
   const pathname = usePathname();
   const companyUserData = useSelector((state: any) => state.globalState.data);
@@ -35,7 +32,7 @@ const UserList = () => {
       label: 'Create New User',
       icon: Add,
       onClick: () => {
-        setIsOpenDialogBox(true);
+        setOpenDialogBox(true);
       },
     },
   ];
@@ -52,17 +49,17 @@ const UserList = () => {
         checkboxSelection={false}
       />
       <DialogBoxUi
-        open={opendialogBox}
+        open={openDialogBox}
         content={
           <UserForm
             key={key}
             mode={mode}
             userEditValue={companyUserData}
-            onClose={() => setIsOpenDialogBox(false)}
+            onClose={() => setOpenDialogBox(false)}
             refetchUserList={refetch}
           />
         }
-        handleClose={() => setIsOpenDialogBox(false)}
+        handleClose={() => setOpenDialogBox(false)}
       />
     </>
   );

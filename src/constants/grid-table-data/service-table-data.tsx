@@ -1,10 +1,8 @@
-import { IconButton, Stack } from '@mui/material';
-import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
-import EditIcon from '@mui/icons-material/Edit';
+import { Stack } from '@mui/material';
+import { GridColDef } from '@mui/x-data-grid';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux-store/store';
 import { useEffect, useState } from 'react';
-import React from 'react';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import {
   useDeleteServiceMutation,
@@ -19,7 +17,6 @@ import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [openModal, setOpenModal] = React.useState(false);
   const { refetch } = useGetServiceListQuery();
   const [
     deletedService,
@@ -30,7 +27,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     },
   ] = useDeleteServiceMutation();
   const [getService] = useGetSingleServiceMutation();
-  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [openDialogBox, setOpenDialogBox] = useState(false);
   const { canEditServices, canDeleteServices } = useRolePermissions();
 
   useEffect(() => {
@@ -51,8 +48,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       if ('data' in response) {
         const serviceData = response.data;
         dispatch(setServiceData(serviceData));
-        setOpenModal(true);
-        setIsOpenDialogBox(true);
+        setOpenDialogBox(true);
       } else {
         console.error('Error response:', response.error);
       }
@@ -77,24 +73,11 @@ const MyCellRenderer = ({ id }: { id: any }) => {
         canDelete={canDeleteServices}
         canEdit={canEditServices}
       />
-      {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleEditClick}>
-                <EditIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton>
-            <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleDeleteClick}>
-                <GridDeleteIcon sx={{ color: `grey.500`, fontSize: "15px", '&:hover': { color: 'blue' } }} fontSize='small' />
-            </IconButton> */}
-      {/* <IconButton sx={{ padding: "3px" }} aria-label="" onClick={handleModalOpen}>
-                <RemoveRedEyeOutlined sx={{ color: `grey.500`, fontSize: "15px" }} fontSize='small' />
-            </IconButton> */}
       <DialogBoxUi
-        open={opendialogBox}
-        content={
-          <>
-            <ServiceCreate setIsOpenDialogBox={setIsOpenDialogBox} />
-          </>
-        }
+        open={openDialogBox}
+        content={<ServiceCreate setOpenDialogBox={setOpenDialogBox} />}
         handleClose={() => {
-          setIsOpenDialogBox(false);
+          setOpenDialogBox(false);
         }}
       />
     </Stack>
@@ -109,13 +92,6 @@ export const columns: GridColDef[] = [
     editable: false,
     renderCell: (params: any) => <MyCellRenderer id={params.row?.id} />,
   },
-  // {
-  //     field: 'id',
-  //     headerName: 'id',
-  //     width: 200,
-  //     editable: true,
-
-  // },
   {
     field: 'serviceAccountingCode',
     headerName: 'Service Code',
@@ -134,27 +110,4 @@ export const columns: GridColDef[] = [
     width: 200,
     editable: false,
   },
-  // {
-  //     field: 'qty',
-  //     headerName: 'Qty',
-  //     width: 150,
-  //     editable: true,
-  //     valueGetter: (params: any) => params.value || 0,
-  //     valueSetter: (params: GridValueSetterParams) => {
-  //         let newValue = params.value; // New value entered by the user
-  //         let row = { ...params.row }; // Copy the row object
-  //         // Update the qty field in the row object
-  //         row.qty = newValue;
-  //         handleRowUpdate(row);
-  //         // Return the updated row object
-  //         return row;
-  //     }
-  // },
-  // {
-  //     field: 'totalAmount',
-  //     headerName: 'Total Amount',
-  //     width: 150,
-  //     editable: false,
-  //     valueGetter: (params: any) => params.value || 0,
-  // },
 ];

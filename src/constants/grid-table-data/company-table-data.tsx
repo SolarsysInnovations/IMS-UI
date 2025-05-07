@@ -1,11 +1,8 @@
-import { Box, IconButton, Stack } from '@mui/material';
-import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
-import EditIcon from '@mui/icons-material/Edit';
+import { Box, Stack } from '@mui/material';
+import { GridColDef} from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import React, { useEffect, useState } from 'react';
-import { RemoveRedEyeOutlined } from '@mui/icons-material';
-import ModalUi from '../../components/ui/ModalUi';
 import CompanyDetails from '../../pages/super-admin-company/companyDetailsScreen';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import {
@@ -21,13 +18,11 @@ import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
   const dispatch = useDispatch();
-  const [openDialogBox, setIsOpenDialogBox] = useState(false);
-  const [openModal, setOpenModal] = React.useState(false);
-  const { data: services, refetch } = useGetUsersListQuery();
+  const [openDialogBox, setOpenDialogBox] = useState(false);
+  const { refetch } = useGetUsersListQuery();
   const [
     deleteCompany,
     {
-      isLoading: deleteCompanyLoading,
       error: deleteCompanyErrorObject,
       isSuccess: deleteCompanySuccess,
       isError: deleteCompanyError,
@@ -56,26 +51,11 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     refetch();
   }, [deleteCompanySuccess, refetch]);
 
-  const handleModalOpen = async () => {
-    try {
-      const response = await getCompany(id);
-      if ('data' in response) {
-        const companyData = response.data;
-        dispatch(setUserData(companyData));
-        setOpenModal(true);
-      } else {
-        console.error('Error fetching company data:', response.error);
-      }
-    } catch (error) {
-      console.error('Error fetching company data:', error);
-    }
-  };
-
   const handleDialogOpen = async () => {
     try {
       const response = await getCompany(id);
       if ('data' in response) {
-        setIsOpenDialogBox(true);
+        setOpenDialogBox(true);
       } else {
         console.error('Error response:', response.error);
       }
@@ -83,8 +63,6 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       console.error('Error fetching customer data:', error);
     }
   };
-
-  const handleModalClose = () => setOpenModal(false);
 
   const handleEditClick = async () => {
     try {
@@ -129,11 +107,11 @@ const MyCellRenderer = ({ id }: { id: any }) => {
           <>
             <TableHeader headerName="Company Details" />
             <Box sx={{ marginTop: '15px' }}>
-              <CompanyDetails details={companyData || []} />
+              <CompanyDetails details={companyData ?? []} />
             </Box>
           </>
         }
-        handleClose={() => setIsOpenDialogBox(false)}
+        handleClose={() => setOpenDialogBox(false)}
       />
     </Stack>
   );

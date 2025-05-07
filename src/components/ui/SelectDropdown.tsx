@@ -9,21 +9,21 @@ interface ValueProps {
 }
 
 interface SelectDropdownProps {
-  options: ValueProps[];
-  labelText?: string;
-  value?: ValueProps | null;
-  onChange: (value: ValueProps | null) => void;
-  error?: boolean;
-  helperText?: any;
-  width?: string;
-  button?: boolean;
-  onMouseDown?: () => void;
-  defaultValue?: any;
-  applySmallSizeStyle?: boolean;
-  required?: boolean;
-  disabled?: boolean;
-  variant?: 'outlined' | 'filled' | 'standard';
-  sx?: SxProps<Theme>;
+  readonly options: ValueProps[];
+  readonly labelText?: string;
+  readonly value?: ValueProps | null;
+  readonly onChange: (value: ValueProps | null) => void;
+  readonly error?: boolean;
+  readonly helperText?: any;
+  readonly width?: string;
+  readonly button?: boolean;
+  readonly onMouseDown?: () => void;
+  readonly defaultValue?: any;
+  readonly applySmallSizeStyle?: boolean;
+  readonly required?: boolean;
+  readonly disabled?: boolean;
+  readonly variant?: 'outlined' | 'filled' | 'standard';
+  readonly sx?: SxProps<Theme>;
 }
 
 export default function SelectDropdown({
@@ -71,9 +71,6 @@ export default function SelectDropdown({
           overflow: 'hidden',
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          '&:hover': {
-            // backgroundColor: `action.hover`,
-          },
         },
         '& .MuiFormLabel-root': {
           fontSize: '12px',
@@ -84,7 +81,7 @@ export default function SelectDropdown({
         '& .css-144qjki-MuiFormLabel-root-MuiInputLabel-root': {
           fontSize: '12px',
         },
-        ...sx, // Apply sx prop passed from parent
+        ...sx,
       }}
       isOptionEqualToValue={(option, value) => option.value === value.value}
       renderInput={(params) => (

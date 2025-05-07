@@ -103,7 +103,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
       error: invoiceUpdateErrorObject,
     },
   ] = useUpdateInvoiceMutation();
-  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [openDialogBox, setOpenDialogBox] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean | undefined>(false);
   const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
   const [discountPercentage, setDiscountPercentage] = useState<number | null>(
@@ -452,7 +452,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
             />
             {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
             <DialogBoxUi
-              open={opendialogBox}
+              open={openDialogBox}
               content={
                 <>
                   {popUpComponent === PopupComponents.GST_TYPE ? (
@@ -475,7 +475,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                 </>
               }
               handleClose={() => {
-                setIsOpenDialogBox(false);
+                setOpenDialogBox(false);
                 setPopUpComponent('');
               }}
             />
@@ -569,7 +569,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                   <Box>
                     <SelectDropdown
                       onMouseDown={() => {
-                        setIsOpenDialogBox(true);
+                        setOpenDialogBox(true);
                         setPopUpComponent(PopupComponents.GST_TYPE);
                         // navigate("/customer/create")
                       }}
@@ -649,7 +649,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       <SelectDropdown
                         onMouseDown={() => {
                           setPopUpComponent(PopupComponents.PAYMENT_TERMS);
-                          setIsOpenDialogBox(true);
+                          setOpenDialogBox(true);
                         }}
                         onChange={(newValue: any) => {
                           if (newValue) {
@@ -712,7 +712,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         button={canCreatePayment}
                         onMouseDown={() => {
                           setPopUpComponent(PopupComponents.PAYMENT_TERMS);
-                          setIsOpenDialogBox(true);
+                          setOpenDialogBox(true);
                         }}
                         onChange={(newValue: any) => {
                           if (newValue) {
@@ -817,7 +817,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                               <TableCell component="th" scope="row">
                                 <SelectDropdown
                                   onMouseDown={() => {
-                                    setIsOpenDialogBox(true);
+                                    setOpenDialogBox(true);
                                     setPopUpComponent(PopupComponents.SERVICES);
                                   }}
                                   button={canCreateService}
@@ -1050,7 +1050,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                     <Box sx={{ display: 'flex' }}>
                       <SelectDropdown
                         onMouseDown={() => {
-                          setIsOpenDialogBox(true);
+                          setOpenDialogBox(true);
                           setPopUpComponent(PopupComponents.TDS_TAX);
                           // navigate("/customer/create")
                         }}

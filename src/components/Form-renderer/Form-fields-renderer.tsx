@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Field, FieldArray, FieldMetaProps, useFormikContext } from 'formik';
 import SelectDropdown from '../ui/SelectDropdown';
 import TextFieldUi from '../ui/TextField';
@@ -9,7 +9,7 @@ import DatePickerUi from '../ui/DatePicker';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import TextAreaUi from '../ui/TextArea';
-import { Country, State, City } from 'country-state-city';
+import { City, Country, State } from 'country-state-city';
 import { generateOptions } from '../../services/utils/dropdownOptions';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 import PhoneInputUi from '../ui/PhoneNumber';
@@ -103,9 +103,7 @@ const renderTextField = (field: any, meta: any, subField: SubField) => {
       required={subField.required}
       disabled={subField.disabled}
       {...field}
-      // variant="outlined"
-      // margin="normal"
-      value={field.value || ''}
+      value={field.value ?? ''}
       startAdornment={
         subField.startAdornment ? (
           <span>{subField.startAdornment}</span>
@@ -133,7 +131,7 @@ const renderPhoneField = (
 ) => {
   return (
     <PhoneInputUi
-      value={field.value || ''}
+      value={field.value ?? ''}
       onChange={field.onChange(field.name)}
       required={subField.required}
       disabled={subField.disabled}
@@ -155,7 +153,7 @@ const renderUploadField = (
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setFieldValue(field.name, file); // Update Formik state with the selected file
+      setFieldValue(field.name, file);
     }
   };
 
@@ -180,7 +178,6 @@ const renderPasswordField = (
     (arg0: boolean): void;
   },
 ) => (
-  //return (
   <TextFieldUi
     required={subField.required}
     disabled={subField.disabled}
@@ -204,13 +201,13 @@ const renderPasswordField = (
         </IconButton>
       )
     }
-    value={field.value || ''}
+    value={field.value ?? ''}
     startAdornment={
       subField.startAdornment ? (
         <span>{subField.startAdornment}</span>
       ) : undefined
     }
-    //endAdornment={subField.endAdornment ? <span>{subField.endAdornment}</span> : undefined}
+
     type={passwordVisible ? 'text' : subField.type}
     fullWidth
     id={subField.name}
@@ -218,7 +215,6 @@ const renderPasswordField = (
     error={meta.touched && !!meta.error}
     helperText={subField?.helperText}
   />
-  //)
 );
 
 // --------------------- text area filed--------------------
@@ -234,7 +230,7 @@ const renderTextArea = (
     {...field}
     // variant="outlined"
     // margin="normal"
-    value={field.value || ''}
+    value={field.value ?? ''}
     startAdornment={
       subField.startAdornment ? (
         <span>{subField.startAdornment}</span>
@@ -245,7 +241,7 @@ const renderTextArea = (
     }
     type={subField.type}
     fullWidth
-    rows={subField.rows || 3}
+    rows={subField.rows ?? 3}
     id={subField.name}
     label={subField.label}
     error={meta.touched && !!meta.error}
