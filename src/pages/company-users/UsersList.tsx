@@ -4,9 +4,7 @@ import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
-import {
-  useGetUsersListQuery,
-} from '../../redux-store/api/injectedApis';
+import { useGetUsersListQuery } from '../../redux-store/api/injectedApis';
 import { columns } from './Roles-table-data';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import UserForm from './UserForm';

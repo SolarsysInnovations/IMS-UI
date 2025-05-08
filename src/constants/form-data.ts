@@ -41,7 +41,7 @@ const inputObjects: InputObject = {
     error: '',
     fullWidth: false,
     label: 'phoneNumber',
-    onChange: (value: string) => {}, 
+    onChange: (value: string) => {},
     helperText: '',
   },
   movies: {

@@ -1,18 +1,9 @@
 import React, { useMemo } from 'react';
-import {
-  paymentTermsFields,
-} from '../../../constants/form-data/form-data-json';
-import {
-  paymentTermsInitialValue,
-} from '../../../constants/forms/formikInitialValues';
-import {
-  paymentTermsValidationSchema,
-} from '../../../constants/forms/validations/validationSchema';
+import { paymentTermsFields } from '../../../constants/form-data/form-data-json';
+import { paymentTermsInitialValue } from '../../../constants/forms/formikInitialValues';
+import { paymentTermsValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
-import {
-  PaymentTermsFormProps,
-  PaymentTermsProps,
-} from '../../../types/types';
+import { PaymentTermsFormProps, PaymentTermsProps } from '../../../types/types';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import { Save } from '@mui/icons-material';
@@ -46,7 +37,7 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const {  refetch } = useGetPaymentTermsListQuery();
+  const { refetch } = useGetPaymentTermsListQuery();
 
   const initialValues = paymentTermsValue || paymentTermsInitialValue;
 

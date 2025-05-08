@@ -63,7 +63,6 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
       onSuccess();
       resetForm();
       setUploadedFiles([]);
-
     } catch (error) {
       console.error('An error occurred during send email:', error);
       alert('Failed to send email. Please try again later.');
@@ -81,10 +80,7 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
   });
 
   return (
-    <Formik
-      initialValues={SendEmailInitialValue}
-      onSubmit={handleSubmit}
-    >
+    <Formik initialValues={SendEmailInitialValue} onSubmit={handleSubmit}>
       {({ values, errors, touched, handleChange, handleSubmit }) => (
         <Form
           onSubmit={handleSubmit}

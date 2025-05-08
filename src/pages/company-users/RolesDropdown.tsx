@@ -10,9 +10,7 @@ const invoiceOptions = ['ADMIN', 'APPROVER', 'ENDUSER'];
 const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
   const [status, setStatus] = useState(params.value);
   const [updateRoles, { isSuccess: updateSuccess }] = useUpdateRoleMutation();
-  const {
-    refetch: fetchRolesList,
-  } = useGetRoleQuery();
+  const { refetch: fetchRolesList } = useGetRoleQuery();
 
   useEffect(() => {
     if (updateSuccess) {

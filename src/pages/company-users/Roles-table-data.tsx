@@ -40,19 +40,11 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
   );
   const { refetch } = useGetUsersListQuery();
 
-  const [
-    getUserRole,
-    {
-      data: roleData,
-      isSuccess: C_success,
-    },
-  ] = useGetUserRoleMutation();
+  const [getUserRole, { data: roleData, isSuccess: C_success }] =
+    useGetUserRoleMutation();
   const [
     deleteUser,
-    {
-      isSuccess: roleDeleteSuccess,
-      isError: roleDeleteError,
-    },
+    { isSuccess: roleDeleteSuccess, isError: roleDeleteError },
   ] = useDeleteUserMutation();
 
   useSnackbarNotifications({
@@ -134,12 +126,12 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
               <UserDetails userDetails={userData} />
             </>
           ) : dialogContent === 'edit' && userData ? (
-              <UserForm
-                userEditValue={userData}
-                mode="edit"
-                onClose={handleCloseDialog}
-                refetchUserList={refetch}
-              />
+            <UserForm
+              userEditValue={userData}
+              mode="edit"
+              onClose={handleCloseDialog}
+              refetchUserList={refetch}
+            />
           ) : (
             <p>Loading...</p>
           )

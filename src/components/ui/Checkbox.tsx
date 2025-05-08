@@ -6,7 +6,7 @@ interface CheckboxesProps {
   readonly label?: string;
   readonly disabled?: boolean;
   readonly checked?: boolean;
-  readonly onChange?: ((event: React.ChangeEvent<HTMLInputElement>) => void);
+  readonly onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function CheckboxesUi({

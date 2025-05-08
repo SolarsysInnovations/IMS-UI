@@ -1,17 +1,11 @@
 import React, { useMemo } from 'react';
-import {
-  InvoiceMailReasonProps,
-} from '../../../types/types';
+import { InvoiceMailReasonProps } from '../../../types/types';
 import { AppDispatch } from '../../../redux-store/store';
 import { useDispatch } from 'react-redux';
 import { clearData } from '../../../redux-store/global/globalState';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
-import {
-  InvoiceMailReasonFields,
-} from '../../../constants/form-data/form-data-json';
-import {
-  InvoiceEmailReasonValidationSchemas,
-} from '../../../constants/forms/validations/validationSchema';
+import { InvoiceMailReasonFields } from '../../../constants/form-data/form-data-json';
+import { InvoiceEmailReasonValidationSchemas } from '../../../constants/forms/validations/validationSchema';
 import { invoiceMailReasonInitialValue } from '../../../constants/forms/formikInitialValues';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import {
@@ -31,9 +25,7 @@ const MailReason = ({ invoiceData, setNestedOpen }: any) => {
     },
   ] = useUpdateInvoiceMutation();
 
-  const {
-    refetch: getInvoiceList,
-  } = useGetInvoiceListQuery();
+  const { refetch: getInvoiceList } = useGetInvoiceListQuery();
 
   useSnackbarNotifications({
     error: invoiceUpdateError,

@@ -1061,9 +1061,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             );
                             if (selectedTdsTax) {
                               setFieldValue('taxAmount.tds', newValue.value);
-                              setSelectedTds(
-                                selectedTdsTax.taxPercentage,
-                              );
+                              setSelectedTds(selectedTdsTax.taxPercentage);
                             } else {
                               setFieldValue('taxAmount.tds', '');
                               setSelectedTds(null);

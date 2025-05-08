@@ -12,9 +12,7 @@ import {
   useGetUserRoleMutation,
   useUpdateInvoiceMutation,
 } from '../../../redux-store/api/injectedApis';
-import {
-  selectCurrentId,
-} from '../../../redux-store/auth/authSlice';
+import { selectCurrentId } from '../../../redux-store/auth/authSlice';
 import StageStepper from '../../../components/ui/StepperUi';
 import ButtonUi from '../../../components/ui/Button';
 import SplitButton from '../../../components/ui/SplitButton';
@@ -44,8 +42,7 @@ const InvoiceLetterUi = ({
     },
   ] = useUpdateInvoiceMutation();
   const invoiceData = useSelector((state: any) => state.invoiceState.data);
-  const [getUserRole, { data: userRoleData }] =
-    useGetUserRoleMutation();
+  const [getUserRole, { data: userRoleData }] = useGetUserRoleMutation();
   const id = useSelector(selectCurrentId);
   const companyIdString = sessionStorage.getItem('id') ?? '';
   const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
@@ -56,8 +53,7 @@ const InvoiceLetterUi = ({
   const [base64String, setBase64String] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
-  const { data: companyData } =
-    useGetCompanySettingByIdQuery(companyIdString);
+  const { data: companyData } = useGetCompanySettingByIdQuery(companyIdString);
   useEffect(() => {
     if (!userRoleData && id) {
       // Ensure `id` is not null
@@ -296,12 +292,10 @@ const InvoiceLetterUi = ({
     }
   };
 
-  const {
-    data: logoData,
-    refetch: refetchCompanyLogo,
-  } = useGetCompanyLogoByIdQuery(companyDetails?.id, {
-    skip: !companyDetails?.id,
-  });
+  const { data: logoData, refetch: refetchCompanyLogo } =
+    useGetCompanyLogoByIdQuery(companyDetails?.id, {
+      skip: !companyDetails?.id,
+    });
 
   useEffect(() => {
     if (companyDetails && companyDetails.id) {
@@ -309,7 +303,7 @@ const InvoiceLetterUi = ({
       refetchCompanyLogo(); // Function to trigger the logo fetch query
     }
   }, [companyDetails]);
-  
+
   useEffect(() => {
     if (companyData) {
       setCompanyDetails(companyData);

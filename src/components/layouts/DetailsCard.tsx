@@ -27,10 +27,7 @@ const flattenCustomerDetails = (detailsArray: typeof customerDetailsArray) => {
 
     // Flatten userDetails into an array of [key, value] pairs
     const flattenedUserDetails = Object.entries(userDetails).map(
-      ([key, value]) => [
-        key.replace(/([A-Z])/g, ' $1').toUpperCase(),
-        value,
-      ],
+      ([key, value]) => [key.replace(/([A-Z])/g, ' $1').toUpperCase(), value],
     );
 
     // Flatten contactPersons into an array of [key, value] pairs

@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import { GridColDef} from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import React, { useEffect, useState } from 'react';

@@ -207,7 +207,6 @@ const renderPasswordField = (
         <span>{subField.startAdornment}</span>
       ) : undefined
     }
-
     type={passwordVisible ? 'text' : subField.type}
     fullWidth
     id={subField.name}

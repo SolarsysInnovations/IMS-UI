@@ -5,9 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import {
-  useUpdateServiceMutation,
-} from '../../redux-store/api/injectedApis';
+import { useUpdateServiceMutation } from '../../redux-store/api/injectedApis';
 
 const ServiceEditScreen = () => {
   const [
