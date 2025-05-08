@@ -86,21 +86,19 @@ const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
   }, [linkAddSuccess, linkUpdateSuccess, handleClose]);
 
   return (
-    <>
-      <DynamicFormCreate
-        headerName="New Link"
-        updateFormValue={updateFormValue}
-        showTable={true}
-        fields={linkFields}
-        initialValues={initialValue || []}
-        validationSchema={linkValidationSchema}
-        onSubmit={onSubmit}
-        buttons={[
-          { label: 'Back', onClick: handleBackClick },
-          { label: 'Save', onClick: onSubmit },
-        ]}
-      />
-    </>
+    <DynamicFormCreate
+      headerName="New Link"
+      updateFormValue={updateFormValue}
+      showTable={true}
+      fields={linkFields}
+      initialValues={initialValue || []}
+      validationSchema={linkValidationSchema}
+      onSubmit={onSubmit}
+      buttons={[
+        { label: 'Back', onClick: handleBackClick },
+        { label: 'Save', onClick: onSubmit },
+      ]}
+    />
   );
 };
 

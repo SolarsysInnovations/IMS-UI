@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import { Grid, Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 interface UserDetailsProps {
   userDetails: {
@@ -13,7 +13,6 @@ interface UserDetailsProps {
 }
 
 const UserDetails = ({ userDetails }: UserDetailsProps) => {
-  const values = userDetails;
   const fieldsToShow = [
     { key: 'userName', label: 'User Name' },
     { key: 'userEmail', label: 'User Email' },

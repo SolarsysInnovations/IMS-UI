@@ -3,22 +3,15 @@ import { paymentTermsColumns } from '../../../constants/grid-table-data/invoice/
 import { useGetPaymentTermsListQuery } from '../../../redux-store/api/injectedApis';
 
 const PaymentTermsList = () => {
-  const {
-    data: paymentTermsList,
-    error,
-    isLoading,
-    refetch,
-  } = useGetPaymentTermsListQuery();
+  const { data: paymentTermsList } = useGetPaymentTermsListQuery();
 
   return (
-    <>
-      <GridDataUi
-        showToolbar={false}
-        columns={paymentTermsColumns}
-        tableData={paymentTermsList || []}
-        checkboxSelection={false}
-      />
-    </>
+    <GridDataUi
+      showToolbar={false}
+      columns={paymentTermsColumns}
+      tableData={paymentTermsList || []}
+      checkboxSelection={false}
+    />
   );
 };
 

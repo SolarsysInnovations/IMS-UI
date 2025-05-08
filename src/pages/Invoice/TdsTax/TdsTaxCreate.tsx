@@ -25,7 +25,6 @@ const TdsTaxCreate = ({ tdsTaxValue, onClose }: TdsTaxCreateProps) => {
   const [
     addTdsTax,
     {
-      isLoading: tdsTaxAddLoading,
       isSuccess: tdsTaxAddSuccess,
       isError: tdsTaxAddError,
       error: tdsTaxAddErrorObject,
@@ -35,14 +34,13 @@ const TdsTaxCreate = ({ tdsTaxValue, onClose }: TdsTaxCreateProps) => {
   const [
     updateTdsTax,
     {
-      isLoading: tdsTaxUpdateLoading,
       isSuccess: tdsTaxUpdateSuccess,
       isError: tdsTaxUpdateError,
       error: tdsTaxUpdateErrorObject,
     },
   ] = useUpdateTdsTaxMutation();
 
-  const { data: tdsTaxList, refetch } = useGetTdsTaxListQuery();
+  const { refetch } = useGetTdsTaxListQuery();
 
   const initialValue = tdsTaxValue || tdsTaxInitialValue;
 

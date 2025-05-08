@@ -1,11 +1,11 @@
 import React from 'react';
 import {
   Document,
+  Image,
   Page,
+  StyleSheet,
   Text,
   View,
-  StyleSheet,
-  Image,
 } from '@react-pdf/renderer';
 
 // Styles for PDF document

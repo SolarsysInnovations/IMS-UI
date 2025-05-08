@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect} from 'react';
 import {
   Avatar,
   Box,
@@ -7,7 +7,7 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { Formik, Form } from 'formik';
+import { Form, Formik } from 'formik';
 import { forgetPwdValidationSchema } from '../constants/forms/validations/validationSchema';
 import { forgetPwdInitialValue } from '../constants/forms/formikInitialValues';
 import TextFieldUi from '../components/ui/TextField';
@@ -17,9 +17,6 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useSnackbarNotifications } from '../hooks/useSnackbarNotification'; // Snackbar hook
 import Container from '@mui/material/Container';
 import HelpIcon from '@mui/icons-material/Help';
-import { useDispatch } from 'react-redux';
-import { StorageKeys, useSessionStorage } from '../hooks/useSessionStorage';
-import { AppDispatch } from '../redux-store/store';
 import { useForgetPwdMutation } from '../redux-store/api/injectedApis';
 
 interface ForgetPasswordProps {
@@ -34,9 +31,6 @@ interface ForgetPasswordResponse {
 }
 
 const ForgetPassword: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const [userToken, setUserToken] = useSessionStorage(StorageKeys.TOKEN, '');
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const [
     forgetPassword,
     {

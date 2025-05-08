@@ -3,22 +3,15 @@ import { gstTypeColumns } from '../../../constants/grid-table-data/invoice/GstTy
 import { useGetGstTypeListQuery } from '../../../redux-store/api/injectedApis';
 
 const GstTypeList = () => {
-  const {
-    data: gstTypeList,
-    error,
-    isLoading,
-    refetch,
-  } = useGetGstTypeListQuery();
+  const { data: gstTypeList } = useGetGstTypeListQuery();
 
   return (
-    <>
-      <GridDataUi
-        showToolbar={false}
-        columns={gstTypeColumns}
-        tableData={gstTypeList || []}
-        checkboxSelection={false}
-      />
-    </>
+    <GridDataUi
+      showToolbar={false}
+      columns={gstTypeColumns}
+      tableData={gstTypeList || []}
+      checkboxSelection={false}
+    />
   );
 };
 

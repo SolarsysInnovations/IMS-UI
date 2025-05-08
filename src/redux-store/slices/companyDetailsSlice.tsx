@@ -1,6 +1,4 @@
-import { API_URLS } from '../../constants/api-urls';
 import { createSlice } from '@reduxjs/toolkit';
-import { apiSlice } from '../api/apiSlice';
 
 const companySlice = createSlice({
   name: 'company',

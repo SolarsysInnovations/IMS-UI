@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { IconButton, Stack } from '@mui/material';
+import { GridColDef } from '@mui/x-data-grid';
+import { Stack } from '@mui/material';
 import { setRoleData } from '../../redux-store/role/roleApi';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { AppDispatch } from '../../redux-store/store';
@@ -45,8 +45,6 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
     {
       data: roleData,
       isSuccess: C_success,
-      isError: C_error,
-      isLoading: getRoleLoading,
     },
   ] = useGetUserRoleMutation();
   const [
@@ -54,7 +52,6 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
     {
       isSuccess: roleDeleteSuccess,
       isError: roleDeleteError,
-      error: roleDeleteErrorObject,
     },
   ] = useDeleteUserMutation();
 
@@ -137,14 +134,12 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
               <UserDetails userDetails={userData} />
             </>
           ) : dialogContent === 'edit' && userData ? (
-            <>
               <UserForm
                 userEditValue={userData}
                 mode="edit"
                 onClose={handleCloseDialog}
                 refetchUserList={refetch}
               />
-            </>
           ) : (
             <p>Loading...</p>
           )

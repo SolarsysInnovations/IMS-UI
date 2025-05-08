@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
 import {
-  useGetCompanySettingByIdQuery,
   useGetCompanyLogoByIdQuery,
+  useGetCompanySettingByIdQuery,
   useGetSingleCompanySettingMutation,
 } from '../../../redux-store/api/injectedApis';
 import { Box, Grid } from '@mui/material';
@@ -18,7 +18,6 @@ import { Roles } from '../../../constants/Enums';
 const SettingsCompanyDetailsScreen: React.FC = () => {
   const context = useInVoiceContext();
   const dispatch = useDispatch<AppDispatch>();
-  const [openModal, setOpenModal] = useState(false);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const [base64String, setBase64String] = useState<string | null>(null);
@@ -71,7 +70,6 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
       if ('data' in response) {
         const companyData = response.data;
         dispatch(setData(companyData));
-        setOpenModal(true);
         setOpenDialogBox(true);
       } else {
         console.error('Error response:', response.error);

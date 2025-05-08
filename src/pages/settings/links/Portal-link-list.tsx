@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
-  Typography,
-  Grid,
   Card,
   CardContent,
+  Grid,
   IconButton,
+  Typography,
 } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
   useDeletePortalLinkMutation,
-  useGetSinglePortalLinkMutation,
   useGetPortalLinkQuery,
+  useGetSinglePortalLinkMutation,
 } from '../../../redux-store/api/injectedApis';
 import { AppDispatch } from '../../../redux-store/store';
 import { useDispatch, useSelector } from 'react-redux';

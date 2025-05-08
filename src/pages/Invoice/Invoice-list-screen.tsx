@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import GridDataUi from '../../components/GridTable/GridData';
@@ -55,14 +55,12 @@ const InvoiceList = () => {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [isCustomRange, setIsCustomRange] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [filterApplied, setFilterApplied] = useState(false);
   const [getInvoiceListScreen] = useGetInvoiceListScreenMutation();
   const [invoiceList, setInvoiceList] = useState<InvoiceInitialValueProps[]>(
     [],
   );
   const [error, setError] = useState(null);
-  // const { refetch } = useGetInvoiceListQuery();
 
   const handleApplyFilter = async (
     startDate: Dayjs | null,
@@ -79,40 +77,8 @@ const InvoiceList = () => {
       setFilterApplied(true);
     } catch (error) {
       console.error('Error fetching filtered dashboard data:', error);
-      setIsLoading(false);
     }
   };
-
-  // const handleApplyFilter = useCallback(
-  //   async (startDate: Dayjs | null, endDate: Dayjs | null) => {
-  //     if (!startDate || !endDate || filterApplied) {
-  //       console.warn(
-  //         "Both start date and end date must be selected, or filter is already applied."
-  //       );
-  //       return;
-  //     }
-
-  //     setIsLoading(true);
-  //     const formattedStartDate = startDate
-  //       ? startDate.format("DD-MM-YYYY")
-  //       : "";
-  //     const formattedEndDate = endDate ? endDate.format("DD-MM-YYYY") : "";
-  //     try {
-  //       const response = await getInvoiceListScreen({
-  //         startDate: formattedStartDate,
-  //         endDate: formattedEndDate,
-  //       }).unwrap();
-  //       setInvoiceList(response);
-  //       setFilterApplied(true);
-  //       setError(null);
-  //     } catch (error) {
-  //       console.error("Error fetching filtered invoice data:", error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   },
-  //   [startDate, endDate, filterApplied, getInvoiceListScreen]
-  // );
 
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
     const today = dayjs();
@@ -157,15 +123,7 @@ const InvoiceList = () => {
     setInvoiceList((prevList) =>
       prevList.filter((invoice) => invoice.id !== deletedInvoiceId),
     );
-    // Optional: Refetch to ensure data is in sync with the server
   };
-
-  //    useEffect(() => {
-  //     // Only set invoiceList when filters are applied
-  //     if (filterApplied && invoiceList) {
-  //         setInvoiceList(invoiceList);
-  //     }
-  // }, [invoiceList, filterApplied])
 
   const columnsLists: GridColDef[] = [
     {

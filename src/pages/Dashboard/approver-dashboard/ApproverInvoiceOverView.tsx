@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { createElement, useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -8,7 +8,6 @@ import { Grid } from '@mui/material';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ErrorIcon from '@mui/icons-material/Error';
 import DoneIcon from '@mui/icons-material/Done';
-import { useState, useEffect } from 'react';
 
 const ApproverInvoiceOverView = ({ approverOverViewData }: any) => {
   const [invoiceAmount, setInvoiceAmount] = useState([
@@ -16,25 +15,25 @@ const ApproverInvoiceOverView = ({ approverOverViewData }: any) => {
       label: 'Total Invoices',
       icon: CurrencyRupeeIcon,
       iconBg: '#635bff',
-      value: approverOverViewData?.totalInvoices || 0,
+      value: approverOverViewData?.totalInvoices ?? 0,
       childLabel: 'Invoice child label',
-      months: approverOverViewData?.totalMonths || 0,
+      months: approverOverViewData?.totalMonths ?? 0,
     },
     {
       label: 'Approved Invoices',
       icon: DoneIcon,
       iconBg: '#4E9F3D',
-      value: approverOverViewData?.approvedInvoices || 0,
+      value: approverOverViewData?.approvedInvoices ?? 0,
       childLabel: 'Invoice child label',
-      months: approverOverViewData?.approvedMonths || 0,
+      months: approverOverViewData?.approvedMonths ?? 0,
     },
     {
       label: 'Pending Invoices',
       icon: ErrorIcon,
       iconBg: '#FF204E',
-      value: approverOverViewData?.pendingInvoices || 0,
+      value: approverOverViewData?.pendingInvoices ?? 0,
       childLabel: 'Invoice child label',
-      months: approverOverViewData?.pendingMonths || 0,
+      months: approverOverViewData?.pendingMonths ?? 0,
     },
   ]);
 
@@ -96,7 +95,7 @@ const ApproverInvoiceOverView = ({ approverOverViewData }: any) => {
                     width: '30px',
                   }}
                 >
-                  {React.createElement(data.icon, { width: 20, height: 20 })}
+                  {createElement(data.icon, { width: 20, height: 20 })}
                 </Avatar>
               </Stack>
               <Stack sx={{ alignItems: 'center' }} direction="row" spacing={1}>
@@ -110,9 +109,6 @@ const ApproverInvoiceOverView = ({ approverOverViewData }: any) => {
                     diff%
                   </Typography>
                 </Stack>
-                {/* <Typography color="text.secondary" variant="caption">
-                  Since last {data.months}
-                </Typography> */}
               </Stack>
             </Stack>
           </Card>

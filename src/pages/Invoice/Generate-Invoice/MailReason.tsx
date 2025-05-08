@@ -1,22 +1,16 @@
-import React, { useEffect, useMemo } from 'react';
-import { Add } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo } from 'react';
 import {
-  GstTypeFormProps,
-  GstTypeProps,
   InvoiceMailReasonProps,
 } from '../../../types/types';
 import { AppDispatch } from '../../../redux-store/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { clearData } from '../../../redux-store/global/globalState';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import {
-  GstTypeFields,
   InvoiceMailReasonFields,
 } from '../../../constants/form-data/form-data-json';
 import {
   InvoiceEmailReasonValidationSchemas,
-  gstTypeValidationSchema,
 } from '../../../constants/forms/validations/validationSchema';
 import { invoiceMailReasonInitialValue } from '../../../constants/forms/formikInitialValues';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
@@ -34,20 +28,12 @@ const MailReason = ({ invoiceData, setNestedOpen }: any) => {
       isSuccess: invoiceUpdateSuccess,
       isError: invoiceUpdateError,
       error: invoiceUpdateErrorObject,
-      isLoading: invoiceUpdateLoading,
     },
   ] = useUpdateInvoiceMutation();
 
-  const navigate = useNavigate();
-
   const {
-    data: invoiceList,
-    error: invoiceListError,
-    isLoading: invoiceListLoading,
     refetch: getInvoiceList,
   } = useGetInvoiceListQuery();
-
-  // const invoiceData = useSelector((state: any) => state.globalState.data);
 
   useSnackbarNotifications({
     error: invoiceUpdateError,

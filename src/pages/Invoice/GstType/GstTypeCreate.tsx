@@ -21,7 +21,6 @@ const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
   const [
     addGstType,
     {
-      isLoading: gstTypeAddLoading,
       isSuccess: gstTypeAddSuccess,
       isError: gstTypeAddError,
       error: gstTypeAddErrorObject,
@@ -31,14 +30,13 @@ const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
   const [
     updateGstType,
     {
-      isLoading: gstTypeUpdateLoading,
       isSuccess: gstTypeUpdateSuccess,
       isError: gstTypeUpdateError,
       error: gstTypeUpdateErrorObject,
     },
   ] = useUpdateGstTypeMutation();
 
-  const { data: getGstType, refetch } = useGetGstTypeListQuery();
+  const { refetch } = useGetGstTypeListQuery();
 
   const dispatch = useDispatch<AppDispatch>();
 

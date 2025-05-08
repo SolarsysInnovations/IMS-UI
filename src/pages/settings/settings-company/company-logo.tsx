@@ -1,12 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import {
   Box,
-  Grid,
   Button,
-  Typography,
+  Grid,
   IconButton,
   InputLabel,
+  Typography,
 } from '@mui/material';
 import ButtonSmallUi from '../../../components/ui/ButtonSmall';
 import { CompanyLogoProps } from '../../../types/types';

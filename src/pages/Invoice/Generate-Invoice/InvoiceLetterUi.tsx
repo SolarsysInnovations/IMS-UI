@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import InvoiceDocument from './InvoiceDocument';
-import { pdf, PDFViewer } from '@react-pdf/renderer';
+import { PDFViewer, pdf } from '@react-pdf/renderer';
 import { Box } from '@mui/system';
 import { useSelector } from 'react-redux';
 import {

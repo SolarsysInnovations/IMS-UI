@@ -49,7 +49,7 @@ const ServiceEditScreen = () => {
   });
 
   const navigate = useNavigate();
-  const onSubmit = async (values: any, actions: any) => {
+  const onSubmit = async (values: any) => {
     try {
       const id = values.id;
       if (id !== undefined) {

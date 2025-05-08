@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import { Grid, Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 interface CustomerDetailsProps {
   details: Record<string, any>;

@@ -1,19 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
-  GstTypeFields,
   paymentTermsFields,
 } from '../../../constants/form-data/form-data-json';
 import {
-  gstTypeInitialValue,
   paymentTermsInitialValue,
 } from '../../../constants/forms/formikInitialValues';
 import {
-  gstTypeValidationSchema,
   paymentTermsValidationSchema,
 } from '../../../constants/forms/validations/validationSchema';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import {
-  GstTypeProps,
   PaymentTermsFormProps,
   PaymentTermsProps,
 } from '../../../types/types';
@@ -33,7 +29,6 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
   const [
     addPaymentTerms,
     {
-      isLoading: paymentTermsAddLoading,
       isSuccess: paymentTermsAddSuccess,
       isError: paymentTermsAddError,
       error: paymentTermsErrorObject,
@@ -43,7 +38,6 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
   const [
     updatePaymentTerms,
     {
-      isLoading: paymentTermsLoading,
       isSuccess: paymentTermsUpdateSuccess,
       isError: paymentTermsUpdateError,
       error: paymentTermsUpdateErrorObject,
@@ -52,7 +46,7 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { data: getPaymentTerms, refetch } = useGetPaymentTermsListQuery();
+  const {  refetch } = useGetPaymentTermsListQuery();
 
   const initialValues = paymentTermsValue || paymentTermsInitialValue;
 

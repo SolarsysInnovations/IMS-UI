@@ -11,24 +11,24 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
   Box,
+  Button,
   Divider,
   Grid,
+  IconButton,
   Paper,
   Table,
   TableBody,
   TableCell,
-  Tooltip,
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
-  IconButton,
-  Button,
 } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
 import { AppDispatch } from '../../redux-store/store';
 import RadioUi from '../../components/ui/RadioGroup';
-import { Formik, Form } from 'formik';
+import { Form, Formik } from 'formik';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
 import { InvoiceInitialValueProps } from '../../types/types';
@@ -110,7 +110,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     null,
   );
   const [discountAmount, setDiscountAmount] = useState<number | null>(null);
-  const [selectedTds, setSelectedTdsAmount] = useState<number | null>(null);
+  const [selectedTds, setSelectedTds] = useState<number | null>(null);
   const [tdsAmount, setTdsAmount] = useState<number | null>(null);
   const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>();
   const [retainerAmount, setRetainerAmount] = useState(0);
@@ -123,7 +123,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   >([]);
   const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
   const [invoiceValues, setInvoiceValues] = useState(
-    invoiceValue || invoiceCreateInitialValue,
+    invoiceValue ?? invoiceCreateInitialValue,
   );
   const { data: gstTypesData = [] } = useGetGstTypeListQuery();
   const { data: tdsTaxData = [] } = useGetTdsTaxListQuery();
@@ -198,7 +198,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
       );
       setSubTotalInvoiceAmount(sumSubTotal);
       setDiscountPercentage(invoiceValues.discountPercentage);
-      setSelectedTdsAmount(invoiceValues.taxAmount.tds);
+      setSelectedTds(invoiceValues.taxAmount.tds);
     }
   }, [invoiceValues]);
 
@@ -249,7 +249,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
       const data = tdsTaxData?.find(
         (item: any) => item?.taxName === invoiceValues.taxAmount.tds,
       );
-      setSelectedTdsAmount(data?.taxPercentage);
+      setSelectedTds(data?.taxPercentage);
     }
     setTdsAmount(invoiceValues.taxAmount.tds);
   }, [invoiceValue]);
@@ -571,7 +571,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       onMouseDown={() => {
                         setOpenDialogBox(true);
                         setPopUpComponent(PopupComponents.GST_TYPE);
-                        // navigate("/customer/create")
                       }}
                       button={canCreateGst}
                       onChange={(newValue: any) => {
@@ -619,7 +618,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       name="gstPercentage"
                       type="number"
                       endAdornment="%"
-                      value={values.gstPercentage || ''}
+                      value={values.gstPercentage ?? ''}
                       onChange={handleChange}
                       error={
                         touched.gstPercentage && Boolean(errors.gstPercentage)
@@ -1019,7 +1018,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         justifyContent: 'space-between',
                       }}
                     >
-                      {/* <Typography variant="body2" color="initial">Discount Amount Typography> */}
                       <TextFieldUi
                         width="100px"
                         label="Discount"
@@ -1063,16 +1061,16 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                             );
                             if (selectedTdsTax) {
                               setFieldValue('taxAmount.tds', newValue.value);
-                              setSelectedTdsAmount(
+                              setSelectedTds(
                                 selectedTdsTax.taxPercentage,
                               );
                             } else {
                               setFieldValue('taxAmount.tds', '');
-                              setSelectedTdsAmount(null);
+                              setSelectedTds(null);
                             }
                           } else {
                             setFieldValue('taxAmount.tds', '');
-                            setSelectedTdsAmount(null);
+                            setSelectedTds(null);
                           }
                         }}
                         options={tdsTaxOptions}

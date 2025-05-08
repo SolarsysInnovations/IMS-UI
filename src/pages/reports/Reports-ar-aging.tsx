@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import TableHeader from '../../components/layouts/TableHeader';
-import { Add, KeyboardBackspaceTwoTone } from '@mui/icons-material';
-import usePathname from '../../hooks/usePathname';
+import { KeyboardBackspaceTwoTone } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Box, Grid } from '@mui/material';
-import { AppDispatch, RootState } from '../../redux-store/store';
-import { Formik, Form } from 'formik';
+import { Form, Formik } from 'formik';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import GridDataUi from '../../components/GridTable/GridData';
 import DatePickerUi from '../../components/ui/DatePicker';
@@ -20,10 +17,7 @@ import { ArAgingInitialValueProps } from '../../types/types';
 import { useGetReportInvoiceMutation } from '../../redux-store/api/injectedApis';
 
 const ArAgingscreen: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const pathname = usePathname();
   const navigate = useNavigate();
-  // const { data: reportList } = useGetReportQuery();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ArAging] = useGetReportInvoiceMutation();
   const [tableData, setTableData] = useState<any>();
@@ -140,20 +134,13 @@ const ArAgingscreen: React.FC = () => {
                             setFieldValue('startDate', currentDateNet4);
                             setFieldValue('endDate', dueDateNet4);
                           } else if (newValue.value === 'Custom') {
-                            const currentDate = dayjs().format('DD-MM-YYYY');
                             setFieldValue('startDate', '');
                             setFieldValue('endDate', '');
                           }
-                          //setFieldValue("invoiceDate", newValue.value)
-                        } else {
-                          // setFieldValue("invoiceDate", "")
                         }
                       }}
                       options={invoiceDate}
-                      //  value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                       labelText="Select"
-                      // error={touched.invoiceDate && Boolean(errors.invoiceDate)}
-                      // helperText={touched.invoiceDate && errors.invoiceDate}
                     />
                   </Box>
                 </Grid>
@@ -193,7 +180,7 @@ const ArAgingscreen: React.FC = () => {
                   <GridDataUi
                     showToolbar={true}
                     columns={columns}
-                    tableData={tableData || []}
+                    tableData={tableData ?? []}
                     checkboxSelection={false}
                   />
                 </Grid>

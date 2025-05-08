@@ -1,21 +1,4 @@
-import { Box, Stack } from '@mui/material';
-import {
-  GridColDef,
-} from '@mui/x-data-grid';
-import ServiceDetails from '../../pages/service/serviceDetails';
-
-const id = 1;
-
-const MyCellRenderer = ({ id, contactPersons }: any) => {
-
-  return (
-    <Stack direction="row" spacing={1}>
-      <Box sx={{ marginTop: '15px' }}>
-        <ServiceDetails details={id} />
-      </Box>
-    </Stack>
-  );
-};
+import { GridColDef } from '@mui/x-data-grid';
 
 export const columns: GridColDef[] = [
   {

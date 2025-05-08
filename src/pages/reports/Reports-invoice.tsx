@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import TableHeader from '../../components/layouts/TableHeader';
-import { Add, KeyboardBackspaceTwoTone } from '@mui/icons-material';
+import { KeyboardBackspaceTwoTone } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Box, Grid } from '@mui/material';
-import { AppDispatch, RootState } from '../../redux-store/store';
-import { Formik, Form } from 'formik';
+import { Form, Formik } from 'formik';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import GridDataUi from '../../components/GridTable/GridData';
 import DatePickerUi from '../../components/ui/DatePicker';
@@ -20,10 +18,8 @@ import { InvoicesInitialValueProps } from '../../types/types';
 import { useGetReportInvoiceMutation } from '../../redux-store/api/injectedApis';
 
 const Reportsinvoice: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
   const navigate = useNavigate();
-  // const { data: reportList } = useGetReportQuery();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ArAging] = useGetReportInvoiceMutation();
   const [tableData, setTableData] = useState<any>();
@@ -140,7 +136,6 @@ const Reportsinvoice: React.FC = () => {
                             setFieldValue('startDate', currentDateNet4);
                             setFieldValue('endDate', dueDateNet4);
                           } else if (newValue.value === 'Custom') {
-                            const currentDate = dayjs().format('DD-MM-YYYY');
                             setFieldValue('startDate', '');
                             setFieldValue('endDate', '');
                           }
@@ -193,7 +188,7 @@ const Reportsinvoice: React.FC = () => {
                   <GridDataUi
                     showToolbar={true}
                     columns={columns}
-                    tableData={tableData || []}
+                    tableData={tableData ?? []}
                     checkboxSelection={false}
                   />
                 </Grid>

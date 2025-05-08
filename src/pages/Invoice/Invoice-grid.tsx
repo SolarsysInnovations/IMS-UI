@@ -27,7 +27,6 @@ const InvoiceGrid = ({
       <GridDataUi
         onCellEditStop={(params: any, event: any) => {
           const newValue = event.target.value;
-          const rowId = params.id;
           const updatedRowData = {
             ...params.row,
             qty: newValue,

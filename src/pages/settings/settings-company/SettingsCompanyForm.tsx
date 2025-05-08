@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import {
   useAddCompanySettingMutation,
-  useUpdateCompanySettingMutation,
   useGetCompanySettingByIdQuery,
+  useUpdateCompanySettingMutation,
 } from '../../../redux-store/api/injectedApis';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { companyDetailsValidationSchema } from '../../../constants/forms/validations/validationSchema';
@@ -43,7 +43,7 @@ const SettingsCompanyForm = ({
       error: companyUpdateErrorObject,
     },
   ] = useUpdateCompanySettingMutation();
-  const companyIdString = sessionStorage.getItem('id') || '';
+  const companyIdString = sessionStorage.getItem('id') ?? '';
   const { refetch: refetchCompanyData } =
     useGetCompanySettingByIdQuery(companyIdString);
 

@@ -1,9 +1,9 @@
-import { Grid, Button, CircularProgress, Typography, Box } from '@mui/material';
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
   useAddCompanyLogoMutation,
-  useGetCompanyLogoByIdQuery,
   useDeleteCompanyLogoMutation,
+  useGetCompanyLogoByIdQuery,
   useGetCompanySettingByIdQuery,
 } from '../../../../src/redux-store/api/injectedApis';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';

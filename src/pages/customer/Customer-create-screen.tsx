@@ -24,7 +24,6 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
   const [
     addCustomer,
     {
-      isLoading: customerAddLoading,
       isSuccess: customerAddSuccess,
       isError: customerAddError,
       error: customerAddErrorObject,
@@ -33,7 +32,6 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
   const [
     updateCustomer,
     {
-      isLoading: customerUpdateLoading,
       isSuccess: customerUpdateSuccess,
       isError: customerUpdateError,
       error: customerUpdateErrorObject,

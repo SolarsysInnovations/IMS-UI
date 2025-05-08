@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form, Field } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import TextFieldUi from '../../components/ui/TextField';
 import SelectDropdown from '../../components/ui/SelectDropdown';
@@ -62,7 +62,7 @@ export const CreateServices: React.FC = () => {
         return (
           <SelectDropdown
             onChange={(newValue: any) =>
-              setFieldValue(input.label, newValue?.value || '')
+              setFieldValue(input.label, newValue?.value ?? '')
             }
             labelText={input.label}
             options={input.options || []}

@@ -10,7 +10,7 @@ import {
 import ButtonUi from '../components/ui/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import palette from '../theme/create-pallet';
-import { Formik, Form } from 'formik';
+import { Form, Formik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 import { AppDispatch } from '../redux-store/store';

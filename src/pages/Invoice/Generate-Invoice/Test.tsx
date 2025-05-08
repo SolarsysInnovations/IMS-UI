@@ -1,15 +1,12 @@
 import React from 'react';
 import {
   Document,
+  Image,
   Page,
+  StyleSheet,
   Text,
   View,
-  StyleSheet,
-  Image,
-  pdf,
 } from '@react-pdf/renderer';
-
-const randomImageUrl = 'http://localhost:8081/settings/getLogo';
 
 // Styles for PDF document
 const styles = StyleSheet.create({
@@ -68,12 +65,6 @@ const styles = StyleSheet.create({
 
 // Invoice Document component for PDF
 const InvoiceDocument = ({ invoiceData, company }: any) => {
-  // const   { data: companyData, refetch } = useGetCompanyLogoQuery();
-  //let companys= company
-  // tdsAmountValue: 11000,
-  // discountPercentageValue: 4050,
-  // gstPercentageValue: 6548,
-  // totalValue: 126503
   return invoiceData ? (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -82,7 +73,6 @@ const InvoiceDocument = ({ invoiceData, company }: any) => {
         >
           <View>
             <Image style={styles.image} src={company} />
-            {/* <p>{companyData}</p> */}
           </View>
           <View>
             <Text style={styles.header}>
@@ -101,7 +91,6 @@ const InvoiceDocument = ({ invoiceData, company }: any) => {
           }}
         >
           <View>
-            {/* <Text style={styles.subHeader}>To :</Text> */}
             <Text style={{ fontSize: '16px', marginBottom: '10px' }}>
               Invoice To:
             </Text>
@@ -118,10 +107,6 @@ const InvoiceDocument = ({ invoiceData, company }: any) => {
               {invoiceData?.customerDetails?.customerPhone}
             </Text>
           </View>
-          {/* <View style={styles.section}>
-                        <Text style={styles.subHeader}>From :</Text>
-                        <Text style={styles.text}>Company Name: {invoiceData?.companyDetails?.companyName}</Text>
-                    </View> */}
           <View>
             {/* <Text style={styles.subHeader}>Invoice :</Text> */}
             <Text style={{ fontSize: '14px', marginBottom: '5px' }}>
@@ -171,7 +156,6 @@ const InvoiceDocument = ({ invoiceData, company }: any) => {
               <Text style={styles.tableCell}>
                 {service.serviceAccountingCode}
               </Text>
-              {/* <Text style={styles.tableCell}>{service.serviceDescription}</Text> */}
               <Text style={styles.tableCell}>{service.serviceHours}</Text>
               <Text style={[styles.tableCell, styles.tableCellLast]}>
                 {service.serviceAmount}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { GridRenderCellParams } from '@mui/x-data-grid';
 import {
   useGetRoleQuery,
   useUpdateRoleMutation,
@@ -11,9 +11,6 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
   const [status, setStatus] = useState(params.value);
   const [updateRoles, { isSuccess: updateSuccess }] = useUpdateRoleMutation();
   const {
-    data: rolesList,
-    error,
-    isLoading,
     refetch: fetchRolesList,
   } = useGetRoleQuery();
 
@@ -39,7 +36,6 @@ const RolesDropdown = ({ params }: { params: GridRenderCellParams }) => {
       });
       if ('error' in response) {
         console.error('Error updating invoice status:', response.error);
-      } else {
       }
     } catch (error) {
       console.error('Error updating invoice status:', error);

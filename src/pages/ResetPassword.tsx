@@ -1,4 +1,4 @@
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -19,7 +19,6 @@ const ResetPassword = () => {
   const [
     resetPassword,
     {
-      isLoading: resetPwdLoading,
       error: resetPwdErrorObject,
       isSuccess: resetPwdSuccess,
       isError: resetPwdError,
