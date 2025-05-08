@@ -45,7 +45,6 @@ const MailReason = ({ invoiceData, setNestedOpen }: any) => {
             ...invoiceData,
             invoiceReason: values.reason,
             mailTo: values.toMail,
-            // invoiceStatus: invoiceData.invoiceStatus
           };
           await updateInvoice({ id: invoiceData.id, data: updatedInvoice });
           setNestedOpen(false);

@@ -145,10 +145,7 @@ const Reportsinvoice: React.FC = () => {
                         }
                       }}
                       options={invoiceDate}
-                      //  value={values.invoiceDate ? { value: values.invoiceDate, label: values.invoiceDate } : null}
                       labelText="Select"
-                      // error={touched.invoiceDate && Boolean(errors.invoiceDate)}
-                      // helperText={touched.invoiceDate && errors.invoiceDate}
                     />
                   </Box>
                 </Grid>

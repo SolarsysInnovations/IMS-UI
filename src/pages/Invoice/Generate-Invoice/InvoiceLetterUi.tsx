@@ -21,6 +21,7 @@ import { InvoiceOptions, InvoiceStatus, Roles } from '../../../constants/Enums';
 import { Card } from '@mui/material';
 import DialogBoxUi from '../../../components/ui/DialogBox';
 import SendEmail from '../Send-email';
+import { useInVoiceContext } from '../../../invoiceContext/invoiceContext';
 
 // InvoiceLetterUi Component
 
@@ -30,6 +31,7 @@ const InvoiceLetterUi = ({
   setIsModalOpen?: Dispatch<SetStateAction<boolean | undefined>>;
 }) => {
   const [data, setData] = useState();
+  const context = useInVoiceContext();
   const invoiceDatas = useSelector((state: any) => state.invoiceState.data);
   const { data: customers } = useGetCustomersListQuery();
   const { data: tdsTaxList } = useGetTdsTaxListQuery();
@@ -51,15 +53,9 @@ const InvoiceLetterUi = ({
   const [resMessage, setResMessage] = useState('');
   const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
   const [base64String, setBase64String] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const userRole = context.userDetails.userRole;
   const [companyDetails, setCompanyDetails] = useState<any>(null);
   const { data: companyData } = useGetCompanySettingByIdQuery(companyIdString);
-  useEffect(() => {
-    if (!userRoleData && id) {
-      // Ensure `id` is not null
-      getUserRole(id); // Pass the `id` only if it's a string
-    }
-  }, [getUserRole, id, userRoleData]);
 
   useEffect(() => {
     if (invoiceUpdateSuccess) {
@@ -71,19 +67,6 @@ const InvoiceLetterUi = ({
       refetch();
     }
   }, [invoiceUpdateSuccess, refetch]);
-
-  useEffect(() => {
-    if (id) {
-      getUserRole(id) // Pass id directly here
-        .unwrap()
-        .then((response) => {
-          setUserRole(response?.userRole || null);
-        })
-        .catch((error) => {
-          console.error('Error fetching user role:', error);
-        });
-    }
-  }, [id, getUserRole]);
 
   useEffect(() => {
     if (invoiceDatas && customers && companyDetails && tdsTaxList) {
@@ -129,7 +112,7 @@ const InvoiceLetterUi = ({
       const mergedData = {
         ...invoiceDatas,
         companyDetails: { ...companyDetails.companyDetails },
-        customerDetails: filteredCustomer || invoiceDatas.customerDetails,
+        customerDetails: filteredCustomer ?? invoiceDatas.customerDetails,
         startDate: invoiceDatas.startDate,
         dueDate: invoiceDatas.dueDate,
         invoiceDate: invoiceDatas.invoiceDate,
