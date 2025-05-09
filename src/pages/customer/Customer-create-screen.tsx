@@ -1,20 +1,19 @@
-import React, { useEffect, useMemo, useState } from "react";
-import * as Yup from "yup";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import { customerFields } from "../../constants/form-data/form-data-json";
-import { customerInitialValues } from "../../constants/forms/formikInitialValues";
-import { DynamicFormCreate } from "../../components/Form-renderer/Dynamic-form";
-import { useSnackbarNotifications } from "../../hooks/useSnackbarNotification";
-import { DyCreateCustomerProps } from "../../types/types";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux-store/store";
+import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { customerFields } from '../../constants/form-data/form-data-json';
+import { customerInitialValues } from '../../constants/forms/formikInitialValues';
+import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
+import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
+import { DyCreateCustomerProps } from '../../types/types';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux-store/store';
 import {
   useCreateCustomerMutation,
   useGetCustomersListQuery,
   useUpdateCustomerMutation,
-} from "../../redux-store/api/injectedApis";
-import { clearCustomerData } from "../../redux-store/slices/customerSlice";
-import { customerValidationSchema } from "../../constants/forms/validations/validationSchema";
+} from '../../redux-store/api/injectedApis';
+import { clearCustomerData } from '../../redux-store/slices/customerSlice';
+import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
 
 interface CustomerValueProps {
   customerEditInitialValues: any;
@@ -25,7 +24,6 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
   const [
     addCustomer,
     {
-      isLoading: customerAddLoading,
       isSuccess: customerAddSuccess,
       isError: customerAddError,
       error: customerAddErrorObject,
@@ -34,7 +32,6 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
   const [
     updateCustomer,
     {
-      isLoading: customerUpdateLoading,
       isSuccess: customerUpdateSuccess,
       isError: customerUpdateError,
       error: customerUpdateErrorObject,
@@ -48,17 +45,17 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
   useSnackbarNotifications({
     error: customerAddError,
     errorObject: customerAddErrorObject,
-    errorMessage: "Error creating Customer",
+    errorMessage: 'Error creating Customer',
     success: customerAddSuccess,
-    successMessage: "Customer created successfully",
+    successMessage: 'Customer created successfully',
   });
 
   useSnackbarNotifications({
     error: customerUpdateError,
     errorObject: customerUpdateErrorObject,
-    errorMessage: "Error updating Customer",
+    errorMessage: 'Error updating Customer',
     success: customerUpdateSuccess,
-    successMessage: "Customer updated successfully",
+    successMessage: 'Customer updated successfully',
   });
 
   useEffect(() => {
@@ -83,12 +80,12 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
         }
         actions.resetForm();
       } catch (error) {
-        console.error("Error during submission:", error);
+        console.error('Error during submission:', error);
       } finally {
         actions.setSubmitting(false);
       }
     },
-    [addCustomer, updateCustomer, customerEditInitialValues, dispatch]
+    [addCustomer, updateCustomer, customerEditInitialValues, dispatch],
   );
 
   return (

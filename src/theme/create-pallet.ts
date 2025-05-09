@@ -1,6 +1,6 @@
-import { common } from "@mui/material/colors";
-import { alpha } from "@mui/material/styles";
-import { error, indigo, info, neutral, success, warning } from "./colors";
+import { common } from '@mui/material/colors';
+import { alpha } from '@mui/material/styles';
+import { error, info, neutral, success, warning } from './colors';
 
 const palette = {
   action: {
@@ -15,21 +15,21 @@ const palette = {
     default: common.white,
     paper: common.white,
   },
-  divider: "#F2F4F7",
+  divider: '#F2F4F7',
   error,
   info,
-  mode: "light",
+  mode: 'light',
   neutral,
   primary: {
-    lightest: "#F5F7FF",
-    light: "#EBEEFE",
-    main: "#6366F1",
-    dark: "#4338CA",
-    darkest: "#312E81",
-    contrastText: "#FFFFFF",
+    lightest: '#F5F7FF',
+    light: '#EBEEFE',
+    main: '#6366F1',
+    dark: '#4338CA',
+    darkest: '#312E81',
+    contrastText: '#FFFFFF',
   },
-  light: "#EBEEFE",
-  secondary: "#6366F1",
+  light: '#EBEEFE',
+  secondary: '#6366F1',
   success,
   text: {
     primary: neutral[900],

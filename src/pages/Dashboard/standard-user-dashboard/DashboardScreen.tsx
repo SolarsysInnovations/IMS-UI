@@ -1,7 +1,7 @@
-import React from "react";
-import StandardUserDashboardOverview from "./StandardUserDashboardOverview";
-import StandardUserInvoiceList from "./StandardUserInvoiceList";
-import { Grid } from "@mui/material";
+import React from 'react';
+import StandardUserDashboardOverview from './StandardUserDashboardOverview';
+import StandardUserInvoiceList from './StandardUserInvoiceList';
+import { Grid } from '@mui/material';
 
 interface StandardUserData {
   totalInvoices: number;
@@ -24,7 +24,6 @@ interface EndUserDashboardScreenProps {
 const EndUserDashboardScreen: React.FC<EndUserDashboardScreenProps> = ({
   standardUserData = defaultStandardUserData, // Use defaultStandardUserData if not provided
 }) => {
-
   const approverOverViewData = {
     totalInvoices: standardUserData.totalInvoices,
     pendingInvoices: standardUserData.pendingInvoices,
@@ -38,7 +37,9 @@ const EndUserDashboardScreen: React.FC<EndUserDashboardScreenProps> = ({
       <Grid container spacing={2}>
         {approverOverViewData && (
           <Grid item xs={8}>
-            <StandardUserDashboardOverview approverOverViewData={approverOverViewData} />
+            <StandardUserDashboardOverview
+              approverOverViewData={approverOverViewData}
+            />
           </Grid>
         )}
       </Grid>

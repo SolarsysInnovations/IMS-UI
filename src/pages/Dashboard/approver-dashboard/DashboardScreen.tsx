@@ -1,7 +1,7 @@
-import React from "react";
-import ApproverInvoiceList from "./ApproverInvoiceList";
-import ApproverInvoiceOverView from "./ApproverInvoiceOverView";
-import { Grid } from "@mui/material";
+import React from 'react';
+import ApproverInvoiceList from './ApproverInvoiceList';
+import ApproverInvoiceOverView from './ApproverInvoiceOverView';
+import { Grid } from '@mui/material';
 
 // Define the type for approverData
 interface ApproverData {
@@ -26,10 +26,9 @@ interface ApproverDashboardScreenProps {
 const ApproverDashboardScreen: React.FC<ApproverDashboardScreenProps> = ({
   approverData = defaultApproverData,
 }) => {
-
   if (!approverData) {
     return <div>No data available</div>;
-  };
+  }
 
   const approverOverViewData = {
     totalInvoices: approverData.totalInvoices || 0,
@@ -40,17 +39,18 @@ const ApproverDashboardScreen: React.FC<ApproverDashboardScreenProps> = ({
 
   return (
     <>
-   <Grid container spacing={2}>
-  {approverOverViewData && (
-    <Grid item xs={8}>
-      <ApproverInvoiceOverView approverOverViewData={approverOverViewData} />
-    </Grid>
-  )}
-  </Grid>
-  {companyOverviewList && (
-    
-      <ApproverInvoiceList companyOverviewList={companyOverviewList} />
-  )}
+      <Grid container spacing={2}>
+        {approverOverViewData && (
+          <Grid item xs={8}>
+            <ApproverInvoiceOverView
+              approverOverViewData={approverOverViewData}
+            />
+          </Grid>
+        )}
+      </Grid>
+      {companyOverviewList && (
+        <ApproverInvoiceList companyOverviewList={companyOverviewList} />
+      )}
     </>
   );
 };

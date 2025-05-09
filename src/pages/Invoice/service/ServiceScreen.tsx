@@ -1,23 +1,7 @@
-import React, { useState } from 'react'
-import ServiceCreate from '../../service/service-create-screen'
-import { useGetServiceListQuery } from '../../../redux-store/api/injectedApis';
+import ServiceCreate from '../../service/service-create-screen';
 
-const ServiceScreen = ({ setIsOpenDialogBox }: any) => {
-    const [openModal, setOpenModal] = useState(false);
-    const { data: serviceList, error, isLoading, refetch } = useGetServiceListQuery();
+const ServiceScreen = ({ setOpenDialogBox }: any) => {
+  return <ServiceCreate setOpenDialogBox={setOpenDialogBox} />;
+};
 
-
-    const handleModalClose = () => {
-        refetch();
-        setOpenModal(false);
-    };
-
-    return (
-        <>
-            <ServiceCreate setIsOpenDialogBox={setIsOpenDialogBox} />
-            {/* <ServicesList /> */}
-        </>
-    )
-}
-
-export default ServiceScreen
+export default ServiceScreen;

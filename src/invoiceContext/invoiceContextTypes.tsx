@@ -1,10 +1,19 @@
-type RoleType = "ADMIN" | "STANDARDUSER" | "GUEST" | "APPROVER" | "SUPERADMIN";
+import { Roles } from '../constants/Enums';
 
+interface UserDetailsInterface {
+  userId: string;
+  userName: string;
+  userEmail: string | null;
+  userMobile: string | null;
+  description: string | null;
+  userRole: Roles;
+}
+
+interface CompanyDetailsInterface {
+  companyName: string | null;
+  companyId: string | null;
+}
 export interface InvoiceContextType {
-    userId: string;
-    userName: string;
-    userEmail: string | null;
-    userRole: RoleType;
-    comPanyName: string | null;
-    comPanyId: string | null;
+  userDetails: UserDetailsInterface;
+  companyDetails: CompanyDetailsInterface;
 }

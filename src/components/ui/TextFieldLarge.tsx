@@ -1,5 +1,11 @@
-import { InputAdornment, TextField, filledInputClasses, inputLabelClasses, outlinedInputClasses } from "@mui/material";
-import React, { } from "react";
+import {
+  InputAdornment,
+  TextField,
+  filledInputClasses,
+  inputLabelClasses,
+  outlinedInputClasses,
+} from '@mui/material';
+import React from 'react';
 
 interface TextFieldProps {
   label?: string;
@@ -15,8 +21,19 @@ interface TextFieldProps {
   fullWidth?: boolean;
 }
 
-const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth }: TextFieldProps) => {
-
+const TextFieldLarge = ({
+  label,
+  value,
+  onChange,
+  disabled,
+  endAdornment,
+  startAdornment,
+  error,
+  helperText,
+  name,
+  type,
+  fullWidth,
+}: TextFieldProps) => {
   return (
     <TextField
       label={label}
@@ -26,18 +43,16 @@ const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startA
       error={error}
       helperText={helperText}
       name={name}
-
       type={type}
       fullWidth={fullWidth}
       InputProps={{
         startAdornment: startAdornment ? (
-          <InputAdornment position='start'>{startAdornment}</InputAdornment>
+          <InputAdornment position="start">{startAdornment}</InputAdornment>
         ) : undefined,
         endAdornment: endAdornment ? (
-          <InputAdornment position='end'>{endAdornment}</InputAdornment>
+          <InputAdornment position="end">{endAdornment}</InputAdornment>
         ) : undefined,
       }}
-
       sx={{
         '& .MuiInputBase-root': {
           '&::placeholder': {
@@ -47,39 +62,38 @@ const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startA
         '& .MuiInputBase-input': {
           fontSize: 14,
           fontWeight: 500,
-          lineHeight: "24px",
+          lineHeight: '24px',
           '&::placeholder': {
             color: `text.secondary`,
           },
         },
         '& .MuiFilledInput-root': {
-          backgroundColor: "transparent",
-          borderRadius: "8px !important",
-          borderStyle: "solid",
+          backgroundColor: 'transparent',
+          borderRadius: '8px !important',
+          borderStyle: 'solid',
           borderWidth: 1,
-          overflow: "hidden",
+          overflow: 'hidden',
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
           '&:hover': {
             backgroundColor: `action.hover`,
-
           },
           '&:before': {
-            display: "none",
+            display: 'none',
           },
           '&:after': {
-            display: "none",
+            display: 'none',
           },
           [`&.${filledInputClasses.disabled}`]: {
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
           },
           [`&.${filledInputClasses.focused}`]: {
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
             borderWidth: 2,
-            boxSizing: "content-box",
+            boxSizing: 'content-box',
             borderColor: `primary.main`,
             '& .MuiTypography-root': {
-              color: "#6366F1",
+              color: '#6366F1',
             },
           },
           [`&.${filledInputClasses.error}`]: {
@@ -98,7 +112,7 @@ const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startA
             },
           },
           [`&.${outlinedInputClasses.focused}`]: {
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
             '& .MuiOutlinedInput-notchedOutline': {
               borderColor: `primary.main`,
               boxShadow: `primary.main 0 0 0 2px`,
@@ -115,23 +129,22 @@ const TextFieldLarge = ({ label, value, onChange, disabled, endAdornment, startA
           fontSize: 14,
           fontWeight: 500,
           [`&.${inputLabelClasses.filled}`]: {
-            transform: "translate(12px, 18px) scale(1)",
+            transform: 'translate(12px, 18px) scale(1)',
           },
           [`&.${inputLabelClasses.shrink}`]: {
             [`&.${inputLabelClasses.standard}`]: {
-              transform: "translate(0, -1.5px) scale(0.85)",
+              transform: 'translate(0, -1.5px) scale(0.85)',
             },
             [`&.${inputLabelClasses.filled}`]: {
-              transform: "translate(12px, 6px) scale(0.85)",
+              transform: 'translate(12px, 6px) scale(0.85)',
             },
             [`&.${inputLabelClasses.outlined}`]: {
-              transform: "translate(14px, -9px) scale(0.85)",
+              transform: 'translate(14px, -9px) scale(0.85)',
             },
           },
         },
       }}
     />
-
   );
 };
 

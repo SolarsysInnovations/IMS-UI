@@ -1,42 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Box, Grid, Typography } from "@mui/material";
-import TableHeader from "../../components/layouts/TableHeader";
-import { useGetUserRoleMutation } from "../../redux-store/api/injectedApis";
-import { selectCurrentId } from "../../redux-store/auth/authSlice";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { Box, Grid, Typography } from '@mui/material';
+import TableHeader from '../../components/layouts/TableHeader';
+import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
 
 const UserProfile = () => {
-  const id = useSelector(selectCurrentId);
-  const [getUserRole, { data: userRoleData, isLoading: isRoleLoading }] = useGetUserRoleMutation();
-  const [userData, setUserData] = useState({
-    userName: "",
-    userEmail: "",
-    userRole: "",
-    userMobile: "",
-    description: "",
-  });
-
-  useEffect(() => {
-    if (id) {
-      getUserRole(id)
-        .unwrap()
-        .then((response) => {
-          setUserData({
-            userName: response?.userName || "N/A",
-            userEmail: response?.userEmail || "N/A",
-            userRole: response?.userRole || "N/A",
-            userMobile: response?.userMobile || "N/A",
-            description: response?.description || "N/A",
-          });
-        })
-        .catch((error) => {
-          console.error("Error fetching user details:", error);
-        });
-    }
-  }, [id, getUserRole]);
+  const context = useInVoiceContext();
 
   return (
-    <Box sx={{ border: "1px solid #e0e0e0", borderRadius: "8px", padding: "20px" }}>
+    <Box
+      sx={{ border: '1px solid #e0e0e0', borderRadius: '8px', padding: '20px' }}
+    >
       <TableHeader headerName="Personal Details" />
       <Grid mt={0.5} container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -44,7 +17,7 @@ const UserProfile = () => {
             Name
           </Typography>
           <Typography variant="subtitle2" color="black">
-            {userData.userName}
+            {context.userDetails.userName}
           </Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -52,7 +25,7 @@ const UserProfile = () => {
             Role
           </Typography>
           <Typography variant="subtitle2" color="black">
-            {userData.userRole}
+            {context.userDetails.userRole}
           </Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -60,7 +33,7 @@ const UserProfile = () => {
             Email address
           </Typography>
           <Typography variant="subtitle2" color="textPrimary">
-            {userData.userEmail}
+            {context.userDetails.userEmail}
           </Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -68,7 +41,7 @@ const UserProfile = () => {
             Phone
           </Typography>
           <Typography variant="subtitle2" color="textPrimary">
-            {userData.userMobile}
+            {context.userDetails.userMobile}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -76,7 +49,7 @@ const UserProfile = () => {
             Description
           </Typography>
           <Typography variant="subtitle2" color="textPrimary">
-            {userData.description}
+            {context.userDetails.description}
           </Typography>
         </Grid>
       </Grid>

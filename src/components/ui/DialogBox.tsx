@@ -1,14 +1,14 @@
-import * as React from "react";
-import { useDispatch } from "react-redux";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { clearData } from "../../redux-store/global/globalState";
-import { AppDispatch } from "../../redux-store/store";
+import * as React from 'react';
+import { useDispatch } from 'react-redux';
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { clearData } from '../../redux-store/global/globalState';
+import { AppDispatch } from '../../redux-store/store';
 
 type CustomizedDialogProps = {
   open?: boolean;
@@ -24,22 +24,22 @@ type CustomizedDialogProps = {
 };
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
+  '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
   },
-  "& .MuiDialogActions-root": {
+  '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
   },
 }));
 
 const DialogBoxUi = ({
   open: defaultOpen = false,
-  paperWidth = "800px", // Default width
-  paperMaxWidth = "600px", // Default max width
-  paperMinHeight = "100px", // Default min height
+  paperWidth = '800px', // Default width
+  paperMaxWidth = '600px', // Default max width
+  paperMinHeight = '100px', // Default min height
   title,
   maxwidth,
-  minWidth = "400px", // Default minimum width
+  minWidth = '400px', // Default minimum width
   content,
   actions,
   handleClose,
@@ -71,29 +71,29 @@ const DialogBoxUi = ({
           },
         }}
       >
-          <DialogTitle sx={{ m: 0, p: 2 }}>
-        <IconButton
-          aria-label="close"
-          onClick={handleCloseDialog}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon sx={{ width: "20px" }} />
-        </IconButton>
+        <DialogTitle sx={{ m: 0, p: 2 }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseDialog}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon sx={{ width: '20px' }} />
+          </IconButton>
         </DialogTitle>
-         <DialogContent
-         sx={{
-           ...(typeof maxwidth === "object" ? maxwidth : {}), 
-            minWidth: "200px",
-            minHeight: "100px",
-            margin: "20px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
+        <DialogContent
+          sx={{
+            ...(typeof maxwidth === 'object' ? maxwidth : {}),
+            minWidth: '200px',
+            minHeight: '100px',
+            margin: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
           }}
         >
           {content}

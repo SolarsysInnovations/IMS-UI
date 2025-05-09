@@ -1,34 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux-store/store";
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux-store/store';
 import {
-  useGetCompanySettingByIdQuery,
   useGetCompanyLogoByIdQuery,
+  useGetCompanySettingByIdQuery,
   useGetSingleCompanySettingMutation,
-  useGetUserRoleMutation,
-} from "../../../redux-store/api/injectedApis";
-import { Box, Grid } from "@mui/material";
-import { setData } from "../../../redux-store/global/globalState";
-import TableHeader from "../../../components/layouts/TableHeader";
-import SettingsCompanyForm from "./SettingsCompanyForm";
-import { Edit } from "@mui/icons-material";
-import DialogBoxUi from "../../../components/ui/DialogBox";
-import { selectCurrentId } from "../../../redux-store/auth/authSlice";
-import usePathname from "../../../hooks/usePathname";
+} from '../../../redux-store/api/injectedApis';
+import { Box, Grid } from '@mui/material';
+import { setData } from '../../../redux-store/global/globalState';
+import TableHeader from '../../../components/layouts/TableHeader';
+import SettingsCompanyForm from './SettingsCompanyForm';
+import { Edit } from '@mui/icons-material';
+import DialogBoxUi from '../../../components/ui/DialogBox';
+import { useInVoiceContext } from '../../../invoiceContext/invoiceContext';
+import { Roles } from '../../../constants/Enums';
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
-
+  const context = useInVoiceContext();
   const dispatch = useDispatch<AppDispatch>();
-  const pathname = usePathname();
-  const [openModal, setOpenModal] = useState(false);
   const [companyDetails, setCompanyDetails] = useState<any>(null);
-  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [openDialogBox, setOpenDialogBox] = useState(false);
   const [base64String, setBase64String] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
-  const [getUserRole, { data: userRoleData, isLoading }] =
-    useGetUserRoleMutation();
-  const userId = useSelector(selectCurrentId) || ""; // Use empty string as fallback
-  const { id: companyId } = companyDetails || {};
+  const userRole = context.userDetails.userRole;
+  const userId = context.userDetails.userId;
+  const { id: companyId } = companyDetails ?? {};
   const { data: companyData, refetch: refetchCompanyData } =
     useGetCompanySettingByIdQuery(userId);
 
@@ -37,24 +32,10 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const {
     data: logoData,
     isSuccess: logoSuccess,
-    isError: logoError,
     refetch: refetchLogoData,
   } = useGetCompanyLogoByIdQuery(companyId, {
     skip: !companyId,
   });
-
-  useEffect(() => {
-    if (userId) {
-      getUserRole(userId) // Pass id directly here
-        .unwrap()
-        .then((response) => {
-          setUserRole(response?.userRole || null);
-        })
-        .catch((error) => {
-          console.error("Error fetching user role:", error);
-        });
-    }
-  }, [userId, getUserRole]);
 
   useEffect(() => {
     if (logoSuccess && logoData?.companyLogo) {
@@ -81,43 +62,42 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
 
   const handleEditClick = async () => {
     if (!companyDetails?.id) {
-      console.error("Company ID is not defined.");
+      console.error('Company ID is not defined.');
       return;
     }
     try {
       const response = await getData(companyDetails.id);
-      if ("data" in response) {
+      if ('data' in response) {
         const companyData = response.data;
-        await dispatch(setData(companyData)); // Store company data in global state
-        setOpenModal(true);
-        setIsOpenDialogBox(true);
+        dispatch(setData(companyData));
+        setOpenDialogBox(true);
       } else {
-        console.error("Error response:", response.error);
+        console.error('Error response:', response.error);
       }
     } catch (error) {
-      console.error("Error handling edit click:", error);
+      console.error('Error handling edit click:', error);
     }
   };
 
   const handleCloseDialog = () => {
     refetchCompanyData();
     refetchLogoData();
-    setIsOpenDialogBox(false);
+    setOpenDialogBox(false);
   };
 
   const button =
-    userRole !== "APPROVER" && userRole !== "ENDUSER"
-      ? [{ label: "Edit", icon: Edit, onClick: handleEditClick }]
+    userRole !== Roles.APPROVER && userRole !== Roles.STANDARDUSER
+      ? [{ label: 'Edit', icon: Edit, onClick: handleEditClick }]
       : [];
 
   if (!companyDetails) {
-    return <div></div>; // Ensure companyDetails are fetched before rendering the content
+    return <div></div>;
   }
 
   return (
     <>
       <DialogBoxUi
-        open={opendialogBox}
+        open={openDialogBox}
         content={
           <SettingsCompanyForm
             companyValue={companyDetails}
@@ -132,17 +112,17 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
       {userId && (
         <Grid
           container
-          sx={{ backgroundColor: "#f8f9f9", padding: "20px 20px" }}
+          sx={{ backgroundColor: '#f8f9f9', padding: '20px 20px' }}
         >
           <Grid item xs={7}>
             <Box gap={3}>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Name
@@ -152,36 +132,36 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
               </div>
               <p
                 style={{
-                  fontSize: "13px",
-                  margin: "0 0 5px 0",
-                  display: "flex",
+                  fontSize: '13px',
+                  margin: '0 0 5px 0',
+                  display: 'flex',
                 }}
               >
                 <span
                   style={{
-                    fontWeight: "500",
-                    width: "140px",
-                    display: "inline-block",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis", // Optional for long labels
+                    fontWeight: '500',
+                    width: '140px',
+                    display: 'inline-block',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis', // Optional for long labels
                   }}
                 >
                   Company Address
                 </span>
                 <span style={{ flex: 1 }}>
-                  {" "}
+                  {' '}
                   : {companyDetails?.companyAddress}
                 </span>
               </p>
 
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company State
@@ -190,12 +170,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Country
@@ -204,12 +184,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company E-mail
@@ -219,15 +199,15 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
               </div>
             </Box>
           </Grid>
-          <Grid sx={{ marginTop: "0px" }} item xs={4}>
+          <Grid sx={{ marginTop: '0px' }} item xs={4}>
             <Box gap={3}>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Phone
@@ -236,12 +216,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Website
@@ -250,12 +230,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Tax Num
@@ -264,12 +244,12 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "13px", margin: "0 0 5px 0" }}>
+                <p style={{ fontSize: '13px', margin: '0 0 5px 0' }}>
                   <span
                     style={{
-                      fontWeight: "500",
-                      width: "140px",
-                      display: "inline-block",
+                      fontWeight: '500',
+                      width: '140px',
+                      display: 'inline-block',
                     }}
                   >
                     Company Reg Num
@@ -278,13 +258,13 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                 </p>
               </div>
 
-              {userId && userRole === "ADMIN" && (
+              {userId && userRole === 'ADMIN' && (
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Box
                       display="flex"
                       alignItems="center"
-                      sx={{ marginTop: "10px" }}
+                      sx={{ marginTop: '10px' }}
                     >
                       <Box
                         component="span"
@@ -294,20 +274,20 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                       >
                         Logo
                       </Box>
-                      :{" "}
+                      :{' '}
                       <Box
                         sx={{
-                          width: "150px",
-                          height: "150px",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          border: base64String ? "1px solid #ddd" : "none", // Conditional border
-                          borderRadius: "8px",
-                          overflow: "hidden",
+                          width: '150px',
+                          height: '150px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          border: base64String ? '1px solid #ddd' : 'none', // Conditional border
+                          borderRadius: '8px',
+                          overflow: 'hidden',
                           backgroundColor: base64String
-                            ? "transparent"
-                            : "#f8f9fa", // Optional background for no image
+                            ? 'transparent'
+                            : '#f8f9fa', // Optional background for no image
                         }}
                       >
                         {base64String ? (
@@ -315,9 +295,9 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
                             src={base64String}
                             alt="Company Logo"
                             style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "contain",
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
                             }}
                           />
                         ) : (

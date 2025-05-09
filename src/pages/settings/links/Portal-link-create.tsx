@@ -1,23 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { linkFields } from "../../../constants/form-data/form-data-json";
-import { linkInitialValues } from "../../../constants/forms/formikInitialValues";
-import { DynamicFormCreate } from "../../../components/Form-renderer/Dynamic-form";
-import { linkValidationSchema } from "../../../constants/forms/validations/validationSchema";
-import { useAddPortalLinkMutation, useGetPortalLinkQuery, useUpdatePortalLinkMutation } from "../../../redux-store/api/injectedApis";
-import { LinkFormProps } from "../../../types/types";
+import React, { useEffect } from 'react';
+import { linkFields } from '../../../constants/form-data/form-data-json';
+import { linkInitialValues } from '../../../constants/forms/formikInitialValues';
+import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
+import { linkValidationSchema } from '../../../constants/forms/validations/validationSchema';
+import {
+  useAddPortalLinkMutation,
+  useGetPortalLinkQuery,
+  useUpdatePortalLinkMutation,
+} from '../../../redux-store/api/injectedApis';
+import { LinkFormProps } from '../../../types/types';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-store/store';
-import { clearData } from "../../../redux-store/global/globalState";
+import { clearData } from '../../../redux-store/global/globalState';
 import { useNavigate } from 'react-router-dom';
-import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 
 const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
-  const [openModal, setOpenModal] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [addLink, { isLoading: linkAddLoading, isSuccess: linkAddSuccess, isError: linkAddError, error: linkAddErrorObject }] = useAddPortalLinkMutation();
-  const [updateLink, { isLoading: linkUpdateLoading, isSuccess: linkUpdateSuccess, isError: linkUpdateError, error: linkUpdateErrorObject }] = useUpdatePortalLinkMutation();
-  const { data: linkList, refetch } = useGetPortalLinkQuery();
+  const [
+    addLink,
+    {
+      isSuccess: linkAddSuccess,
+      isError: linkAddError,
+      error: linkAddErrorObject,
+    },
+  ] = useAddPortalLinkMutation();
+  const [
+    updateLink,
+    {
+      isSuccess: linkUpdateSuccess,
+      isError: linkUpdateError,
+      error: linkUpdateErrorObject,
+    },
+  ] = useUpdatePortalLinkMutation();
+  const { refetch } = useGetPortalLinkQuery();
 
   const initialValue = linkValue || linkInitialValues;
 
@@ -58,7 +75,7 @@ const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
       handleClose(); // Close modal after saving
       refetch(); // Refetch updated list
     } catch (error) {
-      console.error("An error occurred during form submission:", error);
+      console.error('An error occurred during form submission:', error);
     }
   };
 
@@ -69,21 +86,19 @@ const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
   }, [linkAddSuccess, linkUpdateSuccess, handleClose]);
 
   return (
-    <>
-      <DynamicFormCreate
-        headerName="New Link"
-        updateFormValue={updateFormValue}
-        showTable={true}
-        fields={linkFields}
-        initialValues={initialValue || []}
-        validationSchema={linkValidationSchema}
-        onSubmit={onSubmit}
-        buttons={[
-          { label: "Back", onClick: handleBackClick },
-          { label: "Save", onClick: onSubmit }
-        ]}
-      />
-    </>
+    <DynamicFormCreate
+      headerName="New Link"
+      updateFormValue={updateFormValue}
+      showTable={true}
+      fields={linkFields}
+      initialValues={initialValue || []}
+      validationSchema={linkValidationSchema}
+      onSubmit={onSubmit}
+      buttons={[
+        { label: 'Back', onClick: handleBackClick },
+        { label: 'Save', onClick: onSubmit },
+      ]}
+    />
   );
 };
 

@@ -1,22 +1,41 @@
-import React, { useState, useEffect } from "react";
-import { Box, Typography, Grid, Card, CardContent, IconButton } from "@mui/material";
-import LanguageIcon from "@mui/icons-material/Language";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useDeletePortalLinkMutation, useGetSinglePortalLinkMutation, useGetPortalLinkQuery } from "../../../redux-store/api/injectedApis";
-import { AppDispatch } from "../../../redux-store/store";
-import { useDispatch, useSelector } from "react-redux";
-import { setData } from "../../../redux-store/global/globalState";
-import DialogBoxUi from "../../../components/ui/DialogBox";
-import PortalLinkCreate from "./Portal-link-create";
-import { useSnackbarNotifications } from "../../../hooks/useSnackbarNotification";
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  Typography,
+} from '@mui/material';
+import LanguageIcon from '@mui/icons-material/Language';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  useDeletePortalLinkMutation,
+  useGetPortalLinkQuery,
+  useGetSinglePortalLinkMutation,
+} from '../../../redux-store/api/injectedApis';
+import { AppDispatch } from '../../../redux-store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { setData } from '../../../redux-store/global/globalState';
+import DialogBoxUi from '../../../components/ui/DialogBox';
+import PortalLinkCreate from './Portal-link-create';
+import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 
 const PortalLinkList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data: linkCreation, error, isLoading, refetch } = useGetPortalLinkQuery();
-  const [deleteLink, { isSuccess: deleteLinkSuccess, isError: deleteLinkError, error: deleteLinkErrorObject }] = useDeletePortalLinkMutation();
+  const {
+    data: linkCreation,
+    error,
+    isLoading,
+    refetch,
+  } = useGetPortalLinkQuery();
+  const [
+    deleteLink,
+    { isSuccess: deleteLinkSuccess, isError: deleteLinkError },
+  ] = useDeletePortalLinkMutation();
   const [getLink] = useGetSinglePortalLinkMutation();
-  const [opendialogBox, setIsOpenDialogBox] = useState(false);
+  const [openDialogBox, setOpenDialogBox] = useState(false);
   const linkValue = useSelector((state: any) => state.globalState.data);
   const [key, setKey] = useState<number>(0);
 
@@ -29,12 +48,12 @@ const PortalLinkList: React.FC = () => {
 
   useEffect(() => {
     refetch();
-  }, [linkCreation]); // Refetch data after creation or deletion
+  }, [linkCreation, refetch]);
 
   useEffect(() => {
     if (deleteLinkSuccess) {
       setNotification({ success: true, error: false, errorMessage: '' });
-      refetch(); // Refetch data after successful deletion
+      refetch();
     } else if (deleteLinkError) {
       setNotification({
         success: false,
@@ -42,7 +61,7 @@ const PortalLinkList: React.FC = () => {
         errorMessage: 'Error deleting Link',
       });
     }
-  }, [deleteLinkSuccess, deleteLinkError]);
+  }, [deleteLinkSuccess, deleteLinkError, refetch]);
 
   // Call the snackbar notification hook at the top level
   useSnackbarNotifications({
@@ -57,7 +76,7 @@ const PortalLinkList: React.FC = () => {
       const response = await getLink(id);
       if ('data' in response) {
         dispatch(setData(response.data));
-        setIsOpenDialogBox(true);
+        setOpenDialogBox(true);
       } else {
         console.error('Error response:', response.error);
       }
@@ -67,7 +86,9 @@ const PortalLinkList: React.FC = () => {
   };
 
   const handleDeleteClick = async (id: number) => {
-    const confirmed = window.confirm("Are you sure you want to delete this link?");
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this link?',
+    );
     if (confirmed) {
       try {
         await deleteLink(id);
@@ -78,8 +99,8 @@ const PortalLinkList: React.FC = () => {
   };
 
   const handleModalClose = () => {
-    setKey(prevKey => prevKey + 1); // Reset the key to force component re-render
-    setIsOpenDialogBox(false); // Close the dialog
+    setKey((prevKey) => prevKey + 1); // Reset the key to force component re-render
+    setOpenDialogBox(false); // Close the dialog
     refetch(); // Refetch the data after closing
   };
 
@@ -94,59 +115,82 @@ const PortalLinkList: React.FC = () => {
   return (
     <Box>
       <DialogBoxUi
-        open={opendialogBox}
+        open={openDialogBox}
         content={
-          <PortalLinkCreate 
-            linkValue={linkValue} 
-            key={key} 
+          <PortalLinkCreate
+            linkValue={linkValue}
+            key={key}
             handleClose={handleModalClose} // Passing handleClose prop
           />
         }
         handleClose={handleModalClose} // Ensure dialog can be closed
       />
-      <Grid container spacing={2} mt={1} sx={{ width: "1020px" }}>
-        {linkCreation && linkCreation.map((link) => (
-          <Grid item xs={3} key={link.id}>
-            <Card
-              elevation={2}
-              sx={{ width: "200px", height: "40px", marginBottom:"15px", borderRadius:"7px"}}
-            >
-              <CardContent sx={{ padding: 2 }}>
-                <Box sx={{ alignItems: "center", display: "flex", marginTop:"-10px"}}>
-                  <LanguageIcon
-                    style={{ color: "blue", marginLeft: "-10px", height:"15px" }}
-                  />
-                  <a
-                    href={link.url} target="_blank" rel="noopener noreferrer"
-                    style={{ fontSize: "12px", marginLeft: "2px" }}
-                  >
-                    {link.label}
-                  </a>
-                  <Box
-                    sx={{
-                      marginLeft: "auto",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <IconButton
-                      style={{ color: "blue", height:"5px" ,fontSize: "small" }}
-                      onClick={() => handleEditClick(link.id)}
+      <Grid container spacing={2} mt={1} sx={{ width: '1020px' }}>
+        {linkCreation
+          ? linkCreation.map((link) => (
+              <Grid item xs={3} key={link.id}>
+                <Card
+                  elevation={2}
+                  sx={{
+                    width: '200px',
+                    height: '40px',
+                    marginBottom: '15px',
+                    borderRadius: '7px',
+                  }}
+                >
+                  <CardContent sx={{ padding: 2 }}>
+                    <Box
+                      sx={{
+                        alignItems: 'center',
+                        display: 'flex',
+                        marginTop: '-10px',
+                      }}
                     >
-                      <EditIcon style={{ fontSize: "small" }} />
-                    </IconButton>
-                    <IconButton
-                      style={{ color: "blue", fontSize: "small" }}
-                      onClick={() => handleDeleteClick(link.id)}
-                    >
-                      <DeleteIcon style={{ fontSize: "small" }} />
-                    </IconButton>
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                      <LanguageIcon
+                        style={{
+                          color: 'blue',
+                          marginLeft: '-10px',
+                          height: '15px',
+                        }}
+                      />
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ fontSize: '12px', marginLeft: '2px' }}
+                      >
+                        {link.label}
+                      </a>
+                      <Box
+                        sx={{
+                          marginLeft: 'auto',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <IconButton
+                          style={{
+                            color: 'blue',
+                            height: '5px',
+                            fontSize: 'small',
+                          }}
+                          onClick={() => handleEditClick(link.id)}
+                        >
+                          <EditIcon style={{ fontSize: 'small' }} />
+                        </IconButton>
+                        <IconButton
+                          style={{ color: 'blue', fontSize: 'small' }}
+                          onClick={() => handleDeleteClick(link.id)}
+                        >
+                          <DeleteIcon style={{ fontSize: 'small' }} />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          : null}
       </Grid>
     </Box>
   );

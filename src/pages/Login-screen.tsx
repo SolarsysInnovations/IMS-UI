@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -6,47 +6,43 @@ import {
   IconButton,
   Stack,
   Typography,
-} from "@mui/material";
-import ButtonUi from "../components/ui/Button";
-import { Link, useNavigate } from "react-router-dom";
-import palette from "../theme/create-pallet";
-import { Formik, Form } from "formik";
-import { useDispatch } from "react-redux";
-import { VisibilityOff, VisibilityOutlined } from "@mui/icons-material";
-import { AppDispatch } from "../redux-store/store";
-import { useLoginMutation } from "../redux-store/auth/loginApi";
-import { StorageKeys, useSessionStorage } from "../hooks/useSessionStorage";
-import { loginValidationSchema } from "../constants/forms/validations/validationSchema";
-import { loginInitialValue } from "../constants/forms/formikInitialValues";
-import { LoginProps } from "../types/types";
-import { setCredentials } from "../redux-store/auth/authSlice";
-import TextFieldUi from "../components/ui/TextField";
-import Logo from "../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png";
-import { InvoiceContext } from "../invoiceContext/invoiceContext";
+} from '@mui/material';
+import ButtonUi from '../components/ui/Button';
+import { Link, useNavigate } from 'react-router-dom';
+import palette from '../theme/create-pallet';
+import { Form, Formik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
+import { AppDispatch } from '../redux-store/store';
+import { useLoginMutation } from '../redux-store/auth/loginApi';
+import { loginValidationSchema } from '../constants/forms/validations/validationSchema';
+import { loginInitialValue } from '../constants/forms/formikInitialValues';
+import { LoginProps } from '../types/types';
+import { setCredentials } from '../redux-store/auth/authSlice';
+import TextFieldUi from '../components/ui/TextField';
+import Logo from '../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png';
+import { useInVoiceContext } from '../invoiceContext/invoiceContext';
 interface LoginResponse {
   data?: {
     id: any;
-    user: any;
     accessToken: any;
     refresh: any;
     userRole: any;
     userName: any;
     userEmail: string | null;
-    userDetails: any;
   };
   error?: any;
 }
 const Login = () => {
-  const context = useContext(InvoiceContext);
   const [login, { error: loginError }] = useLoginMutation();
   const dispatch = useDispatch<AppDispatch>();
-  const [userToken, setUserToken] = useSessionStorage(StorageKeys.TOKEN, "");
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const context = useInVoiceContext();
 
   useEffect(() => {
     if (loginError) {
-      alert("Login failed. Please check your credentials and try again.");
+      alert('Login failed. Please check your credentials and try again.');
     }
   }, [loginError]);
 
@@ -54,57 +50,48 @@ const Login = () => {
     <Formik
       initialValues={loginInitialValue}
       validationSchema={loginValidationSchema}
-      // validate={() => ({})}
-      onSubmit={async (values: LoginProps, { setSubmitting, resetForm }) => {
+      onSubmit={async (values: LoginProps, { resetForm }) => {
         try {
           const loginResult: LoginResponse = await login(values);
 
-          // Check if the login was successful and accessToken is available
-          if (loginResult.data && "accessToken" in loginResult.data) {
-            // Check if the response contains a refresh token
+          if (loginResult.data && 'accessToken' in loginResult.data) {
             if (loginResult.data.accessToken) {
               const {
                 id,
-                user,
                 accessToken,
                 refresh,
                 userRole,
                 userName,
                 userEmail,
-                userDetails,
               } = loginResult.data;
-              context.userRole = userRole;
-              context.userName = userName;
-              context.userEmail = userEmail;
-              context.userId = id;
+              context.userDetails.userId = id;
+              context.userDetails.userName = userName;
+              context.userDetails.userEmail = userEmail;
+              context.userDetails.userRole = userRole;
               dispatch(
                 setCredentials({
                   id,
-                  user,
                   accessToken,
                   refresh,
                   userRole,
                   userName,
                   userEmail,
-                  userDetails,
-                })
+                }),
               );
             } else {
-              const { user, accessToken } = loginResult.data;
-              dispatch(setCredentials({ user, accessToken }));
+              const { accessToken } = loginResult.data;
+              dispatch(setCredentials({ accessToken }));
             }
-            // Move the navigation inside the if-else block after dispatching actions
-            navigate("/dashboard");
+            navigate('/dashboard');
           } else {
-            // Handle the case where accessToken is not available
             console.error(
-              "Access token not found in login response:",
-              loginResult
+              'Access token not found in login response:',
+              loginResult,
             );
           }
           resetForm();
         } catch (error) {
-          console.error("An error occurred during login:", error);
+          console.error('An error occurred during login:', error);
         }
       }}
     >
@@ -112,29 +99,29 @@ const Login = () => {
         <Box
           sx={{
             mt: 3,
-            backgroundColor: "background.paper",
-            flex: "1 1 auto",
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "center",
+            backgroundColor: 'background.paper',
+            flex: '1 1 auto',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
           }}
         >
-          <Box sx={{ maxWidth: 500, px: 3, py: "0px", width: "100%" }}>
+          <Box sx={{ maxWidth: 500, px: 3, py: '0px', width: '100%' }}>
             <div>
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Avatar
                   sx={{
                     width: 100,
                     height: 100,
-                    bgcolor: "white",
-                    color: "white",
+                    bgcolor: 'white',
+                    color: 'white',
                   }}
                   src={Logo}
                 />
@@ -143,32 +130,26 @@ const Login = () => {
                 spacing={1}
                 sx={{
                   mb: 3,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Typography
                   variant="subtitle1"
                   sx={{
-                    fontWeight: "bold",
-                    fontSize: "30px",
+                    fontWeight: 'bold',
+                    fontSize: '30px',
                   }}
                 >
                   Log In
                 </Typography>
-
-                {/* <Typography color='text.secondary' variant='body2' >
-                  Don&apos;t have an account? &nbsp; <Link style={{ color: palette.primary.main, textDecoration: 'none' }} to="" >
-                    Register
-                  </Link>
-                </Typography> */}
               </Stack>
               <Form noValidate>
                 <Stack spacing={3}>
                   <TextFieldUi
-                    sx={{ padding: "8px 0" }}
+                    sx={{ padding: '8px 0' }}
                     fullWidth={false}
                     label="User Email "
                     name="userEmail"
@@ -179,7 +160,7 @@ const Login = () => {
                     helperText={touched.userEmail && errors.userEmail}
                   />
                   <TextFieldUi
-                    sx={{ padding: "8px 0" }}
+                    sx={{ padding: '8px 0' }}
                     endAdornment={
                       passwordVisible ? (
                         <IconButton
@@ -202,7 +183,7 @@ const Login = () => {
                     fullWidth={false}
                     label="Password"
                     name="password"
-                    type={!passwordVisible ? "password" : "text"}
+                    type={!passwordVisible ? 'password' : 'text'}
                     value={values.password}
                     onChange={handleChange}
                     error={touched.password && Boolean(errors.password)}
@@ -213,18 +194,12 @@ const Login = () => {
                   <Link
                     style={{
                       color: palette.primary.main,
-                      textDecoration: "none",
+                      textDecoration: 'none',
                     }}
-                    to="/forgotpassword" // Change this line
+                    to="/forgotpassword"
                   >
                     Forgot Password?
                   </Link>
-                  {/* <Link
-    style={{ color: palette.primary.main, textDecoration: 'none' , marginLeft:'10px'}}
-    to="/resetpassword"  // Change this line
-  >
-    Reset Password?
-  </Link> */}
                 </FormHelperText>
                 <Box sx={{ mt: 2 }}>
                   <ButtonUi
@@ -233,9 +208,6 @@ const Login = () => {
                     label="Login"
                     variant="contained"
                     type="submit"
-                    // sx={{
-                    //   backgroundColor: "GrayText"
-                    // }}
                   />
                 </Box>
               </Form>
