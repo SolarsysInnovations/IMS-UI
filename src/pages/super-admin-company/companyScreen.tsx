@@ -11,7 +11,6 @@ const CompanyScreen: React.FC = () => {
 
   useEffect(() => {
     if (
-      companyValue &&
       companyValue.companyDetails &&
       companyValue.userDetails
     ) {

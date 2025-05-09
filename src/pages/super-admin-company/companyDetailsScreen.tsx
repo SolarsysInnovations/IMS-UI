@@ -13,7 +13,6 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = () => {
 
   useEffect(() => {
     if (
-      companyValue &&
       companyValue.companyDetails &&
       companyValue.userDetails
     ) {
@@ -26,7 +25,6 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = () => {
   }, [companyValue]);
 
   if (
-    !companyValue ||
     !companyValue.companyDetails ||
     !companyValue.userDetails
   ) {

@@ -173,7 +173,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   useSnackbarNotifications({
     success: invoiceUpdatedSuccess,
     error: invoiceUpdateError,
-    successMessage: resMessage ? resMessage : 'Invoice Updated Successfully',
+    successMessage: resMessage || 'Invoice Updated Successfully',
     errorMessage: 'Error updating invoice',
     errorObject: invoiceUpdateErrorObject,
   });
@@ -229,7 +229,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     setInvoiceTotalAmount(roundedInvoiceAmount);
   }, [subTotalInvoiceAmount, retainerAmount, discountPercentage, selectedTds]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (serviceList) {
       const mappedServiceList = serviceList.map((s: any) => ({
         id: `${rowIdCounter.current++}`, // Manually assign unique ID
@@ -244,7 +244,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   }, [serviceList]);
 
   // * this is for edit screen only
-  React.useEffect(() => {
+  useEffect(() => {
     if (invoiceValue) {
       const data = tdsTaxData?.find(
         (item: any) => item?.taxName === invoiceValues.taxAmount.tds,
@@ -355,11 +355,34 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     }
   };
 
+  function handlePopupComponents(popUpComponent: string) {
+    if (popUpComponent === PopupComponents.GST_TYPE) {
+      return <GstTypeScreen />;
+    } else if (popUpComponent === PopupComponents.PAYMENT_TERMS) {
+      return <PaymentTermsScreen />;
+    } else if (popUpComponent === PopupComponents.TDS_TAX) {
+      return <TdsTaxScreen />;
+    } else if (popUpComponent === PopupComponents.SERVICES) {
+      return <ServiceScreen />;
+    } else if (popUpComponent === PopupComponents.INVOICE) {
+      return (
+        <InvoiceUi
+          preview={preview}
+          discount={discountAmount}
+          subtotal={subTotalInvoiceAmount}
+          tds={tdsAmount}
+          setIsModalOpen={setIsModalOpen}
+        />
+      );
+    } else {
+      return null;
+    }
+  }
+
   return (
     <Formik
       initialValues={invoiceValues}
       validationSchema={invoiceValidationSchema}
-      // validate={() => ({})}
       onSubmit={async (
         values: InvoiceInitialValueProps,
         { setSubmitting, resetForm },
@@ -418,11 +441,11 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       servicesList: invoiceValues.servicesList ?? null,
                       totalAmount: invoiceTotalAmount ?? null,
                     };
-                    dispatch(setInvoiceData(updatedValue as any));
+                    dispatch(setInvoiceData(updatedValue));
 
                     setPreview(false);
                     setIsModalOpen(true);
-                    dispatch(setInvoiceData(updatedValue as any));
+                    dispatch(setInvoiceData(updatedValue));
                   },
                   disabled: !(isValid && dirty),
                 },
@@ -446,34 +469,13 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                   onClick: async () => {
                     handleSubmit();
                   },
-                  // disabled: !(isValid && dirty)
                 },
               ]}
             />
             {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
             <DialogBoxUi
               open={openDialogBox}
-              content={
-                <>
-                  {popUpComponent === PopupComponents.GST_TYPE ? (
-                    <GstTypeScreen />
-                  ) : popUpComponent === PopupComponents.PAYMENT_TERMS ? (
-                    <PaymentTermsScreen />
-                  ) : popUpComponent === PopupComponents.TDS_TAX ? (
-                    <TdsTaxScreen />
-                  ) : popUpComponent === PopupComponents.SERVICES ? (
-                    <ServiceScreen />
-                  ) : popUpComponent === PopupComponents.INVOICE ? (
-                    <InvoiceUi
-                      preview={preview}
-                      discount={discountAmount}
-                      subtotal={subTotalInvoiceAmount}
-                      tds={tdsAmount}
-                      setIsModalOpen={setIsModalOpen}
-                    />
-                  ) : null}
-                </>
-              }
+              content={handlePopupComponents(popUpComponent)}
               handleClose={() => {
                 setOpenDialogBox(false);
                 setPopUpComponent('');
