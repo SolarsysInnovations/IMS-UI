@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import MainLayout from '../../components/layouts/SideBar';
 import { selectCurrentToken } from '../../redux-store/auth/authSlice';
 import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
+import { Roles } from '../../constants/Enums';
 
 interface RoleBasedRouteProps {
   allowedRoles: string[];
@@ -28,7 +29,7 @@ const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({ allowedRoles }) => {
     );
   }
 
-  if (userRole && !allowedRoles.includes(userRole)) {
+  if (userRole !== Roles.GUEST && !allowedRoles.includes(userRole)) {
     return <Navigate to="/unauthorized" state={{ from: location }} replace />;
   }
 
