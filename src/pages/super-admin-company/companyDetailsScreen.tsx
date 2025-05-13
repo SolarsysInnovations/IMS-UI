@@ -12,10 +12,7 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = () => {
   const [mergedData, setMergedData] = useState<{ [key: string]: any }>({});
 
   useEffect(() => {
-    if (
-      companyValue.companyDetails &&
-      companyValue.userDetails
-    ) {
+    if (companyValue.companyDetails && companyValue.userDetails) {
       const mergedObject = {
         ...companyValue.userDetails, // Ensure userDetails are spread first if you want to prioritize those keys
         ...companyValue.companyDetails,
@@ -24,10 +21,7 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = () => {
     }
   }, [companyValue]);
 
-  if (
-    !companyValue.companyDetails ||
-    !companyValue.userDetails
-  ) {
+  if (!companyValue.companyDetails || !companyValue.userDetails) {
     return null; // Or display a loading indicator or placeholder
   }
 

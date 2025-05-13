@@ -10,10 +10,7 @@ const CompanyScreen: React.FC = () => {
   const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
-    if (
-      companyValue.companyDetails &&
-      companyValue.userDetails
-    ) {
+    if (companyValue.companyDetails && companyValue.userDetails) {
       const mergedObject = {
         ...companyValue.companyDetails,
         ...companyValue.userDetails,

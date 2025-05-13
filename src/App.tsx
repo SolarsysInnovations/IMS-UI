@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
+import { Box, Typography } from '@mui/material';
 import theme from './theme/theme';
 import RoleBasedRoute from './services/utils/PrivateRoute';
 import { useSelector } from 'react-redux';
@@ -18,12 +19,37 @@ import {
   InvoiceContextProvider,
   useInVoiceContext,
 } from './invoiceContext/invoiceContext';
+import { InvoiceContextType } from './invoiceContext/invoiceContextTypes';
 
 function App() {
   const context = useInVoiceContext();
   const token = useSelector(selectCurrentToken);
   const id = useSelector(selectCurrentId);
-  const [getUserRole] = useGetUserRoleMutation();
+  const [getUserRole, { isLoading }] = useGetUserRoleMutation();
+
+  function init(context: InvoiceContextType) {
+    if (id) {
+      getUserRole(id)
+        .unwrap()
+        .then((response) => {
+          context.userDetails.userId = id;
+          context.userDetails.userRole = response.userRole;
+          context.userDetails.userName = response.userName;
+          context.userDetails.userEmail = response.userEmail;
+          context.userDetails.userMobile = response.userMobile;
+          context.userDetails.description = response.description;
+          context.companyDetails.companyId = response.companyId;
+        })
+        .catch((error) => {
+          console.error('Error fetching user role:', error);
+        });
+    }
+    return context;
+  }
+
+  useEffect(() => {
+    init(context);
+  }, [context]);
 
   const generateRoutes = (menuItems: any) => {
     return menuItems.flatMap(
@@ -46,24 +72,13 @@ function App() {
     );
   };
 
-  useEffect(() => {
-    if (id) {
-      getUserRole(id)
-        .unwrap()
-        .then((response) => {
-          context.userDetails.userId = id;
-          context.userDetails.userRole = response.userRole;
-          context.userDetails.userName = response.userName;
-          context.userDetails.userEmail = response.userEmail;
-          context.userDetails.userMobile = response.userMobile;
-          context.userDetails.description = response.description;
-          context.companyDetails.companyId = response.companyId;
-        })
-        .catch((error) => {
-          console.error('Error fetching user role:', error);
-        });
-    }
-  }, [id, getUserRole, context]);
+  if (isLoading) {
+    return (
+      <Box px={0} py={2}>
+        <Typography align="center">Loading...</Typography>
+      </Box>
+    );
+  }
 
   return (
     <InvoiceContextProvider>

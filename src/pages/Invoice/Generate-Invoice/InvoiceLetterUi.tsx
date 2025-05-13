@@ -9,10 +9,8 @@ import {
   useGetCustomersListQuery,
   useGetInvoiceListQuery,
   useGetTdsTaxListQuery,
-  useGetUserRoleMutation,
   useUpdateInvoiceMutation,
 } from '../../../redux-store/api/injectedApis';
-import { selectCurrentId } from '../../../redux-store/auth/authSlice';
 import StageStepper from '../../../components/ui/StepperUi';
 import ButtonUi from '../../../components/ui/Button';
 import SplitButton from '../../../components/ui/SplitButton';
@@ -44,8 +42,6 @@ const InvoiceLetterUi = ({
     },
   ] = useUpdateInvoiceMutation();
   const invoiceData = useSelector((state: any) => state.invoiceState.data);
-  const [getUserRole, { data: userRoleData }] = useGetUserRoleMutation();
-  const id = useSelector(selectCurrentId);
   const companyIdString = sessionStorage.getItem('id') ?? '';
   const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
   const [showTracker, setShowTracker] = useState(false);
