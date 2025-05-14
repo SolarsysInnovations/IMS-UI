@@ -3,7 +3,6 @@ import AdminDashboardInvoiceOverviewAmount from '../Admin-dashboard/InvoiceAmoun
 import AdminDashboardInvoicePieChart from '../Admin-dashboard/InvoiceStatusChart';
 import GridDataUi from '../../../components/GridTable/GridData';
 import { GridColDef } from '@mui/x-data-grid';
-import { useGetDashboardMutation } from '../../../redux-store/api/injectedApis';
 
 interface AdminDashboardScreenProps {
   adminData: {
@@ -11,17 +10,17 @@ interface AdminDashboardScreenProps {
     invoiceStatus: any;
     invoiceList: any;
   };
-  startDate: string;
-  endDate: string;
+  isLoading: boolean;
+  isError: boolean;
+  error: any;
 }
 
 const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
   adminData,
-  startDate,
-  endDate,
+  isLoading,
+  isError,
+  error
 }) => {
-  const [getInvoiceList, { isLoading, isError, error }] =
-    useGetDashboardMutation();
   const invoiceList = adminData?.invoiceList ?? [];
 
   const columns: GridColDef[] = [

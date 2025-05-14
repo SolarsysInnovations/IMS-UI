@@ -6,7 +6,7 @@ import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices
 import TaskIcon from '@mui/icons-material/Task';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
-import DashboardScreen from '../pages/Dashboard/Dashboard';
+import DashboardScreen from '../pages/Dashboard';
 import Reportscreen from '../pages/reports/Reportscreen';
 import ArAgingscreen from '../pages/reports/Reports-ar-aging';
 import Reportsinvoice from '../pages/reports/Reports-invoice';
