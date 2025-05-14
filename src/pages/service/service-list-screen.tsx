@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import GridDataUi from '../../components/GridTable/GridData';
+import { Box, Typography } from '@mui/material';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
@@ -14,40 +15,48 @@ import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const ServicesList = () => {
   const dispatch = useDispatch<AppDispatch>();
-
-  const { data: serviceList } = useGetServiceListQuery();
+  const { data = [], isLoading, refetch } = useGetServiceListQuery();
   const [openDialogBox, setOpenDialogBox] = useState(false);
-
   const { canCreateServices } = useRolePermissions();
-  const buttons = [
-    {
-      label: 'Create Service List',
-      icon: Add,
-      onClick: () => {
-        dispatch(clearServiceData());
-        setOpenDialogBox(true);
+  const pathname = usePathname();
+
+  const buttons = useMemo(
+    () => [
+      {
+        label: 'Create Service List',
+        icon: Add,
+        onClick: () => {
+          dispatch(clearServiceData());
+          setOpenDialogBox(true);
+        },
       },
-    },
-  ];
+    ],
+    [dispatch],
+  );
 
   const resolvedButtons = canCreateServices ? buttons : [];
-  const pathname = usePathname();
+
+  if (isLoading) {
+    return (
+      <Box px={0} py={2}>
+        <Typography align="center">Loading Services...</Typography>
+      </Box>
+    );
+  }
 
   return (
     <>
       <TableHeader headerName={pathname} buttons={resolvedButtons} />
       <GridDataUi
         showToolbar={true}
-        columns={columns || []}
-        tableData={serviceList || []}
+        columns={columns}
+        tableData={data}
         checkboxSelection={false}
       />
       <DialogBoxUi
         open={openDialogBox}
-        content={<ServiceCreate setOpenDialogBox={setOpenDialogBox} />}
-        handleClose={() => {
-          setOpenDialogBox(false);
-        }}
+        content={<ServiceCreate setOpenDialogBox={setOpenDialogBox} refetch={refetch} />}
+        handleClose={() => setOpenDialogBox(false)}
       />
     </>
   );

@@ -9,13 +9,15 @@ import { AppDispatch } from '../../redux-store/store';
 import { useGetCustomersListQuery } from '../../redux-store/api/injectedApis';
 import { clearCustomerData } from '../../redux-store/slices/customerSlice';
 import { useRolePermissions } from '../../hooks/useRolePermission';
+import { Box, Typography } from '@mui/material';
 
 const CustomerList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data: customers } = useGetCustomersListQuery();
+  const { data, isLoading } = useGetCustomersListQuery();
   const { canCreateCustomers } = useRolePermissions();
   const navigate = useNavigate();
   const pathname = usePathname();
+  const customers = data ?? [];
 
   const buttons = [
     {
@@ -28,6 +30,14 @@ const CustomerList = () => {
     },
   ];
 
+  if (isLoading) {
+    return (
+      <Box px={0} py={2}>
+        <Typography align="center">Loading Customers...</Typography>
+      </Box>
+    );
+  }
+
   return (
     <>
       {canCreateCustomers && (
@@ -36,7 +46,7 @@ const CustomerList = () => {
       <GridDataUi
         showToolbar={true}
         columns={columns}
-        tableData={customers || []}
+        tableData={customers}
         checkboxSelection={false}
       />
     </>

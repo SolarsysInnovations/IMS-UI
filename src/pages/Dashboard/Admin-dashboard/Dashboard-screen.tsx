@@ -19,7 +19,7 @@ const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
   adminData,
   isLoading,
   isError,
-  error
+  error,
 }) => {
   const invoiceList = adminData?.invoiceList ?? [];
 

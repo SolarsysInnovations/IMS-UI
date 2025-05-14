@@ -79,11 +79,7 @@ const DashboardScreen: React.FC = () => {
       } else if (userRole === Roles.STANDARDUSER) {
         return <EndUserDashboardScreen standardUserData={responseData} />;
       } else if (userRole === Roles.SUPERADMIN) {
-        return (
-          <SuperAdminDashboardScreen
-            superAdminData={responseData}
-          />
-        );
+        return <SuperAdminDashboardScreen superAdminData={responseData} />;
       } else {
         return (
           <AdminDashboardScreen

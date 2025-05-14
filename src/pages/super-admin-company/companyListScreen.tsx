@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Box, Typography } from '@mui/material';
 import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
@@ -79,6 +80,14 @@ const CompanyList = () => {
   ];
 
   const resolvedButtons = canCreateCompanies ? buttons : [];
+
+  if (isLoading) {
+    return (
+      <Box px={0} py={2}>
+        <Typography align="center">Loading Company...</Typography>
+      </Box>
+    );
+  }
 
   return (
     <>
