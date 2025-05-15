@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid } from '@mui/material';
 import { Roles } from '../../constants/Enums';
 import { useGetDashboardMutation } from '../../redux-store/api/injectedApis';
 import { Formik } from 'formik';
@@ -118,9 +118,16 @@ const DashboardScreen: React.FC = () => {
 
   if (!userRole && isLoading) {
     return (
-      <Box px={0} py={2}>
-        <Typography align="center">Loading dashboard...</Typography>
-      </Box>
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'100vh'}
+      >
+        <CircularProgress />
+      </Grid>
     );
   }
 
@@ -198,7 +205,16 @@ const DashboardScreen: React.FC = () => {
         <Grid item xs={12} display="flex" justifyContent="center">
           <Box width="100%" maxWidth="1200px">
             {isLoading ? (
-              <Typography align="center">Loading dashboard...</Typography>
+              <Grid
+                item
+                xs={12}
+                container
+                justifyContent="center"
+                alignItems="center"
+                height={'50vh'}
+              >
+                <CircularProgress />
+              </Grid>
             ) : (
               roleBasedDashboard(userRole)
             )}

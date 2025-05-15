@@ -2,6 +2,7 @@ import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
+import { CircularProgress, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { columns } from '../../constants/grid-table-data/customer-table-data';
 import { useDispatch } from 'react-redux';
@@ -9,7 +10,6 @@ import { AppDispatch } from '../../redux-store/store';
 import { useGetCustomersListQuery } from '../../redux-store/api/injectedApis';
 import { clearCustomerData } from '../../redux-store/slices/customerSlice';
 import { useRolePermissions } from '../../hooks/useRolePermission';
-import { Box, Typography } from '@mui/material';
 
 const CustomerList = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,9 +32,16 @@ const CustomerList = () => {
 
   if (isLoading) {
     return (
-      <Box px={0} py={2}>
-        <Typography align="center">Loading Customers...</Typography>
-      </Box>
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'100vh'}
+      >
+        <CircularProgress />
+      </Grid>
     );
   }
 

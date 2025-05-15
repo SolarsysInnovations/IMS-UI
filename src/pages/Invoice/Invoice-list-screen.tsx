@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
@@ -15,6 +15,7 @@ import { useGetInvoiceListScreenMutation } from '../../redux-store/api/injectedA
 import { Formik } from 'formik';
 import { MyCellRenderer } from '../../constants/grid-table-data/invoice-list-screen-table-data';
 import { GridColDef } from '@mui/x-data-grid';
+
 export interface TaxAmountProps {
   tds: string;
 }
@@ -188,9 +189,16 @@ const InvoiceList = () => {
 
   if (isLoading) {
     return (
-      <Box px={0} py={2}>
-        <Typography align="center">Loading Invoice...</Typography>
-      </Box>
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'90vh'}
+      >
+        <CircularProgress />
+      </Grid>
     );
   }
 

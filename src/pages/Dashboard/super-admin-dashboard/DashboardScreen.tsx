@@ -7,34 +7,32 @@ const SuperAdminDashboardScreen = ({ superAdminData }: any) => {
     return <div>No data available</div>;
   }
   const superAdminOverviewData = {
-    totalNoOfCompany: superAdminData.totalNoOfCompany || 0,
-    totalNoOfInvoices: superAdminData.totalNoOfInvoices || 0,
+    totalNoOfCompany: superAdminData.totalNoOfCompany ?? 0,
+    totalNoOfInvoices: superAdminData.totalNoOfInvoices ?? 0,
   };
-  const companyOverviewData = superAdminData.companyOverview || [];
+  const companyOverviewData = superAdminData.companyOverview ?? [];
 
   return (
-    <>
-      <Grid container spacing={-1}>
-        {superAdminOverviewData && (
-          <Grid item xs={12}>
-            <div style={{ padding: '16px', backgroundColor: '#fff' }}>
-              <SuperAdminDashboardOverview
-                overviewData={superAdminOverviewData}
-              />
-            </div>
-          </Grid>
-        )}
-        {companyOverviewData && (
-          <Grid item xs={12}>
-            <div style={{ padding: '16px', backgroundColor: '#fff' }}>
-              <SuperAdminCustomersList
-                superAdminCustomersListData={companyOverviewData}
-              />
-            </div>
-          </Grid>
-        )}
-      </Grid>
-    </>
+    <Grid container spacing={-1}>
+      {superAdminOverviewData && (
+        <Grid item xs={12}>
+          <div style={{ padding: '16px', backgroundColor: '#fff' }}>
+            <SuperAdminDashboardOverview
+              overviewData={superAdminOverviewData}
+            />
+          </div>
+        </Grid>
+      )}
+      {companyOverviewData && (
+        <Grid item xs={12}>
+          <div style={{ padding: '16px', backgroundColor: '#fff' }}>
+            <SuperAdminCustomersList
+              superAdminCustomersListData={companyOverviewData}
+            />
+          </div>
+        </Grid>
+      )}
+    </Grid>
   );
 };
 

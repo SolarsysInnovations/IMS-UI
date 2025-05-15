@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import GridDataUi from '../../components/GridTable/GridData';
-import { Box, Typography } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
@@ -39,9 +39,16 @@ const UserList = () => {
 
   if (isLoading) {
     return (
-      <Box px={0} py={2}>
-        <Typography align="center">Loading Users...</Typography>
-      </Box>
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'100vh'}
+      >
+        <CircularProgress />
+      </Grid>
     );
   }
 

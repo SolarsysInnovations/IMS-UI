@@ -58,6 +58,32 @@ const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
 
   const invoiceOverviewAmountData = adminData.invoiceOverview ?? {};
   const invoicePieChartData = adminData.invoiceStatus ?? {};
+
+  if (isError) {
+    return (
+      <Grid item xs={12}>
+        <Typography color="error">
+          Error loading invoice data: {error?.message ?? 'Unknown error'}
+        </Typography>
+      </Grid>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'90vh'}
+      >
+        <CircularProgress />
+      </Grid>
+    );
+  }
+
   return (
     <>
       <Grid container spacing={2}>
@@ -77,36 +103,16 @@ const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
         )}
       </Grid>
 
-      {isError ? (
+      <Grid container spacing={2} style={{ marginTop: '16px' }}>
         <Grid item xs={12}>
-          <Typography color="error">
-            Error loading invoice data: {error?.message ?? 'Unknown error'}
-          </Typography>
+          <GridDataUi
+            showToolbar={true}
+            columns={columns}
+            tableData={invoiceList}
+            checkboxSelection={false}
+          />
         </Grid>
-      ) : (
-        <Grid container spacing={2} style={{ marginTop: '16px' }}>
-          {isLoading ? (
-            <Grid
-              item
-              xs={12}
-              container
-              justifyContent="center"
-              alignItems="center"
-            >
-              <CircularProgress />
-            </Grid>
-          ) : (
-            <Grid item xs={12}>
-              <GridDataUi
-                showToolbar={true}
-                columns={columns}
-                tableData={invoiceList}
-                checkboxSelection={false}
-              />
-            </Grid>
-          )}
-        </Grid>
-      )}
+      </Grid>
     </>
   );
 };

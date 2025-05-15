@@ -22,7 +22,7 @@ interface EndUserDashboardScreenProps {
 }
 
 const EndUserDashboardScreen: React.FC<EndUserDashboardScreenProps> = ({
-  standardUserData = defaultStandardUserData, // Use defaultStandardUserData if not provided
+  standardUserData = defaultStandardUserData,
 }) => {
   const approverOverViewData = {
     totalInvoices: standardUserData.totalInvoices,
@@ -30,7 +30,7 @@ const EndUserDashboardScreen: React.FC<EndUserDashboardScreenProps> = ({
     approvedInvoices: standardUserData.approvedInvoices,
   };
 
-  const invoiceListData = standardUserData.allInvoicesList; // This will default to an empty array if no data is present
+  const invoiceListData = standardUserData.allInvoicesList;
 
   return (
     <>
@@ -43,7 +43,6 @@ const EndUserDashboardScreen: React.FC<EndUserDashboardScreenProps> = ({
           </Grid>
         )}
       </Grid>
-      {/* Always render StandardUserInvoiceList, even if invoiceListData is empty */}
       <StandardUserInvoiceList invoiceListData={invoiceListData} />
     </>
   );

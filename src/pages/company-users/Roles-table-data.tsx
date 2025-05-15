@@ -106,6 +106,28 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
     setDialogContent(null);
   };
 
+  function handleDialogContent(dialogContent: string | null) {
+    if (dialogContent === 'view' && userData) {
+      return (
+        <>
+          <TableHeader headerName="User Details" />
+          <UserDetails userDetails={userData} />
+        </>
+      );
+    } else if (dialogContent === 'edit' && userData) {
+      return (
+        <UserForm
+          userEditValue={userData}
+          mode="edit"
+          onClose={handleCloseDialog}
+          refetchUserList={refetch}
+        />
+      );
+    } else {
+      return <p>Loading...</p>;
+    }
+  }
+
   return (
     <Stack direction="row" spacing={1}>
       <ActionButtons
@@ -119,23 +141,7 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
 
       <DialogBoxUi
         open={openDialogBox}
-        content={
-          dialogContent === 'view' && userData ? (
-            <>
-              <TableHeader headerName="User Details" />
-              <UserDetails userDetails={userData} />
-            </>
-          ) : dialogContent === 'edit' && userData ? (
-            <UserForm
-              userEditValue={userData}
-              mode="edit"
-              onClose={handleCloseDialog}
-              refetchUserList={refetch}
-            />
-          ) : (
-            <p>Loading...</p>
-          )
-        }
+        content={handleDialogContent(dialogContent)}
         handleClose={handleCloseDialog}
       />
     </Stack>

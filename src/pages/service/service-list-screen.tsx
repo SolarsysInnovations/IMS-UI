@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import GridDataUi from '../../components/GridTable/GridData';
-import { Box, Typography } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
@@ -38,9 +38,16 @@ const ServicesList = () => {
 
   if (isLoading) {
     return (
-      <Box px={0} py={2}>
-        <Typography align="center">Loading Services...</Typography>
-      </Box>
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'100vh'}
+      >
+        <CircularProgress />
+      </Grid>
     );
   }
 
@@ -55,7 +62,12 @@ const ServicesList = () => {
       />
       <DialogBoxUi
         open={openDialogBox}
-        content={<ServiceCreate setOpenDialogBox={setOpenDialogBox} refetch={refetch} />}
+        content={
+          <ServiceCreate
+            setOpenDialogBox={setOpenDialogBox}
+            refetch={refetch}
+          />
+        }
         handleClose={() => setOpenDialogBox(false)}
       />
     </>

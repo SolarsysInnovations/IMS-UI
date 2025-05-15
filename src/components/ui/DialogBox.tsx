@@ -34,12 +34,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 const DialogBoxUi = ({
   open: defaultOpen = false,
-  paperWidth = '800px', // Default width
-  paperMaxWidth = '600px', // Default max width
-  paperMinHeight = '100px', // Default min height
+  paperWidth = '800px',
+  paperMaxWidth = '600px',
+  paperMinHeight = '100px',
   title,
   maxwidth,
-  minWidth = '400px', // Default minimum width
+  minWidth = '400px',
   content,
   actions,
   handleClose,
@@ -58,49 +58,47 @@ const DialogBoxUi = ({
   };
 
   return (
-    <React.Fragment>
-      <BootstrapDialog
-        onClose={handleCloseDialog}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-        PaperProps={{
-          sx: {
-            width: paperWidth,
-            maxWidth: paperMaxWidth,
-            minHeight: paperMinHeight,
-          },
-        }}
-      >
-        <DialogTitle sx={{ m: 0, p: 2 }}>
-          <IconButton
-            aria-label="close"
-            onClick={handleCloseDialog}
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],
-            }}
-          >
-            <CloseIcon sx={{ width: '20px' }} />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent
+    <BootstrapDialog
+      onClose={handleCloseDialog}
+      aria-labelledby="customized-dialog-title"
+      open={open}
+      PaperProps={{
+        sx: {
+          width: paperWidth,
+          maxWidth: paperMaxWidth,
+          minHeight: paperMinHeight,
+        },
+      }}
+    >
+      <DialogTitle sx={{ m: 0, p: 2 }}>
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseDialog}
           sx={{
-            ...(typeof maxwidth === 'object' ? maxwidth : {}),
-            minWidth: '200px',
-            minHeight: '100px',
-            margin: '20px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
           }}
         >
-          {content}
-        </DialogContent>
-        {actions && <DialogActions>{actions}</DialogActions>}
-      </BootstrapDialog>
-    </React.Fragment>
+          <CloseIcon sx={{ width: '20px' }} />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent
+        sx={{
+          ...(typeof maxwidth === 'object' ? maxwidth : {}),
+          minWidth: '200px',
+          minHeight: '100px',
+          margin: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px',
+        }}
+      >
+        {content}
+      </DialogContent>
+      {actions && <DialogActions>{actions}</DialogActions>}
+    </BootstrapDialog>
   );
 };
 

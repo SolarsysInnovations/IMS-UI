@@ -5,12 +5,12 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 
 interface DatePickerProps {
-  value?: string | Dayjs;
-  onChange: (value: string) => void;
-  label?: string;
-  required?: boolean;
-  disabled?: boolean;
-  sx?: object;
+  readonly value?: string | Dayjs;
+  readonly onChange: (value: string) => void;
+  readonly label?: string;
+  readonly required?: boolean;
+  readonly disabled?: boolean;
+  readonly sx?: object;
 }
 
 export default function DatePickerUi({
