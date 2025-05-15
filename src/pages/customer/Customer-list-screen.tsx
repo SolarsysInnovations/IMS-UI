@@ -2,6 +2,7 @@ import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
+import { CircularProgress, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { columns } from '../../constants/grid-table-data/customer-table-data';
 import { useDispatch } from 'react-redux';
@@ -12,10 +13,11 @@ import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const CustomerList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data: customers } = useGetCustomersListQuery();
+  const { data, isLoading } = useGetCustomersListQuery();
   const { canCreateCustomers } = useRolePermissions();
   const navigate = useNavigate();
   const pathname = usePathname();
+  const customers = data ?? [];
 
   const buttons = [
     {
@@ -28,6 +30,21 @@ const CustomerList = () => {
     },
   ];
 
+  if (isLoading) {
+    return (
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'100vh'}
+      >
+        <CircularProgress />
+      </Grid>
+    );
+  }
+
   return (
     <>
       {canCreateCustomers && (
@@ -36,7 +53,7 @@ const CustomerList = () => {
       <GridDataUi
         showToolbar={true}
         columns={columns}
-        tableData={customers || []}
+        tableData={customers}
         checkboxSelection={false}
       />
     </>

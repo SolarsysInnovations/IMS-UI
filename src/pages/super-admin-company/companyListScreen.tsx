@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { CircularProgress, Grid } from '@mui/material';
 import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
@@ -79,6 +80,21 @@ const CompanyList = () => {
   ];
 
   const resolvedButtons = canCreateCompanies ? buttons : [];
+
+  if (isLoading) {
+    return (
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: '100vh' }}
+      >
+        <CircularProgress />
+      </Grid>
+    );
+  }
 
   return (
     <>

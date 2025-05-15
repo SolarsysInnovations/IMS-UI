@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import GridDataUi from '../../components/GridTable/GridData';
+import { CircularProgress, Grid } from '@mui/material';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
@@ -12,13 +13,12 @@ import { useRolePermissions } from '../../hooks/useRolePermission';
 
 const UserList = () => {
   const [openDialogBox, setOpenDialogBox] = useState(false);
-  const { data: userListData, refetch } = useGetUsersListQuery();
+  const { data, refetch, isLoading } = useGetUsersListQuery();
   const pathname = usePathname();
   const companyUserData = useSelector((state: any) => state.globalState.data);
-
   const [key, setKey] = useState<number>(0);
   const { canCreateUsers } = useRolePermissions();
-
+  const userList = data ?? [];
   const mode = companyUserData ? 'edit' : 'create';
 
   useEffect(() => {
@@ -37,13 +37,28 @@ const UserList = () => {
 
   const resolvedButtons = canCreateUsers ? buttons : [];
 
+  if (isLoading) {
+    return (
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'100vh'}
+      >
+        <CircularProgress />
+      </Grid>
+    );
+  }
+
   return (
     <>
       <TableHeader headerName={pathname} buttons={resolvedButtons} />
       <GridDataUi
         showToolbar={true}
         columns={columns || []}
-        tableData={userListData || []}
+        tableData={userList}
         checkboxSelection={false}
       />
       <DialogBoxUi

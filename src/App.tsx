@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
-import { Box, Typography } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import theme from './theme/theme';
 import RoleBasedRoute from './services/utils/PrivateRoute';
 import { useSelector } from 'react-redux';
@@ -74,9 +74,16 @@ function App() {
 
   if (isLoading) {
     return (
-      <Box px={0} py={2}>
-        <Typography align="center">Loading...</Typography>
-      </Box>
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'100vh'}
+      >
+        <CircularProgress />
+      </Grid>
     );
   }
 

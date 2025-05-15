@@ -6,7 +6,7 @@ import {
   useGetCompanySettingByIdQuery,
   useGetSingleCompanySettingMutation,
 } from '../../../redux-store/api/injectedApis';
-import { Box, Grid } from '@mui/material';
+import { Box, CircularProgress, Grid } from '@mui/material';
 import { setData } from '../../../redux-store/global/globalState';
 import TableHeader from '../../../components/layouts/TableHeader';
 import SettingsCompanyForm from './SettingsCompanyForm';
@@ -24,13 +24,17 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
   const userRole = context.userDetails.userRole;
   const userId = context.userDetails.userId;
   const { id: companyId } = companyDetails ?? {};
-  const { data: companyData, refetch: refetchCompanyData } =
-    useGetCompanySettingByIdQuery(userId);
+  const {
+    data: companyData,
+    isLoading: isCompanyLoading,
+    refetch: refetchCompanyData,
+  } = useGetCompanySettingByIdQuery(userId);
 
   const [getData] = useGetSingleCompanySettingMutation();
 
   const {
     data: logoData,
+    isLoading: logoLoading,
     isSuccess: logoSuccess,
     refetch: refetchLogoData,
   } = useGetCompanyLogoByIdQuery(companyId, {
@@ -92,6 +96,21 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
 
   if (!companyDetails) {
     return <div></div>;
+  }
+
+  if (isCompanyLoading || logoLoading) {
+    return (
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'50vh'}
+      >
+        <CircularProgress />
+      </Grid>
+    );
   }
 
   return (

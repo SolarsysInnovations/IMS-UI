@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
@@ -15,6 +15,7 @@ import { useGetInvoiceListScreenMutation } from '../../redux-store/api/injectedA
 import { Formik } from 'formik';
 import { MyCellRenderer } from '../../constants/grid-table-data/invoice-list-screen-table-data';
 import { GridColDef } from '@mui/x-data-grid';
+
 export interface TaxAmountProps {
   tds: string;
 }
@@ -52,32 +53,25 @@ export interface InvoiceInitialValueProps {
 const InvoiceList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const today = dayjs();
+  const [startDate, setStartDate] = useState<Dayjs | null>(
+    today.startOf('month'),
+  );
+  const [endDate, setEndDate] = useState<Dayjs | null>(today.endOf('month'));
   const [isCustomRange, setIsCustomRange] = useState(false);
   const [filterApplied, setFilterApplied] = useState(false);
-  const [getInvoiceListScreen] = useGetInvoiceListScreenMutation();
+  const [getInvoiceListScreen, { isLoading }] =
+    useGetInvoiceListScreenMutation();
   const [invoiceList, setInvoiceList] = useState<InvoiceInitialValueProps[]>(
     [],
   );
   const [error, setError] = useState(null);
 
-  const handleApplyFilter = async (
+  const handleApplyFilter = (
     startDate: Dayjs | null,
     endDate: Dayjs | null,
   ) => {
-    const formattedStartDate = startDate ? startDate.format('DD-MM-YYYY') : '';
-    const formattedEndDate = endDate ? endDate.format('DD-MM-YYYY') : '';
-    try {
-      const response = await getInvoiceListScreen({
-        startDate: formattedStartDate,
-        endDate: formattedEndDate,
-      }).unwrap();
-      setInvoiceList(response);
-      setFilterApplied(true);
-    } catch (error) {
-      console.error('Error fetching filtered dashboard data:', error);
-    }
+    fetchInvoiceList(startDate, endDate);
   };
 
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
@@ -170,6 +164,44 @@ const InvoiceList = () => {
     },
   ];
 
+  const fetchInvoiceList = async (
+    startDate: Dayjs | null,
+    endDate: Dayjs | null,
+  ) => {
+    const formattedStartDate = startDate ? startDate.format('DD-MM-YYYY') : '';
+    const formattedEndDate = endDate ? endDate.format('DD-MM-YYYY') : '';
+    try {
+      const response = await getInvoiceListScreen({
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+      }).unwrap();
+      setInvoiceList(response ?? []);
+      setFilterApplied(true);
+    } catch (error) {
+      console.error('Error fetching invoice List', error);
+      setInvoiceList([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchInvoiceList(startDate, endDate);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'90vh'}
+      >
+        <CircularProgress />
+      </Grid>
+    );
+  }
+
   return (
     <Box px={0} py={2}>
       <TableHeader
@@ -227,7 +259,7 @@ const InvoiceList = () => {
                     onChange={(date) =>
                       setFieldValue('startDate', dayjs(date, 'DD-MM-YYYY'))
                     }
-                    value={values.startDate || undefined}
+                    value={values.startDate || startDate || undefined}
                     disabled={!isCustomRange}
                     sx={{ width: '80%' }}
                   />
@@ -238,7 +270,7 @@ const InvoiceList = () => {
                     onChange={(date) =>
                       setFieldValue('endDate', dayjs(date, 'DD-MM-YYYY'))
                     }
-                    value={values.endDate || undefined}
+                    value={values.endDate || endDate || undefined}
                     disabled={!isCustomRange}
                     sx={{ width: '80%' }}
                   />

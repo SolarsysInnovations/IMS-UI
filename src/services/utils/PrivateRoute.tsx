@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import { useSelector } from 'react-redux';
 import MainLayout from '../../components/layouts/SideBar';
 import { selectCurrentToken } from '../../redux-store/auth/authSlice';
@@ -23,9 +23,9 @@ const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({ allowedRoles }) => {
 
   if (!userRole) {
     return (
-      <Box px={0} py={2}>
-        <Typography align="center">Loading...</Typography>
-      </Box>
+      <Grid item xs={12} container justifyContent="center" alignItems="center">
+        <CircularProgress />
+      </Grid>
     );
   }
 

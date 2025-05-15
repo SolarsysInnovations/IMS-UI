@@ -61,11 +61,6 @@ const ButtonUi: React.FC<ButtonProps> = ({
         },
         padding: '10px 16px',
         ...sx,
-        ...(gridButton
-          ? {
-              // border: " 1px solid #6366F1 !important",
-            }
-          : {}),
         ...(smallButtonCss
           ? {
               borderRadius: '5px',
@@ -92,7 +87,7 @@ const ButtonUi: React.FC<ButtonProps> = ({
       onMouseEnter={onMouseEnter} // Hover event handler
       onMouseLeave={onMouseLeave} // Hover event handler
     >
-      {label || 'Continue'}
+      {label ?? 'Continue'}
     </LoadingButton>
   );
 };
