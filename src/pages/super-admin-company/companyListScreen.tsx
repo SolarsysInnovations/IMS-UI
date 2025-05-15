@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
@@ -83,9 +83,16 @@ const CompanyList = () => {
 
   if (isLoading) {
     return (
-      <Box px={0} py={2}>
-        <Typography align="center">Loading Company...</Typography>
-      </Box>
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: '100vh' }}
+      >
+        <CircularProgress />
+      </Grid>
     );
   }
 
