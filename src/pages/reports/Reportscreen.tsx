@@ -4,7 +4,7 @@ import usePathname from '../../hooks/usePathname';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import InfoIcon from '@mui/icons-material/Info';
-import TableHeader from '../../../src/components/layouts/TableHeader';
+import TableHeader from '../../components/layouts/TableHeader';
 import { KeyboardBackspaceTwoTone } from '@mui/icons-material';
 import DescriptionIcon from '@mui/icons-material/Description';
 

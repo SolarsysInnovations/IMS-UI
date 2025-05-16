@@ -27,8 +27,6 @@ const invoiceSlice = createSlice({
 
 export const {
   setInvoiceData,
-  setInvoiceLoading,
-  setInvoiceError,
   clearInvoiceData,
 } = invoiceSlice.actions;
 export default invoiceSlice.reducer;

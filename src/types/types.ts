@@ -32,15 +32,12 @@ export interface TdsTaxProps {
 export interface TdsTaxFormProps {
   tdsTaxValue: TdsTaxProps;
 }
-export interface ServiceFormProps {
-  serviceValue: ServiceListProps;
-}
 export interface CompanyFormProps {
   companyValue: AdminCompanyUsersInitialValueProps;
   mode?: 'create' | 'edit';
 }
 export interface LinkFormProps {
-  linkValue: linkCreationProps;
+  linkValue: LinkCreationProps;
   handleClose: () => void; // Add this line
 }
 export interface PaymentTermsProps {
@@ -73,12 +70,6 @@ export interface DyCreateCustomerProps {
 }
 
 // types.ts
-export interface ButtonProps {
-  label: string;
-  icon?: React.ElementType;
-  onClick: (event?: React.FormEvent<HTMLButtonElement>) => void;
-  disabled?: boolean;
-}
 
 export interface FormProps {
   fields: FieldProps[];
@@ -113,6 +104,7 @@ export interface SubField {
 }
 
 export interface FieldProps {
+  id: number;
   name: string;
   label?: string;
   type: string;
@@ -130,15 +122,6 @@ interface ServiceListProps {
   serviceAmount: number;
   serviceHours: number;
   serviceTotalAmount: number;
-}
-
-export interface ReportListProps {
-  id: string;
-  customerName: string;
-  days0to30: string;
-  days30to45: string;
-  above45: string;
-  total: string;
 }
 
 interface TaxAmountProps {
@@ -223,7 +206,7 @@ export interface AdminCompanyUsersInitialValueProps {
   description: string;
 }
 
-export interface linkCreationProps {
+interface LinkCreationProps {
   id: string;
   label: string;
   url: string;
@@ -259,12 +242,6 @@ export interface ChangePasswordInitialValueProps {
   userName: string;
 }
 
-export interface InvoiceMailReasonProps {
-  id?: string;
-  fromMail: string;
-  toMail: string;
-  reason: string;
-}
 export interface CompanyLogoProps {
   companyLogo: any;
 }

@@ -197,14 +197,6 @@ export const sidebarTwo = [
   },
 ];
 
-export const invoiceStatusOptions = [
-  'DRAFT',
-  'PENDING',
-  'APPROVED',
-  'RETURNED',
-  'PAID',
-];
-
 interface UserAccess {
   canCreateCustomers: boolean;
   canViewCustomers: boolean;

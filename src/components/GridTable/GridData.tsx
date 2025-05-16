@@ -99,7 +99,7 @@ export default function GridDataUi({
         rowHeight={40}
         columnBuffer={2}
         columnThreshold={2}
-        pageSizeOptions={[15]}
+        pageSizeOptions={[8, 15]}
         // * below checkbox selection multi and single
         checkboxSelection={checkboxSelection}
         disableRowSelectionOnClick

@@ -2,7 +2,7 @@ import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-export interface SnackBarUiProps {
+interface SnackBarUiProps {
   message: string;
   severity: 'error' | 'warning' | 'info' | 'success';
   autoHideDuration?: number;

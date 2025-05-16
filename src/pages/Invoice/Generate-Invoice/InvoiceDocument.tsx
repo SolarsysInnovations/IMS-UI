@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
 
 // Invoice Document component for PDF
 const InvoiceDocument = ({ invoiceData, companyLogo }: any) => {
-  console.log('Invoice Data', invoiceData);
   return (
     <Document>
       <Page size="A4" style={styles.page}>

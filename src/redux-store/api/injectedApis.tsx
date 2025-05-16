@@ -15,7 +15,7 @@ interface InvoiceRequestProps {
   endDate?: string;
 }
 
-export const apiEndPointLists = apiSlice.injectEndpoints({
+const apiEndPointLists = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // ! -------------- users start ----------------
     getUsersList: builder.query<any[], void>({
@@ -347,15 +347,6 @@ export const apiEndPointLists = apiSlice.injectEndpoints({
       }),
     }),
 
-    getCompanySetting: builder.query<any[], void>({
-      query: () => ({
-        url: API_URLS.settingsList,
-        method: 'POST',
-      }),
-      // Set caching for 5 minutes (adjust the duration as needed)
-      keepUnusedDataFor: 5 * 60 * 1000, // milliseconds
-    }),
-
     addCompanySetting: builder.mutation<any, Partial<any>>({
       query: (company) => ({
         url: API_URLS.settingsCreate,
@@ -572,7 +563,6 @@ export const { useSendEmailNotificationMutation } = apiEndPointLists;
 
 //company Details export
 export const {
-  useGetCompanySettingQuery,
   useGetCompanySettingByIdQuery,
   useAddCompanySettingMutation,
   useGetSingleCompanySettingMutation,

@@ -47,16 +47,10 @@ export const globalSlice = createSlice({
     },
   },
 });
-export const selectCompanyLogo = (state: any) => state.global.companyLogo;
+
 export const {
   setData,
   clearData,
-  setError,
-  setLoading,
-  setCountry,
-  clearCountryData,
-  setCountryError,
-  setCountryLoading,
   setCompanyLogo,
   clearCompanyLogo,
 } = globalSlice.actions;

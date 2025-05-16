@@ -1,7 +1,7 @@
 import GridDataUi from '../../../components/GridTable/GridData'; // Ensure correct path to GridDataUi component
 import { GridColDef } from '@mui/x-data-grid'; // Assuming you are using x-data-grid for GridColDef
 
-export const columns: GridColDef[] = [
+const columns: GridColDef[] = [
   {
     field: 'customerName',
     headerName: 'Name',

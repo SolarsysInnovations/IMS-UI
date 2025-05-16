@@ -411,7 +411,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
             </Typography>
           </Grid>
           {field.subFields?.map((subField: SubField) => (
-            <Grid pb={2} pl={2} xs={subField.gridSize} key={subField.name}>
+            <Grid item pb={2} pl={2} xs={subField.gridSize} key={subField.name}>
               <Field name={subField.name}>
                 {({ field, meta }: any) => {
                   if (subField.type === 'date') {
@@ -505,6 +505,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
                   <React.Fragment key={index}>
                     {field.subFields?.map((subField: SubField) => (
                       <Grid
+                        item
                         pb={2}
                         pl={2}
                         xs={subField.gridSize}

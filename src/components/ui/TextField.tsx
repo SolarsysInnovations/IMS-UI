@@ -83,9 +83,6 @@ const TextFieldUi = ({
           overflow: 'hidden',
           borderColor: `action.active`,
           transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          '&:hover': {
-            // backgroundColor: `action.hover`,
-          },
         },
         ' & .MuiFormLabel-root': {
           fontSize: '12px',
@@ -97,9 +94,9 @@ const TextFieldUi = ({
           fontSize: '13px',
         },
         '& input:-webkit-autofill': {
-          '-webkit-box-shadow': '0 0 0 1000px white inset !important',
-          'box-shadow': '0 0 0 1000px white inset !important',
-          '-webkit-text-fill-color': 'black !important',
+          'WebkitBoxShadow': '0 0 0 1000px white inset !important',
+          'boxShadow': '0 0 0 1000px white inset !important',
+          'WebkitTextFillColor': 'black !important',
         },
       }}
     />

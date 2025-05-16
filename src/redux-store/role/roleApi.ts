@@ -23,7 +23,7 @@ const roleSlice = createSlice({
   },
 });
 
-export const roleApi = apiSlice.injectEndpoints({
+const roleApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getRole: builder.query<RoleInitialValueProps[], void>({
       query: () => ({
@@ -82,14 +82,8 @@ export const roleApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { setRoleData, setRoleLoading, setRoleError } = roleSlice.actions;
-export { roleSlice };
+export const { setRoleData } = roleSlice.actions;
+
 export const {
-  useGetRoleQuery,
-  useAddRoleMutation,
-  useDeleteRoleMutation,
-  useGetRoleByIdMutation,
-  useUpdateRoleMutation,
   useChangePasswordMutation,
-  useRolesGetUserMutation,
 } = roleApi;
