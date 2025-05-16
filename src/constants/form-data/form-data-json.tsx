@@ -3,6 +3,7 @@ import { FieldProps } from '../../types/types';
 
 export const customerFields: FieldProps[] = [
   {
+    id: 1,
     type: 'section',
     titleGridSize: 12,
     name: 'info',
@@ -23,6 +24,7 @@ export const customerFields: FieldProps[] = [
     ],
   },
   {
+    id: 2,
     type: 'section',
     titleGridSize: 12,
     name: 'info',
@@ -67,6 +69,7 @@ export const customerFields: FieldProps[] = [
     ],
   },
   {
+    id: 3,
     name: 'otherDetails',
     type: 'section',
     titleGridSize: 12,
@@ -100,6 +103,7 @@ export const customerFields: FieldProps[] = [
     ],
   },
   {
+    id: 4,
     name: 'country',
     label: 'Country / region',
     type: 'section',
@@ -153,6 +157,7 @@ export const customerFields: FieldProps[] = [
     ],
   },
   {
+    id: 5,
     name: 'contactPersons',
     label: 'Contact Persons',
     type: 'array',
@@ -191,6 +196,7 @@ export const customerFields: FieldProps[] = [
 
 export const serviceFields: FieldProps[] = [
   {
+    id: 1,
     name: 'Service Accounting Code',
     type: 'section',
     titleGridSize: 12,
@@ -234,6 +240,7 @@ export const serviceFields: FieldProps[] = [
 ];
 export const CompanyDetailsFields: FieldProps[] = [
   {
+    id: 1,
     name: 'Company Information',
     type: 'section',
     titleGridSize: 12,
@@ -325,6 +332,7 @@ export const CompanyDetailsFields: FieldProps[] = [
 
 export const CompanyFields: FieldProps[] = [
   {
+    id: 1,
     name: 'Admin Profile',
     label: 'Admin Profile :',
     type: 'section',
@@ -400,13 +408,10 @@ export const CompanyFields: FieldProps[] = [
         validation: Yup.string().required('Description is required'),
         width: '',
       },
-      // {
-      //     name: 'Upload', required: true, disabled: false, label: 'Profile', type: 'upload', gridSize: 5, validation: Yup.string().required('Image is required'),
-      //     width: ''
-      // },
     ],
   },
   {
+    id: 2,
     name: 'Company Information',
     label: 'Company Information :',
     type: 'section',
@@ -506,6 +511,7 @@ export const CompanyFields: FieldProps[] = [
     ],
   },
   {
+    id: 3,
     name: 'Configuration',
     label: 'Configuration :',
     type: 'section',
@@ -553,6 +559,7 @@ export const CompanyFields: FieldProps[] = [
 
 export const CompanyEditFields: FieldProps[] = [
   {
+    id: 1,
     name: 'Admin Profile',
     label: 'Admin Profile :',
     type: 'section',
@@ -608,6 +615,7 @@ export const CompanyEditFields: FieldProps[] = [
     ],
   },
   {
+    id: 2,
     name: 'Company Information',
     label: 'Company Information :',
     type: 'section',
@@ -697,6 +705,7 @@ export const CompanyEditFields: FieldProps[] = [
     ],
   },
   {
+    id: 3,
     name: 'Configuration',
     label: 'Configuration :',
     type: 'section',
@@ -744,6 +753,7 @@ export const CompanyEditFields: FieldProps[] = [
 
 export const linkFields: FieldProps[] = [
   {
+    id: 1,
     name: 'New Link',
     type: 'section',
     titleGridSize: 12,
@@ -784,6 +794,7 @@ export const linkFields: FieldProps[] = [
 
 export const GstTypeFields: FieldProps[] = [
   {
+    id: 1,
     name: 'GstType',
     label: '',
     type: 'section',
@@ -802,7 +813,6 @@ export const GstTypeFields: FieldProps[] = [
       {
         name: 'gstPercentage',
         required: true,
-        disabled: false,
         label: 'Gst',
         type: 'number',
         gridSize: 2,
@@ -813,47 +823,10 @@ export const GstTypeFields: FieldProps[] = [
     ],
   },
 ];
-export const InvoiceMailReasonFields: FieldProps[] = [
-  {
-    name: 'mail Reason',
-    label: '',
-    type: 'section',
-    titleGridSize: 12,
-    subFields: [
-      {
-        name: 'fromMail',
-        label: 'From Mail',
-        required: false,
-        type: 'text',
-        gridSize: 12,
-        validation: Yup.string().required('gstName is required'),
-        width: '',
-      },
-      {
-        name: 'toMail',
-        disabled: false,
-        label: 'To Mail',
-        type: 'text',
-        gridSize: 12,
-        validation: Yup.string().required('gstPercentage is required'),
-        width: '',
-      },
-      {
-        name: 'reason',
-        disabled: false,
-        label: 'reason',
-        rows: 4,
-        type: 'textArea',
-        gridSize: 12,
-        validation: Yup.string().required('gstPercentage is required'),
-        width: '',
-      },
-    ],
-  },
-];
 
 export const TdsTaxFields: FieldProps[] = [
   {
+    id: 1,
     name: 'tdsTax',
     label: '',
     type: 'section',
@@ -886,6 +859,7 @@ export const TdsTaxFields: FieldProps[] = [
 
 export const paymentTermsFields: FieldProps[] = [
   {
+    id: 1,
     name: 'paymentTerms',
     label: '',
     type: 'section',
@@ -918,109 +892,9 @@ export const paymentTermsFields: FieldProps[] = [
   },
 ];
 
-export const invoiceFields: FieldProps[] = [
-  {
-    type: 'section',
-    titleGridSize: 12,
-    name: 'info',
-    subFields: [
-      {
-        name: 'invoiceType',
-        required: true,
-        disabled: false,
-        label: 'invoiceType',
-        type: 'radio',
-        gridSize: 3,
-        options: [
-          { value: 'Onetime', label: 'Onetime' },
-          { value: 'Retainer', label: 'Retainer' },
-        ],
-        validation: Yup.string().required('invoiceType is required'),
-        width: '',
-      },
-      {
-        name: 'invoiceNumber',
-        required: true,
-        disabled: false,
-        label: 'invoiceNumber',
-        type: 'number',
-        gridSize: 3,
-        validation: Yup.string()
-          .typeError('Must be a number')
-          .required('invoiceNumber is required'),
-        width: '',
-      },
-      {
-        name: 'customerName',
-        required: true,
-        disabled: false,
-        label: 'Customer Name',
-        type: 'select',
-        gridSize: 3,
-        options: [],
-        validation: Yup.string().required('companyName is required'),
-        width: '',
-      },
-      {
-        name: 'gstType',
-        required: true,
-        disabled: false,
-        label: 'Gst Type',
-        type: 'select',
-        gridSize: 3,
-        options: [
-          { value: 'Local', label: 'Local' },
-          { value: 'Interstate', label: 'Interstate' },
-        ],
-        validation: Yup.string().required('gstType is required'),
-        width: '',
-      },
-      {
-        name: 'gstPercentage',
-        required: true,
-        disabled: false,
-        label: 'gstPercentage',
-        type: 'number',
-        gridSize: 3,
-        validation: Yup.string()
-          .typeError('Must be a number')
-          .min(0, 'Cannot be negative')
-          .max(100, 'Cannot exceed 100%')
-          .required('gstPercentage is required'),
-        width: '',
-      },
-      {
-        name: 'Gst In Number',
-        required: true,
-        disabled: false,
-        label: 'gstInNumber',
-        type: 'number',
-        gridSize: 3,
-        validation: Yup.string()
-          .matches(/^[0-9]{15}$/, 'Must be a 15-digit number')
-          .required('gstInNumber is required'),
-        width: '',
-      },
-      {
-        name: 'paymentTerms',
-        required: true,
-        disabled: false,
-        label: 'paymentTerms',
-        type: 'select',
-        gridSize: 3,
-        options: [
-          { value: 'Net30', label: 'Net30' },
-          { value: 'Net45', label: 'Net45' },
-        ],
-        validation: Yup.string().required('paymentTerms is required'),
-        width: '',
-      },
-    ],
-  },
-];
-
 export const RolesFields: FieldProps[] = [
   {
+    id: 1,
     type: 'section',
     titleGridSize: 12,
     name: 'info',
@@ -1101,6 +975,7 @@ export const RolesFields: FieldProps[] = [
 
 export const RolesEditFields: FieldProps[] = [
   {
+    id: 1,
     type: 'section',
     titleGridSize: 12,
     name: 'info',

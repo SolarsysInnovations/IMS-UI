@@ -6,6 +6,7 @@ import { serviceValidationSchema } from '../../constants/forms/validations/valid
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import {
   useCreateServiceMutation,
+  useGetServiceListQuery,
   useUpdateServiceMutation,
 } from '../../redux-store/api/injectedApis';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,7 +14,9 @@ import { AppDispatch } from '../../redux-store/store';
 import { clearServiceData } from '../../redux-store/slices/serviceSlice';
 import { serviceCreationProps } from '../../types/types';
 
-const ServiceCreate = ({ setOpenDialogBox, refetch }: any) => {
+const ServiceCreate = ({ setOpenDialogBox }: any) => {
+
+  const { refetch } = useGetServiceListQuery();
   const [
     addService,
     {

@@ -1,12 +1,9 @@
 import {
-  AdminCompanyUsersInitialValueProps,
   ArAgingInitialValueProps,
   ChangePasswordInitialValueProps,
-  DyCreateCustomerProps,
   ForgetPwdProps,
   GstTypeProps,
   InvoiceInitialValueProps,
-  InvoiceMailReasonProps,
   InvoicesInitialValueProps,
   LoginProps,
   PaymentTermsProps,
@@ -14,7 +11,6 @@ import {
   SendEmailInitialValueProps,
   SuperAdminUsersInitialValueProps,
   TdsTaxProps,
-  serviceCreationProps,
 } from '../../types/types';
 
 export const loginInitialValue: LoginProps = {
@@ -54,17 +50,6 @@ export const superAdminCompanyUsersInitialValues: SuperAdminUsersInitialValuePro
     userLimit: 0,
     serviceLimit: 0,
   };
-export const adminCompanyUsersInitialValues: AdminCompanyUsersInitialValueProps =
-  {
-    // * ---------- user registration ----------
-    id: '',
-    userName: '',
-    userEmail: '',
-    password: '',
-    userRole: '',
-    userMobile: '',
-    description: '',
-  };
 
 export const customerInitialValues = {
   customerType: '',
@@ -103,14 +88,6 @@ export const gstTypeInitialValue: GstTypeProps = {
   gstPercentage: 0,
 };
 
-const fromMail = localStorage.getItem('userEmail');
-
-export const invoiceMailReasonInitialValue: InvoiceMailReasonProps = {
-  fromMail: fromMail ?? '',
-  toMail: '',
-  reason: '',
-};
-
 export const tdsTaxInitialValue: TdsTaxProps = {
   taxName: '',
   taxPercentage: 0,
@@ -119,32 +96,6 @@ export const tdsTaxInitialValue: TdsTaxProps = {
 export const paymentTermsInitialValue: PaymentTermsProps = {
   termName: '',
   totalDays: 0,
-};
-
-export const dyCustomerInitialValue: DyCreateCustomerProps = {
-  customerName: 'asasa',
-  customerType: '',
-  companyName: '',
-  customerEmail: '',
-  customerPhone: 0,
-  paymentTerms: '',
-  country: '',
-  address: '',
-  city: '',
-  state: '',
-  pinCode: '',
-  contactPerson: [
-    {
-      contactName: 'wewe',
-      contactEmail: '',
-      contactPhone: 0,
-    },
-  ],
-};
-export const dyserviceInitialValues: serviceCreationProps = {
-  serviceAccountingCode: '',
-  serviceDescription: '',
-  serviceAmount: 0,
 };
 
 const formatDate = (date: Date): string => {
@@ -181,30 +132,6 @@ export const invoiceCreateInitialValue: InvoiceInitialValueProps = {
   signatureFile: null,
 };
 
-export const invoiceEditInitialValue: InvoiceInitialValueProps = {
-  id: '',
-  invoiceDate: new Date(),
-  invoiceType: '',
-  invoiceNumber: '',
-  customerName: '',
-  gstType: '',
-  gstPercentage: null,
-  gstInNumber: '',
-  paymentTerms: '',
-  startDate: '',
-  dueDate: '',
-  invoiceStatus: 'PENDING',
-  discountPercentage: null,
-  totalAmount: null,
-  retainerFee: null,
-  notes: 'Thanks for your business transaction',
-  termsAndConditions: '',
-  taxAmount: {
-    tds: '',
-  },
-  servicesList: [],
-  signatureFile: null,
-};
 export const invoicesInitialValue: InvoicesInitialValueProps = {
   // invoiceDate: "",
   startDate: '',

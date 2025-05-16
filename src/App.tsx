@@ -27,6 +27,8 @@ function App() {
   const id = useSelector(selectCurrentId);
   const [getUserRole, { isLoading }] = useGetUserRoleMutation();
 
+  console.log(id)
+
   function init(context: InvoiceContextType) {
     if (id) {
       getUserRole(id)
@@ -49,7 +51,7 @@ function App() {
 
   useEffect(() => {
     init(context);
-  }, [context]);
+  }, [context, id]);
 
   const generateRoutes = (menuItems: any) => {
     return menuItems.flatMap(

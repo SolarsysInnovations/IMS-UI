@@ -77,12 +77,6 @@ export const { setCredentials, logOut, updateAccessToken } = authSlice.actions;
 export default authSlice.reducer;
 
 // Define the selectors with type annotations
-export const selectCurrentUser = (state: { auth: AuthState }) =>
-  state.auth.user;
 export const selectCurrentId = (state: { auth: AuthState }) => state.auth.id;
 export const selectCurrentToken = (state: { auth: AuthState }) =>
   state.auth.accessToken;
-export const selectRefreshToken = (state: { auth: AuthState }) =>
-  state.auth.refresh;
-export const selectUserDetails = (state: { auth: AuthState }) =>
-  state.auth.userDetails;

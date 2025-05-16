@@ -27,8 +27,6 @@ const serviceSlice = createSlice({
 
 export const {
   setServiceData,
-  setServiceError,
-  setServiceLoading,
   clearServiceData,
 } = serviceSlice.actions;
 export default serviceSlice.reducer;

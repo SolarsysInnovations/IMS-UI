@@ -27,8 +27,6 @@ const paymentTermsSlice = createSlice({
 
 export const {
   setPaymentTermsData,
-  setPaymentTermsError,
-  setPaymentTermsLoading,
   clearPaymentTermsData,
 } = paymentTermsSlice.actions;
 export default paymentTermsSlice.reducer;

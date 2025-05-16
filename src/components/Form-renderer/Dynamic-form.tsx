@@ -78,7 +78,7 @@ export const DynamicFormCreate = ({
               )}
               <Form>
                 {fields?.map((field: FieldProps) => (
-                  <Grid key={field.name} container spacing={2}>
+                  <Grid item key={field.id} container spacing={2}>
                     <FieldRenderer
                       updateFormValue={updateFormValue}
                       setData={setData}

@@ -135,12 +135,6 @@ export const tdsTaxValidationSchema = Yup.object().shape({
   taxName: Yup.string().required('taxName is required'),
 });
 
-export const InvoiceEmailReasonValidationSchemas = Yup.object().shape({
-  fromMail: Yup.string().email('Invalid email format').required('Required'),
-  toMail: Yup.string().email('Invalid email format').required('Required'),
-  reason: Yup.string().required('Required'),
-});
-
 export const paymentTermsValidationSchema = Yup.object().shape({
   termName: Yup.string().required('taxName is required'),
   totalDays: Yup.number()

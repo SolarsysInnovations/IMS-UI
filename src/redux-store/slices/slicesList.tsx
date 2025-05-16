@@ -19,6 +19,6 @@ const customerSlice = createSlice({
     },
   },
 });
-export { customerSlice };
-export const { setCustomerData, setCustomerLoading, setCustomerError } =
+
+export const { setCustomerData } =
   customerSlice.actions;

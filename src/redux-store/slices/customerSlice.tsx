@@ -26,9 +26,6 @@ const customerSlice = createSlice({
 });
 
 export const {
-  setCustomerData,
-  setCustomerLoading,
-  setCustomerError,
   clearCustomerData,
 } = customerSlice.actions;
 export default customerSlice.reducer;

@@ -15,40 +15,10 @@ import { useGetInvoiceListScreenMutation } from '../../redux-store/api/injectedA
 import { Formik } from 'formik';
 import { MyCellRenderer } from '../../constants/grid-table-data/invoice-list-screen-table-data';
 import { GridColDef } from '@mui/x-data-grid';
+import {
+  InvoiceInitialValueProps
+} from '../../types/types';
 
-export interface TaxAmountProps {
-  tds: string;
-}
-
-export interface ServiceListProps {
-  id: number;
-  serviceAccountingCode: string;
-  serviceAmount: number;
-  serviceHours: number;
-  serviceTotalAmount: number;
-}
-
-export interface InvoiceInitialValueProps {
-  id?: string;
-  invoiceDate: Date;
-  invoiceType: string;
-  invoiceNumber: string;
-  customerName: string;
-  gstType: string;
-  gstPercentage: number | null;
-  startDate: string;
-  dueDate: string;
-  gstInNumber: string;
-  paymentTerms: string;
-  invoiceStatus: string;
-  totalAmount: number | null;
-  discountPercentage: number | null;
-  notes: string;
-  retainerFee: null;
-  termsAndConditions: string;
-  taxAmount: TaxAmountProps;
-  servicesList: ServiceListProps[];
-}
 
 const InvoiceList = () => {
   const dispatch = useDispatch<AppDispatch>();
