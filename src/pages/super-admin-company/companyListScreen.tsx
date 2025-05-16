@@ -73,8 +73,8 @@ const CompanyList = () => {
       label: 'Create Company',
       icon: Add,
       onClick: () => {
-        dispatch(clearUserData());
         navigate('/company/create');
+        dispatch(clearUserData());
       },
     },
   ];
