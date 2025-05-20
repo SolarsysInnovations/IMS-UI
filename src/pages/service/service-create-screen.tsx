@@ -10,12 +10,11 @@ import {
   useUpdateServiceMutation,
 } from '../../redux-store/api/injectedApis';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import { clearServiceData } from '../../redux-store/slices/serviceSlice';
 import { serviceCreationProps } from '../../types/types';
 
 const ServiceCreate = ({ setOpenDialogBox }: any) => {
-
   const { refetch } = useGetServiceListQuery();
   const [
     addService,

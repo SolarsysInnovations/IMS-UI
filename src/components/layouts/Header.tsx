@@ -14,14 +14,14 @@ import {
 import { Lock, Logout, Person, Settings } from '@mui/icons-material';
 import { logOut } from '../../redux-store/auth/authSlice';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import DialogBoxUi from '../ui/DialogBox';
 import UserProfile from '../../pages/profile/UserProfile';
 import ChangePassword from '../../pages/profile/ChangePassword';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { capitalize } from '../../services/utils/capitalization';
-import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
+import { useInVoiceContext } from '../../context/invoiceContext';
 
 const PopupComponents = {
   USER_PROFILE: 'userprofile',
@@ -245,7 +245,7 @@ export default function Header() {
                   marginLeft: 1,
                 }}
               >
-                {userName}
+                {capitalize(userName)}
               </Box>
             </Grid>
           )}

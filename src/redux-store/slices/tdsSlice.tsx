@@ -25,8 +25,5 @@ const tdsTaxSlice = createSlice({
   },
 });
 
-export const {
-  setTdsTaxData,
-  clearTdsTaxData,
-} = tdsTaxSlice.actions;
+export const { setTdsTaxData, clearTdsTaxData } = tdsTaxSlice.actions;
 export default tdsTaxSlice.reducer;

@@ -48,9 +48,5 @@ export const globalSlice = createSlice({
   },
 });
 
-export const {
-  setData,
-  clearData,
-  setCompanyLogo,
-  clearCompanyLogo,
-} = globalSlice.actions;
+export const { setData, clearData, setCompanyLogo, clearCompanyLogo } =
+  globalSlice.actions;

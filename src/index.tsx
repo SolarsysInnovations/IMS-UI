@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import { Provider } from 'react-redux';
-import { store } from './redux-store/store';
+import { store } from './app/store';
 import SnackBarUi from './components/ui/snackbarUi';
+import InvoiceApp from './app';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 root.render(
   <Provider store={store}>
-    <App />
+    <InvoiceApp />
     <SnackBarUi />
   </Provider>,
 );

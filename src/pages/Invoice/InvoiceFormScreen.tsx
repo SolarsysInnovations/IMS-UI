@@ -26,7 +26,7 @@ import {
   Typography,
 } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import RadioUi from '../../components/ui/RadioGroup';
 import { Form, Formik } from 'formik';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';

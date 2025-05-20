@@ -1,7 +1,7 @@
 import { IconButton, Stack } from '@mui/material';
 import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
 import { useEffect } from 'react';
-import { AppDispatch } from '../../../redux-store/store';
+import { AppDispatch } from '../../../app/store';
 import { useDispatch } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
 import {

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { hideSnackbar } from '../../redux-store/global/snackBarSlice';
-import { RootState } from '../../redux-store/store';
+import { RootState } from '../../app/store';
 import { Slide } from '@mui/material';
 
 const SlideTransition = (props: any) => {

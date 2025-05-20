@@ -7,7 +7,7 @@ import SettingsCompanyDetailsScreen from './settings-company/SettingsCompanyDeta
 import RoleBasedTabs from '../../components/ui/RoleBasedTabs';
 import { Typography } from '@mui/material';
 import UploadScreen from './upload/uploadScreen';
-import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
+import { useInVoiceContext } from '../../context/invoiceContext';
 
 const SettingScreen = () => {
   const context = useInVoiceContext();

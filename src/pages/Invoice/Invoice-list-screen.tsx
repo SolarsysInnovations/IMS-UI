@@ -8,17 +8,14 @@ import DatePickerUi from '../../components/ui/DatePicker';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Add } from '@mui/icons-material';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import { clearInvoiceData } from '../../redux-store/slices/invoiceSlice';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import { useGetInvoiceListScreenMutation } from '../../redux-store/api/injectedApis';
 import { Formik } from 'formik';
 import { MyCellRenderer } from '../../constants/grid-table-data/invoice-list-screen-table-data';
 import { GridColDef } from '@mui/x-data-grid';
-import {
-  InvoiceInitialValueProps
-} from '../../types/types';
-
+import { InvoiceInitialValueProps } from '../../types/types';
 
 const InvoiceList = () => {
   const dispatch = useDispatch<AppDispatch>();

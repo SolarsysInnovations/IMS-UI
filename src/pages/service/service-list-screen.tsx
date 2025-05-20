@@ -5,7 +5,7 @@ import TableHeader from '../../components/layouts/TableHeader';
 import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import { columns } from '../../constants/grid-table-data/service-table-data';
 import ServiceCreate from './service-create-screen';
 import { useGetServiceListQuery } from '../../redux-store/api/injectedApis';

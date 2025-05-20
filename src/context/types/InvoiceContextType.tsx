@@ -1,4 +1,4 @@
-import { Roles } from '../constants/Enums';
+import { Roles } from '../../constants/Enums';
 
 interface UserDetailsInterface {
   userId: string;

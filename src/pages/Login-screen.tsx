@@ -13,7 +13,7 @@ import palette from '../theme/create-pallet';
 import { Form, Formik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
-import { AppDispatch } from '../redux-store/store';
+import { AppDispatch } from '../app/store';
 import { useLoginMutation } from '../redux-store/auth/loginApi';
 import { loginValidationSchema } from '../constants/forms/validations/validationSchema';
 import { loginInitialValue } from '../constants/forms/formikInitialValues';
@@ -21,7 +21,7 @@ import { LoginProps } from '../types/types';
 import { setCredentials } from '../redux-store/auth/authSlice';
 import TextFieldUi from '../components/ui/TextField';
 import Logo from '../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png';
-import { useInVoiceContext } from '../invoiceContext/invoiceContext';
+import { useInVoiceContext } from '../context/invoiceContext';
 interface LoginResponse {
   data?: {
     id: any;

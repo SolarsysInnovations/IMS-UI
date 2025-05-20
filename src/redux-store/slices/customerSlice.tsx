@@ -25,7 +25,5 @@ const customerSlice = createSlice({
   },
 });
 
-export const {
-  clearCustomerData,
-} = customerSlice.actions;
+export const { clearCustomerData } = customerSlice.actions;
 export default customerSlice.reducer;

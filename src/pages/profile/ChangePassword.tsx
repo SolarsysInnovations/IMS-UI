@@ -14,7 +14,7 @@ import {
   VisibilityOutlined,
 } from '@mui/icons-material';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
+import { useInVoiceContext } from '../../context/invoiceContext';
 
 interface ChangePasswordProps {
   onClose: () => void;

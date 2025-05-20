@@ -241,7 +241,3 @@ export interface ChangePasswordInitialValueProps {
   confirmPassword: string;
   userName: string;
 }
-
-export interface CompanyLogoProps {
-  companyLogo: any;
-}

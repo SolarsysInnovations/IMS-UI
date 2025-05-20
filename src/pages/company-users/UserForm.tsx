@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { clearData } from '../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import {
   useCreateUserMutation,
   useUpdateUserMutation,

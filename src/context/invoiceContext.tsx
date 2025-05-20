@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { InvoiceContextType } from './invoiceContextTypes';
+import { InvoiceContextType } from './types/InvoiceContextType';
 import { Roles } from '../constants/Enums';
 
 let invoiceContextValue: InvoiceContextType = {

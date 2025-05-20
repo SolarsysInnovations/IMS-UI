@@ -7,7 +7,7 @@ import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { clearData } from '../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import { useNavigate } from 'react-router-dom';
 import { superAdminCompanyUsersInitialValues } from '../../constants/forms/formikInitialValues';
 import {

@@ -8,7 +8,7 @@ import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-for
 import { companyDetailsValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { clearData } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux-store/store';
+import { AppDispatch } from '../../../app/store';
 import { CompanyFormProps } from '../../../types/types';
 import { CompanyDetailsFields } from '../../../constants/form-data/form-data-json';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';

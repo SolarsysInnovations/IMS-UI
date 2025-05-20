@@ -20,5 +20,4 @@ const customerSlice = createSlice({
   },
 });
 
-export const { setCustomerData } =
-  customerSlice.actions;
+export const { setCustomerData } = customerSlice.actions;

@@ -3,7 +3,7 @@ import { GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import { setRoleData } from '../../redux-store/role/roleApi';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import { useDispatch } from 'react-redux';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import {
