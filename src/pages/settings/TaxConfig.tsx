@@ -4,7 +4,7 @@ import { Form, Formik } from 'formik';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
 import { InvoiceInitialValueProps } from '../../types/types';
-import { generateOptions } from '../../services/utils/dropdownOptions';
+import { generateOptions } from '../../utils/dropdownOptions';
 import InvoiceUi from '../Invoice/Generate-Invoice/InvoiceUi';
 import { addDays, format } from 'date-fns';
 import DialogBoxUi from '../../components/ui/DialogBox';

@@ -20,7 +20,7 @@ import UserProfile from '../../pages/profile/UserProfile';
 import ChangePassword from '../../pages/profile/ChangePassword';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { capitalize } from '../../services/utils/capitalization';
+import { capitalize } from '../../utils/capitalization';
 import { useInVoiceContext } from '../../context/invoiceContext';
 
 const PopupComponents = {

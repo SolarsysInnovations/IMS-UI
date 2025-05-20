@@ -33,7 +33,7 @@ import { invoiceValidationSchema } from '../../constants/forms/validations/valid
 import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
 import { InvoiceInitialValueProps } from '../../types/types';
 import DatePickerUi from '../../components/ui/DatePicker';
-import { generateOptions } from '../../services/utils/dropdownOptions';
+import { generateOptions } from '../../utils/dropdownOptions';
 import InvoiceUi from './Generate-Invoice/InvoiceUi';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import TextAreaUi from '../../components/ui/TextArea';
