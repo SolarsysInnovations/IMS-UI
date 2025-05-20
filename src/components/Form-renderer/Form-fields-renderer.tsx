@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import TextAreaUi from '../ui/TextArea';
 import { City, Country, State } from 'country-state-city';
-import { generateOptions } from '../../services/utils/dropdownOptions';
+import { generateOptions } from '../../utils/dropdownOptions';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
 import PhoneInputUi from '../ui/PhoneNumber';
 import Upload from '../ui/Upload';

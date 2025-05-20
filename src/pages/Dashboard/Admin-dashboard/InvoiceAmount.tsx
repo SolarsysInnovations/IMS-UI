@@ -8,7 +8,7 @@ import { Grid } from '@mui/material';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ErrorIcon from '@mui/icons-material/Error';
 import DoneIcon from '@mui/icons-material/Done';
-import { roundUp } from '../../../services/utils/decimalconverter';
+import { roundUp } from '../../../utils/decimalconverter';
 
 const transformInvoiceData = (data: any) => {
   // Safeguard each data object to avoid undefined or null errors
