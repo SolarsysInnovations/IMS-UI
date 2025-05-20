@@ -1,9 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Roles } from '../../../constants/Enums';
 import {
   Building2,
   CircleUserRound,
   Home,
+  Menu,
   ReceiptIcon,
   ReceiptText,
   Settings,
@@ -13,6 +14,7 @@ import {
 import { useInVoiceContext } from '../../../context/invoiceContext';
 import { NavLink, Outlet } from 'react-router-dom';
 import Header from '../Header';
+import logo from '../../../assets/solarsys_innovations_private_ltd_logo.jpeg';
 import './InvoiceLayout.css';
 
 type NavItem = {
@@ -85,13 +87,27 @@ const navItems: NavItem[] = [
 const InvoiceLayout = () => {
   const context = useInVoiceContext();
   const userrole = context.userDetails.userRole;
+  const [collasped, setCollasped] = useState(false);
   const filterNavItems = navItems.filter(
     (item) => !item.roles || item.roles.includes(userrole),
   );
   return (
-    <div className="layout">
+    <div className={`layout ${collasped ? 'collapsed' : ''}`}>
       <aside className="sidebar">
-        <div className="sidebar-brand">SolarSys</div>
+        <div className="sidebar-top">
+          {!collasped && (
+            <div className="sidebar-brand">
+              <img src={logo} alt="company logo" className="logo" />
+              <span className="logo-text">Solarsys</span>
+            </div>
+          )}
+          <button
+            className="collapse-btn"
+            onClick={() => setCollasped(!collasped)}
+          >
+            <Menu size={18} />
+          </button>
+        </div>
         <nav className="sidebar-nav">
           {filterNavItems.map((item) => (
             <div key={item.id}>
@@ -102,7 +118,7 @@ const InvoiceLayout = () => {
                 }
               >
                 {item.icon && <span className="sidebar-icon">{item.icon}</span>}
-                {item.label}
+                {!collasped && item.label}
               </NavLink>
             </div>
           ))}
