@@ -4,14 +4,14 @@ import './index.css';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import SnackBarUi from './components/ui/snackbarUi';
-import InvoiceApp from './app';
+import App from './app';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 root.render(
   <Provider store={store}>
-    <InvoiceApp />
+    <App />
     <SnackBarUi />
   </Provider>,
 );

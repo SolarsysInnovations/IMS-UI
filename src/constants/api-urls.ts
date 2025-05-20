@@ -1,6 +1,3 @@
-const JAVA_URL = 'https://ims-backend-9ghn.onrender.com'; // ! java backend
-export const BASE_LOCAL_URL = JAVA_URL;
-
 enum ApiEndpoint {
   LOGIN = 'login',
   FORGET_PWD = 'forgetPwd',

@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_LOCAL_URL } from '../../constants/api-urls';
 import { logOut, updateAccessToken } from '../auth/authSlice';
 
 interface RootState {
@@ -13,8 +12,10 @@ interface RootState {
   };
 }
 
+const BASE_URL = process.env.REACT_APP_JAVA_URL;
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: BASE_LOCAL_URL,
+  baseUrl: BASE_URL,
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const { accessToken, refresh } = (getState() as RootState).auth;

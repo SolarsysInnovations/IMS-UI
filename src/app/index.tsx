@@ -1,7 +1,7 @@
 import AppProvider from './provider';
 import { AppRouter } from './routes';
 
-const InvoiceApp = () => {
+const App = () => {
   return (
     <AppProvider>
       <AppRouter />
@@ -9,4 +9,4 @@ const InvoiceApp = () => {
   );
 };
 
-export default InvoiceApp;
+export default App;
