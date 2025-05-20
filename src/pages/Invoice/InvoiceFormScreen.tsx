@@ -26,7 +26,7 @@ import {
   Typography,
 } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import RadioUi from '../../components/ui/RadioGroup';
 import { Form, Formik } from 'formik';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
@@ -35,7 +35,6 @@ import { InvoiceInitialValueProps } from '../../types/types';
 import DatePickerUi from '../../components/ui/DatePicker';
 import { generateOptions } from '../../services/utils/dropdownOptions';
 import InvoiceUi from './Generate-Invoice/InvoiceUi';
-import { invoiceType } from '../../constants/invoiceData';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
 import TextAreaUi from '../../components/ui/TextArea';
 import GstTypeScreen from './GstType/GstTypeScreen';
@@ -74,6 +73,11 @@ interface Service {
 interface InvoiceGetValueProps {
   invoiceValue: any;
 }
+
+const invoiceType = [
+  { value: 'Retainer', label: 'Retainer' },
+  { value: 'Onetime', label: 'Onetime' },
+];
 
 const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   const dispatch = useDispatch<AppDispatch>();

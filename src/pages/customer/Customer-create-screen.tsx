@@ -6,7 +6,7 @@ import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { DyCreateCustomerProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import {
   useCreateCustomerMutation,
   useGetCustomersListQuery,

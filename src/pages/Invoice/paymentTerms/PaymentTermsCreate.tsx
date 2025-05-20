@@ -5,7 +5,7 @@ import { paymentTermsValidationSchema } from '../../../constants/forms/validatio
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { PaymentTermsFormProps, PaymentTermsProps } from '../../../types/types';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux-store/store';
+import { AppDispatch } from '../../../app/store';
 import { Save } from '@mui/icons-material';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import {

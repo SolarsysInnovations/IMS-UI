@@ -12,7 +12,7 @@ import {
   setCompanyLogo,
 } from '../../../redux-store/global/globalState';
 import { useDispatch } from 'react-redux';
-import { useInVoiceContext } from '../../../invoiceContext/invoiceContext';
+import { useInVoiceContext } from '../../../context/invoiceContext';
 
 const UploadScreen: React.FC = () => {
   const context = useInVoiceContext();

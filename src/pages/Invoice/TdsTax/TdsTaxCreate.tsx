@@ -5,7 +5,7 @@ import { tdsTaxValidationSchema } from '../../../constants/forms/validations/val
 import { TdsTaxFields } from '../../../constants/form-data/form-data-json';
 import { TdsTaxFormProps, TdsTaxProps } from '../../../types/types';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux-store/store';
+import { AppDispatch } from '../../../app/store';
 import { Save } from '@mui/icons-material';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import {

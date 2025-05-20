@@ -8,7 +8,7 @@ import { FieldRenderer } from './Form-fields-renderer';
 import { KeyboardBackspaceTwoTone, Save } from '@mui/icons-material';
 import SnackBarUi from '../ui/Snackbar';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import { clearData } from '../../redux-store/global/globalState';
 
 export const DynamicFormCreate = ({

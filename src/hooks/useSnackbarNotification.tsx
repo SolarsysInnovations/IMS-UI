@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { showSnackbar } from '../redux-store/global/snackBarSlice';
-import { AppDispatch } from '../redux-store/store';
+import { AppDispatch } from '../app/store';
 
 // Better define types for success and error messages
 interface SnackbarNotificationProps {

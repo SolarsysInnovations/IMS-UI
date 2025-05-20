@@ -84,6 +84,4 @@ const roleApi = apiSlice.injectEndpoints({
 
 export const { setRoleData } = roleSlice.actions;
 
-export const {
-  useChangePasswordMutation,
-} = roleApi;
+export const { useChangePasswordMutation } = roleApi;

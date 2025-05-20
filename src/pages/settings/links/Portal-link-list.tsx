@@ -15,7 +15,7 @@ import {
   useGetPortalLinkQuery,
   useGetSinglePortalLinkMutation,
 } from '../../../redux-store/api/injectedApis';
-import { AppDispatch } from '../../../redux-store/store';
+import { AppDispatch } from '../../../app/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { setData } from '../../../redux-store/global/globalState';
 import DialogBoxUi from '../../../components/ui/DialogBox';

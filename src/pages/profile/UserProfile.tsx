@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import TableHeader from '../../components/layouts/TableHeader';
-import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
+import { useInVoiceContext } from '../../context/invoiceContext';
 
 const UserProfile = () => {
   const context = useInVoiceContext();

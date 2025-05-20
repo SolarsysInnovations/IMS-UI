@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux-store/store';
+import { AppDispatch } from '../../../app/store';
 import {
   useGetCompanyLogoByIdQuery,
   useGetCompanySettingByIdQuery,
@@ -12,7 +12,7 @@ import TableHeader from '../../../components/layouts/TableHeader';
 import SettingsCompanyForm from './SettingsCompanyForm';
 import { Edit } from '@mui/icons-material';
 import DialogBoxUi from '../../../components/ui/DialogBox';
-import { useInVoiceContext } from '../../../invoiceContext/invoiceContext';
+import { useInVoiceContext } from '../../../context/invoiceContext';
 import { Roles } from '../../../constants/Enums';
 
 const SettingsCompanyDetailsScreen: React.FC = () => {

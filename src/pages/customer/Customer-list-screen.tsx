@@ -6,7 +6,7 @@ import { CircularProgress, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { columns } from '../../constants/grid-table-data/customer-table-data';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import { useGetCustomersListQuery } from '../../redux-store/api/injectedApis';
 import { clearCustomerData } from '../../redux-store/slices/customerSlice';
 import { useRolePermissions } from '../../hooks/useRolePermission';

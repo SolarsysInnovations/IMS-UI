@@ -94,9 +94,9 @@ const TextFieldUi = ({
           fontSize: '13px',
         },
         '& input:-webkit-autofill': {
-          'WebkitBoxShadow': '0 0 0 1000px white inset !important',
-          'boxShadow': '0 0 0 1000px white inset !important',
-          'WebkitTextFillColor': 'black !important',
+          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+          boxShadow: '0 0 0 1000px white inset !important',
+          WebkitTextFillColor: 'black !important',
         },
       }}
     />

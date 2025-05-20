@@ -13,7 +13,7 @@ import {
 } from '../../redux-store/api/injectedApis';
 import { setCustomerData } from '../../redux-store/slices/slicesList';
 import DialogBoxUi from '../../components/ui/DialogBox';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import { useRolePermissions } from '../../hooks/useRolePermission';
 import ActionButtons from '../../components/ui/ActionButtons';
 

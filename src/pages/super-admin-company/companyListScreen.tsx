@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { columns } from '../../constants/grid-table-data/company-table-data';
 import { useGetUsersListQuery } from '../../redux-store/api/injectedApis';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux-store/store';
+import { AppDispatch } from '../../app/store';
 import { clearUserData } from '../../redux-store/slices/userSlice';
 import { useRolePermissions } from '../../hooks/useRolePermission';
 

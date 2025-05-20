@@ -11,7 +11,7 @@ import ApproverDashboardScreen from './approver-dashboard/DashboardScreen';
 import EndUserDashboardScreen from './standard-user-dashboard/DashboardScreen';
 import SuperAdminDashboardScreen from './super-admin-dashboard/DashboardScreen';
 import AdminDashboardScreen from './Admin-dashboard/Dashboard-screen';
-import { useInVoiceContext } from '../../invoiceContext/invoiceContext';
+import { useInVoiceContext } from '../../context/invoiceContext';
 
 const DashboardScreen: React.FC = () => {
   const context = useInVoiceContext();

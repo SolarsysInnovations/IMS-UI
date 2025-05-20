@@ -25,8 +25,5 @@ const gstTypeSlice = createSlice({
   },
 });
 
-export const {
-  setGstTypeData,
-  clearGstTypeData,
-} = gstTypeSlice.actions;
+export const { setGstTypeData, clearGstTypeData } = gstTypeSlice.actions;
 export default gstTypeSlice.reducer;

@@ -10,7 +10,7 @@ import {
 } from '../../../redux-store/api/injectedApis';
 import { LinkFormProps } from '../../../types/types';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux-store/store';
+import { AppDispatch } from '../../../app/store';
 import { clearData } from '../../../redux-store/global/globalState';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
