@@ -54,7 +54,7 @@ const ForgetPassword: React.FC = () => {
 
   useEffect(() => {
     if (forgetPasswordSuccess) {
-      navigate('/login');
+      navigate('/');
     }
   }, [forgetPasswordSuccess, navigate]);
   // Helper function to check if error is FetchBaseQueryError

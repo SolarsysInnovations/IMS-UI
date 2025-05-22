@@ -44,7 +44,7 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (resetPwdSuccess) {
-      navigate('/login');
+      navigate('/');
     }
   }, [resetPwdSuccess, navigate]);
 
@@ -116,7 +116,7 @@ const ResetPassword = () => {
           errorMessage: '',
         });
         setTimeout(() => {
-          navigate('/login');
+          navigate('/');
         }, 2000);
       }
     } catch (error) {

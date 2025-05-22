@@ -1,6 +1,5 @@
 import { ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuthContext } from '../context/authContext';
 import { useInVoiceContext } from '../context/invoiceContext';
 import { Roles } from '../constants/Enums';
 
@@ -11,10 +10,11 @@ interface ProtectedRoutesProps {
 
 const ProtectedRoutes = ({ children, requiredRole }: ProtectedRoutesProps) => {
   const context = useInVoiceContext();
-  const { isAuthenticated } = useAuthContext();
   const userRole = context.userDetails.userRole;
+  let token = sessionStorage.getItem('accessToken');
 
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+
+  if (!token) return <Navigate to="/" replace />;
   if (userRole !== Roles.GUEST) {
     if (
       requiredRole.length &&
