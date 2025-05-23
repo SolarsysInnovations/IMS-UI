@@ -63,7 +63,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/customer/edit',
+        path: '/customer/edit/:id',
         element: (
           <ProtectedRoutes requiredRole={[Roles.ADMIN, Roles.APPROVER]}>
             <CustomerScreen />

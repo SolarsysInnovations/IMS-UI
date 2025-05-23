@@ -1,19 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { customerFields } from '../../constants/form-data/form-data-json';
 import { customerInitialValues } from '../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { DyCreateCustomerProps } from '../../types/types';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store';
-import {
-  useCreateCustomerMutation,
-  useGetCustomersListQuery,
-  useUpdateCustomerMutation,
-} from '../../redux-store/api/injectedApis';
-import { clearCustomerData } from '../../redux-store/slices/customerSlice';
 import { customerValidationSchema } from '../../constants/forms/validations/validationSchema';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createCustomer, editCustomerDetails } from '../../api/services';
 
 interface CustomerValueProps {
   customerEditInitialValues: any;
@@ -21,49 +14,28 @@ interface CustomerValueProps {
 
 const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
   const navigate = useNavigate();
-  const [
-    addCustomer,
-    {
-      isSuccess: customerAddSuccess,
-      isError: customerAddError,
-      error: customerAddErrorObject,
+  const queryClient = useQueryClient();
+
+  const createCustomerMutation = useMutation({
+    mutationFn: createCustomer,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getCustomerList'] });
+      navigate(-1);
     },
-  ] = useCreateCustomerMutation();
-  const [
-    updateCustomer,
-    {
-      isSuccess: customerUpdateSuccess,
-      isError: customerUpdateError,
-      error: customerUpdateErrorObject,
+  });
+
+  const updateCustomerMutation = useMutation({
+    mutationFn: editCustomerDetails,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getCustomerList'] });
+      navigate(-1);
     },
-  ] = useUpdateCustomerMutation();
-  const { refetch } = useGetCustomersListQuery();
-  const dispatch = useDispatch<AppDispatch>();
+  });
+
+  const isSuccess =
+    updateCustomerMutation.isSuccess || createCustomerMutation.isSuccess;
 
   const [data, setData] = useState<any>();
-
-  useSnackbarNotifications({
-    error: customerAddError,
-    errorObject: customerAddErrorObject,
-    errorMessage: 'Error creating Customer',
-    success: customerAddSuccess,
-    successMessage: 'Customer created successfully',
-  });
-
-  useSnackbarNotifications({
-    error: customerUpdateError,
-    errorObject: customerUpdateErrorObject,
-    errorMessage: 'Error updating Customer',
-    success: customerUpdateSuccess,
-    successMessage: 'Customer updated successfully',
-  });
-
-  useEffect(() => {
-    if (customerAddSuccess || customerUpdateSuccess) {
-      refetch();
-      navigate(-1); // Navigate back to the previous page
-    }
-  }, [customerAddSuccess, customerUpdateSuccess, refetch, navigate]);
 
   const initialValues = customerEditInitialValues ?? customerInitialValues;
 
@@ -71,21 +43,26 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
     () => async (values: DyCreateCustomerProps, actions: any) => {
       try {
         if (customerEditInitialValues) {
-          const id: number = values?.id;
-          await updateCustomer({ id: id, data: values }).unwrap();
-          dispatch(clearCustomerData());
+          const id: string = values?.id;
+          updateCustomerMutation.mutate({ id, data: values });
         } else {
-          await addCustomer(values).unwrap();
-          dispatch(clearCustomerData());
+          createCustomerMutation.mutate(values);
         }
-        actions.resetForm();
+        if (isSuccess) {
+          actions.resetForm();
+        }
       } catch (error) {
         console.error('Error during submission:', error);
       } finally {
         actions.setSubmitting(false);
       }
     },
-    [addCustomer, updateCustomer, customerEditInitialValues, dispatch],
+    [
+      customerEditInitialValues,
+      updateCustomerMutation,
+      createCustomerMutation,
+      isSuccess,
+    ],
   );
 
   return (

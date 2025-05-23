@@ -5,19 +5,20 @@ import { Add } from '@mui/icons-material';
 import { CircularProgress, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { columns } from '../../constants/grid-table-data/customer-table-data';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store';
-import { useGetCustomersListQuery } from '../../redux-store/api/injectedApis';
-import { clearCustomerData } from '../../redux-store/slices/customerSlice';
 import { useRolePermissions } from '../../hooks/useRolePermission';
+import { useQuery } from '@tanstack/react-query';
+import { getCustomerList } from '../../api/services';
 
 const CustomerList = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { data, isLoading } = useGetCustomersListQuery();
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['getCustomerList'],
+    queryFn: getCustomerList,
+    staleTime: 5 * 60 * 1000,
+  });
   const { canCreateCustomers } = useRolePermissions();
   const navigate = useNavigate();
   const pathname = usePathname();
-  const customers = data ?? [];
+  const customers = !isError ? data : [];
 
   const buttons = [
     {
@@ -25,7 +26,6 @@ const CustomerList = () => {
       icon: Add,
       onClick: () => {
         navigate('/customer/create');
-        dispatch(clearCustomerData());
       },
     },
   ];

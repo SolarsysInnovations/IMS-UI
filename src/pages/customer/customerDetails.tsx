@@ -1,9 +1,11 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import { Box, Grid } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { getSingleCustomer } from '../../api/services';
 
 interface CustomerDetailsProps {
-  details: Record<string, any>;
+  id: string;
 }
 
 const labelMapping: Record<string, string> = {
@@ -22,17 +24,28 @@ const labelMapping: Record<string, string> = {
   updatedBy: 'Updated By',
 };
 
-const CustomerDetails = ({ details }: CustomerDetailsProps) => {
-  if (Object.keys(details).length === 0) {
+const CustomerDetails = ({ id }: CustomerDetailsProps) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['getSingleCustomer', id],
+    queryFn: ({ queryKey }) => {
+      const customerId = queryKey[1];
+      if (!customerId) throw new Error('Customer ID is undefined');
+      return getSingleCustomer(customerId);
+    },
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (!data || Object.keys(data).length === 0) {
     return <div>No details available</div>;
   }
 
   return (
     <Box sx={{ bgcolor: 'background.paper', p: 3, borderRadius: 2 }}>
       <Grid container spacing={3}>
-        {Object.entries(details).map(([key, value], index) => (
+        {Object.entries(data).map(([key, value], index) => (
           <Grid item xs={12} sm={6} key={index}>
-            {/* Use mapped label if available */}
             <Typography
               variant="body2"
               sx={{ color: 'GrayText', fontWeight: 'bold' }}

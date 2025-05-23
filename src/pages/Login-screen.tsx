@@ -26,7 +26,7 @@ const Login = () => {
   const context = useInVoiceContext();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const mutation = useMutation({
+  const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: (response) => {
       context.userDetails.userId = response.id;
@@ -40,9 +40,9 @@ const Login = () => {
     },
   });
 
-  const isError = mutation.isError;
-  const isLoading = mutation.isPending;
-  const isSuccess = mutation.isSuccess;
+  const isError = loginMutation.isError;
+  const isLoading = loginMutation.isPending;
+  const isSuccess = loginMutation.isSuccess;
 
   useEffect(() => {
     if (isError) {
@@ -56,7 +56,7 @@ const Login = () => {
       validationSchema={loginValidationSchema}
       onSubmit={async (values: LoginProps, { resetForm }) => {
         try {
-          mutation.mutate(values);
+          loginMutation.mutate(values);
           if (isSuccess) {
             resetForm();
           }

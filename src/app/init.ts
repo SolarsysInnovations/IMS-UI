@@ -24,7 +24,7 @@ function useInit() {
       setIsReady(true);
     },
     onError: (error) => {
-      console.log('initialization is failed', error);
+      console.error('initialization is failed', error);
     },
   });
 
