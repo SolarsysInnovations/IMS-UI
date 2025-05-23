@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { useInVoiceContext } from '../context/invoiceContext';
 import { useMutation } from '@tanstack/react-query';
-import { getUserDetails } from '../api/services/user';
+import { getUserDetails } from '../api/services';
 
 interface CustomeJwtPayload extends JwtPayload {
   id: string;

@@ -13,7 +13,6 @@ const ProtectedRoutes = ({ children, requiredRole }: ProtectedRoutesProps) => {
   const userRole = context.userDetails.userRole;
   let token = sessionStorage.getItem('accessToken');
 
-
   if (!token) return <Navigate to="/" replace />;
   if (userRole !== Roles.GUEST) {
     if (

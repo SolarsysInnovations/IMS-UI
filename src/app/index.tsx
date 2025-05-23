@@ -7,20 +7,20 @@ import { useInit } from './init';
 const App = () => {
   const isReady = useInit();
 
- if (!isReady) {
-     return (
-       <Grid
-         item
-         xs={12}
-         container
-         justifyContent="center"
-         alignItems="center"
-         height={'100vh'}
-       >
-         <CircularProgress />
-       </Grid>
-     );
-   }
+  if (!isReady) {
+    return (
+      <Grid
+        item
+        xs={12}
+        container
+        justifyContent="center"
+        alignItems="center"
+        height={'100vh'}
+      >
+        <CircularProgress />
+      </Grid>
+    );
+  }
 
   return (
     <AppProvider>

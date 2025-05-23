@@ -18,7 +18,7 @@ import { LoginProps } from '../types/types';
 import TextFieldUi from '../components/ui/TextField';
 import Logo from '../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png';
 import { useMutation } from '@tanstack/react-query';
-import { login } from '../api/services/auth';
+import { login } from '../api/services';
 import { useInVoiceContext } from '../context/invoiceContext';
 
 const Login = () => {

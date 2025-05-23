@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Lock, Logout, Person, Settings } from '@mui/icons-material';
-import { logOut } from '../../api/services/auth';
+import { logOut } from '../../api/services';
 import DialogBoxUi from '../ui/DialogBox';
 import UserProfile from '../../pages/profile/UserProfile';
 import ChangePassword from '../../pages/profile/ChangePassword';
