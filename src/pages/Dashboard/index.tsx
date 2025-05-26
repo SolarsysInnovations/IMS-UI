@@ -12,7 +12,7 @@ import SuperAdminDashboardScreen from './super-admin-dashboard/DashboardScreen';
 import AdminDashboardScreen from './Admin-dashboard/Dashboard-screen';
 import { useInVoiceContext } from '../../context/invoiceContext';
 import { useQuery } from '@tanstack/react-query';
-import { getDashboardData } from '../../api/services';
+import { getInvoiceList } from '../../api/services';
 
 const DashboardScreen: React.FC = () => {
   const context = useInVoiceContext();
@@ -31,7 +31,7 @@ const DashboardScreen: React.FC = () => {
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['getDashboard', payload],
-    queryFn: getDashboardData,
+    queryFn: getInvoiceList,
     staleTime: 5 * 60 * 1000,
   });
 
