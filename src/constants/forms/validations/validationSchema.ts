@@ -164,6 +164,17 @@ export const RoleValidationSchema = Yup.object().shape({
     .required('Mobile number is required'),
 });
 
+export const EditRoleValidationSchema = Yup.object().shape({
+  userName: Yup.string().required('Username is required'),
+  userEmail: Yup.string()
+    .email('Invalid email format')
+    .required('User Email is required'),
+  userRole: Yup.string().required('User role is required'),
+  userMobile: Yup.string()
+    .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
+    .required('Mobile number is required'),
+});
+
 export const PasswordValidationSchema = Yup.object().shape({
   currentPassword: Yup.string()
     .required('Current Password is required')
