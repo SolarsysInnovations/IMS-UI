@@ -43,7 +43,7 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['usersList'] });
     },
-  })
+  });
 
   useSnackbarNotifications({
     success: roleDeleteMutation.isSuccess,

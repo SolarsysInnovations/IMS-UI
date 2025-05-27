@@ -37,10 +37,7 @@ const ArAgingscreen: React.FC = () => {
       <Formik
         initialValues={AragingInitialValue}
         validate={() => ({})}
-        onSubmit={async (
-          values: ReportsValueProps,
-          actions: any,
-        ) => {
+        onSubmit={async (values: ReportsValueProps, actions: any) => {
           try {
             reportsMutation.mutate(values);
           } catch (error) {

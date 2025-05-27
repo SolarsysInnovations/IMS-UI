@@ -62,10 +62,7 @@ const UserList = () => {
       <DialogBoxUi
         open={openDialogBox}
         content={
-          <UserForm
-            mode={mode}
-            onClose={() => setOpenDialogBox(false)}
-          />
+          <UserForm mode={mode} onClose={() => setOpenDialogBox(false)} />
         }
         handleClose={() => setOpenDialogBox(false)}
       />

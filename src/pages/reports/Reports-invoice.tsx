@@ -28,21 +28,18 @@ const Reportsinvoice: React.FC = () => {
   };
 
   const reportsMutation = useMutation({
-      mutationFn: reports,
-      onSuccess: (data) => {
-        setTableData(data);
-      },
-    });
+    mutationFn: reports,
+    onSuccess: (data) => {
+      setTableData(data);
+    },
+  });
 
   return (
     <div>
       <Formik
         initialValues={invoicesInitialValue}
         validate={() => ({})}
-        onSubmit={async (
-          values: ReportsValueProps,
-          actions: any,
-        ) => {
+        onSubmit={async (values: ReportsValueProps, actions: any) => {
           try {
             reportsMutation.mutate(values);
           } catch (error) {

@@ -40,6 +40,7 @@ export const updateUser = async ({ id, data }: { id: string; data: any }) => {
     throw error;
   }
 };
+
 export const deleteUser = async (id: string) => {
   try {
     const res = await apiClient.post(`${API_URLS.userDelete}/${id}`);
