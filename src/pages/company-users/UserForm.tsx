@@ -8,7 +8,10 @@ import {
   useUpdateUserMutation,
 } from '../../redux-store/api/injectedApis';
 import { AdminCompanyUsersInitialValueProps } from '../../types/types';
-import { RoleValidationSchema } from '../../constants/forms/validations/validationSchema';
+import {
+  RoleValidationSchema,
+  EditRoleValidationSchema,
+} from '../../constants/forms/validations/validationSchema';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import {
   RolesEditFields,
@@ -101,7 +104,9 @@ const UserForm = ({
       headerName={mode === 'create' ? 'User Create' : 'User Edit'}
       fields={mode === 'create' ? RolesFields : RolesEditFields}
       initialValues={initialValues}
-      validationSchema={RoleValidationSchema}
+      validationSchema={
+        mode === 'edit' ? EditRoleValidationSchema : RoleValidationSchema
+      }
       onSubmit={onSubmit}
     />
   );
