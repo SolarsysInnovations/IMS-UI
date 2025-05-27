@@ -11,7 +11,7 @@ import {
   RolesFields,
 } from '../../constants/form-data/form-data-json';
 import { RoleInitialValue } from '../../constants/forms/formikInitialValues';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createUser, updateUser } from '../../api/services';
 
 interface UserValueProps {
@@ -21,10 +21,13 @@ interface UserValueProps {
 }
 
 const UserForm = ({ userEditValue, mode, onClose }: UserValueProps) => {
+  const queryClient = useQueryClient();
+
   const createUserMutation = useMutation({
     mutationFn: createUser,
     onSuccess: () => {
       onClose();
+      queryClient.invalidateQueries({ queryKey: ['usersList'] });
     },
   });
 
@@ -32,6 +35,7 @@ const UserForm = ({ userEditValue, mode, onClose }: UserValueProps) => {
     mutationFn: updateUser,
     onSuccess: () => {
       onClose();
+      queryClient.invalidateQueries({ queryKey: ['usersList'] });
     },
   });
 
@@ -61,7 +65,10 @@ const UserForm = ({ userEditValue, mode, onClose }: UserValueProps) => {
         if (mode === 'edit' && userEditValue) {
           console.log(values.id);
           if (values.id) {
-            updateUserMutation.mutate({ id: values.id, data: values });
+            updateUserMutation.mutate({
+              id: values.id,
+              data: { userDetails: values },
+            });
           }
         } else {
           createUserMutation.mutate({ userDetails: values });

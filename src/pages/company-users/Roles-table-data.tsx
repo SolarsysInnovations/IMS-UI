@@ -3,18 +3,17 @@ import { GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import DialogBoxUi from '../../components/ui/DialogBox';
-import {
-  useDeleteUserMutation,
-  useGetUserRoleMutation,
-} from '../../redux-store/api/injectedApis';
 import UserForm from './UserForm';
 import ActionButtons from '../../components/ui/ActionButtons';
 import TableHeader from '../../components/layouts/TableHeader';
 import UserDetails from './UserDetaills';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteUser, getUserDetails } from '../../api/services';
 
 interface MyCellRendererProps {
   id: number;
 }
+
 interface UserData {
   id: string;
   userName: string;
@@ -24,36 +23,39 @@ interface UserData {
 }
 
 const MyCellRenderer = ({ id }: MyCellRendererProps) => {
+  const queryClient = useQueryClient();
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const [dialogContent, setDialogContent] = useState<'view' | 'edit' | null>(
     null,
   );
   const [userData, setUserData] = useState<UserData | null>(null);
 
-  const [getUserRole, { data: roleData, isSuccess: C_success }] =
-    useGetUserRoleMutation();
-  const [
-    deleteUser,
-    { isSuccess: roleDeleteSuccess, isError: roleDeleteError },
-  ] = useDeleteUserMutation();
+  const getUserDetailsMutation = useMutation({
+    mutationFn: getUserDetails,
+    onSuccess: (data) => {
+      setUserData(data);
+      setOpenDialogBox(true);
+    },
+  });
+
+  const roleDeleteMutation = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['usersList'] });
+    },
+  })
 
   useSnackbarNotifications({
-    success: roleDeleteSuccess,
-    error: roleDeleteError,
+    success: roleDeleteMutation.isSuccess,
+    error: roleDeleteMutation.isError,
     successMessage: 'User deleted successfully',
     errorMessage: 'Error deleting user',
   });
 
   const handleViewClick = async () => {
     try {
-      const response = await getUserRole(id.toString());
-      if ('data' in response) {
-        setUserData(response.data);
-        setDialogContent('view');
-        setOpenDialogBox(true);
-      } else {
-        console.error('Error fetching user data: No data found in response');
-      }
+      setDialogContent('view');
+      getUserDetailsMutation.mutate(id.toString());
     } catch (error) {
       console.error('Error in handleViewClick:', error);
     }
@@ -61,14 +63,8 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
 
   const handleEditClick = async () => {
     try {
-      const response = await getUserRole(id.toString());
-      if ('data' in response) {
-        setUserData(response.data);
-        setDialogContent('edit');
-        setOpenDialogBox(true);
-      } else {
-        console.error('Error fetching user data: No data found in response');
-      }
+      setDialogContent('edit');
+      getUserDetailsMutation.mutate(id.toString());
     } catch (error) {
       console.error('Error in handleEditClick:', error);
     }
@@ -79,7 +75,7 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
       'Are you sure you want to delete this user?',
     );
     if (confirmed) {
-      deleteUser(id);
+      roleDeleteMutation.mutate(id.toString());
     }
   };
 

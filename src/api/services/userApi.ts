@@ -1,5 +1,4 @@
 import { API_URLS } from '../../constants/api-urls';
-import { AdminCompanyUsersInitialValueProps } from '../../types/types';
 import apiClient from '../apiClient';
 
 export const getUserDetails = async (payload: string) => {
