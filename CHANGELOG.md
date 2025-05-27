@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3] - 2025-05-26
+
+## Changed
+
+- Updated the services api call to tanstack query
+
+---
+
 ## [2.0.2] - 2025-05-23
 
 ## Changed
@@ -26,7 +34,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Tanstack Query Implemented in this project.
+- Implemented Tanstack Query in this project.
 
 ### Changed
 

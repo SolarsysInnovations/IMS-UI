@@ -11,10 +11,10 @@ import DescriptionIcon from '@mui/icons-material/Description';
 const Reportscreen: React.FC = () => {
   const pathname = usePathname();
   const navigate = useNavigate();
-  const handleClick = async () => {
+  const handleAraging = async () => {
     navigate(`/reports/araging`);
   };
-  const handleClick1 = async () => {
+  const handleInvoice = async () => {
     navigate(`/reports/invoice`);
   };
   return (
@@ -36,7 +36,7 @@ const Reportscreen: React.FC = () => {
             variant="text"
             color="primary"
             startIcon={<InfoIcon />}
-            onClick={handleClick}
+            onClick={handleAraging}
           >
             AR Aging Summary
           </Button>
@@ -47,7 +47,7 @@ const Reportscreen: React.FC = () => {
           variant="text"
           color="primary"
           startIcon={<DescriptionIcon />}
-          onClick={handleClick1}
+          onClick={handleInvoice}
         >
           Invoice Detail Summary
         </Button>

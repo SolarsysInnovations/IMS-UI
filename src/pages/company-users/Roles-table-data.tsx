@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
-import { setRoleData } from '../../redux-store/role/roleApi';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import { AppDispatch } from '../../app/store';
-import { useDispatch } from 'react-redux';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import {
   useDeleteUserMutation,
   useGetUserRoleMutation,
-  useGetUsersListQuery,
 } from '../../redux-store/api/injectedApis';
 import UserForm from './UserForm';
 import ActionButtons from '../../components/ui/ActionButtons';
@@ -25,20 +21,14 @@ interface UserData {
   userEmail: string;
   userMobile: number;
   userRole: string;
-
-  // Add other fields as necessary
 }
 
 const MyCellRenderer = ({ id }: MyCellRendererProps) => {
-  const dispatch = useDispatch<AppDispatch>();
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const [dialogContent, setDialogContent] = useState<'view' | 'edit' | null>(
     null,
   );
-  const [userData, setUserData] = useState<UserData | null | undefined | void>(
-    null,
-  );
-  const { refetch } = useGetUsersListQuery();
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   const [getUserRole, { data: roleData, isSuccess: C_success }] =
     useGetUserRoleMutation();
@@ -53,19 +43,12 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
     successMessage: 'User deleted successfully',
     errorMessage: 'Error deleting user',
   });
-  useEffect(() => {
-    refetch();
-  }, [roleDeleteSuccess, refetch]);
 
-  useEffect(() => {
-    dispatch(setRoleData(roleData));
-  }, [roleData, dispatch, C_success]);
   const handleViewClick = async () => {
     try {
       const response = await getUserRole(id.toString());
       if ('data' in response) {
-        setUserData(response.data); // Ensures data is defined
-        dispatch(setRoleData(response.data));
+        setUserData(response.data);
         setDialogContent('view');
         setOpenDialogBox(true);
       } else {
@@ -80,8 +63,7 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
     try {
       const response = await getUserRole(id.toString());
       if ('data' in response) {
-        setUserData(response.data); // Ensures data is defined
-        dispatch(setRoleData(response.data));
+        setUserData(response.data);
         setDialogContent('edit');
         setOpenDialogBox(true);
       } else {
@@ -120,7 +102,6 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
           userEditValue={userData}
           mode="edit"
           onClose={handleCloseDialog}
-          refetchUserList={refetch}
         />
       );
     } else {
