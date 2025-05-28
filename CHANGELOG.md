@@ -2,11 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.0.4] - 2025-05-27
+## [2.0.4] - 2025-05-28
 
 ## Changed
 
 - Updated the user and company api call to tanstack query
+
+---
 
 ## [2.0.3] - 2025-05-26
 
