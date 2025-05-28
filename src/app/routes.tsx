@@ -155,7 +155,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/company/edit',
+        path: '/company/edit/:id',
         element: (
           <ProtectedRoutes requiredRole={[Roles.SUPERADMIN]}>
             <CompanyScreen />

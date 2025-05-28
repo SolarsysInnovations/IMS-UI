@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { useSelector } from 'react-redux';
 
 interface CompanyDetailsProps {
-  details?: any; // Replace 'any' with a more specific type if needed
+  details?: any;
 }
 
-const CompanyDetails: React.FC<CompanyDetailsProps> = () => {
-  const companyValue = useSelector((state: any) => state.userState.data); // Replace 'any' with a specific type if possible
+const CompanyDetails: React.FC<CompanyDetailsProps> = ({ details }) => {
   const [mergedData, setMergedData] = useState<{ [key: string]: any }>({});
 
   useEffect(() => {
-    if (companyValue.companyDetails && companyValue.userDetails) {
+    if (details.companyDetails && details.userDetails) {
       const mergedObject = {
-        ...companyValue.userDetails, // Ensure userDetails are spread first if you want to prioritize those keys
-        ...companyValue.companyDetails,
+        ...details.userDetails,
+        ...details.companyDetails,
       };
       setMergedData(mergedObject);
     }
-  }, [companyValue]);
+  }, [details]);
 
-  if (!companyValue.companyDetails || !companyValue.userDetails) {
-    return null; // Or display a loading indicator or placeholder
+  if (!details.companyDetails || !details.userDetails) {
+    return null;
   }
 
   return (

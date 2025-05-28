@@ -6,11 +6,9 @@ import usePathname from '../../hooks/usePathname';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { columns } from '../../constants/grid-table-data/company-table-data';
-import { useGetUsersListQuery } from '../../redux-store/api/injectedApis';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store';
-import { clearUserData } from '../../redux-store/slices/userSlice';
 import { useRolePermissions } from '../../hooks/useRolePermission';
+import { useQuery } from '@tanstack/react-query';
+import { getCompanyList } from '../../api/services';
 
 interface CompanyDetails {
   companyName: string;
@@ -43,15 +41,19 @@ interface CompanyUserData {
 
 const CompanyList = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const { data: company, error, isLoading } = useGetUsersListQuery();
   const [mergedData, setMergedData] = useState<any[]>([]);
   const pathname = usePathname();
   const { canCreateCompanies } = useRolePermissions();
 
+  const {data: companyData, isLoading, error} = useQuery({
+    queryKey: ['getCompanyList'],
+    queryFn: getCompanyList,
+    staleTime: 5 * 60 * 1000,
+  })
+
   useEffect(() => {
-    if (company && !isLoading && !error) {
-      const mergedArray = company.map((item: CompanyUserData) => ({
+    if (companyData && !isLoading && !error) {
+      const mergedArray = companyData.map((item: CompanyUserData) => ({
         // Admin profile
         id: item.userDetails.id,
         userName: item.userDetails.userName,
@@ -66,7 +68,7 @@ const CompanyList = () => {
       }));
       setMergedData(mergedArray);
     }
-  }, [company, isLoading, error]);
+  }, [companyData, isLoading, error]);
 
   const buttons = [
     {
@@ -74,7 +76,6 @@ const CompanyList = () => {
       icon: Add,
       onClick: () => {
         navigate('/company/create');
-        dispatch(clearUserData());
       },
     },
   ];
@@ -103,7 +104,7 @@ const CompanyList = () => {
         <GridDataUi
           showToolbar={true}
           columns={columns}
-          tableData={mergedData || []}
+          tableData={mergedData}
           checkboxSelection={false}
         />
       )}

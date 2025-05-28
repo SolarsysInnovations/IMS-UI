@@ -1,21 +1,19 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   CompanyEditFields,
   CompanyFields,
 } from '../../constants/form-data/form-data-json';
+import { setData } from '../../redux-store/global/globalState';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import { clearData } from '../../redux-store/global/globalState';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store';
 import { useNavigate } from 'react-router-dom';
 import { superAdminCompanyUsersInitialValues } from '../../constants/forms/formikInitialValues';
 import {
-  useCreateUserMutation,
-  useGetUsersListQuery,
-  useUpdateUserMutation,
-} from '../../redux-store/api/injectedApis';
-import { companyDetailsValidationSchema } from '../../constants/forms/validations/validationSchema';
+  companyDetailsValidationSchema,
+  editCompanyDetailsValidationSchema,
+} from '../../constants/forms/validations/validationSchema';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createCompany, updateCompany } from '../../api/services';
 
 interface CompanyValueProps {
   companyEditInitialValues: any;
@@ -26,68 +24,57 @@ const CompanyCreate = ({
   companyEditInitialValues,
   mode,
 }: CompanyValueProps) => {
-  const [
-    addCompany,
-    {
-      isSuccess: companyAddSuccess,
-      isError: companyAddError,
-      error: companyAddErrorObject,
-    },
-  ] = useCreateUserMutation();
-  const [
-    updateCompany,
-    {
-      isSuccess: companyUpdateSuccess,
-      isError: companyUpdateError,
-      error: companyUpdateErrorObject,
-    },
-  ] = useUpdateUserMutation();
-  const { refetch } = useGetUsersListQuery();
-  const [data, setData] = useState<any>();
-  const dispatch = useDispatch<AppDispatch>();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const initialValues =
     mode === 'edit'
       ? companyEditInitialValues
       : superAdminCompanyUsersInitialValues;
 
-  // Dynamically modify fields based on 'mode'
   const fields = useMemo(() => {
     if (mode === 'create') {
-      return CompanyFields; // Include password field
+      return CompanyFields;
     } else {
-      // Filter out password field in edit mode
       const editedFields = CompanyEditFields.map((section) => ({
         ...section,
         subFields:
-          section.subFields?.filter((field) => field.name !== 'password') || [], // Ensure subFields is not undefined
+          section.subFields?.filter((field) => field.name !== 'password') || [],
       }));
       return editedFields;
     }
   }, [mode]);
 
-  useSnackbarNotifications({
-    error: companyAddError,
-    errorObject: companyAddErrorObject,
-    errorMessage: 'Error creating Company',
-    success: companyAddSuccess,
-    successMessage: 'Company created successfully',
-  });
-
-  useSnackbarNotifications({
-    error: companyUpdateError,
-    errorObject: companyUpdateErrorObject,
-    errorMessage: 'Error updating Company',
-    success: companyUpdateSuccess,
-    successMessage: 'Company updated successfully',
-  });
-
-  useEffect(() => {
-    if (companyUpdateSuccess) {
+  const createCompanyMutation = useMutation({
+    mutationFn: createCompany,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getCompanyList'] });
       navigate(-1);
-    }
-    refetch();
-  }, [companyAddSuccess, companyUpdateSuccess, refetch, navigate]);
+    },
+  });
+
+  const updateCompanyMutation = useMutation({
+    mutationFn: updateCompany,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getCompanyList'] });
+      navigate(-1);
+    },
+  });
+
+  const isSuccess =
+    updateCompanyMutation.isSuccess || createCompanyMutation.isSuccess;
+  const isError =
+    updateCompanyMutation.isError || createCompanyMutation.isError;
+
+  useSnackbarNotifications({
+    error: isError,
+    errorMessage:
+      mode === 'edit' ? 'Error updating Company' : 'Error creating Company',
+    success: isSuccess,
+    successMessage:
+      mode === 'edit'
+        ? 'Company updated successfully'
+        : 'Company created successfully',
+  });
 
   const onSubmit = async (values: any, actions: any) => {
     try {
@@ -119,28 +106,22 @@ const CompanyCreate = ({
       };
 
       if (mode === 'edit' && companyEditInitialValues?.id) {
-        await updateCompany({
+        updateCompanyMutation.mutate({
           id: companyEditInitialValues.id,
           data: transformedData,
         });
       } else {
-        await addCompany(transformedData);
+        createCompanyMutation.mutate(transformedData);
       }
-
-      actions.resetForm();
-      dispatch(clearData());
+      if (isSuccess) {
+        actions.resetForm();
+      }
     } catch (error) {
       console.error('Error during form submission:', error); // Debugging
     } finally {
       actions.setSubmitting(false);
     }
   };
-
-  useEffect(() => {
-    if (companyAddSuccess || companyUpdateSuccess) {
-      navigate(-1); // Redirect after successful submission
-    }
-  }, [companyAddSuccess, companyUpdateSuccess, navigate]);
 
   return (
     <div style={{ maxHeight: '90vh', overflowY: 'auto', paddingRight: '1rem' }}>
@@ -150,7 +131,11 @@ const CompanyCreate = ({
         showTable={true}
         fields={fields}
         initialValues={initialValues}
-        validationSchema={companyDetailsValidationSchema}
+        validationSchema={
+          mode === 'edit'
+            ? editCompanyDetailsValidationSchema
+            : companyDetailsValidationSchema
+        }
         onSubmit={onSubmit}
       />
     </div>
