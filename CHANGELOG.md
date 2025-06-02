@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.5] - 2025-06-02
+
+## Changed
+
+- Updated the settings page api call until link to tanstack query
+
+---
+
 ## [2.0.4] - 2025-05-28
 
 ## Changed
