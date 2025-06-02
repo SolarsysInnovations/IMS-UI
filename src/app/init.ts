@@ -3,6 +3,7 @@ import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { useInVoiceContext } from '../context/invoiceContext';
 import { useMutation } from '@tanstack/react-query';
 import { getUserDetails } from '../api/services';
+import { ACCESS_TOKEN } from '../constants/data';
 
 interface CustomeJwtPayload extends JwtPayload {
   id: string;
@@ -21,6 +22,7 @@ function useInit() {
       context.userDetails.userRole = response.userRole;
       context.userDetails.userMobile = response.userMobile;
       context.companyDetails.companyId = response.companyId;
+      context.userDetails.description = response.description;
       setIsReady(true);
     },
     onError: (error) => {
@@ -29,7 +31,7 @@ function useInit() {
   });
 
   useEffect(() => {
-    const token = sessionStorage.getItem('accessToken');
+    const token = sessionStorage.getItem(ACCESS_TOKEN);
 
     if (!token) {
       setIsReady(true);

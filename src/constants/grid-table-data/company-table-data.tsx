@@ -31,8 +31,8 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     mutationFn: deleteCompany,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getCompanyList'] });
-    }
-  })
+    },
+  });
 
   const isError = deleteCompanyMutation.isError;
   const isSuccess = deleteCompanyMutation.isSuccess;

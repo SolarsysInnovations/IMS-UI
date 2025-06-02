@@ -37,7 +37,7 @@ export interface CompanyFormProps {
   mode?: 'create' | 'edit';
 }
 export interface LinkFormProps {
-  linkValue: LinkCreationProps;
+  linkValue?: LinkCreationProps;
   handleClose: () => void; // Add this line
 }
 export interface PaymentTermsProps {

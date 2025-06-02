@@ -5,3 +5,4 @@ export * from './customerApi';
 export * from './serviceApi';
 export * from './reportsApi';
 export * from './companyApi';
+export * from './settingsApi';

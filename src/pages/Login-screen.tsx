@@ -18,7 +18,7 @@ import { LoginProps } from '../types/types';
 import TextFieldUi from '../components/ui/TextField';
 import Logo from '../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png';
 import { useMutation } from '@tanstack/react-query';
-import { login } from '../api/services';
+import { getUserDetails, login } from '../api/services';
 import { useInVoiceContext } from '../context/invoiceContext';
 
 const Login = () => {
@@ -26,23 +26,36 @@ const Login = () => {
   const context = useInVoiceContext();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const loginMutation = useMutation({
-    mutationFn: login,
+  const getUserDetailsMutation = useMutation({
+    mutationFn: getUserDetails,
     onSuccess: (response) => {
       context.userDetails.userId = response.id;
       context.userDetails.userName = response.userName;
       context.userDetails.userEmail = response.userEmail;
       context.userDetails.userRole = response.userRole;
+      context.userDetails.userMobile = response.userMobile;
+      context.companyDetails.companyId = response.companyId;
+      context.userDetails.description = response.description;
       navigate('/dashboard');
+    },
+    onError: (error) => {
+      console.error('Get user details api failed', error);
+    },
+  });
+
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: (response) => {
+      getUserDetailsMutation.mutate(response.id);
     },
     onError: (error) => {
       console.error('Login failed: ', error);
     },
   });
 
-  const isError = loginMutation.isError;
-  const isLoading = loginMutation.isPending;
-  const isSuccess = loginMutation.isSuccess;
+  const isError = loginMutation.isError || getUserDetailsMutation.isError;
+  const isLoading = loginMutation.isPending || getUserDetailsMutation.isPending;
+  const isSuccess = loginMutation.isSuccess || getUserDetailsMutation.isSuccess;
 
   useEffect(() => {
     if (isError) {

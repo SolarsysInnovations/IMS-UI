@@ -177,7 +177,7 @@ export default function Header() {
     } else if (item.route) {
       navigate(item.route);
     } else if (item.action === 'logout') {
-      window.location.reload();
+      window.location.href = '/';
       logOut();
     }
     setAnchorEl(null);

@@ -1,19 +1,12 @@
-import React, { useEffect } from 'react';
-import {
-  useAddCompanySettingMutation,
-  useGetCompanySettingByIdQuery,
-  useUpdateCompanySettingMutation,
-} from '../../../redux-store/api/injectedApis';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
-import { companyDetailsValidationSchema } from '../../../constants/forms/validations/validationSchema';
-import { clearData } from '../../../redux-store/global/globalState';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../app/store';
+import { settingsCompanyeditValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { CompanyFormProps } from '../../../types/types';
 import { CompanyDetailsFields } from '../../../constants/form-data/form-data-json';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { superAdminCompanyUsersInitialValues } from '../../../constants/forms/formikInitialValues';
 import { ToastContainer, toast } from 'react-toastify';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { addCompanyData, updateCompanyData } from '../../../api/services';
 
 interface SettingsCompanyFormProps extends CompanyFormProps {
   handleCloseDialog: () => void;
@@ -24,71 +17,49 @@ const SettingsCompanyForm = ({
   mode,
   handleCloseDialog,
 }: SettingsCompanyFormProps) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const queryClient = useQueryClient();
 
-  const [
-    addCompany,
-    {
-      isSuccess: companyAddSuccess,
-      isError: companyAddError,
-      error: companyAddErrorObject,
+  const addCompanyMutation = useMutation({
+    mutationFn: addCompanyData,
+    onSuccess: () => {
+      handleCloseDialog();
+      queryClient.invalidateQueries({ queryKey: ['getCompanyData'] });
     },
-  ] = useAddCompanySettingMutation();
+  });
 
-  const [
-    updateCompany,
-    {
-      isSuccess: companyUpdateSuccess,
-      isError: companyUpdateError,
-      error: companyUpdateErrorObject,
+  const updateCompanyMutation = useMutation({
+    mutationFn: updateCompanyData,
+    onSuccess: () => {
+      handleCloseDialog();
+      queryClient.invalidateQueries({ queryKey: ['getCompanyData'] });
     },
-  ] = useUpdateCompanySettingMutation();
-  const companyIdString = sessionStorage.getItem('id') ?? '';
-  const { refetch: refetchCompanyData } =
-    useGetCompanySettingByIdQuery(companyIdString);
+  });
 
   const initialValue = companyValue || superAdminCompanyUsersInitialValues;
+  const isError = updateCompanyMutation.isError || addCompanyMutation.isError;
+  const isSuccess =
+    updateCompanyMutation.isSuccess || addCompanyMutation.isSuccess;
   const fields = CompanyDetailsFields;
 
   useSnackbarNotifications({
-    error: companyAddError,
-    errorObject: companyAddErrorObject,
-    errorMessage: 'Error creating Company',
-    success: companyAddSuccess,
-    successMessage: 'Company created successfully',
+    error: isError,
+    errorMessage:
+      mode === 'edit' ? 'Error updating Company' : 'Error creating Company',
+    success: isSuccess,
+    successMessage:
+      mode === 'edit'
+        ? 'Company updated successfully'
+        : 'Company created successfully',
   });
-
-  useSnackbarNotifications({
-    error: companyUpdateError,
-    errorObject: companyUpdateErrorObject,
-    errorMessage: 'Error updating Company',
-    success: companyUpdateSuccess,
-    successMessage: 'Company updated successfully',
-  });
-
-  useEffect(() => {
-    if (companyAddSuccess || companyUpdateSuccess) {
-      if (companyValue?.id) {
-        refetchCompanyData();
-      }
-    }
-  }, [
-    companyAddSuccess,
-    companyUpdateSuccess,
-    companyValue,
-    refetchCompanyData,
-  ]);
 
   const onSubmit = async (values: CompanyFormProps, actions: any) => {
     try {
-      if (mode === 'edit' && companyValue) {
-        await updateCompany({ id: companyValue.id, company: values });
-        dispatch(clearData());
+      if (mode === 'edit' && companyValue.id) {
+        updateCompanyMutation.mutate({ id: companyValue.id, data: values });
       } else {
-        await addCompany(values);
+        addCompanyMutation.mutate(values);
       }
       actions.resetForm();
-      handleCloseDialog();
     } catch (error) {
       console.error('An error occurred during form submission:', error);
       toast.error('Error occurred while saving fields.');
@@ -107,7 +78,7 @@ const SettingsCompanyForm = ({
         updateFormValue={updateFormValue}
         fields={fields}
         initialValues={initialValue || []}
-        validationSchema={companyDetailsValidationSchema}
+        validationSchema={settingsCompanyeditValidationSchema}
         onSubmit={onSubmit}
       />
     </>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Card,
@@ -10,58 +10,60 @@ import {
 import LanguageIcon from '@mui/icons-material/Language';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-  useDeletePortalLinkMutation,
-  useGetPortalLinkQuery,
-  useGetSinglePortalLinkMutation,
-} from '../../../redux-store/api/injectedApis';
-import { AppDispatch } from '../../../app/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { setData } from '../../../redux-store/global/globalState';
 import DialogBoxUi from '../../../components/ui/DialogBox';
 import PortalLinkCreate from './Portal-link-create';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  deletePortalLink,
+  getPortalList,
+  getSinglePortal,
+} from '../../../api/services';
 
 const PortalLinkList: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const {
-    data: linkCreation,
-    error,
-    isLoading,
-    refetch,
-  } = useGetPortalLinkQuery();
-  const [
-    deleteLink,
-    { isSuccess: deleteLinkSuccess, isError: deleteLinkError },
-  ] = useDeletePortalLinkMutation();
-  const [getLink] = useGetSinglePortalLinkMutation();
   const [openDialogBox, setOpenDialogBox] = useState(false);
-  const linkValue = useSelector((state: any) => state.globalState.data);
+  const queryClient = useQueryClient();
+  const [singlePortalData, setSinglePortalData] = useState({
+    id: '',
+    label: '',
+    url: '',
+    description: '',
+  });
   const [key, setKey] = useState<number>(0);
-
-  // Local state for managing notification messages
   const [notification, setNotification] = useState({
     success: false,
     error: false,
     errorMessage: '',
   });
 
-  useEffect(() => {
-    refetch();
-  }, [linkCreation, refetch]);
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['getPortalList'],
+    queryFn: getPortalList,
+    staleTime: 5 * 60 * 1000,
+  });
 
-  useEffect(() => {
-    if (deleteLinkSuccess) {
+  const getSinglePortalMutation = useMutation({
+    mutationFn: getSinglePortal,
+    onSuccess: (data) => {
+      setOpenDialogBox(true);
+      setSinglePortalData(data);
+    },
+  });
+
+  const deletePortalMutation = useMutation({
+    mutationFn: deletePortalLink,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getPortalList'] });
       setNotification({ success: true, error: false, errorMessage: '' });
-      refetch();
-    } else if (deleteLinkError) {
+    },
+    onError: () => {
       setNotification({
         success: false,
         error: true,
         errorMessage: 'Error deleting Link',
       });
-    }
-  }, [deleteLinkSuccess, deleteLinkError, refetch]);
+    },
+  });
 
   // Call the snackbar notification hook at the top level
   useSnackbarNotifications({
@@ -73,25 +75,19 @@ const PortalLinkList: React.FC = () => {
 
   const handleEditClick = async (id: string) => {
     try {
-      const response = await getLink(id);
-      if ('data' in response) {
-        dispatch(setData(response.data));
-        setOpenDialogBox(true);
-      } else {
-        console.error('Error response:', response.error);
-      }
+      getSinglePortalMutation.mutate(id);
     } catch (error) {
       console.error('Error handling edit click:', error);
     }
   };
 
-  const handleDeleteClick = async (id: number) => {
+  const handleDeleteClick = async (id: string) => {
     const confirmed = window.confirm(
       'Are you sure you want to delete this link?',
     );
     if (confirmed) {
       try {
-        await deleteLink(id);
+        deletePortalMutation.mutate(id);
       } catch (error) {
         console.error('Error deleting link:', error);
       }
@@ -99,9 +95,8 @@ const PortalLinkList: React.FC = () => {
   };
 
   const handleModalClose = () => {
-    setKey((prevKey) => prevKey + 1); // Reset the key to force component re-render
-    setOpenDialogBox(false); // Close the dialog
-    refetch(); // Refetch the data after closing
+    setKey((prevKey) => prevKey + 1);
+    setOpenDialogBox(false);
   };
 
   if (isLoading) {
@@ -118,16 +113,16 @@ const PortalLinkList: React.FC = () => {
         open={openDialogBox}
         content={
           <PortalLinkCreate
-            linkValue={linkValue}
+            linkValue={singlePortalData}
             key={key}
-            handleClose={handleModalClose} // Passing handleClose prop
+            handleClose={handleModalClose}
           />
         }
-        handleClose={handleModalClose} // Ensure dialog can be closed
+        handleClose={handleModalClose}
       />
       <Grid container spacing={2} mt={1} sx={{ width: '1020px' }}>
-        {linkCreation
-          ? linkCreation.map((link) => (
+        {data
+          ? data.map((link: any) => (
               <Grid item xs={3} key={link.id}>
                 <Card
                   elevation={2}

@@ -45,11 +45,15 @@ const CompanyList = () => {
   const pathname = usePathname();
   const { canCreateCompanies } = useRolePermissions();
 
-  const {data: companyData, isLoading, error} = useQuery({
+  const {
+    data: companyData,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['getCompanyList'],
     queryFn: getCompanyList,
     staleTime: 5 * 60 * 1000,
-  })
+  });
 
   useEffect(() => {
     if (companyData && !isLoading && !error) {

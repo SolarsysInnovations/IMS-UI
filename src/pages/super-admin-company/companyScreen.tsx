@@ -1,37 +1,39 @@
 import { useEffect, useState } from 'react';
 import CompanyCreate from './companyCreate';
 import { useParams } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getSingleCompany } from '../../api/services';
 import { CircularProgress, Grid } from '@mui/material';
 
 const CompanyScreen: React.FC = () => {
   const { id } = useParams();
-  const [mode, setMode] = useState<'create' | 'edit'>('create')
+  const [mode, setMode] = useState<'create' | 'edit'>('create');
   const [mergedData, setMergedData] = useState<any>(null);
   const [key, setKey] = useState<number>(0);
 
-  const getSingleCompanyMutation = useMutation({
-    mutationFn: getSingleCompany,
-    onSuccess: (data) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['getSingleCompany', id],
+    queryFn: ({ queryKey }) => {
+      const id = queryKey[1];
+      if (!id) throw new Error('Id is missing');
+      return getSingleCompany(id);
+    },
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  useEffect(() => {
+    if (data) {
       if (data.companyDetails && data.userDetails) {
         const mergedObject = {
           ...data.companyDetails,
           ...data.userDetails,
         };
-        setMode('edit')
+        setMode('edit');
         setMergedData(mergedObject);
       }
-    },
-  });
-
-  const isLoading = getSingleCompanyMutation.isPending;
-
-  useEffect(() => {
-    if (id) {
-      getSingleCompanyMutation.mutate(id);
     }
-  }, [id]);
+  }, [data]);
 
   useEffect(() => {
     setKey((prev) => prev + 1);

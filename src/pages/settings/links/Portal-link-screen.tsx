@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import PortalLinkList from './Portal-link-list';
 import TableHeader from '../../../components/layouts/TableHeader';
 import { Add } from '@mui/icons-material';
@@ -7,8 +6,6 @@ import DialogBoxUi from '../../../components/ui/DialogBox';
 import PortalLinkCreate from './Portal-link-create';
 
 const LinkScreen = () => {
-  const linkValue = useSelector((state: any) => state.globalState.data);
-
   const [key, setKey] = useState<number>(0);
   const [openDialogBox, setOpenDialogBox] = useState(false);
 
@@ -18,12 +15,12 @@ const LinkScreen = () => {
 
   const handleModalClose = () => {
     setOpenDialogBox(false);
-    setKey((prevKey) => prevKey + 1); // Reset the key to force a re-render
+    setKey((prevKey) => prevKey + 1);
   };
 
   useEffect(() => {
     setKey((prev) => prev + 1);
-  }, [linkValue]);
+  }, []);
 
   return (
     <>
@@ -35,14 +32,8 @@ const LinkScreen = () => {
 
       <DialogBoxUi
         open={openDialogBox}
-        content={
-          <PortalLinkCreate
-            key={key}
-            linkValue={linkValue}
-            handleClose={handleModalClose} // Ensure dialog can be closed
-          />
-        }
-        handleClose={handleModalClose} // Ensure dialog can be closed
+        content={<PortalLinkCreate key={key} handleClose={handleModalClose} />}
+        handleClose={handleModalClose}
       />
     </>
   );

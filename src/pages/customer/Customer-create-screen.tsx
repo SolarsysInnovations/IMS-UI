@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
+import { setData } from '../../redux-store/global/globalState';
 import { useNavigate } from 'react-router-dom';
 import { customerFields } from '../../constants/form-data/form-data-json';
 import { customerInitialValues } from '../../constants/forms/formikInitialValues';
@@ -34,8 +35,6 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
 
   const isSuccess =
     updateCustomerMutation.isSuccess || createCustomerMutation.isSuccess;
-
-  const [data, setData] = useState<any>();
 
   const initialValues = customerEditInitialValues ?? customerInitialValues;
 

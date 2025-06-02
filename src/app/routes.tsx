@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 import { Roles } from '../constants/Enums';
 import Login from '../pages/Login-screen';
 import Unauthorized from '../unauthorized';
@@ -20,8 +20,12 @@ import CompanyScreen from '../pages/super-admin-company/companyScreen';
 import SettingScreen from '../pages/settings/settings';
 import SettingRoleScreen from '../pages/settings/settings-role';
 import InvoiceLayout from '../components/layouts/InvoiceLayout';
+import { ACCESS_TOKEN } from '../constants/data';
+
+const token = sessionStorage.getItem(ACCESS_TOKEN);
 
 const router = createBrowserRouter([
+  { path: '*', element: token ? <Navigate to="/dashboard" /> : <Login /> },
   { path: '/', element: <Login /> },
   { path: '/unauthorized', element: <Unauthorized /> },
   { path: '/forgotpassword', element: <ForgetPassword /> },
