@@ -13,7 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DialogBoxUi from '../../../components/ui/DialogBox';
 import PortalLinkCreate from './Portal-link-create';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   deletePortalLink,
   getPortalList,
@@ -22,7 +22,6 @@ import {
 
 const PortalLinkList: React.FC = () => {
   const [openDialogBox, setOpenDialogBox] = useState(false);
-  const queryClient = useQueryClient();
   const [singlePortalData, setSinglePortalData] = useState({
     id: '',
     label: '',
@@ -36,7 +35,7 @@ const PortalLinkList: React.FC = () => {
     errorMessage: '',
   });
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: ['getPortalList'],
     queryFn: getPortalList,
     staleTime: 5 * 60 * 1000,
@@ -53,7 +52,7 @@ const PortalLinkList: React.FC = () => {
   const deletePortalMutation = useMutation({
     mutationFn: deletePortalLink,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getPortalList'] });
+      refetch();
       setNotification({ success: true, error: false, errorMessage: '' });
     },
     onError: () => {

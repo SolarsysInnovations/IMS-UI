@@ -83,6 +83,7 @@ export const linkInitialValues = {
   description: '',
 };
 export const gstTypeInitialValue: GstTypeProps = {
+  id: '',
   gstName: '',
   gstPercentage: 0,
 };

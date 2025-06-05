@@ -2,7 +2,7 @@ import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useInVoiceContext } from '../../../context/invoiceContext';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   addCompanyLogo,
   deleteCompanyLogo,
@@ -11,7 +11,6 @@ import {
 
 const UploadScreen: React.FC = () => {
   const context = useInVoiceContext();
-  const queryClient = useQueryClient();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(
     null,
@@ -19,7 +18,11 @@ const UploadScreen: React.FC = () => {
   const [base64String, setBase64String] = useState<string | null>(null);
   const companyIdString = context.companyDetails.companyId ?? '';
 
-  const { data: logoData, isSuccess: logoSuccess } = useQuery({
+  const {
+    data: logoData,
+    isSuccess: logoSuccess,
+    refetch,
+  } = useQuery({
     queryKey: ['getCompanyLogo', companyIdString],
     queryFn: ({ queryKey }) => {
       const [, companyIdString] = queryKey;
@@ -35,7 +38,7 @@ const UploadScreen: React.FC = () => {
     onSuccess: () => {
       setSelectedFile(null);
       setImagePreview(null);
-      queryClient.invalidateQueries({ queryKey: ['getCompanyLogo'] });
+      refetch();
     },
   });
 
@@ -43,7 +46,7 @@ const UploadScreen: React.FC = () => {
     mutationFn: deleteCompanyLogo,
     onSuccess: () => {
       setBase64String(null);
-      queryClient.invalidateQueries({ queryKey: ['getCompanyLogo'] });
+      refetch();
     },
   });
 

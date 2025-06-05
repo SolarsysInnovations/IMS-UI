@@ -126,3 +126,79 @@ export const deletePortalLink = async (id: string) => {
     throw error;
   }
 };
+
+export const getPaymentTermsList = async () => {
+  try {
+    const res = await apiClient.post(API_URLS.paymentTermsList);
+    return res.data;
+  } catch (error) {
+    console.error('Getting payment terms list api is failed', error);
+    throw error;
+  }
+};
+
+export const getGstTypeList = async () => {
+  try {
+    const res = await apiClient.post(API_URLS.gstTypeList);
+    return res.data;
+  } catch (error) {
+    console.error('Getting gst type list api is failed', error);
+    throw error;
+  }
+};
+
+export const getSingleGstType = async (id: string) => {
+  try {
+    const res = await apiClient.post(`${API_URLS.gstTypeGet}/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error('Getting single gst type api is failed', error);
+    throw error;
+  }
+};
+
+export const createGstType = async (payload: any) => {
+  try {
+    const res = await apiClient.post(API_URLS.gstTypeCreate, payload);
+    return res.data;
+  } catch (error) {
+    console.error('Creating GstType api is failed', error);
+    throw error;
+  }
+};
+
+export const updateGstType = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: any;
+}) => {
+  try {
+    const res = await apiClient.post(`${API_URLS.gstTypeUpdate}/${id}`, data);
+    return res.data;
+  } catch (error) {
+    console.error('Updating Gst Type api is failed', error);
+    throw error;
+  }
+};
+
+export const deleteGstType = async (id: string) => {
+  try {
+    const res = await apiClient.post(`${API_URLS.gstTypeDelete}/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error('Deleting gst Type api is failed', error);
+    throw error;
+  }
+};
+
+export const getTdsTaxList = async () => {
+  try {
+    const res = await apiClient.post(API_URLS.tdsTaxList);
+    return res.data;
+  } catch (error) {
+    console.error('Getting tds Tax List api is failed', error);
+    throw error;
+  }
+};

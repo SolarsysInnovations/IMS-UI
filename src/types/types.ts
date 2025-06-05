@@ -23,6 +23,7 @@ export interface GstTypeProps {
 }
 export interface GstTypeFormProps {
   gstTypeValue?: GstTypeProps;
+  mode: string;
 }
 export interface TdsTaxProps {
   id?: string | undefined;

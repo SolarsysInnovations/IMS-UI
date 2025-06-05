@@ -10,7 +10,6 @@ const PaymentTermsScreen: React.FC = () => {
   const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
-    // Whenever paymentTermsValue changes, update the key to force re-render
     setKey((prevKey) => prevKey + 1);
   }, [paymentTermsValue]);
 

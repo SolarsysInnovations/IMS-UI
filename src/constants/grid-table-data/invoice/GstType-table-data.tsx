@@ -1,37 +1,36 @@
 import { IconButton, Stack } from '@mui/material';
 import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
-import { useEffect } from 'react';
-import { AppDispatch } from '../../../app/store';
-import { useDispatch } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
-import {
-  useDeleteGstTypeMutation,
-  useGetGstTypeListQuery,
-  useGetSingleGstTypeMutation,
-} from '../../../redux-store/api/injectedApis';
-import { setGstTypeData } from '../../../redux-store/slices/gstTypeSlice';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteGstType, getSingleGstType } from '../../../api/services';
+import { useTaxConfigContext } from '../../../context/taxConfigContext';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const queryClient = useQueryClient();
+  const context = useTaxConfigContext();
 
-  const { refetch } = useGetGstTypeListQuery();
-  const [deleteGstType, { isSuccess: deleteSuccess }] =
-    useDeleteGstTypeMutation();
-  const [getGstTypeById] = useGetSingleGstTypeMutation();
+  const getSingleGstTypeMutation = useMutation({
+    mutationFn: getSingleGstType,
+    onSuccess: (data) => {
+      context.setMode('edit');
+      context.gstTypeConfig.setGstTypeData({
+        id: data.id,
+        gstName: data.gstName,
+        gstPercentage: data.gstPercentage,
+      });
+    },
+  });
 
-  useEffect(() => {
-    refetch();
-  }, [deleteSuccess]);
+  const deleteGstTypeMutation = useMutation({
+    mutationFn: deleteGstType,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getGstTypeList'] });
+    },
+  });
 
   const handleEditClick = async () => {
     try {
-      const response = await getGstTypeById(id);
-      if (response && 'data' in response) {
-        const gstTypeData = response.data;
-        dispatch(setGstTypeData(gstTypeData));
-      } else {
-        console.error('Invalid response format:', response);
-      }
+      getSingleGstTypeMutation.mutate(id);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -42,7 +41,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       'Are you sure you want to delete this gst type?',
     );
     if (confirmed) {
-      deleteGstType(id);
+      deleteGstTypeMutation.mutate(id);
     }
   };
 

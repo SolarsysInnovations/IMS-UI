@@ -1,15 +1,16 @@
+import { useQueryClient } from '@tanstack/react-query';
 import GridDataUi from '../../../components/GridTable/GridData';
 import { paymentTermsColumns } from '../../../constants/grid-table-data/invoice/PaymentTerms-table-data';
-import { useGetPaymentTermsListQuery } from '../../../redux-store/api/injectedApis';
 
 const PaymentTermsList = () => {
-  const { data: paymentTermsList } = useGetPaymentTermsListQuery();
+  const queryclient = useQueryClient();
+  const paymentTermsList = queryclient.getQueryData(['getPaymentTerms']);
 
   return (
     <GridDataUi
       showToolbar={false}
       columns={paymentTermsColumns}
-      tableData={paymentTermsList || []}
+      tableData={paymentTermsList ?? []}
       checkboxSelection={false}
     />
   );
