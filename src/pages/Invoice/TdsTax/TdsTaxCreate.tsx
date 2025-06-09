@@ -1,98 +1,85 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { tdsTaxInitialValue } from '../../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { tdsTaxValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { TdsTaxFields } from '../../../constants/form-data/form-data-json';
 import { TdsTaxFormProps, TdsTaxProps } from '../../../types/types';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../app/store';
 import { Save } from '@mui/icons-material';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import {
-  useCreateTdsTaxMutation,
-  useGetTdsTaxListQuery,
-  useUpdateTdsTaxMutation,
-} from '../../../redux-store/api/injectedApis';
-import { clearTdsTaxData } from '../../../redux-store/slices/tdsSlice';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createTdsTax, updateTdsTax } from '../../../api/services';
+import { useTaxConfigContext } from '../../../context/taxConfigContext';
 
 interface TdsTaxCreateProps extends TdsTaxFormProps {
+  mode: string;
   onClose: () => void;
 }
 
-const TdsTaxCreate = ({ tdsTaxValue, onClose }: TdsTaxCreateProps) => {
-  const dispatch = useDispatch<AppDispatch>();
+const TdsTaxCreate = ({ tdsTaxValue, onClose, mode }: TdsTaxCreateProps) => {
+  const queryClient = useQueryClient();
+  const context = useTaxConfigContext();
 
-  const [
-    addTdsTax,
-    {
-      isSuccess: tdsTaxAddSuccess,
-      isError: tdsTaxAddError,
-      error: tdsTaxAddErrorObject,
+  const createTdsTaxMutation = useMutation({
+    mutationFn: createTdsTax,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getTdsTaxList'] });
+      context.tdsTaxConfig.setTdsTaxData(tdsTaxInitialValue);
     },
-  ] = useCreateTdsTaxMutation();
+  });
 
-  const [
-    updateTdsTax,
-    {
-      isSuccess: tdsTaxUpdateSuccess,
-      isError: tdsTaxUpdateError,
-      error: tdsTaxUpdateErrorObject,
+  const updateTdsTaxMutation = useMutation({
+    mutationFn: updateTdsTax,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getTdsTaxList'] });
+      context.tdsTaxConfig.setTdsTaxData(tdsTaxInitialValue);
+      context.setMode('create');
     },
-  ] = useUpdateTdsTaxMutation();
+  });
 
-  const { refetch } = useGetTdsTaxListQuery();
+  const isSuccess =
+    updateTdsTaxMutation.isSuccess || createTdsTaxMutation.isSuccess;
+  const isError = updateTdsTaxMutation.isError || createTdsTaxMutation.isError;
 
-  const initialValue = tdsTaxValue || tdsTaxInitialValue;
-
-  useEffect(() => {
-    refetch();
-  }, [tdsTaxUpdateSuccess]);
+  const initialValue = mode === 'edit' ? tdsTaxValue : tdsTaxInitialValue;
 
   const onSubmit = useMemo(
     () => async (values: TdsTaxProps, actions: any) => {
       try {
-        if (tdsTaxValue) {
-          await updateTdsTax({ id: tdsTaxValue.id, data: values });
+        if (mode === 'edit' && tdsTaxValue) {
+          if (tdsTaxValue.id) {
+            updateTdsTaxMutation.mutate({
+              id: tdsTaxValue.id,
+              payload: values,
+            });
+          }
         } else {
-          await addTdsTax(values);
+          createTdsTaxMutation.mutate({
+            taxName: values.taxName,
+            taxPercentage: values.taxPercentage,
+          });
         }
-        actions.resetForm();
-        refetch();
-        dispatch(clearTdsTaxData());
-        onClose(); // Call onClose to close the dialog
+        if (isSuccess) {
+          actions.resetForm();
+        }
+        onClose();
       } catch (error) {
         console.error('An error occurred during form submission:', error);
       } finally {
         actions.setSubmitting(false);
       }
     },
-    [
-      addTdsTax,
-      updateTdsTax,
-      tdsTaxValue,
-      refetch,
-      dispatch,
-      tdsTaxAddSuccess,
-      onClose,
-    ],
+    [tdsTaxValue, isSuccess, mode],
   );
 
-  // * ------ adding tds tax -------------------------
   useSnackbarNotifications({
-    error: tdsTaxAddError,
-    errorObject: tdsTaxAddErrorObject,
-    errorMessage: 'Error creating Tds Tax',
-    success: tdsTaxAddSuccess,
-    successMessage: 'Tds Tax created successfully',
-  });
-
-  // * ------ updating tds tax ------------------------
-  useSnackbarNotifications({
-    error: tdsTaxUpdateError,
-    errorObject: tdsTaxUpdateErrorObject,
-    errorMessage: 'Error updating Tds Tax',
-    success: tdsTaxUpdateSuccess,
-    successMessage: 'Tds Tax update successfully',
+    error: isError,
+    errorMessage:
+      mode === 'edit' ? 'Error updating Tds Tax' : 'Error creating Tds Tax',
+    success: isSuccess,
+    successMessage:
+      mode === 'edit'
+        ? 'Tds Tax update successfully'
+        : 'Tds Tax created successfully',
   });
 
   return (

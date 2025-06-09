@@ -1,26 +1,27 @@
 import { useEffect, useState } from 'react';
 import TdsTaxCreate from './TdsTaxCreate';
 import TdsTaxList from './TdsTaxList';
-import { useSelector } from 'react-redux';
+import { useTaxConfigContext } from '../../../context/taxConfigContext';
 
 const TdsTaxScreen: React.FC = () => {
-  const tdsTaxValue = useSelector((state: any) => state.tdsTaxState.data);
+  const context = useTaxConfigContext();
+  const tdsTaxValue = context.tdsTaxConfig.taxName;
+  const mode = context.mode;
   const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
     setKey((prev) => prev + 1);
   }, [tdsTaxValue]);
 
-  const handleClose = () => {
-    // Implement the logic to close the dialog
-  };
+  const handleClose = () => {};
 
   return (
     <>
       <TdsTaxCreate
         key={key}
         tdsTaxValue={tdsTaxValue}
-        onClose={handleClose} // Pass the onClose function
+        onClose={handleClose}
+        mode={mode}
       />
       <TdsTaxList />
     </>

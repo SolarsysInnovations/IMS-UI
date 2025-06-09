@@ -48,6 +48,7 @@ export interface PaymentTermsProps {
 }
 export interface PaymentTermsFormProps {
   paymentTermsValue: PaymentTermsProps;
+  mode: string;
 }
 interface ContactPersonProps {
   contactName: string;

@@ -60,13 +60,14 @@ const GstTypeForm = ({ gstTypeValue, mode }: GstTypeFormProps) => {
         actions.setSubmitting(false);
       }
     },
-    [gstTypeValue, isSuccess],
+    [gstTypeValue, isSuccess, mode],
   );
 
   // * -------- gst type creating --------------------
   useSnackbarNotifications({
     error: isError,
-    errorMessage: 'Error creating Gst Type',
+    errorMessage:
+      mode === 'edit' ? 'Error updating Gst Type' : 'Error creating Gst Type',
     success: isSuccess,
     successMessage:
       mode === 'edit'

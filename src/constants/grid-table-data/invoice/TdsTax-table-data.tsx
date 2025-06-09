@@ -1,47 +1,47 @@
 import { IconButton, Stack } from '@mui/material';
 import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
-import { AppDispatch } from '../../../app/store';
-import { useDispatch } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import {
-  useDeleteTdsTaxMutation,
-  useGetSingleTdsTaxMutation,
-} from '../../../redux-store/api/injectedApis';
-import { setTdsTaxData } from '../../../redux-store/slices/tdsSlice';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteTdsTax, getSingleTdsTax } from '../../../api/services';
+import { useTaxConfigContext } from '../../../context/taxConfigContext';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const [getPaymentTerm] = useGetSingleTdsTaxMutation();
-  const [
-    deleteTdsTax,
-    {
-      isSuccess: tdsTaxDeleteSuccess,
-      isError: tdsTaxDeleteError,
-      error: tdsTaxDeleteErrorObject,
+  const context = useTaxConfigContext();
+  const queryClient = useQueryClient();
+
+  const getSingleTdsTaxMutation = useMutation({
+    mutationFn: getSingleTdsTax,
+    onSuccess: (data) => {
+      context.setMode('edit');
+      context.tdsTaxConfig.setTdsTaxData({
+        id: data.id,
+        taxName: data.taxName,
+        taxPercentage: data.taxPercentage,
+      });
     },
-  ] = useDeleteTdsTaxMutation();
+  });
+
+  const deleteTdsTaxMuation = useMutation({
+    mutationFn: deleteTdsTax,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getTdsTaxList'] });
+    },
+  });
 
   const handleEditClick = async () => {
     try {
-      const response = await getPaymentTerm(id);
-      if (response && 'data' in response) {
-        const gstTypeData = response.data;
-        dispatch(setTdsTaxData(gstTypeData));
-      } else {
-        console.error('Invalid response format:', response);
-      }
+      getSingleTdsTaxMutation.mutate(id);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
   useSnackbarNotifications({
-    error: tdsTaxDeleteError,
-    errorObject: tdsTaxDeleteErrorObject,
-    errorMessage: 'Error updating TdsTax',
-    success: tdsTaxDeleteSuccess,
-    successMessage: 'TdsTax update successfully',
+    error: deleteTdsTaxMuation.isError,
+    errorMessage: 'Error deleting TdsTax',
+    success: deleteTdsTaxMuation.isSuccess,
+    successMessage: 'TdsTax deleted successfully',
   });
 
   const handleDeleteClick = () => {
@@ -49,7 +49,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       'Are you sure you want to delete this gst type?',
     );
     if (confirmed) {
-      deleteTdsTax(id);
+      deleteTdsTaxMuation.mutate(id);
     }
   };
 

@@ -89,11 +89,13 @@ export const gstTypeInitialValue: GstTypeProps = {
 };
 
 export const tdsTaxInitialValue: TdsTaxProps = {
+  id: '',
   taxName: '',
   taxPercentage: 0,
 };
 
 export const paymentTermsInitialValue: PaymentTermsProps = {
+  id: '',
   termName: '',
   totalDays: 0,
 };

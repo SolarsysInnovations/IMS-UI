@@ -1,11 +1,25 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
-import { gstTypeInitialValue } from '../constants/forms/formikInitialValues';
-import { GstTypeProps } from '../types/types';
+import {
+  gstTypeInitialValue,
+  paymentTermsInitialValue,
+  tdsTaxInitialValue,
+} from '../constants/forms/formikInitialValues';
+import { GstTypeProps, PaymentTermsProps, TdsTaxProps } from '../types/types';
 
 interface TaxConfigContextType {
   gstTypeConfig: {
     gstType: GstTypeProps;
     setGstTypeData: React.Dispatch<React.SetStateAction<GstTypeProps>>;
+  };
+  paymentTermsConfig: {
+    paymentTerms: PaymentTermsProps;
+    setPaymentTermsData: React.Dispatch<
+      React.SetStateAction<PaymentTermsProps>
+    >;
+  };
+  tdsTaxConfig: {
+    taxName: TdsTaxProps;
+    setTdsTaxData: React.Dispatch<React.SetStateAction<TdsTaxProps>>;
   };
   mode: string;
   setMode: React.Dispatch<React.SetStateAction<'create' | 'edit'>>;
@@ -32,6 +46,10 @@ function TaxConfigProvider({
 }) {
   const [gstTypeData, setGstTypeData] =
     useState<GstTypeProps>(gstTypeInitialValue);
+  const [paymentTermsData, setPaymentTermsData] = useState<PaymentTermsProps>(
+    paymentTermsInitialValue,
+  );
+  const [tdsTaxData, setTdsTaxData] = useState(tdsTaxInitialValue);
   const [mode, setMode] = useState<'create' | 'edit'>('create');
 
   const taxConfigValue = useMemo(
@@ -40,10 +58,18 @@ function TaxConfigProvider({
         gstType: gstTypeData,
         setGstTypeData,
       },
+      paymentTermsConfig: {
+        paymentTerms: paymentTermsData,
+        setPaymentTermsData,
+      },
+      tdsTaxConfig: {
+        taxName: tdsTaxData,
+        setTdsTaxData,
+      },
       mode: mode,
       setMode,
     }),
-    [gstTypeData, mode],
+    [gstTypeData, paymentTermsData, tdsTaxData, mode],
   );
 
   return (

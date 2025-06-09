@@ -1,46 +1,40 @@
 import { IconButton, Stack } from '@mui/material';
 import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
-import { useEffect } from 'react';
-import { AppDispatch } from '../../../app/store';
-import { useDispatch } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  useDeletePaymentTermsMutation,
-  useGetPaymentTermsListQuery,
-  useGetSinglePaymentTermsMutation,
-} from '../../../redux-store/api/injectedApis';
-import { setPaymentTermsData } from '../../../redux-store/slices/paymentTermsSlice';
+  deletePaymentTerms,
+  getSinglePaymentTerms,
+} from '../../../api/services';
+import { useTaxConfigContext } from '../../../context/taxConfigContext';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const context = useTaxConfigContext();
+  const queryClient = useQueryClient();
 
-  const [getPaymentTerm] = useGetSinglePaymentTermsMutation();
-
-  const [
-    deletePaymentTerms,
-    {
-      isSuccess: paymentTermsDeleteSuccess,
-      error: paymentTermsErrorObject,
-      isError: paymentTermsError,
+  const getSinglePaymentTermsMutation = useMutation({
+    mutationFn: getSinglePaymentTerms,
+    onSuccess: (data) => {
+      context.setMode('edit');
+      context.paymentTermsConfig.setPaymentTermsData({
+        id: data.id,
+        termName: data.termName,
+        totalDays: data.totalDays,
+      });
     },
-  ] = useDeletePaymentTermsMutation();
+  });
 
-  const { refetch } = useGetPaymentTermsListQuery();
-
-  useEffect(() => {
-    refetch();
-  }, [paymentTermsDeleteSuccess]);
+  const deletePaymentTermsMutation = useMutation({
+    mutationFn: deletePaymentTerms,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getPaymentTerms'] });
+    },
+  });
 
   const handleEditClick = async () => {
     try {
-      const response = await getPaymentTerm(id);
-      if (response && 'data' in response) {
-        const gstTypeData = response.data;
-        dispatch(setPaymentTermsData(gstTypeData));
-      } else {
-        console.error('Invalid response format:', response);
-      }
+      getSinglePaymentTermsMutation.mutate(id);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -51,15 +45,14 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       'Are you sure you want to delete this gst type?',
     );
     if (confirmed) {
-      deletePaymentTerms(id);
+      deletePaymentTermsMutation.mutate(id);
     }
   };
 
   useSnackbarNotifications({
-    error: paymentTermsError,
-    errorObject: paymentTermsErrorObject,
+    error: deletePaymentTermsMutation.isError,
     errorMessage: 'Error updating Payment Terms',
-    success: paymentTermsDeleteSuccess,
+    success: deletePaymentTermsMutation.isSuccess,
     successMessage: 'Payment terms deleted successfully',
   });
 

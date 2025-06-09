@@ -5,16 +5,14 @@ import SelectDropdown from '../../components/ui/SelectDropdown';
 import { invoiceCreateInitialValue } from '../../constants/forms/formikInitialValues';
 import { InvoiceInitialValueProps } from '../../types/types';
 import { generateOptions } from '../../utils/dropdownOptions';
-import InvoiceUi from '../Invoice/Generate-Invoice/InvoiceUi';
 import { addDays, format } from 'date-fns';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import GstTypeScreen from '../Invoice/GstType/GstTypeScreen';
 import PaymentTermsScreen from '../Invoice/paymentTerms/PaymentTermsScreen';
 import TdsTaxScreen from '../Invoice/TdsTax/TdsTaxScreen';
 import TableHeader from '../../components/layouts/TableHeader';
-import ServiceEditScreen from '../service/service-edit-screen';
 import { useRolePermissions } from '../../hooks/useRolePermission';
-import { useQueries } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
   getGstTypeList,
   getPaymentTermsList,
@@ -27,37 +25,33 @@ const TaxConfig = () => {
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const [invoiceValues, setInvoiceValues] = useState(invoiceCreateInitialValue);
 
-  const response = useQueries({
-    queries: [
-      {
-        queryKey: ['getPaymentTerms'],
-        queryFn: getPaymentTermsList,
-      },
-      {
-        queryKey: ['getGstTypeList'],
-        queryFn: getGstTypeList,
-      },
-      {
-        queryKey: ['getTdsTaxList'],
-        queryFn: getTdsTaxList,
-      },
-    ],
+  const { data: paymentTermsData, isLoading: isPaymentTermsLoading } = useQuery(
+    {
+      queryKey: ['getPaymentTerms'],
+      queryFn: getPaymentTermsList,
+      staleTime: 5 * 60 * 1000,
+    },
+  );
+
+  const { data: gstTypeListData, isLoading: isGstTypeListLoading } = useQuery({
+    queryKey: ['getGstTypeList'],
+    queryFn: getGstTypeList,
+    staleTime: 5 * 60 * 1000,
   });
 
-  const [getPaymentTermsQuery, getGstTypeQuery, getTdsTaxQuery] = response;
+  const { data: tdsTaxListData, isLoading: isTdsTaxListLoading } = useQuery({
+    queryKey: ['getTdsTaxList'],
+    queryFn: getTdsTaxList,
+    staleTime: 5 * 60 * 1000,
+  });
 
-  const gstTypeOptions = generateOptions(
-    getGstTypeQuery.data,
-    'gstName',
-    'gstName',
-  );
-  const tdsTaxOptions = generateOptions(
-    getTdsTaxQuery.data,
-    'taxName',
-    'taxName',
-  );
+  const isLoading =
+    isPaymentTermsLoading && isGstTypeListLoading && isTdsTaxListLoading;
+
+  const gstTypeOptions = generateOptions(gstTypeListData, 'gstName', 'gstName');
+  const tdsTaxOptions = generateOptions(tdsTaxListData, 'taxName', 'taxName');
   const paymentTermsOptions = generateOptions(
-    getPaymentTermsQuery.data,
+    paymentTermsData,
     'termName',
     'termName',
   );
@@ -67,8 +61,6 @@ const TaxConfig = () => {
     GST_TYPE: 'gstType',
     PAYMENT_TERMS: 'paymentTerms',
     TDS_TAX: 'tdsTax',
-    SERVICES: 'services',
-    INVOICE: 'invoice',
   };
 
   function handlePopupMenuOpen(popUpComponent: string) {
@@ -78,15 +70,11 @@ const TaxConfig = () => {
       return <PaymentTermsScreen />;
     } else if (popUpComponent === PopupComponents.TDS_TAX) {
       return <TdsTaxScreen />;
-    } else if (popUpComponent === PopupComponents.SERVICES) {
-      return <ServiceEditScreen />;
-    } else if (popUpComponent === PopupComponents.INVOICE) {
-      return <InvoiceUi />;
     }
     return null;
   }
 
-  if (response.some((r) => r.isLoading)) {
+  if (isLoading) {
     return (
       <Grid
         item
@@ -146,7 +134,7 @@ const TaxConfig = () => {
                         button={canCreateGst}
                         onChange={(newValue: any) => {
                           if (newValue) {
-                            const selectedGstType = getGstTypeQuery.data.find(
+                            const selectedGstType = gstTypeListData.find(
                               (item: any) => item.gstName === newValue.value,
                             );
                             if (selectedGstType) {
@@ -187,10 +175,9 @@ const TaxConfig = () => {
                         }}
                         onChange={(newValue: any) => {
                           if (newValue) {
-                            const selectedPaymentTerms =
-                              getPaymentTermsQuery.data?.find(
-                                (item: any) => item.termName === newValue.value,
-                              );
+                            const selectedPaymentTerms = paymentTermsData?.find(
+                              (item: any) => item.termName === newValue.value,
+                            );
                             if (selectedPaymentTerms) {
                               const today = new Date();
                               const startDate = format(today, 'dd-MM-yyyy');
@@ -240,7 +227,7 @@ const TaxConfig = () => {
                         width="150px"
                         onChange={(newValue: any) => {
                           if (newValue) {
-                            const selectedTdsTax = getTdsTaxQuery.data.find(
+                            const selectedTdsTax = tdsTaxListData.find(
                               (item: any) => item.taxName === newValue.value,
                             );
                             if (selectedTdsTax) {
