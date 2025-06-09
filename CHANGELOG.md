@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.6] - 2025-06-09
+
+## Changed
+
+- Updated the tax and portal link api call to tanstack query and completed the setting page
+
+---
+
 ## [2.0.5] - 2025-06-02
 
 ## Changed
