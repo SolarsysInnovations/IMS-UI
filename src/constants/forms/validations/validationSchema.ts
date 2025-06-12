@@ -127,6 +127,53 @@ export const companyDetailsValidationSchema = Yup.object({
   userLimit: Yup.string().notRequired(),
   serviceLimit: Yup.string().notRequired(),
 });
+
+export const editCompanyDetailsValidationSchema = Yup.object({
+  companyName: Yup.string().required('Company Name is required'),
+  companyAddress: Yup.string().required('Company Address is required'),
+  companyCity: Yup.string().notRequired(),
+  companyState: Yup.string().required('Company State is required'),
+  companyCountry: Yup.string().required('Company Country is required'),
+  companyEmail: Yup.string()
+    .email('Invalid email format')
+    .required('Company Email is required'),
+  companyPhone: Yup.string()
+    .matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits')
+    .required('Company Phone is required'),
+  companyWebsite: Yup.string().required('Company Website is required'),
+  companyTaxNumber: Yup.string().required('Company Tax Number is required'),
+  companyRegNumber: Yup.string().required('Company Reg Number is required'),
+  userName: Yup.string().required('User Name is required'),
+  userEmail: Yup.string()
+    .email('Invalid email format')
+    .required('User Email is required'),
+  userRole: Yup.string().required('User role is required'),
+  userMobile: Yup.string()
+    .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
+    .required('User mobile is required'),
+  userAccess: Yup.string().notRequired(),
+  customerLimit: Yup.string().notRequired(),
+  invoiceLimit: Yup.string().notRequired(),
+  userLimit: Yup.string().notRequired(),
+  serviceLimit: Yup.string().notRequired(),
+});
+
+export const settingsCompanyeditValidationSchema = Yup.object({
+  companyName: Yup.string().required('Company Name is required'),
+  companyAddress: Yup.string().required('Company Address is required'),
+  companyCity: Yup.string().notRequired(),
+  companyState: Yup.string().required('Company State is required'),
+  companyCountry: Yup.string().required('Company Country is required'),
+  companyEmail: Yup.string()
+    .email('Invalid email format')
+    .required('Company Email is required'),
+  companyPhone: Yup.string()
+    .matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits')
+    .required('Company Phone is required'),
+  companyWebsite: Yup.string().required('Company Website is required'),
+  companyTaxNumber: Yup.string().required('Company Tax Number is required'),
+  companyRegNumber: Yup.string().required('Company Reg Number is required'),
+});
 export const gstTypeValidationSchema = Yup.object().shape({
   gstName: Yup.string().required('gstName is required'),
 });

@@ -1,82 +1,44 @@
 import { Box, Stack } from '@mui/material';
 import { GridColDef } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CompanyDetails from '../../pages/super-admin-company/companyDetailsScreen';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import {
-  useDeleteUserMutation,
-  useGetSingleUserMutation,
-  useGetUsersListQuery,
-} from '../../redux-store/api/injectedApis';
-import { setUserData } from '../../redux-store/slices/userSlice';
 import TableHeader from '../../components/layouts/TableHeader';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import ActionButtons from '../../components/ui/ActionButtons';
 import { useRolePermissions } from '../../hooks/useRolePermission';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteCompany, getSingleCompany } from '../../api/services';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const [openDialogBox, setOpenDialogBox] = useState(false);
-  const { refetch } = useGetUsersListQuery();
-  const [
-    deleteCompany,
-    {
-      error: deleteCompanyErrorObject,
-      isSuccess: deleteCompanySuccess,
-      isError: deleteCompanyError,
-    },
-  ] = useDeleteUserMutation();
-  const [getCompany, { data: companyData }] = useGetSingleUserMutation();
+  const [companyData, setCompanyData] = useState({});
   const navigate = useNavigate();
   const { canEditCompanies, canViewCompanies, canDeleteCompanies } =
     useRolePermissions();
-  // Snackbar notifications
-  useSnackbarNotifications({
-    error: deleteCompanyError,
-    errorMessage: 'Error deleting company',
-    success: deleteCompanySuccess,
-    successMessage: 'Company deleted successfully',
-    errorObject: deleteCompanyErrorObject,
+
+  const getSingleCompanyMutation = useMutation({
+    mutationFn: getSingleCompany,
+    onSuccess: (data) => {
+      setCompanyData(data);
+      setOpenDialogBox(true);
+    },
   });
 
-  useEffect(() => {
-    if (companyData) {
-      dispatch(setUserData(companyData));
-    }
-  }, [companyData, dispatch]);
-
-  useEffect(() => {
-    refetch();
-  }, [deleteCompanySuccess, refetch]);
+  const deleteCompanyMutation = useMutation({
+    mutationFn: deleteCompany,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getCompanyList'] });
+    },
+  });
 
   const handleDialogOpen = async () => {
-    try {
-      const response = await getCompany(id);
-      if ('data' in response) {
-        setOpenDialogBox(true);
-      } else {
-        console.error('Error response:', response.error);
-      }
-    } catch (error) {
-      console.error('Error fetching customer data:', error);
-    }
+    getSingleCompanyMutation.mutate(id);
   };
 
   const handleEditClick = async () => {
-    try {
-      const response = await getCompany(id);
-      if ('data' in response) {
-        const companyData = response.data;
-        dispatch(setUserData(companyData));
-        navigate('/company/edit');
-      } else {
-        console.error('Error response:', response.error);
-      }
-    } catch (error) {
-      console.error('Error handling edit click:', error);
-    }
+    navigate(`/company/edit/${id}`);
   };
 
   const handleDeleteClick = () => {
@@ -84,7 +46,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       'Are you sure you want to delete this company?',
     );
     if (confirmed) {
-      deleteCompany(id);
+      deleteCompanyMutation.mutate(id);
     }
   };
 

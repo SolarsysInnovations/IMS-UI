@@ -1,12 +1,11 @@
 import {
-  ArAgingInitialValueProps,
   ChangePasswordInitialValueProps,
   ForgetPwdProps,
   GstTypeProps,
   InvoiceInitialValueProps,
-  InvoicesInitialValueProps,
   LoginProps,
   PaymentTermsProps,
+  ReportsValueProps,
   RoleInitialValueProps,
   SendEmailInitialValueProps,
   SuperAdminUsersInitialValueProps,
@@ -84,16 +83,19 @@ export const linkInitialValues = {
   description: '',
 };
 export const gstTypeInitialValue: GstTypeProps = {
+  id: '',
   gstName: '',
   gstPercentage: 0,
 };
 
 export const tdsTaxInitialValue: TdsTaxProps = {
+  id: '',
   taxName: '',
   taxPercentage: 0,
 };
 
 export const paymentTermsInitialValue: PaymentTermsProps = {
+  id: '',
   termName: '',
   totalDays: 0,
 };
@@ -132,14 +134,14 @@ export const invoiceCreateInitialValue: InvoiceInitialValueProps = {
   signatureFile: null,
 };
 
-export const invoicesInitialValue: InvoicesInitialValueProps = {
+export const invoicesInitialValue: ReportsValueProps = {
   // invoiceDate: "",
   startDate: '',
   endDate: '',
   filter: 'invoiceReport',
 };
 
-export const AragingInitialValue: ArAgingInitialValueProps = {
+export const AragingInitialValue: ReportsValueProps = {
   // invoiceDate: "",
   startDate: '',
   endDate: '',

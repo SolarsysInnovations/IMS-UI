@@ -11,11 +11,6 @@ export interface ForgetPwdProps {
   userEmail: string;
 }
 
-export interface ResetPwdProps {
-  token: string;
-  newPassword: string;
-}
-
 export interface GstTypeProps {
   id?: string | undefined;
   gstName: string;
@@ -23,6 +18,7 @@ export interface GstTypeProps {
 }
 export interface GstTypeFormProps {
   gstTypeValue?: GstTypeProps;
+  mode: string;
 }
 export interface TdsTaxProps {
   id?: string | undefined;
@@ -37,7 +33,7 @@ export interface CompanyFormProps {
   mode?: 'create' | 'edit';
 }
 export interface LinkFormProps {
-  linkValue: LinkCreationProps;
+  linkValue?: LinkCreationProps;
   handleClose: () => void; // Add this line
 }
 export interface PaymentTermsProps {
@@ -47,6 +43,7 @@ export interface PaymentTermsProps {
 }
 export interface PaymentTermsFormProps {
   paymentTermsValue: PaymentTermsProps;
+  mode: string;
 }
 interface ContactPersonProps {
   contactName: string;
@@ -78,7 +75,6 @@ export interface FormProps {
   onClose?: () => void;
   showTable?: boolean;
   onSubmit: (values: any, actions: any) => void;
-  setData?: any;
   updateFormValue?: (setFieldValue: Function) => void;
   headerName?: string;
   isSuccessToast?: boolean;
@@ -149,14 +145,8 @@ export interface InvoiceInitialValueProps {
   servicesList: ServiceListProps[];
   signatureFile: string | null;
 }
-export interface InvoicesInitialValueProps {
-  // invoiceDate: string;
-  startDate: string;
-  endDate: string;
-  filter: string;
-}
 
-export interface ArAgingInitialValueProps {
+export interface ReportsValueProps {
   // invoiceDate: string;
   startDate: string;
   endDate: string;

@@ -1,54 +1,40 @@
-import { useDispatch } from 'react-redux';
 import React, { useCallback, useState } from 'react';
 import { Stack } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
-import {
-  useDeleteInvoiceMutation,
-  useGetInvoiceListQuery,
-  useGetSingleInvoiceMutation,
-} from '../../redux-store/api/injectedApis';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { useRolePermissions } from '../../hooks/useRolePermission';
-import {
-  clearInvoiceData,
-  setInvoiceData,
-} from '../../redux-store/slices/invoiceSlice';
 import ActionButtons from '../../components/ui/ActionButtons';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import InvoiceUi from '../../pages/Invoice/Generate-Invoice/InvoiceUi';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteInvoice, getSingleInvoice } from '../../api/services';
 
 interface MyCellRendererProps {
   row: any;
-  onDelete: (id: string) => void;
 }
 
-export const MyCellRenderer: React.FC<MyCellRendererProps> = ({
-  row,
-  onDelete,
-}) => {
-  const dispatch = useDispatch();
+export const MyCellRenderer: React.FC<MyCellRendererProps> = ({ row }) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { canEditInvoices, canViewInvoices, canDeleteInvoices } =
     useRolePermissions();
-  const [isModalOpen, setIsModalOpen] = useState<boolean | undefined>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [invoiceData, setInvoiceData] = useState(null);
 
-  const [
-    deleteInvoice,
-    {
-      isSuccess: invoiceDeleteSuccess,
-      isError: invoiceDeleteError,
-      error: invoiceDeleteErrorObject,
+  const getSingleInvoiceMutation = useMutation({
+    mutationFn: getSingleInvoice,
+    onSuccess: (data) => {
+      setInvoiceData(data);
+      setIsModalOpen(true);
     },
-  ] = useDeleteInvoiceMutation();
-  const [getList] = useGetSingleInvoiceMutation();
-  const { refetch: getInvoiceList } = useGetInvoiceListQuery();
+  });
 
-  useSnackbarNotifications({
-    error: invoiceDeleteError,
-    errorMessage: 'Error deleting invoice',
-    success: invoiceDeleteSuccess,
-    successMessage: 'Invoice deleted successfully',
-    errorObject: invoiceDeleteErrorObject,
+  const deleteInvoiceMutation = useMutation({
+    mutationFn: deleteInvoice,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'getInvoiceList',
+      });
+    },
   });
 
   const handleEditClick = useCallback(async () => {
@@ -56,37 +42,16 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({
       alert('Editing is not allowed when the invoice status is PENDING.');
       return;
     }
-
-    try {
-      const response = await getList(row.id);
-      if ('data' in response) {
-        dispatch(setInvoiceData(response.data));
-        navigate('/invoice/create');
-      } else {
-        console.error('Error response:', response.error);
-      }
-    } catch (error) {
-      console.error('Error handling edit click:', error);
-    }
-  }, [row, dispatch, navigate, getList]);
+    navigate(`/invoice/edit/${row.id}`);
+  }, [row]);
 
   const handleDetails = useCallback(async () => {
     try {
-      const response = await getList(row.id);
-      if ('data' in response) {
-        dispatch(clearInvoiceData());
-        dispatch(setInvoiceData(response.data));
-        setIsModalOpen(true);
-
-        // Refetch the invoice list after the dialog is opened
-        await getInvoiceList();
-      } else {
-        console.error('Error response:', response.error);
-      }
+      getSingleInvoiceMutation.mutate(row.id);
     } catch (error) {
       console.error('Error handling details click:', error);
     }
-  }, [row, dispatch, getList, getInvoiceList]);
+  }, [row]);
 
   const handleDeleteClick = async () => {
     const confirmed = window.confirm(
@@ -94,8 +59,7 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({
     );
     if (confirmed) {
       try {
-        await deleteInvoice(row.id).unwrap();
-        onDelete(row.id); // Update the local state immediately after deletion
+        deleteInvoiceMutation.mutate(row.id);
       } catch (error) {
         console.error('Error deleting invoice:', error);
       }
@@ -116,7 +80,10 @@ export const MyCellRenderer: React.FC<MyCellRendererProps> = ({
       <DialogBoxUi
         open={isModalOpen}
         content={
-          <InvoiceUi invoiceData={row} setIsModalOpen={setIsModalOpen} />
+          <InvoiceUi
+            invoiceData={invoiceData}
+            setIsModalOpen={setIsModalOpen}
+          />
         }
         handleClose={() => setIsModalOpen(false)}
       />

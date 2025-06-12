@@ -1,78 +1,36 @@
 import { Box, Stack } from '@mui/material';
 import { GridColDef } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CustomerDetails from '../../pages/customer/customerDetails';
 import TableHeader from '../../components/layouts/TableHeader';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import {
-  useDeleteCustomerMutation,
-  useGetCustomersListQuery,
-  useGetSingleCustomerMutation,
-} from '../../redux-store/api/injectedApis';
-import { setCustomerData } from '../../redux-store/slices/slicesList';
 import DialogBoxUi from '../../components/ui/DialogBox';
-import { AppDispatch } from '../../app/store';
 import { useRolePermissions } from '../../hooks/useRolePermission';
 import ActionButtons from '../../components/ui/ActionButtons';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteCustomer } from '../../api/services';
 
 const MyCellRenderer = ({ id }: { id: any }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const queryClient = useQueryClient();
   const [openDialogBox, setOpenDialogBox] = useState(false);
-  const { refetch } = useGetCustomersListQuery();
-  const [
-    deleteCustomer,
-    {
-      isSuccess: deleteCustomerSuccess,
-      isError: deleteCustomerError,
-      error: deleteCustomerErrorObject,
+
+  const deleteCustomerMutation = useMutation({
+    mutationFn: deleteCustomer,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getCustomerList'] });
     },
-  ] = useDeleteCustomerMutation();
-  const [getCustomer, { data: customerData }] = useGetSingleCustomerMutation();
+  });
   const navigate = useNavigate();
 
   const { canViewCustomers, canEditCustomers, canDeleteCustomers } =
     useRolePermissions();
 
-  useEffect(() => {
-    refetch();
-  }, [deleteCustomerSuccess, refetch]);
-
-  useSnackbarNotifications({
-    error: deleteCustomerError,
-    errorMessage: 'Error deleting Customer',
-    errorObject: deleteCustomerErrorObject,
-    success: deleteCustomerSuccess,
-    successMessage: 'Customer deleted successfully',
-  });
-
   const handleEditClick = async () => {
-    try {
-      const response = await getCustomer(id);
-      if ('data' in response) {
-        const customerData = response.data;
-        dispatch(setCustomerData(customerData));
-        navigate('/customer/edit');
-      } else {
-        console.error('Error response:', response.error);
-      }
-    } catch (error) {
-      console.error('Error handling edit click:', error);
-    }
+    navigate(`/customer/edit/${id}`);
   };
 
   const handleDialogOpen = async () => {
-    try {
-      const response = await getCustomer(id);
-      if ('data' in response) {
-        setOpenDialogBox(true);
-      } else {
-        console.error('Error response:', response.error);
-      }
-    } catch (error) {
-      console.error('Error fetching customer data:', error);
-    }
+    setOpenDialogBox(true);
   };
 
   const handleDeleteClick = () => {
@@ -80,7 +38,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       'Are you sure you want to delete this customer?',
     );
     if (confirmed) {
-      deleteCustomer(id);
+      deleteCustomerMutation.mutate(id);
     }
   };
   return (
@@ -102,7 +60,7 @@ const MyCellRenderer = ({ id }: { id: any }) => {
           <>
             <TableHeader headerName="Customer Details" />
             <Box sx={{ marginTop: '15px' }}>
-              <CustomerDetails details={customerData ?? {}} />
+              <CustomerDetails id={id} />
             </Box>
           </>
         }

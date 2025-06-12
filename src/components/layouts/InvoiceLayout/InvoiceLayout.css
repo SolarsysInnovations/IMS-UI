@@ -18,7 +18,7 @@
   transition: width 0.3s ease;
 }
 
-.sidebar-top{
+.sidebar-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,7 +32,7 @@
   gap: 0.5rem;
 }
 
-.logo{
+.logo {
   width: 2rem;
   height: 2rem;
   margin-right: 0.5rem;
@@ -43,7 +43,7 @@
   font-weight: bold;
 }
 
-.collapse-btn{
+.collapse-btn {
   background: none;
   border: none;
   color: white;
@@ -124,38 +124,38 @@
   height: 100%;
 }
 
-.layout.collapsed .sidebar{
+.layout.collapsed .sidebar {
   width: 4rem;
 }
 
-.layout.collapsed .main{
+.layout.collapsed .main {
   margin-left: 4rem;
 }
 
-.layout.collapsed .header{
+.layout.collapsed .header {
   left: 4rem;
 }
 
-.layout.collapsed .sidebar-top{
+.layout.collapsed .sidebar-top {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
 }
 
-.layout.collapsed .sidebar-brand{
+.layout.collapsed .sidebar-brand {
   flex-direction: column;
   align-items: center;
 }
 
-.layout.collapsed .logo-text{
+.layout.collapsed .logo-text {
   display: none;
 }
 
-.layout.collapsed .collapse-btn{
+.layout.collapsed .collapse-btn {
   margin-top: 0.5rem;
 }
 
-.layout.collapsed .sidebar-link{
+.layout.collapsed .sidebar-link {
   justify-content: center;
 }
 

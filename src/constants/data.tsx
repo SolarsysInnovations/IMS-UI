@@ -303,3 +303,5 @@ export const applicationUserAccess: ApplicationUserAccess = {
     canDeleteService: false,
   },
 };
+
+export const ACCESS_TOKEN = 'accessToken';

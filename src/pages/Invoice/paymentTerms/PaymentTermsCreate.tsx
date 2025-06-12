@@ -4,55 +4,61 @@ import { paymentTermsInitialValue } from '../../../constants/forms/formikInitial
 import { paymentTermsValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { PaymentTermsFormProps, PaymentTermsProps } from '../../../types/types';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../app/store';
 import { Save } from '@mui/icons-material';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import {
-  useCreatePaymentTermsMutation,
-  useGetPaymentTermsListQuery,
-  useUpdatePaymentTermsMutation,
-} from '../../../redux-store/api/injectedApis';
-import { clearPaymentTermsData } from '../../../redux-store/slices/paymentTermsSlice';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createPaymentTerms, updatePaymentTerms } from '../../../api/services';
+import { useTaxConfigContext } from '../../../context/taxConfigContext';
 
 // create and edit
-const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
-  const [
-    addPaymentTerms,
-    {
-      isSuccess: paymentTermsAddSuccess,
-      isError: paymentTermsAddError,
-      error: paymentTermsErrorObject,
+const PaymentTermsForm = ({
+  paymentTermsValue,
+  mode,
+}: PaymentTermsFormProps) => {
+  const context = useTaxConfigContext();
+  const queryClient = useQueryClient();
+
+  const createPaymentTermsMutation = useMutation({
+    mutationFn: createPaymentTerms,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getPaymentTerms'] });
+      context.paymentTermsConfig.setPaymentTermsData(paymentTermsInitialValue);
     },
-  ] = useCreatePaymentTermsMutation();
+  });
 
-  const [
-    updatePaymentTerms,
-    {
-      isSuccess: paymentTermsUpdateSuccess,
-      isError: paymentTermsUpdateError,
-      error: paymentTermsUpdateErrorObject,
+  const updatePaymentTermsMutation = useMutation({
+    mutationFn: updatePaymentTerms,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getPaymentTerms'] });
+      context.paymentTermsConfig.setPaymentTermsData(paymentTermsInitialValue);
+      context.setMode('create');
     },
-  ] = useUpdatePaymentTermsMutation();
+  });
 
-  const dispatch = useDispatch<AppDispatch>();
+  const isSuccess =
+    createPaymentTermsMutation.isSuccess ||
+    updatePaymentTermsMutation.isSuccess;
 
-  const { refetch } = useGetPaymentTermsListQuery();
-
-  const initialValues = paymentTermsValue || paymentTermsInitialValue;
+  const initialValues =
+    mode === 'edit' ? paymentTermsValue : paymentTermsInitialValue;
 
   const onSubmit = useMemo(
     () => async (values: PaymentTermsProps, actions: any) => {
       try {
-        if (paymentTermsValue) {
-          await updatePaymentTerms({ id: paymentTermsValue.id, data: values });
+        if (mode === 'edit' && paymentTermsValue) {
+          if (paymentTermsValue.id) {
+            updatePaymentTermsMutation.mutate({
+              id: paymentTermsValue.id,
+              payload: values,
+            });
+          }
         } else {
-          await addPaymentTerms(values);
+          createPaymentTermsMutation.mutate({
+            termName: values.termName,
+            totalDays: values.totalDays,
+          });
         }
-        actions.resetForm();
-        refetch();
-        if (paymentTermsValue) {
-          setTimeout(() => dispatch(clearPaymentTermsData()), 1000);
+        if (isSuccess) {
+          actions.resetForm();
         }
       } catch (error) {
         console.error('An error occurred during form submission:', error);
@@ -60,34 +66,14 @@ const PaymentTermsForm = ({ paymentTermsValue }: PaymentTermsFormProps) => {
         actions.setSubmitting(false);
       }
     },
-    [addPaymentTerms, updatePaymentTerms, paymentTermsValue, refetch, dispatch],
+    [paymentTermsValue, isSuccess, mode],
   );
-
-  // * --------- add paymentTerms ------------
-  useSnackbarNotifications({
-    error: paymentTermsAddError,
-    errorObject: paymentTermsErrorObject,
-    errorMessage: 'Error creating Payment Terms',
-    success: paymentTermsAddSuccess,
-    successMessage: 'Payment Terms created successfully',
-  });
-
-  // * --------- updating paymentTerms ------------
-  useSnackbarNotifications({
-    error: paymentTermsUpdateError,
-    errorObject: paymentTermsUpdateErrorObject,
-    errorMessage: 'Error updating Payment Terms',
-    success: paymentTermsUpdateSuccess,
-    successMessage: 'Payment Terms updated successfully',
-  });
 
   return (
     <div>
       <DynamicFormCreate
-        // toastMessage={isUpdateSuccess && paymentTermsValue ? 'Successfully Updated Payment Terms' : 'Successfully Created Payment Terms'}
-        // isSuccessToast={isAddSuccess || isUpdateSuccess}
         headerName={
-          paymentTermsValue ? 'Edit Payment Terms' : 'Create Payment Terms'
+          mode === 'edit' ? 'Edit Payment Terms' : 'Create Payment Terms'
         }
         showTable={true}
         fields={paymentTermsFields}

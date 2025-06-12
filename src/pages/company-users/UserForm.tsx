@@ -1,16 +1,8 @@
-import React, { useEffect, useMemo } from 'react';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import { clearData } from '../../redux-store/global/globalState';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store';
-import {
-  useCreateUserMutation,
-  useUpdateUserMutation,
-} from '../../redux-store/api/injectedApis';
+import React, { useMemo } from 'react';
 import { AdminCompanyUsersInitialValueProps } from '../../types/types';
 import {
-  RoleValidationSchema,
   EditRoleValidationSchema,
+  RoleValidationSchema,
 } from '../../constants/forms/validations/validationSchema';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import {
@@ -18,77 +10,54 @@ import {
   RolesFields,
 } from '../../constants/form-data/form-data-json';
 import { RoleInitialValue } from '../../constants/forms/formikInitialValues';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createUser, updateUser } from '../../api/services';
 
 interface UserValueProps {
-  userEditValue: any;
+  userEditValue?: any;
   mode: 'create' | 'edit';
   onClose: () => void;
-  refetchUserList: () => void;
 }
 
-const UserForm = ({
-  userEditValue,
-  mode,
-  onClose,
-  refetchUserList,
-}: UserValueProps) => {
-  const [
-    addUser,
-    {
-      isSuccess: userAddSuccess,
-      isError: userAddError,
-      error: userAddErrorObject,
+const UserForm = ({ userEditValue, mode, onClose }: UserValueProps) => {
+  const queryClient = useQueryClient();
+
+  const createUserMutation = useMutation({
+    mutationFn: createUser,
+    onSuccess: () => {
+      onClose();
+      queryClient.invalidateQueries({ queryKey: ['usersList'] });
     },
-  ] = useCreateUserMutation();
-  const [
-    updateUser,
-    {
-      isSuccess: userUpdateSuccess,
-      isError: userUpdateError,
-      error: userUpdateErrorObject,
+  });
+
+  const updateUserMutation = useMutation({
+    mutationFn: updateUser,
+    onSuccess: () => {
+      onClose();
+      queryClient.invalidateQueries({ queryKey: ['usersList'] });
     },
-  ] = useUpdateUserMutation();
-  const dispatch = useDispatch<AppDispatch>();
+  });
 
   // Setting initial values
   const initialValues =
     mode === 'edit' && userEditValue ? userEditValue : RoleInitialValue;
 
-  // Snackbar Notifications
-  useSnackbarNotifications({
-    error: userAddError,
-    errorObject: userAddErrorObject,
-    errorMessage: 'Error creating user',
-    success: userAddSuccess,
-    successMessage: 'User created successfully',
-  });
-
-  useSnackbarNotifications({
-    error: userUpdateError,
-    errorObject: userUpdateErrorObject,
-    errorMessage: 'Error updating user',
-    success: userUpdateSuccess,
-    successMessage: 'User updated successfully',
-  });
-
-  // Refetch data and close dialog on success
-  useEffect(() => {
-    if (userAddSuccess || userUpdateSuccess) {
-      refetchUserList();
-      onClose();
-    }
-  }, [userAddSuccess, userUpdateSuccess, refetchUserList, onClose]);
-
   // Form submission handler
   const onSubmit = useMemo(() => {
     return async (values: AdminCompanyUsersInitialValueProps, actions: any) => {
+      console.log('Form submitted with values:', values);
       try {
         if (mode === 'edit' && userEditValue) {
-          await updateUser({ id: values.id, data: { userDetails: values } });
+          console.log(values.id);
+          if (values.id) {
+            updateUserMutation.mutate({
+              id: values.id,
+              data: { userDetails: values },
+            });
+          }
         } else {
-          await addUser({ userDetails: values });
+          createUserMutation.mutate({ userDetails: values });
         }
-        dispatch(clearData());
         actions.resetForm();
       } catch (error) {
         console.error('Error during form submission:', error);
@@ -96,7 +65,7 @@ const UserForm = ({
         actions.setSubmitting(false);
       }
     };
-  }, [updateUser, addUser, userEditValue, mode, dispatch]);
+  }, [userEditValue, mode]);
 
   return (
     <DynamicFormCreate

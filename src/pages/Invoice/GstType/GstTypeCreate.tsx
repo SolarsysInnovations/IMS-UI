@@ -4,56 +4,52 @@ import { gstTypeInitialValue } from '../../../constants/forms/formikInitialValue
 import { gstTypeValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { GstTypeFormProps, GstTypeProps } from '../../../types/types';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../app/store';
 import { Save } from '@mui/icons-material';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import {
-  useCreateGstTypeMutation,
-  useGetGstTypeListQuery,
-  useUpdateGstTypeMutation,
-} from '../../../redux-store/api/injectedApis';
-import { clearGstTypeData } from '../../../redux-store/slices/gstTypeSlice';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createGstType, updateGstType } from '../../../api/services';
+import { useTaxConfigContext } from '../../../context/taxConfigContext';
 
-// create and edit screen
+const GstTypeForm = ({ gstTypeValue, mode }: GstTypeFormProps) => {
+  const queryClient = useQueryClient();
+  const context = useTaxConfigContext();
 
-const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
-  const [
-    addGstType,
-    {
-      isSuccess: gstTypeAddSuccess,
-      isError: gstTypeAddError,
-      error: gstTypeAddErrorObject,
+  const createGstTypeMutation = useMutation({
+    mutationFn: createGstType,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getGstTypeList'] });
+      context.gstTypeConfig.setGstTypeData(gstTypeInitialValue);
     },
-  ] = useCreateGstTypeMutation();
+  });
 
-  const [
-    updateGstType,
-    {
-      isSuccess: gstTypeUpdateSuccess,
-      isError: gstTypeUpdateError,
-      error: gstTypeUpdateErrorObject,
+  const updateGstTypeMutation = useMutation({
+    mutationFn: updateGstType,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getGstTypeList'] });
+      context.gstTypeConfig.setGstTypeData(gstTypeInitialValue);
+      context.setMode('create');
     },
-  ] = useUpdateGstTypeMutation();
+  });
 
-  const { refetch } = useGetGstTypeListQuery();
+  const isSuccess =
+    createGstTypeMutation.isSuccess || updateGstTypeMutation.isSuccess;
 
-  const dispatch = useDispatch<AppDispatch>();
-
-  const initialValues = gstTypeValue || gstTypeInitialValue;
+  const initialValues = mode === 'edit' ? gstTypeValue : gstTypeInitialValue;
 
   const onSubmit = useMemo(
     () => async (values: GstTypeProps, actions: any) => {
       try {
-        if (gstTypeValue) {
-          await updateGstType({ id: gstTypeValue.id, data: values });
+        if (mode === 'edit' && gstTypeValue) {
+          if (gstTypeValue.id) {
+            updateGstTypeMutation.mutate({ id: gstTypeValue.id, data: values });
+          }
         } else {
-          await addGstType(values);
+          createGstTypeMutation.mutate({
+            gstName: values.gstName,
+            gstPercentage: values.gstPercentage,
+          });
         }
-        actions.resetForm();
-        refetch();
-        if (gstTypeValue) {
-          setTimeout(() => dispatch(clearGstTypeData()), 1000);
+        if (isSuccess) {
+          actions.resetForm();
         }
       } catch (error) {
         console.error('An error occurred during form submission:', error);
@@ -61,31 +57,13 @@ const GstTypeForm = ({ gstTypeValue }: GstTypeFormProps) => {
         actions.setSubmitting(false);
       }
     },
-    [addGstType, updateGstType, gstTypeValue, refetch, dispatch],
+    [gstTypeValue, isSuccess, mode],
   );
-
-  // * -------- gst type creating --------------------
-  useSnackbarNotifications({
-    error: gstTypeAddError,
-    errorObject: gstTypeAddErrorObject,
-    errorMessage: 'Error creating Gst Type',
-    success: gstTypeAddSuccess,
-    successMessage: 'Gst Type created successfully',
-  });
-
-  // * -------- gst type updating --------------------
-  useSnackbarNotifications({
-    error: gstTypeUpdateError,
-    errorObject: gstTypeUpdateErrorObject,
-    errorMessage: 'Error updating Gst Type',
-    success: gstTypeUpdateSuccess,
-    successMessage: 'Gst Type updated successfully',
-  });
 
   return (
     <div>
       <DynamicFormCreate
-        headerName={gstTypeValue ? 'Edit GST Type' : 'Create GST Type'}
+        headerName={mode === 'edit' ? 'Edit GST Type' : 'Create GST Type'}
         showTable={true}
         fields={GstTypeFields}
         initialValues={initialValues}

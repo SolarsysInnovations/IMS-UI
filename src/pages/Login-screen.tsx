@@ -11,40 +11,57 @@ import ButtonUi from '../components/ui/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import palette from '../theme/create-pallet';
 import { Form, Formik } from 'formik';
-import { useDispatch } from 'react-redux';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
-import { AppDispatch } from '../app/store';
-import { useLoginMutation } from '../redux-store/auth/loginApi';
 import { loginValidationSchema } from '../constants/forms/validations/validationSchema';
 import { loginInitialValue } from '../constants/forms/formikInitialValues';
 import { LoginProps } from '../types/types';
-import { setCredentials } from '../redux-store/auth/authSlice';
 import TextFieldUi from '../components/ui/TextField';
 import Logo from '../assets/gradient-abstract-logo_23-2150689648-removebg-preview.png';
+import { useMutation } from '@tanstack/react-query';
+import { getUserDetails, login } from '../api/services';
 import { useInVoiceContext } from '../context/invoiceContext';
-interface LoginResponse {
-  data?: {
-    id: any;
-    accessToken: any;
-    refresh: any;
-    userRole: any;
-    userName: any;
-    userEmail: string | null;
-  };
-  error?: any;
-}
+
 const Login = () => {
-  const [login, { error: loginError }] = useLoginMutation();
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const context = useInVoiceContext();
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const getUserDetailsMutation = useMutation({
+    mutationFn: getUserDetails,
+    onSuccess: (response) => {
+      context.userDetails.userId = response.id;
+      context.userDetails.userName = response.userName;
+      context.userDetails.userEmail = response.userEmail;
+      context.userDetails.userRole = response.userRole;
+      context.userDetails.userMobile = response.userMobile;
+      context.companyDetails.companyId = response.companyId;
+      context.userDetails.description = response.description;
+      navigate('/dashboard');
+    },
+    onError: (error) => {
+      console.error('Get user details api failed', error);
+    },
+  });
+
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: (response) => {
+      getUserDetailsMutation.mutate(response.id);
+    },
+    onError: (error) => {
+      console.error('Login failed: ', error);
+    },
+  });
+
+  const isError = loginMutation.isError || getUserDetailsMutation.isError;
+  const isLoading = loginMutation.isPending || getUserDetailsMutation.isPending;
+  const isSuccess = loginMutation.isSuccess || getUserDetailsMutation.isSuccess;
 
   useEffect(() => {
-    if (loginError) {
+    if (isError) {
       alert('Login failed. Please check your credentials and try again.');
     }
-  }, [loginError]);
+  }, [isError]);
 
   return (
     <Formik
@@ -52,50 +69,16 @@ const Login = () => {
       validationSchema={loginValidationSchema}
       onSubmit={async (values: LoginProps, { resetForm }) => {
         try {
-          const loginResult: LoginResponse = await login(values);
-
-          if (loginResult.data && 'accessToken' in loginResult.data) {
-            if (loginResult.data.accessToken) {
-              const {
-                id,
-                accessToken,
-                refresh,
-                userRole,
-                userName,
-                userEmail,
-              } = loginResult.data;
-              context.userDetails.userId = id;
-              context.userDetails.userName = userName;
-              context.userDetails.userEmail = userEmail;
-              context.userDetails.userRole = userRole;
-              dispatch(
-                setCredentials({
-                  id,
-                  accessToken,
-                  refresh,
-                  userRole,
-                  userName,
-                  userEmail,
-                }),
-              );
-            } else {
-              const { accessToken } = loginResult.data;
-              dispatch(setCredentials({ accessToken }));
-            }
-            navigate('/dashboard');
-          } else {
-            console.error(
-              'Access token not found in login response:',
-              loginResult,
-            );
+          loginMutation.mutate(values);
+          if (isSuccess) {
+            resetForm();
           }
-          resetForm();
         } catch (error) {
           console.error('An error occurred during login:', error);
         }
       }}
     >
-      {({ errors, touched, values, handleChange, isSubmitting }) => (
+      {({ errors, touched, values, handleChange }) => (
         <Box
           sx={{
             mt: 3,
@@ -204,7 +187,7 @@ const Login = () => {
                 <Box sx={{ mt: 2 }}>
                   <ButtonUi
                     fullWidth={true}
-                    loading={isSubmitting}
+                    loading={isLoading}
                     label="Login"
                     variant="contained"
                     type="submit"

@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { Box, CircularProgress, Grid } from '@mui/material';
 import { Roles } from '../../constants/Enums';
-import { useGetDashboardMutation } from '../../redux-store/api/injectedApis';
 import { Formik } from 'formik';
 import DatePickerUi from '../../components/ui/DatePicker';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
@@ -12,12 +11,11 @@ import EndUserDashboardScreen from './standard-user-dashboard/DashboardScreen';
 import SuperAdminDashboardScreen from './super-admin-dashboard/DashboardScreen';
 import AdminDashboardScreen from './Admin-dashboard/Dashboard-screen';
 import { useInVoiceContext } from '../../context/invoiceContext';
+import { useQuery } from '@tanstack/react-query';
+import { getInvoiceList } from '../../api/services';
 
 const DashboardScreen: React.FC = () => {
   const context = useInVoiceContext();
-  const [getDashboard, { isLoading, isError, error }] =
-    useGetDashboardMutation();
-  const [responseData, setResponseData] = useState<any>({});
   const userRole = context.userDetails.userRole;
   const today = dayjs();
   const [startDate, setStartDate] = useState<Dayjs | null>(
@@ -25,12 +23,28 @@ const DashboardScreen: React.FC = () => {
   );
   const [endDate, setEndDate] = useState<Dayjs | null>(today.endOf('month'));
   const [isCustomRange, setIsCustomRange] = useState(false);
+  let initialPayload = {
+    startDate: today.startOf('month').format('DD-MM-YYYY'),
+    endDate: today.endOf('month').format('DD-MM-YYYY'),
+  };
+  const [payload, setPayload] = useState(initialPayload);
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['getDashboard', payload],
+    queryFn: getInvoiceList,
+    staleTime: 5 * 60 * 1000,
+  });
 
   const handleApplyFilter = (
     startDate: Dayjs | null,
     endDate: Dayjs | null,
   ) => {
-    fetchDashboardData(startDate, endDate);
+    const formattedStartDate = startDate ? startDate.format('DD-MM-YYYY') : '';
+    const formattedEndDate = endDate ? endDate.format('DD-MM-YYYY') : '';
+    setPayload({
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+    });
   };
 
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
@@ -75,15 +89,19 @@ const DashboardScreen: React.FC = () => {
   const roleBasedDashboard = useCallback(
     (userRole: string) => {
       if (userRole === Roles.APPROVER) {
-        return <ApproverDashboardScreen approverData={responseData} />;
+        return <ApproverDashboardScreen approverData={!isError ? data : {}} />;
       } else if (userRole === Roles.STANDARDUSER) {
-        return <EndUserDashboardScreen standardUserData={responseData} />;
+        return (
+          <EndUserDashboardScreen standardUserData={!isError ? data : {}} />
+        );
       } else if (userRole === Roles.SUPERADMIN) {
-        return <SuperAdminDashboardScreen superAdminData={responseData} />;
+        return (
+          <SuperAdminDashboardScreen superAdminData={!isError ? data : {}} />
+        );
       } else {
         return (
           <AdminDashboardScreen
-            adminData={responseData}
+            adminData={!isError ? data : {}}
             isLoading={isLoading}
             isError={isError}
             error={error}
@@ -91,30 +109,8 @@ const DashboardScreen: React.FC = () => {
         );
       }
     },
-    [responseData, startDate, endDate, isLoading, isError, error],
+    [data, startDate, endDate, isLoading, isError, error],
   );
-
-  const fetchDashboardData = async (
-    startDate: Dayjs | null,
-    endDate: Dayjs | null,
-  ) => {
-    const formattedStartDate = startDate ? startDate.format('DD-MM-YYYY') : '';
-    const formattedEndDate = endDate ? endDate.format('DD-MM-YYYY') : '';
-    try {
-      const response = await getDashboard({
-        startDate: formattedStartDate,
-        endDate: formattedEndDate,
-      }).unwrap();
-      setResponseData(response ?? {});
-    } catch (error) {
-      console.error('Error fetching filtered dashboard data:', error);
-      setResponseData({});
-    }
-  };
-
-  useEffect(() => {
-    fetchDashboardData(startDate, endDate);
-  }, []);
 
   if (!userRole && isLoading) {
     return (

@@ -12,9 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Lock, Logout, Person, Settings } from '@mui/icons-material';
-import { logOut } from '../../redux-store/auth/authSlice';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store';
+import { logOut } from '../../api/services';
 import DialogBoxUi from '../ui/DialogBox';
 import UserProfile from '../../pages/profile/UserProfile';
 import ChangePassword from '../../pages/profile/ChangePassword';
@@ -159,7 +157,6 @@ export default function Header() {
   );
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const [popUpComponent, setPopUpComponent] = useState('');
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
   const userName = context.userDetails.userName || 'Guest';
@@ -180,8 +177,8 @@ export default function Header() {
     } else if (item.route) {
       navigate(item.route);
     } else if (item.action === 'logout') {
-      window.location.reload();
-      dispatch(logOut());
+      window.location.href = '/';
+      logOut();
     }
     setAnchorEl(null);
     setAddMenuAnchorEl(null);

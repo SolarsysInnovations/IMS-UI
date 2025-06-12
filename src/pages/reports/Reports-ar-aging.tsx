@@ -13,46 +13,38 @@ import { invoiceDate } from '../../constants/reportData';
 import { columns } from '../../constants/grid-table-data/Reports-table-data';
 import { AragingInitialValue } from '../../constants/forms/formikInitialValues';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
-import { ArAgingInitialValueProps } from '../../types/types';
-import { useGetReportInvoiceMutation } from '../../redux-store/api/injectedApis';
+import { ReportsValueProps } from '../../types/types';
+import { useMutation } from '@tanstack/react-query';
+import { reports } from '../../api/services';
 
 const ArAgingscreen: React.FC = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ArAging] = useGetReportInvoiceMutation();
   const [tableData, setTableData] = useState<any>();
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  const reportsMutation = useMutation({
+    mutationFn: reports,
+    onSuccess: (data) => {
+      setTableData(data);
+    },
+  });
 
   return (
     <div>
       <Formik
         initialValues={AragingInitialValue}
         validate={() => ({})}
-        onSubmit={async (
-          values: ArAgingInitialValueProps,
-          { setSubmitting, resetForm },
-        ) => {
+        onSubmit={async (values: ReportsValueProps, actions: any) => {
           try {
-            const response = await ArAging(values);
-            // Check if the response contains data or error
-            if ('data' in response) {
-              // If data exists, log it
-              const data = response.data;
-              setTableData(data);
-              // Reset form or update state with the data
-              resetForm();
-            } else if ('error' in response) {
-              // If error exists, handle the error
-              console.error('An error occurred', response.error);
-              // Handle error state or display error message
-            }
+            reportsMutation.mutate(values);
           } catch (error) {
             // Catch any unexpected errors during mutation call
             console.error('An unexpected error occurred', error);
           } finally {
-            setSubmitting(false);
+            actions.setSubmitting(false);
           }
         }}
       >

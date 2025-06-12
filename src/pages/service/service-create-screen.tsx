@@ -1,90 +1,67 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { serviceFields } from '../../constants/form-data/form-data-json';
 import { serviceInitialValues as defaultServiceInitialValues } from '../../constants/forms/formikInitialValues'; // Rename to avoid conflict
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import {
-  useCreateServiceMutation,
-  useGetServiceListQuery,
-  useUpdateServiceMutation,
-} from '../../redux-store/api/injectedApis';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../app/store';
-import { clearServiceData } from '../../redux-store/slices/serviceSlice';
 import { serviceCreationProps } from '../../types/types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  createService,
+  getSingleService,
+  updateService,
+} from '../../api/services';
 
-const ServiceCreate = ({ setOpenDialogBox }: any) => {
-  const { refetch } = useGetServiceListQuery();
-  const [
-    addService,
-    {
-      isSuccess: serviceAddSuccess,
-      isError: serviceAddError,
-      error: serviceAddErrorObject,
+const ServiceCreate = ({ setOpenDialogBox, id }: any) => {
+  const queryClient = useQueryClient();
+
+  const { data: serviceData, isLoading: isServiceLoading } = useQuery({
+    queryKey: ['getSingleService', id],
+    queryFn: ({ queryKey }) => {
+      const serviceId = queryKey[1];
+      if (!serviceId) throw new Error('Service ID is undefined');
+      return getSingleService(serviceId);
     },
-  ] = useCreateServiceMutation();
-  const [
-    updateService,
-    {
-      isSuccess: serviceUpdateSuccess,
-      isError: serviceUpdateError,
-      error: serviceUpdateErrorObject,
-    },
-  ] = useUpdateServiceMutation();
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  const serviceEditInitialValues = useSelector(
-    (state: any) => state.serviceState.data,
-  );
-
-  useSnackbarNotifications({
-    error: serviceAddError || serviceUpdateError,
-    errorObject: serviceAddErrorObject ?? serviceUpdateErrorObject,
-    errorMessage: 'Error creating or updating Service',
-    success: serviceAddSuccess || serviceUpdateSuccess,
-    successMessage: serviceAddSuccess
-      ? 'Service created successfully'
-      : 'Service updated successfully',
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000,
   });
 
-  useEffect(() => {
-    refetch();
-  }, [serviceUpdateSuccess, serviceAddSuccess, refetch]);
+  const createServiceMutation = useMutation({
+    mutationFn: createService,
+    onSuccess: () => {
+      setOpenDialogBox(false);
+      queryClient.invalidateQueries({ queryKey: ['getServiceList'] });
+    },
+  });
 
-  const initialValues = serviceEditInitialValues ?? defaultServiceInitialValues;
+  const updateServiceMutation = useMutation({
+    mutationFn: updateService,
+    onSuccess: () => {
+      setOpenDialogBox(false);
+      queryClient.invalidateQueries({ queryKey: ['getServiceList'] });
+    },
+  });
+  const isSuccess = createServiceMutation.isSuccess;
+
+  const initialValues = serviceData ?? defaultServiceInitialValues;
 
   const onSubmit = async (values: serviceCreationProps, actions: any) => {
     try {
-      if (serviceEditInitialValues) {
-        const id = serviceEditInitialValues.id;
-        if (!id) {
-          alert('id not specified');
-          return;
-        }
-        await updateService({ id, data: values }).unwrap();
-        dispatch(clearServiceData());
-        setOpenDialogBox(false);
-        actions.resetForm();
+      if (serviceData) {
+        updateServiceMutation.mutate({ id, payload: values });
       } else {
-        await addService(values).unwrap();
-        setOpenDialogBox(false);
+        createServiceMutation.mutate(values);
+      }
+      if (isSuccess) {
         actions.resetForm();
       }
     } catch (error: any) {
       console.error('An error occurred during form submission:', error);
-      if (error.data && error.data.message) {
-        alert(`Error: ${error.data.message}`);
-      } else if (error.message) {
-        alert(`Error: ${error.message}`);
-      } else {
-        alert('An unknown error occurred');
-      }
     } finally {
       actions.setSubmitting(false);
     }
   };
+
+  if (isServiceLoading) return <div>Loading...</div>;
 
   return (
     <DynamicFormCreate

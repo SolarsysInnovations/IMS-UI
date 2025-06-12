@@ -1,69 +1,58 @@
 import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import {
-  useAddCompanyLogoMutation,
-  useDeleteCompanyLogoMutation,
-  useGetCompanyLogoByIdQuery,
-  useGetCompanySettingByIdQuery,
-} from '../../../../src/redux-store/api/injectedApis';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
-import {
-  clearCompanyLogo,
-  setCompanyLogo,
-} from '../../../redux-store/global/globalState';
-import { useDispatch } from 'react-redux';
 import { useInVoiceContext } from '../../../context/invoiceContext';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  addCompanyLogo,
+  deleteCompanyLogo,
+  getcompanyLogo,
+} from '../../../api/services';
 
 const UploadScreen: React.FC = () => {
   const context = useInVoiceContext();
-  const dispatch = useDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(
     null,
   );
   const [base64String, setBase64String] = useState<string | null>(null);
-  const [companyDetails, setCompanyDetails] = useState<any>(null);
   const companyIdString = context.companyDetails.companyId ?? '';
 
-  // Fetch company data
-  const { data: companyData } = useGetCompanySettingByIdQuery(companyIdString);
-  const [
-    addCompanyLogo,
-    { isSuccess: uploadSuccess, isError: uploadError, data },
-  ] = useAddCompanyLogoMutation();
-  const [
-    deleteCompanyLogo,
-    { isSuccess: deleteCompanySuccess, isError: deleteCompanyError },
-  ] = useDeleteCompanyLogoMutation();
-
-  // Fetch logo data after company ID is available
-  const { id: companyId } = companyDetails ?? {};
   const {
     data: logoData,
     isSuccess: logoSuccess,
-    refetch: refetchLogo,
-  } = useGetCompanyLogoByIdQuery(companyId, { skip: !companyId });
+    refetch,
+  } = useQuery({
+    queryKey: ['getCompanyLogo', companyIdString],
+    queryFn: ({ queryKey }) => {
+      const [, companyIdString] = queryKey;
+      if (!companyIdString) throw new Error('CompanyId is missing');
+      return getcompanyLogo(companyIdString);
+    },
+    enabled: !!companyIdString,
+    staleTime: 5 * 60 * 1000,
+  });
 
-  useEffect(() => {
-    if (companyData) {
-      setCompanyDetails(companyData);
-    }
-  }, [companyData]);
-
-  useEffect(() => {
-    if (uploadSuccess && data && companyId) {
-      const responseData = data as { logoUrl: string };
-      dispatch(setCompanyLogo(responseData.logoUrl));
-      setLoading(false);
+  const addCompanyLogoMutation = useMutation({
+    mutationFn: addCompanyLogo,
+    onSuccess: () => {
       setSelectedFile(null);
       setImagePreview(null);
-      refetchLogo();
-    }
-  }, [uploadSuccess, data, companyId, dispatch, refetchLogo]);
+      refetch();
+    },
+  });
+
+  const deleteCompanyLogoMutation = useMutation({
+    mutationFn: deleteCompanyLogo,
+    onSuccess: () => {
+      setBase64String(null);
+      refetch();
+    },
+  });
+
+  const uploadLoading = addCompanyLogoMutation.isPending;
 
   useEffect(() => {
-    if (logoSuccess && logoData?.companyLogo) {
+    if (logoSuccess && logoData) {
       setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
     } else {
       setBase64String(null);
@@ -96,13 +85,9 @@ const UploadScreen: React.FC = () => {
     const confirmed = window.confirm(
       'Are you sure you want to delete this logo?',
     );
-    if (confirmed && companyId) {
+    if (confirmed && companyIdString) {
       try {
-        await deleteCompanyLogo(companyId).unwrap();
-        // Clear the logo from the Redux store
-        dispatch(clearCompanyLogo()); // Dispatch action to clear logo
-        setBase64String(null);
-        refetchLogo();
+        deleteCompanyLogoMutation.mutate(companyIdString);
       } catch (error) {
         console.error('Error deleting logo:', error);
       }
@@ -111,31 +96,15 @@ const UploadScreen: React.FC = () => {
 
   const handleSave = async () => {
     if (selectedFile) {
-      setLoading(true);
       try {
         const formData = new FormData();
         formData.append('companyLogo', selectedFile);
-        await addCompanyLogo(formData).unwrap();
+        addCompanyLogoMutation.mutate(formData);
       } catch (error) {
         console.error('Error uploading logo:', error);
-        setLoading(false);
       }
     }
   };
-
-  useSnackbarNotifications({
-    success: uploadSuccess,
-    successMessage: 'Logo uploaded successfully',
-    error: uploadError,
-    errorMessage: 'Error uploading logo',
-  });
-
-  useSnackbarNotifications({
-    success: deleteCompanySuccess,
-    successMessage: 'Logo deleted successfully',
-    error: deleteCompanyError,
-    errorMessage: 'Error deleting logo',
-  });
 
   return (
     <Grid
@@ -250,7 +219,7 @@ const UploadScreen: React.FC = () => {
                 borderRadius: '4px',
               }}
             />
-            {loading && (
+            {uploadLoading && (
               <CircularProgress
                 size={24}
                 sx={{
@@ -268,7 +237,7 @@ const UploadScreen: React.FC = () => {
           variant="contained"
           color="primary"
           onClick={handleSave}
-          disabled={!selectedFile || loading}
+          disabled={!selectedFile || uploadLoading}
           sx={{ marginTop: '20px' }}
         >
           Save

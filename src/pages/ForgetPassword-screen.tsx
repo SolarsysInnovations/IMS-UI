@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Avatar,
   Box,
@@ -13,54 +13,24 @@ import { forgetPwdInitialValue } from '../constants/forms/formikInitialValues';
 import TextFieldUi from '../components/ui/TextField';
 import ButtonUi from '../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { useSnackbarNotifications } from '../hooks/useSnackbarNotification'; // Snackbar hook
 import Container from '@mui/material/Container';
 import HelpIcon from '@mui/icons-material/Help';
-import { useForgetPwdMutation } from '../redux-store/api/injectedApis';
+import { useMutation } from '@tanstack/react-query';
+import { forgetPassword } from '../api/services';
 
 interface ForgetPasswordProps {
   userEmail: string;
 }
 
-interface ForgetPasswordResponse {
-  data?: {
-    message: string;
-  };
-  error?: any;
-}
-
 const ForgetPassword: React.FC = () => {
-  const [
-    forgetPassword,
-    {
-      isLoading: forgetPasswordLoading,
-      error: forgetPasswordErrorObject,
-      isSuccess: forgetPasswordSuccess,
-      isError: forgetPasswordError,
+  const forgetPasswordMutation = useMutation({
+    mutationFn: forgetPassword,
+    onSuccess: () => {
+      navigate('/');
     },
-  ] = useForgetPwdMutation();
-
-  const navigate = useNavigate();
-
-  // Display snackbar notifications for error or success
-  useSnackbarNotifications({
-    error: forgetPasswordError,
-    errorObject: forgetPasswordErrorObject,
-    errorMessage: 'Error sending mail',
-    success: forgetPasswordSuccess,
-    successMessage: 'Password reset email sent',
   });
 
-  useEffect(() => {
-    if (forgetPasswordSuccess) {
-      navigate('/login');
-    }
-  }, [forgetPasswordSuccess, navigate]);
-  // Helper function to check if error is FetchBaseQueryError
-  const isFetchBaseQueryError = (error: any): error is FetchBaseQueryError => {
-    return error && typeof error === 'object' && 'status' in error;
-  };
+  const navigate = useNavigate();
 
   return (
     <Formik
@@ -71,16 +41,10 @@ const ForgetPassword: React.FC = () => {
         { setSubmitting, resetForm },
       ) => {
         try {
-          const response: ForgetPasswordResponse =
-            await forgetPassword(values).unwrap(); // Use unwrap to handle errors directly
-
-          // Check for success message in response
-          if (response.data?.message) {
-            // Navigate to login on success
-          } else {
-            console.error('Error sending reset email:', response);
+          forgetPasswordMutation.mutate(values);
+          if (forgetPasswordMutation.isSuccess) {
+            resetForm();
           }
-          resetForm();
         } catch (error) {
           console.error('An error occurred during password reset:', error);
         } finally {
@@ -126,13 +90,12 @@ const ForgetPassword: React.FC = () => {
                         </Typography>
                       </Grid>
 
-                      {/* Email Field */}
                       <Grid item xs={12}>
                         <TextFieldUi
                           fullWidth
                           label="Enter your Email *"
                           name="userEmail"
-                          type="email" // Set input type to email
+                          type="email"
                           value={values.userEmail}
                           onChange={handleChange}
                           error={touched.userEmail && Boolean(errors.userEmail)}
@@ -140,11 +103,12 @@ const ForgetPassword: React.FC = () => {
                         />
                       </Grid>
 
-                      {/* Submit Button */}
                       <Grid item xs={12}>
                         <ButtonUi
                           fullWidth
-                          loading={isSubmitting || forgetPasswordLoading}
+                          loading={
+                            isSubmitting || forgetPasswordMutation.isPending
+                          }
                           color="primary"
                           label="Send"
                           variant="contained"
@@ -152,17 +116,6 @@ const ForgetPassword: React.FC = () => {
                         />
                       </Grid>
                     </Grid>
-
-                    {/* Error Message Display */}
-                    {forgetPasswordError && (
-                      <Typography color="error" variant="body2">
-                        {isFetchBaseQueryError(forgetPasswordError) &&
-                        forgetPasswordError.data
-                          ? (forgetPasswordError.data as { message: string })
-                              .message
-                          : 'An error occurred while sending the reset email'}
-                      </Typography>
-                    )}
                   </Form>
                 </Box>
               </CardContent>

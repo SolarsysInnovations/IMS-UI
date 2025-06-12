@@ -8,7 +8,6 @@ import {
 } from '@mui/icons-material';
 import usePathname from '../../hooks/usePathname';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import {
   Box,
   Button,
@@ -26,7 +25,6 @@ import {
   Typography,
 } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
-import { AppDispatch } from '../../app/store';
 import RadioUi from '../../components/ui/RadioGroup';
 import { Form, Formik } from 'formik';
 import { invoiceValidationSchema } from '../../constants/forms/validations/validationSchema';
@@ -41,26 +39,21 @@ import GstTypeScreen from './GstType/GstTypeScreen';
 import TdsTaxScreen from './TdsTax/TdsTaxScreen';
 import PaymentTermsScreen from './paymentTerms/PaymentTermsScreen';
 import { addDays, format } from 'date-fns';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import SelectDropdown from '../../components/ui/SelectDropdown';
-import {
-  useCreateInvoiceMutation,
-  useGetCustomersListQuery,
-  useGetGstTypeListQuery,
-  useGetInvoiceListQuery,
-  useGetPaymentTermsListQuery,
-  useGetServiceListQuery,
-  useGetTdsTaxListQuery,
-  useUpdateInvoiceMutation,
-} from '../../redux-store/api/injectedApis';
-import {
-  clearInvoiceData,
-  setInvoiceData,
-} from '../../redux-store/slices/invoiceSlice';
 import ServiceScreen from './service/ServiceScreen';
 import { useRolePermissions } from '../../hooks/useRolePermission';
 import CancelIcon from '@mui/icons-material/Close';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  createInvoice,
+  getCustomerList,
+  getGstTypeList,
+  getPaymentTermsList,
+  getServiceList,
+  getTdsTaxList,
+  updateInvoice,
+} from '../../api/services';
 
 interface Service {
   id: string;
@@ -80,35 +73,16 @@ const invoiceType = [
 ];
 
 const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
-  const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [popUpComponent, setPopUpComponent] = useState('');
-  const { data: customers, refetch: customerRefetch } =
-    useGetCustomersListQuery();
-  const { refetch: invoiceRefetch } = useGetInvoiceListQuery();
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(
     null,
   );
   const [image, setImage] = useState<string | null>(null);
-  const [
-    addInvoice,
-    {
-      isSuccess: addInvoiceSuccess,
-      isError: addInvoiceError,
-      error: addInvoiceErrorObject,
-    },
-  ] = useCreateInvoiceMutation();
-  const [
-    updateInvoice,
-    {
-      isSuccess: invoiceUpdatedSuccess,
-      isError: invoiceUpdateError,
-      error: invoiceUpdateErrorObject,
-    },
-  ] = useUpdateInvoiceMutation();
   const [openDialogBox, setOpenDialogBox] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean | undefined>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [subTotalInvoiceAmount, setSubTotalInvoiceAmount] = useState(0);
   const [discountPercentage, setDiscountPercentage] = useState<number | null>(
     null,
@@ -118,21 +92,65 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   const [tdsAmount, setTdsAmount] = useState<number | null>(null);
   const [invoiceTotalAmount, setInvoiceTotalAmount] = useState<number | null>();
   const [retainerAmount, setRetainerAmount] = useState(0);
-  // * * * * * * * grid table states * * * * * * * * *
-  // const [addCustomer, { isLoading, isSuccess, isError, error }] = useAddCustomerMutation();
-  const { data: serviceList } = useGetServiceListQuery();
-  const { data: paymentTerms } = useGetPaymentTermsListQuery();
   const [modifiedServiceList, setModifiedServiceList] = React.useState<
     Service[]
   >([]);
-  const rowIdCounter = React.useRef<number>(0); // Ref for keeping track of row IDs
+  const rowIdCounter = React.useRef<number>(0);
   const [invoiceValues, setInvoiceValues] = useState(
     invoiceValue ?? invoiceCreateInitialValue,
   );
-  const { data: gstTypesData = [] } = useGetGstTypeListQuery();
-  const { data: tdsTaxData = [] } = useGetTdsTaxListQuery();
-  const [redirect, setRedirect] = useState(false);
-  // * ----------- to generate the dropdown options -------------
+  const [inVoiceData, setInVoiceData] = useState();
+
+  const createInvoiceMutation = useMutation({
+    mutationFn: createInvoice,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'getInvoiceList',
+      });
+      navigate(-1);
+    },
+  });
+
+  const updateInvoiceMutation = useMutation({
+    mutationFn: updateInvoice,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'getInvoiceList',
+      });
+      navigate(-1);
+    },
+  });
+
+  const { data: customers } = useQuery({
+    queryKey: ['getCustomerList'],
+    queryFn: getCustomerList,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: serviceList } = useQuery({
+    queryKey: ['getServiceList'],
+    queryFn: getServiceList,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: paymentTerms } = useQuery({
+    queryKey: ['getPaymentTerms'],
+    queryFn: getPaymentTermsList,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: gstTypesData } = useQuery({
+    queryKey: ['getGstTypeList'],
+    queryFn: getGstTypeList,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: tdsTaxData } = useQuery({
+    queryKey: ['getTdsTaxList'],
+    queryFn: getTdsTaxList,
+    staleTime: 5 * 60 * 1000,
+  });
+
   const customerName = generateOptions(
     customers,
     'customerName',
@@ -145,8 +163,10 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     'termName',
     'termName',
   );
-  const [preview, setPreview] = useState(false);
-  const [resMessage, setResMessage] = useState('');
+
+  const isSuccess =
+    updateInvoiceMutation.isSuccess || createInvoiceMutation.isSuccess;
+
   const { canCreateTds, canCreateGst, canCreatePayment, canCreateService } =
     useRolePermissions();
 
@@ -157,42 +177,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     SERVICES: 'services',
     INVOICE: 'invoice',
   };
-
-  useEffect(() => {
-    customerRefetch();
-  }, [dispatch, customerRefetch]);
-
-  useEffect(() => {
-    invoiceRefetch();
-  }, [addInvoiceSuccess, invoiceRefetch]);
-
-  useSnackbarNotifications({
-    success: addInvoiceSuccess,
-    error: addInvoiceError,
-    successMessage: resMessage,
-    errorMessage: 'Error adding invoice',
-    errorObject: addInvoiceErrorObject,
-  });
-
-  useSnackbarNotifications({
-    success: invoiceUpdatedSuccess,
-    error: invoiceUpdateError,
-    successMessage: resMessage || 'Invoice Updated Successfully',
-    errorMessage: 'Error updating invoice',
-    errorObject: invoiceUpdateErrorObject,
-  });
-
-  useEffect(() => {
-    if (addInvoiceSuccess || invoiceUpdatedSuccess) {
-      setRedirect(true);
-    }
-  }, [addInvoiceSuccess, invoiceUpdatedSuccess]);
-
-  useEffect(() => {
-    if (redirect) {
-      navigate(-1);
-    }
-  }, [redirect, navigate]);
 
   useEffect(() => {
     if (invoiceValues) {
@@ -236,7 +220,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   useEffect(() => {
     if (serviceList) {
       const mappedServiceList = serviceList.map((s: any) => ({
-        id: `${rowIdCounter.current++}`, // Manually assign unique ID
+        id: `${rowIdCounter.current++}`,
         serviceAccountingCode: s.serviceAccountingCode,
         serviceDescription: s.serviceDescription,
         serviceHours: 0,
@@ -247,7 +231,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     }
   }, [serviceList]);
 
-  // * this is for edit screen only
   useEffect(() => {
     if (invoiceValue) {
       const data = tdsTaxData?.find(
@@ -263,7 +246,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
     index: number,
   ) => {
     const { value } = event.target;
-    const parsedValue = parseInt(value); // Parse the value to an integer
+    const parsedValue = parseInt(value);
     setInvoiceValues((prevInvoiceValues: any) => {
       const updatedServicesList = prevInvoiceValues.servicesList.map(
         (service: any, serviceIndex: any) => {
@@ -303,16 +286,13 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
   };
 
   const handleRemoveRow = (id: string) => {
-    // Find the index of the row with the provided id in invoiceValues.servicesList
     const index = invoiceValues.servicesList.findIndex(
       (row: any) => row.id === id,
     );
     if (index !== -1) {
-      // Create a new array without the removed row
       const updatedServicesList = invoiceValues.servicesList.filter(
         (_: any, idx: any) => idx !== index,
       );
-      // Update the state with the new array
       setInvoiceValues((prevState: any) => ({
         ...prevState,
         servicesList: updatedServicesList,
@@ -370,13 +350,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
       return <ServiceScreen />;
     } else if (popUpComponent === PopupComponents.INVOICE) {
       return (
-        <InvoiceUi
-          preview={preview}
-          discount={discountAmount}
-          subtotal={subTotalInvoiceAmount}
-          tds={tdsAmount}
-          setIsModalOpen={setIsModalOpen}
-        />
+        <InvoiceUi invoiceData={inVoiceData} setIsModalOpen={setIsModalOpen} />
       );
     } else {
       return null;
@@ -395,24 +369,20 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
           values.servicesList = invoiceValues.servicesList;
           values.totalAmount = invoiceTotalAmount ?? null;
           if (invoiceValue) {
-            const response = await updateInvoice({
+            updateInvoiceMutation.mutate({
               id: invoiceValue.id,
               data: values,
             });
-            setResMessage(response.data.message);
-            dispatch(clearInvoiceData());
-            resetForm();
-            navigate(-1);
           } else {
             const updatedInvoiceValues = {
               ...values,
               signatureFile: image,
             };
-            const response = await addInvoice(updatedInvoiceValues);
-            setResMessage(response.data.message);
+            createInvoiceMutation.mutate(updatedInvoiceValues);
+          }
+          if (isSuccess) {
             resetForm();
           }
-          resetForm();
           setInvoiceValues({ ...invoiceValues });
         } catch (error) {
           console.error('Error submitting form:', error);
@@ -445,11 +415,8 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                       servicesList: invoiceValues.servicesList ?? null,
                       totalAmount: invoiceTotalAmount ?? null,
                     };
-                    dispatch(setInvoiceData(updatedValue));
-
-                    setPreview(false);
+                    setInVoiceData(updatedValue);
                     setIsModalOpen(true);
-                    dispatch(setInvoiceData(updatedValue));
                   },
                   disabled: !(isValid && dirty),
                 },
@@ -476,7 +443,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                 },
               ]}
             />
-            {/* ---------- payment Terms, gst type, tds tax screens ---------- */}
             <DialogBoxUi
               open={openDialogBox}
               content={handlePopupComponents(popUpComponent)}
@@ -557,7 +523,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                               'customerPhone',
                               selectedCustomerDetails.customerPhone,
                             );
-                            // Add more fields if required
                           }
                         } else {
                           setFieldValue('customerName', '');
@@ -658,7 +623,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         }}
                         onChange={(newValue: any) => {
                           if (newValue) {
-                            // Determine the number of days based on the selected term
                             let totalDays;
                             switch (newValue.value) {
                               case 'monthly':
@@ -671,7 +635,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 totalDays = 365;
                                 break;
                               default:
-                                totalDays = 0; // Default to 0 if an unknown term is selected
+                                totalDays = 0;
                             }
 
                             if (totalDays > 0) {
@@ -722,7 +686,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         onChange={(newValue: any) => {
                           if (newValue) {
                             const selectedPaymentTerms = paymentTerms?.find(
-                              (item) => item.termName === newValue.value,
+                              (item: any) => item.termName === newValue.value,
                             );
                             if (selectedPaymentTerms) {
                               const today = new Date();
@@ -892,7 +856,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 <TextFieldUi
                                   type="number"
                                   value={item?.serviceHours}
-                                  // label='INout sample'
                                   onChange={(e) =>
                                     handleQuantityChange(e, index)
                                   }
@@ -902,7 +865,6 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                                 <TextFieldUi
                                   type="number"
                                   value={item?.serviceAmount}
-                                  // label='INout sample'
                                 />
                               </TableCell>
                               <TableCell align="right">
@@ -1063,7 +1025,7 @@ const InvoiceFormScreen = ({ invoiceValue }: InvoiceGetValueProps) => {
                         onChange={(newValue: any) => {
                           if (newValue) {
                             const selectedTdsTax = tdsTaxData.find(
-                              (item) => item.taxName === newValue.value,
+                              (item: any) => item.taxName === newValue.value,
                             );
                             if (selectedTdsTax) {
                               setFieldValue('taxAmount.tds', newValue.value);

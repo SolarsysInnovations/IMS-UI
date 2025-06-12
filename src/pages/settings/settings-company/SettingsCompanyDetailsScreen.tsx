@@ -1,53 +1,61 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../app/store';
-import {
-  useGetCompanyLogoByIdQuery,
-  useGetCompanySettingByIdQuery,
-  useGetSingleCompanySettingMutation,
-} from '../../../redux-store/api/injectedApis';
 import { Box, CircularProgress, Grid } from '@mui/material';
-import { setData } from '../../../redux-store/global/globalState';
 import TableHeader from '../../../components/layouts/TableHeader';
 import SettingsCompanyForm from './SettingsCompanyForm';
 import { Edit } from '@mui/icons-material';
 import DialogBoxUi from '../../../components/ui/DialogBox';
 import { useInVoiceContext } from '../../../context/invoiceContext';
 import { Roles } from '../../../constants/Enums';
+import { useQuery } from '@tanstack/react-query';
+import { getCompanyData, getcompanyLogo } from '../../../api/services';
 
 const SettingsCompanyDetailsScreen: React.FC = () => {
   const context = useInVoiceContext();
-  const dispatch = useDispatch<AppDispatch>();
+  const userRole = context.userDetails.userRole;
+  const userId = context.userDetails.userId;
+  const companyId = context.companyDetails.companyId;
   const [companyDetails, setCompanyDetails] = useState<any>(null);
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const [base64String, setBase64String] = useState<string | null>(null);
-  const userRole = context.userDetails.userRole;
-  const userId = context.userDetails.userId;
-  const { id: companyId } = companyDetails ?? {};
+
   const {
     data: companyData,
     isLoading: isCompanyLoading,
-    refetch: refetchCompanyData,
-  } = useGetCompanySettingByIdQuery(userId);
-
-  const [getData] = useGetSingleCompanySettingMutation();
+    isSuccess: isCompanySuccess,
+  } = useQuery({
+    queryKey: ['getCompanyData', userId],
+    queryFn: ({ queryKey }) => {
+      const [, userId] = queryKey;
+      if (!userId) throw new Error('UserId is missing');
+      return getCompanyData(userId);
+    },
+    enabled: !!userId,
+    staleTime: 5 * 60 * 1000,
+  });
 
   const {
     data: logoData,
-    isLoading: logoLoading,
-    isSuccess: logoSuccess,
-    refetch: refetchLogoData,
-  } = useGetCompanyLogoByIdQuery(companyId, {
-    skip: !companyId,
+    isLoading: idLogoLoading,
+    isSuccess: isLogoSuccess,
+    isError: isLogoError,
+  } = useQuery({
+    queryKey: ['getCompanyLogo', companyId],
+    queryFn: ({ queryKey }) => {
+      const [, companyId] = queryKey;
+      if (!companyId) throw new Error('CompanyId is missing');
+      return getcompanyLogo(companyId);
+    },
+    enabled: !!companyId,
+    staleTime: 5 * 60 * 1000,
   });
 
   useEffect(() => {
-    if (logoSuccess && logoData?.companyLogo) {
+    if (isLogoSuccess) {
       setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
     } else {
       setBase64String(null);
     }
-  }, [logoSuccess, logoData]);
+  }, [logoData, isLogoSuccess, isLogoError]);
 
   useEffect(() => {
     if (companyData) {
@@ -55,37 +63,11 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
     }
   }, [companyData]);
 
-  useEffect(() => {
-    if (userId) {
-      refetchCompanyData();
-    }
-    if (companyId) {
-      refetchLogoData();
-    }
-  }, [userId, companyId, refetchCompanyData, refetchLogoData]);
-
   const handleEditClick = async () => {
-    if (!companyDetails?.id) {
-      console.error('Company ID is not defined.');
-      return;
-    }
-    try {
-      const response = await getData(companyDetails.id);
-      if ('data' in response) {
-        const companyData = response.data;
-        dispatch(setData(companyData));
-        setOpenDialogBox(true);
-      } else {
-        console.error('Error response:', response.error);
-      }
-    } catch (error) {
-      console.error('Error handling edit click:', error);
-    }
+    setOpenDialogBox(true);
   };
 
   const handleCloseDialog = () => {
-    refetchCompanyData();
-    refetchLogoData();
     setOpenDialogBox(false);
   };
 
@@ -94,11 +76,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
       ? [{ label: 'Edit', icon: Edit, onClick: handleEditClick }]
       : [];
 
-  if (!companyDetails) {
-    return <div></div>;
-  }
-
-  if (isCompanyLoading || logoLoading) {
+  if (isCompanyLoading || idLogoLoading) {
     return (
       <Grid
         item
@@ -128,7 +106,7 @@ const SettingsCompanyDetailsScreen: React.FC = () => {
       />
       <TableHeader buttons={button} />
 
-      {userId && (
+      {isCompanySuccess && (
         <Grid
           container
           sx={{ backgroundColor: '#f8f9f9', padding: '20px 20px' }}

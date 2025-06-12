@@ -1,89 +1,58 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { linkFields } from '../../../constants/form-data/form-data-json';
 import { linkInitialValues } from '../../../constants/forms/formikInitialValues';
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { linkValidationSchema } from '../../../constants/forms/validations/validationSchema';
-import {
-  useAddPortalLinkMutation,
-  useGetPortalLinkQuery,
-  useUpdatePortalLinkMutation,
-} from '../../../redux-store/api/injectedApis';
 import { LinkFormProps } from '../../../types/types';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../app/store';
-import { clearData } from '../../../redux-store/global/globalState';
 import { useNavigate } from 'react-router-dom';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { addPortalLink, updatePortalLink } from '../../../api/services';
 
 const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [
-    addLink,
-    {
-      isSuccess: linkAddSuccess,
-      isError: linkAddError,
-      error: linkAddErrorObject,
+  const queryClient = useQueryClient();
+
+  const addLinkMutation = useMutation({
+    mutationFn: addPortalLink,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getPortalList'] });
+      handleClose();
     },
-  ] = useAddPortalLinkMutation();
-  const [
-    updateLink,
-    {
-      isSuccess: linkUpdateSuccess,
-      isError: linkUpdateError,
-      error: linkUpdateErrorObject,
+  });
+
+  const updateLinkMutation = useMutation({
+    mutationFn: updatePortalLink,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getPortalList'] });
+      handleClose();
     },
-  ] = useUpdatePortalLinkMutation();
-  const { refetch } = useGetPortalLinkQuery();
+  });
+
+  const isSuccess = addLinkMutation.isSuccess;
 
   const initialValue = linkValue || linkInitialValues;
 
   const handleBackClick = () => {
-    handleClose(); // Close modal
-    navigate(0); // Navigate back
+    handleClose();
+    navigate(0);
   };
 
-  const updateFormValue = (setFieldValue: Function) => {
-    // Update form values
-  };
-
-  useSnackbarNotifications({
-    error: linkAddError,
-    errorObject: linkAddErrorObject,
-    errorMessage: 'Error creating Link',
-    success: linkAddSuccess,
-    successMessage: 'Link created successfully',
-  });
-
-  useSnackbarNotifications({
-    error: linkUpdateError,
-    errorObject: linkUpdateErrorObject,
-    errorMessage: 'Error updating Link',
-    success: linkUpdateSuccess,
-    successMessage: 'Link updated successfully',
-  });
+  const updateFormValue = (setFieldValue: Function) => {};
 
   const onSubmit = async (values: LinkFormProps, actions: any) => {
     try {
       if (linkValue) {
-        await updateLink({ id: linkValue.id, link: values }).unwrap();
+        updateLinkMutation.mutate({ id: linkValue.id, data: values });
       } else {
-        await addLink(values).unwrap();
+        addLinkMutation.mutate(values);
       }
-      actions.resetForm();
-      dispatch(clearData());
-      handleClose(); // Close modal after saving
-      refetch(); // Refetch updated list
+      if (isSuccess) {
+        actions.resetForm();
+      }
     } catch (error) {
       console.error('An error occurred during form submission:', error);
     }
   };
-
-  useEffect(() => {
-    if (linkAddSuccess || linkUpdateSuccess) {
-      handleClose(); // Close modal on successful add or update
-    }
-  }, [linkAddSuccess, linkUpdateSuccess, handleClose]);
 
   return (
     <DynamicFormCreate

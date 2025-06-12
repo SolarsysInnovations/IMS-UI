@@ -1,20 +1,21 @@
-import { useSelector } from 'react-redux';
 import GstTypeList from './GstTypeList';
 import GstTypeForm from './GstTypeCreate';
 import { useEffect, useState } from 'react';
+import { useTaxConfigContext } from '../../../context/taxConfigContext';
 
 const GstTypeScreen: React.FC = () => {
-  const gstValue = useSelector((state: any) => state.gstTypeState.data);
+  const context = useTaxConfigContext();
+  const gstValue = context.gstTypeConfig.gstType;
+  const mode = context.mode;
   const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
-    // Whenever gstValue changes, update the key to force re-render
     setKey((prevKey: number) => prevKey + 1);
   }, [gstValue]);
 
   return (
     <>
-      <GstTypeForm key={key} gstTypeValue={gstValue} />
+      <GstTypeForm key={key} mode={mode} gstTypeValue={gstValue} />
       <GstTypeList />
     </>
   );

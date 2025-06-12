@@ -1,76 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
-import { setRoleData } from '../../redux-store/role/roleApi';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import { AppDispatch } from '../../app/store';
-import { useDispatch } from 'react-redux';
 import DialogBoxUi from '../../components/ui/DialogBox';
-import {
-  useDeleteUserMutation,
-  useGetUserRoleMutation,
-  useGetUsersListQuery,
-} from '../../redux-store/api/injectedApis';
 import UserForm from './UserForm';
 import ActionButtons from '../../components/ui/ActionButtons';
 import TableHeader from '../../components/layouts/TableHeader';
 import UserDetails from './UserDetaills';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteUser, getUserDetails } from '../../api/services';
 
 interface MyCellRendererProps {
   id: number;
 }
+
 interface UserData {
   id: string;
   userName: string;
   userEmail: string;
   userMobile: number;
   userRole: string;
-
-  // Add other fields as necessary
 }
 
 const MyCellRenderer = ({ id }: MyCellRendererProps) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const queryClient = useQueryClient();
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const [dialogContent, setDialogContent] = useState<'view' | 'edit' | null>(
     null,
   );
-  const [userData, setUserData] = useState<UserData | null | undefined | void>(
-    null,
-  );
-  const { refetch } = useGetUsersListQuery();
+  const [userData, setUserData] = useState<UserData | null>(null);
 
-  const [getUserRole, { data: roleData, isSuccess: C_success }] =
-    useGetUserRoleMutation();
-  const [
-    deleteUser,
-    { isSuccess: roleDeleteSuccess, isError: roleDeleteError },
-  ] = useDeleteUserMutation();
-
-  useSnackbarNotifications({
-    success: roleDeleteSuccess,
-    error: roleDeleteError,
-    successMessage: 'User deleted successfully',
-    errorMessage: 'Error deleting user',
+  const getUserDetailsMutation = useMutation({
+    mutationFn: getUserDetails,
+    onSuccess: (data) => {
+      setUserData(data);
+      setOpenDialogBox(true);
+    },
   });
-  useEffect(() => {
-    refetch();
-  }, [roleDeleteSuccess, refetch]);
 
-  useEffect(() => {
-    dispatch(setRoleData(roleData));
-  }, [roleData, dispatch, C_success]);
+  const roleDeleteMutation = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['usersList'] });
+    },
+  });
+
   const handleViewClick = async () => {
     try {
-      const response = await getUserRole(id.toString());
-      if ('data' in response) {
-        setUserData(response.data); // Ensures data is defined
-        dispatch(setRoleData(response.data));
-        setDialogContent('view');
-        setOpenDialogBox(true);
-      } else {
-        console.error('Error fetching user data: No data found in response');
-      }
+      setDialogContent('view');
+      getUserDetailsMutation.mutate(id.toString());
     } catch (error) {
       console.error('Error in handleViewClick:', error);
     }
@@ -78,15 +55,8 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
 
   const handleEditClick = async () => {
     try {
-      const response = await getUserRole(id.toString());
-      if ('data' in response) {
-        setUserData(response.data); // Ensures data is defined
-        dispatch(setRoleData(response.data));
-        setDialogContent('edit');
-        setOpenDialogBox(true);
-      } else {
-        console.error('Error fetching user data: No data found in response');
-      }
+      setDialogContent('edit');
+      getUserDetailsMutation.mutate(id.toString());
     } catch (error) {
       console.error('Error in handleEditClick:', error);
     }
@@ -97,7 +67,7 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
       'Are you sure you want to delete this user?',
     );
     if (confirmed) {
-      deleteUser(id);
+      roleDeleteMutation.mutate(id.toString());
     }
   };
 
@@ -120,7 +90,6 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
           userEditValue={userData}
           mode="edit"
           onClose={handleCloseDialog}
-          refetchUserList={refetch}
         />
       );
     } else {
