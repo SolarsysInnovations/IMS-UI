@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2025-06-12
+
+## Changed
+
+- Completed the tanstack query implementation
+
+---
+
+
 ## [2.0.6] - 2025-06-09
 
 ## Changed
