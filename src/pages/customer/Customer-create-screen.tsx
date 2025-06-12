@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { setData } from '../../redux-store/global/globalState';
 import { useNavigate } from 'react-router-dom';
 import { customerFields } from '../../constants/form-data/form-data-json';
 import { customerInitialValues } from '../../constants/forms/formikInitialValues';
@@ -66,7 +65,6 @@ const CustomerCreate = ({ customerEditInitialValues }: CustomerValueProps) => {
 
   return (
     <DynamicFormCreate
-      setData={setData}
       showTable={true}
       fields={customerFields}
       initialValues={initialValues}

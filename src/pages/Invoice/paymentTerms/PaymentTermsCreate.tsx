@@ -5,7 +5,6 @@ import { paymentTermsValidationSchema } from '../../../constants/forms/validatio
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { PaymentTermsFormProps, PaymentTermsProps } from '../../../types/types';
 import { Save } from '@mui/icons-material';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPaymentTerms, updatePaymentTerms } from '../../../api/services';
 import { useTaxConfigContext } from '../../../context/taxConfigContext';
@@ -38,8 +37,6 @@ const PaymentTermsForm = ({
   const isSuccess =
     createPaymentTermsMutation.isSuccess ||
     updatePaymentTermsMutation.isSuccess;
-  const isError =
-    createPaymentTermsMutation.isError || updatePaymentTermsMutation.isError;
 
   const initialValues =
     mode === 'edit' ? paymentTermsValue : paymentTermsInitialValue;
@@ -71,20 +68,6 @@ const PaymentTermsForm = ({
     },
     [paymentTermsValue, isSuccess, mode],
   );
-
-  // * --------- add paymentTerms ------------
-  useSnackbarNotifications({
-    error: isError,
-    errorMessage:
-      mode === 'edit'
-        ? 'Error updating Payment Terms'
-        : 'Error creating Payment Terms',
-    success: isSuccess,
-    successMessage:
-      mode === 'edit'
-        ? 'Payment Terms updated successfully'
-        : 'Payment Terms created successfully',
-  });
 
   return (
     <div>

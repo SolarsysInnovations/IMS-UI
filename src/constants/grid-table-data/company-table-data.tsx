@@ -3,7 +3,6 @@ import { GridColDef } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import CompanyDetails from '../../pages/super-admin-company/companyDetailsScreen';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import TableHeader from '../../components/layouts/TableHeader';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import ActionButtons from '../../components/ui/ActionButtons';
@@ -32,17 +31,6 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getCompanyList'] });
     },
-  });
-
-  const isError = deleteCompanyMutation.isError;
-  const isSuccess = deleteCompanyMutation.isSuccess;
-
-  // Snackbar notifications
-  useSnackbarNotifications({
-    error: isError,
-    errorMessage: 'Error deleting company',
-    success: isSuccess,
-    successMessage: 'Company deleted successfully',
   });
 
   const handleDialogOpen = async () => {

@@ -11,11 +11,6 @@ export interface ForgetPwdProps {
   userEmail: string;
 }
 
-export interface ResetPwdProps {
-  token: string;
-  newPassword: string;
-}
-
 export interface GstTypeProps {
   id?: string | undefined;
   gstName: string;
@@ -80,7 +75,6 @@ export interface FormProps {
   onClose?: () => void;
   showTable?: boolean;
   onSubmit: (values: any, actions: any) => void;
-  setData?: any;
   updateFormValue?: (setFieldValue: Function) => void;
   headerName?: string;
   isSuccessToast?: boolean;

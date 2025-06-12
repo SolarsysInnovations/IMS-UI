@@ -5,7 +5,6 @@ import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-for
 import { linkValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { LinkFormProps } from '../../../types/types';
 import { useNavigate } from 'react-router-dom';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addPortalLink, updatePortalLink } from '../../../api/services';
 
@@ -30,7 +29,6 @@ const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
   });
 
   const isSuccess = addLinkMutation.isSuccess;
-  const isError = addLinkMutation.isError;
 
   const initialValue = linkValue || linkInitialValues;
 
@@ -40,15 +38,6 @@ const PortalLinkCreate = ({ linkValue, handleClose }: LinkFormProps) => {
   };
 
   const updateFormValue = (setFieldValue: Function) => {};
-
-  useSnackbarNotifications({
-    error: isError,
-    errorMessage: 'Error creating Link',
-    success: isSuccess,
-    successMessage: linkValue
-      ? 'Link updated successfully'
-      : 'Link created successfully',
-  });
 
   const onSubmit = async (values: LinkFormProps, actions: any) => {
     try {

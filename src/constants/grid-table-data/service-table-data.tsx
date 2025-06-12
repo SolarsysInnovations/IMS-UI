@@ -3,7 +3,6 @@ import { GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import ServiceCreate from '../../pages/service/service-create-screen';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import ActionButtons from '../../components/ui/ActionButtons';
 import { useRolePermissions } from '../../hooks/useRolePermission';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -19,18 +18,8 @@ const MyCellRenderer = ({ id }: { id: any }) => {
     },
   });
 
-  const isError = deleteServiceMutation.isError;
-  const isSuccess = deleteServiceMutation.isSuccess;
-
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const { canEditServices, canDeleteServices } = useRolePermissions();
-
-  useSnackbarNotifications({
-    error: isError,
-    errorMessage: 'Error adding Service',
-    success: isSuccess,
-    successMessage: 'Service deleted successfully',
-  });
 
   const handleEditClick = async () => {
     setOpenDialogBox(true);

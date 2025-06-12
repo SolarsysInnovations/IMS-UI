@@ -1,7 +1,6 @@
 import { IconButton, Stack } from '@mui/material';
 import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteTdsTax, getSingleTdsTax } from '../../../api/services';
 import { useTaxConfigContext } from '../../../context/taxConfigContext';
@@ -36,13 +35,6 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       console.error('Error fetching data:', error);
     }
   };
-
-  useSnackbarNotifications({
-    error: deleteTdsTaxMuation.isError,
-    errorMessage: 'Error deleting TdsTax',
-    success: deleteTdsTaxMuation.isSuccess,
-    successMessage: 'TdsTax deleted successfully',
-  });
 
   const handleDeleteClick = () => {
     const confirmed = window.confirm(

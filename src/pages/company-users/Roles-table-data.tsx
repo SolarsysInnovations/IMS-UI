@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import DialogBoxUi from '../../components/ui/DialogBox';
 import UserForm from './UserForm';
 import ActionButtons from '../../components/ui/ActionButtons';
@@ -43,13 +42,6 @@ const MyCellRenderer = ({ id }: MyCellRendererProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['usersList'] });
     },
-  });
-
-  useSnackbarNotifications({
-    success: roleDeleteMutation.isSuccess,
-    error: roleDeleteMutation.isError,
-    successMessage: 'User deleted successfully',
-    errorMessage: 'Error deleting user',
   });
 
   const handleViewClick = async () => {

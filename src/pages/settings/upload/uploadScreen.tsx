@@ -1,6 +1,5 @@
 import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useInVoiceContext } from '../../../context/invoiceContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
@@ -51,10 +50,6 @@ const UploadScreen: React.FC = () => {
   });
 
   const uploadLoading = addCompanyLogoMutation.isPending;
-  const uploadSuccess = addCompanyLogoMutation.isSuccess;
-  const uploadError = addCompanyLogoMutation.isError;
-  const deleteSuccess = deleteCompanyLogoMutation.isSuccess;
-  const deleteError = deleteCompanyLogoMutation.isError;
 
   useEffect(() => {
     if (logoSuccess && logoData) {
@@ -110,20 +105,6 @@ const UploadScreen: React.FC = () => {
       }
     }
   };
-
-  useSnackbarNotifications({
-    success: uploadSuccess,
-    successMessage: 'Logo uploaded successfully',
-    error: uploadError,
-    errorMessage: 'Error uploading logo',
-  });
-
-  useSnackbarNotifications({
-    success: deleteSuccess,
-    successMessage: 'Logo deleted successfully',
-    error: deleteError,
-    errorMessage: 'Error deleting logo',
-  });
 
   return (
     <Grid

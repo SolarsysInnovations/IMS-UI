@@ -1,7 +1,6 @@
 import { IconButton, Stack } from '@mui/material';
 import { GridColDef, GridDeleteIcon } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   deletePaymentTerms,
@@ -48,13 +47,6 @@ const MyCellRenderer = ({ id }: { id: any }) => {
       deletePaymentTermsMutation.mutate(id);
     }
   };
-
-  useSnackbarNotifications({
-    error: deletePaymentTermsMutation.isError,
-    errorMessage: 'Error updating Payment Terms',
-    success: deletePaymentTermsMutation.isSuccess,
-    successMessage: 'Payment terms deleted successfully',
-  });
 
   return (
     <Stack direction="row" spacing={1}>

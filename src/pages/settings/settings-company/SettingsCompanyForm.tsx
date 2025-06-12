@@ -2,7 +2,6 @@ import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-for
 import { settingsCompanyeditValidationSchema } from '../../../constants/forms/validations/validationSchema';
 import { CompanyFormProps } from '../../../types/types';
 import { CompanyDetailsFields } from '../../../constants/form-data/form-data-json';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { superAdminCompanyUsersInitialValues } from '../../../constants/forms/formikInitialValues';
 import { ToastContainer, toast } from 'react-toastify';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -36,21 +35,7 @@ const SettingsCompanyForm = ({
   });
 
   const initialValue = companyValue || superAdminCompanyUsersInitialValues;
-  const isError = updateCompanyMutation.isError || addCompanyMutation.isError;
-  const isSuccess =
-    updateCompanyMutation.isSuccess || addCompanyMutation.isSuccess;
   const fields = CompanyDetailsFields;
-
-  useSnackbarNotifications({
-    error: isError,
-    errorMessage:
-      mode === 'edit' ? 'Error updating Company' : 'Error creating Company',
-    success: isSuccess,
-    successMessage:
-      mode === 'edit'
-        ? 'Company updated successfully'
-        : 'Company created successfully',
-  });
 
   const onSubmit = async (values: CompanyFormProps, actions: any) => {
     try {

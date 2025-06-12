@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import GridDataUi from '../../components/GridTable/GridData';
 import TableHeader from '../../components/layouts/TableHeader';
 import SelectDropdown from '../../components/ui/SelectDropdown';
 import DatePickerUi from '../../components/ui/DatePicker';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Add } from '@mui/icons-material';
-import { AppDispatch } from '../../app/store';
-import { clearInvoiceData } from '../../redux-store/slices/invoiceSlice';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
-import { useGetInvoiceListScreenMutation } from '../../redux-store/api/injectedApis';
 import { Formik } from 'formik';
 import { MyCellRenderer } from '../../constants/grid-table-data/invoice-list-screen-table-data';
 import { GridColDef } from '@mui/x-data-grid';
-import { InvoiceInitialValueProps } from '../../types/types';
+import { getInvoiceList } from '../../api/services';
+import { useQuery } from '@tanstack/react-query';
 
 const InvoiceList = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const today = dayjs();
   const [startDate, setStartDate] = useState<Dayjs | null>(
@@ -26,19 +22,28 @@ const InvoiceList = () => {
   );
   const [endDate, setEndDate] = useState<Dayjs | null>(today.endOf('month'));
   const [isCustomRange, setIsCustomRange] = useState(false);
-  const [filterApplied, setFilterApplied] = useState(false);
-  const [getInvoiceListScreen, { isLoading }] =
-    useGetInvoiceListScreenMutation();
-  const [invoiceList, setInvoiceList] = useState<InvoiceInitialValueProps[]>(
-    [],
-  );
-  const [error, setError] = useState(null);
+  let initialPayload = {
+    startDate: today.startOf('month').format('DD-MM-YYYY'),
+    endDate: today.endOf('month').format('DD-MM-YYYY'),
+  };
+  const [payload, setPayload] = useState(initialPayload);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['getInvoiceList', payload],
+    queryFn: getInvoiceList,
+    staleTime: 5 * 60 * 1000,
+  });
 
   const handleApplyFilter = (
     startDate: Dayjs | null,
     endDate: Dayjs | null,
   ) => {
-    fetchInvoiceList(startDate, endDate);
+    const formattedStartDate = startDate ? startDate.format('DD-MM-YYYY') : '';
+    const formattedEndDate = endDate ? endDate.format('DD-MM-YYYY') : '';
+    setPayload({
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+    });
   };
 
   const handleDropdownChange = (newValue: any, setFieldValue: Function) => {
@@ -80,24 +85,13 @@ const InvoiceList = () => {
     }
   };
 
-  const handleDeleteInvoiceLocally = (deletedInvoiceId: any) => {
-    setInvoiceList((prevList) =>
-      prevList.filter((invoice) => invoice.id !== deletedInvoiceId),
-    );
-  };
-
   const columnsLists: GridColDef[] = [
     {
       field: 'Action',
       headerName: 'Action',
       width: 140,
       editable: false,
-      renderCell: (params: any) => (
-        <MyCellRenderer
-          row={params.row}
-          onDelete={handleDeleteInvoiceLocally}
-        />
-      ),
+      renderCell: (params: any) => <MyCellRenderer row={params.row} />,
     },
     {
       field: 'invoiceType',
@@ -131,29 +125,6 @@ const InvoiceList = () => {
     },
   ];
 
-  const fetchInvoiceList = async (
-    startDate: Dayjs | null,
-    endDate: Dayjs | null,
-  ) => {
-    const formattedStartDate = startDate ? startDate.format('DD-MM-YYYY') : '';
-    const formattedEndDate = endDate ? endDate.format('DD-MM-YYYY') : '';
-    try {
-      const response = await getInvoiceListScreen({
-        startDate: formattedStartDate,
-        endDate: formattedEndDate,
-      }).unwrap();
-      setInvoiceList(response ?? []);
-      setFilterApplied(true);
-    } catch (error) {
-      console.error('Error fetching invoice List', error);
-      setInvoiceList([]);
-    }
-  };
-
-  useEffect(() => {
-    fetchInvoiceList(startDate, endDate);
-  }, []);
-
   if (isLoading) {
     return (
       <Grid
@@ -178,7 +149,6 @@ const InvoiceList = () => {
             label: 'Create Invoice',
             icon: Add,
             onClick: () => {
-              dispatch(clearInvoiceData());
               navigate('/invoice/create');
             },
           },
@@ -251,16 +221,16 @@ const InvoiceList = () => {
         </Formik>
       </Box>
 
-      {error && filterApplied && (
+      {error && (
         <Typography variant="caption" color="error">
-          *Please apply the filters to display the invoices* {error}
+          *Please apply the filters to display the invoices*
         </Typography>
       )}
 
       <GridDataUi
         showToolbar
         columns={columnsLists}
-        tableData={invoiceList || []}
+        tableData={data ?? []}
         checkboxSelection={false}
       />
     </Box>

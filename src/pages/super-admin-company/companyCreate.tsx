@@ -3,9 +3,7 @@ import {
   CompanyEditFields,
   CompanyFields,
 } from '../../constants/form-data/form-data-json';
-import { setData } from '../../redux-store/global/globalState';
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { useNavigate } from 'react-router-dom';
 import { superAdminCompanyUsersInitialValues } from '../../constants/forms/formikInitialValues';
 import {
@@ -62,19 +60,6 @@ const CompanyCreate = ({
 
   const isSuccess =
     updateCompanyMutation.isSuccess || createCompanyMutation.isSuccess;
-  const isError =
-    updateCompanyMutation.isError || createCompanyMutation.isError;
-
-  useSnackbarNotifications({
-    error: isError,
-    errorMessage:
-      mode === 'edit' ? 'Error updating Company' : 'Error creating Company',
-    success: isSuccess,
-    successMessage:
-      mode === 'edit'
-        ? 'Company updated successfully'
-        : 'Company created successfully',
-  });
 
   const onSubmit = async (values: any, actions: any) => {
     try {
@@ -126,7 +111,6 @@ const CompanyCreate = ({
   return (
     <div style={{ maxHeight: '90vh', overflowY: 'auto', paddingRight: '1rem' }}>
       <DynamicFormCreate
-        setData={setData}
         headerName={mode === 'edit' ? 'Company Edit' : 'Company Create'}
         showTable={true}
         fields={fields}

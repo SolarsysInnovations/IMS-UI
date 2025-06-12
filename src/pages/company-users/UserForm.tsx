@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { AdminCompanyUsersInitialValueProps } from '../../types/types';
 import {
   EditRoleValidationSchema,
@@ -39,23 +38,9 @@ const UserForm = ({ userEditValue, mode, onClose }: UserValueProps) => {
     },
   });
 
-  const isSuccess = createUserMutation.isSuccess;
-  const isError = createUserMutation.isError;
-
   // Setting initial values
   const initialValues =
     mode === 'edit' && userEditValue ? userEditValue : RoleInitialValue;
-
-  // Snackbar Notifications
-  useSnackbarNotifications({
-    error: isError,
-    errorMessage: 'Error creating user',
-    success: isSuccess,
-    successMessage:
-      mode === 'edit'
-        ? 'User updated successfully'
-        : 'User created successfully',
-  });
 
   // Form submission handler
   const onSubmit = useMemo(() => {

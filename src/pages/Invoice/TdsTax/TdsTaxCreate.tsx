@@ -5,7 +5,6 @@ import { tdsTaxValidationSchema } from '../../../constants/forms/validations/val
 import { TdsTaxFields } from '../../../constants/form-data/form-data-json';
 import { TdsTaxFormProps, TdsTaxProps } from '../../../types/types';
 import { Save } from '@mui/icons-material';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createTdsTax, updateTdsTax } from '../../../api/services';
 import { useTaxConfigContext } from '../../../context/taxConfigContext';
@@ -38,7 +37,6 @@ const TdsTaxCreate = ({ tdsTaxValue, onClose, mode }: TdsTaxCreateProps) => {
 
   const isSuccess =
     updateTdsTaxMutation.isSuccess || createTdsTaxMutation.isSuccess;
-  const isError = updateTdsTaxMutation.isError || createTdsTaxMutation.isError;
 
   const initialValue = mode === 'edit' ? tdsTaxValue : tdsTaxInitialValue;
 
@@ -70,17 +68,6 @@ const TdsTaxCreate = ({ tdsTaxValue, onClose, mode }: TdsTaxCreateProps) => {
     },
     [tdsTaxValue, isSuccess, mode],
   );
-
-  useSnackbarNotifications({
-    error: isError,
-    errorMessage:
-      mode === 'edit' ? 'Error updating Tds Tax' : 'Error creating Tds Tax',
-    success: isSuccess,
-    successMessage:
-      mode === 'edit'
-        ? 'Tds Tax update successfully'
-        : 'Tds Tax created successfully',
-  });
 
   return (
     <div>

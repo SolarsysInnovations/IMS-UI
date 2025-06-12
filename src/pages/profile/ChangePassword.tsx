@@ -6,48 +6,33 @@ import TextFieldUi from '../../components/ui/TextField';
 import { ChangePasswordInitialValue } from '../../constants/forms/formikInitialValues';
 import { PasswordValidationSchema } from '../../constants/forms/validations/validationSchema';
 import { ChangePasswordInitialValueProps } from '../../types/types';
-import { useChangePasswordMutation } from '../../redux-store/role/roleApi';
 import {
   KeyboardBackspaceTwoTone,
   Save,
   VisibilityOff,
   VisibilityOutlined,
 } from '@mui/icons-material';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
-import { useInVoiceContext } from '../../context/invoiceContext';
+import { useMutation } from '@tanstack/react-query';
+import { changePassword } from '../../api/services';
 
 interface ChangePasswordProps {
   onClose: () => void;
 }
 
 const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
-  const context = useInVoiceContext();
   const pathname = 'Change Password';
-  const [passwordValues, setpasswordValues] = useState(
-    ChangePasswordInitialValue,
-  );
   const [newPasswordVisible, setNewPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const [
-    changePassword,
-    {
-      isSuccess: changePasswordSuccess,
-      isError: changePasswordError,
-      error: changePasswordErrorObject,
-    },
-  ] = useChangePasswordMutation();
-  const userName = context.userDetails.userName;
   const buttons = [
     { label: 'Back', icon: KeyboardBackspaceTwoTone, onClick: () => onClose() },
     { label: 'Update', icon: Save, onClick: () => handleSubmit },
   ];
 
-  useSnackbarNotifications({
-    error: changePasswordError,
-    errorMessage: 'Error changing password',
-    success: changePasswordSuccess,
-    successMessage: 'Password update successfully',
-    errorObject: changePasswordErrorObject,
+  const changePasswordMutation = useMutation({
+    mutationFn: changePassword,
+    onSuccess: () => {
+      onClose();
+    },
   });
 
   const handleSubmit = async (
@@ -63,12 +48,10 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
     },
   ) => {
     try {
-      await changePassword({
-        userName: userName ?? '',
-        values: values,
-      });
-      resetForm();
-      onClose();
+      changePasswordMutation.mutate(values);
+      if (changePasswordMutation.isSuccess) {
+        resetForm();
+      }
     } catch (error) {
       console.error('An error occurred during sendemail:', error);
     } finally {
@@ -77,7 +60,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onClose }) => {
   };
   return (
     <Formik
-      initialValues={passwordValues}
+      initialValues={ChangePasswordInitialValue}
       validationSchema={PasswordValidationSchema}
       validateOnChange={true}
       validateOnBlur={true}

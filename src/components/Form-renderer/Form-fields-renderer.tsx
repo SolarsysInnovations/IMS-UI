@@ -315,7 +315,6 @@ type FormFieldProps = {
 
 interface FieldRendererProps {
   updateFormValue: any;
-  setData: any;
   field: FieldProps;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }
@@ -324,7 +323,6 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
   updateFormValue,
   field,
   setFieldValue,
-  setData,
 }) => {
   const filteredData = field.subFields?.filter(
     (data) =>
@@ -338,10 +336,6 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
   const countryOptionsGenerate = useMemo(
     () => generateOptions(Country.getAllCountries(), 'name', 'isoCode'),
     [],
-  );
-
-  const [countryOptions, setCountryOptions] = useState<any[]>(
-    countryOptionsGenerate || [],
   );
   const [stateOptions, setStateOptions] = useState<any[]>([]);
   const [cityOptions, setCityOptions] = useState<any[]>([]);
@@ -388,12 +382,6 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
     () => updateFormValue,
     [updateFormValue],
   );
-
-  useEffect(() => {
-    if (setData) {
-      setData(values);
-    }
-  }, [values, setData]);
 
   useEffect(() => {
     if (memoizedUpdateFormValue) {
@@ -458,7 +446,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
                   ) {
                     let options = [];
                     if (subField.type === 'selectCountry') {
-                      options = countryOptions;
+                      options = countryOptionsGenerate;
                     } else if (subField.type === 'selectState') {
                       options = stateOptions;
                     } else if (subField.type === 'selectCity') {

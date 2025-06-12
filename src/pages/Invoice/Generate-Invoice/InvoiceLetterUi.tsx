@@ -2,116 +2,239 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import InvoiceDocument from './InvoiceDocument';
 import { PDFViewer, pdf } from '@react-pdf/renderer';
 import { Box } from '@mui/system';
-import { useSelector } from 'react-redux';
-import {
-  useGetCompanyLogoByIdQuery,
-  useGetCompanySettingByIdQuery,
-  useGetCustomersListQuery,
-  useGetInvoiceListQuery,
-  useGetTdsTaxListQuery,
-  useUpdateInvoiceMutation,
-} from '../../../redux-store/api/injectedApis';
 import StageStepper from '../../../components/ui/StepperUi';
 import ButtonUi from '../../../components/ui/Button';
 import SplitButton from '../../../components/ui/SplitButton';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { InvoiceOptions, InvoiceStatus, Roles } from '../../../constants/Enums';
 import { Card } from '@mui/material';
 import DialogBoxUi from '../../../components/ui/DialogBox';
 import SendEmail from '../Send-email';
 import { useInVoiceContext } from '../../../context/invoiceContext';
-
-// InvoiceLetterUi Component
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  getCustomerList,
+  getSingleCompany,
+  getTdsTaxList,
+  getcompanyLogo,
+  updateInvoice,
+} from '../../../api/services';
 
 const InvoiceLetterUi = ({
+  inVoiceValue,
   setIsModalOpen,
 }: {
-  setIsModalOpen?: Dispatch<SetStateAction<boolean | undefined>>;
+  setIsModalOpen?: Dispatch<SetStateAction<boolean>>;
+  inVoiceValue?: any;
 }) => {
-  const [data, setData] = useState();
+  const queryClient = useQueryClient();
   const context = useInVoiceContext();
-  const invoiceDatas = useSelector((state: any) => state.invoiceState.data);
-  const { data: customers } = useGetCustomersListQuery();
-  const { data: tdsTaxList } = useGetTdsTaxListQuery();
-  const [
-    updateInvoice,
-    {
-      isSuccess: invoiceUpdateSuccess,
-      isError: invoiceUpdateError,
-      error: invoiceUpdateErrorObject,
-    },
-  ] = useUpdateInvoiceMutation();
-  const invoiceData = useSelector((state: any) => state.invoiceState.data);
-  const companyIdString = sessionStorage.getItem('id') ?? '';
+  const companyIdString = context.companyDetails.companyId ?? '';
+  const userRole = context.userDetails.userRole;
+  const [data, setData] = useState();
+  const [companyDetails, setCompanyDetails] = useState<any>(null);
   const [currentInvoiceStatus, setCurrentInvoiceStatus] = useState<number>(-1);
-  const [showTracker, setShowTracker] = useState(false);
-  const { refetch } = useGetInvoiceListQuery();
-  const [resMessage, setResMessage] = useState('');
   const [isOpenDialogBox, setIsOpenDialogBox] = useState(false);
   const [base64String, setBase64String] = useState<string | null>(null);
-  const userRole = context.userDetails.userRole;
-  const [companyDetails, setCompanyDetails] = useState<any>(null);
-  const { data: companyData } = useGetCompanySettingByIdQuery(companyIdString);
+  const [showTracker, setShowTracker] = useState(false);
+  const [newStatus, setNewStatus] = useState<InvoiceStatus>();
 
-  useEffect(() => {
-    if (invoiceUpdateSuccess) {
+  const { data: logoData, isSuccess: logoSuccess } = useQuery({
+    queryKey: ['getCompanyLogo', companyIdString],
+    queryFn: ({ queryKey }) => {
+      const [, companyIdString] = queryKey;
+      if (!companyIdString) throw new Error('CompanyId is missing');
+      return getcompanyLogo(companyIdString);
+    },
+    enabled: !!companyIdString,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: companyData, isSuccess: isCompanySuccess } = useQuery({
+    queryKey: ['getSingleCompany', companyIdString],
+    queryFn: ({ queryKey }) => {
+      const id = queryKey[1];
+      if (!id) throw new Error('Id is missing');
+      return getSingleCompany(id);
+    },
+    enabled: !!companyIdString,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: customers, isSuccess: isCustomerSuccess } = useQuery({
+    queryKey: ['getCustomerList'],
+    queryFn: getCustomerList,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: tdsTaxList, isSuccess: isTdsTaxListSuccess } = useQuery({
+    queryKey: ['getTdsTaxList'],
+    queryFn: getTdsTaxList,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const updateInvoiceMutation = useMutation({
+    mutationFn: updateInvoice,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'getInvoiceList',
+      });
       if (typeof setIsModalOpen === 'function') {
         setIsModalOpen(false);
       } else {
         console.error('setIsModalOpen is not a function', setIsModalOpen);
       }
-      refetch();
+    },
+  });
+
+  const getAvailableOptions = () => {
+    const allOptions = [];
+    switch (userRole) {
+      case Roles.ADMIN:
+      case Roles.STANDARDUSER:
+        if (
+          inVoiceValue.invoiceStatus === InvoiceStatus.DRAFT ||
+          inVoiceValue.invoiceStatus === InvoiceStatus.RETURNED
+        ) {
+          allOptions.push(InvoiceOptions.SENT_TO_APPROVER);
+        } else if (inVoiceValue.invoiceStatus === InvoiceStatus.APPROVED) {
+          allOptions.push(InvoiceOptions.MAILED);
+        } else if (inVoiceValue.invoiceStatus === InvoiceStatus.MAILED) {
+          allOptions.push(InvoiceOptions.PAID);
+        }
+        break;
+      case Roles.APPROVER:
+        if (inVoiceValue.invoiceStatus === InvoiceStatus.PENDING) {
+          allOptions.push(InvoiceOptions.APPROVE, InvoiceOptions.RETURN);
+        }
+        break;
+      default:
+        return [];
     }
-  }, [invoiceUpdateSuccess, refetch]);
+    return allOptions.filter((option) => option !== inVoiceValue.invoiceStatus);
+  };
+
+  const availableOptions = getAvailableOptions();
+
+  const handleDownload = async () => {
+    const doc = (
+      <InvoiceDocument inVoiceValue={data} companyLogo={base64String} />
+    );
+    const asPdf = pdf(doc);
+    const blob = await asPdf.toBlob();
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'invoice.pdf';
+    link.click();
+  };
+
+  const handleDialogBoxClose = () => {
+    setIsOpenDialogBox(false);
+  };
+  const handleEmailSuccess = async () => {
+    handleDialogBoxClose();
+
+    if (inVoiceValue.invoiceStatus === InvoiceStatus.APPROVED) {
+      const updatedInvoiceData = {
+        ...inVoiceValue,
+        invoiceStatus: InvoiceStatus.MAILED,
+      };
+      await updateInvoice({ id: inVoiceValue.id, data: updatedInvoiceData });
+    }
+  };
+
+  const handleOptionClick = async (option: any) => {
+    if (option === InvoiceOptions.MAILED) {
+      setIsOpenDialogBox(true);
+      return;
+    }
+
+    if (inVoiceValue.invoiceStatus !== option) {
+      try {
+        let updatedInvoiceData = { ...inVoiceValue };
+
+        switch (option) {
+          case InvoiceOptions.APPROVE:
+            setNewStatus(InvoiceStatus.APPROVED);
+            break;
+          case InvoiceOptions.RETURN:
+            setNewStatus(InvoiceStatus.RETURNED);
+            break;
+          case InvoiceOptions.MAILED:
+            setNewStatus(InvoiceStatus.MAILED);
+            break;
+          case InvoiceOptions.PAID:
+            setNewStatus(InvoiceStatus.PAID);
+            break;
+          case InvoiceOptions.SENT_TO_APPROVER:
+            setNewStatus(InvoiceStatus.PENDING);
+            break;
+          default:
+            return;
+        }
+        if (newStatus) {
+          updatedInvoiceData = { ...inVoiceValue, invoiceStatus: newStatus };
+        }
+
+        updateInvoiceMutation.mutate({
+          id: inVoiceValue.id,
+          data: updatedInvoiceData,
+        });
+      } catch (error) {
+        console.error('Error in handleOptionClick:', error);
+      }
+    }
+  };
 
   useEffect(() => {
-    if (invoiceDatas && customers && companyDetails && tdsTaxList) {
-      // Find the relevant customer
+    if (inVoiceValue) {
+      const currentInvoiceStatus = Object.values(InvoiceStatus).indexOf(
+        inVoiceValue.invoiceStatus,
+      );
+      if (currentInvoiceStatus !== -1) {
+        setCurrentInvoiceStatus(currentInvoiceStatus);
+      }
+    }
+  }, [inVoiceValue]);
+
+  useEffect(() => {
+    if (inVoiceValue && customers && companyDetails && tdsTaxList) {
       const filteredCustomer = customers.find(
-        (customer: any) => customer.customerName === invoiceDatas.customerName,
+        (customer: any) => customer.customerName === inVoiceValue.customerName,
       );
 
-      // Calculate the subtotal from servicesList
-      const subTotalValue = invoiceDatas.servicesList.reduce(
+      const subTotalValue = inVoiceValue.servicesList.reduce(
         (acc: number, service: any) => acc + service.serviceTotalAmount,
         0,
       );
 
-      // Calculate the discount amount
       const discountPercentageValue =
-        (subTotalValue * invoiceDatas.discountPercentage) / 100;
+        (subTotalValue * inVoiceValue.discountPercentage) / 100;
 
-      // Calculate the GST amount
       const gstPercentageValue =
         ((subTotalValue - discountPercentageValue) *
-          invoiceDatas.gstPercentage) /
+          inVoiceValue.gstPercentage) /
         100;
 
-      // Find the relevant TDS tax object
       const filteredTdsTax = tdsTaxList.find(
-        (tdsTax: any) => invoiceDatas.taxAmount.tds === tdsTax.taxName,
+        (tdsTax: any) => inVoiceValue.taxAmount.tds === tdsTax.taxName,
       );
 
-      // Calculate the total value before TDS
       const totalValueBeforeTds =
         subTotalValue - discountPercentageValue + gstPercentageValue;
 
-      // Calculate TDS amount if applicable
       let tdsAmount = 0;
       if (filteredTdsTax) {
         tdsAmount = (totalValueBeforeTds * filteredTdsTax.taxPercentage) / 100;
       }
 
-      // Calculate the final total value after applying TDS
       const finalTotalValue = totalValueBeforeTds - tdsAmount;
-      // Merge all data including calculated values
       const mergedData = {
-        ...invoiceDatas,
+        ...inVoiceValue,
         companyDetails: { ...companyDetails.companyDetails },
-        customerDetails: filteredCustomer ?? invoiceDatas.customerDetails,
-        startDate: invoiceDatas.startDate,
-        dueDate: invoiceDatas.dueDate,
-        invoiceDate: invoiceDatas.invoiceDate,
+        customerDetails: filteredCustomer ?? inVoiceValue.customerDetails,
+        startDate: inVoiceValue.startDate,
+        dueDate: inVoiceValue.dueDate,
+        invoiceDate: inVoiceValue.invoiceDate,
         subTotal: Math.round(subTotalValue),
         tdsAmountValue: Math.round(tdsAmount),
         discountPercentageValue: Math.round(discountPercentageValue),
@@ -120,180 +243,19 @@ const InvoiceLetterUi = ({
       };
       setData(mergedData);
     }
-  }, [invoiceDatas, customers, companyDetails, tdsTaxList]);
-
-  const handleDownload = async () => {
-    const doc = (
-      <InvoiceDocument invoiceData={data} companyLogo={base64String} />
-    );
-    const asPdf = pdf(doc); // Create a new instance of pdf with the document
-    const blob = await asPdf.toBlob(); // Convert the PDF document to a Blob
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'invoice.pdf';
-    link.click();
-  };
-
-  const getAvailableOptions = () => {
-    const allOptions = [];
-    switch (userRole) {
-      case Roles.ADMIN:
-      case Roles.STANDARDUSER:
-        if (
-          invoiceData.invoiceStatus === InvoiceStatus.DRAFT ||
-          invoiceData.invoiceStatus === InvoiceStatus.RETURNED
-        ) {
-          allOptions.push(InvoiceOptions.SENT_TO_APPROVER);
-        } else if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
-          allOptions.push(InvoiceOptions.MAILED);
-        } else if (invoiceData.invoiceStatus === InvoiceStatus.MAILED) {
-          allOptions.push(InvoiceOptions.PAID);
-        }
-        break;
-      case Roles.APPROVER:
-        if (invoiceData.invoiceStatus === InvoiceStatus.PENDING) {
-          allOptions.push(InvoiceOptions.APPROVE, InvoiceOptions.RETURN);
-        }
-        break;
-      default:
-        return [];
-    }
-    return allOptions.filter((option) => option !== invoiceData.invoiceStatus);
-  };
-
-  const availableOptions = getAvailableOptions();
-
-  useSnackbarNotifications({
-    error: invoiceUpdateError,
-    errorObject: invoiceUpdateErrorObject,
-    errorMessage: 'Error While updating ',
-    success: invoiceUpdateSuccess,
-    successMessage: resMessage,
-  });
-
-  useEffect(() => {
-    if (invoiceUpdateSuccess) {
-      setIsModalOpen?.(false); // Close the dialog box on success
-      refetch(); // Trigger refetch of the invoice list
-    }
-  }, [invoiceUpdateSuccess, refetch]);
-
-  useEffect(() => {
-    if (invoiceData) {
-      const currentInvoiceStatus = Object.values(InvoiceStatus).indexOf(
-        invoiceData.invoiceStatus,
-      );
-      if (currentInvoiceStatus !== -1) {
-        setCurrentInvoiceStatus(currentInvoiceStatus);
-      }
-    }
-  }, [invoiceData]);
-
-  const handleOptionClick = async (option: any) => {
-    if (option === InvoiceOptions.MAILED) {
-      setIsOpenDialogBox(true);
-      return;
-    }
-
-    if (invoiceData.invoiceStatus !== option) {
-      try {
-        let updatedInvoiceData = { ...invoiceData };
-        let newStatus: InvoiceStatus;
-
-        switch (option) {
-          case InvoiceOptions.APPROVE:
-            newStatus = InvoiceStatus.APPROVED;
-            break;
-          case InvoiceOptions.RETURN:
-            newStatus = InvoiceStatus.RETURNED;
-            break;
-          case InvoiceOptions.MAILED:
-            newStatus = InvoiceStatus.MAILED;
-            break;
-          case InvoiceOptions.PAID:
-            newStatus = InvoiceStatus.PAID;
-            break;
-          case InvoiceOptions.SENT_TO_APPROVER:
-            newStatus = InvoiceStatus.PENDING;
-            break;
-          default:
-            return;
-        }
-        if (newStatus) {
-          updatedInvoiceData = { ...invoiceData, invoiceStatus: newStatus };
-        }
-
-        // Call updateInvoice and explicitly set modal state on success
-        await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData })
-          .unwrap()
-          .then((response) => {
-            setResMessage(response.message ?? 'Invoice Updated Successfully');
-            setIsModalOpen?.(false);
-            if (newStatus === InvoiceStatus.APPROVED) {
-              setResMessage(
-                response.message ?? 'Invoice Approved Successfully',
-              );
-            } else if (newStatus === InvoiceStatus.RETURNED) {
-              setResMessage(
-                response.message ?? 'Invoice Returned Successfully',
-              );
-            } // Close modal
-            refetch(); // Refetch invoice list
-          })
-          .catch((error) => {
-            console.error('Error updating invoice data:', error);
-          });
-      } catch (error) {
-        console.error('Error in handleOptionClick:', error);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (invoiceUpdateSuccess) {
-      setIsModalOpen?.(false);
-      refetch(); // Refetch invoice list
-    }
-  }, [invoiceUpdateSuccess, refetch]);
-
-  const handleDialogBoxClose = () => {
-    setIsOpenDialogBox(false);
-  };
-  const handleEmailSuccess = async () => {
-    handleDialogBoxClose();
-
-    if (invoiceData.invoiceStatus === InvoiceStatus.APPROVED) {
-      const updatedInvoiceData = {
-        ...invoiceData,
-        invoiceStatus: InvoiceStatus.MAILED,
-      };
-      await updateInvoice({ id: invoiceData.id, data: updatedInvoiceData });
-    }
-  };
-
-  const { data: logoData, refetch: refetchCompanyLogo } =
-    useGetCompanyLogoByIdQuery(companyDetails?.id, {
-      skip: !companyDetails?.id,
-    });
-
-  useEffect(() => {
-    if (companyDetails && companyDetails.id) {
-      // Now we can safely fetch the logo
-      refetchCompanyLogo(); // Function to trigger the logo fetch query
-    }
-  }, [companyDetails]);
+  }, [inVoiceValue, isCustomerSuccess, isCompanySuccess, isTdsTaxListSuccess]);
 
   useEffect(() => {
     if (companyData) {
       setCompanyDetails(companyData);
     }
-  }, [companyData]);
+  }, [isCompanySuccess]);
 
   useEffect(() => {
     if (logoData?.companyLogo) {
       setBase64String(`data:image/jpeg;base64,${logoData.companyLogo}`);
     }
-  }, [logoData]);
+  }, [logoSuccess]);
 
   return (
     <>
@@ -326,7 +288,7 @@ const InvoiceLetterUi = ({
                 marginTop: '5px',
               }}
             >
-              <InvoiceDocument invoiceData={data} companyLogo={base64String} />
+              <InvoiceDocument inVoiceValue={data} companyLogo={base64String} />
             </PDFViewer>
           ) : (
             <div>Loading PDF...</div>
@@ -351,7 +313,7 @@ const InvoiceLetterUi = ({
               }}
             />
             {(userRole === Roles.ADMIN || userRole === Roles.STANDARDUSER) &&
-              invoiceData.invoiceStatus === InvoiceStatus.DRAFT && (
+              inVoiceValue.invoiceStatus === InvoiceStatus.DRAFT && (
                 <ButtonUi
                   label="Send for Approver"
                   smallButtonCss
@@ -366,12 +328,12 @@ const InvoiceLetterUi = ({
               )}
             {availableOptions.length > 0 && (
               <SplitButton
-                key={currentInvoiceStatus} // Ensures re-render when status changes
+                key={currentInvoiceStatus}
                 disabledOptions={[
-                  availableOptions.indexOf(invoiceData.invoiceStatus),
+                  availableOptions.indexOf(inVoiceValue.invoiceStatus),
                 ]}
                 options={availableOptions}
-                defaultIndex={0} // Set the first option as default
+                defaultIndex={0}
                 onOptionClick={handleOptionClick}
               />
             )}
@@ -395,14 +357,13 @@ const InvoiceLetterUi = ({
                   display: showTracker ? 'block' : 'none',
                 }}
               >
-                <StageStepper stages={invoiceData.invoiceStages} />
+                <StageStepper stages={inVoiceValue.invoiceStages} />
               </Card>
             </Box>
           </Box>
         </div>
       </Box>
 
-      {/* INVOICE EMAIL DIALOG BOX */}
       <DialogBoxUi
         open={isOpenDialogBox}
         content={

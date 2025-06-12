@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -7,8 +6,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { clearData } from '../../redux-store/global/globalState';
-import { AppDispatch } from '../../app/store';
 
 type CustomizedDialogProps = {
   open?: boolean;
@@ -45,14 +42,12 @@ const DialogBoxUi = ({
   handleClose,
 }: CustomizedDialogProps) => {
   const [open, setOpen] = React.useState(defaultOpen);
-  const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
     setOpen(defaultOpen);
   }, [defaultOpen]);
 
   const handleCloseDialog = () => {
-    dispatch(clearData());
     setOpen(false);
     handleClose && handleClose();
   };

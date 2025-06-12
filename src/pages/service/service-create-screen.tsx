@@ -3,7 +3,6 @@ import { serviceFields } from '../../constants/form-data/form-data-json';
 import { serviceInitialValues as defaultServiceInitialValues } from '../../constants/forms/formikInitialValues'; // Rename to avoid conflict
 import { DynamicFormCreate } from '../../components/Form-renderer/Dynamic-form';
 import { serviceValidationSchema } from '../../constants/forms/validations/validationSchema';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { serviceCreationProps } from '../../types/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -42,16 +41,6 @@ const ServiceCreate = ({ setOpenDialogBox, id }: any) => {
     },
   });
   const isSuccess = createServiceMutation.isSuccess;
-  const isError = createServiceMutation.isError;
-
-  useSnackbarNotifications({
-    error: isError,
-    errorMessage: 'Error creating or updating Service',
-    success: isSuccess,
-    successMessage: isSuccess
-      ? 'Service created successfully'
-      : 'Service updated successfully',
-  });
 
   const initialValues = serviceData ?? defaultServiceInitialValues;
 

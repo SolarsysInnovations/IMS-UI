@@ -5,7 +5,6 @@ import { gstTypeValidationSchema } from '../../../constants/forms/validations/va
 import { DynamicFormCreate } from '../../../components/Form-renderer/Dynamic-form';
 import { GstTypeFormProps, GstTypeProps } from '../../../types/types';
 import { Save } from '@mui/icons-material';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createGstType, updateGstType } from '../../../api/services';
 import { useTaxConfigContext } from '../../../context/taxConfigContext';
@@ -33,8 +32,6 @@ const GstTypeForm = ({ gstTypeValue, mode }: GstTypeFormProps) => {
 
   const isSuccess =
     createGstTypeMutation.isSuccess || updateGstTypeMutation.isSuccess;
-  const isError =
-    createGstTypeMutation.isError || updateGstTypeMutation.isError;
 
   const initialValues = mode === 'edit' ? gstTypeValue : gstTypeInitialValue;
 
@@ -62,18 +59,6 @@ const GstTypeForm = ({ gstTypeValue, mode }: GstTypeFormProps) => {
     },
     [gstTypeValue, isSuccess, mode],
   );
-
-  // * -------- gst type creating --------------------
-  useSnackbarNotifications({
-    error: isError,
-    errorMessage:
-      mode === 'edit' ? 'Error updating Gst Type' : 'Error creating Gst Type',
-    success: isSuccess,
-    successMessage:
-      mode === 'edit'
-        ? 'Gst Type updated successfully'
-        : 'Gst Type created successfully',
-  });
 
   return (
     <div>

@@ -7,125 +7,42 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Card, CardContent, Grid, IconButton } from '@mui/material';
 import TextFieldUi from '../components/ui/TextField';
-import { useResetPwdMutation } from '../redux-store/api/injectedApis';
 import { VisibilityOff, VisibilityOutlined } from '@mui/icons-material';
-import { useEffect, useState } from 'react';
-import { useSnackbarNotifications } from '../hooks/useSnackbarNotification';
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { resetPassword } from '../api/services';
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get('token') as string;
-  const [
-    resetPassword,
-    {
-      error: resetPwdErrorObject,
-      isSuccess: resetPwdSuccess,
-      isError: resetPwdError,
-    },
-  ] = useResetPwdMutation();
   const [newPasswordVisible, setNewPasswordVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  // const passwordRegex =
+  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
 
-  const [notification, setNotification] = useState({
-    success: false,
-    error: false,
-    successMessage: '',
-    errorMessage: '',
-  });
-
-  useSnackbarNotifications({
-    error: resetPwdError,
-    errorObject: resetPwdErrorObject,
-    errorMessage: 'An error occurred. Please try again.',
-    success: resetPwdSuccess,
-    successMessage: 'Password Reset Successful',
-  });
-
-  useEffect(() => {
-    if (resetPwdSuccess) {
+  const resetPasswordMutation = useMutation({
+    mutationFn: resetPassword,
+    onSuccess: () => {
       navigate('/');
-    }
-  }, [resetPwdSuccess, navigate]);
-
-  useSnackbarNotifications({
-    error: notification.error,
-    errorObject: resetPwdErrorObject,
-    errorMessage: notification.errorMessage,
-    success: notification.success,
-    successMessage: notification.successMessage,
+    },
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget as HTMLFormElement);
     const newpassword = data.get('newpassword') as string;
-    const confirmpassword = data.get('confirmpassword') as string;
-
-    // Trim the password to remove leading/trailing spaces
+    // const confirmpassword = data.get('confirmpassword') as string;
     const trimmedNewPassword = newpassword.trim();
-    const trimmedConfirmPassword = confirmpassword.trim();
-
-    // Password length check (optional but can help reduce unnecessary regex checks)
-    if (trimmedNewPassword.length < 8) {
-      setNotification({
-        success: false,
-        error: true,
-        successMessage: '',
-        errorMessage: 'Password must be at least 8 characters long.',
-      });
-      return;
-    }
-
-    // Updated regex to include lowercase, uppercase, digit, and allow special characters
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
-
-    if (!passwordRegex.test(trimmedNewPassword)) {
-      setNotification({
-        success: false,
-        error: true,
-        successMessage: '',
-        errorMessage:
-          'Password must contain at least one number, one uppercase letter, one lowercase letter, and be at least 8 characters long.',
-      });
-      return;
-    }
-
-    if (trimmedNewPassword !== trimmedConfirmPassword) {
-      setNotification({
-        success: false,
-        error: true,
-        successMessage: '',
-        errorMessage: 'New Password and Confirm Password do not match!',
-      });
-      return;
-    }
+    // const trimmedConfirmPassword = confirmpassword.trim();
 
     try {
-      const response = await resetPassword({
+      resetPasswordMutation.mutate({
         token,
         newPassword: trimmedNewPassword,
-      }).unwrap();
-
-      if (response.success) {
-        setNotification({
-          success: true,
-          error: false,
-          successMessage: 'Password Reset Successful',
-          errorMessage: '',
-        });
-        setTimeout(() => {
-          navigate('/');
-        }, 2000);
-      }
-    } catch (error) {
-      setNotification({
-        success: false,
-        error: true,
-        successMessage: 'Password has been set successfully',
-        errorMessage: 'An error occurred. Please try again.',
       });
+    } catch (error) {
+      console.error('An error occurred. Please try again.', error);
     }
   };
 

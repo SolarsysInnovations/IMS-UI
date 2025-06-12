@@ -95,6 +95,16 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: '/invoice/edit/:id',
+        element: (
+          <ProtectedRoutes
+            requiredRole={[Roles.ADMIN, Roles.APPROVER, Roles.STANDARDUSER]}
+          >
+            <InvoiceCreateScreen />
+          </ProtectedRoutes>
+        ),
+      },
+      {
         path: '/services',
         element: (
           <ProtectedRoutes

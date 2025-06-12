@@ -12,7 +12,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DialogBoxUi from '../../../components/ui/DialogBox';
 import PortalLinkCreate from './Portal-link-create';
-import { useSnackbarNotifications } from '../../../hooks/useSnackbarNotification';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   deletePortalLink,
@@ -29,11 +28,6 @@ const PortalLinkList: React.FC = () => {
     description: '',
   });
   const [key, setKey] = useState<number>(0);
-  const [notification, setNotification] = useState({
-    success: false,
-    error: false,
-    errorMessage: '',
-  });
 
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ['getPortalList'],
@@ -53,23 +47,7 @@ const PortalLinkList: React.FC = () => {
     mutationFn: deletePortalLink,
     onSuccess: () => {
       refetch();
-      setNotification({ success: true, error: false, errorMessage: '' });
     },
-    onError: () => {
-      setNotification({
-        success: false,
-        error: true,
-        errorMessage: 'Error deleting Link',
-      });
-    },
-  });
-
-  // Call the snackbar notification hook at the top level
-  useSnackbarNotifications({
-    success: notification.success,
-    error: notification.error,
-    errorMessage: notification.errorMessage,
-    successMessage: 'Link deleted successfully',
   });
 
   const handleEditClick = async (id: string) => {

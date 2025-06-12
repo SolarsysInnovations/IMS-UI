@@ -5,29 +5,19 @@ import { Dispatch, SetStateAction } from 'react';
 
 interface InvoiceUiProps {
   readonly invoiceData?: any;
-  readonly subtotal?: number | null;
-  readonly discount?: number | null;
-  readonly tds?: number | null;
-  readonly setIsModalOpen?: Dispatch<SetStateAction<boolean | undefined>>;
-  readonly downloadPdf?: boolean;
-  readonly preview?: boolean;
+  readonly setIsModalOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function InvoiceUi({
-  preview,
-  downloadPdf,
-  subtotal,
-  discount,
-  tds,
-  invoiceData,
-  setIsModalOpen,
-}: InvoiceUiProps) {
+function InvoiceUi({ invoiceData, setIsModalOpen }: InvoiceUiProps) {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <InvoiceLetterUi setIsModalOpen={setIsModalOpen} />
+        <InvoiceLetterUi
+          setIsModalOpen={setIsModalOpen}
+          inVoiceValue={invoiceData}
+        />
       </Grid>
     </Grid>
   );

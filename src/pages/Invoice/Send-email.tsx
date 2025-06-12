@@ -3,29 +3,30 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
 import TextFieldUi from '../../components/ui/TextField';
 import ButtonSmallUi from '../../components/ui/ButtonSmall';
-import { useSendEmailNotificationMutation } from '../../redux-store/api/injectedApis';
-import { useSnackbarNotifications } from '../../hooks/useSnackbarNotification';
 import { SendEmailInitialValueProps } from '../../types/types';
 import { SendEmailInitialValue } from '../../constants/forms/formikInitialValues';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CancelIcon from '@mui/icons-material/Close';
+import { useMutation } from '@tanstack/react-query';
+import { sendMail } from '../../api/services';
 
 interface SendEmailProps {
   onSuccess: () => void;
-  invoiceData: any; // Add this line to define the prop type
+  invoiceData: any;
 }
 
 const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showFileName, setShowFileName] = useState<string[]>([]);
-  const [
-    sendEmail,
-    {
-      isSuccess: sendEmailSuccess,
-      isError: sendEmailError,
-      error: sendEmailErrorObject,
+
+  const sendMailMutation = useMutation({
+    mutationFn: sendMail,
+    onSuccess: () => {
+      onSuccess();
+      setUploadedFiles([]);
     },
-  ] = useSendEmailNotificationMutation();
+  });
+
   const handleFileUpload = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const files = event.target.files;
@@ -43,6 +44,7 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
     setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     setShowFileName((prevNames) => prevNames.filter((_, i) => i !== index));
   }, []);
+
   const handleSubmit = async (
     values: SendEmailInitialValueProps,
     { setSubmitting, resetForm }: FormikHelpers<SendEmailInitialValueProps>,
@@ -58,11 +60,10 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
         formData.append('file', file);
       });
 
-      await sendEmail(formData);
-
-      onSuccess();
-      resetForm();
-      setUploadedFiles([]);
+      sendMailMutation.mutate(formData);
+      if (sendMailMutation.isSuccess) {
+        resetForm();
+      }
     } catch (error) {
       console.error('An error occurred during send email:', error);
       alert('Failed to send email. Please try again later.');
@@ -70,14 +71,6 @@ const SendEmail: React.FC<SendEmailProps> = ({ onSuccess, invoiceData }) => {
       setSubmitting(false);
     }
   };
-
-  useSnackbarNotifications({
-    error: sendEmailError,
-    errorObject: sendEmailErrorObject,
-    errorMessage: 'Error Sending Mail',
-    success: sendEmailSuccess,
-    successMessage: 'Mail sent successfully',
-  });
 
   return (
     <Formik initialValues={SendEmailInitialValue} onSubmit={handleSubmit}>

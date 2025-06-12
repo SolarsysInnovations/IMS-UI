@@ -23,3 +23,59 @@ export const getInvoiceList = async ({
     throw error;
   }
 };
+
+export const getSingleInvoice = async (id: string) => {
+  try {
+    const res = await apiClient.post(`${API_URLS.invoiceGet}/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error('Getting single invoice api is failed', error);
+    throw error;
+  }
+};
+
+export const createInvoice = async (payload: any) => {
+  try {
+    const res = await apiClient.post(API_URLS.invoiceCreate, payload);
+    return res.data;
+  } catch (error) {
+    console.error('Create Invoice api is failed', error);
+    throw error;
+  }
+};
+
+export const updateInvoice = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: any;
+}) => {
+  try {
+    const res = await apiClient.post(`${API_URLS.invoiceUpdate}/${id}`, data);
+    return res.data;
+  } catch (error) {
+    console.error('Updating Invoice api is failed', error);
+    throw error;
+  }
+};
+
+export const deleteInvoice = async (id: string) => {
+  try {
+    const res = await apiClient.post(`${API_URLS.invoiceDelete}/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error('Deleting invoice api is failed', error);
+    throw error;
+  }
+};
+
+export const sendMail = async (payload: FormData) => {
+  try {
+    const res = await apiClient.post(API_URLS.sendMail, payload);
+    return res.data;
+  } catch (error) {
+    console.error('Sending Mail api is failed', error);
+    throw error;
+  }
+};
